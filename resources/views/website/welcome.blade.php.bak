@@ -1,0 +1,314 @@
+@extends('layouts.website.master')
+@section('title','Laman Utama')
+@section('insert_style')
+<link rel="stylesheet" href="{{ asset('web/plugins/owlcarousel/owl.carousel.min.css') }}">
+<link rel="stylesheet" href="{{ asset('web/plugins/owlcarousel/owl.theme.default.min.css') }}">
+
+<style>
+    #ajax-aduan .error {
+        color: #343a40
+    }
+</style>
+@endsection
+
+@section('insert_js')
+<script src="{{ asset('web/plugins/jquery-validation/jquery-validation.min.js') }}"></script>
+<script src="{{ asset('web/plugins/jquery-validation/jquery-validation-methods.min.js') }}"></script>
+<script src="{{ asset('web/plugins/jquery-validation/jquery-validation-additional.js') }}"></script>
+<script src="{{ asset('web/plugins/owlcarousel/owl.carousel.min.js') }}"></script>
+
+<!-- bs-custom-file-input -->
+<script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+
+
+
+<script>@php($issetpop = @isset($popup) ? $popup : null); </script>
+<script>
+    $(document).ready(function () {
+
+        var issetpop = "{{ $issetpop }}";
+
+        if(issetpop){
+            setTimeout(function() {
+                $('#modalPopup').modal('show');
+            },3000);
+        }
+
+
+        function getBase64(file) {
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+                console.log(reader.result);
+            };
+            reader.onerror = function (error) {
+                console.log('Error: ', error);
+            };
+        }
+        bsCustomFileInput.init();
+        var url = "{{route('website.feedbacks.simpan')}}";
+        $('#ajaxfeedbacks').validate({ //sets up the validator
+            submitHandler: function (form) {
+                //form.submit();
+                $.ajaxSetup({
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                });
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: $('#ajaxfeedbacks').serialize(),
+                    success: function(data) {
+                        console.log('data',data);
+                        $('#myModalAjax').modal('show');
+                        setTimeout(()=>{
+                            $('#myModalAjax').modal('hide');
+                        },6000);
+
+                        $('#ajaxfeedbacks')[0].reset();
+                    },
+                    error: function(error) {
+                        console.log('error',error);
+                    }
+                });
+
+                return false;
+
+            },
+            rules: {
+                'name': 'required',
+                'email': {
+                    required:true,
+                    email:true
+                },
+                'phone': {
+                    required:true,
+                    phone:true
+                },
+                'message': 'required'
+            }
+        });
+        $(".owl-carousel").owlCarousel({
+            nav: true,
+            center: true,
+            items: 4,
+            loop: true,
+            autoplay:true,
+            autoplayTimeout:2000,
+            responsiveClass: true,
+            autoplayHoverPause:true,
+            responsive: {
+                0: {
+                    items: 1,
+                    nav: true
+                },
+                600: {
+                    items: 3,
+                    nav: true
+                },
+                1000: {
+                    items: 3,
+                    nav: true
+                }
+            }
+        });
+
+
+    });
+
+</script>
+<!--<meta name="google-site-verification" content="H9AQXvBj0Cnj11LZWLCzYI2lIZ5srIczvWXwKu4Xmig" />-->
+
+@endsection
+
+@section('content')
+
+<section id="banner">
+    <div class="container-fluid p-0">
+        <div id="carouselBanner" class="carousel slide" data-ride="carousel">
+            {!! website_slider('carouselBanner') !!}
+        </div>
+    </div>
+</section>
+<!-- /.section#banner -->
+
+<section id="why-chose-area" class="bg-light">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-6 col-12">
+                <h1 class="text-center">Taman Persekutuan</h1>
+                <h5 class="text-center">Bukit Kiara</h5>
+                <p class="text-justify">Taman Persekutuan, Taman Awam Berskala Besar Bukit Kiara adalah merupakan muzium hidup yang menjadikan tempat lokasi pokok utama, pokok renek dan tanaman tutup
+                    bumi. Pokok-pokok
+                    hutan berkayu dan tanaman sokongan hutan hujan khatulistiwa akan ditanam mengikut rekabentuk senibina landskap berasaskan hutan semulajadi. </p>
+                <p>
+                    Pembangunan TABB Bukit Kiara dibahagikan beberapa ZON pembangunan.
+                </p>
+                <ul>
+                    <li><i class="icofont-check"></i> Zon Rekreasi Keluarga</li>
+                    <li><i class="icofont-check"></i> Zon Tropika Khatulistiwa Asia</li>
+                    <li><i class="icofont-check"></i> Zon Arboretum Bernilai Tinggi</li>
+                    <li><i class="icofont-check"></i> Zon Riparian / Konservasi Hidrologi</li>
+                    <li><i class="icofont-check"></i> Zon Biodiversiti (Forest Restoration)</li>
+                </ul>
+            </div>
+            <div class="col-lg-6 col-12">
+                <div class="embed-responsive embed-responsive-16by9 align-middle">
+                    <video class="w-100 w-lg-50" controls poster="{{ asset('storage/images/shares/kiara_gambar.png') }}">
+                        <source src="{{ asset('storage/videos/kiara_drone.mp4') }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="activities" class="bg-olive">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1>Permohonan Aktiviti</h1>
+                <p>
+                    Penggunaan Taman Persekutuan Bukit Kiara perlu mendapatkan kelulusan daripada Jabatan Landskap Negara sebelum sesuatu program/aktiviti  dijalankan dan perlu mematuhi syarat-syarat yang telah ditetapkan.
+                </p>
+                <a class="btn bg-light" href="{{ route('website.activities.index') }}">Maklumat Lanjut</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="posts" class="bg-white">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-6 col-12">
+                <article>
+                    <div class="row m-3">
+                        <div class="col-md-3">
+                            <div class="img w-100">
+                                <img src="{{ asset('img/maps-image.png') }}" class="img-fluid img-thumnail" alt="Responsive image">
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="card-body p-0">
+                                <h5>Peta Inventori TPBK</h5>
+                                <p> Peta interaktif beserta maklumat mengenai aset lembut dan kejur yang terdapat di sekitar Taman Persekutuan Bukit Kiara.</p>
+                                <a class="btn bg-olive mb-3" href="{{ route('website.peta') }}">Maklumat Lanjut</a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            <div class="col-lg-6 col-12">
+                <section id="posts">
+                    <div class="row m-3">
+                        <div class="col-md-3">
+                            <div class="img w-100">
+                                <img src="{{ asset('img/engagement.png') }}" class="img-fluid" alt="Responsive image">
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="card-body p-0">
+                                <h5>Konsultasi Awam
+                                </h5>
+                                <p class="card-text">Konsultasi awam ini merupakan salah satu inisiatif kerajaan untuk mendapatkan penglibatan yang lebih ramai orang awam khusus dalam kalangan penduduk sekitar Taman Persekutuan Bukit Kiara.</p>
+                                <a class="btn bg-olive mb-3" href="{{ route('website.konsultasi') }}">Maklumat Lanjut</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /.section#posts -->
+
+<section id="page">
+    <div class="container py-5">
+        {!! website_carousel_article() !!}
+    </div>
+</section>
+
+<style>
+
+</style>
+<section id="faq-area" class="bg-gray">
+    <div class="container py-5">
+
+        <h1 class="text-center">Soalan Lazim</h1>
+        <p class="text-center">
+        </p>
+        <hr class="mb-4">
+
+        <div class="row">
+            <div class="col-12 col-lg-10 offset-lg-1">
+                {!! website_faqs('faqaccordion') !!}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact-area" class="bg-olive">
+    <div class="container py-5">
+        <style>
+            #ajaxfeedbacks .error {
+                color: #dc3545 !important;
+                font-weight: normal
+            }
+        </style>
+
+        <h1 class="text-center">Aduan, Cadangan, Atau Pertanyaan</h1>
+        <p class="text-center">Kami sentiasa berusaha untuk meningkatkan mutu perkhidmatan dari semasa ke semasa. Utarakan sebarang cadangan, aduan, atau pertanyaan anda kepada kami. Kami menghargai setiap maklumbalas yang kami terima.</p>
+        <hr class="mb-4">
+        <div class="row">
+            <div class="col-12 col-lg-5 text-center text-lg-left">
+                {!! website_contact() !!}
+            </div>
+            <!--start contact form-->
+            <div class="col-12 col-lg-7">
+                {!! website_contact_form() !!}
+            </div>
+            <!--end contact form-->
+        </div>
+    </div>
+</section>
+
+@endsection
+
+@if ($popup)
+@section('webmodal')
+
+
+<div class="modal fade" id="modalPopup" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="modalPopupLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Notifikasi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                @if(isset($popup->url))
+                    <div class="modal-body p-0">
+                        <a href="{{ $popup->url }}" href="{{ $popup->target }}">
+                            <img src="{{ $popup->slider_image }}" width="100%" alt="popup">
+                        </a>
+                    </div>
+                    <!--<div class="modal-footer p-1">
+                        <p class="h3 my-2">Maklumat Lanjut</p>
+                        <a href='{{ $popup->url }}' href="{{ $popup->target }}" class="btn btn-primary">Klik Disini</a>
+                    </div>-->
+                @else
+                <div class="modal-body p-0">
+                    <img src="{{ $popup->slider_image }}" width="100%" alt="popup">
+                </div>        
+                @endif
+            </div>
+    </div>
+</div>
+<!-- /.modal -->
+@endsection
+@endif

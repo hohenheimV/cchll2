@@ -1,0 +1,34 @@
+    'zonutama' => [
+        'a' => 'Zon Rekreasi Keluarga',
+        'b' => 'Zon Pentadbiran & Garden Centre',
+        'c' => 'Zon Arboretum',
+        'd' => 'Zon Riparian / Konservasi Hidrologi',
+        'e' => 'Zon Biodiversiti',
+        'f' => 'Zon Arboretum Bernilai Tinggi',
+
+A,B,C,AB - zon
+x - lokasi
+
+a - Zon Rekreasi Keluarga
+a_A_0 - zon A, Tempat Letak Kereta
+a_A_1 - zon A, Kawasan Open Plaza 2nd Ent
+a_A_2 - zon A, Kawasan Lapang Signage Zon Rekreasi keluarga
+
+a_B_0 - zon B, Kawasan 1st Gazebo Di Kiri Jalan
+a_B_1 - zon B, Kawasan Sebelah 1st Gazebo Kaw.Lapang
+
+a_C_0 - zon C, Dataran Plaza
+a_C_1 - zon C, Kawasan Tepi Sungai
+a_C_2 - zon C, Kawasan Permainan Kanak2
+a_C_3 - zon C, Kawasan 'Exercise Decking Platform'
+a_C_4 - zon C, Kawasan 'Family Timber Decking'
+a_C_5 - zon C, Kawasan 'Viewing Deck' Small Space'
+a_C_6 - zon C, Kawasan Gazebo Sebelah Permainan Kanak2
+
+c - Zon Arboretum
+c_0 - zon Arboretum, Kawasan Laluan 'Jungle Trekking'
+c_1 - zon Arboretum, Laluan Aktiviti Basikal. Mountain Bike Race Route 
+c_2 - zon Arboretum, Kawasan Laluan Trek Denai Keladi
+c_3 - zon Arboretum, Kawasan Promenade Taman Hawa 
+c_4 - zon Arboretum, Kawasan 'Viewing Area' From Top
+c_5 - zon Arboretum, Kawasan Laluan Trail Trekking Pos B

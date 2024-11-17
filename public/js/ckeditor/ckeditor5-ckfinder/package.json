@@ -1,0 +1,96 @@
+{
+  "_from": "@ckeditor/ckeditor5-ckfinder",
+  "_id": "@ckeditor/ckeditor5-ckfinder@15.0.0",
+  "_inBundle": false,
+  "_integrity": "sha512-X9oj8Mzkk+MamBlrN9kKasHA1qYedKHmIgv/rSrsw8s6QNWnOP2shLPoagpVfb0ZnBN5FvEqLSvSrVqddA5K0w==",
+  "_location": "/@ckeditor/ckeditor5-ckfinder",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@ckeditor/ckeditor5-ckfinder",
+    "name": "@ckeditor/ckeditor5-ckfinder",
+    "escapedName": "@ckeditor%2fckeditor5-ckfinder",
+    "scope": "@ckeditor",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@ckeditor/ckeditor5-ckfinder/-/ckeditor5-ckfinder-15.0.0.tgz",
+  "_shasum": "b4d3b3cb321c5edb274e5edf1b98be057dd945d0",
+  "_spec": "@ckeditor/ckeditor5-ckfinder",
+  "_where": "/Users/mohamadzaki/Sites/canadabloms",
+  "author": {
+    "name": "CKSource",
+    "url": "http://cksource.com/"
+  },
+  "bugs": {
+    "url": "https://github.com/ckeditor/ckeditor5/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "@ckeditor/ckeditor5-adapter-ckfinder": "^15.0.0",
+    "@ckeditor/ckeditor5-core": "^15.0.0",
+    "@ckeditor/ckeditor5-image": "^15.0.0",
+    "@ckeditor/ckeditor5-link": "^15.0.0",
+    "@ckeditor/ckeditor5-ui": "^15.0.0"
+  },
+  "deprecated": false,
+  "description": "CKFinder integration for CKEditor 5.",
+  "devDependencies": {
+    "@ckeditor/ckeditor5-clipboard": "^15.0.0",
+    "@ckeditor/ckeditor5-editor-classic": "^15.0.0",
+    "@ckeditor/ckeditor5-engine": "^15.0.0",
+    "@ckeditor/ckeditor5-paragraph": "^15.0.0",
+    "@ckeditor/ckeditor5-utils": "^15.0.0",
+    "eslint": "^5.5.0",
+    "eslint-config-ckeditor5": "^2.0.0",
+    "husky": "^1.3.1",
+    "lint-staged": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=8.0.0",
+    "npm": ">=5.7.1"
+  },
+  "eslintIgnore": [
+    "src/lib/**",
+    "packages/**"
+  ],
+  "files": [
+    "lang",
+    "src",
+    "theme"
+  ],
+  "homepage": "https://ckeditor.com/ckeditor-5",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "keywords": [
+    "ckeditor",
+    "ckeditor5",
+    "ckeditor 5",
+    "ckeditor5-feature",
+    "ckeditor5-plugin"
+  ],
+  "license": "GPL-2.0-or-later",
+  "lint-staged": {
+    "**/*.js": [
+      "eslint --quiet"
+    ]
+  },
+  "name": "@ckeditor/ckeditor5-ckfinder",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckeditor/ckeditor5-ckfinder.git"
+  },
+  "scripts": {
+    "lint": "eslint --quiet '**/*.js'"
+  },
+  "version": "15.0.0"
+}

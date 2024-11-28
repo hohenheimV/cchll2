@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Lihat Kempen Tanam Pokok')
+@section('title', 'Lihat Entiti Landskap Unik')
 
 @section('content')
 <div class="container-fluid">
@@ -11,14 +11,14 @@
                     <h5 class="card-title p-1 m-1 font-weight-bold">@yield('title')</h5>
                 </div>
 
-                {!! Form::model($kempenTanamPokok, ['route' => ['pengurusan.kempen-tanam-pokok.update', $kempenTanamPokok], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
+                {!! Form::model($entitiLandskapUnik, ['route' => ['pengurusan.entiti-landskap-unik.update', $entitiLandskapUnik], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
                 <div class="card-body table-hardscape form-hardscape text-sm">
 
                     <!-- Nama Kempen and Lokasi -->
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            {{ Form::label('nama_kempen', 'Nama Kempen') }}
-                            {{ Form::text('nama_kempen', 'Kempen Tanam Pokok 1', ['placeholder' => 'Masukkan Nama Kempen', 'class' => 'form-control', 'inert' => true]) }}
+                            {{ Form::label('nama_kempen', 'Nama Pokok/ Kawasan Unik') }}
+                            {{ Form::text('nama_kempen', 'Pokok Unik 1', ['placeholder' => 'Masukkan Nama Pokok/ Kawasan Unik', 'class' => 'form-control', 'inert' => true]) }}
                         </div>
 
                         <div class="form-group col-md-6">
@@ -26,7 +26,11 @@
                             {{ Form::text('lokasi', 'Lokasi 1', ['placeholder' => 'Masukkan Lokasi', 'class' => 'form-control', 'inert' => true]) }}
                         </div>
                     </div>
-
+                    <div class="form-group">
+                        {{ Form::label('keterangan', 'Keterangan') }}
+                        {{ Form::textarea('keterangan','Pokok Unik 1 ini adalah pokok yang pertama... ',['placeholder'=>'Sila masukkan keterangan','rows'=>3, 'inert' => true,'class' => 'form-control '.Html::isInvalid($errors,'keterangan')]) }}
+                        {!! Html::hasError($errors,'keterangan') !!}
+                    </div>
                     <!-- PBT and Agensi -->
                     <div class="form-row">
                         <div class="form-group col-md-6">
@@ -47,8 +51,8 @@
                                 <table id="spesis-pokok-table" class="table table-bordered table-hover">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th class="w-50">Spesis Pokok</th>
-                                            <th class="w-20">Jumlah Pokok</th>
+                                            <th class="w-50">Entiti Unik</th>
+                                            <th class="w-20">Anggaran Nilai</th>
                                         </tr>
                                     </thead>
                                     <tbody id="spesis_pokok_container">
@@ -56,7 +60,7 @@
                                             @foreach ($spesisPokokJumlahPairs as $index => $pair)
                                             <tr>
                                                 <td><input type="text" name="spesis_pokok[]" class="form-control" value="{{ $pair['spesis_pokok'] }}" placeholder="Masukkan Spesis Pokok" inert></td>
-                                                <td><input type="number" name="jumlah_pokok[]" class="form-control" value="{{ $pair['jumlah_pokok'] }}" placeholder="Masukkan Jumlah Pokok" inert></td>
+                                                <td><input type="text" name="jumlah_pokok[]" class="form-control" value="{{ $pair['jumlah_pokok'] }}" placeholder="Masukkan Jumlah Pokok" inert></td>
                                             </tr>
                                             @endforeach
                                         @else
@@ -75,19 +79,11 @@
                     <input type="hidden" name="serialized_spesis_pokok" id="serialized_spesis_pokok">
                     <input type="hidden" name="jumlah_tanam_pokok" id="jumlah_tanam_pokok">
 
-                    <!-- PBT and Agensi -->
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            {{ Form::label('pbt', 'Jumlah Karbon yang diserap') }}
-                            {{ Form::text('pbt', '2.5443 Meter padu', ['placeholder' => 'Masukkan PBT', 'class' => 'form-control', 'inert' => true]) }}
-                        </div>
-                    </div>
 
-                    <!-- @include('pengurusan.kempen-tanam-pokok._upload', ['inert' => true]) -->
+                    <!-- @include('pengurusan.entiti-landskap-unik._upload', ['inert' => true]) -->
                 </div>
                 <div class="card-footer">
-                    {!! Form::button('Kembali', ['onclick' => "window.location='".route('pengurusan.kempen-tanam-pokok.index')."'", 'class' => 'btn btn-secondary']) !!}
-                    {!! Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini', ['class' => 'btn btn-warning', 'onclick'=>"window.location='".route('pengurusan.kempen-tanam-pokok.edit',$kempenTanamPokok->id)."'", Html::tooltip('Kemaskini Kempen Tanam Pokok')]) !!}
+                    {!! Form::button('Kembali', ['onclick' => "window.location='".route('pengurusan.entiti-landskap-unik.index')."'", 'class' => 'btn btn-secondary']) !!}
                 </div>
                 {!! Form::close() !!}
             </div>

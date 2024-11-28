@@ -195,8 +195,8 @@
                 {{-- @can('analisa-list') --}}
                 <li class="nav-item">
                     {!! Html::buttonSidebarNavLink('Entiti Landskap', 'fas fa-chart-pie', [
-                        'onclick' => "window.location='" . route('pengurusan.entitiLandskap.entiti.index') . "'",
-                        'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.entitiLandskap.entiti.')
+                        'onclick' => "window.location='" . route('pengurusan.entiti-landskap-unik.index') . "'",
+                        'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.entiti-landskap-unik.')
                     ]) !!}
                 </li>
                 {{-- @endcan --}}

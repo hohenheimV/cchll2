@@ -16,7 +16,14 @@
 
                     @include('pengurusan.kempen-tanam-pokok._form')
 
-                    @include('pengurusan.kempen-tanam-pokok._upload')
+                    <!-- PBT and Agensi -->
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ Form::label('pbt', 'Jumlah Karbon yang diserap') }}
+                            {{ Form::text('pbt', '2.5443 Meter padu', ['placeholder' => 'Masukkan PBT', 'class' => 'form-control', 'inert' => true]) }}
+                        </div>
+                    </div>
+                    <!-- @include('pengurusan.kempen-tanam-pokok._upload') -->
                 </div>
                 <div class="card-footer">
                     {!! Form::button('Batal dan Kembali', ['onclick' => "window.location='".route('pengurusan.kempen-tanam-pokok.index')."'", 'class' => 'btn btn-secondary']) !!}

@@ -26,9 +26,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DataController;
-use App\Http\Controllers\Pengurusan\EntitiLandskapController;
-use App\Http\Controllers\Pengurusan\KempenTanamController;
-use App\Http\Controllers\Pengurusan\eMohonController;
+// use App\Http\Controllers\Pengurusan\EntitiLandskapController;
+// use App\Http\Controllers\Pengurusan\KempenTanamController;
+// use App\Http\Controllers\Pengurusan\eMohonController;
 
 Route::get('/vtour-bukit-kiara', function () {
     return view('website.vtour');
@@ -422,6 +422,10 @@ Route::middleware(['auth'])
          */
         Route::resource('kempen-tanam-pokok', 'KempenTanamPokokController');
 
+        /**
+         * Route EntitiLandskapUnikController
+         */
+        Route::resource('entiti-landskap-unik', 'EntitiLandskapUnikController');
 
         /**
          * Route DroneController

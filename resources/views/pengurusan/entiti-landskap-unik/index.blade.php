@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Kempen Tanam Pokok')
+@section('title', 'Entiti Landskap Unik')
 
 @section('content')
 <div class="container-fluid">
@@ -15,8 +15,8 @@
                             <div class="btn-group" role="group" aria-label="First group">
 
                                 {!! Form::button('<i class="fas fa-plus"></i> Daftar', 
-                                    ['onclick'=>"window.location='".route('pengurusan.kempen-tanam-pokok.create')."'",
-                                    'class'=>'btn bg-success btn-sm', Html::tooltip('Daftar Kempen Tanam Pokok')]) !!}
+                                    ['onclick'=>"window.location='".route('pengurusan.entiti-landskap-unik.create')."'",
+                                    'class'=>'btn bg-success btn-sm', Html::tooltip('Daftar Entiti Landskap Unik')]) !!}
                             </div>
                         </div>
                     </div>
@@ -28,47 +28,47 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="w-1">Bil.</th>
-                                    <!-- <th class="w-5">Gambar</th> -->
-                                    <th class="text-center w-10">Nama Kempen</th>
+                                    <th class="w-5">Gambar</th>
+                                    <th>Nama Entiti Landskap</th>
+                                    <th>Keterangan</th>
                                     <th class="text-center w-10">PBT/ Agensi</th>
                                     <th class="text-center w-10">Lokasi</th>
-                                    <th class="text-center w-10">Jumlah Karbon yang diserap</th>
-                                    <th class="text-center w-5">Tahun</th>
+                                    <th class="text-center w-10">Anggaran Nilai</th>
                                     <th class="text-center w-5">Tindakan</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @php($index = $kempenTanamPokok->firstItem())
-                                @forelse($kempenTanamPokok as $kempen)
+                                @php($index = $entitiLandskapUnik->firstItem())
+                                @forelse($entitiLandskapUnik as $kempen)
                                 <tr>
                                     <td>{{ $index++ }}</td>
-                                    <!-- <td class="p-0">
-                                        {!! '<img class="image-thumb p-1 w-75 mx-auto d-block embed-responsive-item" alt="Gambar Kempen Tanam Pokok"
-                                            src="'.asset($kempen->gambar_360 ? 'storage/images/shares/kempen-tanam-pokok/'.$kempen->gambar_360 : 'img/no-photos.png').'">' !!}
-                                    </td> -->
-                                    <td class="text-center">{{ $kempen->tajuk ? 'Kempen Tanam Pokok '.($index-1) : 'null' }}</td>
+                                    <td class="p-0">
+                                        {!! '<img class="image-thumb p-1 w-75 mx-auto d-block embed-responsive-item" alt="Gambar Entiti Landskap Unik"
+                                            src="'.asset($kempen->gambar_360 ? 'storage/images/shares/entiti-landskap-unik/'.$kempen->gambar_360 : 'img/no-photos.png').'">' !!}
+                                    </td>
+                                    <td>{{ (($index-1) % 2 == 0) ? 'Kawasan Unik '.($index-1) : 'Pokok Unik '.($index-1) }}</td>
+                                    <td>{{ (($index-1) % 2 == 0) ? 'Kawasan Unik '.($index-1).' ini berkonsepkan...' : 'Pokok Unik '.($index-1).' ini adalah pokok yang pertama...' }} </td>
                                     <td class="text-center">{!! Html::datetime($kempen->tarikh, 'd-m-Y') ? 'PBT '.($index-1) : 'null'  !!}</td>
                                     <td class="text-center">{!! Html::datetime($kempen->created_at, 'd-m-Y') ? 'Lokasi '.($index-1) : 'null'  !!}</td>
-                                    <td class="text-center">{!! Html::datetime($kempen->updated_at, 'd-m-Y')  ? ((($index-1)*2.5443).' Meter padu') : 'null' !!}</td>
-                                    <td class="text-center">2024 </td>
+                                    <td class="text-center">{!! Html::datetime($kempen->updated_at, 'd-m-Y')  ? 'RM '.number_format(($index - 1) * 2541.143, 2) : 'null' !!}</td>
                                     <td>
                                         <div class="btn-group">
                                             {!! Form::button('<i class="fas fa-search"></i>',
-                                                ['onclick'=>"window.location='".route('pengurusan.kempen-tanam-pokok.show',$kempen)."'",
-                                                'class'=>'btn bg-info btn-sm', Html::tooltip('Butiran Kempen Tanam Pokok')]) !!}
+                                                ['onclick'=>"window.location='".route('pengurusan.entiti-landskap-unik.show',$kempen)."'",
+                                                'class'=>'btn bg-info btn-sm', Html::tooltip('Butiran Entiti Landskap Unik')]) !!}
                                             {!! Form::button('<i class="fas fa-pencil-alt"></i>',
-                                                ['onclick'=>"window.location='".route('pengurusan.kempen-tanam-pokok.edit',$kempen)."'",
-                                                'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini Kempen Tanam Pokok')]) !!}
+                                                ['onclick'=>"window.location='".route('pengurusan.entiti-landskap-unik.edit',$kempen)."'",
+                                                'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini Entiti Landskap Unik')]) !!}
                                             {!! Form::button('<i class="fas fa-trash"></i>', 
                                                 ['class'=>'btn btn-danger btn-sm',
-                                                'data-url'=>route('pengurusan.kempen-tanam-pokok.destroy',$kempen),
+                                                'data-url'=>route('pengurusan.entiti-landskap-unik.destroy',$kempen),
                                                 'data-text'=>'Kempen : '.$kempen->tajuk,
                                                 'data-toggle'=>'modal', 'data-target'=>'#modalDelete']) !!}
                                         </div>
                                     </td>
                                 </tr>
                                 @empty
-                                {!! Html::forelse_alert(request('keyword'),'Kempen Tanam Pokok') !!}
+                                {!! Html::forelse_alert(request('keyword'),'Entiti Landskap Unik') !!}
                                 @endforelse
                             </tbody>
                         </table>
@@ -76,9 +76,9 @@
                     <!-- /.table-responsive -->
                 </div>
                 <!-- /.card-body -->
-                @if(count($kempenTanamPokok) > 0)
+                @if(count($entitiLandskapUnik) > 0)
                 <div class="card-footer bg-light p-2 border-top-0 d-flex flex-column justify-content-center align-items-end">
-                    {!! Html::pagination($kempenTanamPokok) !!}
+                    {!! Html::pagination($entitiLandskapUnik) !!}
                 </div>
                 <!-- /.card-footer -->
                 @endif

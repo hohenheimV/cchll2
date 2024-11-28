@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Pengurusan;
 
 use App\Http\Controllers\Controller;
-use App\Model\KempenTanamPokok;  // Updated to the new model
+use App\Model\EntitiLandskapUnik;  // Updated to the new model
 use Illuminate\Http\Request;
 
-class KempenTanamPokokController extends Controller
+class EntitiLandskapUnikController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +15,10 @@ class KempenTanamPokokController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['role_or_permission:Pentadbir Sistem|kempen-tanam-pokok-list']);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|kempen-tanam-pokok-create'], ['only' => ['create', 'store']]);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|kempen-tanam-pokok-edit'], ['only' => ['edit', 'update']]);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|kempen-tanam-pokok-delete'], ['only' => ['destroy']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|entiti-landskap-unik-list']);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|entiti-landskap-unik-create'], ['only' => ['create', 'store']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|entiti-landskap-unik-edit'], ['only' => ['edit', 'update']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|entiti-landskap-unik-delete'], ['only' => ['destroy']]);
     }
 
     /**
@@ -28,9 +28,9 @@ class KempenTanamPokokController extends Controller
      */
     public function index()
     {
-        $kempenTanamPokok = KempenTanamPokok::latest()->paginate(10);
+        $entitiLandskapUnik = EntitiLandskapUnik::latest()->paginate(5);
 
-        return view('pengurusan.kempen-tanam-pokok.index', ['kempenTanamPokok' => $kempenTanamPokok]);
+        return view('pengurusan.entiti-landskap-unik.index', ['entitiLandskapUnik' => $entitiLandskapUnik]);
     }
 
     /**
@@ -40,7 +40,7 @@ class KempenTanamPokokController extends Controller
      */
     public function create()
     {
-        return view('pengurusan.kempen-tanam-pokok.create');
+        return view('pengurusan.entiti-landskap-unik.create');
     }
 
     /**
@@ -95,15 +95,15 @@ class KempenTanamPokokController extends Controller
         // Process the uploaded image if it exists
         if ($request->has('gambar')) {
             $filename = 'kempen_tanam_pokok_' . time() . '.' . $request->gambar->extension();
-            $request->gambar->storeAs('public/images/shares/kempen-tanam-pokok/', $filename);
+            $request->gambar->storeAs('public/images/shares/entiti-landskap-unik/', $filename);
             $validatedData['gambar_360'] = $filename; // Store image name in the validated data
         }
 
         // Add the current date to the validated data
         $validatedData['tarikh'] = now()->toDateString(); // Use now() for current date
 
-        // Insert the main record (KempenTanamPokok) into the database
-        $kempen = KempenTanamPokok::create($validatedData);
+        // Insert the main record (EntitiLandskapUnik) into the database
+        $kempen = EntitiLandskapUnik::create($validatedData);
 
         // Prepare and store species (spesis_pokok) and tree count (jumlah_pokok)
         $spesisPokok = [];
@@ -120,7 +120,7 @@ class KempenTanamPokokController extends Controller
         ]);
 
         // Redirect back to the list page with a success message
-        return redirect()->route('pengurusan.kempen-tanam-pokok.index')
+        return redirect()->route('pengurusan.entiti-landskap-unik.index')
                         ->with('successMessage', 'Maklumat kempen tanam pokok telah berjaya disimpan');
     }
 
@@ -129,33 +129,33 @@ class KempenTanamPokokController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Model\KempenTanamPokok  $kempenTanamPokok
+     * @param  \App\Model\EntitiLandskapUnik  $entitiLandskapUnik
      * @return \Illuminate\Http\Response
      */
-    public function show(KempenTanamPokok $kempenTanamPokok)
+    public function show(EntitiLandskapUnik $entitiLandskapUnik)
     {
         // Retrieve the record from the database
-        $defaultSpesis = '[{"spesis_pokok":"Pokok a","jumlah_pokok":1111},{"spesis_pokok":"Pokok b","jumlah_pokok":2222},{"spesis_pokok":"Pokok c","jumlah_pokok":3333}]';
+        $defaultSpesis = '[{"spesis_pokok":"Pokok Getah Tertua","jumlah_pokok":"RM 2,541.14"}]';
 
         // Decode the JSON string into a PHP array
         $spesisPokokJumlahPairs = json_decode($defaultSpesis, true); // `true` makes it an array
         // dd($spesisPokokJumlahPairs);
 
         // Return the data to the view
-        return view('pengurusan.kempen-tanam-pokok.show', [
-            'kempenTanamPokok' => $kempenTanamPokok,
+        return view('pengurusan.entiti-landskap-unik.show', [
+            'entitiLandskapUnik' => $entitiLandskapUnik,
             'spesisPokokJumlahPairs' => $spesisPokokJumlahPairs, // Pass the parsed data
         ]);
-        return view('pengurusan.kempen-tanam-pokok.show', ['kempenTanamPokok' => $kempenTanamPokok]);
+        return view('pengurusan.entiti-landskap-unik.show', ['entitiLandskapUnik' => $entitiLandskapUnik]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Model\KempenTanamPokok  $kempenTanamPokok
+     * @param  \App\Model\EntitiLandskapUnik  $entitiLandskapUnik
      * @return \Illuminate\Http\Response
      */
-    public function edit(KempenTanamPokok $kempenTanamPokok)
+    public function edit(EntitiLandskapUnik $entitiLandskapUnik)
     {
         // // Retrieve the serialized data from the database
         // $serializedSpesis = "A,213;B,null;null,31";
@@ -170,15 +170,15 @@ class KempenTanamPokokController extends Controller
         // }, $pairs);
 
         // Retrieve the record from the database
-        $defaultSpesis = '[{"spesis_pokok":"Pokok a","jumlah_pokok":1111},{"spesis_pokok":"Pokok b","jumlah_pokok":2222},{"spesis_pokok":"Pokok c","jumlah_pokok":3333}]';
+        $defaultSpesis = '[{"spesis_pokok":"Pokok Getah Tertua","jumlah_pokok":"RM 2,541.14"}]';
 
         // Decode the JSON string into a PHP array
         $spesisPokokJumlahPairs = json_decode($defaultSpesis, true); // `true` makes it an array
         // dd($spesisPokokJumlahPairs);
 
         // Return the data to the view
-        return view('pengurusan.kempen-tanam-pokok.edit', [
-            'kempenTanamPokok' => $kempenTanamPokok,
+        return view('pengurusan.entiti-landskap-unik.edit', [
+            'entitiLandskapUnik' => $entitiLandskapUnik,
             'spesisPokokJumlahPairs' => $spesisPokokJumlahPairs, // Pass the parsed data
         ]);
     }
@@ -187,10 +187,10 @@ class KempenTanamPokokController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\KempenTanamPokok  $kempenTanamPokok
+     * @param  \App\Model\EntitiLandskapUnik  $entitiLandskapUnik
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, KempenTanamPokok $kempenTanamPokok)
+    public function update(Request $request, EntitiLandskapUnik $entitiLandskapUnik)
     {
         dd($request->input('serialized_spesis_pokok'));
         $request->validate([
@@ -211,28 +211,28 @@ class KempenTanamPokokController extends Controller
         // Check if the image is uploaded
         if ($request->has('gambar')) {
             $filename = 'kempen_tanam_pokok_' . time() . '.' . $request->gambar->extension();
-            $request->gambar->storeAs('public/images/shares/kempen-tanam-pokok/', $filename);
+            $request->gambar->storeAs('public/images/shares/entiti-landskap-unik/', $filename);
             $request->merge(['gambar_360' => $filename]);
         }
 
         $request->merge(['tarikh' => date('Y-m-d')]);
 
         // Update the existing record
-        // $kempenTanamPokok->update($request->all());
+        // $entitiLandskapUnik->update($request->all());
 
         // Redirect with success message
-        return redirect()->route('pengurusan.kempen-tanam-pokok.index')->with('successMessage', 'Maklumat kempen tanam pokok telah berjaya dikemaskini');
+        return redirect()->route('pengurusan.entiti-landskap-unik.index')->with('successMessage', 'Maklumat kempen tanam pokok telah berjaya dikemaskini');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Model\KempenTanamPokok  $kempenTanamPokok
+     * @param  \App\Model\EntitiLandskapUnik  $entitiLandskapUnik
      * @return \Illuminate\Http\Response
      */
-    public function destroy(KempenTanamPokok $kempenTanamPokok)
+    public function destroy(EntitiLandskapUnik $entitiLandskapUnik)
     {
-        $kempenTanamPokok->delete();
-        return redirect()->route('pengurusan.kempen-tanam-pokok.index')->with('successMessage', 'Maklumat kempen tanam pokok telah dihapuskan');
+        $entitiLandskapUnik->delete();
+        return redirect()->route('pengurusan.entiti-landskap-unik.index')->with('successMessage', 'Maklumat kempen tanam pokok telah dihapuskan');
     }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Daftar Kempen Tanam Pokok')
+@section('title', 'Daftar Entiti Landskap Unik')
 
 @section('content')
 <div class="container-fluid">
@@ -11,15 +11,15 @@
                     <h5 class="card-title p-1 m-1 font-weight-bold">@yield('title')</h5>
                 </div>
 
-                {{ Form::open(['route' =>['pengurusan.kempen-tanam-pokok.store'], 'enctype'=>'multipart/form-data']) }}
+                {{ Form::open(['route' =>['pengurusan.entiti-landskap-unik.store'], 'enctype'=>'multipart/form-data']) }}
                 <div class="card-body table-hardscape form-hardscape text-sm">
 
-                    @include('pengurusan.kempen-tanam-pokok._form')
+                    @include('pengurusan.entiti-landskap-unik._form')
 
-                    <!-- @include('pengurusan.kempen-tanam-pokok._upload') -->
+                    @include('pengurusan.entiti-landskap-unik._upload')
                 </div>
                 <div class="card-footer">
-                    {!! Form::button('Batal dan Kembali', ['onclick'=>"window.location='".route('pengurusan.kempen-tanam-pokok.index')."'",'class'=>'btn btn-secondary']) !!}
+                    {!! Form::button('Batal dan Kembali', ['onclick'=>"window.location='".route('pengurusan.entiti-landskap-unik.index')."'",'class'=>'btn btn-secondary']) !!}
                     {!! Form::button('<i class="fas fa-save"></i> Daftar', ['class'=>'btn btn-success','type'=>'submit']) !!}
                 </div>
                 {!! Form::close() !!}

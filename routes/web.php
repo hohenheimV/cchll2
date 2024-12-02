@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DataController;
+use App\Http\Controllers\LocationController;
 // use App\Http\Controllers\Pengurusan\EntitiLandskapController;
 // use App\Http\Controllers\Pengurusan\KempenTanamController;
 // use App\Http\Controllers\Pengurusan\eMohonController;
@@ -82,6 +83,16 @@ Route::get('/data/negeri/{shortName}', [DataController::class, 'getNegeri']);
 Route::get('/data/pbt/{negeriId}', [DataController::class, 'getPBT']);
 Route::get('/data/pbt/{negeriId}/{pbtId}', [DataController::class, 'getPBT']);
 Route::get('/data/postcode/{postcode}', [DataController::class, 'getPostcode']);
+
+
+// Route::get('your-form-url', [LocationController::class, 'create']);
+Route::get('get-negeri', [LocationController::class, 'create']);
+Route::get('get-daerah/{kod_negeri}', [LocationController::class, 'getDaerah']);
+Route::get('get-mukim/{kod_negeri}/{kod_daerah}', [LocationController::class, 'getMukim']);
+
+
+Route::get('get-parlimen/{kod_negeri}', [LocationController::class, 'getParlimen']);
+Route::get('get-dun/{kod_parlimen}', [LocationController::class, 'getDun']);
 
 // Route::get('/register', function () {
 //     return view('auth.register');
@@ -426,6 +437,11 @@ Route::middleware(['auth'])
          * Route EntitiLandskapUnikController
          */
         Route::resource('entiti-landskap-unik', 'EntitiLandskapUnikController');
+
+        /**
+         * Route eLAPSController
+         */
+        Route::resource('eLAPS', 'eLAPSController');
 
         /**
          * Route DroneController

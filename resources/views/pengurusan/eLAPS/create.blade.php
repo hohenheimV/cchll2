@@ -16,7 +16,7 @@
 
                     @include('pengurusan.eLAPS._form')
 
-                    @include('pengurusan.eLAPS._upload')
+                    <!-- @include('pengurusan.eLAPS._upload') -->
                 </div>
                 <div class="card-footer">
                     {!! Form::button('Batal dan Kembali', ['onclick'=>"window.location='".route('pengurusan.eLAPS.index')."'",'class'=>'btn btn-secondary']) !!}

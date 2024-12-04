@@ -8,8 +8,12 @@
         <div class="col-lg-12">
             <div class="card card-olive card-outline">
                 <div class="card-header">
-                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title')</h3>
-
+                    @hasrole('Pentadbir Sistem')
+                        <h3 class="card-title font-weight-bold my-1">Senarai @yield('title')</h3>
+                    @endhasrole
+                    @hasrole('Penggiat Industri')
+                        <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') PBT1</h3>
+                    @endhasrole
                     <div class="card-tools">
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                             <div class="btn-group" role="group" aria-label="First group">
@@ -31,46 +35,94 @@
                                     <th class="w-5">Gambar</th>
                                     <th>Nama Entiti Landskap</th>
                                     <th>Keterangan</th>
-                                    <th class="text-center w-10">PBT/ Agensi</th>
+                                    <!-- <th class="text-center w-10">PBT/ Agensi</th> -->
+                                    @hasrole('Pentadbir Sistem')
+                                        <th class="text-center w-10">PBT/ Agensi</th>
+                                    @endhasrole
+                                    @hasrole('Penggiat Industri')
+                                        <!-- <th class="text-center w-10">PBT/ Agensi</th> -->
+                                    @endhasrole
                                     <th class="text-center w-10">Lokasi</th>
                                     <th class="text-center w-10">Anggaran Nilai</th>
                                     <th class="text-center w-5">Tindakan</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @php($index = $eLAPS->firstItem())
-                                @forelse($eLAPS as $kempen)
-                                <tr>
-                                    <td>{{ $index++ }}</td>
-                                    <td class="p-0">
-                                        {!! '<img class="image-thumb p-1 w-75 mx-auto d-block embed-responsive-item" alt="Gambar eLAPS"
-                                            src="'.asset($kempen->gambar_360 ? 'storage/images/shares/eLAPS/'.$kempen->gambar_360 : 'img/no-photos.png').'">' !!}
-                                    </td>
-                                    <td>{{ (($index-1) % 2 == 0) ? 'Kawasan Unik '.($index-1) : 'Pokok Unik '.($index-1) }}</td>
-                                    <td>{{ (($index-1) % 2 == 0) ? 'Kawasan Unik '.($index-1).' ini berkonsepkan...' : 'Pokok Unik '.($index-1).' ini adalah pokok yang pertama...' }} </td>
-                                    <td class="text-center">{!! Html::datetime($kempen->tarikh, 'd-m-Y') ? 'PBT '.($index-1) : 'null'  !!}</td>
-                                    <td class="text-center">{!! Html::datetime($kempen->created_at, 'd-m-Y') ? 'Lokasi '.($index-1) : 'null'  !!}</td>
-                                    <td class="text-center">{!! Html::datetime($kempen->updated_at, 'd-m-Y')  ? 'RM '.number_format(($index - 1) * 2541.143, 2) : 'null' !!}</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            {!! Form::button('<i class="fas fa-search"></i>',
-                                                ['onclick'=>"window.location='".route('pengurusan.eLAPS.show',$kempen)."'",
-                                                'class'=>'btn bg-info btn-sm', Html::tooltip('Butiran eLAPS')]) !!}
-                                            {!! Form::button('<i class="fas fa-pencil-alt"></i>',
-                                                ['onclick'=>"window.location='".route('pengurusan.eLAPS.edit',$kempen)."'",
-                                                'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini eLAPS')]) !!}
-                                            {!! Form::button('<i class="fas fa-trash"></i>', 
-                                                ['class'=>'btn btn-danger btn-sm',
-                                                'data-url'=>route('pengurusan.eLAPS.destroy',$kempen),
-                                                'data-text'=>'Kempen : '.$kempen->tajuk,
-                                                'data-toggle'=>'modal', 'data-target'=>'#modalDelete']) !!}
-                                        </div>
-                                    </td>
-                                </tr>
-                                @empty
-                                {!! Html::forelse_alert(request('keyword'),'eLAPS') !!}
-                                @endforelse
+                                @hasrole('Pentadbir Sistem')
+                                    @php($index = $eLAPS->firstItem())
+                                    @forelse($eLAPS as $kempen)
+                                        <tr>
+                                            <td>{{ $index++ }}</td>
+                                            <td class="p-0">
+                                                {!! '<img class="image-thumb p-1 w-75 mx-auto d-block embed-responsive-item" alt="Gambar eLAPS"
+                                                    src="'.asset($kempen->gambar_360 ? 'storage/images/shares/eLAPS/'.$kempen->gambar_360 : 'img/no-photos.png').'">' !!}
+                                            </td>
+                                            <td>{{ (($index-1) % 2 == 0) ? 'Kawasan Unik '.($index-1) : 'Pokok Unik '.($index-1) }}</td>
+                                            <td>{{ (($index-1) % 2 == 0) ? 'Kawasan Unik '.($index-1).' ini berkonsepkan...' : 'Pokok Unik '.($index-1).' ini adalah pokok yang pertama...' }} </td>
+                                            <td class="text-center">{!! Html::datetime($kempen->tarikh, 'd-m-Y') ? 'PBT '.($index-1) : 'null'  !!}</td>
+                                            <td class="text-center">{!! Html::datetime($kempen->created_at, 'd-m-Y') ? 'Lokasi '.($index-1) : 'null'  !!}</td>
+                                            <td class="text-center">{!! Html::datetime($kempen->updated_at, 'd-m-Y')  ? 'RM '.number_format(($index - 1) * 2541.143, 2) : 'null' !!}</td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    {!! Form::button('<i class="fas fa-search"></i>',
+                                                        ['onclick'=>"window.location='".route('pengurusan.eLAPS.show',$kempen)."'",
+                                                        'class'=>'btn bg-info btn-sm', Html::tooltip('Butiran eLAPS')]) !!}
+                                                    {!! Form::button('<i class="fas fa-pencil-alt"></i>',
+                                                        ['onclick'=>"window.location='".route('pengurusan.eLAPS.edit',$kempen)."'",
+                                                        'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini eLAPS')]) !!}
+                                                    {!! Form::button('<i class="fas fa-trash"></i>', 
+                                                        ['class'=>'btn btn-danger btn-sm',
+                                                        'data-url'=>route('pengurusan.eLAPS.destroy',$kempen),
+                                                        'data-text'=>'Kempen : '.$kempen->tajuk,
+                                                        'data-toggle'=>'modal', 'data-target'=>'#modalDelete']) !!}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr><td colspan="8" class="text-center">No data available</td></tr>
+                                    @endforelse
+                                @endhasrole
+                                @hasrole('Penggiat Industri')
+                                    @php($index = $eLAPS->firstItem())
+                                    @forelse($eLAPS as $kempen)
+                                        <!-- Check if the PBT/Agensi matches the user's assigned PBT/Agensi -->
+                                            <tr>
+                                                <td>{{ $index++ }}</td>
+                                                <td class="p-0">
+                                                    {!! '<img class="image-thumb p-1 w-75 mx-auto d-block embed-responsive-item" alt="Gambar eLAPS"
+                                                        src="'.asset($kempen->gambar_360 ? 'storage/images/shares/eLAPS/'.$kempen->gambar_360 : 'img/no-photos.png').'">' !!}
+                                                </td>
+                                                <td>{{ (($index-1) % 2 == 0) ? 'Kawasan Unik '.($index-1) : 'Pokok Unik '.($index-1) }}</td>
+                                                <td>{{ (($index-1) % 2 == 0) ? 'Kawasan Unik '.($index-1).' ini berkonsepkan...' : 'Pokok Unik '.($index-1).' ini adalah pokok yang pertama...' }} </td>
+                                                <!-- <td class="text-center">{!! Html::datetime($kempen->tarikh, 'd-m-Y') ? 'PBT 1' : 'null'  !!}</td> -->
+                                                <td class="text-center">{!! Html::datetime($kempen->created_at, 'd-m-Y') ? 'Lokasi '.($index-1) : 'null'  !!}</td>
+                                                <td class="text-center">{!! Html::datetime($kempen->updated_at, 'd-m-Y')  ? 'RM '.number_format(($index - 1) * 2541.143, 2) : 'null' !!}</td>
+                                                <td>
+                                                    <div class="btn-group">
+                                                        {!! Form::button('<i class="fas fa-search"></i>',
+                                                            ['onclick'=>"window.location='".route('pengurusan.eLAPS.show',$kempen)."'",
+                                                            'class'=>'btn bg-info btn-sm', Html::tooltip('Butiran eLAPS')]) !!}
+                                                        {!! Form::button('<i class="fas fa-pencil-alt"></i>',
+                                                            ['onclick'=>"window.location='".route('pengurusan.eLAPS.edit',$kempen)."'",
+                                                            'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini eLAPS')]) !!}
+                                                        {!! Form::button('<i class="fas fa-trash"></i>', 
+                                                            ['class'=>'btn btn-danger btn-sm',
+                                                            'data-url'=>route('pengurusan.eLAPS.destroy',$kempen),
+                                                            'data-text'=>'Kempen : '.$kempen->tajuk,
+                                                            'data-toggle'=>'modal', 'data-target'=>'#modalDelete']) !!}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                    @empty
+                                        <tr><td colspan="8" class="text-center">No data available for your role.</td></tr>
+                                    @endforelse
+                                @endhasrole
+                                @unlessrole('Pentadbir Sistem|Penggiat Industri')
+                                    <tr><td colspan="8" class="text-center">You do not have the necessary permissions to view this data.</td></tr>
+                                @endunlessrole
+                                
                             </tbody>
+
                         </table>
                     </div>
                     <!-- /.table-responsive -->
@@ -86,59 +138,4 @@
         </div><!-- /.col-lg-12 -->
     </div><!-- /.row -->
 </div><!-- /.container -->
-
-@section('page-js-script')
-
-<script>
-    $(document).ready(function () {
-        $('#modalKempen').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var href = button.data('href'); // Extract info from data-* attributes
-            $('[data-tooltip="tooltip"]').tooltip('hide');
-            // Load URL from data-href
-            $('#modalKempen .modal-content').load(href, function (responseTxt, statusTxt, xhr) {
-
-                // Date picker
-                $('input[name="tarikh"]').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    minDate: '01-' + moment().subtract(1, 'month').subtract(1, 'year').format('MM-YYYY'),
-                    maxDate: moment().endOf('month').format('DD-MM-YYYY'),
-                    drops: "up",
-                    locale: { format: 'DD-MM-YYYY' }
-                });
-
-                validation();
-
-                if (statusTxt == "success") {
-                    $('#modalKempen').modal('show');
-                    $('#modalKempen').on('hidden.bs.modal', function () {
-                        $('[data-tooltip="tooltip"]').tooltip('hide');
-                        $(this).find('.modal-content').empty();
-                    });
-                } else {
-                    alert("Error: " + xhr.status + ": " + xhr.statusText);
-                }
-            });
-        });
-
-        // JQuery validation
-        function validation() {
-            $('#modalFormKempen').validate({
-                submitHandler: function (form) {
-                    form.submit();
-                },
-                rules: {
-                    'kod_tag': 'required',
-                    'kategori': 'required',
-                    'jenis': 'required',
-                    'tarikh': 'required',
-                    'lat': 'required',
-                    'lng': 'required',
-                }
-            });
-        }
-    });
-</script>
-@stop
 @endsection

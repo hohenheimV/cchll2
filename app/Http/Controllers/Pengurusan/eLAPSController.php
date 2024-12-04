@@ -15,10 +15,10 @@ class eLAPSController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['role_or_permission:Pentadbir Sistem|eLAPS-list']);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|eLAPS-create'], ['only' => ['create', 'store']]);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|eLAPS-edit'], ['only' => ['edit', 'update']]);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|eLAPS-delete'], ['only' => ['destroy']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|Penggiat Industri|eLAPS-list']);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|Penggiat Industri|eLAPS-create'], ['only' => ['create', 'store']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|Penggiat Industri|eLAPS-edit'], ['only' => ['edit', 'update']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|Penggiat Industri|eLAPS-delete'], ['only' => ['destroy']]);
     }
 
     /**
@@ -146,7 +146,7 @@ class eLAPSController extends Controller
             'eLAPS' => $eLAPS,
             'spesisPokokJumlahPairs' => $spesisPokokJumlahPairs, // Pass the parsed data
         ]);
-        return view('pengurusan.eLAPS.show', ['eLAPS' => $eLAPS]);
+        return view('pengurusan.eLAPS.show'/* , ['eLAPS' => $eLAPS] */);
     }
 
     /**
@@ -177,10 +177,10 @@ class eLAPSController extends Controller
         // dd($spesisPokokJumlahPairs);
 
         // Return the data to the view
-        return view('pengurusan.eLAPS.edit', [
+        return view('pengurusan.eLAPS.edit'/* , [
             'eLAPS' => $eLAPS,
             'spesisPokokJumlahPairs' => $spesisPokokJumlahPairs, // Pass the parsed data
-        ]);
+        ] */);
     }
 
     /**
@@ -192,7 +192,16 @@ class eLAPSController extends Controller
      */
     public function update(Request $request, eLAPS $eLAPS)
     {
-        dd($request->input('serialized_spesis_pokok'));
+        if ($request->input('action') === 'update') {
+            dd($request->input('action'));
+            // Handle the update logic
+            // For example, saving the changes to the database
+        } elseif ($request->input('action') === 'submit') {
+            dd($request->all());
+            // Handle the submit logic
+            // For example, processing the application submission
+        }
+        // dd($request->all());
         $request->validate([
             'lat' => ['required'],
             'lng' => ['required'],

@@ -418,9 +418,10 @@ Route::middleware(['auth'])
         Route::resource('panorama', 'PanoramaController');
 
         /**
-         * Route KempenTanamPokokController
+         * Route KTPController
          */
-        Route::resource('kempen-tanam-pokok', 'KempenTanamPokokController');
+        Route::resource('ktp', 'KTPController');
+        Route::get('ktp/{ktp}/download', 'KTPController@download')->name('ktp.download');
 
         /**
          * Route EntitiLandskapUnikController
@@ -457,6 +458,42 @@ Route::middleware(['auth'])
          */
         Route::resource('manual', 'ManualController');
         Route::get('manual/{manual}/download', 'ManualController@download')->name('manual.download');
+        /**
+         * Route EREADController
+         */
+        Route::resource('eread', 'EREADController');
+        Route::get('eread/{eread}/download', 'EREADController@download')->name('eread.download');
+
+        /**
+         * Route ELADController
+         */
+        Route::resource('elad', 'ELADController');
+        Route::get('elad/{elad}/download', 'ELADController@download')->name('elad.download');
+        Route::get('/get-subkategori/{kategoriId}', [ELADController::class, 'getSubkategori']);
+
+        // /**
+        //  * Route ELADLLController
+        //  */
+        // Route::resource('eladll', 'ELADLLController');
+        // Route::get('eladll/{eladll}/download', 'ELADLLController@download')->name('eladll.download');
+        // Route::get('/get-subkategori/{kategoriId}', [ELADLLController::class, 'getSubkategori']);
+
+        //  /**
+        //  * Route ELADLKController
+        //  */
+        // Route::resource('eladlk', 'ELADLKController');
+        // Route::get('eladlk/{eladlk}/download', 'ELADLKController@download')->name('eladlk.download');
+        // Route::get('/get-subkategori/{kategoriId}', [ELADLKController::class, 'getSubkategori']);
+
+
+        /**
+         * Route EPACTController
+         */
+        Route::resource('epact', 'EPACTController');
+        Route::get('epact/{epact}/download', 'EPACTController@download')->name('epact.download');
+        Route::get('/get-subkategori/{kategoriId}', [EPACTController::class, 'getSubkategori']);
+
+
         /**
          * Route ArticleController
          */

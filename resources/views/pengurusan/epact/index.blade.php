@@ -3,33 +3,29 @@
 @section('title', 'Maklumat Polisi Landskap (ePACT)')
 
 @section('content')
-
+<section class="content">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card card-olive card-outline">
-                    <div class="card-header">
-                        <h3 class="card-title font-weight-bold my-1">Senarai @yield('title')</h3>
 
+        <div class="row justify-content-center">
+            <div class="col">
+                <div class="card card-outline card-dark">
+                    <div class="card-header border-0">
+                        <h5 class="card-title">@yield('title')</h5>
                         <div class="card-tools">
                             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+
                                 <div class="btn-group" role="group" aria-label="First group">
-                                     @if (Auth::user()->hasRole('Perunding'))
-                                     {{--Role is Perunding, Hide Button--}}
-                                        
-                                    @else
                                     {!! Form::button('<i class="fas fa-plus"></i> Daftar', [
-                                        'onclick' => "window.location='" . route('pengurusan.epact.create') . "'",
-                                        'class' => 'btn bg-success btn-sm',
-                                        Html::tooltip('Daftar Maklumat Polisi Landskap'),
+                                    'class'=>'btn btn-success btn-sm',
+                                    'onclick'=>"window.location='".route('pengurusan.epact.create')."'",
+                                    Html::tooltip('Daftar')
                                     ]) !!}
-                                    @endif
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- /.card-header -->
-                    <div class="card-body p-0">
+                    <div class="card-body">
                         <div class="table-responsive">
                             <table id="example" class="responsive table table-bordered table-hover table-striped mb-0">
                                 <thead class="thead-dark">
@@ -119,15 +115,17 @@
     <script>
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
     
-    @foreach($epacts as $epact)
-        (function(epactId) {
-            const url = "{{ asset($epact->dokumen ? 'storage/images/shares/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}";
+    document.addEventListener('DOMContentLoaded', function() {
+        const epacts = @json($epacts);
+
+        epacts.data.forEach(epact => {
+            const url = epact.dokumen ? `{{ asset('storage/images/shares/epact/dokumen') }}/${epact.dokumen}` : `{{ asset('img/no-photos.png') }}`;
             
             pdfjsLib.getDocument(url).promise.then(function(pdf) {
                 return pdf.getPage(1);
             }).then(function(page) {
-                const canvas = document.getElementById('pdf-render-' + epactId);
-                const loadingElement = document.getElementById('loading-' + epactId);
+                const canvas = document.getElementById('pdf-render-' + epact.id);
+                const loadingElement = document.getElementById('loading-' + epact.id);
                 const context = canvas.getContext('2d');
                 
                 // Get the viewport at scale 1
@@ -159,74 +157,15 @@
                     canvas.style.display = 'block';
                 });
             }).catch(function(error) {
-                console.error('Error loading PDF for ID ' + epactId + ':', error);
+                console.error('Error loading PDF for ID ' + epact.id + ':', error);
                 // Show a placeholder or error message
-                const viewerElement = document.getElementById('pdf-viewer-' + epactId);
+                const viewerElement = document.getElementById('pdf-viewer-' + epact.id);
                 if (viewerElement) {
                     viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Preview not available</div>';
                 }
             });
-        })({{ $epact->id }});
-    @endforeach
-</script>
-
-
-        <script>
-            $(document).ready(function() {
-                $('#modalPanorama').on('show.bs.modal', function(event) {
-                    var button = $(event.relatedTarget); // Button that triggered the modal
-                    var href = button.data('href'); // Extract info from data-* attributes
-                    $('[data-tooltip="tooltip"]').tooltip('hide');
-                    // Load URL from data-href
-                    $('#modalPanorama .modal-content').load(href, function(responseTxt, statusTxt, xhr) {
-
-                        //Date picker
-                        $('input[name="tarikh"]').daterangepicker({
-                            singleDatePicker: true,
-                            showDropdowns: true,
-                            minDate: '01-' + moment().subtract(1, 'month').subtract(1, 'year')
-                                .format('MM-YYYY'), //Tarikh mula 01/01/TahunLepas
-                            maxDate: moment().endOf('month').format(
-                            'DD-MM-YYYY'), //Tarikh mula 01/01/TahunDepan
-                            drops: "up",
-                            locale: {
-                                format: 'DD-MM-YYYY'
-                            }
-                        });
-
-                        validation();
-
-                        //If success load, show modal
-                        if (statusTxt == "success") {
-                            $('#modalPanorama').modal('show'); // Show Modal start
-                            // clear modal content if modal closed
-                            $('#modalPanorama').on('hidden.bs.modal', function() {
-                                $('[data-tooltip="tooltip"]').tooltip('hide');
-                                $(this).find('.modal-content').empty();
-                            });
-                        } else {
-                            alert("Error: " + xhr.status + ": " + xhr.statusText);
-                        }
-                    });
-                });
-
-                //jquery validation
-                function validation() {
-                    $('#modalFormPanorama').validate({ //sets up the validator
-                        submitHandler: function(form) {
-                            form.submit();
-                        },
-                        rules: {
-                            'kod_tag': 'required',
-                            'kategori': 'required',
-                            'jenis': 'required',
-                            'tarikh': 'required',
-                            'lat': 'required',
-                            'lng': 'required',
-                        }
-                    });
-                }
-            });
-        </script>
+        });
+    });
+    </script>
     @stop
 @endsection

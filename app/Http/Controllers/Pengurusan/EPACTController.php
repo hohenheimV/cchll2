@@ -33,7 +33,7 @@ class EPACTController extends Controller
      */
     public function index(Request $request) 
     {
-        $epacts = ePACT::with('kategori')->paginate(10);
+        $epacts = ePACT::with('kategori')->orderBy('created_at', 'desc')->paginate(10);
         return view('pengurusan.epact.index', compact('epacts'));
     }
 

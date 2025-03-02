@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\Pengurusan;
 
 use App\Http\Controllers\Controller;
-use App\Model\eREAD;
+use App\Model\eLAD;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
 use App\Model\Kategori;
 
 
-class EREADController extends Controller
+class ELADController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,10 +19,10 @@ class EREADController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['role_or_permission:Pentadbir Sistem|eread-list']);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|eread-create'], ['only' => ['create', 'store']]);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|eread-edit'], ['only' => ['edit', 'update']]);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|eread-delete'], ['only' => ['destroy']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|elad-list']);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|elad-create'], ['only' => ['create', 'store']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|elad-edit'], ['only' => ['edit', 'update']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|elad-delete'], ['only' => ['destroy']]);
     }
 
     /**
@@ -33,8 +32,11 @@ class EREADController extends Controller
      */
     public function index(Request $request) 
     {
-        $ereads = eREAD::with('kategori')->orderBy('created_at', 'desc')->paginate(10);
-        return view('pengurusan.eread.index', compact('ereads'));
+        $eladsLembut = eLAD::with('kategori')->where('kate', 157)->orderBy('created_at', 'desc')->paginate(10, ['*'], 'lembut');
+
+        $eladsKejur = eLAD::with('kategori')->where('kate', 123)->orderBy('created_at', 'desc')->paginate(10, ['*'], 'kejur');
+
+        return view('pengurusan.elad.index', compact('eladsLembut', 'eladsKejur'));
     }
 
 
@@ -45,11 +47,10 @@ class EREADController extends Controller
      */
     public function create()
     {
-        $kategories = Kategori::where('type', 1)->pluck('name', 'id');
-        $eread = new eREAD(); // Create a new instance for the form
-        return view('pengurusan.eread.create', compact('eread', 'kategories'));
+        $kategories = Kategori::where('type', 3)->pluck('name', 'id');
+        $elad = new eLAD(); // Create a new instance for the form
+        return view('pengurusan.elad.create', compact('elad', 'kategories'));
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -65,7 +66,8 @@ class EREADController extends Controller
         $request->validate([
             'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
             'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
-            'fail_dokumen' => 'required|mimes:pdf|max:51200', // 50MB in KB , PDF
+            'fail_dokumen' => 'required|mimes:pdf|max:20480', // PDF
+            'fail_imej' => 'nullable|image|max:20480',//image
             'tarikh' => 'required',
         ], [
             'required' => ':attribute diperlukan.',
@@ -78,7 +80,7 @@ class EREADController extends Controller
         $dokumenData = [];
         if ($request->hasFile('fail_dokumen')) {
             $dokumenFile = $request->file('fail_dokumen');
-            $dokumenName = 'eread_' . time() . '.' . $dokumenFile->getClientOriginalExtension();
+            $dokumenName = 'elad_' . time() . '.' . $dokumenFile->getClientOriginalExtension();
 
             $dokumenData = [
                 'dokumen' => $dokumenName,
@@ -88,11 +90,23 @@ class EREADController extends Controller
             ];
 
             // Store file
-            $dokumenFile->storeAs('public/images/shares/eread/dokumen', $dokumenName);
+            $dokumenFile->storeAs('public/images/shares/elad/dokumen', $dokumenName);
+        }
+
+        // Handle file upload for imej
+        $imejData = [];
+        if ($request->hasFile('fail_imej')) {
+            $imejFile = $request->file('fail_imej');
+            $imejName = 'elad_' . time() . '.' . $imejFile->getClientOriginalExtension();
+
+            $imejData = ['imej' => $imejName];
+
+            // Store file
+            $imejFile->storeAs('public/images/shares/elad/images', $imejName);
         }
 
         // Merge additional data for database insertion
-        $requestData = array_merge($request->all(), $dokumenData, [
+        $requestData = array_merge($request->all(), $dokumenData, $imejData, [
             'tarikh' => date('Y-m-d', strtotime($request->tarikh)),
         ]);
 
@@ -100,61 +114,63 @@ class EREADController extends Controller
         \Log::info('Data to be stored:', $requestData);
 
         // Store data in database
-        eREAD::create($requestData);
+        eLAD::create($requestData);
 
         // Redirect with success message
-        return redirect()->route('pengurusan.eread.index')->with('successMessage', 'Maklumat Telah Berjaya Ditambah');
+        return redirect()->route('pengurusan.elad.index')->with('success', 'Data telah berjaya disimpan.');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Model\eREAD  $eread
+     * @param  \App\Model\eLAD  $elad
      * @return \Illuminate\Http\Response
      */
-    public function show(eREAD $eread)
+    public function show(eLAD $elad)
     {
-        return view('pengurusan.eread.show', ['eread' => $eread]);
+        return view('pengurusan.elad.show', ['elad' => $elad]);
     }
 
     /**
      * Download the specified resource.
      *
-     * @param  \App\Model\eREAD  $eread
+     * @param  \App\Model\eLAD  $elad
      * @return \Illuminate\Http\Response
      */
-    public function download(eREAD $eread)
+    public function download(eLAD $elad)
     {
         return Storage::download(
-            'public/images/shares/eread/' . $eread->dokumen,
-            Str::slug(Str::lower($eread->tajuk), '-') . '.' . $eread->extension,
+            'public/images/shares/elad/' . $elad->dokumen,
+            Str::slug(Str::lower($elad->tajuk), '-') . '.' . $elad->extension,
             [
-                'Content-Description' => $eread->tajuk,
-                'Content-Type' => $eread->mimes,
+                'Content-Description' => $elad->tajuk,
+                'Content-Type' => $elad->mimes,
             ]
         );
     }
 
+    
+
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Model\eREAD  $eread
+     * @param  \App\Model\eLAD  $elad
      * @return \Illuminate\Http\Response
      */
-    public function edit(eREAD $eread)
+    public function edit(eLAD $elad)
     {
-        $kategories = Kategori::where('type', 1)->pluck('name', 'id');
-        return view('pengurusan.eread.edit', compact('eread', 'kategories'));
+        $kategories = Kategori::where('type', 3)->pluck('name', 'id');
+        return view('pengurusan.elad.edit', compact('elad', 'kategories'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\eREAD  $eread
+     * @param  \App\Model\eLAD  $elad
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, eREAD $eread)
+    public function update(Request $request, eLAD $elad)
     {
 
         $request->validate([
@@ -173,45 +189,45 @@ class EREADController extends Controller
         if ($request->hasFile('fail_dokumen')) {
             //nama baru bagi fail yg di upload
             //akan disimpan ke dalm fields imej
-            $filename = 'eread_' . time() . '.' . $request->fail_dokumen->extension();
+            $filename = 'elad_' . time() . '.' . $request->fail_dokumen->extension();
             $filenameMime = $request->fail_dokumen->getClientMimeType();
             $filenameExtension = $request->fail_dokumen->extension();
             $filenameSize = $request->fail_dokumen->getSize();
 
             //storage/app/images
-            $request->fail_dokumen->storeAs('public/images/shares/eread/dokumen', $filename);
+            $request->fail_dokumen->storeAs('public/images/shares/elad/dokumen', $filename);
             $request->request->add(['dokumen' => $filename, 'extension' => $filenameExtension, 'mimes' => $filenameMime, 'size' => $filenameSize]);
         }
             //Semak sekiranya wujud input fail_imej
             if ($request->hasFile('fail_imej')) {
-            $filename = 'eread' . time() . '.' . $request->fail_imej->extension();
+            $filename = 'elad' . time() . '.' . $request->fail_imej->extension();
 
             //storage/app/images
-            $request->fail_imej->storeAs('public/images/shares/eread/images', $filename);
+            $request->fail_imej->storeAs('public/images/shares/elad/images', $filename);
 
             $request->request->add(['imej' => $filename]);
         }
         $request->merge(['tarikh' => date('Y-m-d', strtotime($request->tarikh))]);
 
         //define data field of Model
-        $eread->update($request->all());
+        $elad->update($request->all());
         //$request->merge(['keterangan' =>'null']);
 
         //redirect to 'user.designations'
-        return redirect()->route('pengurusan.eread.index')->with('successMessage', 'Maklumat Telah Dikemaskini');
-        
+         return response()->json(['success'=>'You have successfully update file.']);
+        //return redirect()->route('pengurusan.elad.index')->with('successMessage', 'Maklumat elad telah berjaya disimpan');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Model\eREAD  $eread
+     * @param  \App\Model\eLAD  $elad
      * @return \Illuminate\Http\Response
      */
-    public function destroy(eREAD $eread)
+    public function destroy(eLAD $elad)
     {
-        $eread->delete();
-        return redirect()->route('pengurusan.eread.index')->with('successMessage', 'Maklumat Telah Dihapuskan');
+        $elad->delete();
+        return redirect()->route('pengurusan.elad.index')->with('successMessage', 'Maklumat elad telah dihapuskan');
     }
-    
+
 }

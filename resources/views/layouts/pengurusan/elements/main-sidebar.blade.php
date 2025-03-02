@@ -138,8 +138,15 @@
                 {{-- @can('drone-list') --}}
                 <li class="nav-item">
                     {!! Html::buttonSidebarNavLink('ePACT','fas fa-chart-pie',
-                    ['onclick'=>"window.location='#'",
-                    'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.drone.')]) !!}
+                    ['onclick'=>"window.location='".route('pengurusan.epact.index')."'",
+                    'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.epact.')]) !!}
+                </li>
+                {{-- @endcan --}}
+                {{-- @can('analisa-list') --}}
+                <li class="nav-item">
+                    {!! Html::buttonSidebarNavLink('eREAD','fas fa-chart-pie',
+                            ['onclick'=>"window.location='".route('pengurusan.eread.index')."'",
+                            'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.eread.')]) !!}
                 </li>
                 {{-- @endcan --}}
                 {{-- @can('analisa-list') --}}
@@ -166,8 +173,8 @@
                 {{-- @can('analisa-list') --}}
                 <li class="nav-item">
                     {!! Html::buttonSidebarNavLink('eLAD','fas fa-chart-pie',
-                    ['onclick'=>"window.location='#'",
-                    'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.analisa.')]) !!}
+                                ['onclick'=>"window.location='".route('pengurusan.elad.index')."'",
+                                'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.elad.')]) !!}
                 </li>
                 {{-- @endcan --}}
                 {{-- @can('analisa-list') --}}
@@ -185,14 +192,6 @@
                 </li>
                 {{-- @endcan --}}
                 {{-- @can('analisa-list') --}}
-                <!-- <li class="nav-item">
-                    {!! Html::buttonSidebarNavLink('eMOHON', 'fas fa-chart-pie', [
-                        'onclick' => "window.location='" . route('pengurusan.eMohon.entiti.index') . "'",
-                        'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.eMohon.entiti.')
-                    ]) !!}
-                </li> -->
-                {{-- @endcan --}}
-                {{-- @can('analisa-list') --}}
                 <li class="nav-item">
                     {!! Html::buttonSidebarNavLink('Entiti Landskap', 'fas fa-chart-pie', [
                         'onclick' => "window.location='" . route('pengurusan.entiti-landskap-unik.index') . "'",
@@ -203,8 +202,8 @@
                 {{-- @can('analisa-list') --}}
                 <li class="nav-item">
                     {!! Html::buttonSidebarNavLink('Kempen Tanam Pokok', 'fas fa-chart-pie', [
-                        'onclick' => "window.location='" . route('pengurusan.kempen-tanam-pokok.index') . "'",
-                        'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.kempen-tanam-pokok.')
+                        'onclick' => "window.location='" . route('pengurusan.ktp.index') . "'",
+                        'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.ktp.')
                     ]) !!}
                 </li>
 

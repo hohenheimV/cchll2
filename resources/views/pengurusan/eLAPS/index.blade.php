@@ -3,17 +3,22 @@
 @section('title', 'eLAPS')
 
 @section('content')
+
+@php
+    //dd(auth()->user()->roles, auth()->user()->permissions);
+@endphp
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-olive card-outline">
                 <div class="card-header">
-                    @hasrole('Pentadbir Sistem')
-                        <h3 class="card-title font-weight-bold my-1">Senarai @yield('title')</h3>
-                    @endhasrole
-                    @hasrole('Penggiat Industri')
-                        <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') PBT1</h3>
-                    @endhasrole
+                @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem'))
+                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan Pegawai JLN]</h3>
+                @elseif(Auth::user()->hasRole('TKP/B JLN|Pentadbir Sistem'))
+                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan KP/TKP/B. Penilaian]</h3>
+                @elseif(Auth::user()->hasRole('Pihak Berkuasa Tempatan'))
+                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan PBT]</h3>
+                @endif
                     <div class="card-tools">
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                             <div class="btn-group" role="group" aria-label="First group">
@@ -28,98 +33,158 @@
                 <!-- /.card-header -->
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table id="example" class="responsive table table-bordered table-hover table-striped mb-0">
+                        <table id="exampleNP" class="responsive table table-bordered table-hover table-striped mb-0">
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="w-1">Bil.</th>
-                                    <th class="w-5">Gambar</th>
-                                    <th>Nama Entiti Landskap</th>
-                                    <th>Keterangan</th>
-                                    <!-- <th class="text-center w-10">PBT/ Agensi</th> -->
-                                    @hasrole('Pentadbir Sistem')
-                                        <th class="text-center w-10">PBT/ Agensi</th>
-                                    @endhasrole
-                                    @hasrole('Penggiat Industri')
-                                        <!-- <th class="text-center w-10">PBT/ Agensi</th> -->
-                                    @endhasrole
-                                    <th class="text-center w-10">Lokasi</th>
-                                    <th class="text-center w-10">Anggaran Nilai</th>
+                                    <th>Tajuk Permohonan</th>
+                                    <th class="w-15">Jenis Permohonan</th>
+                                    @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|TKP/B JLN'))
+                                        <th class="text-center w-10">PBT</th>
+                                    @endif
+                                    <th class="text-center w-5">Tarikh Permohonan</th>
+                                    <th class="text-center w-12">Status</th>
                                     <th class="text-center w-5">Tindakan</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
-                                @hasrole('Pentadbir Sistem')
-                                    @php($index = $eLAPS->firstItem())
-                                    @forelse($eLAPS as $kempen)
+                                @php($jenis_pembangunan = [
+                                    'Taman Awam',
+                                    'Taman Botani',
+                                    'Pemuliharaan Dan Penyelidikan Landskap',
+                                    'Landskap Perbandaran',
+                                    'Persekitaran Kehidupan',
+                                    'Penyelenggaraan Landskap',
+                                    'Taman Persekutuan',
+                                    'Naik Taraf Taman Awam',
+                                    'Pelan Induk Landskap',
+                                    'Lain-lain (sila nyatakan)'
+                                ])
+                                @php($jenis_count = count($jenis_pembangunan))
+                                @php($index = $eLAPS->firstItem())
+                                @php($status_pembangunan = [
+                                    ['id' => 'Draf Permohonan', 'label' => 'bg-warning'], //1
+                                    ['id' => 'Permohonan diterima', 'label' => 'bg-info'], //2
+                                    ['id' => 'Pengesahan Permohonan', 'label' => 'bg-primary'], //3
+                                    ['id' => 'Permohonan ditolak', 'label' => 'bg-danger'], //4
+                                    ['id' => 'Serahan Permohonan ke Bahagian', 'label' => 'bg-secondary'], //5
+                                    ['id' => 'Lawatan Kawasan Tapak', 'label' => 'bg-success'], //6
+                                    ['id' => 'Draf Ulasan Lawatan Kawasan Tapak', 'label' => 'bg-warning'], //7
+                                    ['id' => 'Ulasan Lawatan Kawasan Tapak diterima', 'label' => 'bg-info'], //8
+                                    ['id' => 'Permohonan dibawa ke JPT', 'label' => 'bg-primary'], //9
+                                    ['id' => 'Permohonan Lulus', 'label' => 'bg-success'], //10
+                                    ['id' => 'Permohonan Gagal', 'label' => 'bg-danger'], //11
+                                    ['id' => 'Projek dalam pembinaan', 'label' => 'bg-secondary'], //12
+                                    ['id' => 'Projek Batal', 'label' => 'bg-dark'], //13
+                                    ['id' => 'Projek Siap', 'label' => 'bg-success'] //14
+                                ])
+                                @php($status_count = count($status_pembangunan))
+
+                                @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|Pihak Berkuasa Tempatan|TKP/B JLN'))
+                                    @forelse($eLAPS as $permohonan)
                                         <tr>
                                             <td>{{ $index++ }}</td>
-                                            <td class="p-0">
-                                                {!! '<img class="image-thumb p-1 w-75 mx-auto d-block embed-responsive-item" alt="Gambar eLAPS"
-                                                    src="'.asset($kempen->gambar_360 ? 'storage/images/shares/eLAPS/'.$kempen->gambar_360 : 'img/no-photos.png').'">' !!}
+                                            <td>{{ strtoupper($permohonan->projectTitle) }}</td>
+                                            
+                                            <td>
+                                            {!! 
+                                                in_array($permohonan->category, $jenis_pembangunan) ? $permohonan->category : '<span class="badge bg-warning">' . $permohonan->category . '</span>'
+                                            !!}
                                             </td>
-                                            <td>{{ (($index-1) % 2 == 0) ? 'Kawasan Unik '.($index-1) : 'Pokok Unik '.($index-1) }}</td>
-                                            <td>{{ (($index-1) % 2 == 0) ? 'Kawasan Unik '.($index-1).' ini berkonsepkan...' : 'Pokok Unik '.($index-1).' ini adalah pokok yang pertama...' }} </td>
-                                            <td class="text-center">{!! Html::datetime($kempen->tarikh, 'd-m-Y') ? 'PBT '.($index-1) : 'null'  !!}</td>
-                                            <td class="text-center">{!! Html::datetime($kempen->created_at, 'd-m-Y') ? 'Lokasi '.($index-1) : 'null'  !!}</td>
-                                            <td class="text-center">{!! Html::datetime($kempen->updated_at, 'd-m-Y')  ? 'RM '.number_format(($index - 1) * 2541.143, 2) : 'null' !!}</td>
+                                            @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem'))
+                                            <td>
+                                                {{ $permohonan->pbt_name }}
+                                            </td>
+                                            @endif
+                                            <td class="text-center">
+                                                {!! Html::datetime($permohonan->created_at, 'd-m-Y') ? Html::datetime($permohonan->created_at, 'd-m-Y') : '-' !!}
+                                            </td>
+                                            <td>
+                                                @if(Auth::user()->hasRole('Pihak Berkuasa Tempatan'))
+                                                    @php($currentStatus = ($permohonan->status_permohonan <= 8 && $permohonan->status_permohonan > 3) ? 3 : $permohonan->status_permohonan)
+                                                @else
+                                                    @php($currentStatus = $permohonan->status_permohonan)
+                                                @endif
+                                                <span style="white-space: normal; text-align: centre;width: 100%;" class="badge {{ $status_pembangunan[($currentStatus - 1) % $status_count]['label'] }}">{{ $status_pembangunan[($currentStatus - 1) % $status_count]['id'] }}</span>
+                                            </td>
                                             <td>
                                                 <div class="btn-group">
-                                                    {!! Form::button('<i class="fas fa-search"></i>',
-                                                        ['onclick'=>"window.location='".route('pengurusan.eLAPS.show',$kempen)."'",
-                                                        'class'=>'btn bg-info btn-sm', Html::tooltip('Butiran eLAPS')]) !!}
-                                                    {!! Form::button('<i class="fas fa-pencil-alt"></i>',
-                                                        ['onclick'=>"window.location='".route('pengurusan.eLAPS.edit',$kempen)."'",
-                                                        'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini eLAPS')]) !!}
-                                                    {!! Form::button('<i class="fas fa-trash"></i>', 
-                                                        ['class'=>'btn btn-danger btn-sm',
-                                                        'data-url'=>route('pengurusan.eLAPS.destroy',$kempen),
-                                                        'data-text'=>'Kempen : '.$kempen->tajuk,
-                                                        'data-toggle'=>'modal', 'data-target'=>'#modalDelete']) !!}
+                                                    
+                                                    @if($permohonan->status_permohonan >= 2)
+                                                        {!! Form::button('<i class="fas fa-search"></i>',
+                                                            ['onclick'=>"window.location='".route('pengurusan.eLAPS.show',$permohonan)."'",
+                                                            'class'=>'btn bg-info btn-sm', Html::tooltip('Lihat permohonan')
+                                                        ]) !!}
+                                                    @endif
+
+                                                    @if($permohonan->status_permohonan == 1 && (Auth::user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem')))
+                                                        {!! 
+                                                            Form::button('<i class="fas fa-pencil-alt"></i>', [
+                                                                'onclick' => "window.location='".route('pengurusan.eLAPS.edit', $permohonan)."'",
+                                                                'class' => 'btn bg-warning btn-sm',
+                                                                'data-toggle' => 'tooltip',
+                                                                Html::tooltip('Kemaskini Draf Permohonan')
+                                                            ]) 
+                                                            .
+                                                            Form::button('<i class="fas fa-trash"></i>', [
+                                                                'class' => 'btn btn-danger btn-sm',
+                                                                'data-url' => route('pengurusan.eLAPS.destroy', $permohonan),
+                                                                'data-text' => 'Kempen : '.$permohonan->tajuk,
+                                                                'data-toggle' => 'modal',
+                                                                'data-target' => '#modalDelete',
+                                                                Html::tooltip('Padam Draf Permohonan')
+                                                            ]) 
+                                                        !!}
+                                                    @elseif($permohonan->status_permohonan == 3 && (Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN')))
+                                                        {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
+                                                            'class' => 'btn btn-warning btn-sm', 
+                                                            'data-toggle'=>'modal', 
+                                                            'data-target'=>'#modalSerahan', 
+                                                            'data-elaps-id' => $permohonan->id, 
+                                                            Html::tooltip('Serahan kepada bahagian')
+                                                        ]) !!}
+                                                    @elseif($permohonan->status_permohonan == 8 && (Auth::user()->hasRole('Pentadbir Sistem|Pegawai')))
+                                                        {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
+                                                            ['class'=>'btn btn-warning btn-sm', Html::tooltip('Kemaskini Status JPT'),
+                                                            'data-url'=>route('pengurusan.eLAPS.destroy', $permohonan),
+                                                            'data-text'=>'Kempen : '.$permohonan->tajuk,
+                                                            'data-toggle'=>'modal', 'data-target'=>'#modalKeputusan'
+                                                        ]) !!}
+                                                    @elseif(($permohonan->status_permohonan == 10 || $permohonan->status_permohonan == 12) && (Auth::user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem')))
+                                                        {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
+                                                            ['class' => 'btn btn-warning btn-sm', 
+                                                            'data-url' => route('pengurusan.eLAPS.store', $permohonan),
+                                                            'data-toggle' => 'modal', 
+                                                            'data-target' => '#modalStatusProjek', 
+                                                            Html::tooltip('Kemaskini Status Projek')
+                                                        ])  !!}
+                                                    @elseif($permohonan->status_permohonan == 14 && (Auth::user()->hasRole('Pentadbir Sistem|Pegawai')))
+                                                        @if(in_array($permohonan->category, [$jenis_pembangunan[0],$jenis_pembangunan[1],$jenis_pembangunan[3],$jenis_pembangunan[4],$jenis_pembangunan[6]]))
+                                                            {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
+                                                                ['class'=>'btn btn-warning btn-sm', Html::tooltip('Eksport Taman Awam'),
+                                                                'data-url'=>route('pengurusan.eLAPS.destroy', $permohonan),
+                                                                'data-text'=>'Kempen : '.$permohonan->tajuk,
+                                                                'data-toggle'=>'modal', 'data-target'=>'#modalKeputusan']) !!}
+
+                                                        @elseif(in_array($permohonan->category, [$jenis_pembangunan[8]]))
+                                                            {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
+                                                                ['class'=>'btn btn-warning btn-sm', Html::tooltip('Eksport PIL'),
+                                                                'data-url'=>route('pengurusan.eLAPS.destroy', $permohonan),
+                                                                'data-text'=>'Kempen : '.$permohonan->tajuk,
+                                                                'data-toggle'=>'modal', 'data-target'=>'#modalKeputusan']) !!}
+                                                        @endif
+                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="8" class="text-center">No data available</td></tr>
+                                        <tr><td colspan="7" class="text-center">No data available</td></tr>
                                     @endforelse
-                                @endhasrole
-                                @hasrole('Penggiat Industri')
-                                    @php($index = $eLAPS->firstItem())
-                                    @forelse($eLAPS as $kempen)
-                                        <!-- Check if the PBT/Agensi matches the user's assigned PBT/Agensi -->
-                                            <tr>
-                                                <td>{{ $index++ }}</td>
-                                                <td class="p-0">
-                                                    {!! '<img class="image-thumb p-1 w-75 mx-auto d-block embed-responsive-item" alt="Gambar eLAPS"
-                                                        src="'.asset($kempen->gambar_360 ? 'storage/images/shares/eLAPS/'.$kempen->gambar_360 : 'img/no-photos.png').'">' !!}
-                                                </td>
-                                                <td>{{ (($index-1) % 2 == 0) ? 'Kawasan Unik '.($index-1) : 'Pokok Unik '.($index-1) }}</td>
-                                                <td>{{ (($index-1) % 2 == 0) ? 'Kawasan Unik '.($index-1).' ini berkonsepkan...' : 'Pokok Unik '.($index-1).' ini adalah pokok yang pertama...' }} </td>
-                                                <!-- <td class="text-center">{!! Html::datetime($kempen->tarikh, 'd-m-Y') ? 'PBT 1' : 'null'  !!}</td> -->
-                                                <td class="text-center">{!! Html::datetime($kempen->created_at, 'd-m-Y') ? 'Lokasi '.($index-1) : 'null'  !!}</td>
-                                                <td class="text-center">{!! Html::datetime($kempen->updated_at, 'd-m-Y')  ? 'RM '.number_format(($index - 1) * 2541.143, 2) : 'null' !!}</td>
-                                                <td>
-                                                    <div class="btn-group">
-                                                        {!! Form::button('<i class="fas fa-search"></i>',
-                                                            ['onclick'=>"window.location='".route('pengurusan.eLAPS.show',$kempen)."'",
-                                                            'class'=>'btn bg-info btn-sm', Html::tooltip('Butiran eLAPS')]) !!}
-                                                        {!! Form::button('<i class="fas fa-pencil-alt"></i>',
-                                                            ['onclick'=>"window.location='".route('pengurusan.eLAPS.edit',$kempen)."'",
-                                                            'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini eLAPS')]) !!}
-                                                        {!! Form::button('<i class="fas fa-trash"></i>', 
-                                                            ['class'=>'btn btn-danger btn-sm',
-                                                            'data-url'=>route('pengurusan.eLAPS.destroy',$kempen),
-                                                            'data-text'=>'Kempen : '.$kempen->tajuk,
-                                                            'data-toggle'=>'modal', 'data-target'=>'#modalDelete']) !!}
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                    @empty
-                                        <tr><td colspan="8" class="text-center">No data available for your role.</td></tr>
-                                    @endforelse
-                                @endhasrole
-                                @unlessrole('Pentadbir Sistem|Penggiat Industri')
-                                    <tr><td colspan="8" class="text-center">You do not have the necessary permissions to view this data.</td></tr>
-                                @endunlessrole
+                                
+                                @else
+                                    <tr><td colspan="6" class="text-center">You do not have the necessary permissions to view this data.</td></tr>
+                                @endif
                                 
                             </tbody>
 

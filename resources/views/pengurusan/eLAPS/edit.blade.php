@@ -10,13 +10,16 @@
                 <div class="card-header p-0 m-0">
                     <h5 class="card-title p-1 m-1 font-weight-bold">@yield('title')</h5>
                 </div>
-
-                {!! Form::model($eLAPS ?? '', ['route' => ['pengurusan.eLAPS.update', $eLAPS ?? '43'], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
+                @php
+                    //dd($eLAPS['id']);
+                    //(dd($eLAPS->category))
+                @endphp
+                {!! Form::model($eLAPS, ['route' => ['pengurusan.eLAPS.update', $eLAPS], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
                 <div class="card-body table-hardscape form-hardscape text-sm">
 
                     @include('pengurusan.eLAPS._form')
 
-                    @include('pengurusan.eLAPS._upload')
+                    <!-- @include('pengurusan.eLAPS._upload') -->
                 </div>
                 <div class="card-footer">
                     <!-- Cancel Button (redirect to eLAPS index) -->
@@ -24,10 +27,11 @@
 
                     <!-- Update Button (Kemaskini) -->
                     {!! Form::button('<i class="fas fa-save"></i> Kemaskini', [
-                        'class' => 'btn btn-success', 
+                        'class' => 'btn btn-primary', 
                         'type' => 'submit', 
                         'name' => 'action', 
-                        'value' => 'update'
+                        'value' => 'update',
+                        'id' => 'updateButton'
                     ]) !!}
 
                     <!-- Submit Button (Hantar Permohonan) -->
@@ -37,6 +41,18 @@
                         'name' => 'action', 
                         'value' => 'submit'
                     ]) !!}
+
+                    {!!
+                        ((($eLAPS->status_permohonan == 10 || $eLAPS->status_permohonan == 12) && auth()->user()->hasRole('Pentadbir Sistem|Pihak Berkuasa Tempatan')) ?
+                            Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini Status Projek', 
+                                [
+                                    'class' => 'btn btn-primary', 
+                                    'type' => 'submit', 
+                                    'name' => 'statusProjek', 
+                                    'value' => 'siap'
+                                ]) 
+                        : '')
+                    !!}
                 </div>
                 {!! Form::close() !!}
             </div>

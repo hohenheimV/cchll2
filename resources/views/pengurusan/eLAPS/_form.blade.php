@@ -1,12 +1,56 @@
 <table class="table table-bordered" style="border: none; font-size: 12px;">
     <!-- First Row: Title (Tajuk Permohonan and Rujukan) -->
-    <tr style="border-bottom: 1px solid black;border-top: 1px solid black;background-color: #ffff00;"  style="background-color: #ffff00;">
-        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('projectTitle', '1.&nbsp;&nbsp;&nbsp;&nbsp;TAJUK PERMOHONAN PROJEK:', ['class' => 'col-form-label']) }}</td>
-        <!-- <td style="border: none; padding: 8px; text-align: left;"  colspan="3">{{ Form::text('projectTitle', null, ['class' => 'form-control']) }}</td> -->
-        <td style="border: none; padding: 8px; text-align: left;"  colspan="3">{{ Form::textarea('projectTitle', null, ['class' => 'form-control', 'rows' => 2, 'cols' => 50, 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
+    <tr style="border-bottom: 1px solid black;border-top: 1px solid black;background-color: #ffff00;">
+        <td style="border: none; padding: 8px; text-align: left;" rowspan="2" >{{ Form::label('projectTitle', '1.&nbsp;&nbsp;&nbsp;&nbsp;TAJUK PERMOHONAN PROJEK:', ['class' => 'col-form-label']) }}</td>
+        <td style="border: none; padding: 8px; text-align: left;" colspan="3" rowspan="2">{{ Form::textarea('projectTitle', null, ['class' => 'form-control', 'rows' => 3, 'cols' => 50, 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
         <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('referenceNumber', '2.&nbsp;&nbsp;&nbsp;&nbsp;RUJUKAN PERMOHONAN:', ['class' => 'col-form-label']) }}</td>
-        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::text('referenceNumber', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
+        <td style="border: none; padding: 8px; text-align: left;" >
+            {{ Form::text('referenceNumber', $eLAPS->referenceNumber, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'text-align: right; width: 70%; margin-top: 0; margin-left: auto; margin-right: 0;']) }}
+        </td>
     </tr>
+    <tr style="border-bottom: 1px solid black; border-top: 1px solid black; background-color: #ffff00;">
+        <td style="border: none; padding: 8px; text-align: left;">
+            {{ Form::label('anggaranKos', '&nbsp;&nbsp;&nbsp;&nbsp;ANGGARAN KOS PEMBANGUNAN (RM):', ['class' => 'col-form-label']) }}
+        </td>
+        <td style="border: none; padding: 8px; text-align: left;">
+            {{ Form::text('anggaranKos', null, ['class' => 'form-control currency-input', 'placeholder' => '0.00', 'style' => 'text-align: right; width: 70%; margin-left: auto; margin-right: 0;', 'oninput' => 'formatCurrency(this);']) }}
+        </td>
+        <style>
+            .currency-input {
+                font-size: 1.2em;
+                padding: 10px;
+                width: 200px;
+            }
+        </style>
+
+        <script>
+            function formatCurrency(input) {
+                // Remove non-numeric characters except for the decimal point
+                let value = input.value.replace(/[^\d.]/g, '');
+                
+                // Split the value into integer and decimal parts
+                let [integer, decimal] = value.split('.');
+
+                // Format the integer part with commas
+                integer = integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                // If there's no decimal part, initialize it to '00'
+                if (!decimal) {
+                    decimal = '00';
+                } else {
+                    // If there's a decimal part, limit it to two digits
+                    decimal = decimal.slice(0, 2);
+                }
+
+                // Rejoin the integer and decimal parts, ensuring two decimal places
+                input.value = integer + '.' + decimal;  // Concatenate integer and two decimal digits
+            }
+        </script>
+    </tr>
+
+    
+
+
     <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
         <td style="border: none; padding: 8px; text-align: left;"  colspan="6" style="height: 20px; padding-top: 5px; padding-bottom: 5px;"></td>
     </tr>
@@ -18,68 +62,6 @@
     <!-- Third Row: Rancangan Pembangunan (checkboxes with input fields) -->
     <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
         <td style="border: none; padding: 8px; text-align: left;"  colspan="6">
-            <!-- <div class="form-group row">
-                <div class="col-md-4">
-                    <div class="form-check">
-                        {{ Form::checkbox('category[]', 'Taman Awam', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'category_taman_awam', 'onclick' => 'onlyOne1(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('category_taman_awam', 'Taman Awam', ['class' => 'form-check-label bigger-label']) }}
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-check">
-                        {{ Form::checkbox('category[]', 'Taman Botani', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'category_taman_botani', 'onclick' => 'onlyOne1(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('category_taman_botani', 'Taman Botani', ['class' => 'form-check-label bigger-label']) }}
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-check">
-                        {{ Form::checkbox('category[]', 'Pemuliharaan Dan Penyelidikan Landskap', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'category_pemuliharaan', 'onclick' => 'onlyOne1(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('category_pemuliharaan', 'Pemuliharaan Dan Penyelidikan Landskap', ['class' => 'form-check-label bigger-label']) }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-md-4">
-                    <div class="form-check">
-                        {{ Form::checkbox('category[]', 'Landskap Perbandaran', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'category_landskap_perbandaran', 'onclick' => 'onlyOne1(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('category_landskap_perbandaran', 'Landskap Perbandaran', ['class' => 'form-check-label bigger-label']) }}
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-check">
-                        {{ Form::checkbox('category[]', 'Persekitaran Kehidupan', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'category_persekitaran', 'onclick' => 'onlyOne1(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('category_persekitaran', 'Persekitaran Kehidupan', ['class' => 'form-check-label bigger-label']) }}
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-check">
-                        {{ Form::checkbox('category[]', 'Penyelenggaraan Landskap', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'category_penyelenggaraan', 'onclick' => 'onlyOne1(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('category_penyelenggaraan', 'Penyelenggaraan Landskap', ['class' => 'form-check-label bigger-label']) }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-md-4">
-                    <div class="form-check">
-                        {{ Form::checkbox('category[]', 'Taman Persekutuan', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'category_taman_persekutuan', 'onclick' => 'onlyOne1(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('category_taman_persekutuan', 'Taman Persekutuan', ['class' => 'form-check-label bigger-label']) }}
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-check">
-                        {{ Form::checkbox('category[]', 'Naik Taraf Taman Awam', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'category_naik_taraf', 'onclick' => 'onlyOne1(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('category_naik_taraf', 'Naik Taraf Taman Awam', ['class' => 'form-check-label bigger-label']) }}
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-check">
-                        {{ Form::checkbox('category[]', 'Lain-lain (sila nyatakan)', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'category_lain', 'onclick' => 'toggleLainLainText();onlyOne1(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('category_lain', 'Lain-lain (sila nyatakan)', ['class' => 'form-check-label bigger-label']) }}
-                    </div>
-                </div>
-            </div> -->
 
             <style>
                 /* Add space before the checkbox */
@@ -92,7 +74,10 @@
                     margin-left: 40px; /* Adjust this value for the desired space between checkbox and label */
                 }
             </style>
-
+            @php
+                $allLabels = [];
+                //$eLAPS->category = isset($eLAPS->category) ? $eLAPS->category : '';
+            @endphp
             @foreach ([
                 [
                     ['id' => 'category_taman_awam', 'label' => 'Taman Awam'],
@@ -107,20 +92,54 @@
                 [
                     ['id' => 'category_taman_persekutuan', 'label' => 'Taman Persekutuan'],
                     ['id' => 'category_naik_taraf', 'label' => 'Naik Taraf Taman Awam'],
+                    ['id' => 'category_pelan_induk', 'label' => 'Pelan Induk Landskap']
+                ],
+                [
                     ['id' => 'category_lain', 'label' => 'Lain-lain (sila nyatakan)', 'onclick' => 'toggleLainLainText();onlyOne1(this);']
                 ]
             ] as $categoryGroup)
+                @php
+                    $allLabels = array_merge($allLabels, array_column($categoryGroup, 'label'));
+                @endphp
                 <div class="form-group row">
                     @foreach ($categoryGroup as $category)
                         <div class="col-md-4">
                             <div class="form-check">
-                                {{ Form::checkbox('category[]', $category['label'], false, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => $category['id'], 'onclick' => $category['onclick'] ?? 'onlyOne1(this)']) }}
+                            @php
+                                $isChecked = $category['label'] == (isset($eLAPS->category) ? $eLAPS->category : '');
+                                //dump($isChecked);
+                            @endphp
+                                {{ Form::checkbox('category[]', $category['label'], $isChecked, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => $category['id'], 'onclick' => $category['onclick'] ?? 'onlyOne1(this)']) }}
                                 {{ Form::label($category['id'], $category['label'], ['class' => 'form-check-label bigger-label space-label']) }}
                             </div>
                         </div>
                     @endforeach
                 </div>
             @endforeach
+            
+            <!-- Textbox for "Lain-lain" option -->
+            <div class="form-group row" id="lain_lain_details" style="display: none;">
+                <div class="col-md-12">
+                    {{ Form::label('lain_lain_text', 'Sila Nyatakan:', ['class' => 'col-form-label']) }}
+                    {{ Form::text('category[lain-lain]', null, ['class' => 'form-control', 'placeholder' => 'Masukkan maklumat lain-lain', 'id' => 'lain_lain_text', 'disabled' => true]) }}
+                </div>
+            </div>
+            @php
+                // Check if the category is not in the list of predefined categories
+                $lainLainChecked = isset($eLAPS->category) && !in_array($eLAPS->category, ['Taman Awam', 'Taman Botani', 'Pemuliharaan Dan Penyelidikan Landskap', 'Landskap Perbandaran', 'Persekitaran Kehidupan', 'Penyelenggaraan Landskap', 'Taman Persekutuan', 'Naik Taraf Taman Awam', 'Pelan Induk Landskap']);
+                $findString = (isset($eLAPS->category)) ? $eLAPS->category : '';
+                $isMatch = empty(array_intersect($allLabels, [$findString]));
+                //dd($isMatch);
+            @endphp
+
+            @if($isMatch && isset($eLAPS->category))
+                <script>
+                    document.getElementById('category_lain').checked = true;
+                    document.getElementById('lain_lain_details').style.display = 'block';
+                    document.getElementById('lain_lain_text').disabled = false;
+                    document.getElementById('lain_lain_text').value = "{{$eLAPS->category ?? ''}}";
+                </script>
+            @endif
 
             <script>
                 function onlyOne1(checkbox1) {
@@ -130,10 +149,11 @@
                             item1.checked = false;
                         }
                     });
-                    if(checkbox1.id != 'category_lain'){document.getElementById('lain_lain_details').style.display = 'none';}
+                    if(checkbox1.id != 'category_lain'){document.getElementById('lain_lain_details').style.display = 'none';document.getElementById('lain_lain_text').disabled = true;}
                     else{
                         if (document.getElementById('category_lain').checked) {
                             document.getElementById('lain_lain_details').style.display = 'block';
+                            document.getElementById('lain_lain_text').disabled = false;
                             setTimeout(function() {
                                 document.getElementById('lain_lain_text').focus();
                             }, 100);
@@ -149,17 +169,12 @@
             </script>
 
 
-            <!-- Textbox for "Lain-lain" option -->
-            <div class="form-group row" id="lain_lain_details" style="display: none;">
-                <div class="col-md-12">
-                    {{ Form::label('lain_lain_text', 'Sila Nyatakan:', ['class' => 'col-form-label']) }}
-                    {{ Form::text('lain_lain_text', null, ['class' => 'form-control', 'placeholder' => 'Masukkan maklumat lain-lain']) }}
-                </div>
-            </div>
+            
 
             <!-- JavaScript to toggle the display of the "Lain-lain" text box -->
             <script>
                 function toggleLainLainText() {
+                    // alert("DA");
                     // var checkBox = document.getElementById('category_lain');
                     // var textBox = document.getElementById('lain_lain_details');
                     // if (checkBox.checked) {
@@ -177,62 +192,12 @@
     </tr>
     <!-- Third Row: Rancangan Pembangunan (checkbox and text box) -->
     <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
-        <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('rancangan_pembangunan', '4.&nbsp;&nbsp;&nbsp;&nbsp;RANCANGAN PEMBANGUNAN:', ['class' => 'col-form-label']) }}</td>
+        <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('rancangan_pembangunan', '4.&nbsp;&nbsp;&nbsp;&nbsp;RANCANGAN PEMBANGUNAN: ', ['class' => 'col-form-label']) }}<h7>&nbsp;(Adakah tapak cadangan berasaskan kepada Rancangan Pembangunan tersebut?)</h7></td>
     </tr>
 
     <!-- Third Row: Rancangan Pembangunan (checkboxes with input fields) -->
     <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
         <td style="border: none; padding: 8px; text-align: left;"  colspan="6">
-            <!-- <div class="form-group row">
-                <div class="col-md-6">
-                    <div class="form-check d-flex align-items-center">
-                        {{ Form::checkbox('rancangan_pembangunan[]', 'Pelan Induk Landskap', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'rancangan_pembangunan_1', 'onclick' => 'onlyOne2(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('rancangan_pembangunan', 'Pelan Induk Landskap : ', ['class' => 'form-check-label bigger-label ms-2']) }}
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::text('rancangan_pembangunan_details_1', null, ['class' => 'form-control d-inline-block ms-2', 'id' => 'rancangan_pembangunan_details_1', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'width: 50%; margin-top: 0;']) }}
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="form-check d-flex align-items-center">
-                        {{ Form::checkbox('rancangan_pembangunan[]', 'Rancangan Struktur', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'rancangan_pembangunan_2', 'onclick' => 'onlyOne2(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('rancangan_pembangunan_2', 'Rancangan Struktur : ', ['class' => 'form-check-label bigger-label ms-2']) }}
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::text('rancangan_pembangunan_details_2', null, ['class' => 'form-control d-inline-block ms-2', 'id' => 'rancangan_pembangunan_details_2', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'width: 50%; margin-top: 0;']) }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-md-6">
-                    <div class="form-check d-flex align-items-center">
-                        {{ Form::checkbox('rancangan_pembangunan[]', 'Rancangan Tempatan', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'rancangan_pembangunan_3', 'onclick' => 'onlyOne2(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('rancangan_pembangunan_3', 'Rancangan Tempatan : ', ['class' => 'form-check-label bigger-label ms-2']) }}
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::text('rancangan_pembangunan_details_3', null, ['class' => 'form-control d-inline-block ms-2', 'id' => 'rancangan_pembangunan_details_3', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'width: 50%; margin-top: 0;']) }}
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-check d-flex align-items-center">
-                        {{ Form::checkbox('rancangan_pembangunan[]', 'Rancangan Kawasan Khas', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'rancangan_pembangunan_4', 'onclick' => 'onlyOne2(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('rancangan_pembangunan_4', 'Rancangan Kawasan Khas : ', ['class' => 'form-check-label bigger-label ms-2']) }}
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::text('rancangan_pembangunan_details_4', null, ['class' => 'form-control d-inline-block ms-2', 'id' => 'rancangan_pembangunan_details_4', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'width: 50%; margin-top: 0;']) }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-md-12">
-                    <div class="form-check d-flex align-items-center">
-                        {{ Form::checkbox('rancangan_pembangunan[]', 'Lain-Lain Pelan Pembangunan (Nyatakan)', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'rancangan_pembangunan_5', 'onclick' => 'onlyOne2(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('rancangan_pembangunan_5', 'Lain-Lain Pelan Pembangunan (Nyatakan) : ', ['class' => 'form-check-label bigger-label ms-2']) }}
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::text('rancangan_pembangunan_details_5', null, ['class' => 'form-control d-inline-block ms-2', 'id' => 'rancangan_pembangunan_details_5', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'width: 50%; margin-top: 0;']) }}
-                    </div>
-                </div>
-            </div> -->
-
             @php
                 $rancangan_pembangunan = [
                     ['label' => 'Pelan Induk Landskap', 'id' => '1'],
@@ -242,7 +207,12 @@
                     ['label' => 'Lain-Lain Pelan Pembangunan (Nyatakan)', 'id' => '5'],
                 ];
             @endphp
-
+            @php
+                if(isset($eLAPS->rancangan_pembangunan)){
+                    $rancanganPembangunanData = json_decode($eLAPS->rancangan_pembangunan, true);
+                    //dd($rancanganPembangunanData)
+                }
+            @endphp
             @foreach ($rancangan_pembangunan as $index => $item)
                 @if ($index % 2 == 0)
                     <div class="form-group row">
@@ -250,9 +220,14 @@
 
                     <div class="{{ $index == count($rancangan_pembangunan) - 1 ? 'col-md-12' : 'col-md-6' }}">
                         <div class="form-check d-flex align-items-center">
-                            {{ Form::checkbox('rancangan_pembangunan[]', $item['label'], false, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'rancangan_pembangunan_' . $item['id'], 'onclick' => 'onlyOne2(this)']) }}
-                            {{ Form::label('rancangan_pembangunan_' . $item['id'], $item['label'] . ' :&nbsp;&nbsp;&nbsp;&nbsp;', ['class' => 'form-check-label bigger-label space-label ms-2']) }}
-                            {{ Form::text('rancangan_pembangunan_details_' . $item['id'], null, ['class' => 'form-control d-inline-block ms-2', 'id' => 'rancangan_pembangunan_details_' . $item['id'], 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'width: 50%; margin-top: 0;']) }}
+                            @php
+                                if(isset($eLAPS->rancangan_pembangunan) && isset($rancanganPembangunanData['jenis'])){
+                                    $isChecked = $rancanganPembangunanData['jenis'] == str_replace('&nbsp;', '', $item['label']);
+                                }
+                            @endphp
+                            {{ Form::checkbox('rancangan_pembangunan[jenis]', str_replace('&nbsp;', '', $item['label']), $isChecked, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'rancangan_pembangunan_' . $item['id'], 'onclick' => 'onlyOne2(this)']) }}
+                            {{ Form::label('rancangan_pembangunan_' . $item['id'], str_replace('&nbsp;', '', $item['label']) . ' :&nbsp;&nbsp;&nbsp;&nbsp;', ['class' => 'form-check-label bigger-label space-label ms-2']) }}
+                            {{ Form::text('rancangan_pembangunan[keterangan]', $isChecked ? $rancanganPembangunanData['keterangan'] : null, ['class' => 'form-control d-inline-block ms-2', 'id' => 'rancangan_pembangunan_details_' . str_replace('&nbsp;', '', $item['id']), 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'width: 50%; margin-top: 0;', 'disabled' => !$isChecked]) }}
                         </div>
                     </div>
 
@@ -264,42 +239,54 @@
             <script>
                 // JavaScript function to ensure only one checkbox is selected
                 function onlyOne2(checkbox2) {
-                    var checkboxes2 = document.querySelectorAll('input[name="rancangan_pembangunan[]"]');
+                    var checkboxes2 = document.querySelectorAll('input[name="rancangan_pembangunan[jenis]"]');
                     checkboxes2.forEach(function(item2) {
+                        let id = item2.id.replace("rancangan_pembangunan", "rancangan_pembangunan_details");
                         if (item2 !== checkbox2) {
                             item2.checked = false;
+                            document.getElementById(id).disabled = true;
+                        }else{
+                            document.getElementById(id).disabled = false;
+                            setTimeout(function() {
+                                document.getElementById(id).focus();
+                            }, 100); 
                         }
                     });
 
-                    switch(checkbox2.id) {
-                        case 'rancangan_pembangunan_1':
-                            setTimeout(function() {
-                                document.getElementById('rancangan_pembangunan_details_1').focus();
-                            }, 100); // Delay the focus by 100ms
-                            break;
-                        case 'rancangan_pembangunan_2':
-                            setTimeout(function() {
-                                document.getElementById('rancangan_pembangunan_details_2').focus();
-                            }, 100); // Delay the focus by 100ms
-                            break;
-                        case 'rancangan_pembangunan_3':
-                            setTimeout(function() {
-                                document.getElementById('rancangan_pembangunan_details_3').focus();
-                            }, 100); // Delay the focus by 100ms
-                            break;
-                        case 'rancangan_pembangunan_4':
-                            setTimeout(function() {
-                                document.getElementById('rancangan_pembangunan_details_4').focus();
-                            }, 100); // Delay the focus by 100ms
-                            break;
-                        case 'rancangan_pembangunan_5':
-                            setTimeout(function() {
-                                document.getElementById('rancangan_pembangunan_details_5').focus();
-                            }, 100); // Delay the focus by 100ms
-                            break;
-                        default:
-                            console.log('No matching case');
-                    }
+                    // switch(checkbox2.id) {
+                    //     case 'rancangan_pembangunan_1':
+                    //         document.getElementById('rancangan_pembangunan_details_1').disabled = false;
+                    //         setTimeout(function() {
+                    //             document.getElementById('rancangan_pembangunan_details_1').focus();
+                    //         }, 100); // Delay the focus by 100ms
+                    //         break;
+                    //     case 'rancangan_pembangunan_2':
+                            
+                    //         setTimeout(function() {
+                    //             document.getElementById('rancangan_pembangunan_details_2').focus();
+                    //         }, 100); // Delay the focus by 100ms
+                    //         break;
+                    //     case 'rancangan_pembangunan_3':
+                            
+                    //         setTimeout(function() {
+                    //             document.getElementById('rancangan_pembangunan_details_3').focus();
+                    //         }, 100); // Delay the focus by 100ms
+                    //         break;
+                    //     case 'rancangan_pembangunan_4':
+                            
+                    //         setTimeout(function() {
+                    //             document.getElementById('rancangan_pembangunan_details_4').focus();
+                    //         }, 100); // Delay the focus by 100ms
+                    //         break;
+                    //     case 'rancangan_pembangunan_5':
+                            
+                    //         setTimeout(function() {
+                    //             document.getElementById('rancangan_pembangunan_details_5').focus();
+                    //         }, 100); // Delay the focus by 100ms
+                    //         break;
+                    //     default:
+                    //         console.log('No matching case');
+                    // }
                 }
             </script>
 
@@ -333,68 +320,54 @@
 
 
     <tr>
+        @php  
+            //dd((in_array($eLAPS->hakmilik_tanah, ["PBT", "Negeri"])))
+            //dd($eLAPS->hakmilik_tanah)
+            $pbt = (isset($eLAPS->hakmilik_tanah) && $eLAPS->hakmilik_tanah == "PBT");
+            $negeri = (isset($eLAPS->hakmilik_tanah) && $eLAPS->hakmilik_tanah == "Negeri");
+            $agensi = (isset($eLAPS->hakmilik_tanah) && !in_array($eLAPS->hakmilik_tanah, ["PBT", "Negeri"]));
+            $agensiName = (isset($eLAPS->hakmilik_tanah) && !in_array($eLAPS->hakmilik_tanah, ["PBT", "Negeri"])) ? $eLAPS->hakmilik_tanah : '';
+        @endphp
         <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('hakmilik_tanah', 'b.&nbsp;&nbsp;&nbsp;&nbsp;Hakmilik Tanah :', ['class' => 'col-form-label']) }}</td>
-        
-        <!-- <td style="border: none; padding: 8px; text-align: left;" >
-            <div class="form-check d-flex align-items-center">
-                {{ Form::checkbox('hakmilik_tanah[]', 'PBT', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'pelan_induk_landskap_4']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                {{ Form::label('pelan_induk_landskap_4', 'PBT', ['class' => 'form-check-label bigger-label ms-2']) }}
-                {{ Form::text('pelan_induk_landskap_details_4', null, ['class' => 'form-control d-inline-block ms-2', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'visibility: hidden; width: 0; margin-top: 0;']) }}
-            </div>
-        </td>
-
         <td style="border: none; padding: 8px; text-align: left;" >
             <div class="form-check d-flex align-items-center">
-                {{ Form::checkbox('hakmilik_tanah[]', 'Negeri', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'pelan_induk_landskap_4']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                {{ Form::label('pelan_induk_landskap_4', 'Negeri', ['class' => 'form-check-label bigger-label ms-2']) }}
-                {{ Form::text('pelan_induk_landskap_details_4', null, ['class' => 'form-control d-inline-block ms-2', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'visibility: hidden; width: 0; margin-top: 0;']) }}
-            </div>
-        </td>
-
-        <td style="border: none; padding: 8px; text-align: left;"  colspan="3">
-            <div class="form-check d-flex align-items-center">
-                {{ Form::checkbox('hakmilik_tanah[]', 'Agensi lain (Nyatakan)', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'pelan_induk_landskap_5']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                {{ Form::label('pelan_induk_landskap_5', 'Agensi lain (Nyatakan) : ', ['class' => 'form-check-label bigger-label ms-2']) }}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                {{ Form::text('pelan_induk_landskap_details_5', null, ['class' => 'form-control d-inline-block ms-2', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'width: 50%; margin-top: 0;']) }}
-            </div>
-        </td> -->
-        <td style="border: none; padding: 8px; text-align: left;" >
-            <div class="form-check d-flex align-items-center">
-                {{ Form::checkbox('hakmilik_tanah[]', 'PBT', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'hakmilik_tanah_1', 'onclick' => 'onlyOne3(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
+                {{ Form::checkbox('hakmilik_tanah[hakmilik]', 'PBT', $pbt, ['class' => 'form-check-input bigger-checkbox', 'id' => 'hakmilik_tanah_1', 'onclick' => 'onlyOne3(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
                 {{ Form::label('hakmilik_tanah_1', 'PBT', ['class' => 'form-check-label bigger-label ms-2']) }}
-                {{ Form::text('hakmilik_tanah_details_1', null, ['class' => 'form-control d-inline-block ms-2', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'visibility: hidden; width: 0; margin-top: 0;']) }}
+                {{ Form::text('hakmilik_tanah_details_1', null, ['class' => 'form-control d-inline-block ms-2', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'visibility: hidden; width: 0; margin-top: 0;', 'disabled' => true]) }}
             </div>
         </td>
 
         <td style="border: none; padding: 8px; text-align: left;" >
             <div class="form-check d-flex align-items-center">
-                {{ Form::checkbox('hakmilik_tanah[]', 'Negeri', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'hakmilik_tanah_2', 'onclick' => 'onlyOne3(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
+                {{ Form::checkbox('hakmilik_tanah[hakmilik]', 'Negeri', $negeri, ['class' => 'form-check-input bigger-checkbox', 'id' => 'hakmilik_tanah_2', 'onclick' => 'onlyOne3(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
                 {{ Form::label('hakmilik_tanah_2', 'Negeri', ['class' => 'form-check-label bigger-label ms-2']) }}
-                {{ Form::text('hakmilik_tanah_details_2', null, ['class' => 'form-control d-inline-block ms-2', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'visibility: hidden; width: 0; margin-top: 0;']) }}
+                {{ Form::text('hakmilik_tanah_details_2', null, ['class' => 'form-control d-inline-block ms-2', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'visibility: hidden; width: 0; margin-top: 0;', 'disabled' => true]) }}
             </div>
         </td>
 
         <td style="border: none; padding: 8px; text-align: left;"  colspan="3">
             <div class="form-check d-flex align-items-center">
-                {{ Form::checkbox('hakmilik_tanah[]', 'Agensi lain (Nyatakan)', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'hakmilik_tanah_3', 'onclick' => 'onlyOne3(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
+                {{ Form::checkbox('hakmilik_tanah[hakmilik]', 'Agensi lain (Nyatakan)', $agensi, ['class' => 'form-check-input bigger-checkbox', 'id' => 'hakmilik_tanah_3', 'onclick' => 'onlyOne3(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
                 {{ Form::label('hakmilik_tanah_3', 'Agensi lain (Nyatakan) : ', ['class' => 'form-check-label bigger-label ms-2']) }}
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                {{ Form::text('hakmilik_tanah_details_3', null, ['class' => 'form-control d-inline-block ms-2', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'width: 50%;', 'id' => 'hakmilik_tanah_details_3']) }}
+                {{ Form::text('hakmilik_tanah[keterangan]', $agensiName, ['class' => 'form-control d-inline-block ms-2', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'width: 50%;', 'id' => 'hakmilik_tanah_details_3', 'disabled' => !$agensi]) }}
             </div>
         </td>
 
         <script>
             function onlyOne3(checkbox3) {
-                var checkboxes3 = document.querySelectorAll('input[name="hakmilik_tanah[]"]');
+                var checkboxes3 = document.querySelectorAll('input[name="hakmilik_tanah[hakmilik]"]');
                 checkboxes3.forEach(function(item3) {
                     if (item3 !== checkbox3) {
                         item3.checked = false;
                     }
                     if(checkbox3.id == 'hakmilik_tanah_3'){
+                        document.getElementById('hakmilik_tanah_details_3').disabled = false;
                         setTimeout(function() {
                             document.getElementById('hakmilik_tanah_details_3').focus();
                         }, 100);
+                    }else{
+                        document.getElementById('hakmilik_tanah_details_3').disabled = true;
                     }
                 });
             }
@@ -415,11 +388,33 @@
             <br>
             {{ Form::label('note1', '(WAJIB disertakan salinan surat pewartaan untuk setiap lot yg terlibat)', ['class' => 'col-form-label','style'=>'font-size: 10px; height: 20px; padding-top: 5px; padding-bottom: 5px;']) }}
         </td>
+        @php
+            if(isset($eLAPS->status_tanah)){
+                $status_tanahData = json_decode($eLAPS->status_tanah, true);
+                //dd($status_tanahData);
+                if(isset($status_tanahData['status'])){
+                    $warta = $status_tanahData['status'] == "Diwartakan";
+                    $prosesWarta = $status_tanahData['status'] == "Proses Perwartaan";
+                    $belumWarta = $status_tanahData['status'] == "Belum diwartakan";
+                    $TarikhWarta = (isset($status_tanahData['tarikh'])) ? $status_tanahData['tarikh'] : "";
+                }else{
+                    $warta = '';
+                    $prosesWarta = '';
+                    $belumWarta = '';
+                    $TarikhWarta = '';
+                }
+            }else{
+                $warta = '';
+                $prosesWarta = '';
+                $belumWarta = '';
+                $TarikhWarta = '';
+            }
+        @endphp
         <td style="border: none; padding: 8px; text-align: left;"  colspan="3">
             <div class="form-group row">
                 <div class="col-md-4">
                     <div class="form-check d-flex align-items-center">
-                        {{ Form::checkbox('status_tanah[]', 'Diwartakan', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'status_tanah_1', 'onclick' => 'onlyOne4(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
+                        {{ Form::checkbox('status_tanah[status]', 'Diwartakan', $warta, ['class' => 'form-check-input bigger-checkbox', 'id' => 'status_tanah_1', 'onclick' => 'onlyOne4(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
                         {{ Form::label('status_tanah_1', 'Diwartakan', ['class' => 'form-check-label bigger-label ms-2']) }}
                     </div>
                 </div>
@@ -428,14 +423,14 @@
                     <div class="form-check d-flex align-items-center">
                         {{ Form::label('status_tanah_1', 'Tarikh:', ['class' => 'form-check-label bigger-label ms-2']) }}
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::date('status_tanah_details_1', null, ['class' => 'form-control d-inline-block ms-2', 'placeholder' => 'Masukkan butiran jika ada','disabled'=>'true', 'id' => 'status_tanah_details_1']) }}
+                        {{ Form::date('status_tanah[tarikh]', $warta ? $TarikhWarta : '', ['class' => 'form-control d-inline-block ms-2', 'placeholder' => 'Masukkan butiran jika ada','disabled'=>!$warta, 'id' => 'status_tanah_details_1']) }}
                     </div>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-md-4">
                     <div class="form-check d-flex align-items-center">
-                        {{ Form::checkbox('status_tanah[]', 'Proses Perwartaan', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'status_tanah_2', 'onclick' => 'onlyOne4(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
+                        {{ Form::checkbox('status_tanah[status]', 'Proses Perwartaan', $prosesWarta, ['class' => 'form-check-input bigger-checkbox', 'id' => 'status_tanah_2', 'onclick' => 'onlyOne4(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
                         {{ Form::label('status_tanah_2', 'Proses Perwartaan', ['class' => 'form-check-label bigger-label ms-2']) }}
                     </div>
                 </div>
@@ -444,14 +439,14 @@
                     <div class="form-check d-flex align-items-center">
                         {{ Form::label('status_tanah_2', 'Tarikh:', ['class' => 'form-check-label bigger-label ms-2']) }}
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::date('status_tanah_details_2', null, ['class' => 'form-control d-inline-block ms-2', 'placeholder' => 'Masukkan butiran jika ada','disabled'=>'true', 'id' => 'status_tanah_details_2']) }}
+                        {{ Form::date('status_tanah[tarikh]', $prosesWarta ? $TarikhWarta : '', ['class' => 'form-control d-inline-block ms-2', 'placeholder' => 'Masukkan butiran jika ada','disabled'=>!$prosesWarta, 'id' => 'status_tanah_details_2']) }}
                     </div>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-md-4">
                     <div class="form-check d-flex align-items-center">
-                        {{ Form::checkbox('status_tanah[]', 'Belum diwartakan', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'status_tanah_3', 'onclick' => 'onlyOne4(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
+                        {{ Form::checkbox('status_tanah[status]', 'Belum diwartakan', $belumWarta, ['class' => 'form-check-input bigger-checkbox', 'id' => 'status_tanah_3', 'onclick' => 'onlyOne4(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
                         {{ Form::label('status_tanah_3', 'Belum diwartakan', ['class' => 'form-check-label bigger-label ms-2']) }}
                     </div>
                 </div>
@@ -460,7 +455,7 @@
             <script>
                 function onlyOne4(checkbox4) {
                     console.log(checkbox4.id);
-                    var checkboxes4 = document.querySelectorAll('input[name="status_tanah[]"]');
+                    var checkboxes4 = document.querySelectorAll('input[name="status_tanah[status]"]');
                     checkboxes4.forEach(function(item4) {
                         if (item4 !== checkbox4) {
                             item4.checked = false;
@@ -494,8 +489,8 @@
 
     <!-- d. Status Tanah : Diwartakan sebagai tanah lapang /rezab landskap -->
     <tr>
-        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('keluasan', 'd.&nbsp;&nbsp;&nbsp;&nbsp;No Lot/PT :', ['class' => 'col-form-label']) }}</td>
-        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::text('keluasan', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
+        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('no_lot', 'd.&nbsp;&nbsp;&nbsp;&nbsp;No Lot/PT :', ['class' => 'col-form-label']) }}</td>
+        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::text('no_lot', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
         <td style="border: none; padding: 8px; text-align: left;"  colspan="4">
             <!-- Dropdown for Negeri, Daerah, and Mukim -->
             <div class="form-group row">
@@ -558,12 +553,20 @@
                     success: function(data) {
                         // Populate the Negeri dropdown with the data
                         $('#negeri').empty(); // Clear current options
-                        $('#negeri').append('<option value="">Pilih Negeri</option>'); // Add default option
+                        $('#negeri').append('<option value="">Pilih Negeri</option>');
+                        $('#daerah').append('<option value="">Pilih Daerah</option>');
+                        $('#mukim').append('<option value="">Pilih Mukim</option>');
+                        $('#parlimen').append('<option value="">Pilih Parlimen</option>');
+                        $('#dun').append('<option value="">Pilih Dun</option>');
 
                         $.each(data, function(key, value) {
                             // Add each Negeri to the dropdown
                             $('#negeri').append('<option value="' + value.kod_negeri + '">' + value.nama_negeri + '</option>');
                         });
+                        var negeriSelected = "{{ isset($eLAPS->negeri) ? $eLAPS->negeri : '' }}"; // Assuming you have $eLAPS->negeri
+                        if (negeriSelected) {
+                            $('#negeri').val(negeriSelected).trigger('change');
+                        }
                     },
                     error: function(xhr, status, error) {
                         console.error("Error fetching Negeri data: ", error);
@@ -607,6 +610,10 @@
                                         // }
                                     });
                                 }
+                                var daerahSelected = "{{ isset($eLAPS->daerah) ? $eLAPS->daerah : '' }}"; // Assuming you have $eLAPS->daerah
+                                if (daerahSelected) {
+                                    $('#daerah').val(daerahSelected).trigger('change');
+                                }
                             }
                         });
 
@@ -622,6 +629,10 @@
                                 $.each(data, function(key, value) {
                                     $('#parlimen').append('<option value="' + value.kod_parlimen + '">' + value.nama_parlimen + '</option>');
                                 });
+                                var parlimenSelected = "{{ isset($eLAPS->parlimen) ? $eLAPS->parlimen : '' }}"; // Assuming you have $eLAPS->parlimen
+                                if (parlimenSelected) {
+                                    $('#parlimen').val(parlimenSelected).trigger('change');
+                                }
                             }
                         });
                     } else {
@@ -658,6 +669,10 @@
                                         $('#mukim').append('<option value="' + value.kod_mukim + '">' + value.nama_mukim + '</option>');
                                     });
                                 }
+                                var mukimSelected = "{{ isset($eLAPS->mukim) ? $eLAPS->mukim : '' }}"; // Assuming you have $eLAPS->mukim
+                                if (mukimSelected) {
+                                    $('#mukim').val(mukimSelected).trigger('change');
+                                }
                             }
                         });
                     } else {
@@ -685,6 +700,10 @@
                                     $.each(data, function(key, value) {
                                         $('#dun').append('<option value="' + value.kod_dun + '">' + value.nama_dun + '</option>');
                                     });
+                                }
+                                var dunSelected = "{{ isset($eLAPS->dun) ? $eLAPS->dun : '' }}"; // Assuming you have $eLAPS->dun
+                                if (dunSelected) {
+                                    $('#dun').val(dunSelected).trigger('change');
                                 }
                             }
                         });
@@ -750,15 +769,19 @@
                 <div class="col-md-6">
                     {{ Form::label('kemudahsampaian', 'g.&nbsp;&nbsp;&nbsp;&nbsp;Kemudahsampaian ke tapak cadangan menggangu lot-lot bersebelahan.', ['class' => 'col-form-label']) }}
                 </div>
+                @php
+                    $isCheckedY = (isset($eLAPS->kemudahsampaian) && $eLAPS->kemudahsampaian == "Ya");
+                    $isCheckedN = (isset($eLAPS->kemudahsampaian) && $eLAPS->kemudahsampaian == "Tidak");
+                @endphp
                 <div class="col-md-6">
                     <div class="d-flex align-items-center">
                         <div class="form-check d-flex align-items-center me-4">
-                            {{ Form::checkbox('kemudahsampaian[]', 'Ya', false, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'kemudahsampaian_1', 'onclick' => 'onlyOne5(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
+                            {{ Form::checkbox('kemudahsampaian[]', 'Ya', $isCheckedY, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'kemudahsampaian_1', 'onclick' => 'onlyOne5(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
                             {{ Form::label('kemudahsampaian_1', 'Ya', ['class' => 'form-check-label bigger-label space-label ms-2']) }}
                         </div>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <div class="form-check d-flex align-items-center">
-                            {{ Form::checkbox('kemudahsampaian[]', 'Tidak', false, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'kemudahsampaian_2', 'onclick' => 'onlyOne5(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
+                            {{ Form::checkbox('kemudahsampaian[]', 'Tidak', $isCheckedN, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'kemudahsampaian_2', 'onclick' => 'onlyOne5(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
                             {{ Form::label('kemudahsampaian_2', 'Tidak', ['class' => 'form-check-label bigger-label space-label ms-2']) }}
                         </div>
                     </div>
@@ -786,57 +809,6 @@
 
     <tr>
         <td style="border: none; padding: 8px; text-align: left;"  colspan="6">
-            <!-- <div class="form-group row">
-                <div class="col-md-4">
-                    <div class="form-check d-flex align-items-center">
-                        {{ Form::checkbox('guna_tanah[]', 'Perumahan', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'guna_tanah_1', 'onclick' => 'onlyOne6(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('guna_tanah_1', 'Perumahan', ['class' => 'form-check-label bigger-label ms-2']) }}
-                    </div>
-                </div>
-                
-                <div class="col-md-8">
-                    <div class="form-check d-flex align-items-center">
-                        {{ Form::checkbox('guna_tanah[]', 'Institusi Kerajaan /Pendidikan', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'guna_tanah_2', 'onclick' => 'onlyOne6(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('guna_tanah_2', 'Institusi Kerajaan /Pendidikan', ['class' => 'form-check-label bigger-label ms-2']) }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-md-4">
-                    <div class="form-check d-flex align-items-center">
-                        {{ Form::checkbox('guna_tanah[]', 'Perniagaan', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'guna_tanah_3', 'onclick' => 'onlyOne6(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('guna_tanah_3', 'Perniagaan', ['class' => 'form-check-label bigger-label ms-2']) }}
-                    </div>
-                </div>
-
-                <div class="col-md-8">
-                    <div class="form-check d-flex align-items-center">
-                        {{ Form::checkbox('guna_tanah[]', 'Institusi Kewangan', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'guna_tanah_4', 'onclick' => 'onlyOne6(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('guna_tanah_4', 'Institusi Kewangan', ['class' => 'form-check-label bigger-label ms-2']) }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-md-4">
-                    <div class="form-check d-flex align-items-center">
-                        {{ Form::checkbox('guna_tanah[]', 'Kawasan terbiar', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'guna_tanah_5', 'onclick' => 'onlyOne6(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('guna_tanah_5', 'Kawasan terbiar', ['class' => 'form-check-label bigger-label ms-2']) }}
-                    </div>
-                </div>
-                
-                <div class="col-md-8">
-                    <div class="form-check d-flex align-items-center">
-                        {{ Form::checkbox('guna_tanah[]', 'Lain-lain (nyatakan)', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'guna_tanah_6', 'onclick' => 'onlyOne6(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::label('guna_tanah_6', 'Lain-lain (nyatakan) :', ['class' => 'form-check-label bigger-label ms-2']) }}
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::text('guna_tanah_details_6', null, ['class' => 'form-control d-inline-block ms-2', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'width: 50%; margin-top: 0;', 'disabled' => 'true', 'id' => 'guna_tanah_details_6']) }}
-                    </div>
-                </div>
-            </div> -->
-
-
             @php
                 $guna_tanah = [
                     ['label' => 'Perumahan', 'id' => '1'],
@@ -849,22 +821,25 @@
             @endphp
 
             @foreach ($guna_tanah as $index => $item)
+                @php
+                    $isChecked = (isset($eLAPS->guna_tanah) && $eLAPS->guna_tanah == $item['label']);
+                @endphp
                 @if ($index % 2 == 0)
                     <div class="form-group row">
                 @endif
 
                     <div class="col-md-6">
                         <div class="form-check d-flex align-items-center">
-                            {{ Form::checkbox('guna_tanah[]', $item['label'], false, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'guna_tanah_' . $item['id'], 'onclick' => 'onlyOne6(this)']) }}
+                            {{ Form::checkbox('guna_tanah[jenis]', $item['label'], $isChecked, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'guna_tanah_' . $item['id'], 'onclick' => 'onlyOne6(this)']) }}
                             {{ Form::label('guna_tanah_' . $item['id'], $item['label'], ['class' => 'form-check-label bigger-label space-label ms-2']) }}
                             
                             @if (isset($item['has_input']))
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                {{ Form::text('guna_tanah_details_' . $item['id'], null, [
+                                {{ Form::text('guna_tanah[keterangan]', null, [
                                     'class' => 'form-control d-inline-block ms-2',
                                     'placeholder' => 'Masukkan butiran jika ada',
                                     'style' => 'width: 50%; margin-top: 0;',
-                                    'disabled' => 'true',
+                                    'disabled' => $isChecked,
                                     'id' => 'guna_tanah_details_' . $item['id']
                                 ]) }}
                             @endif
@@ -875,11 +850,22 @@
                     </div>
                 @endif
             @endforeach
+            @php
+                $findString = (isset($eLAPS->guna_tanah)) ? $eLAPS->guna_tanah : '';
+                $isMatch = !in_array($findString, array_column($guna_tanah, 'label'));
+            @endphp
 
+            @if($isMatch && isset($eLAPS->guna_tanah))
+                <script>
+                    document.getElementById('guna_tanah_6').checked = true;
+                    document.getElementById('guna_tanah_details_6').disabled = false;
+                    document.getElementById('guna_tanah_details_6').value = "{{$eLAPS->guna_tanah ?? ''}}";
+                </script>
+            @endif
 
             <script>
                 function onlyOne6(checkbox6) {
-                    var checkboxes6 = document.querySelectorAll('input[name="guna_tanah[]"]');
+                    var checkboxes6 = document.querySelectorAll('input[name="guna_tanah[jenis]"]');
                     
                     checkboxes6.forEach(function(item6) {
                         if (item6 !== checkbox6) {
@@ -908,48 +894,34 @@
     <!-- i. Status Tanah : Diwartakan sebagai tanah lapang /rezab landskap -->
     <tr>
         <td style="border: none; padding: 8px; text-align: left;"  colspan="6" class="align-middle">
-            <!-- <div class="row">
-                <div class="col-md-4">
-                    {{ Form::label('pelan_ukur', 'i.&nbsp;&nbsp;&nbsp;&nbsp;Tapak cadangan mempunyai pelan ukur', ['class' => 'col-form-label']) }}
-                </div>
-                <div class="col-md-6">
-                    <div class="d-flex align-items-center">
-                        <div class="form-check d-flex align-items-center me-4">
-                            {{ Form::checkbox('pelan_ukur[]', 'Ya', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'pelan_ukur_1', 'onclick' => 'onlyOne7(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                            {{ Form::label('pelan_ukur_1', 'Ya', ['class' => 'form-check-label bigger-label ms-2']) }}
-                        </div>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <div class="form-check d-flex align-items-center">
-                            {{ Form::checkbox('pelan_ukur[]', 'Tidak', false, ['class' => 'form-check-input bigger-checkbox', 'id' => 'pelan_ukur_2', 'onclick' => 'onlyOne7(this)']) }}&nbsp;&nbsp;&nbsp;&nbsp;
-                            {{ Form::label('pelan_ukur_2', 'Tidak', ['class' => 'form-check-label bigger-label ms-2']) }}
-                        </div>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <div class="form-check d-flex align-items-center">
-                            <label for="pelan_ukur_1" class="form-check-label bigger-label ms-2" style="white-space: nowrap;">
-                                Jika <strong>Ya</strong> tarikh pelan disediakan :
-                            </label>
-
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            {{ Form::date('pelan_ukur_details_1', null, ['class' => 'form-control d-inline-block ms-2', 'placeholder' => 'Masukkan butiran jika ada','disabled'=>'true', 'id' => 'pelan_ukur_details_1']) }}
-                        </div>
-                    </div>
-                </div>
-            </div> -->
             <div class="row">
                 <div class="col-md-4">
                     {{ Form::label('pelan_ukur', 'i.&nbsp;&nbsp;&nbsp;&nbsp;Tapak cadangan mempunyai pelan ukur', ['class' => 'col-form-label']) }}
                 </div>
+                @php
+                    if(isset($eLAPS->pelan_ukur)){
+                        $pelan_ukurData = json_decode($eLAPS->pelan_ukur, true);
+                        //dd($pelan_ukurData);
+                        $pelan_ukurY = $pelan_ukurData[0] == "Ya";
+                        $pelan_ukurN = $pelan_ukurData[0] == "Tidak";
+                        $Tarikhpelan_ukur = (($pelan_ukurData['tarikh']) != null) ? $pelan_ukurData['tarikh'] : "";
+                    }else{
+                        $pelan_ukurY = '';
+                        $pelan_ukurN = '';
+                        $Tarikhpelan_ukur = '';
+                    }
+                @endphp
                 <div class="col-md-6">
                     <div class="d-flex align-items-center">
                         <!-- Yes checkbox -->
                         <div class="form-check d-flex align-items-center me-4">
-                            {{ Form::checkbox('pelan_ukur[]', 'Ya', false, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'pelan_ukur_1', 'onclick' => 'onlyOne7(this)']) }}
+                            {{ Form::checkbox('pelan_ukur[]', 'Ya', $pelan_ukurY, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'pelan_ukur_1', 'onclick' => 'onlyOne7(this)']) }}
                             {{ Form::label('pelan_ukur_1', 'Ya', ['class' => 'form-check-label bigger-label space-label ms-2']) }}
                         </div>
 
                         <!-- No checkbox -->
                         <div class="form-check d-flex align-items-center me-4">
-                            {{ Form::checkbox('pelan_ukur[]', 'Tidak', false, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'pelan_ukur_2', 'onclick' => 'onlyOne7(this)']) }}
+                            {{ Form::checkbox('pelan_ukur[]', 'Tidak', $pelan_ukurN, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'pelan_ukur_2', 'onclick' => 'onlyOne7(this)']) }}
                             {{ Form::label('pelan_ukur_2', 'Tidak', ['class' => 'form-check-label bigger-label space-label ms-2']) }}
                         </div>
 
@@ -958,7 +930,7 @@
                             <label for="pelan_ukur_1" class="form-check-label bigger-label ms-2" style="white-space: nowrap;margin-left: 30px;">
                                 Jika <strong>Ya</strong> tarikh pelan disediakan :
                             </label>
-                            {{ Form::date('pelan_ukur_details_1', null, ['class' => 'form-control d-inline-block ms-2 space-label', 'placeholder' => 'Masukkan butiran jika ada', 'disabled' => 'true', 'id' => 'pelan_ukur_details_1']) }}
+                            {{ Form::date('pelan_ukur[tarikh]', $Tarikhpelan_ukur, ['class' => 'form-control d-inline-block ms-2 space-label', 'placeholder' => 'Masukkan butiran jika ada', 'disabled' => !$pelan_ukurY, 'id' => 'pelan_ukur_details_1']) }}
                         </div>
                     </div>
                 </div>
@@ -1012,6 +984,13 @@
                         'Tapak terlibat tidak ada pertindihan dengan projek lain',
                         'Isu penempatan setinggan (diselesaikan sebelum proses tender / sebut harga)'
                     ];
+                    if(isset($eLAPS->masalah)){
+                        $masalahData = json_decode($eLAPS->masalah, true);
+                    }else{
+                        $masalahY = '';
+                        $masalahN = '';
+                        $Tarikhmasalah = '';
+                    }
                 @endphp
 
                 @foreach($labels as $index => $label)
@@ -1021,12 +1000,12 @@
                     <div class="col-md-6">
                         <div class="d-flex align-items-center">
                             <div class="form-check d-flex align-items-center me-4">
-                                {{ Form::checkbox('masalah_' . $index . '[]', 'Ya', false, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'masalah_' . $index . '_1', 'onclick' => 'onlyOne8("masalah_' . $index . '")']) }}
+                                {{ Form::checkbox('masalah['.$index.'][]', 1, isset($masalahData[$index]) && $masalahData[$index] == 1, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'masalah_' . $index . '_1', 'onclick' => 'onlyOne8(this)']) }}
                                 {{ Form::label('masalah_' . $index . '_1', 'Ya', ['class' => 'form-check-label bigger-label space-label ms-2']) }}
                             </div>
                             
                             <div class="form-check d-flex align-items-center">
-                                {{ Form::checkbox('masalah_' . $index . '[]', 'Tidak', false, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'masalah_' . $index . '_2', 'onclick' => 'onlyOne8("masalah_' . $index . '")']) }}
+                                {{ Form::checkbox('masalah['.$index.'][]', 0, isset($masalahData[$index]) && $masalahData[$index] == 0, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'masalah_' . $index . '_2', 'onclick' => 'onlyOne8(this)']) }}
                                 {{ Form::label('masalah_' . $index . '_2', 'Tidak', ['class' => 'form-check-label bigger-label space-label ms-2']) }}
                             </div>
                         </div>
@@ -1038,20 +1017,18 @@
                     <div class="d-flex align-items-center">
                         {{ Form::label('masalah_6', '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-Lain-lain (nyatakan) :', ['class' => 'form-check-label ms-2']) }}
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ Form::text('masalah_details_6', null, ['class' => 'form-control d-inline-block ms-2', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'width: 50%; margin-top: 0;', 'id' => 'masalah_details_6']) }}
+                        {{ Form::text('masalah[-1][]', isset($masalahData[-1]) ? $masalahData[-1] : 'Tiada Maklumat', ['class' => 'form-control d-inline-block ms-2', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'width: 50%; margin-top: 0;', 'id' => 'masalah_details_6']) }}
                     </div>
                 </div>
             </div>
         </td>
         <script>
-            function onlyOne8(group) {
-                // Get all checkboxes in the group (based on the group name passed dynamically)
-                var checkboxes = document.querySelectorAll('input[name="' + group + '[]"]');
-                
-                checkboxes.forEach(function(item) {
-                    // Uncheck other checkboxes in the same group when one is checked
-                    if (item !== event.target) {
-                        item.checked = false;
+            function onlyOne8(checkbox8) {
+                console.log(checkbox8);
+                var checkboxes8 = document.querySelectorAll('input[name="' + checkbox8.name + '"]');
+                checkboxes8.forEach(function(item8) {
+                    if (item8 !== checkbox8) {
+                        item8.checked = false;
                     }
                 });
             }
@@ -1072,42 +1049,43 @@
         <td style="border: none; padding: 8px; text-align: left;"  colspan="6">
             <div class="form-group row">
             @php
-    // Define the array of labels
-    $labels = [
-        'Pelan ukur terkini (dalam tempoh 3 tahun) yang telah disahkan oleh Juruukur Bertauliah',
-        'Pelan guna tanah bagi kawasan tapak cadangan dan sekitarnya',
-        'Pelan kontur kawasan tapak cadangan dan sekitarnya',
-        'Gambar foto tapak cadangan',
-        'Gambar foto kawasan sekitar tapak cadangan',
-        'Lain-lain (nyatakan)'
-    ];
-@endphp
+                // Define the array of labels
+                $labels = [
+                    'Pelan ukur terkini (dalam tempoh 3 tahun) yang telah disahkan oleh Juruukur Bertauliah',
+                    'Pelan guna tanah bagi kawasan tapak cadangan dan sekitarnya',
+                    'Pelan kontur kawasan tapak cadangan dan sekitarnya',
+                    'Gambar foto tapak cadangan',
+                    'Gambar foto kawasan sekitar tapak cadangan',
+                    'Lain-lain (nyatakan)'
+                ];
+            @endphp
 
-@foreach($labels as $index => $label)
-    <div class="col-md-12 mb-2">  <!-- Added margin-bottom to create space between rows -->
-        <div class="form-check d-flex align-items-center" style="padding-right: 20px;">
-            {{ Form::checkbox('maklumat_sokongan[]', $label, false, [
-                'class' => 'form-check-input bigger-checkbox space-checkbox',
-                'id' => 'maklumat_sokongan_' . ($index + 1),
-                'onclick' => ($index == 5) ? 'handleCheckboxClick(this);' : ''
-            ]) }}
-            
-            {{ Form::label('maklumat_sokongan_' . ($index + 1), '-' . $label, [
-                'class' => 'form-check-label bigger-label space-label ms-2',
-                'style' => 'font-weight: normal; white-space: nowrap;'
-            ]) }}
+            @foreach($labels as $index => $label)
+                <div class="col-md-12 mb-2">  <!-- Added margin-bottom to create space between rows -->
+                    <div class="form-check d-flex align-items-center" style="padding-right: 20px;">
+                        {{ Form::checkbox('maklumat_sokongan[]', $label, false, [
+                            'class' => 'form-check-input bigger-checkbox space-checkbox',
+                            'id' => 'maklumat_sokongan_' . ($index + 1),
+                            'onclick' => ($index == 5) ? 'handleCheckboxClick(this);' : ''
+                        ]) }}
+                        
+                        {{ Form::label('maklumat_sokongan_' . ($index + 1), '-' . $label, [
+                            'class' => 'form-check-label bigger-label space-label ms-2',
+                            'style' => 'font-weight: normal; white-space: nowrap;'
+                        ]) }}
 
-            @if($index == 5)
-                {{ Form::text('maklumat_sokongan_details_6', null, [
-                    'class' => 'form-control d-inline-block ms-2 space-label',
-                    'placeholder' => 'Masukkan butiran jika ada',
-                    'style' => 'width: 50%; margin-top: 0;',
-                    'id' => 'maklumat_sokongan_details_6'
-                ]) }}
-            @endif
-        </div>
-    </div>
-@endforeach
+                        @if($index == 5)
+                            {{ Form::text('maklumat_sokongan_details_6', null, [
+                                'class' => 'form-control d-inline-block ms-2 space-label',
+                                'placeholder' => 'Masukkan butiran jika ada',
+                                'style' => 'width: 50%; margin-top: 0;',
+                                'id' => 'maklumat_sokongan_details_6',
+                                'onkeyup' => "document.getElementById('maklumat_sokongan_6').value = document.getElementById('maklumat_sokongan_details_6').value;"
+                            ]) }}
+                        @endif
+                    </div>
+                </div>
+            @endforeach
 
                 <script>
                     // Function to handle the checkbox click (checked or unchecked)
@@ -1136,17 +1114,124 @@
             </div>
             <div class="form-group row">
                 <div class="col-md-12">
-                    <div class="d-flex align-items-center">
-                        <!-- File input field -->
-                        {{ Form::file('supporting_documents[]', ['class' => 'form-control d-inline-block ms-2', 'multiple' => true, 'style' => 'width: 50%; margin-top: 0;']) }}
+                    <div class="d-block">
+                        <!-- File input field with the same width as the progress bar -->
+                        {{ Form::file('supporting_documents', ['class' => 'form-control d-inline-block ms-2', 'id' => 'supporting_documents', 'multiple' => true, 'style' => 'width: 100%;']) }}
+                        <input name="large_file_name_new" type="hidden" id="large_file_name_new">
+                        <input name="large_file_name_old" type="hidden" id="large_file_name_old">
                     </div>
+
+                    <!-- <div id="progress-container" class="d-block mt-2" style="width: 100%; display: none;">
+                        <div id="progress-bar" style="width: 100%; background-color: #ccc;">
+                            <div id="progress" style="height: 20px; width: 0; background-color: green;"></div>
+                        </div>
+                        <p>Uploading: <span id="progress-text">0%</span></p>
+                    </div> -->
+                    <div id="progress-container" style="display: none;">
+                        <div id="progress-bar" style="width: 100%; background-color: #ccc;">
+                            <div id="progress" style="height: 20px; width: 0; background-color: green;"></div>
+                        </div>
+                        <p>Uploading: <span id="progress-text">0%</span></p>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="d-flex align-items-center">
+                        @php
+                            $folderName = isset($eLAPS->file_path) ? 'eLAPS/'.str_replace('/', '', $eLAPS->referenceNumber).'/'.$eLAPS->file_path : 'no-photos.png';
+                            //$fileName = isset($eLAPS->file_path) ? $eLAPS->file_path : 'no-photos.png';
+                        @endphp
+                        <a href="{{ asset('storage/uploads/' . $folderName) }}" target="_blank">Download File</a>
+                        {{--
+                            {{ asset('storage/img/' . $folderName . '/' . $fileName) }}
+                            <img src="{{ asset('storage/img/' . $folderName . '/' . $fileName) }}" alt="Uploaded File">
+                        --}}
+                    </div>
+                    <br>
+                        <!-- <img style="width: 100px; height: 100px; object-fit: cover; margin: 2px;" alt="Uploaded File" src="{{ asset('storage/img/' . $folderName) }}">
+                        <a href="{{ asset('storage/img/' . $folderName) }}" target="_blank">Download File</a> -->
+                    <br>
                 </div>
             </div>
         </td>
     </tr>
 
 </table>
+<script>
 
+    $(document).ready(function() {
+        const timestamp = new Date().getTime();
+        $('#supporting_documents').change(function() {
+            let destinationFolder = `eLAPS/`+`{{str_replace('/', '', $eLAPS->referenceNumber)}}`+`/`;
+            let deleteThis = $('#large_file_name_old').val();
+            // alert(destinationFolder);
+            let fileInput = $('#supporting_documents')[0];
+            if (fileInput.files.length === 0) {
+                alert("No file selected!");
+                return;
+            }
+
+            let file = fileInput.files[0];
+            let chunkSize = 10 * 1024 * 1024;  // 10MB per chunk
+            let totalChunks = Math.ceil(file.size / chunkSize);
+            let currentChunk = 0;
+
+            // Show progress bar
+            $('#progress-container').show();
+
+            // Function to upload the next chunk
+            function uploadNextChunk() {
+                let start = currentChunk * chunkSize;
+                let end = Math.min(start + chunkSize, file.size);
+                let chunkBlob = file.slice(start, end);
+
+                let formData = new FormData();
+                formData.append('large_file', chunkBlob);
+                formData.append('chunk', currentChunk);
+                formData.append('totalChunks', totalChunks);
+                formData.append('fileName', timestamp+'_'+file.name);
+                formData.append('destinationFolder', destinationFolder);
+                formData.append('deleteThis', deleteThis);
+
+                // Upload the chunk
+                $.ajax({
+                    url: '/upload-chunk',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        currentChunk++;
+                        let progress = Math.round((currentChunk / totalChunks) * 100);
+                        $('#progress').css('width', progress + '%');
+                        $('#progress-text').text(progress + '%');
+
+                        // Continue uploading next chunk
+                        if (currentChunk < totalChunks) {
+                            uploadNextChunk();
+                        } else {
+                            setTimeout(function() {
+                                alert("Upload Complete!");
+                            }, 1000);
+                            $('#large_file_name_new').val(timestamp+'_'+file.name);
+                            $('#large_file_name_old').val(timestamp+'_'+file.name);
+                            $('#supporting_documents').val('');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("Error: " + error);
+                    },
+                    complete: function(xhr, status) {
+                        // Optionally log the completion of the request
+                        console.log("Request complete with status: " + status);
+                    }
+                });
+            }
+
+            // Start the chunk upload process
+            uploadNextChunk();
+        });
+    });
+</script>
 <!-- Add custom CSS to make checkboxes bigger -->
 <style>
     .bigger-checkbox {
@@ -1168,5 +1253,15 @@
 
     .form-group {
         margin-bottom: 15px; /* Adds spacing between form groups */
+    }
+</style>
+
+<style>
+    @media (max-width: 768px) {
+        .card {
+            width: 1000px; /* Make sure the card has the same fixed width */
+            margin: 0 auto; /* Center the card */
+        }
+
     }
 </style>

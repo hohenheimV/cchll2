@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Facades\Storage;
+use App\Model\ePALM;
+use App\Model\ePALM_draf;
 
 class DataController extends Controller
 {
@@ -15,6 +18,161 @@ class DataController extends Controller
         $this->client = new Client();
     }
 
+    public function testUpload(Request $request) {
+        $file = $request->file('supporting_documents');
+        if ($file) {
+            $file->storeAs('public/uploads', $file->getClientOriginalName());
+            return response()->json(['message' => 'File uploaded successfully!']);
+        }
+        return response()->json(['message' => 'No file uploaded!'], 400);
+    }
+    public function uploadChunk(Request $request)
+    {
+        // dd($request->all());
+        $chunk = $request->input('chunk');
+        $totalChunks = $request->input('totalChunks');
+        $fileName = $request->input('fileName');
+        $destinationFolder = $request->input('destinationFolder');
+        $deleteThis = $request->input('deleteThis');
+    
+        // Ensure the chunk directory exists
+        $chunksDirectory = storage_path('app/public/chunks');
+        if (!is_dir($chunksDirectory)) {
+            mkdir($chunksDirectory, 0777, true);
+        }
+        // dd($request->all());
+        // Validate the uploaded file
+        // $request->validate([
+        //     'large_file' => 'required|file|mimes:jpeg,jpg,png,pdf,zip|max:10240',
+        // ]);
+        
+        // Ensure the file is uploaded
+        if (!$request->hasFile('large_file')) {
+            return response()->json(['error' => 'No file uploaded']);
+        }
+
+        if ($deleteThis != '' && ($deleteThis != $fileName)) {
+            $filePath = storage_path('app/public/uploads/'.$destinationFolder . $deleteThis);
+            unlink($filePath);
+        }
+    
+        // Store the chunk temporarily
+        $chunkFile = $request->file('large_file');
+        // dd($request->all());
+        try {
+            $chunkFile->storeAs('public/chunks', $fileName . '.' . $chunk);
+        } catch (\Exception $e) {
+            // \Log::error('Error uploading chunk: ' . $e->getMessage());
+            return response()->json(['error' => 'Error uploading chunk: ' . $e->getMessage()]);
+        }
+        // dd($request->all());
+        // If all chunks are uploaded, merge them into a single file
+        if ($chunk + 1 == $totalChunks) {
+            $this->mergeChunks($fileName, $totalChunks, $destinationFolder);
+        }
+        // dd($request->all());
+        return response()->json(['success' => true, 'message' => 'Chunk uploaded']);
+    }
+
+    private function mergeChunks($fileName, $totalChunks, $destinationFolder)
+    {
+        // dd($fileName);
+        // Ensure the uploads directory exists
+        $uploadsDirectory = storage_path('app/public/uploads/'.$destinationFolder);
+        if (!is_dir($uploadsDirectory)) {
+            mkdir($uploadsDirectory, 0777, true);
+        }
+        // dd($fileName);
+        $filePath = storage_path('app/public/uploads/'.$destinationFolder . $fileName);
+    
+        // Open the file in append mode
+        $file = fopen($filePath, 'ab');
+        // dd($fileName);
+        // Append each chunk in order
+        for ($i = 0; $i < $totalChunks; $i++) {
+            $chunkPath = storage_path('app/public/chunks/' . $fileName . '.' . $i);
+            $chunk = fopen($chunkPath, 'rb');
+            stream_copy_to_stream($chunk, $file);
+            fclose($chunk);
+    
+            // Optionally, delete the chunk after it's been merged
+            unlink($chunkPath);
+        }
+        // dd($fileName);
+        fclose($file);
+        // dd($fileName);
+        // Optionally, move the file to a final location or process it further
+        // Storage::move($filePath, 'public/uploads/' . $fileName);
+        // Storage::put('public/uploads/' . $fileName, file_get_contents($filePath));
+
+        // dd($fileName);
+    }
+
+    // public function uploadChunk(Request $request)
+    // {
+    //     $chunk = $request->input('chunk');
+    //     $totalChunks = $request->input('totalChunks');
+    //     $fileName = $request->input('fileName');
+        
+    //     // Ensure the chunk directory exists
+    //     $chunksDirectory = storage_path('app/public/chunks');
+    //     if (!is_dir($chunksDirectory)) {
+    //         mkdir($chunksDirectory, 0777, true);
+    //     }
+
+    //     // Ensure the file is uploaded
+    //     if (!$request->hasFile('supporting_documents')) {
+    //         return response()->json(['error' => 'No file uploaded']);
+    //     }
+
+    //     // Store the chunk temporarily
+    //     $chunkFile = $request->file('supporting_documents');
+    //     try {
+    //         $chunkFile->storeAs('public/chunks', $fileName . '.' . $chunk);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['error' => 'Error uploading chunk: ' . $e->getMessage()]);
+    //     }
+
+    //     // If all chunks are uploaded, merge them into a single file
+    //     if ($chunk + 1 == $totalChunks) {
+    //         $this->mergeChunks($fileName, $totalChunks);
+    //     }
+
+    //     return response()->json(['success' => true, 'message' => 'Chunk uploaded']);
+    // }
+
+    // private function mergeChunks($fileName, $totalChunks)
+    // {
+    //     // Ensure the uploads directory exists
+    //     $uploadsDirectory = storage_path('app/public/uploads');
+    //     if (!is_dir($uploadsDirectory)) {
+    //         mkdir($uploadsDirectory, 0777, true);
+    //     }
+
+    //     $filePath = storage_path('app/public/uploads/' . $fileName);
+    //     $file = fopen($filePath, 'ab');
+
+    //     // Append each chunk in order
+    //     for ($i = 0; $i < $totalChunks; $i++) {
+    //         $chunkPath = storage_path('app/public/chunks/' . $fileName . '.' . $i);
+    //         if (file_exists($chunkPath)) {
+    //             $chunk = fopen($chunkPath, 'rb');
+    //             stream_copy_to_stream($chunk, $file);
+    //             fclose($chunk);
+                
+    //             // Optionally, delete the chunk after it's been merged
+    //             unlink($chunkPath);
+    //         }
+    //     }
+
+    //     fclose($file);
+
+    //     // Move the final file to a final location
+    //     Storage::put('public/uploads/' . $fileName, file_get_contents($filePath));
+    //     // Optionally delete the merged temp file after storing it in the final location
+    //     unlink($filePath);
+    // }
+    
     // Function to fetch HTML content from a URL using file_get_contents
     private function fetchHtmlContent($url = 'https://portalosc.kpkt.gov.my/osc/PBT2_index.cfm?Neg=00&Taraf=0&S=2') {
         $context = stream_context_create([
@@ -398,6 +556,77 @@ class DataController extends Controller
             'alamat1' => '',
             'poskod' => '',
             'kawasan' => ''
+        ];
+    }
+
+    public function fetchComponents($id_taman)
+    {
+        // $this->middleware(['role_or_permission:Pentadsbir Sistem|TsKP/B JLN|Pegaswai|Piswhak Berkuasa Tempatan|esLAPS-list']);
+        if(auth()->id()){
+            // User::find($userId);
+            // dd(auth()->id());
+            // dd($id_taman);
+            // Assuming you're fetching ePALM components related to a particular taman
+            $ePALM = ePALM_draf::find($id_taman); // or pass the ID from the request if needed
+            if ($ePALM && $ePALM->kategori_taman == "Landskap Perbandaran") {
+                $folder = $ePALM->nama_taman;
+                $ePALM_komponen = ePALM_draf::where('is_komponen', $ePALM->id_taman)->get();
+                // $ePALM->komponen = $ePALM_komponen;
+                $ePALM_komponen->each(function ($komponen) use ($folder) {
+                    $komponen->folder = str_replace(' ', '_', $folder);
+                });
+                // If you want to send back the necessary data to display in the front-end
+                $imagePaths = [];
+                foreach ($ePALM_komponen as $komponen) {
+                    $imagePaths[] = [
+                        'nama_taman' => $komponen->nama_taman,
+                        'keterangan_taman' => $komponen->keterangan_taman,
+                        'is_komponen' => $komponen->is_komponen,
+                        'images' => $this->getImagePaths($komponen),
+                        'id_taman' => $komponen->id_taman,
+                        'gambar_taman' => $komponen->gambar_taman,
+                    ];
+                }
+
+                return response()->json(['success' => true, 'data' => $imagePaths]);
+            }
+
+            return response()->json(['success' => false, 'message' => 'No data found']);
+        }else{
+            abort(403, 'You are not authorized to access this page.');
+        }
+    }
+
+    // Helper function to get image paths
+    public function getImagePaths($komponen)
+    {
+        // dd($komponen);
+        $gambar_tamanData = json_decode($komponen->gambar_taman, true);
+        $folderName = str_replace(' ', '_', $komponen->folder);
+        $subfolderName = str_replace(' ', '_', $komponen->nama_taman);
+        // dd($folderName);
+        // $gambar_input_modal_1 = isset($gambar_tamanData['gambar_input_modal_1']) ? $folderName.'/'.$subfolderName.'/'.$gambar_tamanData['gambar_input_modal_1'] : null;
+        // $gambar_input_modal_2 = isset($gambar_tamanData['gambar_input_modal_2']) ? $folderName.'/'.$subfolderName.'/'.$gambar_tamanData['gambar_input_modal_2'] : null;
+        // $gambar_input_modal_3 = isset($gambar_tamanData['gambar_input_modal_3']) ? $folderName.'/'.$subfolderName.'/'.$gambar_tamanData['gambar_input_modal_3'] : null;
+        // $gambar_input_modal_4 = isset($gambar_tamanData['gambar_input_modal_4']) ? $folderName.'/'.$subfolderName.'/'.$gambar_tamanData['gambar_input_modal_4'] : null;
+
+        // return [
+        //     asset('storage/uploads/ePALM/' . $gambar_input_modal_1),
+        //     asset('storage/uploads/ePALM/' . $gambar_input_modal_2),
+        //     asset('storage/uploads/ePALM/' . $gambar_input_modal_3),
+        //     asset('storage/uploads/ePALM/' . $gambar_input_modal_4)
+        // ];
+        $gambar_input_modal_1 = isset($gambar_tamanData['gambar_input_modal_1']) ? 'ePALM/'.$folderName.'/'.$subfolderName.'/'.$gambar_tamanData['gambar_input_modal_1'] : 'no-photos.png';
+        $gambar_input_modal_2 = isset($gambar_tamanData['gambar_input_modal_2']) ? 'ePALM/'.$folderName.'/'.$subfolderName.'/'.$gambar_tamanData['gambar_input_modal_2'] : 'no-photos.png';
+        $gambar_input_modal_3 = isset($gambar_tamanData['gambar_input_modal_3']) ? 'ePALM/'.$folderName.'/'.$subfolderName.'/'.$gambar_tamanData['gambar_input_modal_3'] : 'no-photos.png';
+        $gambar_input_modal_4 = isset($gambar_tamanData['gambar_input_modal_4']) ? 'ePALM/'.$folderName.'/'.$subfolderName.'/'.$gambar_tamanData['gambar_input_modal_4'] : 'no-photos.png';
+
+        // Add to the array of image paths
+        return [
+            asset('storage/uploads/' . $gambar_input_modal_1),
+            asset('storage/uploads/' . $gambar_input_modal_2),
+            asset('storage/uploads/' . $gambar_input_modal_3),
+            asset('storage/uploads/' . $gambar_input_modal_4)
         ];
     }
 }

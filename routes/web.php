@@ -20,6 +20,7 @@ use App\Model\Home;
 use App\Model\Menu;
 use App\Model\Page;
 use App\Model\Slider;
+use App\Model\ePALM;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -27,13 +28,19 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\LocationController;
-// use App\Http\Controllers\Pengurusan\EntitiLandskapController;
+use App\Http\Controllers\Pengurusan\eLINDController;
+use App\Http\Controllers\Pengurusan\eLAPSController;
+use App\Http\Controllers\Pengurusan\ePALMController;
 // use App\Http\Controllers\Pengurusan\KempenTanamController;
 // use App\Http\Controllers\Pengurusan\eMohonController;
 
 Route::get('/vtour-bukit-kiara', function () {
     return view('website.vtour');
 })->name('vtour');
+
+// Route::get('/epalm-taman', function () {
+//     return ePALM::where('is_komponen', null)->latest()->paginate(10);
+// })->name('epalm');
 
 Route::get('/', function () {
     $counter = Home::findOrFail(1);
@@ -71,6 +78,13 @@ Route::get('/T3', function () {
     return view('website.T3welcome', compact('popup'));
 })->name('welcomeT3');
 
+Route::get('/T4', function () {
+    $counter = Home::findOrFail(1);
+    views($counter)->cooldown(now()->addHours(1))->record();
+    $popup = Slider::where('popup',1)->first();
+    return view('website.T4welcome', compact('popup'));
+})->name('welcomeT4');
+
 Route::get('/api/negeri', [RegisterController::class, 'getNegeri']);
 // Route::get('/api/daerah/{negeriId}', [RegisterController::class, 'getDaerah']);
 Route::get('/api/pbt/{negeriId}', [RegisterController::class, 'getPBT']);
@@ -83,6 +97,10 @@ Route::get('/data/negeri/{shortName}', [DataController::class, 'getNegeri']);
 Route::get('/data/pbt/{negeriId}', [DataController::class, 'getPBT']);
 Route::get('/data/pbt/{negeriId}/{pbtId}', [DataController::class, 'getPBT']);
 Route::get('/data/postcode/{postcode}', [DataController::class, 'getPostcode']);
+// Route::post('/upload-chunk', [DataController::class, 'uploadChunk'])->name('upload.chunk');
+Route::post('/upload-chunk', [DataController::class, 'uploadChunk']);
+Route::post('/test-upload', [DataController::class, 'testUpload']);
+Route::get('/fetchComponents/{id_taman}', [DataController::class, 'fetchComponents']);
 
 
 // Route::get('your-form-url', [LocationController::class, 'create']);
@@ -94,9 +112,6 @@ Route::get('get-mukim/{kod_negeri}/{kod_daerah}', [LocationController::class, 'g
 Route::get('get-parlimen/{kod_negeri}', [LocationController::class, 'getParlimen']);
 Route::get('get-dun/{kod_parlimen}', [LocationController::class, 'getDun']);
 
-// Route::get('/register', function () {
-//     return view('auth.register');
-// })->name('vtour');
 
 Route::get('/pengurusan', function () {
     return redirect()->route('pengurusan.dashboard');
@@ -110,7 +125,8 @@ Route::get('/pano', function () {
     return view('website.pano');
 })->name('pano');
 
-Auth::routes(['verify' => false, 'register' => true, 'reset' => true]);
+// Auth::routes(['verify' => false, 'register' => true, 'reset' => true]);
+Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -133,6 +149,16 @@ Route::name('website.')
         Route::post('/aktiviti/checkbooking', 'ActivitiesController@checkbooking')->name('activities.checkbooking');
 
         Route::post('maklumbalas/simpan', 'FeedbacksController@simpan')->name('feedbacks.simpan');
+
+
+        Route::get('/rakan-taman', function () {
+            return view('website.MIB.register');
+        })->name('MIB.register');
+        Route::get('/borang-rakan-taman', function () {
+            return view('website.MIB.borang');
+        })->name('MIB.borang');
+        Route::post('rakan-taman/simpan', 'MIBController@simpan')->name('MIB.simpan');
+
 
         Route::get('/konsultasi-awam', function () {
 
@@ -219,6 +245,19 @@ Route::name('website.')
 
             return view('website.search', ['articles' => []]);
         })->name('search');
+
+        Route::get('/epalm-taman', function () {
+            // return ePALM::where('is_komponen', null)->latest()->paginate(10);
+            $ePALM = ePALM::where('is_komponen', null)->latest()->paginate(10);//ePALM::latest()->paginate(15);
+            foreach ($ePALM as $item) {
+                if ($item->nama_pbt == "Landskap Perbandaran") {
+                    $ePALM_komponen = ePALM::where('id_taman', $item->is_komponen)->select('nama_taman')->first();
+                    $item->komponen = "ePALM/".str_replace(' ', '_', $ePALM_komponen->nama_taman)."/".str_replace(' ', '_', $item->nama_taman);
+                    // dump($item->komponen );
+                }
+            }
+            return view('website.ePALM', ['ePALM_all' => $ePALM]);
+        })->name('epalm');
     });
 
 Route::middleware(['auth'])
@@ -269,10 +308,23 @@ Route::middleware(['auth'])
             Route::get('velind', 'UsersController@velind')->name('velind');
         });
 
+        // Route::get('eLIND/kontraktor', 'eLINDController@kontraktor')->name('eLIND.kontraktor');
+        // Route::get('eLIND/perunding_landskap', 'eLINDController@perundingLandskap')->name('eLIND.perunding_landskap');
+        // Route::get('eLIND/pembekal_landskap', 'eLINDController@pembekalLandskap')->name('eLIND.pembekal_landskap');
+        // Route::get('eLIND/pertubuhan_antarabangsa', 'eLINDController@pertubuhanAntarabangsa')->name('eLIND.pertubuhan_antarabangsa');
+        // Route::get('eLIND/ngo_badan_ikhtisas', 'eLINDController@ngoBadanIkhtisas')->name('eLIND.ngo_badan_ikhtisas');
+        // Route::get('eLIND/institusi_pendidikan', 'eLINDController@institusiPendidikan')->name('eLIND.institusi_pendidikan');
+
         /**
          * Route eLINDController
          */
-        Route::resource('eLIND', 'UsersController');
+        // Route::resource('eLIND', 'eLINDController');
+        // Add this route for the kontraktor method
+
+
+        // Route::get('eLIND/kontraktor', [eLINDController::class, 'kontraktor'])->name('pengurusan.eLIND.kontraktor');
+        // Route::get('eLIND/perunding', [eLINDController::class, 'perunding'])->name('pengurusan.eLIND.perunding');
+
         
         Route::get('entiti-lanskap', [EntitiLandskapController::class, 'index'])->name('entitiLandskap.entiti.index');
         Route::get('kempen-tanam', [KempenTanamController::class, 'index'])->name('kempenTanam.entiti.index');
@@ -442,6 +494,44 @@ Route::middleware(['auth'])
          * Route eLAPSController
          */
         Route::resource('eLAPS', 'eLAPSController');
+        // Route::get('/eLAPS/{eLAPS}/edit', [eLAPSController::class, 'edit'])->name('pengurusan.eLAPS.edit');
+        Route::post('/upload-chunk', [eLAPSController::class, 'uploadChunk'])->name('upload.chunk');
+
+        /**
+         * Route ePALMController
+         */
+        Route::resource('ePALM', 'ePALMController');
+        // Route::get('/ePALM/fetchComponents', [ePALMController::class, 'fetchComponents'])->name('pengurusan.ePALM.fetchComponentsManual');
+
+
+
+        /**
+         * Route ePILController
+         */
+        Route::resource('ePIL', 'ePILController');
+        Route::resource('ePIL_dokumen', 'ePIL_dokumenController');
+        /**
+         * Route MIBController
+         */
+        Route::resource('MIB', 'MIBController');
+
+        /**
+         * Route eLINDController
+         */
+        // Route::resource('eLIND', 'eLINDController');
+        // Route::resource('eLIND', 'eLINDController');
+        // Route::get('eLIND/{type}', 'eLINDController@indexSubmodule')->name('eLIND.indexSubmodule');
+        // Define routes for the submodule actions
+        // Route::get('eLIND/{type}', 'eLINDController@index')->name('eLIND.index');
+        Route::get('eLIND/{type}', 'eLINDController@index')->name('eLIND.index');
+        Route::get('eLIND/{type}/create', 'eLINDController@create')->name('eLIND.create');
+        Route::get('eLIND/{type}/{id}/show', 'eLINDController@show')->name('eLIND.show');
+        Route::post('eLIND/{type}', 'eLINDController@store')->name('eLIND.store');
+        Route::get('eLIND/{type}/{id}/edit', 'eLINDController@edit')->name('eLIND.edit');
+        Route::put('eLIND/{type}/{id}', 'eLINDController@update')->name('eLIND.update');
+        Route::delete('eLIND/{type}/{id}', 'eLINDController@destroy')->name('eLIND.destroy');
+        // Route::get('eLIND', 'eLINDController@kontraktor')->name('eLIND.kontraktor');
+        // Route::get('pengurusan/eLINDz', [eLINDController::class, 'indexz'])->name('pengurusan.eLIND.indexz');
 
         /**
          * Route DroneController
@@ -537,43 +627,44 @@ Route::middleware(['auth'])
         });
     });
 
-Route::get('/test-email', function () {
-    $details = [
-        'title' => 'Mail from Laravel App',
-        'body' => 'This is a test email sent from Laravel application.'
-    ];
 
-    Mail::raw($details['body'], function ($message) use ($details) {
-        $message->to('your_test_email@example.com')  // Replace with your test email address
-                ->subject($details['title']);
+    Route::get('/test-email', function () {
+        $details = [
+            'title' => 'Mail from Laravel App',
+            'body' => 'This is a test email sent from Laravel application.'
+        ];
+
+        Mail::raw($details['body'], function ($message) use ($details) {
+            $message->to('your_test_email@example.com')  // Replace with your test email address
+                    ->subject($details['title']);
+        });
+
+        return 'Email sent!';
     });
+    Route::get('/test-email2', function () {
+        $details = [
+            'title' => 'Mail from Laravel App',
+            'body' => 'This is a test email sent from Laravel application.'
+        ];
 
-    return 'Email sent!';
-});
-Route::get('/test-email2', function () {
-    $details = [
-        'title' => 'Mail from Laravel App',
-        'body' => 'This is a test email sent from Laravel application.'
-    ];
+        \Illuminate\Support\Facades\Mail::raw($details['body'], function ($message) use ($details) {
+            $message->to('test@example.com')  // Replace with your test email address
+                    ->subject($details['title']);
+        });
 
-    \Illuminate\Support\Facades\Mail::raw($details['body'], function ($message) use ($details) {
-        $message->to('test@example.com')  // Replace with your test email address
-                ->subject($details['title']);
+        return 'Email sent!';
     });
+    Route::get('/test-email-html', function () {
+        $details = [
+            'title' => 'HTML Mail from Laravel App',
+            'body' => '<h1>This is a test email sent from Laravel application.</h1>'
+        ];
 
-    return 'Email sent!';
-});
-Route::get('/test-email-html', function () {
-    $details = [
-        'title' => 'HTML Mail from Laravel App',
-        'body' => '<h1>This is a test email sent from Laravel application.</h1>'
-    ];
+        \Illuminate\Support\Facades\Mail::send([], [], function ($message) use ($details) {
+            $message->to('test@example.com')
+                    ->subject($details['title'])
+                    ->setBody($details['body'], 'text/html');
+        });
 
-    \Illuminate\Support\Facades\Mail::send([], [], function ($message) use ($details) {
-        $message->to('test@example.com')
-                ->subject($details['title'])
-                ->setBody($details['body'], 'text/html');
+        return 'HTML email sent!';
     });
-
-    return 'HTML email sent!';
-});

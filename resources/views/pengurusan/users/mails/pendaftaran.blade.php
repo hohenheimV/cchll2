@@ -23,5 +23,11 @@
             {{ $user->is_active ? 'Aktif' : 'Tidak Aktif' }}
         </td>
     </tr>
+    <tr>
+        <th style="{!! $style !!}">Peranan</th>
+        <td style="{!! $style !!}">
+            {{ $accountType }}
+        </td>
+    </tr>
 </table>
 @endsection

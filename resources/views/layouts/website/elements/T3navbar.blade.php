@@ -51,7 +51,7 @@
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg   p-lg-0">
             <a class="navbar-brand" href="{{ route('welcome') }}">
-                <img src="{{ asset('images/logo.png') }}" height="70" alt="">
+                <img src="{{ asset('images/logo2.png') }}" height="70" alt="">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"  style="background-color: #36458e;">
                 <span class="navbar-toggler-icon"  style="color: white;"><i class="fas fa-bars"></i></span>

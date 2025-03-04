@@ -21,11 +21,16 @@ h1, h2, h3, h4, h5 {
 
 .login-page,
 .register-page {
-    background: linear-gradient(to top right, rgba(61, 153, 112, 1) 0%, rgba(197, 143, 255, 1));
+    background-color:rgb(25, 98, 92) !important;
     /* background: url(../img/sections.png), linear-gradient(to top right, rgba(61, 153, 112, 1) 0%, rgba(90, 168, 133, 1)); */
-    background: url(../img/sections.png);
+    background: url("../storage/img/bg-pattern-leaves.png");
     background-repeat: repeat;
 }
+.login-page .footer,
+.register-page .footer {
+    color: white !important;
+}
+
 
 
 /*Checkbox*/

@@ -4,7 +4,6 @@
 
 @section('content')
 
-
 @hasanyrole('Perunding')
 <div class="container-fluid">
 

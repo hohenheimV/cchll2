@@ -1,23 +1,21 @@
 <style>
-.navbar-nav li:hover > ul.dropdown-menu {
-    display: block;
-}
-.dropdown-submenu {
-    position:relative;
-}
-.dropdown-submenu>.dropdown-menu {
-    top:0;
-    left:100%;
-    margin-top:-6px;
-}
+    .navbar-nav li:hover > ul.dropdown-menu {
+        display: block;
+    }
+    .dropdown-submenu {
+        position:relative;
+    }
+    .dropdown-submenu>.dropdown-menu {
+        top:0;
+        left:100%;
+        margin-top:-6px;
+    }
 
-/* rotate caret on hover */
-.dropdown-menu > li > a:hover:after {
-    text-decoration: underline;
-    transform: rotate(-90deg);
-}
-
-
+    /* rotate caret on hover */
+    .dropdown-menu > li > a:hover:after {
+        text-decoration: underline;
+        transform: rotate(-90deg);
+    }
 </style>
 <style>
     .scroll-button {
@@ -31,6 +29,7 @@
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease; /* Smooth transition for color change */
+        
     }
 
     .scroll-button.scrolled {

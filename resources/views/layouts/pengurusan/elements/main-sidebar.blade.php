@@ -55,8 +55,8 @@
                     @endforeach
                     <li class="nav-item">
                         {!! Html::buttonSidebarNavLink('Kempen Tanam Pokok', 'fas fa-chart-pie', [
-                            'onclick' => "window.location='" . route('pengurusan.kempen-tanam-pokok.index') . "'",
-                            'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.kempen-tanam-pokok.')
+                            'onclick' => "window.location='" . route('pengurusan.ktp.index') . "'",
+                            'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.ktp.')
                         ]) !!}
                     </li>
                     <li class="nav-item">

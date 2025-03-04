@@ -1,7 +1,18 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Kemaskini')
+@php
+    $lastSegment = Request::segment(3);
+    $capitalizedSegment = ucfirst($lastSegment);
+    if ($capitalizedSegment == 'Pendidikan') {
+        $capitalizedSegment = 'Institusi Pendidikan';
+    }else if ($capitalizedSegment == 'Ngo') {
+        $capitalizedSegment = 'NGO / Badan Ikhtisas';
+    }else if ($capitalizedSegment == 'Antarabangsa') {
+        $capitalizedSegment = 'Pertubuhan Antarabangsa';
+    }
+@endphp
 
+@section('title', 'Kemaskini Maklumat ' . $capitalizedSegment)
 @section('content')
 <section class="content">
 
@@ -17,8 +28,7 @@
                     </div>
                     <!-- /.card-header -->
 
-                    {!! Form::model($user, ['route' => ['pengurusan.eLIND.update', $user], 'method'=>'PATCH']) !!}
-
+                    {!! Form::model($eLIND, ['route' => ['pengurusan.eLIND.update', 'type' => $lastSegment, 'id' => $eLIND], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
                     <div class="card-body">
                         @include('pengurusan.eLIND._form')
                     </div>
@@ -26,7 +36,7 @@
 
                     <div class="card-footer">
                         {!! Form::button('Batal dan Kembali',
-                        ['onclick'=>"window.location='".route('pengurusan.eLIND.index')."'",'class'=>'btn btn-secondary']) !!}
+                        ['onclick'=>"window.location='".route('pengurusan.eLIND.index', ['type' => $lastSegment])."'",'class'=>'btn btn-secondary']) !!}
                         {!! Form::button('<i class="fas fa-save"></i> Kemaskini', ['class'=>'btn btn-success','type'=>'submit']) !!}
                     </div>
                     <!-- /.card-footer -->

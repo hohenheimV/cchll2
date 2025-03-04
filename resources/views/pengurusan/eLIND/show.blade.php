@@ -1,6 +1,18 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Pengguna')
+@php
+    $lastSegment = Request::segment(3);
+    $capitalizedSegment = ucfirst($lastSegment);
+    if ($capitalizedSegment == 'Pendidikan') {
+        $capitalizedSegment = 'Institusi Pendidikan';
+    }else if ($capitalizedSegment == 'Ngo') {
+        $capitalizedSegment = 'NGO / Badan Ikhtisas';
+    }else if ($capitalizedSegment == 'Antarabangsa') {
+        $capitalizedSegment = 'Pertubuhan Antarabangsa';
+    }
+@endphp
+
+@section('title', 'Lihat Maklumat ' . $capitalizedSegment)
 
 @section('content')
 <section class="content">
@@ -14,12 +26,12 @@
                             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group" role="group" aria-label="First group">
                                     {!! Form::button('Kembali',
-                                    ['onclick'=>"window.location='".route('pengurusan.eLIND.index')."'",'class'=>'btn
+                                    ['onclick'=>"window.location='".route('pengurusan.eLIND.index', ['type' => $lastSegment])."'",'class'=>'btn
                                     btn-secondary']) !!}
                                     @can('role-edit')
                                     {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
                                     'class'=>'btn btn-warning btn-sm',
-                                    'onclick'=>"window.location='".route('pengurusan.eLIND.edit',$user)."'"
+                                    'onclick'=>"window.location='".route('pengurusan.eLIND.edit', ['type' => $lastSegment, 'id' => $eLIND])."'"
                                     ]) !!}
                                     @endcan
                                 </div>
@@ -27,7 +39,7 @@
                         </div>
                     </div>
                     <!-- /.card-header -->
-                    <div class="card-body">
+                    <!-- <div class="card-body">
 
                         <div class="row">
                             <div class="col-6">
@@ -35,15 +47,15 @@
                                     @php($null = '<span class="badge badge-light">Tiada Maklumat</span>')
 
                                     <dt class='col-sm-4'>Nama</dt>
-                                    <dd class='col-sm-6'>{!! $user->name ?? $null !!}</dd>
+                                    <dd class='col-sm-6'>{!! $eLIND->name ?? $null !!}</dd>
 
                                     <dt class='col-sm-4'>Emel</dt>
-                                    <dd class='col-sm-6'>{!! $user->email ?? $null !!}</dd>
+                                    <dd class='col-sm-6'>{!! $eLIND->email ?? $null !!}</dd>
 
                                     <dt class='col-sm-4 text-capitalize'>Peranan</dt>
                                     <dd class='col-sm-6 text-capitalize'>
-                                        @if(!empty($user->getRoleNames()))
-                                        @foreach($user->getRoleNames() as $v)
+                                        @if(!empty($eLIND->getRoleNames()))
+                                        @foreach($eLIND->getRoleNames() as $v)
                                         <label
                                             class="badge badge-success font-weight-normal">{{ $v }}</label>
                                         @endforeach
@@ -52,15 +64,21 @@
 
                                     <dt class='col-sm-4'>Tarikh Daftarkan</dt>
                                     <dd class='col-sm-6'>
-                                        {{ $user->created_at ? $user->created_at->format('d/m/Y') : '-' }}</dd>
+                                        {{ $eLIND->created_at ? $eLIND->created_at->format('d/m/Y') : '-' }}</dd>
 
                                     <dt class='col-sm-4'>Tarikh Dikemaskini</dt>
                                     <dd class='col-sm-6'>
-                                        {{ $user->updated_at ? $user->updated_at->format('d/m/Y') : '-' }}</dd>
+                                        {{ $eLIND->updated_at ? $eLIND->updated_at->format('d/m/Y') : '-' }}</dd>
                                 </dl>
                             </div>
                         </div>
 
+                    </div> -->
+                    <div class="card-body table-hardscape form-hardscape text-sm">
+                        <div >
+                            @include('pengurusan.eLIND._form')
+                        </div>
+                        <!-- @include('pengurusan.eLIND._upload') -->
                     </div>
                     <!-- /.card-body -->
                 </div>

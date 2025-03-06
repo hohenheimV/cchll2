@@ -1,16 +1,19 @@
 <table class="table table-bordered" style="border: none; font-size: 12px;">
     <!-- First Row: Title (Tajuk Permohonan and Rujukan) -->
     <tr style="border-bottom: 1px solid black;border-top: 1px solid black;background-color: #ffff00;">
-        <td style="border: none; padding: 8px; text-align: left;" rowspan="2" >{{ Form::label('projectTitle', '1.&nbsp;&nbsp;&nbsp;&nbsp;TAJUK PERMOHONAN PROJEK:', ['class' => 'col-form-label']) }}</td>
-        <td style="border: none; padding: 8px; text-align: left;" colspan="3" rowspan="2">{{ Form::textarea('projectTitle', null, ['class' => 'form-control', 'rows' => 3, 'cols' => 50, 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
+        <td style="border: none; padding: 8px; text-align: left;" rowspan="2" >
+            {{ Form::label('projectTitle', '1.&nbsp;&nbsp;&nbsp;&nbsp;TAJUK PERMOHONAN PROJEK:', ['class' => 'col-form-label required-field-create']) }}
+
+        </td>
+        <td style="border: none; padding: 8px; text-align: left;" colspan="3" rowspan="2">{{ Form::textarea('projectTitle', null, ['class' => 'form-control', 'rows' => 3, 'cols' => 50, 'placeholder' => 'Masukkan butiran jika ada', 'required' => 'required']) }}</td>
         <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('referenceNumber', '2.&nbsp;&nbsp;&nbsp;&nbsp;RUJUKAN PERMOHONAN:', ['class' => 'col-form-label']) }}</td>
         <td style="border: none; padding: 8px; text-align: left;" >
-            {{ Form::text('referenceNumber', $eLAPS->referenceNumber, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'text-align: right; width: 70%; margin-top: 0; margin-left: auto; margin-right: 0;']) }}
+            {{ Form::text('referenceNumber', $eLAPS->referenceNumber ?? '', ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'text-align: right; width: 70%; margin-top: 0; margin-left: auto; margin-right: 0;', 'inert' => 'true']) }}
         </td>
     </tr>
     <tr style="border-bottom: 1px solid black; border-top: 1px solid black; background-color: #ffff00;">
         <td style="border: none; padding: 8px; text-align: left;">
-            {{ Form::label('anggaranKos', '&nbsp;&nbsp;&nbsp;&nbsp;ANGGARAN KOS PEMBANGUNAN (RM):', ['class' => 'col-form-label']) }}
+            {{ Form::label('anggaranKos', '&nbsp;&nbsp;&nbsp;&nbsp;ANGGARAN KOS PEMBANGUNAN (RM):', ['class' => 'col-form-label required-field-create']) }}
         </td>
         <td style="border: none; padding: 8px; text-align: left;">
             {{ Form::text('anggaranKos', null, ['class' => 'form-control currency-input', 'placeholder' => '0.00', 'style' => 'text-align: right; width: 70%; margin-left: auto; margin-right: 0;', 'oninput' => 'formatCurrency(this);']) }}
@@ -57,7 +60,7 @@
 
     <!-- Second Row: KATEGORI PROJEK -->
     <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
-        <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('projectCategory', '3.&nbsp;&nbsp;&nbsp;&nbsp;KATEGORI PROJEK:', ['class' => 'col-form-label']) }}</td>
+        <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('projectCategory', '3.&nbsp;&nbsp;&nbsp;&nbsp;KATEGORI PROJEK:', ['class' => 'col-form-label required-field']) }}</td>
     </tr>
     <!-- Third Row: Rancangan Pembangunan (checkboxes with input fields) -->
     <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
@@ -192,7 +195,7 @@
     </tr>
     <!-- Third Row: Rancangan Pembangunan (checkbox and text box) -->
     <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
-        <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('rancangan_pembangunan', '4.&nbsp;&nbsp;&nbsp;&nbsp;RANCANGAN PEMBANGUNAN: ', ['class' => 'col-form-label']) }}<h7>&nbsp;(Adakah tapak cadangan berasaskan kepada Rancangan Pembangunan tersebut?)</h7></td>
+        <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('rancangan_pembangunan', '4.&nbsp;&nbsp;&nbsp;&nbsp;RANCANGAN PEMBANGUNAN: ', ['class' => 'col-form-label required-field']) }}<h7>&nbsp;(Adakah tapak cadangan berasaskan kepada Rancangan Pembangunan tersebut?)</h7></td>
     </tr>
 
     <!-- Third Row: Rancangan Pembangunan (checkboxes with input fields) -->
@@ -296,17 +299,17 @@
 
     <!-- Fourth Row: PERIHAL TAPAK -->
     <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
-        <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('tapak_details', '5.&nbsp;&nbsp;&nbsp;&nbsp;PERIHAL TAPAK:', ['class' => 'col-form-label']) }}</td>
+        <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('tapak_details', '5.&nbsp;&nbsp;&nbsp;&nbsp;PERIHAL TAPAK:', ['class' => 'col-form-label required-field']) }}</td>
     </tr>
 
     <!-- Fifth Row: Keluasan and Panjang -->
     <tr>
-        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('keluasan', 'a.&nbsp;&nbsp;&nbsp;&nbsp;Keluasan (ekar / hektar) :', ['class' => 'col-form-label']) }}</td>
+        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('keluasan', 'a.&nbsp;&nbsp;&nbsp;&nbsp;Keluasan (ekar / hektar) :', ['class' => 'col-form-label required-field']) }}</td>
         <td style="border: none; padding: 8px; text-align: left;" >{{ Form::text('keluasan', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
 
         <!-- Dropdown for Unit (Keluasan) with fixed width -->
         <td style="border: none; padding: 8px; text-align: left;" >
-            {{ Form::select('unit_keluasan', ['ekar' => 'Ekar', 'hektar' => 'Hektar'], null, ['class' => 'form-control', 'style' => 'width: 150px;']) }}
+            {{ Form::select('unit_keluasan', ['ekar' => 'Ekar', 'hektar' => 'Hektar'], null, ['class' => 'form-control required-field', 'style' => 'width: 150px;']) }}
         </td>
 
         <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('panjang', 'Panjang (Jika berkaitan):', ['class' => 'col-form-label']) }}</td>
@@ -489,13 +492,13 @@
 
     <!-- d. Status Tanah : Diwartakan sebagai tanah lapang /rezab landskap -->
     <tr>
-        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('no_lot', 'd.&nbsp;&nbsp;&nbsp;&nbsp;No Lot/PT :', ['class' => 'col-form-label']) }}</td>
+        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('no_lot', 'd.&nbsp;&nbsp;&nbsp;&nbsp;No Lot/PT :', ['class' => 'col-form-label required-field']) }}</td>
         <td style="border: none; padding: 8px; text-align: left;" >{{ Form::text('no_lot', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
         <td style="border: none; padding: 8px; text-align: left;"  colspan="4">
             <!-- Dropdown for Negeri, Daerah, and Mukim -->
             <div class="form-group row">
                 <div class="col-md-1">
-                    {{ Form::label('negeri', 'Negeri:', ['class' => 'col-form-label']) }}
+                    {{ Form::label('negeri', 'Negeri:', ['class' => 'col-form-label required-field']) }}
                 </div>
                 <div class="col-md-3">
                     {{ Form::select('negeri', [], null, ['class' => 'form-control', 'style' => 'width: 200px;', 'id' => 'negeri']) }}
@@ -504,7 +507,7 @@
 
             <div class="form-group row"> -->
                 <div class="col-md-1">
-                    {{ Form::label('daerah', 'Daerah:', ['class' => 'col-form-label']) }}
+                    {{ Form::label('daerah', 'Daerah:', ['class' => 'col-form-label required-field']) }}
                 </div>
                 <div class="col-md-3">
                     {{ Form::select('daerah', [], null, ['class' => 'form-control', 'style' => 'width: 200px;', 'id' => 'daerah']) }}
@@ -513,7 +516,7 @@
 
             <div class="form-group row"> -->
                 <div class="col-md-1">
-                    {{ Form::label('mukim', 'Mukim:', ['class' => 'col-form-label']) }}
+                    {{ Form::label('mukim', 'Mukim:', ['class' => 'col-form-label required-field']) }}
                 </div>
                 <div class="col-md-3">
                     {{ Form::select('mukim', [], null, ['class' => 'form-control', 'style' => 'width: 200px;', 'id' => 'mukim']) }}
@@ -522,7 +525,7 @@
 
             <div class="form-group row">
                 <div class="col-md-1">
-                    {{ Form::label('parlimen', 'Parlimen:', ['class' => 'col-form-label']) }}
+                    {{ Form::label('parlimen', 'Parlimen:', ['class' => 'col-form-label required-field']) }}
                 </div>
                 <div class="col-md-3">
                     {{ Form::select('parlimen', [], null, ['class' => 'form-control', 'style' => 'width: 200px;', 'id' => 'parlimen']) }}
@@ -531,7 +534,7 @@
 
             <div class="form-group row"> -->
                 <div class="col-md-1">
-                    {{ Form::label('dun', 'Dun:', ['class' => 'col-form-label']) }}
+                    {{ Form::label('dun', 'Dun:', ['class' => 'col-form-label required-field']) }}
                 </div>
                 <div class="col-md-3">
                     {{ Form::select('dun', [], null, ['class' => 'form-control', 'style' => 'width: 200px;', 'id' => 'dun']) }}
@@ -726,7 +729,7 @@
         <td style="border: none; padding: 8px; text-align: left;"  colspan="5">
             <div class="row">
                 <div class="col-md-3">
-                    {{ Form::label('aktiviti_semasa', 'e.&nbsp;&nbsp;&nbsp;&nbsp;Aktiviti semasa di tapak cadangan :', ['class' => 'col-form-label']) }}
+                    {{ Form::label('aktiviti_semasa', 'e.&nbsp;&nbsp;&nbsp;&nbsp;Aktiviti semasa di tapak cadangan :', ['class' => 'col-form-label required-field']) }}
                 </div>
                 <div class="col-md-9">
                     {{ Form::textarea('aktiviti_semasa', null, ['class' => 'form-control summernote', 'rows' => 3, 'cols' => 20, 'placeholder' => 'Masukkan butiran jika ada']) }}
@@ -758,7 +761,7 @@
         </td>
 
 
-        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('jumlah_penduduk', 'f.&nbsp;&nbsp;&nbsp;&nbsp;Jumlah penduduk (kawasan pentadbiran PBT) :', ['class' => 'col-form-label']) }}<!-- </td>
+        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('jumlah_penduduk', 'f.&nbsp;&nbsp;&nbsp;&nbsp;Jumlah penduduk (kawasan pentadbiran PBT) :', ['class' => 'col-form-label required-field']) }}<!-- </td>
         <td style="border: none; padding: 8px; text-align: left;" > -->{{ Form::text('jumlah_penduduk', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
     </tr>
 
@@ -1039,6 +1042,7 @@
     <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
         <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('projectCategory', '6.&nbsp;&nbsp;&nbsp;&nbsp;MAKLUMAT SOKONGAN:', ['class' => 'col-form-label']) }}</td>
     </tr>
+    @if(Auth::user()->hasRole('Pihak Berkuasa Tempatan'))
     <tr>
         <td style="border: none; padding: 8px; text-align: left;"  colspan="6" style="height: 20px; padding-top: 5px; padding-bottom: 5px;">
             {{ Form::label('note1', '&nbsp;&nbsp;&nbsp;&nbsp;Maklumat lain yang perlu disertakan', ['class' => 'col-form-label']) }}
@@ -1051,107 +1055,112 @@
             @php
                 // Define the array of labels
                 $labels = [
-                    'Pelan ukur terkini (dalam tempoh 3 tahun) yang telah disahkan oleh Juruukur Bertauliah',
-                    'Pelan guna tanah bagi kawasan tapak cadangan dan sekitarnya',
-                    'Pelan kontur kawasan tapak cadangan dan sekitarnya',
-                    'Gambar foto tapak cadangan',
-                    'Gambar foto kawasan sekitar tapak cadangan',
-                    'Lain-lain (nyatakan)'
+                    'Surat Permohonan Beserta Cop Pengesahan Datuk Bandar/YDP/SU *',
+                    'Pelan ukur terkini (dalam tempoh 3 tahun) yang telah disahkan oleh Juruukur Bertauliah *',
+                    'Pelan guna tanah bagi kawasan tapak cadangan dan sekitarnya *',
+                    'Pelan kontur kawasan tapak cadangan dan sekitarnya *',
+                    'Gambar foto tapak cadangan *',
+                    'Gambar foto kawasan sekitar tapak cadangan *',
+                    'Salinan surat hakmilik tanah untuk setiap lot yang terlibat',
+                    'Salinan surat pewartaan untuk setiap lot yang terlibat',
+                    'Lain-lain gambar',
                 ];
             @endphp
 
-            @foreach($labels as $index => $label)
-                <div class="col-md-12 mb-2">  <!-- Added margin-bottom to create space between rows -->
-                    <div class="form-check d-flex align-items-center" style="padding-right: 20px;">
-                        {{ Form::checkbox('maklumat_sokongan[]', $label, false, [
-                            'class' => 'form-check-input bigger-checkbox space-checkbox',
-                            'id' => 'maklumat_sokongan_' . ($index + 1),
-                            'onclick' => ($index == 5) ? 'handleCheckboxClick(this);' : ''
-                        ]) }}
-                        
-                        {{ Form::label('maklumat_sokongan_' . ($index + 1), '-' . $label, [
-                            'class' => 'form-check-label bigger-label space-label ms-2',
-                            'style' => 'font-weight: normal; white-space: nowrap;'
-                        ]) }}
-
-                        @if($index == 5)
-                            {{ Form::text('maklumat_sokongan_details_6', null, [
-                                'class' => 'form-control d-inline-block ms-2 space-label',
-                                'placeholder' => 'Masukkan butiran jika ada',
-                                'style' => 'width: 50%; margin-top: 0;',
-                                'id' => 'maklumat_sokongan_details_6',
-                                'onkeyup' => "document.getElementById('maklumat_sokongan_6').value = document.getElementById('maklumat_sokongan_details_6').value;"
-                            ]) }}
-                        @endif
-                    </div>
-                </div>
-            @endforeach
-
-                <script>
-                    // Function to handle the checkbox click (checked or unchecked)
-                    function handleCheckboxClick(checkbox) {
-                        var inputField = document.getElementById('maklumat_sokongan_details_6');
-                        
-                        // Check if the checkbox is unchecked
-                        if (checkbox.checked) {
-                            // Focus the input field when the checkbox is unchecked
-                            setTimeout(function() {
-                                inputField.focus();
-                            }, 100); // Optional delay to ensure the checkbox state is applied before focusing
-                        }
-                    }
-                </script>
+            <ol>
+                @foreach($labels as $index => $label)
+                    <li class="mb-2">
+                    @if(strpos($label, '*') !== false)
+                        {!! str_replace('*', '<span style="color: red;">*</span>', $label) !!}
+                    @else
+                        {{ $label }}
+                    @endif
+                    </li>
+                @endforeach
+            </ol>
             </div>
         </td>
     </tr>
+    @endif
     <!-- File Upload Section -->
     <tr>
         <td style="border: none; padding: 8px; text-align: left;"  colspan="6" style="padding-top: 15px; padding-bottom: 15px;">
-            <div class="form-group row">
-                <div class="col-md-12">
-                    {{ Form::label('file_upload', '&nbsp;&nbsp;&nbsp;&nbsp;Sila muat naik dokumen sokongan:', ['class' => 'col-form-label', 'style' => 'font-weight: normal;']) }}
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-md-12">
-                    <div class="d-block">
-                        <!-- File input field with the same width as the progress bar -->
-                        {{ Form::file('supporting_documents', ['class' => 'form-control d-inline-block ms-2', 'id' => 'supporting_documents', 'multiple' => true, 'style' => 'width: 100%;']) }}
-                        <input name="large_file_name_new" type="hidden" id="large_file_name_new">
-                        <input name="large_file_name_old" type="hidden" id="large_file_name_old">
+            @if(Auth::user()->hasRole('Pihak Berkuasa Tempatan'))
+                <div class="form-group row">
+                    <div class="col-md-12">
+                        {{ Form::label('file_upload', '&nbsp;&nbsp;&nbsp;&nbsp;Sila muat naik dokumen sokongan:', ['class' => 'col-form-label', 'style' => 'font-weight: normal;']) }}
+                        <br>
+                        @if(isset($eLAPS->file_path))
+                        {{ Form::label('', '&nbsp;&nbsp;&nbsp;&nbsp;Muatnaik semula akan menggantikan fail sedia ada.', ['class' => 'col-form-label required-field-create', 'style' => 'font-weight: strong;']) }}
+                        @endif
                     </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-12">
+                        <div class="d-block">
+                            <!-- File input field with the same width as the progress bar -->
+                            {{ Form::file('supporting_documents', ['class' => 'form-control d-inline-block ms-2', 'id' => 'supporting_documents', 'multiple' => true, 'style' => 'width: 100%;']) }}
+                            <input name="large_file_name_new" type="hidden" id="large_file_name_new">
+                            <input name="large_file_name_old" type="hidden" id="large_file_name_old">
+                        </div>
 
-                    <!-- <div id="progress-container" class="d-block mt-2" style="width: 100%; display: none;">
-                        <div id="progress-bar" style="width: 100%; background-color: #ccc;">
-                            <div id="progress" style="height: 20px; width: 0; background-color: green;"></div>
+                        <!-- <div id="progress-container" class="d-block mt-2" style="width: 100%; display: none;">
+                            <div id="progress-bar" style="width: 100%; background-color: #ccc;">
+                                <div id="progress" style="height: 20px; width: 0; background-color: green;"></div>
+                            </div>
+                            <p>Uploading: <span id="progress-text">0%</span></p>
+                        </div> -->
+                        <div id="progress-container" style="display: none;">
+                            <div id="progress-bar" style="width: 100%; background-color: #ccc;">
+                                <div id="progress" style="height: 20px; width: 0; background-color: green;"></div>
+                            </div>
+                            <p>Uploading: <span id="progress-text">0%</span></p>
                         </div>
-                        <p>Uploading: <span id="progress-text">0%</span></p>
-                    </div> -->
-                    <div id="progress-container" style="display: none;">
-                        <div id="progress-bar" style="width: 100%; background-color: #ccc;">
-                            <div id="progress" style="height: 20px; width: 0; background-color: green;"></div>
-                        </div>
-                        <p>Uploading: <span id="progress-text">0%</span></p>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <div class="d-flex align-items-center">
-                        @php
-                            $folderName = isset($eLAPS->file_path) ? 'eLAPS/'.str_replace('/', '', $eLAPS->referenceNumber).'/'.$eLAPS->file_path : 'no-photos.png';
-                            //$fileName = isset($eLAPS->file_path) ? $eLAPS->file_path : 'no-photos.png';
-                        @endphp
-                        <a href="{{ asset('storage/uploads/' . $folderName) }}" target="_blank">Download File</a>
-                        {{--
-                            {{ asset('storage/img/' . $folderName . '/' . $fileName) }}
-                            <img src="{{ asset('storage/img/' . $folderName . '/' . $fileName) }}" alt="Uploaded File">
-                        --}}
+                <div class="form-group row">
+                    <div class="col-md-12">
+                        {{ Form::label('', '&nbsp;&nbsp;&nbsp;&nbsp;Fail hendaklah dikepil bersama (compress) dan dimuatnaik format rar atau zip.', ['class' => 'col-form-label required-field-create', 'style' => 'font-weight: strong;']) }}
+                        <br>
+                        {{ Form::label('', '&nbsp;&nbsp;&nbsp;&nbsp;Saiz fail muatnaik tidak melebihi 50 MB.', ['class' => 'col-form-label required-field-create', 'style' => 'font-weight: strong;']) }}
                     </div>
-                    <br>
-                        <!-- <img style="width: 100px; height: 100px; object-fit: cover; margin: 2px;" alt="Uploaded File" src="{{ asset('storage/img/' . $folderName) }}">
-                        <a href="{{ asset('storage/img/' . $folderName) }}" target="_blank">Download File</a> -->
-                    <br>
+                </div>
+                
+                @if(isset($eLAPS->file_path))
+                    <div class="col-md-12">
+                        <div class="d-flex align-items-center">
+                            @php
+                                $folderName = isset($eLAPS->file_path) ? 'eLAPS/'.str_replace('/', '', $eLAPS->referenceNumber).'/'.$eLAPS->file_path : null;
+                            @endphp
+                            
+                            @if($folderName != null)
+                            <a href="{{ asset('storage/uploads/' . $folderName) }}" target="_blank" class="" style="border: 1px solid #ddd; border-radius: 10px; padding: 10px; display: inline-block; text-align: center; background-color: #fff;" download>
+                                <div class="product-image">
+                                    <img src="https://img.icons8.com/fluency/48/winrar.png" class="br-5" alt="" style="width: 48px; height: 48px; border-radius: 5px; margin-bottom: 10px;">
+                                </div>
+                                <div class="product-image">
+                                    <span class="file-name-1 bg-yellow" style="background-color: #f4c600; padding: 5px 10px; border-radius: 5px; color: #fff; font-weight: 600; display: inline-block; font-size: 14px;">Download RAR File</span>
+                                </div>
+                            </a>
+                            @endif
+                        </div>
+                        <br>
+                        <span class="file-name-1" style="background-color: #0f9d58;color:rgb(255, 255, 255); padding: 2px 2px; border-radius: 5px; font-weight: 600; display: inline-block;">{{ $eLAPS->file_path }} ddddd ddddddd ddddddd d       ddddddddd dddddd</span>
+                    </div>
+                @endif
+            
+            @endif
+
+            @if(Auth::user()->hasRole('Pihak Berkuasa Tempatan'))
+            <div class="row">
+                <div class="form-group mb-6 col-md-12" style="background-color:#fef7f8; border-left: 5px solid #f0868e; padding: 15px;">
+                    <label for="anggaran_penduduk"><h4>Pengesahan dan pengakuan pemohon:</h4></label>
+                    <div style="background-color: transparent; border: none; padding: 10px; width: 100%; font-size: 16px;">
+                        Dengan ini saya mengesahkan segala maklumat yang diberikan adalah <strong>betul, tepat, lengkap</strong> dan sebarang kesalahan dan percanggahan maklumat adalah dibawah tanggungan pihak saya sendiri. Diperakukan bahawa tapak cadangan ini tidak terlibat dengan pembangunan-pembangunan semasa dan pihak saya juga tidak mengemukakan apa-apa permohonan selain cadangan pembangunan yang dipohon untuk projek ini sahaja.
+                    </div>
                 </div>
             </div>
+            @endif
         </td>
     </tr>
 
@@ -1161,7 +1170,9 @@
     $(document).ready(function() {
         const timestamp = new Date().getTime();
         $('#supporting_documents').change(function() {
-            let destinationFolder = `eLAPS/`+`{{str_replace('/', '', $eLAPS->referenceNumber)}}`+`/`;
+            $('button[type="submit"]').prop('disabled', true);
+            $('#supporting_documents').prop('disabled', true);
+            let destinationFolder = `eLAPS/temp/`;
             let deleteThis = $('#large_file_name_old').val();
             // alert(destinationFolder);
             let fileInput = $('#supporting_documents')[0];
@@ -1215,6 +1226,8 @@
                             $('#large_file_name_new').val(timestamp+'_'+file.name);
                             $('#large_file_name_old').val(timestamp+'_'+file.name);
                             $('#supporting_documents').val('');
+                            $('button[type="submit"]').prop('disabled', false);
+                            $('#supporting_documents').prop('disabled', false);
                         }
                     },
                     error: function(xhr, status, error) {
@@ -1262,6 +1275,18 @@
             width: 1000px; /* Make sure the card has the same fixed width */
             margin: 0 auto; /* Center the card */
         }
-
+    }
+    .required-field-create::after {
+        content: "***"; /* Add the asterisk */
+        color: red; /* Make the asterisk red */
     }
 </style>
+
+@if(isset($eLAPS))
+    <style>
+        .required-field::after {
+            content: "**"; /* Add the asterisk */
+            color: red; /* Make the asterisk red */
+        }
+    </style>
+@endif

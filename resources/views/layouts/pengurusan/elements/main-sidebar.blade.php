@@ -96,8 +96,8 @@
                     @foreach(['eREAD', 'eLAD', 'ePACT'] as $item)
                         <li class="nav-item">
                             {!! Html::buttonSidebarNavLink($item, 'fas fa-chart-pie', [
-                                {{--'onclick' => "window.location='" . route('pengurusan.' . ($item) . '.index') . "'",--}}
-                                'class' => 'nav-link btn btn-block btn-link text-left ' {{--.  Html::active('pengurusan.' . ($item) . '.index') --}}
+                                'onclick' => "window.location='" . route('pengurusan.' . strt($item) . '.index') . "'",
+                                'class' => 'nav-link btn btn-block btn-link text-left ' .  Html::active('pengurusan.' . strt($item) . '.index') 
                             ]) !!}
                         </li>
                     @endforeach

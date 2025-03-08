@@ -518,7 +518,7 @@ class eLAPSController extends Controller
                             "subject" => 'New User Application Notification',
                         ];
         
-                        Mail::send('pengurusan.eLAPS.mails.pendaftaran', ['elaps' => $hantarPermohonan, 'name' => $user->name, 'email' => $user->email], function ($message) use ($emailData) {
+                        Mail::send('pengurusan.eLAPS.mails.pendaftaran', ['elaps' => $serahPermohonan, 'name' => $user->name, 'email' => $user->email], function ($message) use ($emailData) {
                             $message->subject($emailData["subject"]);
                             // Loop through to array and add each email
                             foreach ($emailData['email_to'] as $to) {
@@ -637,9 +637,9 @@ class eLAPSController extends Controller
                 return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat Status Projek tidak berjaya dikemaskini');
             }
         } elseif ($request->input('statusProjek') === 'siap') {
-            dd($request->all());
+            // dd($request->all());
             $siapProjek = $permohonan->update(['status_permohonan' => 14]);
-            
+            //if taman awam
             if($siapProjek){
                 //email
                 $duplicateData = new ePALM();

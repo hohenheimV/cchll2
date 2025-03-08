@@ -116,7 +116,7 @@ class UsersController extends Controller
 
 
         $input = $request->all();
-        dd($request->all());
+        // dd($request->all());
         if (!empty($input['password'])) {
             $input['password'] = Hash::make($request->password);
         } else {
@@ -165,7 +165,8 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user)
-    {dump($request->all());
+    {
+        // dd($request->all());
         // Mula Rule validation
         $rules = [
             'name' => 'required',

@@ -12,34 +12,23 @@
                 </div>
                 {!! Form::model($ePALM ?? '', ['route' => ['pengurusan.ePALM.update', $ePALM ?? '43'], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
                 <div class="card-body table-hardscape form-hardscape text-sm">
-                    <style>
-                        div[inert] {
-                            pointer-events: none; /* Ensure no interactions are possible */
-                        }
+                    @if($ePALM->id_permohonan != null || isset($ePALM->nama_taman))
+                        <style>
+                            .inertClass {
+                                pointer-events: none; /* Ensure no interactions are possible */
+                            }
 
-                        div[inert] input,
-                        div[inert] span,
-                        div[inert] textarea,
-                        div[inert] select {
-                            background-color:rgb(215, 215, 215); /* Light grey background for input/select */
-                            color:rgb(65, 60, 60); /* Light grey text color */
-                            cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
-                            pointer-events: none; /* Ensure no interactions are possible */
-                        }
-                        .inertClass {
-                            pointer-events: none; /* Ensure no interactions are possible */
-                        }
-
-                        .inertClass input,
-                        .inertClass span,
-                        .inertClass textarea,
-                        .inertClass select {
-                            background-color: rgb(215, 215, 215); /* Light grey background for input/select */
-                            color: rgb(65, 60, 60); /* Light grey text color */
-                            cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
-                            pointer-events: none; /* Ensure no interactions are possible */
-                        }
-                    </style>
+                            .inertClass input,
+                            .inertClass span,
+                            .inertClass textarea,
+                            .inertClass select {
+                                background-color: rgb(215, 215, 215); /* Light grey background for input/select */
+                                color: rgb(65, 60, 60); /* Light grey text color */
+                                cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
+                                pointer-events: none; /* Ensure no interactions are possible */
+                            }
+                        </style>
+                    @endif
                     @include('pengurusan.ePALM._form')
 
                     <!-- @include('pengurusan.ePALM._upload') -->

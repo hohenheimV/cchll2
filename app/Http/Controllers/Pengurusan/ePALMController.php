@@ -45,7 +45,7 @@ class ePALMController extends Controller
     {
         $userId = auth()->id();
         $user = User::find($userId);
-        $pbt_name = null; 
+        $pbt = null; 
         if($user->hasRole('Pihak Berkuasa Tempatan')){
             $email = $user->email;
             $pbt = MaklumatPenggunaPbt::where('email', '=', $email)->first();

@@ -10,7 +10,7 @@
                 <div class="card-header p-0 m-0">
                     <h5 class="card-title p-1 m-1 font-weight-bold">@yield('title')</h5>
                 </div>
-                {!! Form::model($ePALM ?? '', ['route' => ['pengurusan.ePALM.update', $ePALM ?? '43'], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
+                {!! Form::model($ePALM, ['route' => ['pengurusan.ePALM.update', $ePALM], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
                 <div class="card-body table-hardscape form-hardscape text-sm">
                     @if($ePALM->id_permohonan != null || isset($ePALM->nama_taman))
                         <style>

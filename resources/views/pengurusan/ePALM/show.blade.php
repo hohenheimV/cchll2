@@ -30,33 +30,30 @@
                     @endif
 
                     <style>
-                        div[inert] {
-                            pointer-events: none;
-                        }
-
-                        div[inert] input,
-                        div[inert] span,
-                        div[inert] textarea,
-                        div[inert] select {
-                            /* background-color:rgb(215, 215, 215); */
-                            /* color:rgb(65, 60, 60); */
-                            cursor: not-allowed;
-                            pointer-events: none;
-                        }
                         .showButton{
                             display: none;
                         }
+                        .inertShow {
+                            pointer-events: none; /* Ensure no interactions are possible */
+                        }
 
-                    </style>
-                    <style>
+                        .inertShow input,
+                        .inertShow span:not(.parks span),
+                        .inertShow textarea,
+                        .inertShow select {
+                            background-color: rgb(215, 215, 215); /* Light grey background for input/select */
+                            color: rgb(65, 60, 60); /* Light grey text color */
+                            cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
+                            pointer-events: none; /* Ensure no interactions are possible */
+                        }
                         #projek_table th:last-child, #projek_table td:last-child {
                             display: none;
                         }
                     </style>
-                    <div inert>
+                    <div>
                         @include('pengurusan.ePALM._form')
                     </div>
-                    <div class="col-lg">
+                    <div class="col-lg showButton">
                         <div inert class="form-group required">
                             <label for="keterangan_taman" class="col-md-12 control-label">Keterangan Taman</label>
                             <div class="col-md-12">

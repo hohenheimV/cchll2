@@ -13,7 +13,7 @@
 
                 {{ Form::open(['route' =>['pengurusan.ePALM.store'], 'enctype'=>'multipart/form-data']) }}
                 <div class="card-body table-hardscape form-hardscape text-sm">
-                    @if($pbt->pbt_name != null)
+                    @if(isset($pbt))
                     <style>
                         #nama_pbt {
                             pointer-events: none;

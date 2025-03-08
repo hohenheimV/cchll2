@@ -74,18 +74,18 @@
                 {!! Form::button('Batal', ['class'=>'btn btn-danger btn-lg btn-flat btn-block m-0 mr-1', 'data-dismiss'=>'modal']) !!}
                 {!! Form::button('Serah Permohonan', ['type'=>'submit', 'name' => 'action', 'value' => 'serahan', 'class'=>'btn btn-success btn-lg btn-flat btn-block m-0 ml-1']) !!}
             </div>
-            {!! Form::close() !!}
+        {!! Form::close() !!}
 
         </div>
     </div>
 </div>
 
 <!-- Modal Keputusan -->
- 
+
 <div class="modal" id="modalKeputusan" tabindex="-1" role="dialog" aria-labelledby="modalKeputusanLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-l">
         <div class="modal-content">
-            {!! Form::open(['method'=>'POST', 'id'=>'modalFormKeputusan', 'route' => 'pengurusan.eLAPS.store']) !!}
+        {!! Form::open(['method' => 'PUT', 'id' => 'modalFormKeputusan', 'route' => ['pengurusan.eLAPS.update', ''], 'enctype' => 'multipart/form-data']) !!}
             <div class="modal-header d-flex justify-content-center bg-dark border-0">
                 <h5 class="modal-title">Status Keputusan JPT</h5>
             </div>
@@ -93,29 +93,30 @@
             <div class="modal-body text-center">
                 <p><strong>Sila pilih Status Keputusan JPT:</strong></p>
                 <div class="form-group">
-                    <!-- {!! Form::label('department', 'Pilih Bahagian:') !!} -->
-                    {!! Form::select('department', [
-                        'Lulus' => 'Lulus',
-                        'Gagal' => 'Gagal'
+                    {!! Form::select('keputusan', [
+                        '10' => 'Lulus',
+                        '11' => 'Gagal'
                     ], null, ['class' => 'form-control']) !!}
+                    {!! Form::text('eLAPS_id', null, ['id' => 'eLAPS_idK']) !!}
                 </div>
             </div>
 
             <div class="modal-footer d-flex">
                 {!! Form::button('Batal', ['class'=>'btn btn-danger btn-lg btn-flat btn-block m-0 mr-1', 'data-dismiss'=>'modal']) !!}
-                {!! Form::button('Kemaskini Status', ['type'=>'submit', 'class'=>'btn btn-success btn-lg btn-flat btn-block m-0 ml-1']) !!}
+                {!! Form::button('Kemaskini Status', ['type'=>'submit', 'name' => 'action', 'value' => 'keputusan', 'class'=>'btn btn-success btn-lg btn-flat btn-block m-0 ml-1']) !!}
             </div>
-            {!! Form::close() !!}
+        {!! Form::close() !!}
+
         </div>
     </div>
 </div>
 
+
 <!-- Modal StatusProjek -->
- 
 <div class="modal" id="modalStatusProjek" tabindex="-1" role="dialog" aria-labelledby="modalStatusProjekLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-l">
         <div class="modal-content">
-            {!! Form::open(['method'=>'POST', 'id'=>'modalFormStatusProjek', 'route' => 'pengurusan.eLAPS.store']) !!}
+        {!! Form::open(['method' => 'PUT', 'id' => 'modalFormStatus', 'route' => ['pengurusan.eLAPS.update', ''], 'enctype' => 'multipart/form-data']) !!}
             <div class="modal-header d-flex justify-content-center bg-dark border-0">
                 <h5 class="modal-title">Status Projek</h5>
             </div>
@@ -123,15 +124,16 @@
             <div class="modal-body text-center">
                 <p><strong>Sila pilih Status Projek:</strong></p>
                 <div class="form-group">
-                    {!! Form::select('department', [], null, ['class' => 'form-control', 'id' => 'statusProjekSelect']) !!}
+                    {!! Form::select('statusProjek', [], null, ['class' => 'form-control', 'id' => 'statusProjekSelect']) !!}
+                    {{ Form::text('eLAPS_id', null, ['id' => 'eLAPS_idP']) }}
                 </div>
             </div>
 
             <div class="modal-footer d-flex">
                 {!! Form::button('Batal', ['class'=>'btn btn-danger btn-lg btn-flat btn-block m-0 mr-1', 'data-dismiss'=>'modal']) !!}
-                {!! Form::button('Kemaskini Status', ['type'=>'submit', 'class'=>'btn btn-success btn-lg btn-flat btn-block m-0 ml-1']) !!}
+                {!! Form::button('Kemaskini Status', ['type'=>'submit', 'name' => 'action', 'value' => 'status', 'class'=>'btn btn-success btn-lg btn-flat btn-block m-0 ml-1']) !!}
             </div>
-            {!! Form::close() !!}
+        {!! Form::close() !!}
         </div>
     </div>
 </div>
@@ -174,6 +176,8 @@
     </div>
 </div>
 
+<!-- Komponen Landskap Perbandaran -->
+ 
 <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -187,14 +191,14 @@
             <div class="modal-body">
                     <div class="form-group">
                         <label for="nama_taman">Nama Komponen</label>
-                        <input type="hidden" class="form-control" id="id_taman" name="id_taman" placeholder="Masukkan Nama Produk" value="{{ $ePALM->id_taman ?? ''}}">
-                        <input type="hidden" class="form-control" id="nama_taman" name="nama_taman" placeholder="Masukkan Nama Produk" value="{{ $ePALM->nama_taman ?? ''}}">
-                        <input type="hidden" class="form-control" id="jenis" name="jenis" placeholder="Masukkan Nama Produk" value="komponen">
+                        <input type="hidden" class="form-control" id="id_taman" name="id_taman" placeholder="Masukkan Nama Komponen" value="{{ $ePALM->id_taman ?? ''}}">
+                        <input type="hidden" class="form-control" id="nama_taman" name="nama_taman" placeholder="Masukkan Nama Komponen" value="{{ $ePALM->nama_taman ?? ''}}">
+                        <input type="hidden" class="form-control" id="jenis" name="jenis" placeholder="Masukkan Nama Komponen" value="komponen">
                         <input type="text" class="form-control" id="nama_komponen" name="nama_komponen" placeholder="Masukkan Nama Komponen" value="">
                     </div>
                     <div class="form-group">
                         <label for="keterangan_taman">Keterangan</label>
-                        <input type="text" class="form-control" id="keterangan_taman" name="keterangan_taman" placeholder="Masukkan Keterangan Produk">
+                        <input type="text" class="form-control" id="keterangan_taman" name="keterangan_taman" placeholder="Masukkan Keterangan Komponen">
                     </div>
                     <style>
 
@@ -305,16 +309,16 @@
                 <div class="form-group">
                     <label for="nama_taman">Nama Komponen</label>
                     <!-- Hidden field to store the ID of the product you're updating -->
-                    <input type="text" class="form-control" id="id_tamanX" name="id_tamanX" placeholder="Masukkan Nama Produk" value="">
-                    <input type="text" class="form-control" id="nama_taman" name="nama_taman" placeholder="Masukkan Nama Produk" value="{{ $ePALM->nama_taman ?? ''}}">
-                    <input type="text" class="form-control" id="jenis" name="jenis" placeholder="Masukkan Nama Produk" value="komponen">
-                    <input type="text" class="form-control" id="update" name="update" placeholder="Masukkan Nama Produk" value="komponen">
+                    <input type="hidden" class="form-control" id="id_tamanX" name="id_tamanX" placeholder="Masukkan Nama Komponen" value="">
+                    <input type="hidden" class="form-control" id="nama_taman" name="nama_taman" placeholder="Masukkan Nama Komponen" value="{{ $ePALM->nama_taman ?? ''}}">
+                    <input type="hidden" class="form-control" id="jenis" name="jenis" placeholder="Masukkan Nama Komponen" value="komponen">
+                    <input type="hidden" class="form-control" id="update" name="update" placeholder="Masukkan Nama Komponen" value="komponen">
                     <input type="text" class="form-control" id="nama_komponenX" name="nama_komponenX" placeholder="Masukkan Nama Komponen" value="" readonly>
                 </div>
                 <div class="form-group">
                     <label for="keterangan_taman">Keterangan</label>
-                    <input type="text" class="form-control" id="keterangan_tamanX" name="keterangan_tamanX" placeholder="Masukkan Keterangan Produk" value="">
-                    <input type="text" class="form-control" id="gambar_taman" name="gambar_taman" placeholder="Masukkan Keterangan Produk" value="">
+                    <input type="text" class="form-control" id="keterangan_tamanX" name="keterangan_tamanX" placeholder="Masukkan Keterangan Komponen" value="">
+                    <input type="hidden" class="form-control" id="gambar_taman" name="gambar_taman" placeholder="Masukkan Keterangan Komponen" value="">
                 </div>
                 <style>
                     .grid2-container {
@@ -407,9 +411,9 @@
 
             <div class="modal-body text-center">
                 <p><strong>Adakan anda pasti untuk padam rekod ini?</strong></p>
-                <input type="hidden" class="form-control" id="id_tamanD" name="id_tamanD" placeholder="Masukkan Nama Produk" value="">
-                <input type="hidden" class="form-control" id="jenis" name="jenis" placeholder="Masukkan Nama Produk" value="komponen">
-                <input type="hidden" class="form-control" id="delete" name="delete" placeholder="Masukkan Nama Produk" value="komponen">
+                <input type="hidden" class="form-control" id="id_tamanD" name="id_tamanD" placeholder="Masukkan Nama Komponen" value="">
+                <input type="hidden" class="form-control" id="jenis" name="jenis" placeholder="Masukkan Nama Komponen" value="komponen">
+                <input type="hidden" class="form-control" id="delete" name="delete" placeholder="Masukkan Nama Komponen" value="komponen">
             </div>
             <div class="modal-footer d-flex">
                 {!! Form::button('Batal', ['class'=>'btn btn-danger btn-lg btn-flat btn-block m-0
@@ -421,6 +425,7 @@
     </div>
 </div>
 
+<!-- Komponen Landskap Perbandaran -->
 
 
 
@@ -496,43 +501,36 @@
             // alert(document.querySelector('#modalSerahan form').getAttribute('action'));
         });
 
+        $('#modalKeputusan').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var elapsId = button.data('elaps-id'); // Extract the eLAPS ID from the button
+
+            // Update the hidden input field with the eLAPS ID
+            $('#eLAPS_idK').val(elapsId);
+            let url = document.querySelector('#modalKeputusan form').getAttribute('action');
+            document.querySelector('#modalKeputusan form').setAttribute('action', url + '/' + elapsId);
+            // alert(document.querySelector('#modalKeputusan form').getAttribute('action'));
+        });
+
         $('#modalStatusProjek').on('show.bs.modal', function (event) {
-            // Get the button that triggered the modal
-            var button = $(event.relatedTarget);  // The button that triggered the modal
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var elapsId = button.data('elaps-id'); // Extract the eLAPS ID from the button
 
-            // Get the data attributes from the button
-            // var url = button.data('url');
+            // Update the hidden input field with the eLAPS ID
+            $('#eLAPS_idP').val(elapsId);
+            let url = document.querySelector('#modalStatusProjek form').getAttribute('action');
+            document.querySelector('#modalStatusProjek form').setAttribute('action', url + '/' + elapsId);
+
             var text = button.data('text');
-            
-            // Reference to the select input and other modal elements
             var select = $('#statusProjekSelect');
-
-            // Clear previous options
             select.empty();
-
-            // Optionally, you can use the data attributes to customize the modal
-            // For example, setting a custom message or action URL in the modal
-            // console.log('Data URL:', url);
-            console.log('Data Text:', text);
-
-            // Conditionally populate the select options based on the 'data-tajuk'
-            if (text === 'Projek dalam pembinaan') {
-                // If the status is 'Projek dalam pembinaan', show 'Projek Batal' and 'Projek Siap'
-                select.append('<option value="Projek Batal">Projek Batal</option>');
-                select.append('<option value="Projek Siap">Projek Siap</option>');
-            } else if (text === 'Permohonan Lulus') {
-                // If the status is 'Permohonan Lulus', show all available options
-                select.append('<option value="Projek dalam pembinaan">Projek dalam pembinaan</option>');
-                select.append('<option value="Projek Batal">Projek Batal</option>');
-                select.append('<option value="Projek Siap">Projek Siap</option>');
-            } else {
-                // Default case (if needed, add other logic here)
-                select.append('<option value="">No Options Available</option>');
-                select.prop('disabled', true); // Disable the select box
+            if (text === 10) {
+                select.append('<option value="12">Projek dalam pembinaan</option>');
             }
-
-            // You can also set other modal data, e.g., update a title or URL dynamically
-            // $('#modalFormStatusProjek').attr('action', url);  // Set the action URL for the form
+            if (text >= 10) {
+                select.append('<option value="13">Projek Batal</option>');
+                select.append('<option value="14">Projek Siap</option>');
+            }
         });
 
 

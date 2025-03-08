@@ -1139,13 +1139,14 @@
                                     <img src="https://img.icons8.com/fluency/48/winrar.png" class="br-5" alt="" style="width: 48px; height: 48px; border-radius: 5px; margin-bottom: 10px;">
                                 </div>
                                 <div class="product-image">
-                                    <span class="file-name-1 bg-yellow" style="background-color: #f4c600; padding: 5px 10px; border-radius: 5px; color: #fff; font-weight: 600; display: inline-block; font-size: 14px;">Download RAR File</span>
+                                    <span class="file-name-1" style="background-color: #008000; padding: 5px 10px; border-radius: 5px; color: #fff; font-weight: 600; display: inline-block; font-size: 14px;">Dokumen Sokongan <i class="fas fa-download"></i></span>
+                                </div>
+                                <div class="product-image">
+                                    <span class="file-name-1">{{ $eLAPS->file_path }}</span>
                                 </div>
                             </a>
                             @endif
                         </div>
-                        <br>
-                        <span class="file-name-1" style="background-color: #0f9d58;color:rgb(255, 255, 255); padding: 2px 2px; border-radius: 5px; font-weight: 600; display: inline-block;">{{ $eLAPS->file_path }} ddddd ddddddd ddddddd d       ddddddddd dddddd</span>
                     </div>
                 @endif
             

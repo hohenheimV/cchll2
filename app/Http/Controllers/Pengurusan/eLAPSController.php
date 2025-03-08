@@ -627,7 +627,7 @@ class eLAPSController extends Controller
                         $duplicateData_draf->mukim_taman = $permohonan->mukim;
                         $duplicateData_draf->parlimen_taman = $permohonan->parlimen;
                         $duplicateData_draf->dun_taman = $permohonan->dun;
-                        $duplicateData->id_permohonan = $id;
+                        $duplicateData_draf->id_permohonan = $id;
 
                         $duplicateData_drafSaved = $duplicateData_draf->save();
                     }

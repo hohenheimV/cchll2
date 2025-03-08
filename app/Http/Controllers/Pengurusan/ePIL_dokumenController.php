@@ -38,8 +38,11 @@ class ePIL_dokumenController extends Controller
         // Update the document's fields
         $dokumen->nama_fail = $request->nama_fail;
         $dokumen->keterangan_dokumen_pelan = $request->keterangan_dokumen_pelan;
-        $dokumen->status = $request->status;
 
+        $dokumen->status = $request->status;
+        if($dokumen->status == 'active'){
+            $deactivateDocuments = ePIL_dokumen::where('status', 'active')->where('id_pelan', $dokumen->id_pelan)->update(['status' => 'inactive']);
+        }
         // Handle image update
         if ($request->hasFile('gambar_dokumen_pelan')) {
             $file = $request->file('gambar_dokumen_pelan');
@@ -60,7 +63,7 @@ class ePIL_dokumenController extends Controller
         $dokumen->save();
 
         // Redirect back with a success message
-        return redirect()->route('pengurusan.ePIL_dokumen.edit', [$dokumen])->with('successMessage', 'Document updated successfully!');
+        return redirect()->route('pengurusan.ePIL_dokumen.edit', [$dokumen])->with('successMessage', 'Maklumat dokumen telah berjaya dikemaskini');
     }
 
     public function destroy(Request $request, $id)

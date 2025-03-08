@@ -16,7 +16,7 @@
                     <div class="form-group">
                         <label for="nama_fail">Nama Fail:</label>
                         <input type="text" name="nama_fail" class="form-control" value="{{ $dokumen->nama_fail }}" required>
-                        <input type="text" name="folder" class="form-control" value="{{ $dokumen->folder }}" required>
+                        <input type="hidden" name="folder" class="form-control" value="{{ $dokumen->folder }}" required readonly>
                     </div>
 
                     <div class="form-group">
@@ -25,31 +25,37 @@
                     </div>
 
                     <!-- Image -->
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="gambar_dokumen_pelan">Image:</label>
                         @if($dokumen->gambar_dokumen_pelan)
                             <img src="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->gambar_dokumen_pelan) }}" alt="Image" style="width: 100px; height: 100px;">
                         @endif
                         <input type="file" name="gambar_dokumen_pelan" class="form-control" accept="image/*">
                         <input type="text" name="gambar_dokumen_pelan_db" class="form-control" value="{{ $dokumen->gambar_dokumen_pelan }}">
-                    </div>
+                    </div> -->
 
                     <!-- File -->
                     <div class="form-group">
-                        <label for="nama_dokumen_pelan">File:</label>
-                        @if($dokumen->nama_dokumen_pelan)
-                            <a href="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}" target="_blank">View File</a>
-                        @endif
-                        <input type="file" name="nama_dokumen_pelan" id="nama_dokumen_pelan" class="form-control" accept=".pdf,.docx,.zip">
+                        <label for="nama_dokumen_pelan">Fail:</label>
+                        <input type="file" name="nama_dokumen_pelan" id="nama_dokumen_pelan" class="form-control" accept=".pdf">
+                        {{ Form::label('', '***Muatnaik semula akan menggantikan fail sedia ada.', ['class' => 'col-form-label required-field-create', 'style' => 'font-weight: strong;']) }}
+                            <br>
                         <div id="progress-container" style="display: none;">
                             <div id="progress-bar" style="width: 100%; background-color: #ccc;">
                                 <div id="progress" style="height: 20px; width: 0; background-color: green;"></div>
                             </div>
                             <p>Uploading: <span id="progress-text">0%</span></p>
                         </div>
-                        <input type="text" name="nama_dokumen_pelan_db" class="form-control" value="{{ $dokumen->nama_dokumen_pelan }}">
-                        <input name="large_file_name_new" type="text" id="large_file_name_new">
-                        <input name="large_file_name_old" type="text" id="large_file_name_old">
+                        <input type="hidden" name="nama_dokumen_pelan_db" class="form-control" value="{{ $dokumen->nama_dokumen_pelan }}" readonly>
+                        <input name="large_file_name_new" type="hidden" id="large_file_name_new" readonly>
+                        <input name="large_file_name_old" type="hidden" id="large_file_name_old" readonly>
+                    </div>
+                    <div class="form-group" style="text-align: center;">
+                        @if($dokumen->nama_dokumen_pelan)
+                            <object data="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}" type="application/pdf" width="70%" height="1100">
+                                <p>Your browser does not support PDFs. <a href="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}">Download the PDF</a>.</p>
+                            </object>
+                        @endif
                     </div>
                     <div class="form-group">
                         {{ Form::label('status', 'Status Aktif') }}

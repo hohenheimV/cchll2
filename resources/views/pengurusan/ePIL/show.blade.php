@@ -13,26 +13,43 @@
                 {{-- dd($ePIL)--}}
                 {!! Form::model($ePIL, ['route' => ['pengurusan.ePIL.update', $ePIL], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
                 <div class="card-body table-hardscape form-hardscape text-sm">
-                    <style>
-                        div[inert] {
-                            pointer-events: none;
-                        }
+                    
+                    @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))
+                        <div class="row" style="max-height: 40px; display: flex; justify-content: flex-end;">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    {{ Form::label('', 'Paparan Portal&nbsp;:&nbsp;', ['class' => 'col-form-label required-field-create', 'style' => 'font-weight: strong;']) }}
+                                </div>
+                                <div class="col-auto">
+                                    <label class="switch">
+                                        <input type="checkbox" name="status" {{ isset($status) && $status == 'approved' ? 'checked' : '' }}>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
 
-                        div[inert] input,
-                        div[inert] span,
-                        div[inert] textarea,
-                        div[inert] select {
-                            /* background-color:rgb(215, 215, 215); */
-                            /* color:rgb(65, 60, 60); */
-                            cursor: not-allowed;
-                            pointer-events: none;
-                        }
+                    <style>
                         .showButton{
                             display: none;
                         }
+                        .inertShow {
+                            pointer-events: none; /* Ensure no interactions are possible */
+                        }
 
+                        .inertShow input,
+                        .inertShow span,
+                        .inertShow textarea,
+                        .inertShow select {
+                            background-color: rgb(215, 215, 215); /* Light grey background for input/select */
+                            color: rgb(65, 60, 60); /* Light grey text color */
+                            cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
+                            pointer-events: none; /* Ensure no interactions are possible */
+                        }
                     </style>
-                    <div inert>
+                    </style>
+                    <div>
                         @include('pengurusan.ePIL._form')
                     </div>
                 </div>
@@ -41,12 +58,15 @@
                     {!! 
                         Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini', ['onclick'=>"window.location='".route('pengurusan.ePIL.edit',$ePIL->id_pelan)."'", 'class'=>'btn bg-warning', Html::tooltip('Kemaskini PIL')]); 
                     !!}
-                    {!! Form::button('<i class="fas fa-save"></i> Approve', [
+
+                    @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))
+                        {!! Form::button('<i class="fas fa-save"></i> Pengesahan', [
                         'class' => 'btn btn-primary', 
                         'type' => 'submit', 
                         'name' => 'action', 
                         'value' => 'approve'
                     ]) !!}
+                    @endif
                 </div>
                 {!! Form::close() !!}
             </div>

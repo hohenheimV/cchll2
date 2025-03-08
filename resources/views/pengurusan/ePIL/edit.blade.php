@@ -12,43 +12,24 @@
                 </div>
                 {!! Form::model($ePIL, ['route' => ['pengurusan.ePIL.update', $ePIL], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
                 <div class="card-body table-hardscape form-hardscape text-sm">
-                    <style>
-                        div[inert] {
-                            pointer-events: none; /* Ensure no interactions are possible */
-                        }
+                    @if($ePIL->id_permohonan != null || isset($ePIL->nama_pelan))
+                        <style>
+                            .inertClass {
+                                pointer-events: none; /* Ensure no interactions are possible */
+                            }
 
-                        div[inert] input,
-                        div[inert] span,
-                        div[inert] textarea,
-                        div[inert] select {
-                            background-color:rgb(215, 215, 215); /* Light grey background for input/select */
-                            color:rgb(65, 60, 60); /* Light grey text color */
-                            cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
-                            pointer-events: none; /* Ensure no interactions are possible */
-                        }
-                        .inertClass {
-                            pointer-events: none; /* Ensure no interactions are possible */
-                        }
-
-                        .inertClass input,
-                        .inertClass span,
-                        .inertClass textarea,
-                        .inertClass select {
-                            background-color: rgb(215, 215, 215); /* Light grey background for input/select */
-                            color: rgb(65, 60, 60); /* Light grey text color */
-                            cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
-                            pointer-events: none; /* Ensure no interactions are possible */
-                        }
-                    </style>
+                            .inertClass input,
+                            .inertClass span,
+                            .inertClass textarea,
+                            .inertClass select {
+                                background-color: rgb(215, 215, 215); /* Light grey background for input/select */
+                                color: rgb(65, 60, 60); /* Light grey text color */
+                                cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
+                                pointer-events: none; /* Ensure no interactions are possible */
+                            }
+                        </style>
+                    @endif
                     @include('pengurusan.ePIL._form')
-
-                    
-                    <script>
-                        // Function to add a row when the page loads
-                        window.onload = function() {
-                            // addRowOnce();
-                        };
-                    </script>
 
                     <!-- @include('pengurusan.ePIL._upload') -->
                 </div>
@@ -57,8 +38,8 @@
                     {!! Form::button('Batal dan Kembali', ['onclick' => "window.location='".route('pengurusan.ePIL.index')."'", 'class' => 'btn btn-secondary']) !!}
 
                     <!-- Update Button (Kemaskini) -->
-                    {!! Form::button('<i class="fas fa-save"></i> Kemaskini', [
-                        'class' => 'btn btn-primary', 
+                    {!! Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini', [
+                        'class' => 'btn btn-warning', 
                         'type' => 'submit', 
                         'name' => 'action', 
                         'value' => 'update'

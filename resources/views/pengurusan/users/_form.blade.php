@@ -65,4 +65,22 @@
             @enderror
         </div>
     </div>
+    <div class="col-12 col-md-6">
+        <div class="form-group">
+            {{ Form::label('bahagian_jln', 'Bahagian - Jabatan Landskap Negara') }}
+            {!! Form::select('bahagian_jln', [
+                '0' => 'Tiada Maklumat',
+                '1' => 'Bahagian Pengurusan Landskap',
+                '2' => 'Bahagian Taman Awam',
+                '3' => 'Bahagian Pembangunan Landskap',
+                '4' => 'Bahagian Khidmat Teknikal',
+                '5' => 'Bahagian Penyelidikan & Pemulihan',
+                '6' => 'Bahagian Penilaian & Penyelenggaraan',
+                '7' => 'Bahagian Teknologi Maklumat',
+            ], null, ['class' => 'form-control']) !!}
+            @error('bahagian_jln')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+    </div>
 </div>

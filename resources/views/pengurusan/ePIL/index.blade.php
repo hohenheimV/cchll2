@@ -38,7 +38,7 @@
                                 <tr>
                                     <th class="w-1">Bil.</th>
                                     <th>Tajuk Pelan Induk Landskap</th>
-                                    <th class="text-center w-5">Gambar</th>
+                                    <th class="text-center w-5">Imej Hadapan</th>
                                     @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|TKP/B JLN'))
                                         <th class="text-center w-10">PBT</th>
                                         <th class="text-center w-12">Paparan Portal</th>
@@ -62,11 +62,20 @@
                                             <td>{{ strtoupper($pelan->nama_pelan) }}</td>
                                             <td style="text-align: center;">
                                                 <?php $folder = str_replace(' ', '_', $pelan->nama_pelan); ?>
-                                                @if($pelan['gambar_dokumen_pelan'])
-                                                    <img src="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$pelan['gambar_dokumen_pelan']) }}" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">
-                                                @else
-                                                    <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">
-                                                @endif
+                                                <a href="{{ asset($pelan->nama_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan : 'storage/uploads/no-photos.png' ) }}" 
+                                                    target="_blank" download>
+                                                    <div id="pdf-viewer-{{$pelan->id_dokumen_pelan ?? $pelan->id_pelan}}" 
+                                                        style="width: 200px; height: 250px; border: 1px solid #ddd; margin: auto; cursor: pointer;">
+                                                        <div id="loading-{{$pelan->id_dokumen_pelan}}" 
+                                                            class="text-center" 
+                                                            style="padding-top: 80px;">
+                                                            <i class="fas fa-spinner fa-spin"></i>
+                                                        </div>
+                                                        <canvas id="pdf-render-{{$pelan->id_dokumen_pelan}}" 
+                                                                style="width: 100%; height: 100%; object-fit: contain; display: none;">
+                                                        </canvas>
+                                                    </div>
+                                                </a>
                                             </td>
                                             
                                             @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem'))
@@ -86,19 +95,18 @@
                                                     {!! 
                                                         Form::button('<i class="fas fa-pencil-alt"></i>', ['onclick'=>"window.location='".route('pengurusan.ePIL.edit',$pelan)."'", 'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini PIL')]); 
                                                     !!}
-                                                    @can('user-delete')
+                                                    @if($pelan->id_permohonan == null && ($pelan->status == 'draft'))
                                                     {!! 
                                                         Form::button('<i class="fas fa-trash"></i>', 
                                                         [
                                                             'class' => 'btn btn-danger btn-sm',
                                                             'data-url' => route('pengurusan.ePIL.destroy', $pelan),
-                                                            'data-text' => 'pelan : '.$pelan->tajuk,
                                                             'data-toggle' => 'modal',
                                                             'data-target' => '#modalDelete',
                                                             Html::tooltip('Padam PIL')
                                                         ])  
                                                     !!}
-                                                    @endcan
+                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>
@@ -128,3 +136,61 @@
     </div><!-- /.row -->
 </div><!-- /.container -->
 @endsection
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+<script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const ePIL = @json($ePIL); // Convert the $ePIL array from PHP to JavaScript
+        console.log(ePIL.data); // Check the array inside the "data" property
+
+        // Use ePIL.data to loop through the records
+        ePIL.data.forEach(pelan => {
+            // console.log(pelan);
+            let folder = pelan.nama_pelan.replace(/\s+/g, '_'); // Replace spaces with underscores in folder name
+            const url = pelan.nama_dokumen_pelan ?
+                `/storage/uploads/ePIL/${folder}/${pelan.nama_dokumen_pelan}` : 
+                '/img/no-photos.png';
+
+            // Load and render the first page of the PDF document
+            pdfjsLib.getDocument(url).promise.then(function(pdf) {
+                return pdf.getPage(1); // Get the first page of the document
+            }).then(function(page) {
+                const canvas = document.getElementById('pdf-render-' + pelan.id_dokumen_pelan);
+                const loadingElement = document.getElementById('loading-' + pelan.id_dokumen_pelan);
+                const context = canvas.getContext('2d');
+
+                const originalViewport = page.getViewport({ scale: 0.5 });
+
+                const containerWidth = 150;
+                const containerHeight = 200;
+                const scale = Math.min(
+                    containerWidth / originalViewport.width,
+                    containerHeight / originalViewport.height
+                );
+
+                const viewport = page.getViewport({ scale: scale });
+
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+
+                page.render({
+                    canvasContext: context,
+                    viewport: viewport
+                }).promise.then(() => {
+                    if (loadingElement) {
+                        loadingElement.style.display = 'none';
+                    }
+                    canvas.style.display = 'block';
+                });
+            }).catch(function(error) {
+                // console.error('Error loading PDF for ID ' + pelan.id_dokumen_pelan + ':', error);
+                const viewerElement = document.getElementById('pdf-viewer-' + pelan.id_pelan);
+                if (viewerElement) {
+                    viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Preview not available</div>';
+                }
+            });
+        });
+    });
+</script>

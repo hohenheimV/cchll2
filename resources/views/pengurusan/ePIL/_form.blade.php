@@ -20,7 +20,7 @@
             background: none; /* Remove the left border for the first column */
         }
     </style>
-    <div class="row">
+    <div class="row inertShow">
         <div class="col-lg col-separator">
             <div class="form-group">
                 <label class="col-xs-4 control-label"></label>
@@ -49,10 +49,10 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group required col-md-8">
+                    <div class="form-group required col-md-12">
                         <label for="nama_pbt" class="col-md-12 control-label">Pihak Berkuasa Tempatan</label>
                         <div class="col-md-12">
-                            {!! Form::text('nama_pbt', null, ['class' => 'form-control', 'id' => 'nama_pbt']) !!}
+                            {!! Form::text('nama_pbt', $pbt->pbt_name ?? $ePIL->nama_pbt ?? '', ['class' => 'form-control', 'id' => 'nama_pbt']) !!}
                         </div>
                     </div>
                 </div>
@@ -325,15 +325,15 @@
                         $media8 = isset($mediaSosial_pelanData['TikTok']) ? $mediaSosial_pelanData['TikTok'] : '';
                         //dd($mediaSosial_pelanData);
                     }else{
-                        $media1 = 0; 
-                        $media2 = 0; 
-                        $media3 = 0; 
-                        $media4 = 0; 
-                        $media5 = 0; 
-                        $media6 = 0; 
-                        $media7 = 0; 
-                        $media8 = 0; 
-                        $media9 = 0; 
+                        $media1 = ''; 
+                        $media2 = isset($pbt->email) ? $pbt->email : ''; 
+                        $media3 = ''; 
+                        $media4 = ''; 
+                        $media5 = ''; 
+                        $media6 = ''; 
+                        $media7 = ''; 
+                        $media8 = ''; 
+                        $media9 = ''; 
                     }
                 @endphp
                 <div class="form-group required col-md-3">
@@ -403,7 +403,7 @@
                 <div class="col-xs-12">
                     <h4 class="d-flex align-items-center justify-content-between">
                         Fail Pelan Induk Landskap
-                        <button type="button" class="btn btn-primary btn-sm" id="addProductBtn">
+                        <button type="button" class="btn btn-primary btn-sm showButton" id="addProductBtn">
                             Tambah Fail
                         </button>
                     </h4>
@@ -419,9 +419,9 @@
                                         <th class="w-1">Bil</th>
                                         <th class="w-10">Nama Fail</th>
                                         <th class="w-10">Keterangan</th>
-                                        <th class="w-5">Gambar</th>
-                                        <th class="w-15">Fail</th>
-                                        <th class="w-1">Tindakan</th>
+                                        <!-- <th class="w-5">Gambar</th> -->
+                                        <th class="w-5">Fail</th>
+                                        <th class="w-5">Tindakan</th>
                                     </tr>
                                 </thead>
                                 <!-- <tbody id="projek_container">
@@ -438,50 +438,107 @@
                                             <td>{{ $value['nama_fail'] }}</td>
                                             <td>{{ $value['keterangan_dokumen_pelan'] }}</td>
 
-                                            <!-- Displaying Image -->
-                                            <td>
+                                            <!-- <td>
                                                 @if($value['gambar_dokumen_pelan'])
                                                     <img src="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$value['gambar_dokumen_pelan']) }}" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">
                                                 @else
                                                     <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">
                                                 @endif
-                                            </td>
+                                                {{ $value['status'] }}
+                                            </td> -->
 
-                                            <!-- Displaying File -->
-                                            <td>
+                                            <td style="text-align: center; vertical-align: middle;">
                                                 @if($value['nama_dokumen_pelan'])
-                                                    <a href="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$value['nama_dokumen_pelan']) }}" target="_blank">
-                                                        View File
-                                                    </a>
+                                                    <canvas id="pdf-render-{{ $value['id_dokumen_pelan'] }}" width="200" height="250"></canvas>
                                                 @else
-                                                    No File
+                                                    No PDF available
                                                 @endif
                                             </td>
 
-                                            <td>
-                                                {!! 
-                                                    Form::button('<i class="fas fa-trash"></i>', 
-                                                    [
-                                                        'class' => 'btn btn-danger btn-sm',
-                                                        'data-url' => route('pengurusan.ePIL_dokumen.destroy', $value),
-                                                        'data-id_pelan' => $value,
-                                                        'data-toggle' => 'modal',
-                                                        'data-target' => '#modalDelete',
-                                                        Html::tooltip('Padam PIL')
-                                                    ])  
-                                                !!}
-                                                <!-- <button type="button" class="btn btn-danger btn-sm remove_field"><i class="fas fa-trash"></i></button> -->
-                                                {!! 
-                                                    Form::button('<i class="fas fa-pencil-alt"></i>', ['onclick'=>"window.location='".route('pengurusan.ePIL_dokumen.edit',$value)."'", 'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini PIL')]); 
-                                                !!}
+                                            <td style="text-align: center;">
+                                                <div>
+                                                    {!! 
+                                                        Form::button('<i class="fas fa-eye"></i>', 
+                                                        [
+                                                            'onclick' => "window.open('".asset('storage/uploads/ePIL/'.$folder.'/'.$value['nama_dokumen_pelan'])."', '_blank');",
+                                                            'class' => 'btn btn-primary btn-sm',
+                                                            Html::tooltip('Papar PIL')
+                                                        ]) 
+                                                    !!}
+                                                    <a href="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$value['nama_dokumen_pelan']) }}" download="{{ $value['nama_dokumen_pelan'] }}">
+                                                        {!! 
+                                                            Form::button('<i class="fas fa-download"></i>', 
+                                                            [
+                                                                'class' => 'btn btn-success btn-sm',
+                                                                Html::tooltip('Muat turun PIL')
+                                                            ]) 
+                                                        !!}
+                                                    </a>
+                                                    {!! 
+                                                        Form::button('<i class="fas fa-pencil-alt"></i>', ['onclick'=>"window.location='".route('pengurusan.ePIL_dokumen.edit',$value)."'", 'class'=>'btn bg-warning btn-sm showButton', Html::tooltip('Kemaskini PIL')]); 
+                                                    !!}
+                                                    {!! 
+                                                        Form::button('<i class="fas fa-trash"></i>', 
+                                                        [
+                                                            'class' => 'btn btn-danger btn-sm showButton',
+                                                            'data-url' => route('pengurusan.ePIL_dokumen.destroy', $value),
+                                                            'data-id_pelan' => $value,
+                                                            'data-toggle' => 'modal',
+                                                            'data-target' => '#modalDelete',
+                                                            Html::tooltip('Padam PIL')
+                                                        ])  
+                                                    !!}
+                                                </div>
+                                                <div>
+                                                    <span style="white-space: normal; text-align: centre;width: 80%;" class="badge {{ $value->status == 'active' ? 'bg-success' : 'bg-danger' }}">{{ $value->status == 'active' ? 'Aktif' : 'Tidak Aktif' }}</span>
+                                                </div>
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr>
+                                        <tr id="dummy_row">
                                             <td colspan="6" class="text-center">Tiada Maklumat</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
+                                <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+                                <script>
+                                    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        // Loop through each document and render the first page of the PDF
+                                        @foreach($ePIL->dokumen as $value)
+                                            const url_{{ $value['id_dokumen_pelan'] }} = '{{ asset('storage/uploads/ePIL/'.$folder.'/'.$value['nama_dokumen_pelan']) }}';
+                                            const canvas_{{ $value['id_dokumen_pelan'] }} = document.getElementById('pdf-render-{{ $value['id_dokumen_pelan'] }}');
+                                            const context_{{ $value['id_dokumen_pelan'] }} = canvas_{{ $value['id_dokumen_pelan'] }}.getContext('2d');
+
+                                            // Check if the URL is valid (the document exists)
+                                            if (url_{{ $value['id_dokumen_pelan'] }}) {
+                                                pdfjsLib.getDocument(url_{{ $value['id_dokumen_pelan'] }}).promise.then(function(pdf) {
+                                                    // Fetch the first page
+                                                    pdf.getPage(1).then(function(page) {
+                                                        const scale = 0.25;  // Adjust scale as needed
+                                                        const viewport = page.getViewport({ scale: scale });
+
+                                                        // Set canvas dimensions
+                                                        canvas_{{ $value['id_dokumen_pelan'] }}.width = viewport.width;
+                                                        canvas_{{ $value['id_dokumen_pelan'] }}.height = viewport.height;
+
+                                                        // Render the page
+                                                        page.render({
+                                                            canvasContext: context_{{ $value['id_dokumen_pelan'] }},
+                                                            viewport: viewport
+                                                        });
+                                                    });
+                                                }).catch(function(error) {
+                                                    console.error('Error loading PDF:', error);
+                                                    // If there's an error, we can display a placeholder
+                                                    const canvas_{{ $value['id_dokumen_pelan'] }} = document.getElementById('pdf-render-{{ $value['id_dokumen_pelan'] }}');
+                                                    canvas_{{ $value['id_dokumen_pelan'] }}.innerHTML = '<div class="text-center text-muted">Preview not available</div>';
+                                                });
+                                            }
+                                        @endforeach
+                                    });
+                                </script>
                                 @else
                                 <tbody id="projek_container">
                                     <tr id="dummy_row">
@@ -507,12 +564,14 @@
                             <td>${bilCount}</td>
                             <td><input type="text" class="form-control" name="pelan[${bilCount}][nama_fail]" placeholder="Masukkan Nama Fail"></td>
                             <td><input type="text" class="form-control" name="pelan[${bilCount}][keterangan]" placeholder="Masukkan Keterangan Fail"></td>
+                            <!--
+                                <td>
+                                    <input type="file" class="form-control" name="pelan[${bilCount}][gambar]" id="gambar_${bilCount}" accept="image/*">
+                                    <div class="image-preview"></div>
+                                </td>
+                            -->
                             <td>
-                                <input type="file" class="form-control" name="pelan[${bilCount}][gambar]" id="gambar_${bilCount}" accept="image/*">
-                                <div class="image-preview"></div>
-                            </td>
-                            <td>
-                                <input type="file" class="form-control" name="pelan[${bilCount}][fail]" id="fail_${bilCount}" accept="application/pdf, .docx, .xlsx, .zip">
+                                <input type="file" class="form-control" name="pelan[${bilCount}][fail]" id="fail_${bilCount}" accept="application/pdf">
                                 <input name="pelan[${bilCount}][large_file_name_new]" type="hidden" id="large_file_name_new_${bilCount}">
                                 <input name="pelan[${bilCount}][large_file_name_old]" type="hidden" id="large_file_name_old_${bilCount}">
                                 <input name="pelan[${bilCount}][file_type]" type="hidden" id="file_type_${bilCount}">
@@ -524,7 +583,7 @@
                                     <p>Uploading: <span id="progress-text_${bilCount}">0%</span></p>
                                 </div>
                             </td>
-                            <td>
+                            <td style="text-align: center;">
                                 <button type="button" class="btn btn-danger btn-sm remove_field"><i class="fas fa-trash remove_field"></i></button>
                             </td>
                         `;

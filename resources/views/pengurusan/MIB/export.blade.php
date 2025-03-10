@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Eksport Maklumbalas')
+@section('title', 'Eksport Rakan Taman')
 
 @section('content')
 <div class="container-fluid">
@@ -19,21 +19,21 @@
                         <div class="col-md-6">
                             <div class="form-row">
                                 <div class="form-group col-md-4">
-                                    {{ Form::label('feedback_at', 'Tarikh Daftar Maklumbalas') }}
+                                    {{ Form::label('feedback_at', 'Tarikh Daftar Rakan Taman') }}
                                     {{ Form::text('feedback_at',null,['class' => 'form-control '.Html::isInvalid($errors,'feedback_at')]) }}
                                     {!! Html::hasError($errors,'feedback_at') !!}
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-4">
-                                    {{ Form::label('response_at', 'Tarikh Tindakan Maklumbalas') }}
+                                    {{ Form::label('response_at', 'Tarikh Tindakan Rakan Taman') }}
                                     {{ Form::text('response_at',null,['class' => 'tarikh form-control '.Html::isInvalid($errors,'response_at')]) }}
                                     {!! Html::hasError($errors,'response_at') !!}
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-4">
-                                    {{ Form::label('status', 'Status Maklumbalas') }}
+                                    {{ Form::label('status', 'Status Rakan Taman') }}
                                     {{ Form::select('status', $status,null,['placeholder'=>'--Pilihan--','class'=>'notselect2 form-control '.Html::isInvalid($errors,'status')]) }}
                                     {!! Html::hasError($errors,'status') !!}
                                 </div>

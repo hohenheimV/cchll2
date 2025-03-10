@@ -88,19 +88,18 @@
                                                     {!! 
                                                         Form::button('<i class="fas fa-pencil-alt"></i>', ['onclick'=>"window.location='".route('pengurusan.ePALM.edit',$taman)."'", 'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini Taman')]); 
                                                     !!}
-                                                    @can('user-delete')
+                                                    @if($taman->id_permohonan == null && ($taman->status == 'draft'))
                                                     {!! 
                                                         Form::button('<i class="fas fa-trash"></i>', 
                                                         [
                                                             'class' => 'btn btn-danger btn-sm',
                                                             'data-url' => route('pengurusan.ePALM.destroy', $taman),
-                                                            'data-text' => 'taman : '.$taman->tajuk,
                                                             'data-toggle' => 'modal',
                                                             'data-target' => '#modalDelete',
                                                             Html::tooltip('Padam Taman')
                                                         ])  
                                                     !!}
-                                                    @endcan
+                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>

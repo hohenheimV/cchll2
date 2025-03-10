@@ -130,7 +130,6 @@
                                                             Form::button('<i class="fas fa-trash"></i>', [
                                                                 'class' => 'btn btn-danger btn-sm',
                                                                 'data-url' => route('pengurusan.eLAPS.destroy', $permohonan),
-                                                                'data-text' => 'Kempen : '.$permohonan->tajuk,
                                                                 'data-toggle' => 'modal',
                                                                 'data-target' => '#modalDelete',
                                                                 Html::tooltip('Padam Draf Permohonan')
@@ -144,22 +143,23 @@
                                                             'data-elaps-id' => $permohonan->id, 
                                                             Html::tooltip('Serahan kepada bahagian')
                                                         ]) !!}
-                                                    @elseif($permohonan->status_permohonan == 8 && (Auth::user()->hasRole('Pentadbir Sistem|Pegawai')))
+                                                    @elseif(($permohonan->status_permohonan == 8 || $permohonan->status_permohonan == 9) && (Auth::user()->hasRole('Pentadbir Sistem|Pegawai')))
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
                                                             ['class'=>'btn btn-warning btn-sm', Html::tooltip('Kemaskini Status JPT'),
-                                                            'data-url'=>route('pengurusan.eLAPS.destroy', $permohonan),
-                                                            'data-text'=>'Kempen : '.$permohonan->tajuk,
-                                                            'data-toggle'=>'modal', 'data-target'=>'#modalKeputusan'
+                                                            'data-toggle'=>'modal', 
+                                                            'data-target'=>'#modalKeputusan', 
+                                                            'data-elaps-id' => $permohonan->id
                                                         ]) !!}
                                                     @elseif(($permohonan->status_permohonan == 10 || $permohonan->status_permohonan == 12) && (Auth::user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem')))
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
                                                             ['class' => 'btn btn-warning btn-sm', 
-                                                            'data-url' => route('pengurusan.eLAPS.store', $permohonan),
+                                                            'data-elaps-id' => $permohonan->id,
+                                                            'data-text'=> $permohonan->status_permohonan, 
                                                             'data-toggle' => 'modal', 
                                                             'data-target' => '#modalStatusProjek', 
                                                             Html::tooltip('Kemaskini Status Projek')
                                                         ])  !!}
-                                                    @elseif($permohonan->status_permohonan == 14 && (Auth::user()->hasRole('Pentadbir Sistem|Pegawai')))
+                                                    {{--@elseif($permohonan->status_permohonan == 14 && (Auth::user()->hasRole('Pentadbir Sistem|Pegawai')))
                                                         @if(in_array($permohonan->category, [$jenis_pembangunan[0],$jenis_pembangunan[1],$jenis_pembangunan[3],$jenis_pembangunan[4],$jenis_pembangunan[6]]))
                                                             {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
                                                                 ['class'=>'btn btn-warning btn-sm', Html::tooltip('Eksport Taman Awam'),
@@ -174,6 +174,7 @@
                                                                 'data-text'=>'Kempen : '.$permohonan->tajuk,
                                                                 'data-toggle'=>'modal', 'data-target'=>'#modalKeputusan']) !!}
                                                         @endif
+                                                    --}}
                                                     @endif
                                                 </div>
                                             </td>

@@ -53,7 +53,9 @@ class DataController extends Controller
 
         if ($deleteThis != '' && ($deleteThis != $fileName)) {
             $filePath = storage_path('app/public/uploads/'.$destinationFolder . $deleteThis);
-            unlink($filePath);
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
         }
     
         // Store the chunk temporarily

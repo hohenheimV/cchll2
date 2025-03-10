@@ -19,6 +19,7 @@
         background: none; /* Remove the left border for the first column */
     }
 </style>
+{{-- dd($MIB) --}}
 <div class="row">
     <div class="col-lg col-separator">
         <div class="form-group">
@@ -28,34 +29,21 @@
             </div>
         </div>
         <div class="form-row">
-            <div class="form-group col-md-9">
-                {{ Form::label('nama_entiti', 'Nama Pokok/ Kawasan Unik') }}
-                {{ Form::text('nama_entiti', null, ['placeholder' => 'Masukkan Nama Pokok/ Kawasan Unik', 'class' => 'form-control' . Html::isInvalid($errors, 'nama_entiti')]) }}
-                {!! Html::hasError($errors, 'nama_entiti') !!}
+            <div class="form-group col-md-12">
+                {{ Form::label('name', 'Nama Aktiviti') }}
+                {{ Form::text('name', $MIB_laporan->name ?? '', ['placeholder' => 'Masukkan Nama Aktiviti', 'class' => 'form-control' . Html::isInvalid($errors, 'name')]) }}
+                {!! Html::hasError($errors, 'name') !!}
             </div>
-            <div class="form-group col-md-3">
-                {{ Form::label('agensi', 'Anggaran Nilai') }}
-                {{ Form::text('agensi', null, ['placeholder' => 'Masukkan Anggaran Nilai', 'class' => 'form-control' . Html::isInvalid($errors, 'agensi')]) }}
-                {!! Html::hasError($errors, 'agensi') !!}
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                {{ Form::label('pbt', 'Pihak Berkuasa Tempatan') }}
-                {{ Form::text('pbt', null, ['placeholder' => 'Masukkan Pihak Berkuasa Tempatan', 'class' => 'form-control' . Html::isInvalid($errors, 'pbt')]) }}
-                {!! Html::hasError($errors, 'pbt') !!}
-            </div>
-
-            <div class="form-group col-md-6">
-                {{ Form::label('lokasi', 'Lokasi') }}
-                {{ Form::text('lokasi', null, ['placeholder' => 'Masukkan Lokasi', 'class' => 'form-control' . Html::isInvalid($errors, 'lokasi')]) }}
-                {!! Html::hasError($errors, 'lokasi') !!}
+            <div style="display: none;">
+                {{ Form::text('taman', $MIB->taman ?? ($MIB_laporan->taman ?? ''), ['placeholder' => 'Masukkan Anggaran Nilai', 'class' => 'form-control' . Html::isInvalid($errors, 'taman')]) }}
+                {!! Html::hasError($errors, 'taman') !!}
+                <input type="text" name="id_rakan" value="{{ $MIB->id ?? ($MIB_laporan->id_rakan ?? '') }}" required>
             </div>
         </div>
         <div class="form-group">
-            {{ Form::label('keterangan', 'Keterangan') }}
-            {{ Form::textarea('keterangan',null,['placeholder'=>'Sila masukkan keterangan','rows'=>3,'class' => 'form-control '.Html::isInvalid($errors,'keterangan')]) }}
-            {!! Html::hasError($errors,'keterangan') !!}
+            {{ Form::label('laporan', 'Laporan') }}
+            {{ Form::textarea('laporan',$MIB_laporan->laporan ?? '',['placeholder'=>'Sila masukkan laporan','rows'=>14,'class' => 'form-control '.Html::isInvalid($errors,'laporan')]) }}
+            {!! Html::hasError($errors,'laporan') !!}
         </div>
     </div>
     <div class="col-lg col-separator inertShow">
@@ -67,11 +55,11 @@
         </div>
         <div class="row">
             <div class="form-group required col-md-12">
-                <label for="konsep_rekabentuk" class="col-md-12 control-label">Gambar Entiti Landskap</label>
+                <label for="konsep_rekabentuk" class="col-md-12 control-label">Gambar Aktiviti</label>
                 @php
-                    if(isset($entitiLandskapUnik->gambar)){
-                        $folderName = str_replace(' ', '_', $entitiLandskapUnik->nama_entiti);
-                        $gambarData = json_decode($entitiLandskapUnik->gambar, true);
+                    if(isset($MIB_laporan->fail)){
+                        $folderName = str_replace(' ', '_', $MIB->taman ?? ($MIB_laporan->taman ?? 'temp'));
+                        $gambarData = $MIB_laporan->fail;
 
                         $gambar_input_modal_1 = isset($gambarData['gambar_input_modal_1']) ? $folderName.'/'.$gambarData['gambar_input_modal_1'] : null;
                         $gambar_input_modal_2 = isset($gambarData['gambar_input_modal_2']) ? $folderName.'/'.$gambarData['gambar_input_modal_2'] : null;
@@ -146,28 +134,28 @@
                         <div class="grid-item">
                             <input type="file" class="form-control-file" id="gambar_input_modal_1" name="gambar_input_modal_1" accept="image/*" style="display: none;">
                             <div id="imagePreviewContainer1" class="image-preview-container">
-                                <img src="{{ isset($gambar_input_modal_1) ? asset('storage/uploads/entiti_landskap/'.$gambar_input_modal_1) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                <img src="{{ isset($gambar_input_modal_1) ? asset('storage/uploads/MIB/'.$gambar_input_modal_1) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
                             </div>
                         </div>
                         <br class="mobile-done">
                         <div class="grid-item">
                             <input type="file" class="form-control-file" id="gambar_input_modal_2" name="gambar_input_modal_2" accept="image/*" style="display: none;">
                             <div id="imagePreviewContainer2" class="image-preview-container">
-                                <img src="{{ isset($gambar_input_modal_2) ? asset('storage/uploads/entiti_landskap/'.$gambar_input_modal_2) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                <img src="{{ isset($gambar_input_modal_2) ? asset('storage/uploads/MIB/'.$gambar_input_modal_2) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
                             </div>
                         </div>
                         <br class="mobile-done">
                         <div class="grid-item">
                             <input type="file" class="form-control-file" id="gambar_input_modal_3" name="gambar_input_modal_3" accept="image/*" style="display: none;">
                             <div id="imagePreviewContainer3" class="image-preview-container">
-                                <img src="{{ isset($gambar_input_modal_3) ? asset('storage/uploads/entiti_landskap/'.$gambar_input_modal_3) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                <img src="{{ isset($gambar_input_modal_3) ? asset('storage/uploads/MIB/'.$gambar_input_modal_3) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
                             </div>
                         </div>
                         <br class="mobile-done">
                         <div class="grid-item">
                             <input type="file" class="form-control-file" id="gambar_input_modal_4" name="gambar_input_modal_4" accept="image/*" style="display: none;">
                             <div id="imagePreviewContainer4" class="image-preview-container">
-                                <img src="{{ isset($gambar_input_modal_4) ? asset('storage/uploads/entiti_landskap/'.$gambar_input_modal_4) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                <img src="{{ isset($gambar_input_modal_4) ? asset('storage/uploads/MIB/'.$gambar_input_modal_4) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
                             </div>
                         </div>
                     </div>

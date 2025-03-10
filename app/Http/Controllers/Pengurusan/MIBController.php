@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pengurusan;
 use App\Http\Controllers\Controller;
 use App\Exports\MIBExport;
 use App\Model\MIB;
+use App\Model\MIB_laporan;
 use Carbon\Carbon;
 use Error;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\UploadedFile;
 
 class MIBController extends Controller
 {
@@ -31,7 +33,7 @@ class MIBController extends Controller
         $this->middleware(['role_or_permission:Pentadbir Sistem|MIB-edit'], ['only' => ['edit', 'update']]);
         $this->middleware(['role_or_permission:Pentadbir Sistem|MIB-delete'], ['only' => ['destroy']]);
         
-        $status = ['Baru', 'Dalam Tindakan', 'Diperakui'];
+        $status = ['Baru', 'Diperakui', 'Diluluskan'];
         $this->statusArr = array_combine($status, $status);
     }
 
@@ -81,7 +83,7 @@ class MIBController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         // Mula Rule validation
         $rules = [
             'name'   => 'required',
@@ -120,7 +122,10 @@ class MIBController extends Controller
      */
     public function show(MIB $MIB)
     {
-        return view('pengurusan.MIB.show', ['MIB' => $MIB]);
+        // dd($MIB->id);
+        $count = MIB_laporan::count();
+        $MIB_laporan = MIB_laporan::where('id_rakan', $MIB->id)->latest()->paginate($count);
+        return view('pengurusan.MIB.show', ['MIB' => $MIB, 'status' => $this->statusArr, 'MIB_laporan' => $MIB_laporan]);
     }
 
     /**
@@ -131,6 +136,8 @@ class MIBController extends Controller
      */
     public function edit(MIB $MIB)
     {
+        // $MIB->message = json_decode($MIB->message, true);
+        // dd($message);
         return view('pengurusan.MIB.edit', ['MIB' => $MIB, 'status' => $this->statusArr]);
     }
 
@@ -143,17 +150,11 @@ class MIBController extends Controller
      */
     public function update(Request $request, MIB $MIB)
     {
-        // dd($request->all());
-
-        if (strtolower($request->status) == 'selesai') {
-            $data['approved_at'] = Carbon::now()->format('Y-m-d H:i:s');
-        }
-
         // Mula Rule validation
         $rules = [
             'name'   => 'required|min:3',
             'email'   => 'required|email',
-            'message' => 'required|min:3',
+            'jawatankuasa' => 'required|min:3',
         ];
         //Selaras bentuk mesej yang sama; attributes berbeza
         $messages = [
@@ -163,38 +164,123 @@ class MIBController extends Controller
             'regex' => ':attribute tidak sah.',
         ];
         // Rename field ke perkataan boleh difaham (jika perlu/berlainan)
+        $data = $request->all();
+        // dd($data);
+
+        if (strtolower($request->action) == 'approve') {
+            if (strtolower($request->status) == 'diperakui') {
+                $data['responsed_by'] = Auth::user()->name;
+                $data['responsed_at'] = Carbon::now()->format('Y-m-d H:i:s');
+                $data['form_attachment'] = $data['notes'];
+                $data['notes'] = null;
+                $MIB->update($data);
+                // send email to JLN Promosi
+                return redirect()->route('pengurusan.MIB.index')->with('successMessage', 'Maklumat telah berjaya disimpan');
+            }
+            if (strtolower($request->status) == 'diluluskan') {
+                $data['approved_by'] = Auth::user()->name;
+                $data['approved_at'] = Carbon::now()->format('Y-m-d H:i:s');
+                $data['officer'] = $data['notes'];
+                $data['notes'] = null;
+                $MIB->update($data);
+                // send email to PBT
+                return redirect()->route('pengurusan.MIB.index')->with('successMessage', 'Maklumat telah berjaya disimpan');
+            }
+        }
+
+        $keysToCheck = [
+            'pengerusi_nama', 'pengerusi_tel_bimbit', 'pengerusi_email',
+            'timbalan_pengerusi_nama', 'timbalan_pengerusi_tel_bimbit', 'timbalan_pengerusi_email',
+            'setiausaha_nama', 'setiausaha_tel_bimbit', 'setiausaha_email',
+            'bendahari_nama', 'bendahari_tel_bimbit', 'bendahari_email',
+            'ajk1_nama', 'ajk1_tel_bimbit', 'ajk1_email',
+            'ajk2_nama', 'ajk2_tel_bimbit', 'ajk2_email',
+            'ajk3_nama', 'ajk3_tel_bimbit', 'ajk3_email',
+            'ajk4_nama', 'ajk4_tel_bimbit', 'ajk4_email',
+            'ajk5_nama', 'ajk5_tel_bimbit', 'ajk5_email',
+            'ajk6_nama', 'ajk6_tel_bimbit', 'ajk6_email'
+        ];
+
+        // Group the data by 3
+        $data = $request->all();//$request->only($keysToCheck);
+        $groupedData = [];
+        for ($i = 0; $i < count($keysToCheck); $i += 3) {
+            if(isset($data[$keysToCheck[$i]]) || isset($data[$keysToCheck[$i + 1]]) || isset($data[$keysToCheck[$i + 2]])){    
+                $group = [
+                    $keysToCheck[$i] => $data[$keysToCheck[$i]] ?? null,
+                    $keysToCheck[$i + 1] => $data[$keysToCheck[$i + 1]] ?? null,
+                    $keysToCheck[$i + 2] => $data[$keysToCheck[$i + 2]] ?? null,
+                ];
+                $groupedData[] = $group;
+                // dump($keysToCheck[$i]);
+                // dump($keysToCheck[$i + 1]);
+                // dump($keysToCheck[$i + 2]);
+            }
+        }
+        // $jsonData = json_encode($groupedData, JSON_PRETTY_PRINT);
+        $data['jawatankuasa'] = $groupedData;
+        // $data['taman'] = "Taman 2";
+
+        if(isset($data['kawasan'])){
+            $mergedkawasan = [];
+            $kawasanArr = $data['kawasan'];
+            foreach ($kawasanArr as $key => $value) {
+                $kawasan = collect($value ?? [])
+                ->map(function($item) {
+                    return $item;
+                })
+                ->toArray();
+                if ($kawasan['nama'] !== null) {
+                    $mergedkawasan[] = $kawasan;
+                }
+            }
+            $data['kawasan'] = ($mergedkawasan);
+        }
+
+        if (isset($data['fail'])) {
+            $mergedfail = [];
+            $failArr = $data['fail'];
+            foreach ($failArr as $key => $value) {
+                if ($value instanceof UploadedFile && $value->isValid()) {
+                    $folderName = str_replace(' ', '_', $data['taman']);
+                    $filename = time() . '_' . $value->getClientOriginalName();
+                    $path = $value->storeAs('public/uploads/MIB/' . $folderName, $filename);
+                    $mergedfail[$key] = $filename;
+                } else {
+                    $mergedfail[$key] = $MIB->fail[$key];
+                }
+            }
+            $data['fail'] = ($mergedfail);
+        }  
+        // dd($data);
         $attributes = [];
 
-        $validator = Validator::make($request->all(), $rules, $messages, $attributes)->validate();
-
-        $data = $request->all();
-		$data['officer'] = Auth::user()->name;
-
-		if (strtolower($request->status) == 'selesai') {
-            $data['approved_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $validator = Validator::make($data, $rules, $messages, $attributes)->validate();
+        if ($validator instanceof \Illuminate\Http\RedirectResponse) {
+            return $validator;
         }
 
-        //$data['MIB_at'] = Carbon::now()->format('Y-m-d H:i:s');
-        $data['response_at'] = date('Y-m-d H:i:s', strtotime($request->response_at));
+		// if (strtolower($request->status) == 'diperakui') {
+        //     $data['responsed_by'] = Auth::user()->name;
+        //     $data['responsed_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        //     $data['form_attachment'] = $data['notes'];
+        // }
+        // if (strtolower($request->status) == 'diluluskan') {
+        //     $data['approved_by'] = Auth::user()->name;
+        //     $data['approved_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        //     $data['officer'] = $data['notes'];
+        // }
+        // $data['notes'] = null;
 
-        if (isset($request->attachment)) {
-            $attachmentName = $MIB->ref_num . '_' . Carbon::now()->format('Ymdhis') . '.' . $request->file('attachment')->extension();
-            $data['form_attachment'] = $attachmentName;
-        }
-
-        $data = Arr::except($data, ['attachment']);
-
-        // define data field of Model
         $MIB->update($data);
 
-        if (isset($request->attachment)) {
-            Storage::disk('public')->putFileAs(
-                'files/MIB/' . $MIB->id,
-                $request->file('attachment'),
-                $attachmentName
-            );
+        if (strtolower($request->status) == 'diperakui') {
+            // send email to JLN Promosi
         }
-
+        if (strtolower($request->status) == 'diluluskan') {
+            // send email to PBT
+        }
+        dd($MIB);
         // redirect to
         return redirect()->route('pengurusan.MIB.index')->with('successMessage', 'Maklumat telah berjaya disimpan');
     }

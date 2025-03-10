@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Daftar Rakan Taman')
+@section('title', 'Daftar Aktiviti Rakan Taman')
 
 @section('content')
 
@@ -13,14 +13,14 @@
                     <h3 class="card-title font-weight-bold my-1">@yield('title')</h3>
                 </div>
                 <!-- /.card-header -->
-                {{ Form::open(['route' =>['pengurusan.MIB.store'],'id'=>'formFeedbacks','files' => true]) }}
+                {{ Form::open(['route' =>['pengurusan.MIB_laporan.store'],'id'=>'formFeedbacks','files' => true]) }}
                 <div class="card-body">
-                    @include('pengurusan.MIB._form')
+                    @include('pengurusan.MIB_laporan._form')
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
                     {!! Form::button('Batal dan Kembali',
-                    ['onclick'=>"window.location='".route('pengurusan.MIB.index')."'",
+                    ['onclick'=>"window.location='".route('pengurusan.MIB.show',$MIB->id)."'",
                     'class'=>'btn btn-secondary']) !!}
                     {!! Form::button('<i class="fas fa-save"></i> Daftar', ['class'=>'btn btn-success','type'=>'submit']) !!}
                 </div>

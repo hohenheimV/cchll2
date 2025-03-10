@@ -1,113 +1,198 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Butiran Maklumbalas')
+@section('title', 'Butiran Rakan Taman')
 
 @section('content')
-<section class="content">
+
+
     <div class="container-fluid">
         <div class="row">
-            <div class="col">
-                <div class="card card-outline card-dark">
-                    <div class="card-header border-0">
-                        <h5 class="card-title">@yield('title')</h5>
-                        <div class="card-tools">
-                            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                                <div class="btn-group" role="group" aria-label="First group">
-                                    {!! Form::button('Kembali',
-                                    ['onclick'=>"window.location='".route('pengurusan.MIB.index')."'",'class'=>'btn
-                                    btn-secondary']) !!}
-                                    @can('role-edit')
-                                    {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
-                                    'class'=>'btn btn-warning btn-sm',
-                                    'onclick'=>"window.location='".route('pengurusan.MIB.edit',$MIB)."'"
-                                    ]) !!}
-                                    @endcan
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body" inert>
-                        @include('pengurusan.MIB._form')
-
-
-                        <!-- <div class="row">
-                            <div class="col-6">
-                                <dl class="row p-3">
-                                    @php($null = '<span class="badge badge-light">Tiada Maklumat</span>')
-
-                                    <dt class='col-sm-4'>Tarikh Maklumbalas</dt>
-                                    <dd class='col-sm-6'>
-                                        <span class="badge badge-info">
-                                            <h6 class="m-0">{!! $MIB->feedback_at->format('d-m-Y')!!}</h6>
-                                        </span>
-                                    </dd>
-
-                                    <dt class='col-sm-4'>Rujukan Maklumbalas</dt>
-                                    <dd class='col-sm-6 font-weight-bold'>{!! $MIB->ref_num ?? $null !!}</dd>
-
-                                    <dt class='col-sm-4'>Nama Pengguna</dt>
-                                    <dd class='col-sm-6'>{!! $MIB->name ?? $null !!}</dd>
-
-                                    <dt class='col-sm-4'>E-mel Pengguna</dt>
-                                    <dd class='col-sm-6'>{!! $MIB->email ?? $null !!}</dd>
-
-                                    <dt class='col-sm-4'>No Telefon Pengguna</dt>
-                                    <dd class='col-sm-6'>{!! $MIB->phone ?? $null !!}</dd>
-
-                                    <dt class='col-sm-4'>Mesej</dt>
-                                    <dd class='col-sm-6'>{!! $MIB->message ?? $null !!}</dd>
-
-                                </dl>
-                                <div class="bg-gray p-3">
-                                    <dl class="row p-3">
-
-                                        <dt class='col-sm-4'>Status</dt>
-                                        <dd class='col-sm-6'>
-                                            <span class="badge badge-info">
-                                                <h6 class="m-0">{!! $MIB->status ?? $null !!}</h6>
-                                            </span>
-                                        </dd>
-
-                                        <dt class='col-sm-4'>Tarikh Tindakan</dt>
-                                        <dd class='col-sm-6'>{!! $MIB->response_at ? $MIB->response_at->format('d/m/Y') : $null !!}</dd>
-
-                                        <dt class='col-sm-4'>Dokumen Tindakan</dt>
-                                        <dd class='col-sm-6'>
-                                            @if ($MIB->form_attachment)
-                                            {!! Form::button('<i class="fas fa-file"></i> Dokumen Tindakan',
-                                            ['onclick'=>"window.location='".route('pengurusan.MIB.download',['feedback'=>$MIB])."'",
-                                            'class'=>'btn bg-purple']) !!}
-                                            @else
-                                            {!!  $null !!}
-                                            @endif
-                                        </dd>
-
-                                        <dt class='col-sm-4'>Nama Pegawai</dt>
-                                        <dd class='col-sm-6'>{!! $MIB->officer ?? $null !!}</dd>
-
-                                        <dt class='col-sm-4'>Catatan</dt>
-                                        <dd class='col-sm-6'>{!! $MIB->notes ?? $null !!}</dd>
-
-                                        <dt class='col-sm-4'>Tarikh Daftarkan</dt>
-                                        <dd class='col-sm-6'>
-                                            {{ $MIB->created_at ? $MIB->created_at->format('d/m/Y') : '-' }}
-                                        </dd>
-                                        <dt class='col-sm-4'>Tarikh Dikemaskini</dt>
-                                        <dd class='col-sm-6'>
-                                            {{ $MIB->updated_at ? $MIB->updated_at->format('d/m/Y') : '-' }}
-                                        </dd>
-                                    </dl>
-                                </div>
-                            </div>
-                        </div> -->
-
-                    </div>
-                    <!-- /.card-body -->
+        <div class="col-lg-12">
+            <div class="card card-olive card-outline">
+                <div class="card-header">
+                    <h3 class="card-title font-weight-bold my-1">@yield('title')</h3>
                 </div>
+                <!-- /.card-header -->
+                {!! Form::model($MIB, ['route' => ['pengurusan.MIB.update', $MIB],
+                'method'=>'PUT','id'=>'formFeedbacks','files' => true]) !!}
+                <div class="card-body">
+                    <style>
+                        .showButton{
+                            display: none;
+                        }
+                        .inertShow {
+                            pointer-events: none; /* Ensure no interactions are possible */
+                        }
+
+                        .inertShow input,
+                        .inertShow span,
+                        .inertShow textarea,
+                        .inertShow select {
+                            background-color: rgb(215, 215, 215); /* Light grey background for input/select */
+                            color: rgb(65, 60, 60); /* Light grey text color */
+                            cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
+                            pointer-events: none; /* Ensure no interactions are possible */
+                        }
+                    </style>
+                    @if($MIB->status == "Diluluskan")
+                        <div class="table-responsive">
+                            <h3>Senarai Aktiviti Rakan Taman - [{{ $MIB->taman }}] </h3>
+                            <div class="d-flex justify-content-end" role="group" aria-label="First group">
+                                {!! Form::button('<i class="fas fa-plus"></i> Daftar', [
+                                'class'=>'btn btn-success btn-sm',
+                                'onclick' => "window.location='" . route('pengurusan.MIB_laporan.create', ['id_rakan' => $MIB]) . "'"
+                                ]) !!}
+                            </div>
+                            <table id="exampleNP" class="responsive table table-bordered table-hover table-striped table-sm mb-0">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th class="text-center align-middle w-5">No.</th>
+                                        <th class="text-center align-middle">Nama Aktviti</th>
+                                        <th class="text-center align-middle wpx-7">Laporan</th>
+                                        <th class="text-center align-middle w-8">Tarikh Laporan</th>
+                                        <th class="text-center align-middle w-5">Tindakan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php($null = '<span class="badge badge-light">Tiada Maklumat</span>')
+                                    @php($index = $MIB_laporan->firstItem())
+                                    @forelse($MIB_laporan as $laporan)
+                                    <tr>
+                                        <td>{{ $index++ }}</td>
+                                        <td>{!! $laporan->name !!}</td>
+                                        <td>{!! Str::limit($laporan->laporan, 250) !!}</td>
+                                        <td class="text-center">{!! $laporan->created_at->format('d-m-Y') !!}</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                {!! Form::button('<i class="fas fa-search"></i>', [
+                                                'class'=>'btn btn-info btn-sm',
+                                                'onclick'=>"window.location='".route('pengurusan.MIB_laporan.show',$laporan)."'"
+                                                ]) !!}
+                                                {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
+                                                'class'=>'btn btn-warning btn-sm',
+                                                'onclick'=>"window.location='".route('pengurusan.MIB_laporan.edit',$laporan)."'"
+                                                ]) !!}
+                                                {!! Form::button('<i class="fas fa-trash"></i>', ['class'=>'btn btn-danger
+                                                btn-sm',
+                                                'data-url'=>route('pengurusan.MIB_laporan.destroy',$laporan->id),
+                                                'data-toggle'=>'modal','data-target'=>'#modalDelete']) !!}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @empty
+                                    {!! Html::forelse_alert(request('keyword'),'Kategori') !!}
+                                    @endforelse
+                                </tbody>
+                            </table>
+                            @if($MIB_laporan->count() > 0)
+                            <div
+                                class="card-footer bg-light p-2 border-top-0 d-flex flex-column justify-content-center align-items-end">
+                                {!! Html::pagination($MIB_laporan) !!}
+                            </div>
+                            <!-- /.card-footer -->
+                            @endif
+                        </div>
+                        <br>
+                    @endif
+                    <br>
+                    <h3>Maklumat Rakan Taman</h3>
+                    <div inert>
+                        @include('pengurusan.MIB._form')
+                    </div>
+
+                    @if(auth()->user()->hasRole('Pentadbir Sistem|Pihak Berkuasa Tempatan'))
+                        @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai')) <div inert> @endif
+                            {{ Form::label('ulasan_lawatan', 'KEGUNAAN PIHAK BERKUASA TEMPATAN :', ['class' => 'col-form-label']) }}<br>
+                            <div class="p-3 bg-gray">
+                                <div class="form-row">
+
+                                    <div class="col-6 col-md-3">
+                                        <div class="form-group">
+                                            {{ Form::label('responsed_at', 'Tarikh Tindakan') }}
+                                            {{ Form::text('responsed_at',$MIB->responsed_at?$MIB->responsed_at->format('d-m-Y g:m A') : null,
+                                            ['class' => 'form-control '.Html::isInvalid($errors,'responsed_at'), 'disabled' => 'disabled']) }}
+                                            {!! Html::hasError($errors,'responsed_at') !!}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3">
+                                        <div class="form-group">
+                                            {{ Form::label('status', 'Status') }}
+                                            {{ Form::select('status', $status, 'Diperakui', ['placeholder' => '', 'disabled' => 'disabled','class' => 'form-control notselect2']) }}
+                                            {!! Html::hasError($errors,'status') !!}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            {{ Form::label('notes', 'Catatan') }}
+                                            {{ Form::textarea('notes',$MIB->form_attachment ? $MIB->form_attachment : null,['rows'=>6,'placeholder'=>'Sila masukkan Catatan Permohonan', 'disabled' => 'disabled','class' => 'form-control '.Html::isInvalid($errors,'notes')]) }}
+                                            {!! Html::hasError($errors,'notes') !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai')) </div> @endif
+                    @endif
+
+                    @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))
+                        @if($MIB->status == "Diluluskan") <div inert> @endif
+                            {{ Form::label('ulasan_lawatan', 'KEGUNAAN JABATAN :', ['class' => 'col-form-label']) }}<br>
+                            <div class="p-3 bg-gray">
+                                <div class="form-row">
+
+                                    <div class="col-6 col-md-3">
+                                        <div class="form-group">
+                                            {{ Form::label('approved_at', 'Tarikh Tindakan') }}
+                                        {{ Form::text('approved_at',$MIB->approved_at?$MIB->approved_at->format('d-m-Y g:m A') : null,
+                                        ['class' => 'form-control '.Html::isInvalid($errors,'approved_at'), 'disabled' => 'disabled']) }}
+                                            {!! Html::hasError($errors,'approved_at') !!}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3">
+                                        <div class="form-group">
+                                            {{ Form::label('status', 'Status') }}
+                                            {{ Form::select('status', $status, 'Diluluskan', ['placeholder' => '','class' => 'form-control notselect2']) }}
+                                            {!! Html::hasError($errors,'status') !!}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            {{ Form::label('notes', 'Catatan') }}
+                                            {{ Form::textarea('notes',$MIB->officer ? $MIB->officer : null,['rows'=>6,'placeholder'=>'Sila masukkan Catatan Permohonan','class' => 'form-control '.Html::isInvalid($errors,'notes')]) }}
+                                            {!! Html::hasError($errors,'notes') !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @if($MIB->status == "Diluluskan") </div> @endif
+                    @endif
+                </div>
+                <div class="card-footer">
+                    {!! Form::button('Batal dan Kembali',
+                    ['onclick'=>"window.location='".route('pengurusan.MIB.index')."'",
+                    'class'=>'btn btn-secondary']) !!}
+                    {{--
+                        {!! 
+                            Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini', ['onclick'=>"window.location='".route('pengurusan.MIB.edit',$MIB)."'", 'class'=>'btn bg-warning', Html::tooltip('Kemaskini PIL')]); 
+                        !!}
+                    --}}
+                    @if($MIB->status != "Diluluskan")
+                        {!! Form::button('<i class="fas fa-save"></i> Pengesahan', [
+                            'class' => 'btn btn-primary', 
+                            'type' => 'submit', 
+                            'name' => 'action', 
+                            'value' => 'approve'
+                        ]) !!}
+                    @endif
+                </div>
+                {{ Form::close() }}
             </div>
         </div>
     </div>
-    <!--/. container-fluid -->
-</section>
+</div>
 @endsection

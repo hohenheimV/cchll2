@@ -26,6 +26,31 @@
                     <div inert>
                         @include('pengurusan.eLAPS._form')
                     </div>
+
+                    @if(isset($eLAPS->file_path) && auth()->user()->hasRole('Pentadbir Sistem|TKP/B JLN'))
+                        <div class="col-md-12">
+                            <div class="d-flex align-items-center">
+                                @php
+                                    $folderName = isset($eLAPS->file_path) ? 'eLAPS/'.str_replace('/', '', $eLAPS->referenceNumber).'/'.$eLAPS->file_path : null;
+                                @endphp
+                                
+                                @if($folderName != null)
+                                <a href="{{ asset('storage/uploads/' . $folderName) }}" target="_blank" class="" style="border: 0px solid #ddd; border-radius: 10px; padding: 10px; display: inline-block; text-align: center; background-color: #fff;" download>
+                                    <div class="product-image">
+                                        <img src="https://img.icons8.com/fluency/48/winrar.png" class="br-5" alt="" style="width: 48px; height: 48px; border-radius: 5px; margin-bottom: 10px;">
+                                    </div>
+                                    <div class="product-image">
+                                        <span class="file-name-1" style="background-color: #008000; padding: 5px 10px; border-radius: 5px; color: #fff; font-weight: 600; display: inline-block; font-size: 14px;">Dokumen Sokongan  <i class="fas fa-download"></i></span>
+                                    </div>
+                                    <div class="product-image">
+                                        <span class="file-name-1">{{ $eLAPS->file_path }}</span>
+                                    </div>
+                                </a>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+
                     <!-- @include('pengurusan.eLAPS._upload') -->
                     @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai') && $eLAPS->status_permohonan >= 6)
                         @if($eLAPS->status_permohonan > 7) <div inert> @endif
@@ -81,6 +106,16 @@
                             'class' => 'btn btn-warning', 
                             'data-toggle'=>'modal', 
                             'data-target'=>'#modalKeputusan', 
+                            'data-elaps-id' => $eLAPS->id
+                        ]) !!}
+                    @endif
+
+                    @if(($eLAPS->status_permohonan == 10 || $eLAPS->status_permohonan == 12) && (auth()->user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem')))
+                        {!! Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini Status Projek', [
+                            'class' => 'btn btn-warning', 
+                            'data-toggle'=>'modal', 
+                            'data-target'=>'#modalStatusProjek', 
+                            'data-text'=> $eLAPS->status_permohonan, 
                             'data-elaps-id' => $eLAPS->id
                         ]) !!}
                     @endif

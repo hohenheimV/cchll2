@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Pengurusan;
 
 use App\Http\Controllers\Controller;
-use App\Model\eLAPS;  // Updated to the new model
+use App\Model\eLAPS;
 use App\Model\ePALM;
 use App\Model\ePALM_draf;
-use App\Model\MaklumatPenggunaPbt;  // Updated to the new model
+use App\Model\ePIL;
+use App\Model\ePIL_draf;
+use App\Model\MaklumatPenggunaPbt;
 use App\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon; 
@@ -16,11 +18,6 @@ use Illuminate\Support\Facades\Storage;
 
 class eLAPSController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function __construct()
     {
         $this->middleware(['role_or_permission:Pentadbir Sistem|TKP/B JLN|Pegawai|Pihak Berkuasa Tempatan|eLAPS-list']);
@@ -29,11 +26,6 @@ class eLAPSController extends Controller
         $this->middleware(['role_or_permission:Pentadbir Sistem|TKP/B JLN|Pegawai|Pihak Berkuasa Tempatan|eLAPS-delete'], ['only' => ['destroy']]);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         
@@ -42,152 +34,19 @@ class eLAPSController extends Controller
         if($user->hasRole('Pihak Berkuasa Tempatan')){
             $totalCount = eLAPS::where('id_pemohon', $userId)->count();
             $eLAPS = eLAPS::where('id_pemohon', $userId)->orderBy('id', 'desc')->paginate($totalCount);
+        }elseif($user->hasRole('TKP/B JLN|Pentadbir Sistem')){
+            $totalCount = eLAPS::count();
+            $eLAPS = eLAPS::orderByRaw('CAST(status_permohonan AS INT) ASC')->orderBy('id', 'desc')->paginate($totalCount);
         }else{
             // $totalCount = eLAPS::where('status_permohonan', '!=', $userId)->count();
             // $eLAPS = eLAPS::where('status_permohonan', '!=', $userId)->orderBy('id', 'desc')->paginate($totalCount);
-            $totalCount = eLAPS::count();
-            $eLAPS = eLAPS::orderBy('status_permohonan', 'asc')->paginate($totalCount);
+            $totalCount = eLAPS::where('bahagian_jln', $user->bahagian_jln)->count();
+            $eLAPS = eLAPS::orderByRaw('CAST(status_permohonan AS INT) ASC')->where('bahagian_jln', $user->bahagian_jln)->orderBy('id', 'desc')->paginate($totalCount);
         }
-        
-        // $data = [
-        //     [
-        //         'id_pemohon' => '1',
-        //         'status_permohonan' => '1',
-        //         'projectTitle' => 'PERMOHONAN PROJEK 1',
-        //         'referenceNumber' => 'JLN/2025/1',
-        //         'anggaranKos' => '500000.00',
-        //         'category' => 'Pelan Induk Landskap',
-        //         'rancangan_pembangunan' => json_encode([
-        //             'jenis' => 'Lain-Lain Pelan Pembangunan (Nyatakan)',
-        //             'keterangan' => 'Lainan'
-        //         ]),
-        //         'keluasan' => '12.00',
-        //         'unit_keluasan' => 'hektar',
-        //         'panjang' => '122.00',
-        //         'unit_panjang' => 'kilometer',
-        //         'hakmilik_tanah' => 'ALAMI',
-        //         'status_tanah' => json_encode(['status' => 'Belum diwartakan']),
-        //         'negeri' => '06',
-        //         'daerah' => '05',
-        //         'mukim' => '03',
-        //         'parlimen' => 'P.079',
-        //         'dun' => 'N.04',
-        //         'aktiviti_semasa' => "1.ddd\r\n2.dddf\r\n3.sdf",
-        //         'jumlah_penduduk' => 140000,
-        //         'kemudahsampaian' => 'Tidak',
-        //         'guna_tanah' => 'Sekolah',
-        //         'pelan_ukur' => json_encode(['0' => 'Tidak', 'tarikh' => null]),
-        //         'masalah' => json_encode(['0' => '0', '1' => '0', '2' => '0', '3' => '0', '4' => '1', '-1' => 'Tiada Maklumat']),
-        //         'file_path' => null,
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'id_pemohon' => '1',
-        //         'status_permohonan' => '1',
-        //         'projectTitle' => 'PERMOHONAN PROJEK 2 (updated)',
-        //         'referenceNumber' => 'JLN/2025/2',
-        //         'anggaranKos' => '2000000.00',
-        //         'category' => 'Taman Awam',
-        //         'rancangan_pembangunan' => json_encode([
-        //             'jenis' => 'Rancangan Tempatan',
-        //             'keterangan' => 'Taman Medan'
-        //         ]),
-        //         'keluasan' => '123123.00',
-        //         'unit_keluasan' => 'ekar',
-        //         'panjang' => '1212.00',
-        //         'unit_panjang' => 'meter',
-        //         'hakmilik_tanah' => 'PBT',
-        //         'status_tanah' => json_encode(['status' => 'Diwartakan', 'tarikh' => '2025-02-19']),
-        //         'negeri' => '01',
-        //         'daerah' => '01',
-        //         'mukim' => '40',
-        //         'parlimen' => 'P.152',
-        //         'dun' => 'N.29',
-        //         'aktiviti_semasa' => '123213',
-        //         'jumlah_penduduk' => 213123,
-        //         'kemudahsampaian' => 'Ya',
-        //         'guna_tanah' => 'Perumahan',
-        //         'pelan_ukur' => json_encode(['0' => 'Ya', 'tarikh' => '2025-03-04']),
-        //         'masalah' => json_encode(['0' => '1', '1' => '0', '2' => '1', '3' => '0', '4' => '1', '-1' => 'Tiada Maklumatss']),
-        //         'file_path' => null,
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'id_pemohon' => '1',
-        //         'status_permohonan' => '1',
-        //         'projectTitle' => 'q',
-        //         'referenceNumber' => 'JLN/2025/4',
-        //         'anggaranKos' => '22.00',
-        //         'category' => 'Taman Awam',
-        //         'rancangan_pembangunan' => json_encode([
-        //             'jenis' => 'Rancangan Tempatan',
-        //             'keterangan' => 'Majlis Daerah Pekan'
-        //         ]),
-        //         'keluasan' => '212.00',
-        //         'unit_keluasan' => 'ekar',
-        //         'panjang' => '122.00',
-        //         'unit_panjang' => 'meter',
-        //         'hakmilik_tanah' => 'PBT',
-        //         'status_tanah' => json_encode(['status' => 'Belum diwartakan']),
-        //         'negeri' => '05',
-        //         'daerah' => '04',
-        //         'mukim' => '05',
-        //         'parlimen' => 'P.131',
-        //         'dun' => 'N.25',
-        //         'aktiviti_semasa' => 'wqda',
-        //         'jumlah_penduduk' => 122,
-        //         'kemudahsampaian' => 'Tidak',
-        //         'guna_tanah' => 'ww',
-        //         'pelan_ukur' => json_encode(['0' => 'Tidak', 'tarikh' => null]),
-        //         'masalah' => json_encode(['0' => '1', '1' => '0', '2' => '1', '3' => '0', '4' => '1', '-1' => 'dsdsa']),
-        //         'file_path' => null,
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'id_pemohon' => '1',
-        //         'status_permohonan' => '1',
-        //         'projectTitle' => 'PERMOHONAN PROJEK 3 (updated)',
-        //         'referenceNumber' => 'JLN/2025/3',
-        //         'anggaranKos' => '115252.00',
-        //         'category' => 'Taman Botanis',
-        //         'rancangan_pembangunan' => json_encode([
-        //             'jenis' => 'Rancangan Tempatan',
-        //             'keterangan' => 'Botan'
-        //         ]),
-        //         'keluasan' => '1212.00',
-        //         'unit_keluasan' => 'hektar',
-        //         'panjang' => '121.00',
-        //         'unit_panjang' => 'meter',
-        //         'hakmilik_tanah' => 'PBT',
-        //         'status_tanah' => json_encode(['status' => 'Diwartakan', 'tarikh' => '2025-02-19']),
-        //         'negeri' => '03',
-        //         'daerah' => '08',
-        //         'mukim' => '40',
-        //         'parlimen' => 'P.032',
-        //         'dun' => 'N.43',
-        //         'aktiviti_semasa' => '1212asff',
-        //         'jumlah_penduduk' => 123114,
-        //         'kemudahsampaian' => 'Ya',
-        //         'guna_tanah' => 'Perniagaan',
-        //         'pelan_ukur' => json_encode(['0' => 'Ya', 'tarikh' => null]),
-        //         'masalah' => json_encode(['0' => '1', '1' => '1', '2' => '1', '3' => '1', '4' => '1', '-1' => 'Tiada Maklumat']),
-        //         'file_path' => null,
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        // ];
-        // foreach ($data as $item) {
-        //     eLAPS::create($item);
-        // }
 
         $eLAPS->getCollection()->transform(function ($eLAP) {
-            // Assuming id_pemohon is a reference to the 'User' model or a similar model
             $email = User::find($eLAP->id_pemohon)->email;
-            // $pbt = MaklumatPenggunaPbt::where('email', '=', $email)->first();
-            $pbt = MaklumatPenggunaPbt::where('email', '=', '5netsparker@example.com')->first();
+            $pbt = MaklumatPenggunaPbt::where('email', '=', $email)->first();
             
             // Add the pbt_name to each eLAP record
             $eLAP->pbt_name = $pbt ? $pbt->pbt_name : null;
@@ -220,18 +79,12 @@ class eLAPSController extends Controller
         // dd($id_pemohon);
         if($id_pemohon == null){
             $user = $this->getUser();
-            // return MaklumatPenggunaPbt::where('email', '=', $user->email)->first();
-            return MaklumatPenggunaPbt::where('email', '=', '5netsparker@example.com')->first();
+            return MaklumatPenggunaPbt::where('email', '=', $user->email)->first();
         }else if($id_pemohon){
             return MaklumatPenggunaPbt::where('id', '=', $id_pemohon)->first();
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $currentYear = Carbon::now()->year;
@@ -240,9 +93,9 @@ class eLAPSController extends Controller
         $referenceNumber = "JLN/{$currentYear}/{$referenceNumber}";
 
         $eLAPS = new eLAPS();
-        $eLAPS->referenceNumber = $referenceNumber;
+        // $eLAPS->referenceNumber = $referenceNumber;
         // dd($eLAPS);
-        return view('pengurusan.eLAPS.create', compact('eLAPS'));
+        return view('pengurusan.eLAPS.create'/* , compact('eLAPS') */);
     }
 
     public function validateData(array $request)
@@ -380,15 +233,9 @@ class eLAPSController extends Controller
         return $request;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $userId = auth()->id();
         $user = User::whereRaw('id = ?', [$userId])->first();
         // dd($user->name); // Now you can access the 'name' attribute
@@ -406,12 +253,30 @@ class eLAPSController extends Controller
         // $cleanedValue = str_replace(',', '', $request->input('anggaranKos'));
         // $decimalValue = (float)$cleanedValue;
         $request->merge(['anggaranKos' => str_replace(',', '', $request->input('anggaranKos')) ]);
-        
+
+        // dd($request->all());
         $validated = $this->validateData($request->all());
         if ($validated instanceof \Illuminate\Http\RedirectResponse) {
             return $validated;
         }
-        // dump($validated);
+        
+        $folderName = str_replace('/', '', $referenceNumber);
+        // dd($folderName);
+        $largeFileName = $request->input('large_file_name_new');
+        if (null !== $largeFileName) {
+            $oldPath = storage_path('app/public/uploads/eLAPS/temp/'.$largeFileName); // Current file location
+            $newPath = storage_path('app/public/uploads/eLAPS/'.$folderName.'/'.$largeFileName); // New location
+            
+            if (file_exists($oldPath)) {
+                $destinationDir = dirname($newPath);
+                if (!file_exists($destinationDir)) {
+                    mkdir($destinationDir, 0777, true);
+                }
+                rename($oldPath, $newPath);
+            }
+            $validated['file_path'] = $largeFileName;
+        }
+        // dd($validated);
         // dd($request->all());
         // Insert the main record (eLAPS) into the database
         $elaps = eLAPS::create($validated);
@@ -419,38 +284,38 @@ class eLAPSController extends Controller
 
         // Redirect back to the list page with a success message
         if($elaps){
-            if (config('mail.enabled')) {
-                try {
-                    $emailData = [
-                        "email_to" => [
-                            ['address' => 'admin@jln.com', 'name' => 'Admin'],
-                            ['address' => 'anotheradmin@jln.com', 'name' => 'Another Admin']
-                        ],
-                        "email_cc" => [
-                            ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
-                            ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
-                        ],
-                        "subject" => 'New User Application Notification',
-                    ];
+            // if (config('mail.enabled')) {
+            //     try {
+            //         $emailData = [
+            //             "email_to" => [
+            //                 ['address' => 'admin@jln.com', 'name' => 'Admin'],
+            //                 ['address' => 'anotheradmin@jln.com', 'name' => 'Another Admin']
+            //             ],
+            //             "email_cc" => [
+            //                 ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
+            //                 ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
+            //             ],
+            //             "subject" => 'New User Application Notification',
+            //         ];
     
-                    Mail::send('pengurusan.eLAPS.mails.pendaftaran', ['elaps' => $elaps, 'name' => $user->name, 'email' => $user->email], function ($message) use ($emailData) {
-                        $message->subject($emailData["subject"]);
-                        // Loop through to array and add each email
-                        foreach ($emailData['email_to'] as $to) {
-                            $message->to($to['address'], $to['name']);
-                        }
+            //         Mail::send('pengurusan.eLAPS.mails.pendaftaran', ['elaps' => $elaps, 'name' => $user->name, 'email' => $user->email], function ($message) use ($emailData) {
+            //             $message->subject($emailData["subject"]);
+            //             // Loop through to array and add each email
+            //             foreach ($emailData['email_to'] as $to) {
+            //                 $message->to($to['address'], $to['name']);
+            //             }
     
-                        // Loop through cc array and add each email
-                        foreach ($emailData['email_cc'] as $cc) {
-                            $message->cc($cc['address'], $cc['name']);
-                        }
-                    });
-                } catch (\Exception $exception) {
-                    // Handle mail sending error
-                    // You can log the exception or display an error message
-                    // \Log::error("Error sending registration email: " . $exception->getMessage());
-                }
-            }
+            //             // Loop through cc array and add each email
+            //             foreach ($emailData['email_cc'] as $cc) {
+            //                 $message->cc($cc['address'], $cc['name']);
+            //             }
+            //         });
+            //     } catch (\Exception $exception) {
+            //         // Handle mail sending error
+            //         // You can log the exception or display an error message
+            //         // \Log::error("Error sending registration email: " . $exception->getMessage());
+            //     }
+            // }
             return redirect()->route('pengurusan.eLAPS.index')
             ->with('successMessage', 'Maklumat permohonan telah berjaya disimpan');
         }else{
@@ -459,14 +324,6 @@ class eLAPSController extends Controller
         }
     }
 
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Model\eLAPS  $eLAPS
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $eLAPS = eLAPS::findOrFail($id);
@@ -489,12 +346,6 @@ class eLAPSController extends Controller
         return view('pengurusan.eLAPS.show', compact('eLAPS'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\eLAPS  $eLAPS
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $user = $this->getUser();
@@ -506,64 +357,41 @@ class eLAPSController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\eLAPS  $eLAPS
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
-    {   
-        // dd(str_replace('/', '_', $request->input('referenceNumber')));
-        // if ($request->has('supporting_documents')) {
-        //     $folderName = str_replace('/', '', $request->input('referenceNumber'));
-        //     $filename =  time() . '.' . $request->supporting_documents->extension();
-        //     $request->supporting_documents->storeAs('public/img/eLAPS/'.$folderName, $filename);
-        //     $request->merge(['file_path' => $filename]);
-        // }
-        // dd($request->all());
-        $request->merge(['file_path' => $request->input('large_file_name_new')]);
-        if ($request->hasFile('supporting_documents')) {
-            // Check if the file is valid (e.g., uploaded correctly)
-            $file = $request->file('supporting_documents');
-            
-            if ($file->isValid()) {
-                // Create folder name from reference number
-                $folderName = str_replace('/', '', $request->input('referenceNumber'));
-                
-                // Generate a unique filename (time-based)
-                $filename = time() . '.' . $file->extension();
-                
-                // Store the file in the 'public/img/eLAPS/{folderName}' directory
-                // $file->storeAs('public/uploads/eLAPS/'.$folderName, $filename);
-                // Storage::put('public/uploads/eLAPS/'.$folderName, $file);
-
-                // Optionally, merge the file path into the request for further use
-                $request->merge(['file_path' => $filename]);
-                // $request->merge(['file_path' => str_replace(' ', '', $request->input('large_file_name'))]);
-                // $request->merge(['file_path' => $request->input('large_file_name')]);
-        
-                // return back()->with('successMessage', 'File uploaded successfully!');
-            } else {
-                return back()->with('errorMessage', 'File upload failed.');
-            }
-        } else {
-            // return back()->with('errorMessage', 'No file selected.');
-        }
-        
+    {
         // dd($request->all());
         $permohonan = eLAPS::findOrFail($id); 
-        
-
-        // dd($validated);
+        // dd($id);
+        $folderName = str_replace('/', '', $permohonan->referenceNumber);
+        $largeFileName = $request->input('large_file_name_new');
+        $fileExist = false;
+        if (null !== $largeFileName) {
+            $oldPath = storage_path('app/public/uploads/eLAPS/temp/'.$largeFileName);
+            $newPath = storage_path('app/public/uploads/eLAPS/'.$folderName.'/'.$largeFileName);
+            if (file_exists($oldPath)) {
+                $fileExist = true;
+                $destinationDir = dirname($newPath);
+                if (!file_exists($destinationDir)) {
+                    mkdir($destinationDir, 0777, true);
+                }
+            }
+        }
+        $user = User::whereRaw('id = ?', [$permohonan->id_pemohon])->first();
         if ($request->input('action') === 'update') {
             $validated = $this->validateData($request->all());
             if ($validated instanceof \Illuminate\Http\RedirectResponse) {
+                if ($fileExist) {
+                    unlink($oldPath);
+                }
                 return $validated;
             }
+            
+            if ($fileExist) {
+                rename($oldPath, $newPath);
+                $validated['file_path'] = $largeFileName;
+            }
+
             $updatePermohonan = $permohonan->update($validated);
-            // dd($validated);
             
             if($updatePermohonan){
                 return redirect()->route('pengurusan.eLAPS.edit', [$permohonan])->with('successMessage', 'Maklumat permohonan telah berjaya dikemaskini');
@@ -573,30 +401,105 @@ class eLAPSController extends Controller
         } elseif ($request->input('action') === 'submit') {
             $validated = $this->validateData($request->all());
             if ($validated instanceof \Illuminate\Http\RedirectResponse) {
+                if ($fileExist) {
+                    unlink($oldPath);
+                }
                 return $validated;
             }
             $validated['status_permohonan'] = 2;
+            if ($fileExist) {
+                rename($oldPath, $newPath);
+                $validated['file_path'] = $largeFileName;
+            }
+            
             $hantarPermohonan = $permohonan->update($validated);
             
             if($hantarPermohonan){
                 //email
+                if (config('mail.enabled')) {
+                    try {
+                        $emailData = [
+                            "email_to" => [
+                                ['address' => 'admin@jln.com', 'name' => 'Admin'],
+                                ['address' => 'anotheradmin@jln.com', 'name' => 'Another Admin']
+                            ],
+                            "email_cc" => [
+                                ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
+                                ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
+                            ],
+                            "subject" => 'New User Application Notification',
+                        ];
+        
+                        Mail::send('pengurusan.eLAPS.mails.pendaftaran', ['elaps' => $hantarPermohonan, 'name' => $user->name, 'email' => $user->email], function ($message) use ($emailData) {
+                            $message->subject($emailData["subject"]);
+                            // Loop through to array and add each email
+                            foreach ($emailData['email_to'] as $to) {
+                                $message->to($to['address'], $to['name']);
+                            }
+        
+                            // Loop through cc array and add each email
+                            foreach ($emailData['email_cc'] as $cc) {
+                                $message->cc($cc['address'], $cc['name']);
+                            }
+                        });
+                    } catch (\Exception $exception) {
+                        // Handle mail sending error
+                        // You can log the exception or display an error message
+                        // \Log::error("Error sending registration email: " . $exception->getMessage());
+                    }
+                }
                 return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat permohonan telah berjaya dihantar');
             }else{
                 return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat permohonan tidak berjaya dihantar');
             }
         } elseif ($request->input('action') === 'serahan') {
             // dd($request->all());
-            $serahPermohonan = $permohonan->update(['status_permohonan' => 5]);
+            $serahPermohonan = $permohonan->update([
+                'status_permohonan' => 5,
+                'bahagian_jln' => $request->input('bahagian_jln'),
+            ]);
             
             if($serahPermohonan){
                 //email
+                if (config('mail.enabled')) {
+                    try {
+                        $emailData = [
+                            "email_to" => [
+                                ['address' => 'admin@jln.com', 'name' => 'Admin'],
+                                ['address' => 'anotheradmin@jln.com', 'name' => 'Another Admin']
+                            ],
+                            "email_cc" => [
+                                ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
+                                ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
+                            ],
+                            "subject" => 'New User Application Notification',
+                        ];
+        
+                        Mail::send('pengurusan.eLAPS.mails.pendaftaran', ['elaps' => $serahPermohonan, 'name' => $user->name, 'email' => $user->email], function ($message) use ($emailData) {
+                            $message->subject($emailData["subject"]);
+                            // Loop through to array and add each email
+                            foreach ($emailData['email_to'] as $to) {
+                                $message->to($to['address'], $to['name']);
+                            }
+        
+                            // Loop through cc array and add each email
+                            foreach ($emailData['email_cc'] as $cc) {
+                                $message->cc($cc['address'], $cc['name']);
+                            }
+                        });
+                    } catch (\Exception $exception) {
+                        // Handle mail sending error
+                        // You can log the exception or display an error message
+                        // \Log::error("Error sending registration email: " . $exception->getMessage());
+                    }
+                }
                 return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat permohonan telah berjaya diserah kepada bahagian');
             }else{
                 return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat permohonan tidak berjaya diserah kepada bahagian');
             }
         } elseif ($request->input('ulasan') === 'draf') {
             $drafUlasan = $permohonan->update(['status_permohonan' => 7, 'ulasan_lawatan' => $request->input('ulasan_lawatan')]);
-            
+            // dd($permohonan);
             if($drafUlasan){
                 //email
                 return redirect()->route('pengurusan.eLAPS.show', [$permohonan])->with('successMessage', 'Maklumat ulasan telah berjaya disimpan');
@@ -607,89 +510,134 @@ class eLAPSController extends Controller
             $hantarUlasan = $permohonan->update(['status_permohonan' => 8, 'ulasan_lawatan' => $request->input('ulasan_lawatan')]);
             
             if($hantarUlasan){
-                //email
+                //email to ?
                 return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat ulasan telah berjaya dihantar');
             }else{
                 return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat ulasan tidak berjaya dihantar');
             }
-        } elseif ($request->input('statusProjek') === 'siap') {
-            // dd($this->getPBT($permohonan->id_pemohon)->pbt_name);
-            // dd($request->all());
-            $siapProjek = $permohonan->update(['status_permohonan' => 14]);
+        } elseif ($request->input('action') === 'keputusan') {
+            $keputusanPermohonan = $permohonan->update([
+                'status_permohonan' => $request->input('keputusan'),
+            ]);
             
-            if($siapProjek){
+            if($keputusanPermohonan){
                 //email
-
-                $duplicateData = new ePALM();
-                $duplicateData->nama_taman = $permohonan->projectTitle;
-                $duplicateData->kategori_taman = $permohonan->category;
-                $duplicateData->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
-                    ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
-                    : 'Jabatan Landskap Negara';
-                $duplicateData->keluasan_taman = $permohonan->keluasan;
-                $duplicateData->keluasan_unit = $permohonan->unit_keluasan;
-                $duplicateData->panjang_taman = $permohonan->panjang;
-                $duplicateData->panjang_unit = $permohonan->unit_panjang;
-                $duplicateData->hakmilik_tanah_taman = $permohonan->hakmilik_tanah;
-
-                $status_tanahData = json_decode($permohonan->status_tanah, true);
-                $duplicateData->status_tanah_taman = $status_tanahData['status'];
-                $duplicateData->tarikhWarta_tanah_taman = isset($status_tanahData['tarikh']) ? $status_tanahData['tarikh'] : null;
-
-                $duplicateData->negeri_taman = $permohonan->negeri;
-                $duplicateData->daerah_taman = $permohonan->daerah;
-                $duplicateData->mukim_taman = $permohonan->mukim;
-                $duplicateData->parlimen_taman = $permohonan->parlimen;
-                $duplicateData->dun_taman = $permohonan->dun;
-                $duplicateData->id_permohonan = $id;
-
-                $duplicateDataSaved = $duplicateData->save();
-
-                $duplicateDataId = $duplicateData->id_taman;
-                if ($duplicateDataSaved) {
-                    $duplicateData_draf = new ePALM_draf();
-                    $duplicateData_draf->id_taman = $duplicateDataId;
-                    $duplicateData_draf->nama_taman = $permohonan->projectTitle;
-                    $duplicateData_draf->kategori_taman = $permohonan->category;
-                    $duplicateData_draf->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
-                        ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
-                        : 'Jabatan Landskap Negara';
-                    $duplicateData_draf->keluasan_taman = $permohonan->keluasan;
-                    $duplicateData_draf->keluasan_unit = $permohonan->unit_keluasan;
-                    $duplicateData_draf->panjang_taman = $permohonan->panjang;
-                    $duplicateData_draf->panjang_unit = $permohonan->unit_panjang;
-                    $duplicateData_draf->hakmilik_tanah_taman = $permohonan->hakmilik_tanah;
-
-                    $status_tanahData = json_decode($permohonan->status_tanah, true);
-                    $duplicateData_draf->status_tanah_taman = $status_tanahData['status'];
-                    $duplicateData_draf->tarikhWarta_tanah_taman = isset($status_tanahData['tarikh']) ? $status_tanahData['tarikh'] : null;
-
-                    $duplicateData_draf->negeri_taman = $permohonan->negeri;
-                    $duplicateData_draf->daerah_taman = $permohonan->daerah;
-                    $duplicateData_draf->mukim_taman = $permohonan->mukim;
-                    $duplicateData_draf->parlimen_taman = $permohonan->parlimen;
-                    $duplicateData_draf->dun_taman = $permohonan->dun;
-                    $duplicateData->id_permohonan = $id;
-
-                    $duplicateData_drafSaved = $duplicateData_draf->save();
-                }      
-                return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat permohonan telah berjaya diserah kepada bahagian');
+                return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat keputusan telah berjaya dikemaskini');
             }else{
-                return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat permohonan tidak berjaya diserah kepada bahagian');
+                return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat keputusan tidak berjaya dikemaskini');
+            }
+        } elseif ($request->input('action') === 'status') {
+            $projekSiap = $request->input('statusProjek');
+            $statusProjek = $permohonan->update([
+                'status_permohonan' => $projekSiap,
+            ]);
+            
+            if($statusProjek){
+                //email to JLN for portal display
+                if($projekSiap == 14){
+                    if (in_array($permohonan->category, ['Taman Awam', 'Taman Botani', 'Landskap Perbandaran', 'Persekitaran Kehidupan', 'Taman Persekutuan'])) {
+                        $duplicateData = new ePALM();
+                        $duplicateData->nama_taman = $permohonan->projectTitle;
+                        $duplicateData->kategori_taman = $permohonan->category;
+                        $duplicateData->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
+                            ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
+                            : 'Jabatan Landskap Negara';
+                        $duplicateData->keluasan_taman = $permohonan->keluasan;
+                        $duplicateData->keluasan_unit = $permohonan->unit_keluasan;
+                        $duplicateData->panjang_taman = $permohonan->panjang;
+                        $duplicateData->panjang_unit = $permohonan->unit_panjang;
+                        $duplicateData->hakmilik_tanah_taman = $permohonan->hakmilik_tanah;
+
+                        $status_tanahData = json_decode($permohonan->status_tanah, true);
+                        $duplicateData->status_tanah_taman = $status_tanahData['status'];
+                        $duplicateData->tarikhWarta_tanah_taman = isset($status_tanahData['tarikh']) ? $status_tanahData['tarikh'] : null;
+
+                        $duplicateData->negeri_taman = $permohonan->negeri;
+                        $duplicateData->daerah_taman = $permohonan->daerah;
+                        $duplicateData->mukim_taman = $permohonan->mukim;
+                        $duplicateData->parlimen_taman = $permohonan->parlimen;
+                        $duplicateData->dun_taman = $permohonan->dun;
+                        $duplicateData->id_permohonan = $id;
+
+                        $duplicateDataSaved = $duplicateData->save();
+
+                        $duplicateDataId = $duplicateData->id_taman;
+                        if ($duplicateDataSaved) {
+                            $duplicateData_draf = new ePALM_draf();
+                            $duplicateData_draf->id_taman = $duplicateDataId;
+                            $duplicateData_draf->nama_taman = $permohonan->projectTitle;
+                            $duplicateData_draf->kategori_taman = $permohonan->category;
+                            $duplicateData_draf->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
+                                ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
+                                : 'Jabatan Landskap Negara';
+                            $duplicateData_draf->keluasan_taman = $permohonan->keluasan;
+                            $duplicateData_draf->keluasan_unit = $permohonan->unit_keluasan;
+                            $duplicateData_draf->panjang_taman = $permohonan->panjang;
+                            $duplicateData_draf->panjang_unit = $permohonan->unit_panjang;
+                            $duplicateData_draf->hakmilik_tanah_taman = $permohonan->hakmilik_tanah;
+
+                            $status_tanahData = json_decode($permohonan->status_tanah, true);
+                            $duplicateData_draf->status_tanah_taman = $status_tanahData['status'];
+                            $duplicateData_draf->tarikhWarta_tanah_taman = isset($status_tanahData['tarikh']) ? $status_tanahData['tarikh'] : null;
+
+                            $duplicateData_draf->negeri_taman = $permohonan->negeri;
+                            $duplicateData_draf->daerah_taman = $permohonan->daerah;
+                            $duplicateData_draf->mukim_taman = $permohonan->mukim;
+                            $duplicateData_draf->parlimen_taman = $permohonan->parlimen;
+                            $duplicateData_draf->dun_taman = $permohonan->dun;
+                            $duplicateData_draf->id_permohonan = $id;
+
+                            $duplicateData_drafSaved = $duplicateData_draf->save();
+                        }
+                    }
+
+                    if ($permohonan->category == "Pelan Induk Landskap") {
+                        $duplicateData = new ePIL();
+                        $duplicateData->nama_pelan = $permohonan->projectTitle;
+                        $duplicateData->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
+                            ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
+                            : 'Jabatan Landskap Negara';
+
+                        $duplicateData->negeri_pelan = $permohonan->negeri;
+                        $duplicateData->daerah_pelan = $permohonan->daerah;
+                        $duplicateData->mukim_pelan = $permohonan->mukim;
+                        $duplicateData->parlimen_pelan = $permohonan->parlimen;
+                        $duplicateData->dun_pelan = $permohonan->dun;
+                        $duplicateData->id_permohonan = $id;
+
+                        $duplicateDataSaved = $duplicateData->save();
+
+                        $duplicateDataId = $duplicateData->id_pelan;
+                        if ($duplicateDataSaved) {
+                            $duplicateData_draf = new ePIL_draf();
+                            $duplicateData_draf->id_pelan = $duplicateDataId;
+                            $duplicateData_draf->nama_pelan = $permohonan->projectTitle;
+                            $duplicateData_draf->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
+                                ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
+                                : 'Jabatan Landskap Negara';
+
+                            $duplicateData_draf->negeri_pelan = $permohonan->negeri;
+                            $duplicateData_draf->daerah_pelan = $permohonan->daerah;
+                            $duplicateData_draf->mukim_pelan = $permohonan->mukim;
+                            $duplicateData_draf->parlimen_pelan = $permohonan->parlimen;
+                            $duplicateData_draf->dun_pelan = $permohonan->dun;
+                            $duplicateData_draf->id_permohonan = $id;
+
+                            $duplicateData_drafSaved = $duplicateData_draf->save();
+                        }
+                    }
+                }
+                return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat Status Projek telah berjaya dikemaskini');
+            }else{
+                return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat Status Projek tidak berjaya dikemaskini');
             }
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Model\eLAPS  $eLAPS
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(eLAPS $eLAPS)
+    public function destroy($id)
     {
-        dd($eLAPS);
-        $eLAPS->delete();
-        return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat kempen tanam pokok telah dihapuskan');
+        $permohonan = eLAPS::findOrFail($id);
+        $permohonan->delete();
+        return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat permohonan telah dihapuskan');
     }
 }

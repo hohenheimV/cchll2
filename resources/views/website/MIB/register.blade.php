@@ -91,13 +91,18 @@
                     <h3><span class="font-weight-bold">{{ config('app.name_short') }}</span> {{ config('app.agency_short') }}</h3>
                 </div>
                 <div class="login-logo h-100 d-flex flex-column justify-content-center align-items-center">
-                    {{ config('app.name_short') }}
+                    <div>
+                        <img src="{{ asset('storage/images/logo-jln.png') }}" alt="" style="height:60px;">
+                        <img src="{{ asset('storage/images/jata_malaysia.png') }}" alt="" style="height:60px;">
+                        <img src="{{ asset('storage/images/logo.png') }}" alt="" style="height:60px;">
+                    </div>
+                    <h4 class="login-box-msg text-dark">MALAYSIA IN BLOOM (MiB)</h4>
+                    <h6 class="login-box-msg text-dark">Permohonan Pendaftaran Rakan Taman</h6>
                 </div>
 
                 <!-- Registration form Input Fields -->
-                <form id="myForm" method="POST" action="{{ route('website.MIB.simpan') }}" class="m-lg-5">
+                <form id="myForm" method="POST" action="{{ route('website.MIB.simpan') }}" class="m-lg-5" enctype="multipart/form-data">
                     @csrf
-                    <h4 class="login-box-msg text-dark">PERMOHONAN PENUBUHAN MALAYSIA IN BLOOM (MiB)</h4>
 
                     <div id="user_details" style="display: block;">
                         <div class="row">
@@ -138,8 +143,8 @@
                             </datalist>
                         </div>
                         <div class="form-group mb-3">
-                            {{ Form::label('nama_taman', 'Taman Perumahan') }}
-                            <input id="nama_taman" type="text" class="form-control" name="nama_taman" placeholder="Taman Perumahan (House No./Lot No./Floor and Building Name)" >
+                            {{ Form::label('taman', 'Taman Perumahan') }}
+                            <input id="taman" type="text" class="form-control" name="taman" placeholder="Taman Perumahan (House No./Lot No./Floor and Building Name)" >
                         </div>
                     </div>
                     
@@ -157,10 +162,10 @@
                                     <tbody>
                                         <tr>
                                             <td style="vertical-align:middle;">
-                                                <input type="text" name="nama_kawasan[]" class="form-control" maxlength="150" value="">
+                                                <input type="text" name="kawasan[0][nama]" class="form-control" maxlength="150" value="">
                                             </td>
                                             <td style="vertical-align:middle;">
-                                                <input type="text" name="keluasan[]" class="form-control decimal" maxlength="20" value="">
+                                                <input type="text" name="kawasan[0][keluasan]" class="form-control decimal" maxlength="20" value="">
                                             </td>
                                         </tr>
                                     </tbody>
@@ -181,37 +186,37 @@
                         <div class="row">
                             <div class="form-group mb-3 col-md-4">
                                 <label for="pelan_lokasi_1">Pelan Lokasi 1 <span class="font-red"> * </span></label>
-                                <input type="file" name="pelan_lokasi[]" class="form-control" >
+                                <input type="file" name="fail[pelan_lokasi_1]" class="form-control" >
                             </div>
                         <!-- </div>
                         <div class="row"> -->
                             <div class="form-group mb-3 col-md-4">
                                 <label for="pelan_lokasi_2">Pelan Lokasi 2</label>
-                                <input type="file" name="pelan_lokasi[]" class="form-control">
+                                <input type="file" name="fail[pelan_lokasi_2]" class="form-control">
                             </div>
                         <!-- </div>
                         <div class="row"> -->
                             <div class="form-group mb-3 col-md-4">
                                 <label for="pelan_lokasi_3">Pelan Lokasi 3</label>
-                                <input type="file" name="pelan_lokasi[]" class="form-control">
+                                <input type="file" name="fail[pelan_lokasi_3]" class="form-control">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group mb-3 col-md-4">
                                 <label for="gambar_kawasan_lapang_1">Gambar Kawasan Lapang 1 <span class="font-red"> * </span></label>
-                                <input type="file" name="gambar_kawasan_lapang[]" class="form-control" >
+                                <input type="file" name="fail[gambar_kawasan_lapang_1]" class="form-control" >
                             </div>
                         <!-- </div>
                         <div class="row"> -->
                             <div class="form-group mb-3 col-md-4">
                                 <label for="gambar_kawasan_lapang_2">Gambar Kawasan Lapang 2</label>
-                                <input type="file" name="gambar_kawasan_lapang[]" class="form-control">
+                                <input type="file" name="fail[gambar_kawasan_lapang_2]" class="form-control">
                             </div>
                         <!-- </div>
                         <div class="row"> -->
                             <div class="form-group mb-3 col-md-4">
                                 <label for="gambar_kawasan_lapang_3">Gambar Kawasan Lapang 3</label>
-                                <input type="file" name="gambar_kawasan_lapang[]" class="form-control">
+                                <input type="file" name="fail[gambar_kawasan_lapang_3]" class="form-control">
                             </div>
                         </div>
 
@@ -223,8 +228,8 @@
                         
                         <div class="row">
                             <div class="form-group mb-6 col-md-12">
-                                {{ Form::label('anggaran_penduduk', 'Anggaran Penduduk * ') }}
-                                <input id="anggaran_penduduk" type="text" class="form-control" name="anggaran_penduduk" placeholder="Anggaran Penduduk">
+                                {{ Form::label('penduduk', 'Anggaran Penduduk * ') }}
+                                <input id="penduduk" type="text" class="form-control" name="penduduk" placeholder="Anggaran Penduduk">
                             </div>
                         </div>
 
@@ -269,7 +274,7 @@
                                         <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="bendahari_email" name="bendahari_email" class="form-control lowercase" maxlength="100" value=""></td>
                                     </tr>
                                     <!-- Repeat for other rows with similar structure -->
-                                    @for ($i = 1; $i <= 1; $i++)
+                                    @for ($i = 1; $i <= 6; $i++)
                                         <tr>
                                             <td style="padding: 4px 8px; line-height: 1;">AJK {{ $i }}</td>
                                             <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="ajk{{ $i }}_nama" name="ajk{{ $i }}_nama" class="form-control" maxlength="150" value=""></td>
@@ -277,16 +282,16 @@
                                             <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="ajk{{ $i }}_email" name="ajk{{ $i }}_email" class="form-control lowercase" maxlength="100" value=""></td>
                                         </tr>
                                     @endfor
-                                    <tr>
+                                    <!-- <tr>
                                         <td style="padding: 4px 8px; line-height: 1;">Penyelaras (Pemegang ID) <span class="font-red"> * </span></td>
                                         <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="penyelaras_nama" name="penyelaras_nama" class="form-control" maxlength="150" value=""></td>
                                         <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="penyelaras_tel_bimbit" name="penyelaras_tel_bimbit" class="form-control" maxlength="20" value=""></td>
                                         <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="penyelaras_email" name="penyelaras_email" class="form-control lowercase" maxlength="100" value=""></td>
-                                    </tr>
+                                    </tr> -->
                                     <tr>
                                         <td style="padding: 4px 8px; line-height: 1;">Alamat Surat Menyurat Penyelaras <span class="font-red"> * </span></td>
                                         <td colspan="3" style="padding: 4px 8px; line-height: 1;">
-                                            <textarea id="alamat_penyelaras" name="alamat_penyelaras" class="form-control" rows="5"></textarea>
+                                            <textarea id="alamat" name="alamat" class="form-control" rows="5"></textarea>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -302,7 +307,7 @@
 
                         <div class="row">
                             <div class="form-group mb-6 col-md-12" style="background-color:#fef7f8; border-left: 5px solid #f0868e; padding: 15px;">
-                                <label for="anggaran_penduduk"><h4>Pengesahan dan pengakuan pemohon:</h4></label>
+                                <label><h4>Pengesahan dan pengakuan pemohon:</h4></label>
                                 <textarea style="background-color: transparent; border: none; outline: none; padding: 10px; width: 100%; resize: none;" rows="3" class="form-control" readonly disabled>Saya mengaku segala maklumat yang saya nyatakan di dalam borang ini adalah benar dan betul. Saya faham sekiranya ada di antara maklumat yang saya nyatakan di atas tidak benar/palsu, permohonan ini akan terbatal dengan sendirinya.</textarea>
                             </div>
                         </div>
@@ -410,24 +415,30 @@
             if($('#roles').val() != ''){
                 updateFields();
             }
+
+            let rowIndex = 1; // Initialize the row index.
+
             $('#addKawasan').click(function() {
                 var newRow = `
                     <tr>
                         <td style="vertical-align:middle;">
-                            <input type="text" name="nama_kawasan[]" class="form-control" maxlength="150" value="">
+                            <input type="text" name="kawasan[${rowIndex}][nama]" class="form-control" maxlength="150" value="">
                         </td>
                         <td style="vertical-align:middle;">
-                            <input type="text" name="keluasan[]" class="form-control decimal" maxlength="20" value="">
+                            <input type="text" name="kawasan[${rowIndex}][keluasan]" class="form-control decimal" maxlength="20" value="">
                         </td>
                     </tr>
                 `;
                 $('#senarai_kawasan_lapang tbody').append(newRow);
+                
+                // Increment the rowIndex for the next row
+                rowIndex++;
             });
 
             // Update total area (jumlah_keluasan) when a field changes
-            $(document).on('input', 'input[name="keluasan[]"]', function() {
+            $(document).on('input', 'input[name^="kawasan"][name$="[keluasan]"]', function() {
                 var totalArea = 0;
-                $('input[name="keluasan[]"]').each(function() {
+                $('input[name$="[keluasan]"]').each(function() {
                     var area = parseFloat($(this).val());
                     if (!isNaN(area)) {
                         totalArea += area;

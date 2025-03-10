@@ -20,7 +20,8 @@
             background: none; /* Remove the left border for the first column */
         }
     </style>
-    <div class="row">
+    
+    <div class="row inertShow">
         <div class="col-lg col-separator">
             <div class="form-group">
                 <label class="col-xs-4 control-label"></label>
@@ -32,19 +33,17 @@
                 <div class="form-group required">
                     <label for="nama_taman" class="col-md-12 control-label">Nama Taman</label>
                     <div class="col-md-12">
-                        <!-- <textarea name="nama_taman" class="form-control" maxlength="50" rows="1" id="nama_taman" required="required" >{{-- old('nama_taman', $ePALM->nama_taman) --}}</textarea> -->
                         {!! Form::textarea('nama_taman', null, ['class' => 'form-control', 'maxlength' => '50', 'rows' => '1', 'id' => 'nama_taman', 'required' => 'required']) !!}
                         <script>
-                            // Function to resize textarea based on content
                             function resizeTextarea(textarea) {
                                 textarea.style.height = 'auto';  // Reset the height
-                                textarea.style.height = (textarea.scrollHeight) + 'px';  // Set the height to scrollHeight
+                                textarea.style.height = (textarea.scrollHeight) + 'px';
                             }
 
                             // Call resize function when the page loads
                             window.onload = function() {
                                 var textarea = document.getElementById('nama_taman');
-                                resizeTextarea(textarea);  // Resize textarea based on content
+                                resizeTextarea(textarea);
                             };
                         </script>
                     </div>
@@ -53,32 +52,13 @@
                     <div class="form-group required col-md-8">
                         <label for="nama_pbt" class="col-md-12 control-label">Pihak Berkuasa Tempatan</label>
                         <div class="col-md-12">
-                            <!-- <input name="nama_pbt" class="form-control" maxlength="50" type="text" id="nama_pbt" required="required" value="MAJLIS DAERAH KUALA LANGAT"> -->
-                            {!! Form::text('nama_pbt', null, ['class' => 'form-control', 'id' => 'nama_pbt']) !!}
+                            {!! Form::text('nama_pbt', $pbt->pbt_name ?? $ePALM->nama_pbt ?? '', ['class' => 'form-control', 'id' => 'nama_pbt']) !!}
                         </div>
                     </div>
 
                     <div class="form-group required col-md-4">
                         <label for="kategori_taman" class="col-md-12 control-label">Jenis Taman</label>
                         <div class="col-md-12">
-                            <!-- <select name="kategori_taman" class="form-control" id="kategori_taman" required="required">
-                                <option value="1">Taman Awam</option>
-                                <option value="2">Taman Botani</option>
-                                <option value="3">Landskap Perbandaran</option>
-                                <option value="4">Persekitaran Kehidupan</option>
-                                <option value="5">Taman Persekutuan</option>
-                                <option value="6">Lain-lain (sila nyatakan)</option>
-                            </select> -->
-                            {{--
-                                {!! Form::select('kategori_taman', [
-                                    'Taman Awam' => 'Taman Awam',
-                                    'Taman Botani' => 'Taman Botani',
-                                    'Landskap Perbandaran' => 'Landskap Perbandaran',
-                                    'Persekitaran Kehidupan' => 'Persekitaran Kehidupan',
-                                    'Taman Persekutuan' => 'Taman Persekutuan',
-                                ], isset($ePALM->kategori_taman) ? $ePALM->kategori_taman : '', ['class' => 'form-control', 'id' => 'kategori_taman', 'required' => 'required']) !!}
-                            --}}
-
                             @php
                                 $options = [
                                     'Taman Awam' => 'Taman Awam',
@@ -86,7 +66,7 @@
                                     'Landskap Perbandaran' => 'Landskap Perbandaran',
                                     'Persekitaran Kehidupan' => 'Persekitaran Kehidupan',
                                     'Taman Persekutuan' => 'Taman Persekutuan',
-                                    '6' => 'Lain-lain (sila nyatakan)'
+                                    //'6' => 'Lain-lain (sila nyatakan)'
                                 ];
 
                                 // Check if $ePALM->kategori_taman exists and is not in the options list, then append it
@@ -271,7 +251,10 @@
                     <label for="park_facilities" class="col-md-12 control-label">Fasiliti</label>
                     @php
                         if(isset($ePALM->fasiliti)){
-                            $fasilitiData = ($ePALM->fasiliti);
+                            $fasilitiData = json_decode($ePALM->fasiliti, true);
+                            if (!(is_array($fasilitiData) || is_object($fasilitiData))) {
+                                $fasilitiData = json_decode($ePALM->fasiliti, true);
+                            }
                             $check1 = isset($fasilitiData['cctv']) && $fasilitiData['cctv'] > 0 ? 'checked' : '';
                             $check2 = isset($fasilitiData['wifi']) && $fasilitiData['wifi'] > 0 ? 'checked' : '';
                             $check3 = isset($fasilitiData['cycling']) && $fasilitiData['cycling'] > 0 ? 'checked' : '';
@@ -281,7 +264,7 @@
                             $check7 = isset($fasilitiData['food2']) && $fasilitiData['food2'] > 0 ? 'checked' : '';
                             $check8 = isset($fasilitiData['oku2']) && $fasilitiData['oku2'] > 0 ? 'checked' : '';
                             $check9 = isset($fasilitiData['toilet2']) && $fasilitiData['toilet2'] > 0 ? 'checked' : '';
-                            //dd($fasilitiData['cctv']);
+                            //dd($fasilitiData);
                         }else{
                             $check1 = 0; 
                             $check2 = 0; 
@@ -711,15 +694,15 @@
                             $media8 = isset($mediaSosial_tamanData['TikTok']) ? $mediaSosial_tamanData['TikTok'] : '';
                             //dd($mediaSosial_tamanData);
                         }else{
-                            $media1 = 0; 
-                            $media2 = 0; 
-                            $media3 = 0; 
-                            $media4 = 0; 
-                            $media5 = 0; 
-                            $media6 = 0; 
-                            $media7 = 0; 
-                            $media8 = 0; 
-                            $media9 = 0; 
+                            $media1 = ''; 
+                            $media2 = isset($pbt->email) ? $pbt->email : ''; 
+                            $media3 = ''; 
+                            $media4 = ''; 
+                            $media5 = ''; 
+                            $media6 = ''; 
+                            $media7 = ''; 
+                            $media8 = ''; 
+                            $media9 = ''; 
                         }
                     @endphp
                 <div class="form-group required col-md-3">
@@ -790,7 +773,7 @@
                     <h4>&nbsp;</h4>
                 </div>
             </div>
-            <div class="form-group required">
+            <div class="form-group required inertShow">
                 <label for="keterangan_taman" class="col-md-12 control-label">Keterangan Taman</label>
                 <div class="col-md-12">
                     <textarea name="keterangan_taman" class="form-control" maxlength="50" rows="5" id="keterangan_taman" required="required">{{ isset($ePALM->keterangan_taman) ? $ePALM->keterangan_taman : '' }}</textarea>
@@ -802,14 +785,46 @@
                 <div class="form-group required col-md-9">
                     <label for="fail_konsep" class="col-md-12 control-label">Konsep Rekabentuk</label>
                     <div class="col-md-12 showButton">
-                        @if(!isset($ePALM->fail_konsep))
-                            {{ Form::file('fail_konsep', ['class' => 'form-control d-inline-block ms-2', 'multiple' => false]) }}
-                        @else
-                            <a href="{{ asset('storage/uploads/eLAPS/JLN202514/1740468990941_WhatsApp Image 2024-08-23 at 09.38.28_e35d88e2.jpg') }}" target="_blank">Download File</a>
-                        @endif
+                        {{ Form::file('fail_konsep', ['class' => 'form-control d-inline-block ms-2', 'multiple' => false, 'accept' => '.pdf,.docx,.pptx']) }}
+                        
                     </div>
+                    @if(isset($ePALM->fail_konsep))
+                        {{ Form::label('', '***Muatnaik semula akan menggantikan fail sedia ada.', ['class' => 'col-form-label required-field-create showButton', 'style' => 'font-weight: strong;']) }}
+                        <br>
+                        <div class="col-md-12">
+                            <div class="d-flex align-items-center">
+                                @php
+                                    $folderName = isset($ePALM->fail_konsep) ? 'ePALM/'.str_replace(' ', '_', $ePALM->nama_taman).'/'.$ePALM->fail_konsep : null;
+
+                                    $fileExtension = isset($ePALM->fail_konsep) ? pathinfo($ePALM->fail_konsep, PATHINFO_EXTENSION) : '';
+                                    $extensionIcon = null;
+                                    if ($fileExtension === 'pdf') {
+                                        $extensionIcon = "https://img.icons8.com/plasticine/100/pdf-2.png";
+                                    } elseif ($fileExtension === 'docx') {
+                                        $extensionIcon = "https://img.icons8.com/plasticine/100/google-docs--v2.png";
+                                    } elseif ($fileExtension === 'pptx') {
+                                        $extensionIcon = "https://img.icons8.com/plasticine/100/google-slides.png";
+                                    }
+                                @endphp
+                                
+                                @if($folderName != null)
+                                    <a href="{{ asset('storage/uploads/' . $folderName) }}" target="_blank" class="" style="border: 0px solid #ddd; border-radius: 10px; padding: 10px; display: inline-block; text-align: center; background-color: #fff;" download>
+                                        <div class="product-image">
+                                            <img src="{{ $extensionIcon }}" class="br-5" alt="" style="width: 100px; height: 100px; border-radius: 5px; margin-bottom: 10px;">
+                                        </div>
+                                        <div class="product-image">
+                                            <span class="file-name-1" style="background-color: #008000; padding: 5px 10px; border-radius: 5px; color: #fff; font-weight: 600; display: inline-block; font-size: 14px;">Konsep Rekabentuk <i class="fas fa-download"></i></span>
+                                        </div>
+                                        <div class="product-image">
+                                            <span class="file-name-1">{{ $ePALM->fail_konsep ?? '' }}</span>
+                                        </div>
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
                 </div>
-                <div class="form-group required col-md-3">
+                <div class="form-group required col-md-3 inertShow">
                     <div class="inertClass">
                         <label for="tarikh_siapBina_taman" class="col-md-12 control-label">Tarikh Siap Bina</label>
                         <div class="col-md-12">
@@ -820,7 +835,7 @@
             </div>
             
         </div>
-        <div class="col-lg col-separator">
+        <div class="col-lg col-separator inertShow">
             <div class="form-group">
                 <label class="col-xs-4 control-label"></label>
                 <div class="col-xs-12">
@@ -911,20 +926,21 @@
                                     <img src="{{ isset($Xgambar_input_modal_1) ? asset('storage/uploads/ePALM/'.$Xgambar_input_modal_1) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
                                 </div>
                             </div>
+                            <br class="mobile-done">
                             <div class="grid-item">
                                 <input type="file" class="form-control-file" id="Xgambar_input_modal_2" name="Xgambar_input_modal_2" accept="image/*" style="display: none;">
                                 <div id="XimagePreviewContainer2" class="image-preview-container">
                                     <img src="{{ isset($Xgambar_input_modal_2) ? asset('storage/uploads/ePALM/'.$Xgambar_input_modal_2) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
                                 </div>
                             </div>
-
+                            <br class="mobile-done">
                             <div class="grid-item">
                                 <input type="file" class="form-control-file" id="Xgambar_input_modal_3" name="Xgambar_input_modal_3" accept="image/*" style="display: none;">
                                 <div id="XimagePreviewContainer3" class="image-preview-container">
                                     <img src="{{ isset($Xgambar_input_modal_3) ? asset('storage/uploads/ePALM/'.$Xgambar_input_modal_3) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
                                 </div>
                             </div>
-
+                            <br class="mobile-done">
                             <div class="grid-item">
                                 <input type="file" class="form-control-file" id="Xgambar_input_modal_4" name="Xgambar_input_modal_4" accept="image/*" style="display: none;">
                                 <div id="XimagePreviewContainer4" class="image-preview-container">
@@ -1047,45 +1063,54 @@
                             method: 'GET',
                             success: function(response) {
                                 if (response.success) {
+                                    console.log(response.data);
                                     // Populate the container with the new rows
                                     const projekContainer = document.getElementById('projek_container');
-                                    response.data.forEach((component, index) => {
+                                    if(response.data.length > 0){
+                                        response.data.forEach((component, index) => {
+                                            let newRow = document.createElement('tr');
+                                            newRow.innerHTML = `
+                                                <td>${index + 1}</td>
+                                                <td>${component.nama_taman}</td>
+                                                <td>${component.keterangan_taman}</td>
+                                                <td>
+                                                    ${component.images.map(url => `<img src="${url}" alt="image" style="width: 50px; height: 50px; object-fit: cover; margin: 2px;">`).join('')}
+                                                </td>
+                                                <td style="padding: 0; vertical-align: middle; text-align: center;">
+                                                    <button 
+                                                        type="button" data-row="row-${index + 1}" 
+                                                        class="btn btn-danger btn-sm" 
+                                                        data-id_taman="${component.id_taman}"
+                                                        data-toggle="modal" 
+                                                        data-target="#deleteKomponenModal" 
+                                                        style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
+                                                        <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
+                                                    </button>
+                                                    <button 
+                                                        type="button" data-row="row-${index + 1}" 
+                                                        class="btn btn-warning btn-sm" 
+                                                        data-images="${component.images}"
+                                                        data-nama_taman="${component.nama_taman}"
+                                                        data-keterangan_taman="${component.keterangan_taman}"
+                                                        data-id_taman="${component.id_taman}"
+                                                        data-gambar_taman='${component.gambar_taman}'
+                                                        data-toggle="modal" 
+                                                        data-target="#updateModal" 
+                                                        style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
+                                                        <i class="fas fa-pencil-alt" style="font-size: 0.6rem;"></i>
+                                                    </button>
+                                                </td>
+                                            `;
+                                            projekContainer.appendChild(newRow);
+                                        });
+                                        updateBilNumbers();
+                                    }else{
                                         let newRow = document.createElement('tr');
-                                        newRow.innerHTML = `
-                                            <td>${index + 1}</td>
-                                            <td>${component.nama_taman}</td>
-                                            <td>${component.keterangan_taman}</td>
-                                            <td>
-                                                ${component.images.map(url => `<img src="${url}" alt="image" style="width: 50px; height: 50px; object-fit: cover; margin: 2px;">`).join('')}
-                                            </td>
-                                            <td style="padding: 0; vertical-align: middle; text-align: center;">
-                                                <button 
-                                                    type="button" data-row="row-${index + 1}" 
-                                                    class="btn btn-danger btn-sm" 
-                                                    data-id_taman="${component.id_taman}"
-                                                    data-toggle="modal" 
-                                                    data-target="#deleteKomponenModal" 
-                                                    style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
-                                                    <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
-                                                </button>
-                                                <button 
-                                                    type="button" data-row="row-${index + 1}" 
-                                                    class="btn btn-warning btn-sm" 
-                                                    data-images="${component.images}"
-                                                    data-nama_taman="${component.nama_taman}"
-                                                    data-keterangan_taman="${component.keterangan_taman}"
-                                                    data-id_taman="${component.id_taman}"
-                                                    data-gambar_taman='${component.gambar_taman}'
-                                                    data-toggle="modal" 
-                                                    data-target="#updateModal" 
-                                                    style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
-                                                    <i class="fas fa-pencil-alt" style="font-size: 0.6rem;"></i>
-                                                </button>
-                                            </td>
-                                        `;
-                                        projekContainer.appendChild(newRow);
-                                    });
-                                    updateBilNumbers();
+                                            newRow.innerHTML = `
+                                                <td colspan="6" class="text-center">Tiada Maklumat</td>
+                                            `;
+                                            projekContainer.appendChild(newRow);
+                                    }
                                 } else {
                                     alert('Failed to fetch updated components.');
                                 }
@@ -1115,86 +1140,6 @@
                             currentRow = null; // Reset currentRow for a new product
                         });
 
-                        // Handle the "Simpan Produk" button click to save the product
-                        // document.getElementById('saveProductBtn').addEventListener('click', function() {
-                        //     $('#saveProductBtn').prop('disabled', true);
-
-                        //     // Gather form data
-                        //     var formData = new FormData(document.getElementById('ePALMForm'));
-
-                        //     // Perform AJAX call
-                        //     $.ajax({
-                        //         url: '{{ route("pengurusan.ePALM.store") }}', // The route to handle the form submission
-                        //         method: 'POST',  // The HTTP method for the request
-                        //         data: formData, // Send the form data
-                        //         contentType: false, // Do not set content type (multipart/form-data)
-                        //         processData: false, // Do not process data as a query string
-                        //         success: function(response) {
-                        //             // Handle the success case here
-                        //             // You can show a success message or redirect as needed
-                        //             if (response.success) {
-                        //                 alert('Data saved successfully!');
-                        //                 // Optionally, you can reset the form or redirect to another page
-                        //                 $('#ePALMForm')[0].reset();
-                        //             } else {
-                        //                 alert('Something went wrong. Please try again.');
-                        //             }
-                        //         },
-                        //         error: function(xhr, status, error) {
-                        //             // Handle any errors during the AJAX request
-                        //             alert('An error occurred: ' + error);
-                        //         },
-                        //         complete: function() {
-                        //             // Re-enable the button after the AJAX request completes
-                        //             $('#saveProductBtn').prop('disabled', false);
-                        //         }
-                        //     });
-                        //     // Get the product details from the form
-                        //     // const productName = document.getElementById('productName').value;
-                        //     // const productDescription = document.getElementById('productDescription').value;
-
-                        //     // // Get the images
-                        //     // const images = [];
-                        //     // for (let i = 1; i <= 4; i++) {
-                        //     //     const fileInput = document.getElementById('gambar_input_modal_' + i);
-                        //     //     if (fileInput.files.length > 0) {
-                        //     //         images.push(fileInput.files[0]);
-                        //     //     }
-                        //     // }
-
-                        //     // if (/* productName && productDescription && */ images.length > 0) {
-                        //     //     const newRow = document.createElement('tr');
-                        //     //     newRow.innerHTML = `
-                        //     //         <td>${bilCount}</td>
-                        //     //         <td>${bilCount}</td>
-                        //     //         <td>${bilCount}</td>
-                        //     //         <td>
-                        //     //             ${images.map(image => `<img src="${URL.createObjectURL(image)}" alt="image" style="width: 50px; height: 50px; object-fit: cover; margin: 2px;">`).join('')}
-                        //     //         </td>
-                        //     //         <td style="padding: 0; vertical-align: middle; text-align: center;">
-                        //     //             <button type="button" class="btn btn-danger btn-sm remove_field" data-row="row-${bilCount}" 
-                        //     //                     style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
-                        //     //                 <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
-                        //     //             </button>
-                        //     //         </td>
-                        //     //     `;
-                        //     //     document.getElementById('projek_container').appendChild(newRow);
-                        //     //     bilCount++;
-
-                        //     //     // Close the modal after saving
-                        //     //     $('#productModal').modal('hide');
-
-                        //     //     // Hide the dummy row if it's there
-                        //     //     var dummyRow = document.getElementById('dummy_row');
-                        //     //     if (dummyRow) {
-                        //     //         dummyRow.remove();
-                        //     //     }
-
-                        //     //     updateBilNumbers();
-                        //     // } else {
-                        //     //     alert('Sila isi semua maklumat produk dan pilih gambar.');
-                        //     // }
-                        // });
 
                         document.getElementById('saveProductBtn').addEventListener('click', function() {
                             $('#saveProductBtn').prop('disabled', true);
@@ -1228,6 +1173,7 @@
                                 },
                                 complete: function() {
                                     $('#saveProductBtn').prop('disabled', false);
+                                    $('#productModal').modal('hide');
                                 }
                             });
                         });
@@ -1264,6 +1210,7 @@
                                 },
                                 complete: function() {
                                     $('#updateProductBtn').prop('disabled', false);
+                                    $('#updateModal').modal('hide');
                                 }
                             });
                         });
@@ -1300,46 +1247,10 @@
                                 },
                                 complete: function() {
                                     $('#deleteKomponenBtn').prop('disabled', false);
+                                    $('#deleteKomponenModal').modal('hide');
                                 }
                             });
                         });
-
-                        // Function to fetch the latest data from the server
-                        // function fetchUpdatedData() {
-                        //     $.ajax({
-                        //         url: '/fetchComponents',  // Define this route in your controller to fetch updated components
-                        //         method: 'GET',
-                        //         success: function(response) {
-                        //             if (response.success) {
-                        //                 // Populate the container with the new rows
-                        //                 const projekContainer = document.getElementById('projek_container');
-                        //                 response.data.forEach((component, index) => {
-                        //                     let newRow = document.createElement('tr');
-                        //                     newRow.innerHTML = `
-                        //                         <td>${index + 1}</td>
-                        //                         <td>${component.is_komponen}</td>
-                        //                         <td>${component.is_komponen}</td>
-                        //                         <td>
-                        //                             ${component.images.map(url => `<img src="${url}" alt="image" style="width: 50px; height: 50px; object-fit: cover; margin: 2px;">`).join('')}
-                        //                         </td>
-                        //                         <td style="padding: 0; vertical-align: middle; text-align: center;">
-                        //                             <button type="button" class="btn btn-danger btn-sm remove_field" data-row="row-${index + 1}" 
-                        //                                     style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
-                        //                                 <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
-                        //                             </button>
-                        //                         </td>
-                        //                     `;
-                        //                     projekContainer.appendChild(newRow);
-                        //                 });
-                        //             } else {
-                        //                 alert('Failed to fetch updated components.');
-                        //             }
-                        //         },
-                        //         error: function(xhr, status, error) {
-                        //             alert('An error occurred while fetching updated data: ' + error);
-                        //         }
-                        //     });
-                        // }
 
 
                         // Remove a row when "Hapus" button is clicked

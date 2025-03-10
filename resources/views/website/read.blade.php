@@ -56,7 +56,7 @@
             @include('layouts.website.elements.sidebar-widgets')
             @endif
             <!-- Post Content Column -->
-            <div class="col-12 {{ $articles->layout == 'full' ? 'col-lg-12':'col-lg-8' }}">
+            <div class="col-12 {{ $articles->layout == 'full' ? 'col-lg-12':'col-lg-9' }}">
                 <div class="card">
                     @if ($articles->page_image)
                     <div class="embed-responsive embed-responsive-21by9">

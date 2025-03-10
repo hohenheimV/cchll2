@@ -141,7 +141,7 @@
 <div class="modal" id="modalKomenPrestasi" tabindex="-1" role="dialog" aria-labelledby="modalKomenPrestasiLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-l">
         <div class="modal-content">
-            {!! Form::open(['method'=>'POST', 'id'=>'modalFormKomenPrestasi', 'route' => ['pengurusan.eLIND.store', 'type' => $lastSegment ?? 'kontraktor', 'id' => '1']]) !!}
+            {!! Form::open(['method'=>'PUT', 'id'=>'modalFormKomenPrestasi']) !!}
             <div class="modal-header d-flex justify-content-center bg-dark border-0">
                 <h5 class="modal-title">Komen dan Prestasi</h5>
             </div>
@@ -153,10 +153,11 @@
                 <div class="form-group">
                     {!! Form::label('prestasi', 'Prestasi:') !!}
                     {!! Form::select('prestasi', [
-                        'sangat_baik' => 'Sangat Baik',
-                        'baik' => 'Baik',
-                        'sederhana' => 'Sederhana',
-                        'lemah' => 'Lemah'
+                        '1' => 'Sangat Baik',
+                        '2' => 'Baik',
+                        '3' => 'Sederhana',
+                        '4' => 'Lemah',
+                        '0' => 'Tiada Maklumat'
                     ], null, ['class' => 'form-control', 'id' => 'prestasiSelect']) !!}
                 </div>
 
@@ -165,6 +166,8 @@
                     {!! Form::label('komen', 'Komen:') !!}
                     {!! Form::textarea('komen', null, ['class' => 'form-control', 'id' => 'komenTextarea', 'rows' => 3, 'placeholder' => 'Masukkan komen di sini...']) !!}
                 </div>
+                {{ Form::text('elind_id', null, ['id' => 'elind_idP']) }}
+                <input type="hidden" class="form-control" id="action" name="action" value="prestasi">
             </div>
 
             <div class="modal-footer d-flex">
@@ -441,6 +444,7 @@
             var button = $(event.relatedTarget);        // Button that triggered the modal
             var url = button.data('url'); // Extract info from data-* attributes
             $('#modalFormDelete').attr('action', url);
+            console.log(url);
         });
 
         
@@ -531,6 +535,16 @@
                 select.append('<option value="13">Projek Batal</option>');
                 select.append('<option value="14">Projek Siap</option>');
             }
+        });
+
+        $('#modalKomenPrestasi').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var elindId = button.data('elind-id'); // Extract the elind ID from the button
+
+            // Update the hidden input field with the elind ID
+            $('#elind_idP').val(elindId);
+            let url = document.querySelector('#modalKomenPrestasi form').getAttribute('action');
+            document.querySelector('#modalKomenPrestasi form').setAttribute('action', url + '/' + elindId);
         });
 
 

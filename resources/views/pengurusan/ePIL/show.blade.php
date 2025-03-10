@@ -48,7 +48,6 @@
                             pointer-events: none; /* Ensure no interactions are possible */
                         }
                     </style>
-                    </style>
                     <div>
                         @include('pengurusan.ePIL._form')
                     </div>
@@ -61,11 +60,11 @@
 
                     @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))
                         {!! Form::button('<i class="fas fa-save"></i> Pengesahan', [
-                        'class' => 'btn btn-primary', 
-                        'type' => 'submit', 
-                        'name' => 'action', 
-                        'value' => 'approve'
-                    ]) !!}
+                            'class' => 'btn btn-primary', 
+                            'type' => 'submit', 
+                            'name' => 'action', 
+                            'value' => 'approve'
+                        ]) !!}
                     @endif
                 </div>
                 {!! Form::close() !!}

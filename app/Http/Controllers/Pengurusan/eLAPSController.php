@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Pengurusan;
 
 use App\Http\Controllers\Controller;
-use App\Model\eLAPS;  // Updated to the new model
+use App\Model\eLAPS;
 use App\Model\ePALM;
 use App\Model\ePALM_draf;
-use App\Model\MaklumatPenggunaPbt;  // Updated to the new model
+use App\Model\ePIL;
+use App\Model\ePIL_draf;
+use App\Model\MaklumatPenggunaPbt;
 use App\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon; 
@@ -16,11 +18,6 @@ use Illuminate\Support\Facades\Storage;
 
 class eLAPSController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function __construct()
     {
         $this->middleware(['role_or_permission:Pentadbir Sistem|TKP/B JLN|Pegawai|Pihak Berkuasa Tempatan|eLAPS-list']);
@@ -29,11 +26,6 @@ class eLAPSController extends Controller
         $this->middleware(['role_or_permission:Pentadbir Sistem|TKP/B JLN|Pegawai|Pihak Berkuasa Tempatan|eLAPS-delete'], ['only' => ['destroy']]);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         
@@ -53,10 +45,8 @@ class eLAPSController extends Controller
         }
 
         $eLAPS->getCollection()->transform(function ($eLAP) {
-            // Assuming id_pemohon is a reference to the 'User' model or a similar model
             $email = User::find($eLAP->id_pemohon)->email;
             $pbt = MaklumatPenggunaPbt::where('email', '=', $email)->first();
-            // $pbt = MaklumatPenggunaPbt::where('email', '=', '5netsparker@example.com')->first();
             
             // Add the pbt_name to each eLAP record
             $eLAP->pbt_name = $pbt ? $pbt->pbt_name : null;
@@ -89,18 +79,12 @@ class eLAPSController extends Controller
         // dd($id_pemohon);
         if($id_pemohon == null){
             $user = $this->getUser();
-            // return MaklumatPenggunaPbt::where('email', '=', $user->email)->first();
-            return MaklumatPenggunaPbt::where('email', '=', '5netsparker@example.com')->first();
+            return MaklumatPenggunaPbt::where('email', '=', $user->email)->first();
         }else if($id_pemohon){
             return MaklumatPenggunaPbt::where('id', '=', $id_pemohon)->first();
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $currentYear = Carbon::now()->year;
@@ -249,12 +233,6 @@ class eLAPSController extends Controller
         return $request;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         // dd($request->all());
@@ -346,14 +324,6 @@ class eLAPSController extends Controller
         }
     }
 
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Model\eLAPS  $eLAPS
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $eLAPS = eLAPS::findOrFail($id);
@@ -376,12 +346,6 @@ class eLAPSController extends Controller
         return view('pengurusan.eLAPS.show', compact('eLAPS'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\eLAPS  $eLAPS
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $user = $this->getUser();
@@ -393,13 +357,6 @@ class eLAPSController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\eLAPS  $eLAPS
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         // dd($request->all());
@@ -578,136 +535,105 @@ class eLAPSController extends Controller
             if($statusProjek){
                 //email to JLN for portal display
                 if($projekSiap == 14){
-                    $duplicateData = new ePALM();
-                    $duplicateData->nama_taman = $permohonan->projectTitle;
-                    $duplicateData->kategori_taman = $permohonan->category;
-                    $duplicateData->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
-                        ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
-                        : 'Jabatan Landskap Negara';
-                    $duplicateData->keluasan_taman = $permohonan->keluasan;
-                    $duplicateData->keluasan_unit = $permohonan->unit_keluasan;
-                    $duplicateData->panjang_taman = $permohonan->panjang;
-                    $duplicateData->panjang_unit = $permohonan->unit_panjang;
-                    $duplicateData->hakmilik_tanah_taman = $permohonan->hakmilik_tanah;
-
-                    $status_tanahData = json_decode($permohonan->status_tanah, true);
-                    $duplicateData->status_tanah_taman = $status_tanahData['status'];
-                    $duplicateData->tarikhWarta_tanah_taman = isset($status_tanahData['tarikh']) ? $status_tanahData['tarikh'] : null;
-
-                    $duplicateData->negeri_taman = $permohonan->negeri;
-                    $duplicateData->daerah_taman = $permohonan->daerah;
-                    $duplicateData->mukim_taman = $permohonan->mukim;
-                    $duplicateData->parlimen_taman = $permohonan->parlimen;
-                    $duplicateData->dun_taman = $permohonan->dun;
-                    $duplicateData->id_permohonan = $id;
-
-                    $duplicateDataSaved = $duplicateData->save();
-
-                    $duplicateDataId = $duplicateData->id_taman;
-                    if ($duplicateDataSaved) {
-                        $duplicateData_draf = new ePALM_draf();
-                        $duplicateData_draf->id_taman = $duplicateDataId;
-                        $duplicateData_draf->nama_taman = $permohonan->projectTitle;
-                        $duplicateData_draf->kategori_taman = $permohonan->category;
-                        $duplicateData_draf->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
+                    if (in_array($permohonan->category, ['Taman Awam', 'Taman Botani', 'Landskap Perbandaran', 'Persekitaran Kehidupan', 'Taman Persekutuan'])) {
+                        $duplicateData = new ePALM();
+                        $duplicateData->nama_taman = $permohonan->projectTitle;
+                        $duplicateData->kategori_taman = $permohonan->category;
+                        $duplicateData->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
                             ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
                             : 'Jabatan Landskap Negara';
-                        $duplicateData_draf->keluasan_taman = $permohonan->keluasan;
-                        $duplicateData_draf->keluasan_unit = $permohonan->unit_keluasan;
-                        $duplicateData_draf->panjang_taman = $permohonan->panjang;
-                        $duplicateData_draf->panjang_unit = $permohonan->unit_panjang;
-                        $duplicateData_draf->hakmilik_tanah_taman = $permohonan->hakmilik_tanah;
+                        $duplicateData->keluasan_taman = $permohonan->keluasan;
+                        $duplicateData->keluasan_unit = $permohonan->unit_keluasan;
+                        $duplicateData->panjang_taman = $permohonan->panjang;
+                        $duplicateData->panjang_unit = $permohonan->unit_panjang;
+                        $duplicateData->hakmilik_tanah_taman = $permohonan->hakmilik_tanah;
 
                         $status_tanahData = json_decode($permohonan->status_tanah, true);
-                        $duplicateData_draf->status_tanah_taman = $status_tanahData['status'];
-                        $duplicateData_draf->tarikhWarta_tanah_taman = isset($status_tanahData['tarikh']) ? $status_tanahData['tarikh'] : null;
+                        $duplicateData->status_tanah_taman = $status_tanahData['status'];
+                        $duplicateData->tarikhWarta_tanah_taman = isset($status_tanahData['tarikh']) ? $status_tanahData['tarikh'] : null;
 
-                        $duplicateData_draf->negeri_taman = $permohonan->negeri;
-                        $duplicateData_draf->daerah_taman = $permohonan->daerah;
-                        $duplicateData_draf->mukim_taman = $permohonan->mukim;
-                        $duplicateData_draf->parlimen_taman = $permohonan->parlimen;
-                        $duplicateData_draf->dun_taman = $permohonan->dun;
-                        $duplicateData_draf->id_permohonan = $id;
+                        $duplicateData->negeri_taman = $permohonan->negeri;
+                        $duplicateData->daerah_taman = $permohonan->daerah;
+                        $duplicateData->mukim_taman = $permohonan->mukim;
+                        $duplicateData->parlimen_taman = $permohonan->parlimen;
+                        $duplicateData->dun_taman = $permohonan->dun;
+                        $duplicateData->id_permohonan = $id;
 
-                        $duplicateData_drafSaved = $duplicateData_draf->save();
+                        $duplicateDataSaved = $duplicateData->save();
+
+                        $duplicateDataId = $duplicateData->id_taman;
+                        if ($duplicateDataSaved) {
+                            $duplicateData_draf = new ePALM_draf();
+                            $duplicateData_draf->id_taman = $duplicateDataId;
+                            $duplicateData_draf->nama_taman = $permohonan->projectTitle;
+                            $duplicateData_draf->kategori_taman = $permohonan->category;
+                            $duplicateData_draf->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
+                                ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
+                                : 'Jabatan Landskap Negara';
+                            $duplicateData_draf->keluasan_taman = $permohonan->keluasan;
+                            $duplicateData_draf->keluasan_unit = $permohonan->unit_keluasan;
+                            $duplicateData_draf->panjang_taman = $permohonan->panjang;
+                            $duplicateData_draf->panjang_unit = $permohonan->unit_panjang;
+                            $duplicateData_draf->hakmilik_tanah_taman = $permohonan->hakmilik_tanah;
+
+                            $status_tanahData = json_decode($permohonan->status_tanah, true);
+                            $duplicateData_draf->status_tanah_taman = $status_tanahData['status'];
+                            $duplicateData_draf->tarikhWarta_tanah_taman = isset($status_tanahData['tarikh']) ? $status_tanahData['tarikh'] : null;
+
+                            $duplicateData_draf->negeri_taman = $permohonan->negeri;
+                            $duplicateData_draf->daerah_taman = $permohonan->daerah;
+                            $duplicateData_draf->mukim_taman = $permohonan->mukim;
+                            $duplicateData_draf->parlimen_taman = $permohonan->parlimen;
+                            $duplicateData_draf->dun_taman = $permohonan->dun;
+                            $duplicateData_draf->id_permohonan = $id;
+
+                            $duplicateData_drafSaved = $duplicateData_draf->save();
+                        }
+                    }
+
+                    if ($permohonan->category == "Pelan Induk Landskap") {
+                        $duplicateData = new ePIL();
+                        $duplicateData->nama_pelan = $permohonan->projectTitle;
+                        $duplicateData->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
+                            ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
+                            : 'Jabatan Landskap Negara';
+
+                        $duplicateData->negeri_pelan = $permohonan->negeri;
+                        $duplicateData->daerah_pelan = $permohonan->daerah;
+                        $duplicateData->mukim_pelan = $permohonan->mukim;
+                        $duplicateData->parlimen_pelan = $permohonan->parlimen;
+                        $duplicateData->dun_pelan = $permohonan->dun;
+                        $duplicateData->id_permohonan = $id;
+
+                        $duplicateDataSaved = $duplicateData->save();
+
+                        $duplicateDataId = $duplicateData->id_pelan;
+                        if ($duplicateDataSaved) {
+                            $duplicateData_draf = new ePIL_draf();
+                            $duplicateData_draf->id_pelan = $duplicateDataId;
+                            $duplicateData_draf->nama_pelan = $permohonan->projectTitle;
+                            $duplicateData_draf->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
+                                ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
+                                : 'Jabatan Landskap Negara';
+
+                            $duplicateData_draf->negeri_pelan = $permohonan->negeri;
+                            $duplicateData_draf->daerah_pelan = $permohonan->daerah;
+                            $duplicateData_draf->mukim_pelan = $permohonan->mukim;
+                            $duplicateData_draf->parlimen_pelan = $permohonan->parlimen;
+                            $duplicateData_draf->dun_pelan = $permohonan->dun;
+                            $duplicateData_draf->id_permohonan = $id;
+
+                            $duplicateData_drafSaved = $duplicateData_draf->save();
+                        }
                     }
                 }
                 return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat Status Projek telah berjaya dikemaskini');
             }else{
                 return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat Status Projek tidak berjaya dikemaskini');
             }
-        } elseif ($request->input('statusProjek') === 'siap') {
-            // dd($request->all());
-            $siapProjek = $permohonan->update(['status_permohonan' => 14]);
-            //if taman awam
-            if($siapProjek){
-                //email
-                $duplicateData = new ePALM();
-                $duplicateData->nama_taman = $permohonan->projectTitle;
-                $duplicateData->kategori_taman = $permohonan->category;
-                $duplicateData->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
-                    ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
-                    : 'Jabatan Landskap Negara';
-                $duplicateData->keluasan_taman = $permohonan->keluasan;
-                $duplicateData->keluasan_unit = $permohonan->unit_keluasan;
-                $duplicateData->panjang_taman = $permohonan->panjang;
-                $duplicateData->panjang_unit = $permohonan->unit_panjang;
-                $duplicateData->hakmilik_tanah_taman = $permohonan->hakmilik_tanah;
-
-                $status_tanahData = json_decode($permohonan->status_tanah, true);
-                $duplicateData->status_tanah_taman = $status_tanahData['status'];
-                $duplicateData->tarikhWarta_tanah_taman = isset($status_tanahData['tarikh']) ? $status_tanahData['tarikh'] : null;
-
-                $duplicateData->negeri_taman = $permohonan->negeri;
-                $duplicateData->daerah_taman = $permohonan->daerah;
-                $duplicateData->mukim_taman = $permohonan->mukim;
-                $duplicateData->parlimen_taman = $permohonan->parlimen;
-                $duplicateData->dun_taman = $permohonan->dun;
-                $duplicateData->id_permohonan = $id;
-
-                $duplicateDataSaved = $duplicateData->save();
-
-                $duplicateDataId = $duplicateData->id_taman;
-                if ($duplicateDataSaved) {
-                    $duplicateData_draf = new ePALM_draf();
-                    $duplicateData_draf->id_taman = $duplicateDataId;
-                    $duplicateData_draf->nama_taman = $permohonan->projectTitle;
-                    $duplicateData_draf->kategori_taman = $permohonan->category;
-                    $duplicateData_draf->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
-                        ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
-                        : 'Jabatan Landskap Negara';
-                    $duplicateData_draf->keluasan_taman = $permohonan->keluasan;
-                    $duplicateData_draf->keluasan_unit = $permohonan->unit_keluasan;
-                    $duplicateData_draf->panjang_taman = $permohonan->panjang;
-                    $duplicateData_draf->panjang_unit = $permohonan->unit_panjang;
-                    $duplicateData_draf->hakmilik_tanah_taman = $permohonan->hakmilik_tanah;
-
-                    $status_tanahData = json_decode($permohonan->status_tanah, true);
-                    $duplicateData_draf->status_tanah_taman = $status_tanahData['status'];
-                    $duplicateData_draf->tarikhWarta_tanah_taman = isset($status_tanahData['tarikh']) ? $status_tanahData['tarikh'] : null;
-
-                    $duplicateData_draf->negeri_taman = $permohonan->negeri;
-                    $duplicateData_draf->daerah_taman = $permohonan->daerah;
-                    $duplicateData_draf->mukim_taman = $permohonan->mukim;
-                    $duplicateData_draf->parlimen_taman = $permohonan->parlimen;
-                    $duplicateData_draf->dun_taman = $permohonan->dun;
-                    $duplicateData->id_permohonan = $id;
-
-                    $duplicateData_drafSaved = $duplicateData_draf->save();
-                }      
-                return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat permohonan telah berjaya diserah kepada bahagian');
-            }else{
-                return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat permohonan tidak berjaya diserah kepada bahagian');
-            }
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Model\eLAPS  $eLAPS
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $permohonan = eLAPS::findOrFail($id);

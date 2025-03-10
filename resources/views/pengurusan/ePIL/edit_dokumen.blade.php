@@ -39,7 +39,7 @@
                         <label for="nama_dokumen_pelan">Fail:</label>
                         <input type="file" name="nama_dokumen_pelan" id="nama_dokumen_pelan" class="form-control" accept=".pdf">
                         {{ Form::label('', '***Muatnaik semula akan menggantikan fail sedia ada.', ['class' => 'col-form-label required-field-create', 'style' => 'font-weight: strong;']) }}
-                            <br>
+                        <br>
                         <div id="progress-container" style="display: none;">
                             <div id="progress-bar" style="width: 100%; background-color: #ccc;">
                                 <div id="progress" style="height: 20px; width: 0; background-color: green;"></div>

@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Rakan Taman')
+@section('title', 'Aktiviti Rakan Taman')
 
 @section('content')
 
@@ -20,7 +20,7 @@
                                     {!! Form::button('<i class="fas fa-search"></i>', ['class'=>'btn btn-default
                                     btn-sm','type'=>'submit']) !!}
                                     {!! Form::button('Reset',
-                                    ['onclick'=>"window.location='".route('pengurusan.MIB.index')."'",'class'=>'btn
+                                    ['onclick'=>"window.location='".route('pengurusan.MIB_laporan.index')."'",'class'=>'btn
                                     btn-secondary btn-sm']) !!}
                                 </div>
                             </div>
@@ -29,8 +29,7 @@
                             <div class="btn-group" role="group" aria-label="First group">
                                 {!! Form::button('<i class="fas fa-plus"></i> Daftar', [
                                 'class'=>'btn btn-success btn-sm',
-                                'onclick'=>"window.location='".route('pengurusan.MIB.create')."'",
-                                Html::tooltip('Daftar')
+                                'onclick' => "window.location='" . route('pengurusan.MIB_laporan.create', ['id_rakan' => 5]) . "'"
                                 ]) !!}
                             </div>
                         </div>
@@ -53,8 +52,8 @@
                             </thead>
                             <tbody>
                                 @php($null = '<span class="badge badge-light">Tiada Maklumat</span>')
-                                @php($index = $MIB->firstItem())
-                                @forelse($MIB as $rakan_taman)
+                                @php($index = $MIB_laporan->firstItem())
+                                @forelse($MIB_laporan as $rakan_taman)
                                 <tr>
                                     <td>{{ $index++ }}</td>
                                     <td>
@@ -70,18 +69,18 @@
                                         <div class="btn-group">
                                             {!! Form::button('<i class="fas fa-search"></i>', [
                                             'class'=>'btn btn-info btn-sm',
-                                            'onclick'=>"window.location='".route('pengurusan.MIB.show',$rakan_taman)."'"
+                                            'onclick'=>"window.location='".route('pengurusan.MIB_laporan.show',$rakan_taman)."'"
                                             ]) !!}
                                             @can('rakan_taman-edit')
                                             {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
                                             'class'=>'btn btn-warning btn-sm',
-                                            'onclick'=>"window.location='".route('pengurusan.MIB.edit',$rakan_taman)."'"
+                                            'onclick'=>"window.location='".route('pengurusan.MIB_laporan.edit',$rakan_taman)."'"
                                             ]) !!}
                                             @endcan
                                             @can('rakan_taman-delete')
                                             {!! Form::button('<i class="fas fa-trash"></i>', ['class'=>'btn btn-danger
                                             btn-sm',
-                                            'data-url'=>route('pengurusan.MIB.destroy',$rakan_taman->id),
+                                            'data-url'=>route('pengurusan.MIB_laporan.destroy',$rakan_taman->id),
                                             'data-toggle'=>'modal','data-target'=>'#modalDelete']) !!}
                                             @endcan
                                         </div>
@@ -96,10 +95,10 @@
                     <!-- /.table-responsive -->
                 </div>
                 <!-- /.card-body -->
-                @if($MIB->count() > 0)
+                @if($MIB_laporan->count() > 0)
                 <div
                     class="card-footer bg-light p-2 border-top-0 d-flex flex-column justify-content-center align-items-end">
-                    {!! Html::pagination($MIB) !!}
+                    {!! Html::pagination($MIB_laporan) !!}
                 </div>
                 <!-- /.card-footer -->
                 @endif

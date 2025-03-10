@@ -31,6 +31,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\Pengurusan\eLINDController;
 use App\Http\Controllers\Pengurusan\eLAPSController;
 use App\Http\Controllers\Pengurusan\ePALMController;
+use App\Http\Controllers\Pengurusan\MIB_laporanController;
 // use App\Http\Controllers\Pengurusan\KempenTanamController;
 // use App\Http\Controllers\Pengurusan\eMohonController;
 
@@ -248,7 +249,7 @@ Route::name('website.')
 
         Route::get('/epalm-taman', function () {
             // return ePALM::where('is_komponen', null)->latest()->paginate(10);
-            $ePALM = ePALM::where('is_komponen', null)->latest()->paginate(10);//ePALM::latest()->paginate(15);
+            $ePALM = ePALM::where('is_komponen', null)->where('status', 'approved')->latest()->paginate(10);//ePALM::latest()->paginate(15);
             foreach ($ePALM as $item) {
                 if ($item->nama_pbt == "Landskap Perbandaran") {
                     $ePALM_komponen = ePALM::where('id_taman', $item->is_komponen)->select('nama_taman')->first();
@@ -515,6 +516,30 @@ Route::middleware(['auth'])
          * Route MIBController
          */
         Route::resource('MIB', 'MIBController');
+
+        /**
+         * Route MIB_laporanController
+         */
+        // Route::resource('MIB_laporan', 'MIB_laporanController');
+        Route::get('MIB_laporan/create/{id_rakan}', [MIB_laporanController::class, 'create'])->name('MIB_laporan.create');
+
+        Route::get('MIB_laporan', [MIB_laporanController::class, 'index'])->name('MIB_laporan.index');
+
+        // Route to show the form for creating a new MIB laporan (create)
+        Route::get('MIB_laporan/create/{id_rakan}', [MIB_laporanController::class, 'create'])->name('MIB_laporan.create');
+
+        // Route to store a newly created MIB laporan (store)
+        Route::post('MIB_laporan', [MIB_laporanController::class, 'store'])->name('MIB_laporan.store');
+
+        // Route to show the form for editing an existing MIB laporan (edit)
+        Route::get('MIB_laporan/edit/{id}', [MIB_laporanController::class, 'edit'])->name('MIB_laporan.edit');
+        Route::get('MIB_laporan/show/{id}', [MIB_laporanController::class, 'show'])->name('MIB_laporan.show');
+
+        // Route to update an existing MIB laporan (update)
+        Route::put('MIB_laporan/{id}', [MIB_laporanController::class, 'update'])->name('MIB_laporan.update');
+
+        // Route to delete an existing MIB laporan (destroy)
+        Route::delete('MIB_laporan/{id}', [MIB_laporanController::class, 'destroy'])->name('MIB_laporan.destroy');
 
         /**
          * Route eLINDController

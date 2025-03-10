@@ -50,20 +50,53 @@ class MIBController extends Controller
                     $keysToCheck[$i + 2] => $requestData[$keysToCheck[$i + 2]] ?? null,
                 ];
                 $groupedData[] = $group;
-                unset($requestData[$keysToCheck[$i]]);
-                unset($requestData[$keysToCheck[$i + 1]]);
-                unset($requestData[$keysToCheck[$i + 2]]);
+                // dump($keysToCheck[$i]);
+                // dump($keysToCheck[$i + 1]);
+                // dump($keysToCheck[$i + 2]);
             }
         }
-        $jsonData = json_encode($groupedData, JSON_PRETTY_PRINT);
-        $requestData['message'] = $jsonData;
+        // $jsonData = json_encode($groupedData, JSON_PRETTY_PRINT);
+        $requestData['jawatankuasa'] = $groupedData;
+        // $requestData['taman'] = "Taman 2";
+
+        if(isset($requestData['kawasan'])){
+            $mergedkawasan = [];
+            $kawasanArr = $requestData['kawasan'];
+            foreach ($kawasanArr as $key => $value) {
+                $kawasan = collect($value ?? [])
+                ->map(function($item) {
+                    return $item;
+                })
+                ->toArray();
+                if ($kawasan['nama'] !== null) {
+                    $mergedkawasan[] = $kawasan;
+                }
+            }
+            $requestData['kawasan'] = ($mergedkawasan);
+        }
+
+        if (isset($requestData['fail'])) {
+            $mergedfail = [];
+            $failArr = $requestData['fail'];
+            foreach ($failArr as $key => $value) {
+                if ($value->isValid()) {
+                    $folderName = str_replace(' ', '_', $requestData['taman']); 
+                    $filename = time() . '_' .$value->getClientOriginalName();
+                    $path = $value->storeAs('public/uploads/MIB/' . $folderName, $filename);
+                    $mergedfail[$key] = $filename;
+                }else{
+                    $mergedfail[$key] = null;
+                }
+            }
+            $requestData['fail'] = ($mergedfail);
+        }  
 
         // dd($requestData);
         // Mula Rule validation
         $rules = [
             'name'   => 'required',
             'email'   => 'required|email',
-            'message'  => 'required',
+            'jawatankuasa'  => 'required',
         ];
 
         //Selaras bentuk mesej yang sama; attributes berbeza
@@ -79,11 +112,9 @@ class MIBController extends Controller
 
         $ref = Carbon::now()->timestamp;
         $data = $requestData;
-        $data['ref_num'] = "F$ref";
-        $data['MIB_at'] = Carbon::now()->format('Y-m-d H:i:s');
-        $data['feedback_at'] = Carbon::now()->format('Y-m-d H:i:s');
-        // dd($data);
-        // define data field of Model
+        $data['ref_num'] = "MIB$ref";
+        $data['registered_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        
         $MIB = MIB::create($data);
         dd($MIB);
 		//Hold
@@ -91,15 +122,6 @@ class MIBController extends Controller
             $this->sendmailtopemohon($MIB);
             $this->sendmailtoadmin($MIB);
         }
-
-
-        # code...
-        $response = [
-            'status' => true
-        ];
-
-        // return response()->json($response, 200);
-        // redirect to
         return view('website.MIB.register')->with('successMessage', 'Maklumat telah berjaya disimpan');
     }
 

@@ -15,8 +15,6 @@
                 <div class="card-body table-hardscape form-hardscape text-sm">
 
                     @include('pengurusan.entiti-landskap-unik._form')
-
-                    @include('pengurusan.entiti-landskap-unik._upload')
                 </div>
                 <div class="card-footer">
                     {!! Form::button('Batal dan Kembali', ['onclick'=>"window.location='".route('pengurusan.entiti-landskap-unik.index')."'",'class'=>'btn btn-secondary']) !!}

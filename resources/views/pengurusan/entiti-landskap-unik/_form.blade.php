@@ -1,170 +1,214 @@
-<!-- 
-<div class="form-row">
-    <div class="col">
+<style>
+    .col-separator {
+        position: relative;
+        padding-left: 15px; /* Optional padding */
+    }
+
+    .col-separator::before {
+        content: '';
+        position: absolute;
+        top: 5%;   /* Adjust the starting position of the gradient */
+        bottom: 5%; /* Adjust the ending position of the gradient */
+        left: 0;
+        width: 3px;   /* Border thickness */
+        background: linear-gradient(to bottom, #ff7f50, #00bfff); /* Gradient effect */
+    }
+
+    /* Optionally, you can remove the border for the first column */
+    .col-separator:first-child::before {
+        background: none; /* Remove the left border for the first column */
+    }
+</style>
+<div class="row">
+    <div class="col-lg col-separator">
         <div class="form-group">
-            {{ Form::label('lat', 'Koordinat X') }}
-            {{ Form::text('lat',null,['placeholder'=>'Koordinat X : x.xxxxxx','class' => 'form-control '.Html::isInvalid($errors,'lat')]) }}
-            {!! Html::hasError($errors,'lat') !!}
+            <label class="col-xs-4 control-label"></label>
+            <div class="col-xs-12">
+                <h4>&nbsp;</h4>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-9">
+                {{ Form::label('nama_entiti', 'Nama Pokok/ Kawasan Unik') }}
+                {{ Form::text('nama_entiti', null, ['placeholder' => 'Masukkan Nama Pokok/ Kawasan Unik', 'class' => 'form-control' . Html::isInvalid($errors, 'nama_entiti')]) }}
+                {!! Html::hasError($errors, 'nama_entiti') !!}
+            </div>
+            <div class="form-group col-md-3">
+                {{ Form::label('agensi', 'Anggaran Nilai') }}
+                {{ Form::text('agensi', null, ['placeholder' => 'Masukkan Anggaran Nilai', 'class' => 'form-control' . Html::isInvalid($errors, 'agensi')]) }}
+                {!! Html::hasError($errors, 'agensi') !!}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                {{ Form::label('pbt', 'Pihak Berkuasa Tempatan') }}
+                {{ Form::text('pbt', null, ['placeholder' => 'Masukkan Pihak Berkuasa Tempatan', 'class' => 'form-control' . Html::isInvalid($errors, 'pbt')]) }}
+                {!! Html::hasError($errors, 'pbt') !!}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{ Form::label('lokasi', 'Lokasi') }}
+                {{ Form::text('lokasi', null, ['placeholder' => 'Masukkan Lokasi', 'class' => 'form-control' . Html::isInvalid($errors, 'lokasi')]) }}
+                {!! Html::hasError($errors, 'lokasi') !!}
+            </div>
+        </div>
+        <div class="form-group">
+            {{ Form::label('keterangan', 'Keterangan') }}
+            {{ Form::textarea('keterangan',null,['placeholder'=>'Sila masukkan keterangan','rows'=>3,'class' => 'form-control '.Html::isInvalid($errors,'keterangan')]) }}
+            {!! Html::hasError($errors,'keterangan') !!}
         </div>
     </div>
-    <div class="col">
+    <div class="col-lg col-separator inertShow">
         <div class="form-group">
-            {{ Form::label('lng', 'Koordinat Y') }}
-            {{ Form::text('lng',null,['placeholder'=>'Koordinat Y  : xxx.xxxxxx','class' => 'form-control '.Html::isInvalid($errors,'lng')]) }}
-            {!! Html::hasError($errors,'lng') !!}
+            <label class="col-xs-4 control-label"></label>
+            <div class="col-xs-12">
+                <h4>&nbsp;</h4>
+            </div>
         </div>
-    </div>
-</div>
-<div class="form-group">
-    {{ Form::label('tajuk', 'Tajuk') }}
-    {{ Form::text('tajuk',null,['placeholder'=>'Sila masukkan Tajuk','class' => 'form-control '.Html::isInvalid($errors,'tajuk')]) }}
-    {!! Html::hasError($errors,'tajuk') !!}
-</div>
-<div class="form-group">
-    {{ Form::label('keterangan', 'Keterangan') }}
-    {{ Form::textarea('keterangan',null,['placeholder'=>'Sila masukkan keterangan','rows'=>3,'class' => 'form-control '.Html::isInvalid($errors,'keterangan')]) }}
-    {!! Html::hasError($errors,'keterangan') !!}
-</div>
- -->
+        <div class="row">
+            <div class="form-group required col-md-12">
+                <label for="konsep_rekabentuk" class="col-md-12 control-label">Gambar Entiti Landskap</label>
+                @php
+                    if(isset($entitiLandskapUnik->gambar)){
+                        $folderName = str_replace(' ', '_', $entitiLandskapUnik->nama_entiti);
+                        $gambarData = json_decode($entitiLandskapUnik->gambar, true);
 
-<!-- Nama Kempen and Lokasi -->
-<div class="form-row">
-    <div class="form-group col-md-6">
-        {{ Form::label('nama_kempen', 'Nama Pokok/ Kawasan Unik') }}
-        {{ Form::text('nama_kempen', null, ['placeholder' => 'Masukkan Nama Pokok/ Kawasan Unik', 'class' => 'form-control' . Html::isInvalid($errors, 'nama_kempen')]) }}
-        {!! Html::hasError($errors, 'nama_kempen') !!}
-    </div>
-
-    <div class="form-group col-md-6">
-        {{ Form::label('lokasi', 'Lokasi') }}
-        {{ Form::text('lokasi', null, ['placeholder' => 'Masukkan Lokasi', 'class' => 'form-control' . Html::isInvalid($errors, 'lokasi')]) }}
-        {!! Html::hasError($errors, 'lokasi') !!}
-    </div>
-</div>
-<div class="form-group">
-    {{ Form::label('keterangan', 'Keterangan') }}
-    {{ Form::textarea('keterangan',null,['placeholder'=>'Sila masukkan keterangan','rows'=>3,'class' => 'form-control '.Html::isInvalid($errors,'keterangan')]) }}
-    {!! Html::hasError($errors,'keterangan') !!}
-</div>
-<!-- PBT and Agensi -->
-<div class="form-row">
-    <div class="form-group col-md-6">
-        {{ Form::label('pbt', 'PBT') }}
-        {{ Form::text('pbt', null, ['placeholder' => 'Masukkan PBT', 'class' => 'form-control' . Html::isInvalid($errors, 'pbt')]) }}
-        {!! Html::hasError($errors, 'pbt') !!}
-    </div>
-
-    <div class="form-group col-md-6">
-        {{ Form::label('agensi', 'Agensi') }}
-        {{ Form::text('agensi', null, ['placeholder' => 'Masukkan Agensi', 'class' => 'form-control' . Html::isInvalid($errors, 'agensi')]) }}
-        {!! Html::hasError($errors, 'agensi') !!}
-    </div>
-</div>
-
-<!-- Entiti Unik & Anggaran Nilai -->
-<div class="form-row">
-    <div class="form-group col-md-7">
-        <div class="table-responsive">
-            <table id="spesis-pokok-table" class="table table-bordered table-hover">
-                <thead class="thead-dark">
+                        $gambar_input_modal_1 = isset($gambarData['gambar_input_modal_1']) ? $folderName.'/'.$gambarData['gambar_input_modal_1'] : null;
+                        $gambar_input_modal_2 = isset($gambarData['gambar_input_modal_2']) ? $folderName.'/'.$gambarData['gambar_input_modal_2'] : null;
+                        $gambar_input_modal_3 = isset($gambarData['gambar_input_modal_3']) ? $folderName.'/'.$gambarData['gambar_input_modal_3'] : null;
+                        $gambar_input_modal_4 = isset($gambarData['gambar_input_modal_4']) ? $folderName.'/'.$gambarData['gambar_input_modal_4'] : null;
+                        //dd($gambarData);
+                    }else{
+                        $gambar_input_modal_1 = null;
+                        $gambar_input_modal_2 = null;
+                        $gambar_input_modal_3 = null;
+                        $gambar_input_modal_4 = null;
+                    }
+                @endphp
+                <div class="col-md-12">
                     <style>
-                        #spesis-pokok-table th {
-                            padding: 5px 5px;  /* Adjust the padding for header cells */
-                            text-align: center;  /* Center the text for better alignment */
+                        /* Container for the grid with files and previews */
+                        .grid-container {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr; /* 2 equal-width columns */
+                            gap: 10px; /* Space between grid items */
+                            width: 500px;
+                            max-width: 600px;  /* Limit max width for the grid */
+                            margin: 0 auto; /* Centers the grid container horizontally */
+                            height: auto; /* Allow the height to adjust based on content */
+                        }
+
+                        /* Grid item styling */
+                        .grid-item {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: space-between;
+                            text-align: center;
+                            border: 1px solid #ddd;
+                            background-color: lightgray;
+                            padding: 10px;
+                            box-sizing: border-box;
+                            overflow: hidden; /* Prevent overflowing content */
+                        }
+
+                        /* Image preview container */
+                        .image-preview-container {
+                        display: grid;
+                        place-items: center; /* Center both horizontally and vertically */
+                        width: 100%;
+                        height: 100%; /* Optional, adjust as needed */
+                        overflow-y: auto;
+                        }
+
+                        .image-preview-container img {
+                        width: 200px; /* Adjust the width as needed */
+                        height: 200px; /* Adjust the height as needed */
+                        object-fit: cover;
+                        border-radius: 5px;
+                        border: 0px solid #ddd;
+                        padding: 2px;
+                        }
+
+                        /* File input button styling */
+                        .form-control-file {
+                            padding: 5px;
+                            font-size: 12px;
+                            width: 100%;
+                            height: 30px;
+                            border-radius: 4px;
+                            background-color: #f7f7f7;
+                            border: 1px solid #ccc;
+                            cursor: pointer;
                         }
                     </style>
-                    <tr>
-                        <th class="w-50">Entiti Unik</th>
-                        <th class="w-20">Anggaran Nilai</th>
-                        <th class="w-15" id="add_spesis_pokok">[Tambah Entiti]</th>
-                    </tr>
-                </thead>
-                <tbody id="spesis_pokok_container">
-                    @if(isset($spesisPokokJumlahPairs))
-                        @foreach ($spesisPokokJumlahPairs as $index => $pair)
-                        <tr>
-                            <td><input type="text" name="spesis_pokok[]" class="form-control" value="{{ $pair['spesis_pokok'] }}" placeholder="Masukkan Entiti Unik"></td>
-                            <td><input type="text" name="jumlah_pokok[]" class="form-control" value="{{ $pair['jumlah_pokok'] }}" placeholder="Masukkan Anggaran Nilai" min="1"></td>
-                            <td><button type="button" class="btn btn-danger btn-sm remove_field">Hapus</button></td>
-                        </tr>
-                        @endforeach
-                    @else
-                        <tr>
-                            <td><input type="text" name="spesis_pokok[]" class="form-control" placeholder="Masukkan Entiti Unik"></td>
-                            <td><input type="text" name="jumlah_pokok[]" class="form-control" placeholder="Masukkan Anggaran Nilai" min="1"></td>
-                            <td><button type="button" class="btn btn-danger btn-sm remove_field">Hapus</button></td>
-                        </tr>
-                    @endif
-                </tbody>
-            </table>
+                    <div class="grid-container">
+                        <div class="grid-item">
+                            <input type="file" class="form-control-file" id="gambar_input_modal_1" name="gambar_input_modal_1" accept="image/*" style="display: none;">
+                            <div id="imagePreviewContainer1" class="image-preview-container">
+                                <img src="{{ isset($gambar_input_modal_1) ? asset('storage/uploads/entiti_landskap/'.$gambar_input_modal_1) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                            </div>
+                        </div>
+                        <br class="mobile-done">
+                        <div class="grid-item">
+                            <input type="file" class="form-control-file" id="gambar_input_modal_2" name="gambar_input_modal_2" accept="image/*" style="display: none;">
+                            <div id="imagePreviewContainer2" class="image-preview-container">
+                                <img src="{{ isset($gambar_input_modal_2) ? asset('storage/uploads/entiti_landskap/'.$gambar_input_modal_2) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                            </div>
+                        </div>
+                        <br class="mobile-done">
+                        <div class="grid-item">
+                            <input type="file" class="form-control-file" id="gambar_input_modal_3" name="gambar_input_modal_3" accept="image/*" style="display: none;">
+                            <div id="imagePreviewContainer3" class="image-preview-container">
+                                <img src="{{ isset($gambar_input_modal_3) ? asset('storage/uploads/entiti_landskap/'.$gambar_input_modal_3) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                            </div>
+                        </div>
+                        <br class="mobile-done">
+                        <div class="grid-item">
+                            <input type="file" class="form-control-file" id="gambar_input_modal_4" name="gambar_input_modal_4" accept="image/*" style="display: none;">
+                            <div id="imagePreviewContainer4" class="image-preview-container">
+                                <img src="{{ isset($gambar_input_modal_4) ? asset('storage/uploads/entiti_landskap/'.$gambar_input_modal_4) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                const fileInputs = [
+                    { inputId: 'gambar_input_modal_1', previewContainerId: 'imagePreviewContainer1' },
+                    { inputId: 'gambar_input_modal_2', previewContainerId: 'imagePreviewContainer2' },
+                    { inputId: 'gambar_input_modal_3', previewContainerId: 'imagePreviewContainer3' },
+                    { inputId: 'gambar_input_modal_4', previewContainerId: 'imagePreviewContainer4' }
+                ];
 
-            <!-- Button to add more fields -->
-            <!-- <button type="button" class="btn btn-primary btn-sm mt-2" id="add_spesis_pokok">Tambah Entiti Unik</button> -->
-        </div>
-        <!-- Hidden input to store the serialized data -->
-        <input type="hidden" name="serialized_spesis_pokok" id="serialized_spesis_pokok">
-        <input type="hidden" name="jumlah_tanam_pokok" id="jumlah_tanam_pokok">
-    </div>
-
-</div>
-
-
-
-                
-
-@section('page-js-script')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('add_spesis_pokok').addEventListener('click', function() {
-            var container = document.getElementById('spesis_pokok_container');
-            var newRow = document.createElement('tr');
-            newRow.innerHTML = `
-                <td><input type="text" name="spesis_pokok[]" class="form-control" placeholder="Masukkan Entiti Unik"></td>
-                <td><input type="number" name="jumlah_pokok[]" class="form-control" placeholder="Masukkan Anggaran Nilai" min="1"></td>
-                <td><button type="button" class="btn btn-danger btn-sm remove_field">Hapus</button></td>
-            `;
-            container.appendChild(newRow);
-        });
-
-
-        // Remove dynamic fields
-        // Remove field functionality
-        document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('remove_field')) {
-                event.target.closest('tr').remove();
-            }
-        });
-        document.querySelector('form').addEventListener('submit', function(event) {
-            var spesis = document.querySelectorAll('input[name="spesis_pokok[]"]');
-            var jumlah = document.querySelectorAll('input[name="jumlah_pokok[]"]');
-            var serializedData = [];
-            var jumlah_tanam_pokok = 0;
-
-            // Loop through each set of spesis_pokok and jumlah_pokok fields
-            spesis.forEach(function(spesisInput, index) {
-                var jumlahInput = jumlah[index];
-                if (spesisInput.value) {
-                    var jumlahValue = parseInt(jumlahInput.value.trim()) || 0;
-                    jumlah_tanam_pokok += jumlahValue;
-                    // Concatenate spesis and jumlah into an object
-                    serializedData.push({
-                        spesis_pokok: spesisInput.value,
-                        jumlah_pokok: jumlahValue
-                    });
+                // Function to preview image
+                function previewImage(inputElement, previewContainer) {
+                    const file = inputElement.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            previewContainer.querySelector('img').src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
                 }
-                // var jumlahValue = jumlahInput.value.trim() || '0';  // Default to '0' if empty
 
-                // // Concatenate spesis and jumlah into an object
-                // serializedData.push({
-                //     spesis_pokok: spesisInput.value,
-                //     jumlah_pokok: jumlahValue
-                // });
-            });
+                // Loop through each file input and set up event listeners
+                fileInputs.forEach(({ inputId, previewContainerId }) => {
+                    const inputElement = document.getElementById(inputId);
+                    const previewContainer = document.getElementById(previewContainerId);
 
-            // Serialize the data into a JSON string
-            document.getElementById('serialized_spesis_pokok').value = JSON.stringify(serializedData);
-            document.getElementById('jumlah_tanam_pokok').value = jumlah_tanam_pokok;
-        });
-    });
-</script>
-@endsection
+                    // Trigger file input when preview container is clicked
+                    previewContainer.addEventListener('click', function() {
+                        inputElement.click();
+                    });
+
+                    // Handle file input change event
+                    inputElement.addEventListener('change', function(event) {
+                        previewImage(event.target, previewContainer);
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</div>

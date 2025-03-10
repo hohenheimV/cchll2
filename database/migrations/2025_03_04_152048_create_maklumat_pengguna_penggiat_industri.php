@@ -16,9 +16,9 @@ class CreateMaklumatPenggunaPenggiatIndustri extends Migration
         Schema::create('maklumat_pengguna_penggiat_industri', function (Blueprint $table) {
             $table->bigIncrements('id_elind');
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email')->nullable()->unique();
             $table->string('jenis_industri');
-            $table->string('no_mof')->unique();
+            $table->string('no_mof')->nullable()->unique();
             $table->string('no_ssm')->nullable();
             $table->string('bilPekerja')->nullable();
             $table->string('status_eperunding')->nullable();
@@ -34,6 +34,11 @@ class CreateMaklumatPenggunaPenggiatIndustri extends Migration
             $table->string('bidang_pembekal')->nullable();
             $table->string('bidang_lain_pembekal')->nullable();
             $table->string('saiz_nurseri')->nullable();
+
+            $table->string('nama_presiden')->nullable();
+            $table->string('wakil_negara')->nullable();
+            $table->string('kategori_ngo')->nullable();
+            $table->string('jenis_institusi')->nullable();
 
             // Nullable address columns
             $table->string('address1')->nullable();
@@ -61,9 +66,9 @@ class CreateMaklumatPenggunaPenggiatIndustri extends Migration
             $table->bigIncrements('id_elind_draf');
             $table->string('id_elind');
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email')->nullable()->unique();
             $table->string('jenis_industri');
-            $table->string('no_mof')->unique();
+            $table->string('no_mof')->nullable()->unique();
             $table->string('no_ssm')->nullable();
             $table->string('bilPekerja')->nullable();
             $table->string('status_eperunding')->nullable();
@@ -79,6 +84,11 @@ class CreateMaklumatPenggunaPenggiatIndustri extends Migration
             $table->string('bidang_pembekal')->nullable();
             $table->string('bidang_lain_pembekal')->nullable();
             $table->string('saiz_nurseri')->nullable();
+
+            $table->string('nama_presiden')->nullable();
+            $table->string('wakil_negara')->nullable();
+            $table->string('kategori_ngo')->nullable();
+            $table->string('jenis_institusi')->nullable();
 
             // Nullable address columns
             $table->string('address1')->nullable();

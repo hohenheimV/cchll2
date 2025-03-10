@@ -8,6 +8,9 @@ use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Storage;
 use App\Model\ePALM;
 use App\Model\ePALM_draf;
+use App\Model\MaklumatPenggunaPbt;
+use Illuminate\Support\Facades\DB;
+
 
 class DataController extends Controller
 {
@@ -631,4 +634,39 @@ class DataController extends Controller
             asset('storage/uploads/' . $gambar_input_modal_4)
         ];
     }
+
+    public function getPBTStatistics()
+    {
+        // Fetch count of PBTs grouped by state using LIKE for flexible matching
+        $states = [
+            'Johor', 'Kedah', 'Kelantan', 'Melaka', 'Negeri Sembilan',
+            'Pahang', 'Penang', 'Perak', 'Perlis', 'Selangor',
+            'Sabah', 'Sarawak', 'Wilayah Persekutuan'
+        ];
+
+        $pbtCounts = [];
+
+        foreach ($states as $state) {
+            $count = MaklumatPenggunaPbt::where('state', 'LIKE', '%' . $state . '%')->count();
+            $pbtCounts[] = $count;
+        }
+
+        return response()->json($pbtCounts);
+    }
+
+    public function getVisitorStatistics()
+    {
+        $currentYear = now()->year - 1;
+        // Fetch visitor counts by month from the web_visitor table
+        $visitorCounts = DB::table('web_visitor')
+            ->select(DB::raw("TO_CHAR(viewed_at, 'YYYY-MM') as month"), DB::raw('count(*) as count'))
+            ->whereYear('viewed_at', $currentYear)
+            ->groupBy(DB::raw("TO_CHAR(viewed_at, 'YYYY-MM')"))
+            ->orderBy(DB::raw("TO_CHAR(viewed_at, 'YYYY-MM')"))
+            ->get();
+
+        // Return the data as JSON
+        return response()->json($visitorCounts);
+    }
+
 }

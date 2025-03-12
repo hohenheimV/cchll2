@@ -49,6 +49,9 @@ Route::get('/vtour-bukit-kiara', function () {
 // })->name('epalm');
 
 Route::get('/', function () {
+    // remove before git pull
+    return abort(403, 'Page under maintenence');
+    // remove before git pull
     $counter = Home::findOrFail(1);
     views($counter)->cooldown(now()->addHours(1))->record();
     $popup = Slider::where('popup',1)->first();
@@ -64,6 +67,7 @@ Route::get('/', function () {
 })->name('welcome');
 
 Route::get('/T1', function () {
+    return view('website.T1welcome');
     $counter = Home::findOrFail(1);
     views($counter)->cooldown(now()->addHours(1))->record();
     $popup = Slider::where('popup',1)->first();

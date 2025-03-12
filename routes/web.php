@@ -21,6 +21,12 @@ use App\Model\Menu;
 use App\Model\Page;
 use App\Model\Slider;
 use App\Model\ePALM;
+use App\Model\eREAD;
+use App\Model\eLAD;
+use App\Model\ePIL;
+use App\Model\ePIL_dokumen;
+use App\Model\Negeri;
+use App\Model\MaklumatPenggunaPenggiatIndustri;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -32,7 +38,6 @@ use App\Http\Controllers\Pengurusan\eLINDController;
 use App\Http\Controllers\Pengurusan\eLAPSController;
 use App\Http\Controllers\Pengurusan\ePALMController;
 use App\Http\Controllers\Pengurusan\MIB_laporanController;
-// use App\Http\Controllers\Pengurusan\KempenTanamController;
 // use App\Http\Controllers\Pengurusan\eMohonController;
 
 Route::get('/vtour-bukit-kiara', function () {
@@ -102,10 +107,13 @@ Route::get('/data/postcode/{postcode}', [DataController::class, 'getPostcode']);
 Route::post('/upload-chunk', [DataController::class, 'uploadChunk']);
 Route::post('/test-upload', [DataController::class, 'testUpload']);
 Route::get('/fetchComponents/{id_taman}', [DataController::class, 'fetchComponents']);
+Route::get('/get-pbt-statistics', [DataController::class, 'getPBTStatistics']);
+Route::get('/get-visitor-statistics', [DataController::class, 'getVisitorStatistics']);
 
 
 // Route::get('your-form-url', [LocationController::class, 'create']);
 Route::get('get-negeri', [LocationController::class, 'create']);
+Route::get('get-negeri/{kod_negeri?}', [LocationController::class, 'getNegeri']);
 Route::get('get-daerah/{kod_negeri}', [LocationController::class, 'getDaerah']);
 Route::get('get-mukim/{kod_negeri}/{kod_daerah}', [LocationController::class, 'getMukim']);
 
@@ -125,6 +133,20 @@ Route::get('/read', function () {
 Route::get('/pano', function () {
     return view('website.pano');
 })->name('pano');
+Route::get('/pano/{folder}/{image}', function ($folder, $image) {
+    // dd($folder);
+    $imageExist = storage_path("app/public/uploads/ePALM/{$folder}/{$image}"); 
+    $imagePath = asset('storage/uploads/ePALM/'.$folder.'/'.$image); 
+    if (file_exists($imageExist) && $image != null && $folder != null) {
+        return view('website.360', compact('imagePath'));
+    }
+    return abort(404, 'Image not found');
+})->name('pano');
+
+
+// Route::get('/360', function () {
+//     return view('website.360');
+// })->name('360.view');
 
 // Auth::routes(['verify' => false, 'register' => true, 'reset' => true]);
 Auth::routes();
@@ -247,18 +269,132 @@ Route::name('website.')
             return view('website.search', ['articles' => []]);
         })->name('search');
 
-        Route::get('/epalm-taman', function () {
+        Route::get('/epalm-taman/{keyword?}', function ($keyword = null) {
+            // dd($keyword);
             // return ePALM::where('is_komponen', null)->latest()->paginate(10);
-            $ePALM = ePALM::where('is_komponen', null)->where('status', 'approved')->latest()->paginate(10);//ePALM::latest()->paginate(15);
+            // $ePALM = ePALM::/* where('is_komponen', null)-> */where('status', 'approved')->latest()->paginate(5);//ePALM::latest()->paginate(15);
+            $ePALM = ePALM::where('status', 'approved')
+                ->when($keyword, function($query) use ($keyword) {
+                    return $query->where('negeri_taman', 'like', "%$keyword%");
+                })
+                ->orderBy('negeri_taman')
+                ->orderBy('created_at', 'asc')
+                ->orderBy('nama_pbt')
+                ->paginate(10);
             foreach ($ePALM as $item) {
                 if ($item->nama_pbt == "Landskap Perbandaran") {
-                    $ePALM_komponen = ePALM::where('id_taman', $item->is_komponen)->select('nama_taman')->first();
-                    $item->komponen = "ePALM/".str_replace(' ', '_', $ePALM_komponen->nama_taman)."/".str_replace(' ', '_', $item->nama_taman);
-                    // dump($item->komponen );
+                    $ePALM_komponen = ePALM::where('id_taman', $item->is_komponen)->first();
+                    $item->komponen = str_replace(' ', '_', $ePALM_komponen->nama_taman)."/".str_replace(' ', '_', $item->nama_taman);
+                    // dump($ePALM_komponen);
+                    $item->nama_pbt = $ePALM_komponen->nama_pbt;
+                    $item->gambar_taman = str_replace('gambar_input_modal_', 'Xgambar_input_modal_', $item->gambar_taman);
+                    $item->kategori_taman = $ePALM_komponen->kategori_taman;
+                    // $item->keterangan_taman = $ePALM_komponen->nama_pbt;
+                    $item->fasiliti = $ePALM_komponen->fasiliti;
+                    $item->lat = $ePALM_komponen->lat;
+                    $item->lng = $ePALM_komponen->lng;
+                    $item->keluasan_taman = $ePALM_komponen->keluasan_taman;
+                    $item->keluasan_unit = $ePALM_komponen->keluasan_unit;
+                    $item->waktuMula_taman = $ePALM_komponen->waktuMula_taman;
+                    $item->waktuTamat_taman = $ePALM_komponen->waktuTamat_taman;
+                    $item->negeri_taman = $ePALM_komponen->negeri_taman;
+                    $item->nama_taman = "Komponen: ".$item->nama_taman;
+                    // dump($item);
+                }
+                $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->negeri_taman)->orderBy('nama_negeri', 'asc')->first();
+                $item->negeri = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 
+            }
+            return view('website.ePALM', ['ePALM_all' => $ePALM, 'keyword' => $keyword]);
+        })->name('epalm');
+
+        Route::get('/epil-pelan/{keyword?}', function ($keyword = null) {
+            $ePIL = ePIL::where('status', 'approved')
+                ->when($keyword, function($query) use ($keyword) {
+                    return $query->where('negeri_pelan', 'like', "%$keyword%");
+                })
+                ->orderBy('negeri_pelan')
+                ->orderBy('created_at', 'asc')
+                ->orderBy('nama_pbt')
+                ->paginate(5);
+            foreach ($ePIL as $item) {
+                $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->negeri_pelan)->orderBy('nama_negeri', 'asc')->first();
+                $item->negeri = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 
+            }
+            $ePIL->getCollection()->transform(function ($PIL) {
+                $dokumen = ePIL_dokumen::where('status', 'active')->where('id_pelan', $PIL->id_pelan)->first();
+                $PIL->nama_dokumen_pelan = $dokumen ? $dokumen->nama_dokumen_pelan : null;
+                $PIL->id_dokumen_pelan = $dokumen ? $dokumen->id_dokumen_pelan : null;
+                // dump($dokumen);
+        
+                return $PIL;
+            });
+            // dd($ePIL[0]);
+            return view('website.ePIL', ['ePIL' => $ePIL, 'keyword' => $keyword]);
+        })->name('ePIL');
+
+        Route::get('/eread-dokumen/{keyword?}', function ($keyword = null) {
+            $totalCount = eREAD::with('kategori')->count();
+            $ereads = eREAD::with('kategori')->orderBy('tarikh', 'desc')->paginate($totalCount);
+            return view('website.eREAD', ['ereads' => $ereads, 'keyword' => $keyword]);
+        })->name('eREAD');
+
+        Route::get('/elad-dokumen/{keyword}', function ($keyword) {
+            if($keyword == "lembut"){
+                $totalCount = eLAD::with('kategori')->where('kate', 157)->count();
+                $eLAD = eLAD::with('kategori')->where('kate', 157)->orderBy('tarikh', 'desc')->paginate($totalCount, ['*'], 'lembut');
+            }elseif($keyword == "kejur"){
+                $totalCount = eLAD::with('kategori')->where('kate', 123)->count();
+                $eLAD = eLAD::with('kategori')->where('kate', 123)->orderBy('tarikh', 'desc')->paginate($totalCount, ['*'], 'kejur');
+            }else{
+                return abort(404, 'Not Found');
+            }
+            return view('website.eLAD', ['eLAD' => $eLAD, 'keyword' => ucwords($keyword)]);
+        })->name('eLAD');
+
+        Route::get('/penggiat-industri/{keyword}', function ($keyword) {
+            switch ($keyword) {
+                case 'kontraktor':
+                    $type = 'Kontraktor';
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+                    break;
+    
+                case 'perunding':
+                    $type = 'Perunding';
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+                    break;
+    
+                case 'pembekal':
+                    $type = 'Pembekal';
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+                    break;
+                case 'antarabangsa':
+                    $type = 'Pertubuhan Antarabangsa';
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+                    break;
+    
+                case 'ngo':
+                    $type = 'NGO / Badan Ikhtisas';
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+                    break;
+    
+                case 'pendidikan':
+                    $type = 'Institusi Pendidikan';
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+                    break;
+    
+                default:
+                    return abort(404, 'Not Found');
+            }
+            foreach ($data as $item) {
+                $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->state)->orderBy('nama_negeri', 'asc')->first();
+                if($negeris){
+                    $item->state = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 
+                }else{
+                    $item->state = 'Tiada Maklumat';
                 }
             }
-            return view('website.ePALM', ['ePALM_all' => $ePALM]);
-        })->name('epalm');
+            return view('website.eLIND', ['eLIND' => $data, 'keyword' => ($type)]);
+        })->name('eLIND');
     });
 
 Route::middleware(['auth'])

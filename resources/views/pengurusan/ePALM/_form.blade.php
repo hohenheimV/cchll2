@@ -635,7 +635,7 @@
                                         $('#dun').empty();
                                         $('#dun').append('<option value="">Pilih Dun</option>');
                                         if (data.length<1) {
-                                            $('#dun').append('<option value="000" selected disabled>TIADA DUN</option>');
+                                            $('#dun').append('<option value="000" selected>TIADA DUN</option>');
                                         }else{
                                             $.each(data, function(key, value) {
                                                 $('#dun').append('<option value="' + value.kod_dun + '">' + value.nama_dun + '</option>');
@@ -776,7 +776,7 @@
             <div class="form-group required inertShow">
                 <label for="keterangan_taman" class="col-md-12 control-label">Keterangan Taman</label>
                 <div class="col-md-12">
-                    <textarea name="keterangan_taman" class="form-control" maxlength="50" rows="5" id="keterangan_taman" required="required">{{ isset($ePALM->keterangan_taman) ? $ePALM->keterangan_taman : '' }}</textarea>
+                    <textarea name="keterangan_taman" class="form-control" maxlength="250" rows="5" id="keterangan_taman" required="required">{{ isset($ePALM->keterangan_taman) ? $ePALM->keterangan_taman : '' }}</textarea>
                 </div>
             </div>
 

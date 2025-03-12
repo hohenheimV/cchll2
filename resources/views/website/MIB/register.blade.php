@@ -337,16 +337,80 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        function updateFields() {
-            $('.card-body').css('width', '100%');
-            var accountType = $('#roles').val();
-            var $pbtFields = $('#pbt_fields');
-            var $daftarButton = $('#daftar');
+        // function updateFields() {
+        //     $('.card-body').css('width', '100%');
+        //     var accountType = $('#roles').val();
+        //     var $pbtFields = $('#pbt_fields');
+        //     var $daftarButton = $('#daftar');
 
-            $('#user_details').show();
-            $pbtFields.show();
-            $pbtFields.find('input, select').prop('disabled', false);
-            $daftarButton.show();
+        //     $('#user_details').show();
+        //     $pbtFields.show();
+        //     $pbtFields.find('input, select').prop('disabled', false);
+        //     $daftarButton.show();
+        //     var $negeri = $('#negeri');
+        //     // Disable the PBT dropdown and show the spinner
+        //     $negeri.prop('disabled', true);
+        //     $('#loading-spinner').show(); // Show the spinner
+        //     // Load Negeri options
+        //     $.getJSON('/data/negeri', function(data) {
+                
+        //         $.each(data, function(index, negeri) {
+        //             let pname = negeri.name;
+        //             $negeri.append($('<option>', {
+        //                 value: negeri.id,
+        //                 text: negeri.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+        //             }));
+        //         });
+        //         // Re-enable the negeri dropdown and hide the spinner
+        //         $negeri.prop('disabled', false);
+        //         $('#loading-spinner').hide(); // Hide the spinner
+
+        //         // Initialize Select2
+        //         $negeri.select2({
+        //             // placeholder: 'Pilih Negeri',
+        //             allowClear: false
+        //         });
+        //     }).fail(function() {
+        //         // Handle errors if needed
+        //         $negeri.prop('disabled', false);
+        //         $('#loading-spinner').hide(); // Hide the spinner in case of error
+        //         alert('Failed to load data');
+        //     });
+        // }
+
+        function updatePBT() {
+            // const negeriId = $('#negeri').val();
+            // const $datalist = $('#data_pbt');  // Target the datalist element
+            
+            // // Clear previous options in the datalist
+            // $datalist.empty();
+            
+            // // Show the spinner while loading
+            // $('#loading-spinner').show(); 
+
+            // $.getJSON('/data/pbt/' + negeriId, function(data) {
+            //     // Loop through the data and populate the datalist
+            //     $.each(data, function(index, pbt) {
+            //         // Create a new option element for the datalist
+            //         $datalist.append($('<option>', {
+            //             value: pbt.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+            //             // text: pbt.id,
+            //             'data-id': pbt.id,
+            //         }));
+            //     });
+
+            //     // Hide the spinner once the data is loaded
+            //     $('#loading-spinner').hide(); 
+            // }).fail(function() {
+            //     // Hide the spinner in case of error
+            //     $('#loading-spinner').hide();
+            //     alert('Failed to load data. Sila isi Nama Pihak Berkuasa Tempatan.');
+            // });
+        }
+
+        // Initialize fields based on the default dropdown value
+        $(document).ready(function() {
+            $('.card-body').css('width', '100%');
             var $negeri = $('#negeri');
             // Disable the PBT dropdown and show the spinner
             $negeri.prop('disabled', true);
@@ -376,45 +440,42 @@
                 $('#loading-spinner').hide(); // Hide the spinner in case of error
                 alert('Failed to load data');
             });
-        }
 
-        function updatePBT() {
-            const negeriId = $('#negeri').val();
-            const $datalist = $('#data_pbt');  // Target the datalist element
-            
-            // Clear previous options in the datalist
-            $datalist.empty();
-            
-            // Show the spinner while loading
-            $('#loading-spinner').show(); 
+            // When the 'Negeri' dropdown changes
+            $('#negeri').change(function() {
+                const negeriId = $('#negeri').val();
+                const $datalist = $('#data_pbt');  // Target the datalist element
+                $('#pbt').val('');
+                // Clear previous options in the datalist
+                $datalist.empty();
+                
+                // Show the spinner while loading
+                $('#loading-spinner').show(); 
 
-            $.getJSON('/data/pbt/' + negeriId, function(data) {
-                // Loop through the data and populate the datalist
-                $.each(data, function(index, pbt) {
-                    // Create a new option element for the datalist
-                    $datalist.append($('<option>', {
-                        value: pbt.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-                        // text: pbt.id,
-                        'data-id': pbt.id,
-                    }));
+                $.getJSON('/data/pbt/' + negeriId, function(data) {
+                    // Loop through the data and populate the datalist
+                    $.each(data, function(index, pbt) {
+                        // Create a new option element for the datalist
+                        $datalist.append($('<option>', {
+                            value: pbt.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+                            // text: pbt.id,
+                            'data-id': pbt.id,
+                        }));
+                    });
+                    
+                    // Hide the spinner once the data is loaded
+                    $('#loading-spinner').hide(); 
+                }).fail(function() {
+                    // Hide the spinner in case of error
+                    $('#loading-spinner').hide();
+                    alert('Failed to load data. Sila isi Nama Pihak Berkuasa Tempatan.');
                 });
-
-                // Hide the spinner once the data is loaded
-                $('#loading-spinner').hide(); 
-            }).fail(function() {
-                // Hide the spinner in case of error
-                $('#loading-spinner').hide();
-                alert('Failed to load data. Sila isi Nama Pihak Berkuasa Tempatan.');
             });
-        }
-
-        // Initialize fields based on the default dropdown value
-        $(document).ready(function() {
-            $('#myForm')[0].reset();
-            // $('#roles').val('');
-            if($('#roles').val() != ''){
-                updateFields();
-            }
+            // $('#myForm')[0].reset();
+            // // $('#roles').val('');
+            // if($('#roles').val() != ''){
+            //     updateFields();
+            // }
 
             let rowIndex = 1; // Initialize the row index.
 

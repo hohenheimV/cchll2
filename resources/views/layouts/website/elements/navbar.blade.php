@@ -1,3 +1,7 @@
+<link rel="stylesheet" href="{{ asset('css/tree.css') }}">
+<script>
+    // document.documentElement.style.setProperty('--themeColor', '#84cd73');
+</script>
 <style>
     .navbar-nav li:hover > ul.dropdown-menu {
         display: block;

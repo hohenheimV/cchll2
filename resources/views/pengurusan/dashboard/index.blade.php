@@ -105,7 +105,7 @@
                                                         display: true,
                                                         text: 'Bilangan PBT'
                                                     },
-                                                    suggestedMax: 20 // Increase y-axis scale
+                                                    suggestedMax: 10 // Increase y-axis scale
                                                 }
                                             }
                                         }

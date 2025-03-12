@@ -12,11 +12,11 @@
         <div class="col-lg-12">
             <div class="card card-olive card-outline">
                 <div class="card-header">
-                @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem'))
+                    @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem'))
                         <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan Pegawai JLN]</h3>
-                @elseif(Auth::user()->hasRole('TKP/B JLN|Pentadbir Sistem'))
+                    @elseif(Auth::user()->hasRole('TKP/B JLN|Pentadbir Sistem'))
                         <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan KP/TKP/B. Penilaian]</h3>
-                @elseif(Auth::user()->hasRole('Pihak Berkuasa Tempatan'))
+                    @elseif(Auth::user()->hasRole('Pihak Berkuasa Tempatan'))
                         <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan PBT]</h3>
                     @endif
                     <div class="card-tools">

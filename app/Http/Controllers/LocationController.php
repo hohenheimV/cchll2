@@ -17,6 +17,11 @@ class LocationController extends Controller
         $negeris = Negeri::orderBy('nama_negeri', 'asc')->get();  // Fetch all Negeri data
         return response()->json($negeris); // Return as JSON response
     }
+    public function getNegeri($kod_negeri)
+    {
+        $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $kod_negeri)->orderBy('nama_negeri', 'asc')->get();  // Fetch all Negeri data
+        return response()->json($negeris);
+    }
     // Method to get Daerah based on selected Negeri
     public function getDaerah($kod_negeri)
     {

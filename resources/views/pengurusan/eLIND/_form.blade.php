@@ -69,8 +69,41 @@
                 <div class="form-group required col-md-6">
                     <label for="state" class="col-md-12 control-label">Negeri</label>
                     <div class="col-md-12">
-                        <input value="{{isset($eLIND->state) ? $eLIND->state : ''}}" name="state" class="form-control" type="char" id="state" >
+                        <!-- <input value="{{isset($eLIND->state) ? $eLIND->state : ''}}" name="state" class="form-control" type="char" id="state" > -->
+                        {{ Form::select('state', [], null, ['class' => 'form-control', 'id' => 'negeri']) }}
                     </div>
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script>
+                        $(document).ready(function() {
+                            // Fetch Negeri data on page load (AJAX call)
+                            $.ajax({
+                                url: '/get-negeri', // API endpoint to get negeri data
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function(data) {
+                                    // Populate the Negeri dropdown with the data
+                                    $('#negeri').empty(); // Clear current options
+                                    $('#negeri').append('<option value="">Pilih Negeri</option>');
+                                    $('#daerah').append('<option value="">Pilih Daerah</option>');
+                                    $('#mukim').append('<option value="">Pilih Mukim</option>');
+                                    $('#parlimen').append('<option value="">Pilih Parlimen</option>');
+                                    $('#dun').append('<option value="">Pilih Dun</option>');
+
+                                    $.each(data, function(key, value) {
+                                        // Add each Negeri to the dropdown
+                                        $('#negeri').append('<option value="' + value.kod_negeri + '">' + value.nama_negeri + '</option>');
+                                    });
+                                    var negeriSelected = "{{ isset($eLIND->state) ? $eLIND->state : '' }}"; // Assuming you have $eLIND->negeri
+                                    if (negeriSelected) {
+                                        $('#negeri').val(negeriSelected).trigger('change');
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error("Error fetching Negeri data: ", error);
+                                }
+                            });
+                        });
+                    </script>
                 </div>
             </div>
 

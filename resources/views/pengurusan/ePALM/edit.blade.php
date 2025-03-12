@@ -15,7 +15,7 @@
                     @if($ePALM->id_permohonan != null || isset($ePALM->nama_taman))
                         <style>
                             .inertClass {
-                                pointer-events: none; /* Ensure no interactions are possible */
+                                pointer-events: none;
                             }
 
                             .inertClass input,
@@ -24,8 +24,8 @@
                             .inertClass select {
                                 background-color: rgb(215, 215, 215); /* Light grey background for input/select */
                                 color: rgb(65, 60, 60); /* Light grey text color */
-                                cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
-                                pointer-events: none; /* Ensure no interactions are possible */
+                                cursor: not-allowed;
+                                pointer-events: none;
                             }
                         </style>
                     @endif

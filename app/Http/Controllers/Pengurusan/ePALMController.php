@@ -279,8 +279,14 @@ class ePALMController extends Controller
                 foreach ($ePALM_komponen as $item) {
                     $ePALM_approve_komponen_draf = ePALM_draf::where('id_taman', $item->id_taman)->first();
                     
-                    if($ePALM_approve_komponen_draf){
-                        $ePALM_approve_komponen_draf->status = $paparan_portal;
+                    $ePALM_approve_komponen_draf->negeri_taman = $ePALM_approve->negeri_taman;
+                    $ePALM_approve_komponen_draf->daerah_taman = $ePALM_approve->daerah_taman;
+                    $ePALM_approve_komponen_draf->mukim_taman = $ePALM_approve->mukim_taman;
+                    $ePALM_approve_komponen_draf->parlimen_taman = $ePALM_approve->parlimen_taman;
+                    $ePALM_approve_komponen_draf->dun_taman = $ePALM_approve->dun_taman;
+                    $ePALM_approve_komponen_draf->status = $paparan_portal;
+                    // $ePALM_approve_komponen_draf->save();
+                    if($ePALM_approve_komponen_draf->save()){
 
                         $ePALM_approve_komponen = ePALM::where('id_taman', $item->id_taman)->first();
                         $dataToUpdate_komponen = $ePALM_approve_komponen_draf->getAttributes();

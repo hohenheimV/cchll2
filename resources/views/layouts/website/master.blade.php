@@ -42,6 +42,7 @@
     <!-- CSS:percentage -->
     <link rel="stylesheet" href="{{ asset('css/percentage.css') }}">
     <link rel="stylesheet" href="{{ asset('css/tree.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Function to extract path from URL
         function getPathFromUrl() {
@@ -56,20 +57,20 @@
                 'T1': '#71c55d',
                 'T2': '#36458e',
                 'T3': '#0171f9',
-                // 'T4': 'rgb(25, 98, 92)',
+                // 'T4': 'rgb(59, 25, 98)',
                 // Add more mappings as needed
             };
 
-            return colorMap[path] || '#36458e'; // Default color if no match
+            return colorMap[path] || '#84cd73'; // Default color if no match
         }
 
         // Get the path and determine color
         const path = getPathFromUrl();
         // alert(path);
         const color = getColorForPath(path);
-
+        
         // Apply the color to the CSS variable
-        document.documentElement.style.setProperty('--themeColor', color);
+        // document.documentElement.style.setProperty('--themeColor', color);
     </script>
     <style>
         /* Mobile Styles */

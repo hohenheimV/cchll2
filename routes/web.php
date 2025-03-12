@@ -50,7 +50,7 @@ Route::get('/vtour-bukit-kiara', function () {
 
 Route::get('/', function () {
     // remove before git pull
-    return abort(403, 'Page under maintenence');
+    return abort(403, 'Page under maintenence!');
     // remove before git pull
     $counter = Home::findOrFail(1);
     views($counter)->cooldown(now()->addHours(1))->record();

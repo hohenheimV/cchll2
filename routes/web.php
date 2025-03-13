@@ -66,7 +66,7 @@ Route::get('/', function () {
     return view('website.welcome', compact('popup'));
 })->name('welcome');
 
-Route::get('/T1', function () {
+Route::post('/T1', function () {
     return view('website.T1welcome');
     $counter = Home::findOrFail(1);
     views($counter)->cooldown(now()->addHours(1))->record();

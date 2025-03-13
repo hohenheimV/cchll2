@@ -73,6 +73,80 @@
             display: flex;
             flex-wrap: wrap; /* Allow buttons to wrap */
         }
+        
+        .mobile-done {
+            display: none;
+        }
+        /* Mobile Styles */
+        @media only screen and (max-width: 768px) {
+            .mobile-gone {
+                display: none;
+            }
+            .mobile-done {
+                display: block;
+            }
+        }
+    </style>
+    <style>
+        .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+        }
+
+        .switch input { 
+        opacity: 0;
+        width: 0;
+        height: 0;
+        }
+
+        .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ff0000;
+        -webkit-transition: .4s;
+        transition: .4s;
+        }
+
+        .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+        }
+
+        input:checked + .slider {
+        background-color: #008000;
+        }
+
+        input:focus + .slider {
+        box-shadow: 0 0 1px #008000;
+        }
+
+        input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+        border-radius: 34px;
+        }
+
+        .slider.round:before {
+        border-radius: 50%;
+        }
     </style>
 </head>
 
@@ -178,6 +252,76 @@
                     dom: 'Bfrtip', // Position of the buttons
                     buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
                 });
+                $('#exampleNP').DataTable({
+                    responsive: true,
+                    paging: true,
+                    searching: true,
+                    info: true,
+                    autoWidth: false,
+                    ordering: true,
+                    columnDefs: [
+                        {
+                            targets: [0, 1, -2],
+                            orderable: true
+                        },
+                        // {
+                        //     targets: [-3],
+                        //     visible: false
+                        // },
+                        {
+                            targets: '_all',
+                            orderable: false
+                        }
+                    ],
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'copy',
+                            exportOptions: {
+                                columns: ':not(:eq(5), :eq(-1))'  // Only include the first, second, and second last columns in the "Copy" export
+                            }
+                        },
+                        {
+                            extend: 'csv',
+                            exportOptions: {
+                                columns: ':not(:eq(5), :eq(-1))'  // Only include the first, second, and second last columns in the "CSV" export
+                            }
+                        },
+                        {
+                            extend: 'excel',
+                            exportOptions: {
+                                columns: ':not(:eq(5), :eq(-1))'  // Only include the first, second, and second last columns in the "Excel" export
+                            }
+                        },
+                        {
+                            extend: 'pdf',
+                            exportOptions: {
+                                columns: ':not(:eq(5), :eq(-1))'  // Only include the first, second, and second last columns in the "PDF" export
+                            }
+                        },
+                        {
+                            extend: 'print',
+                            exportOptions: {
+                                columns: ':not(:eq(5), :eq(-1))'  // Only include the first, second, and second last columns in the "Print" export
+                            }
+                        }
+                    ],
+                    language: {
+                        search: "Carian:",  // Custom text for the search input
+                        searchPlaceholder: "Cari sesuatu...",  // Placeholder text in the search box
+                        info: "Menunjukkan baris _START_ hingga baris _END_ daripada _TOTAL_ jumlah data",  // Info text
+                        infoEmpty: "Tiada rekod yang ditemui",  // Info text when no data is available
+                        infoFiltered: "(disaring daripada _MAX_ jumlah data keseluruhan)",  // Info when filtering
+                        lengthMenu: "Tunjukkan _MENU_ jumlah data",  // Text for "Show entries"
+                        paginate: {
+                            first: "Pertama",  // First page button
+                            previous: "Sebelumnya",  // Previous page button
+                            next: "Seterusnya",  // Next page button
+                            last: "Terakhir"  // Last page button
+                        }
+                    }
+                });
+
             });
 
 
@@ -188,6 +332,16 @@
 
             // Center content of the last column
             $('#example tbody tr').each(function() {
+                $(this).find('td').last().css('text-align', 'center'); // Last column
+            });
+
+            // Set minimum width for the first column
+            $('#exampleNP thead tr').each(function() {
+                $(this).find('th').eq(0).css('min-width', '5px'); // First column
+            });
+
+            // Center content of the last column
+            $('#exampleNP tbody tr').each(function() {
                 $(this).find('td').last().css('text-align', 'center'); // Last column
             });
             

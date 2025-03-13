@@ -15,7 +15,7 @@ class EntitiLandskapUnik extends Model implements Auditable
      *
      * @var string
      */
-    protected $table = 'web_panorama';
+    protected $table = 'entiti_maklumat_landskap';
 
     /**
      * The primary key associated with the table.
@@ -37,17 +37,12 @@ class EntitiLandskapUnik extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'lat',
-        'lng',
-        'tajuk',
+        'nama_entiti',
+        'lokasi',
         'keterangan',
-        'gambar_360',
-        'tarikh'
+        'pbt',
+        'agensi',
+        'gambar',
     ];
 
-    public function setTypeAttribute()
-    {
-        $this->attributes['type'] = 'panorama';
-        # code...
-    }
 }

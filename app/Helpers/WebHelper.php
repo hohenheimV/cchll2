@@ -122,12 +122,17 @@ if (!function_exists('in_arrayi')) {
             $count = count($sliders);
             $html = '<div class="carousel-inner">';
             foreach ($sliders as $key => $slider) {
+                // $active = ($key == 0 ? 'active' : '');
+                // $html .= '<div class="carousel-item ' . $active . '">';
+                // $html .= '<div class="embed-responsive embed-responsive-16by9">';
+                // // $html .= '<img src="' . url(str_replace('tpbk.jln.gov.my', '127.0.0.1:8000', $slider->slider_image)) . '" class="card-img-top embed-responsive-item" alt="Slider ' . $slider->title . '">';
+                // $html .= '<img src="' . url(str_replace('https', 'http', str_replace('tpbk.jln.gov.my', '127.0.0.1:8000', str_replace('//storage', '/storage', $slider->slider_image)))) . '" class="card-img-top embed-responsive-item" alt="Slider ' . $slider->title . '">';
+                // // dump(url(str_replace('https', 'http', str_replace('tpbk.jln.gov.my', '127.0.0.1:8000', str_replace('//storage', '/storage', $slider->slider_image)))));
+
                 $active = ($key == 0 ? 'active' : '');
                 $html .= '<div class="carousel-item ' . $active . '">';
                 $html .= '<div class="embed-responsive embed-responsive-16by9">';
-                // $html .= '<img src="' . url(str_replace('tpbk.jln.gov.my', '127.0.0.1:8000', $slider->slider_image)) . '" class="card-img-top embed-responsive-item" alt="Slider ' . $slider->title . '">';
-                $html .= '<img src="' . url(str_replace('https', 'http', str_replace('tpbk.jln.gov.my', '127.0.0.1:8000', str_replace('//storage', '/storage', $slider->slider_image)))) . '" class="card-img-top embed-responsive-item" alt="Slider ' . $slider->title . '">';
-                // dump(url(str_replace('https', 'http', str_replace('tpbk.jln.gov.my', '127.0.0.1:8000', str_replace('//storage', '/storage', $slider->slider_image)))));
+                $html .= '<img src="' . url(str_replace('10.28.203.150', '192.168.0.120', $slider->slider_image)) . '" class="card-img-top embed-responsive-item" alt="Slider ' . $slider->title . '">';
 
                 $html .= '<div class="carousel-caption d-none d-md-block" style="top: 50%;">';
 
@@ -407,6 +412,8 @@ if (!function_exists('in_arrayi')) {
                     $html .= '<li class="nav-item"><a target="_blank" class="btn bg-olive btn-sm mr-1" href="' . $social['link'] . '"><i class="' . $social['icon'] . '"></i></a>';
                 }
             }
+            $html .= '<li class="nav-item"><a target="_blank" class="btn bg-olive btn-sm mr-1" href="/login"><i class="fas fa-lock"></i></a>';
+            
             $html .= '</ul></div>';
             return $html;
         }
@@ -579,7 +586,7 @@ if (!function_exists('in_arrayi')) {
 
         function website_sidebar_contact()
         {
-            $slug = 'widget:bahagian-taman-persekutuan';
+            $slug = 'widget:jabatan-landskap-negara';
             $footer = Page::with('category')->where('slug', $slug)
                 ->whereHas('category', function ($query) {
                     $query->where('slug', 'meta');

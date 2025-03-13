@@ -1,5 +1,5 @@
 <!-- Sidebar Widgets Column -->
-<div class="col-lg-4">
+<div class="col-lg-3">
 
     <!-- Search Widget -->
     <div class="card mb-4 d-none d-lg-block">
@@ -18,7 +18,7 @@
         </div>
     </div> --}}
      <!-- Categories Widget -->
-     <div class="card my-4 border border-success">
+     <div class="card my-4 border border-success mobile-gone">
         <h5 class="card-header bg-olive">Hubungi Kami</h5>
         <div class="card-body">
             <div class="row">

@@ -20,21 +20,38 @@ use App\Model\Home;
 use App\Model\Menu;
 use App\Model\Page;
 use App\Model\Slider;
+use App\Model\ePALM;
+use App\Model\eREAD;
+use App\Model\eLAD;
+use App\Model\ePIL;
+use App\Model\ePIL_dokumen;
+use App\Model\Negeri;
+use App\Model\MaklumatPenggunaPenggiatIndustri;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DataController;
-// use App\Http\Controllers\Pengurusan\EntitiLandskapController;
-// use App\Http\Controllers\Pengurusan\KempenTanamController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\Pengurusan\eLINDController;
+use App\Http\Controllers\Pengurusan\eLAPSController;
+use App\Http\Controllers\Pengurusan\ePALMController;
+use App\Http\Controllers\Pengurusan\MIB_laporanController;
 // use App\Http\Controllers\Pengurusan\eMohonController;
 
 Route::get('/vtour-bukit-kiara', function () {
     return view('website.vtour');
 })->name('vtour');
 
+// Route::get('/epalm-taman', function () {
+//     return ePALM::where('is_komponen', null)->latest()->paginate(10);
+// })->name('epalm');
+
 Route::get('/', function () {
+    // remove before git pull
+    return abort(403, 'Page under maintenence!');
+    // remove before git pull
     $counter = Home::findOrFail(1);
     views($counter)->cooldown(now()->addHours(1))->record();
     $popup = Slider::where('popup',1)->first();
@@ -49,7 +66,8 @@ Route::get('/', function () {
     return view('website.welcome', compact('popup'));
 })->name('welcome');
 
-Route::get('/T1', function () {
+Route::post('/T1', function () {
+    return view('website.T1welcome');
     $counter = Home::findOrFail(1);
     views($counter)->cooldown(now()->addHours(1))->record();
     $popup = Slider::where('popup',1)->first();
@@ -70,6 +88,13 @@ Route::get('/T3', function () {
     return view('website.T3welcome', compact('popup'));
 })->name('welcomeT3');
 
+Route::get('/T4', function () {
+    $counter = Home::findOrFail(1);
+    views($counter)->cooldown(now()->addHours(1))->record();
+    $popup = Slider::where('popup',1)->first();
+    return view('website.T4welcome', compact('popup'));
+})->name('welcomeT4');
+
 Route::get('/api/negeri', [RegisterController::class, 'getNegeri']);
 // Route::get('/api/daerah/{negeriId}', [RegisterController::class, 'getDaerah']);
 Route::get('/api/pbt/{negeriId}', [RegisterController::class, 'getPBT']);
@@ -82,10 +107,24 @@ Route::get('/data/negeri/{shortName}', [DataController::class, 'getNegeri']);
 Route::get('/data/pbt/{negeriId}', [DataController::class, 'getPBT']);
 Route::get('/data/pbt/{negeriId}/{pbtId}', [DataController::class, 'getPBT']);
 Route::get('/data/postcode/{postcode}', [DataController::class, 'getPostcode']);
+// Route::post('/upload-chunk', [DataController::class, 'uploadChunk'])->name('upload.chunk');
+Route::post('/upload-chunk', [DataController::class, 'uploadChunk']);
+Route::post('/test-upload', [DataController::class, 'testUpload']);
+Route::get('/fetchComponents/{id_taman}', [DataController::class, 'fetchComponents']);
+Route::get('/get-pbt-statistics', [DataController::class, 'getPBTStatistics']);
+Route::get('/get-visitor-statistics', [DataController::class, 'getVisitorStatistics']);
 
-// Route::get('/register', function () {
-//     return view('auth.register');
-// })->name('vtour');
+
+// Route::get('your-form-url', [LocationController::class, 'create']);
+Route::get('get-negeri', [LocationController::class, 'create']);
+Route::get('get-negeri/{kod_negeri?}', [LocationController::class, 'getNegeri']);
+Route::get('get-daerah/{kod_negeri}', [LocationController::class, 'getDaerah']);
+Route::get('get-mukim/{kod_negeri}/{kod_daerah}', [LocationController::class, 'getMukim']);
+
+
+Route::get('get-parlimen/{kod_negeri}', [LocationController::class, 'getParlimen']);
+Route::get('get-dun/{kod_parlimen}', [LocationController::class, 'getDun']);
+
 
 Route::get('/pengurusan', function () {
     return redirect()->route('pengurusan.dashboard');
@@ -98,8 +137,23 @@ Route::get('/read', function () {
 Route::get('/pano', function () {
     return view('website.pano');
 })->name('pano');
+Route::get('/pano/{folder}/{image}', function ($folder, $image) {
+    // dd($folder);
+    $imageExist = storage_path("app/public/uploads/ePALM/{$folder}/{$image}"); 
+    $imagePath = asset('storage/uploads/ePALM/'.$folder.'/'.$image); 
+    if (file_exists($imageExist) && $image != null && $folder != null) {
+        return view('website.360', compact('imagePath'));
+    }
+    return abort(404, 'Image not found');
+})->name('pano');
 
-Auth::routes(['verify' => false, 'register' => true, 'reset' => true]);
+
+// Route::get('/360', function () {
+//     return view('website.360');
+// })->name('360.view');
+
+// Auth::routes(['verify' => false, 'register' => true, 'reset' => true]);
+Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -122,6 +176,16 @@ Route::name('website.')
         Route::post('/aktiviti/checkbooking', 'ActivitiesController@checkbooking')->name('activities.checkbooking');
 
         Route::post('maklumbalas/simpan', 'FeedbacksController@simpan')->name('feedbacks.simpan');
+
+
+        Route::get('/rakan-taman', function () {
+            return view('website.MIB.register');
+        })->name('MIB.register');
+        Route::get('/borang-rakan-taman', function () {
+            return view('website.MIB.borang');
+        })->name('MIB.borang');
+        Route::post('rakan-taman/simpan', 'MIBController@simpan')->name('MIB.simpan');
+
 
         Route::get('/konsultasi-awam', function () {
 
@@ -208,6 +272,133 @@ Route::name('website.')
 
             return view('website.search', ['articles' => []]);
         })->name('search');
+
+        Route::get('/epalm-taman/{keyword?}', function ($keyword = null) {
+            // dd($keyword);
+            // return ePALM::where('is_komponen', null)->latest()->paginate(10);
+            // $ePALM = ePALM::/* where('is_komponen', null)-> */where('status', 'approved')->latest()->paginate(5);//ePALM::latest()->paginate(15);
+            $ePALM = ePALM::where('status', 'approved')
+                ->when($keyword, function($query) use ($keyword) {
+                    return $query->where('negeri_taman', 'like', "%$keyword%");
+                })
+                ->orderBy('negeri_taman')
+                ->orderBy('created_at', 'asc')
+                ->orderBy('nama_pbt')
+                ->paginate(10);
+            foreach ($ePALM as $item) {
+                if ($item->nama_pbt == "Landskap Perbandaran") {
+                    $ePALM_komponen = ePALM::where('id_taman', $item->is_komponen)->first();
+                    $item->komponen = str_replace(' ', '_', $ePALM_komponen->nama_taman)."/".str_replace(' ', '_', $item->nama_taman);
+                    // dump($ePALM_komponen);
+                    $item->nama_pbt = $ePALM_komponen->nama_pbt;
+                    $item->gambar_taman = str_replace('gambar_input_modal_', 'Xgambar_input_modal_', $item->gambar_taman);
+                    $item->kategori_taman = $ePALM_komponen->kategori_taman;
+                    // $item->keterangan_taman = $ePALM_komponen->nama_pbt;
+                    $item->fasiliti = $ePALM_komponen->fasiliti;
+                    $item->lat = $ePALM_komponen->lat;
+                    $item->lng = $ePALM_komponen->lng;
+                    $item->keluasan_taman = $ePALM_komponen->keluasan_taman;
+                    $item->keluasan_unit = $ePALM_komponen->keluasan_unit;
+                    $item->waktuMula_taman = $ePALM_komponen->waktuMula_taman;
+                    $item->waktuTamat_taman = $ePALM_komponen->waktuTamat_taman;
+                    $item->negeri_taman = $ePALM_komponen->negeri_taman;
+                    $item->nama_taman = "Komponen: ".$item->nama_taman;
+                    // dump($item);
+                }
+                $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->negeri_taman)->orderBy('nama_negeri', 'asc')->first();
+                $item->negeri = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 
+            }
+            return view('website.ePALM', ['ePALM_all' => $ePALM, 'keyword' => $keyword]);
+        })->name('epalm');
+
+        Route::get('/epil-pelan/{keyword?}', function ($keyword = null) {
+            $ePIL = ePIL::where('status', 'approved')
+                ->when($keyword, function($query) use ($keyword) {
+                    return $query->where('negeri_pelan', 'like', "%$keyword%");
+                })
+                ->orderBy('negeri_pelan')
+                ->orderBy('created_at', 'asc')
+                ->orderBy('nama_pbt')
+                ->paginate(5);
+            foreach ($ePIL as $item) {
+                $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->negeri_pelan)->orderBy('nama_negeri', 'asc')->first();
+                $item->negeri = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 
+            }
+            $ePIL->getCollection()->transform(function ($PIL) {
+                $dokumen = ePIL_dokumen::where('status', 'active')->where('id_pelan', $PIL->id_pelan)->first();
+                $PIL->nama_dokumen_pelan = $dokumen ? $dokumen->nama_dokumen_pelan : null;
+                $PIL->id_dokumen_pelan = $dokumen ? $dokumen->id_dokumen_pelan : null;
+                // dump($dokumen);
+        
+                return $PIL;
+            });
+            // dd($ePIL[0]);
+            return view('website.ePIL', ['ePIL' => $ePIL, 'keyword' => $keyword]);
+        })->name('ePIL');
+
+        Route::get('/eread-dokumen/{keyword?}', function ($keyword = null) {
+            $totalCount = eREAD::with('kategori')->count();
+            $ereads = eREAD::with('kategori')->orderBy('tarikh', 'desc')->paginate($totalCount);
+            return view('website.eREAD', ['ereads' => $ereads, 'keyword' => $keyword]);
+        })->name('eREAD');
+
+        Route::get('/elad-dokumen/{keyword}', function ($keyword) {
+            if($keyword == "lembut"){
+                $totalCount = eLAD::with('kategori')->where('kate', 157)->count();
+                $eLAD = eLAD::with('kategori')->where('kate', 157)->orderBy('tarikh', 'desc')->paginate($totalCount, ['*'], 'lembut');
+            }elseif($keyword == "kejur"){
+                $totalCount = eLAD::with('kategori')->where('kate', 123)->count();
+                $eLAD = eLAD::with('kategori')->where('kate', 123)->orderBy('tarikh', 'desc')->paginate($totalCount, ['*'], 'kejur');
+            }else{
+                return abort(404, 'Not Found');
+            }
+            return view('website.eLAD', ['eLAD' => $eLAD, 'keyword' => ucwords($keyword)]);
+        })->name('eLAD');
+
+        Route::get('/penggiat-industri/{keyword}', function ($keyword) {
+            switch ($keyword) {
+                case 'kontraktor':
+                    $type = 'Kontraktor';
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+                    break;
+    
+                case 'perunding':
+                    $type = 'Perunding';
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+                    break;
+    
+                case 'pembekal':
+                    $type = 'Pembekal';
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+                    break;
+                case 'antarabangsa':
+                    $type = 'Pertubuhan Antarabangsa';
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+                    break;
+    
+                case 'ngo':
+                    $type = 'NGO / Badan Ikhtisas';
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+                    break;
+    
+                case 'pendidikan':
+                    $type = 'Institusi Pendidikan';
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+                    break;
+    
+                default:
+                    return abort(404, 'Not Found');
+            }
+            foreach ($data as $item) {
+                $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->state)->orderBy('nama_negeri', 'asc')->first();
+                if($negeris){
+                    $item->state = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 
+                }else{
+                    $item->state = 'Tiada Maklumat';
+                }
+            }
+            return view('website.eLIND', ['eLIND' => $data, 'keyword' => ($type)]);
+        })->name('eLIND');
     });
 
 Route::middleware(['auth'])
@@ -258,10 +449,23 @@ Route::middleware(['auth'])
             Route::get('velind', 'UsersController@velind')->name('velind');
         });
 
+        // Route::get('eLIND/kontraktor', 'eLINDController@kontraktor')->name('eLIND.kontraktor');
+        // Route::get('eLIND/perunding_landskap', 'eLINDController@perundingLandskap')->name('eLIND.perunding_landskap');
+        // Route::get('eLIND/pembekal_landskap', 'eLINDController@pembekalLandskap')->name('eLIND.pembekal_landskap');
+        // Route::get('eLIND/pertubuhan_antarabangsa', 'eLINDController@pertubuhanAntarabangsa')->name('eLIND.pertubuhan_antarabangsa');
+        // Route::get('eLIND/ngo_badan_ikhtisas', 'eLINDController@ngoBadanIkhtisas')->name('eLIND.ngo_badan_ikhtisas');
+        // Route::get('eLIND/institusi_pendidikan', 'eLINDController@institusiPendidikan')->name('eLIND.institusi_pendidikan');
+
         /**
          * Route eLINDController
          */
-        Route::resource('eLIND', 'UsersController');
+        // Route::resource('eLIND', 'eLINDController');
+        // Add this route for the kontraktor method
+
+
+        // Route::get('eLIND/kontraktor', [eLINDController::class, 'kontraktor'])->name('pengurusan.eLIND.kontraktor');
+        // Route::get('eLIND/perunding', [eLINDController::class, 'perunding'])->name('pengurusan.eLIND.perunding');
+
         
         Route::get('entiti-lanskap', [EntitiLandskapController::class, 'index'])->name('entitiLandskap.entiti.index');
         Route::get('kempen-tanam', [KempenTanamController::class, 'index'])->name('kempenTanam.entiti.index');
@@ -429,6 +633,73 @@ Route::middleware(['auth'])
         Route::resource('entiti-landskap-unik', 'EntitiLandskapUnikController');
 
         /**
+         * Route eLAPSController
+         */
+        Route::resource('eLAPS', 'eLAPSController');
+        // Route::get('/eLAPS/{eLAPS}/edit', [eLAPSController::class, 'edit'])->name('pengurusan.eLAPS.edit');
+        Route::post('/upload-chunk', [eLAPSController::class, 'uploadChunk'])->name('upload.chunk');
+
+        /**
+         * Route ePALMController
+         */
+        Route::resource('ePALM', 'ePALMController');
+        // Route::get('/ePALM/fetchComponents', [ePALMController::class, 'fetchComponents'])->name('pengurusan.ePALM.fetchComponentsManual');
+
+
+
+        /**
+         * Route ePILController
+         */
+        Route::resource('ePIL', 'ePILController');
+        Route::resource('ePIL_dokumen', 'ePIL_dokumenController');
+        /**
+         * Route MIBController
+         */
+        Route::resource('MIB', 'MIBController');
+
+        /**
+         * Route MIB_laporanController
+         */
+        // Route::resource('MIB_laporan', 'MIB_laporanController');
+        Route::get('MIB_laporan/create/{id_rakan}', [MIB_laporanController::class, 'create'])->name('MIB_laporan.create');
+
+        Route::get('MIB_laporan', [MIB_laporanController::class, 'index'])->name('MIB_laporan.index');
+
+        // Route to show the form for creating a new MIB laporan (create)
+        Route::get('MIB_laporan/create/{id_rakan}', [MIB_laporanController::class, 'create'])->name('MIB_laporan.create');
+
+        // Route to store a newly created MIB laporan (store)
+        Route::post('MIB_laporan', [MIB_laporanController::class, 'store'])->name('MIB_laporan.store');
+
+        // Route to show the form for editing an existing MIB laporan (edit)
+        Route::get('MIB_laporan/edit/{id}', [MIB_laporanController::class, 'edit'])->name('MIB_laporan.edit');
+        Route::get('MIB_laporan/show/{id}', [MIB_laporanController::class, 'show'])->name('MIB_laporan.show');
+
+        // Route to update an existing MIB laporan (update)
+        Route::put('MIB_laporan/{id}', [MIB_laporanController::class, 'update'])->name('MIB_laporan.update');
+
+        // Route to delete an existing MIB laporan (destroy)
+        Route::delete('MIB_laporan/{id}', [MIB_laporanController::class, 'destroy'])->name('MIB_laporan.destroy');
+
+        /**
+         * Route eLINDController
+         */
+        // Route::resource('eLIND', 'eLINDController');
+        // Route::resource('eLIND', 'eLINDController');
+        // Route::get('eLIND/{type}', 'eLINDController@indexSubmodule')->name('eLIND.indexSubmodule');
+        // Define routes for the submodule actions
+        // Route::get('eLIND/{type}', 'eLINDController@index')->name('eLIND.index');
+        Route::get('eLIND/{type}', 'eLINDController@index')->name('eLIND.index');
+        Route::get('eLIND/{type}/create', 'eLINDController@create')->name('eLIND.create');
+        Route::get('eLIND/{type}/{id}/show', 'eLINDController@show')->name('eLIND.show');
+        Route::post('eLIND/{type}', 'eLINDController@store')->name('eLIND.store');
+        Route::get('eLIND/{type}/{id}/edit', 'eLINDController@edit')->name('eLIND.edit');
+        Route::put('eLIND/{type}/{id}', 'eLINDController@update')->name('eLIND.update');
+        Route::delete('eLIND/{type}/{id}', 'eLINDController@destroy')->name('eLIND.destroy');
+        // Route::get('eLIND', 'eLINDController@kontraktor')->name('eLIND.kontraktor');
+        // Route::get('pengurusan/eLINDz', [eLINDController::class, 'indexz'])->name('pengurusan.eLIND.indexz');
+
+        /**
          * Route DroneController
          */
         Route::resource('drone', 'DroneController');
@@ -558,43 +829,44 @@ Route::middleware(['auth'])
         });
     });
 
-Route::get('/test-email', function () {
-    $details = [
-        'title' => 'Mail from Laravel App',
-        'body' => 'This is a test email sent from Laravel application.'
-    ];
 
-    Mail::raw($details['body'], function ($message) use ($details) {
-        $message->to('your_test_email@example.com')  // Replace with your test email address
-                ->subject($details['title']);
+    Route::get('/test-email', function () {
+        $details = [
+            'title' => 'Mail from Laravel App',
+            'body' => 'This is a test email sent from Laravel application.'
+        ];
+
+        Mail::raw($details['body'], function ($message) use ($details) {
+            $message->to('your_test_email@example.com')  // Replace with your test email address
+                    ->subject($details['title']);
+        });
+
+        return 'Email sent!';
     });
+    Route::get('/test-email2', function () {
+        $details = [
+            'title' => 'Mail from Laravel App',
+            'body' => 'This is a test email sent from Laravel application.'
+        ];
 
-    return 'Email sent!';
-});
-Route::get('/test-email2', function () {
-    $details = [
-        'title' => 'Mail from Laravel App',
-        'body' => 'This is a test email sent from Laravel application.'
-    ];
+        \Illuminate\Support\Facades\Mail::raw($details['body'], function ($message) use ($details) {
+            $message->to('test@example.com')  // Replace with your test email address
+                    ->subject($details['title']);
+        });
 
-    \Illuminate\Support\Facades\Mail::raw($details['body'], function ($message) use ($details) {
-        $message->to('test@example.com')  // Replace with your test email address
-                ->subject($details['title']);
+        return 'Email sent!';
     });
+    Route::get('/test-email-html', function () {
+        $details = [
+            'title' => 'HTML Mail from Laravel App',
+            'body' => '<h1>This is a test email sent from Laravel application.</h1>'
+        ];
 
-    return 'Email sent!';
-});
-Route::get('/test-email-html', function () {
-    $details = [
-        'title' => 'HTML Mail from Laravel App',
-        'body' => '<h1>This is a test email sent from Laravel application.</h1>'
-    ];
+        \Illuminate\Support\Facades\Mail::send([], [], function ($message) use ($details) {
+            $message->to('test@example.com')
+                    ->subject($details['title'])
+                    ->setBody($details['body'], 'text/html');
+        });
 
-    \Illuminate\Support\Facades\Mail::send([], [], function ($message) use ($details) {
-        $message->to('test@example.com')
-                ->subject($details['title'])
-                ->setBody($details['body'], 'text/html');
+        return 'HTML email sent!';
     });
-
-    return 'HTML email sent!';
-});

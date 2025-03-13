@@ -28,41 +28,53 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="w-1">Bil.</th>
-                                    <th class="w-5">Gambar</th>
                                     <th>Nama Entiti Landskap</th>
                                     <th>Keterangan</th>
-                                    <th class="text-center w-10">PBT/ Agensi</th>
+                                    <th class="text-center w-10">PBT</th>
                                     <th class="text-center w-10">Lokasi</th>
+                                    <th class="w-15">Gambar</th>
                                     <th class="text-center w-10">Anggaran Nilai</th>
                                     <th class="text-center w-5">Tindakan</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php($index = $entitiLandskapUnik->firstItem())
-                                @forelse($entitiLandskapUnik as $kempen)
+                                @forelse($entitiLandskapUnik as $entiti)
                                 <tr>
                                     <td>{{ $index++ }}</td>
+                                    <td>{{ $entiti->nama_entiti }}</td>
+                                    <td>{{ $entiti->keterangan }} </td>
+                                    <td class="text-center">{{ $entiti->pbt }}</td>
+                                    <td class="text-center">{{ $entiti->lokasi }}</td>
                                     <td class="p-0">
-                                        {!! '<img class="image-thumb p-1 w-75 mx-auto d-block embed-responsive-item" alt="Gambar Entiti Landskap Unik"
-                                            src="'.asset($kempen->gambar_360 ? 'storage/images/shares/entiti-landskap-unik/'.$kempen->gambar_360 : 'img/no-photos.png').'">' !!}
+                                        <?php
+                                            if(isset($entiti->gambar)){
+                                                $folderName = str_replace(' ', '_', $entiti->nama_entiti);
+                                                $gambarData = json_decode($entiti->gambar, true);
+
+                                                $gambar_input_modal = isset($gambarData['gambar_input_modal_4']) ? $folderName.'/'.$gambarData['gambar_input_modal_4'] : null;
+                                                $gambar_input_modal = isset($gambarData['gambar_input_modal_3']) ? $folderName.'/'.$gambarData['gambar_input_modal_3'] : null;
+                                                $gambar_input_modal = isset($gambarData['gambar_input_modal_2']) ? $folderName.'/'.$gambarData['gambar_input_modal_2'] : null;
+                                                $gambar_input_modal = isset($gambarData['gambar_input_modal_1']) ? $folderName.'/'.$gambarData['gambar_input_modal_1'] : null;
+                                                //dd($gambarData);
+                                            }else{
+                                                $gambar_input_modal = null;
+                                            }
+                                        ?>
+                                        <img class="image-thumb p-1 w-75 mx-auto d-block embed-responsive-item" alt="Gambar Entiti Landskap Unik" src="{{ isset($gambar_input_modal) ? asset('storage/uploads/entiti_landskap/' . $gambar_input_modal) : asset('storage/uploads/no-photos.png') }}">
                                     </td>
-                                    <td>{{ (($index-1) % 2 == 0) ? 'Kawasan Unik '.($index-1) : 'Pokok Unik '.($index-1) }}</td>
-                                    <td>{{ (($index-1) % 2 == 0) ? 'Kawasan Unik '.($index-1).' ini berkonsepkan...' : 'Pokok Unik '.($index-1).' ini adalah pokok yang pertama...' }} </td>
-                                    <td class="text-center">{!! Html::datetime($kempen->tarikh, 'd-m-Y') ? 'PBT '.($index-1) : 'null'  !!}</td>
-                                    <td class="text-center">{!! Html::datetime($kempen->created_at, 'd-m-Y') ? 'Lokasi '.($index-1) : 'null'  !!}</td>
-                                    <td class="text-center">{!! Html::datetime($kempen->updated_at, 'd-m-Y')  ? 'RM '.number_format(($index - 1) * 2541.143, 2) : 'null' !!}</td>
+                                    <td class="text-center">{{ $entiti->agensi }}</td>
                                     <td>
                                         <div class="btn-group">
                                             {!! Form::button('<i class="fas fa-search"></i>',
-                                                ['onclick'=>"window.location='".route('pengurusan.entiti-landskap-unik.show',$kempen)."'",
+                                                ['onclick'=>"window.location='".route('pengurusan.entiti-landskap-unik.show',$entiti)."'",
                                                 'class'=>'btn bg-info btn-sm', Html::tooltip('Butiran Entiti Landskap Unik')]) !!}
                                             {!! Form::button('<i class="fas fa-pencil-alt"></i>',
-                                                ['onclick'=>"window.location='".route('pengurusan.entiti-landskap-unik.edit',$kempen)."'",
+                                                ['onclick'=>"window.location='".route('pengurusan.entiti-landskap-unik.edit',$entiti)."'",
                                                 'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini Entiti Landskap Unik')]) !!}
                                             {!! Form::button('<i class="fas fa-trash"></i>', 
                                                 ['class'=>'btn btn-danger btn-sm',
-                                                'data-url'=>route('pengurusan.entiti-landskap-unik.destroy',$kempen),
-                                                'data-text'=>'Kempen : '.$kempen->tajuk,
+                                                'data-url'=>route('pengurusan.entiti-landskap-unik.destroy',$entiti),
                                                 'data-toggle'=>'modal', 'data-target'=>'#modalDelete']) !!}
                                         </div>
                                     </td>
@@ -73,72 +85,16 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- /.table-responsive -->
                 </div>
-                <!-- /.card-body -->
                 @if(count($entitiLandskapUnik) > 0)
                 <div class="card-footer bg-light p-2 border-top-0 d-flex flex-column justify-content-center align-items-end">
                     {!! Html::pagination($entitiLandskapUnik) !!}
                 </div>
-                <!-- /.card-footer -->
                 @endif
-            </div><!-- /.card -->
-        </div><!-- /.col-lg-12 -->
-    </div><!-- /.row -->
-</div><!-- /.container -->
+            </div>
+        </div>
+    </div>
+</div>
 
-@section('page-js-script')
-
-<script>
-    $(document).ready(function () {
-        $('#modalKempen').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var href = button.data('href'); // Extract info from data-* attributes
-            $('[data-tooltip="tooltip"]').tooltip('hide');
-            // Load URL from data-href
-            $('#modalKempen .modal-content').load(href, function (responseTxt, statusTxt, xhr) {
-
-                // Date picker
-                $('input[name="tarikh"]').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    minDate: '01-' + moment().subtract(1, 'month').subtract(1, 'year').format('MM-YYYY'),
-                    maxDate: moment().endOf('month').format('DD-MM-YYYY'),
-                    drops: "up",
-                    locale: { format: 'DD-MM-YYYY' }
-                });
-
-                validation();
-
-                if (statusTxt == "success") {
-                    $('#modalKempen').modal('show');
-                    $('#modalKempen').on('hidden.bs.modal', function () {
-                        $('[data-tooltip="tooltip"]').tooltip('hide');
-                        $(this).find('.modal-content').empty();
-                    });
-                } else {
-                    alert("Error: " + xhr.status + ": " + xhr.statusText);
-                }
-            });
-        });
-
-        // JQuery validation
-        function validation() {
-            $('#modalFormKempen').validate({
-                submitHandler: function (form) {
-                    form.submit();
-                },
-                rules: {
-                    'kod_tag': 'required',
-                    'kategori': 'required',
-                    'jenis': 'required',
-                    'tarikh': 'required',
-                    'lat': 'required',
-                    'lng': 'required',
-                }
-            });
-        }
-    });
-</script>
-@stop
 @endsection
+

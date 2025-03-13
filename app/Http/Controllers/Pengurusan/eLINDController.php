@@ -3,59 +3,76 @@
 namespace App\Http\Controllers\Pengurusan;
 
 use App\Http\Controllers\Controller;
+use App\Model\eLIND;
 use App\User;
+use App\Model\MaklumatPenggunaPenggiatIndustri;
+use App\Model\MaklumatPenggunaPenggiatIndustri_draf;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Mail;
-
-use App\Exports\UsersExport;
+use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon; 
 
 class eLINDController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    function __construct()
+    public function __construct()
     {
-        $this->middleware(['role:Pentadbir Sistem'], ['except' => ['profile_show','profile_edit','profile_update']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|Penggiat Industri|eLIND-list']);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|Penggiat Industri|eLIND-create'], ['only' => ['create', 'store']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|Penggiat Industri|eLIND-edit'], ['only' => ['edit', 'update']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|Penggiat Industri|eLIND-delete'], ['only' => ['destroy']]);
     }
 
-
     /**
      * Display a listing of the resource.
      *
-     * Search with keyword for user.name OR SUBSTRING user.email or roles.name
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    
+
+    public function index($type)
     {
-        if ($request->only('keyword')) {
-            $request->validate([
-                'keyword' => 'required|min:3|max:255|regex:/(^[A-Za-z0-9\/\- ]+$)+/',
-            ]);
+        // dd($type);
+        switch ($type) {
+            case 'kontraktor':
+                $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Kontraktor')->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Kontraktor')->count());
+                $view = 'pengurusan.eLIND.index';
+                break;
+
+            case 'perunding':
+                $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Perunding')->latest()->paginate(10);
+                $view = 'pengurusan.eLIND.index';
+                break;
+
+            case 'pembekal':
+                $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Pembekal')->latest()->paginate(10);
+                $view = 'pengurusan.eLIND.index';
+                break;
+            case 'antarabangsa':
+                $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Pertubuhan Antarabangsa')->latest()->paginate(5);
+                $view = 'pengurusan.eLIND.index';
+                break;
+
+            case 'ngo':
+                $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'NGO / Badan Ikhtisas')->latest()->paginate(10);
+                $view = 'pengurusan.eLIND.index';
+                break;
+
+            case 'pendidikan':
+                $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Institusi Pendidikan')->latest()->paginate(10);
+                $view = 'pengurusan.eLIND.index';
+                break;
+
+            default:
+                dd($type);
+                abort(404); 
         }
-
-        $users = User::when($request->keyword, function ($q) use ($request) { //Bila ada keyword
-            $q->where(function ($query) use ($request) {
-				$query->whereRaw('lower(name) LIKE ? ', ['%' . trim(strtolower($request->keyword)) . '%']);    
-            })->orWhereHas('roles', function ($query)  use ($request){
-                $query->where('name', '=', $request->keyword);
-            });
-        })->paginate(20);
-
-        $users->appends($request->only('keyword'));
-
-        return view('pengurusan.eLIND.index', ['users' => $users]);
+        // dd($data);
+        return view($view, ['eLIND' => $data]);
     }
 
     /**
@@ -65,9 +82,7 @@ class eLINDController extends Controller
      */
     public function create()
     {
-        $roles = Role::pluck('name', 'name')->all();
-
-        return view('pengurusan.eLIND.create', ['roles' => $roles, 'userRole' => []]);
+        return view('pengurusan.eLIND.create');
     }
 
     /**
@@ -76,220 +91,415 @@ class eLINDController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($type, Request $request)
     {
-        // Mula Rule validation
-        $rules = [
-            'name' => 'required',
-            'email' => 'required|email|unique:eLIND,email',
-            'password' => 'required|same:confirm-password',
-            'roles' => 'required'
-        ];
-        //Selaras bentuk mesej yang sama; attributes berbeza
-        $messages = [
-            'required' => ':attribute diperlukan.',
-            'min' => ':attribute terlalu ringkas.',
-            'max' => ':attribute terlalu panjang.',
-            'regex' => ':attribute tidak sah.',
-        ];
-        // Rename field ke perkataan boleh difaham (jika perlu/berlainan)
-        $attributes = [];
+        // dd($request->all());
+        $requestData = $request->all();
 
-        $validator = Validator::make($request->all(), $rules, $messages, $attributes)->validate();
+        // dd($requestData['mediaSosial_penggiat']['Emel']);
+        $requestData['email'] = $requestData['mediaSosial_penggiat']['Emel'];
 
+        $mediaSosial_penggiat = collect($requestData['mediaSosial_penggiat'] ?? [])
+            ->map(function($item) {
+                return $item;
+            })
+            ->toArray();
+        $requestData['mediaSosial_penggiat'] = json_encode($mediaSosial_penggiat);
 
-        $input = $request->all();
-
-        if (!empty($input['password'])) {
-            $input['password'] = Hash::make($request->password);
-        } else {
-            $input = Arr::except($input, ['password']);
+        if(isset($requestData['pekerja'])){
+            $mergedPekerja = [];
+            $pekerjaArr = $requestData['pekerja'];
+            foreach ($pekerjaArr as $key => $value) {
+                $pekerja_penggiat = collect($value ?? [])
+                ->map(function($item) {
+                    return $item;
+                })
+                ->toArray();
+                if ($pekerja_penggiat['nama'] !== null) {
+                    $mergedPekerja[] = $pekerja_penggiat;
+                }
+            }
+            $requestData['pekerja'] = json_encode($mergedPekerja);
         }
 
-        // define data field of Model
-        $user = User::create($input);
+        if(isset($requestData['pengalaman'])){
+            $mergedPengalaman = [];
+            $pengalamanArr = $requestData['pengalaman'];
+            foreach ($pengalamanArr as $key => $value) {
+                $pengalaman_penggiat = collect($value ?? [])
+                ->map(function($item) {
+                    return $item;
+                })
+                ->toArray();
+                if ($pengalaman_penggiat['tajuk'] !== null) {
+                    $mergedPengalaman[] = $pengalaman_penggiat;
+                }
+            }
+            $requestData['pengalaman'] = json_encode($mergedPengalaman);
+        }
+        
+        if(isset($requestData['produk'])){
+            $mergedproduk = [];
+            $produkArr = $requestData['produk'];
+            foreach ($produkArr as $key => $value) {
+                for ($i=1; $i <= 2; $i++) { 
+                    $idGambar = 'gambar_produk_'.$i;
+                    if (isset($value[$idGambar]) && $value[$idGambar] instanceof \Illuminate\Http\UploadedFile) {
+                        $file = $value[$idGambar];
+                        if ($file->isValid()) {
+                            $folderName = str_replace(' ', '_', $requestData['name']); 
+                            $subfolderName = str_replace(' ', '_', $value['nama']); 
+                            $filename = time() . '_' .$file->getClientOriginalName();
+                            $path = $file->storeAs('public/uploads/eLIND/' . $folderName . '/' . $subfolderName, $filename);
+                            $value[$idGambar] = $filename;
+                        }
+                    }
+                }
+                $produk_penggiat = collect($value ?? [])
+                ->map(function($item) {
+                    return $item;
+                })
+                ->toArray();
+                if ($produk_penggiat['nama'] !== null) {
+                    $mergedproduk[] = $produk_penggiat;
+                }
+            }
+            $requestData['produk'] = json_encode($mergedproduk);
+        }
+        // dd($requestData);
+        if(isset($requestData['email']) && $requestData['email'] !== null && isset($requestData['no_mof'])){
+            $existingMof = MaklumatPenggunaPenggiatIndustri::where('no_mof', $requestData['no_mof'])->first();
+            if ($existingMof) {
+                return redirect()->route('pengurusan.eLIND.create',['type' => $type])->with('errorMessage', 'The MOF registration number has already been taken. Please choose another one.');
+            }
+            $user = User::create([
+                'name' => $requestData['name'],
+                'email' => $requestData['email'],
+                'password' => Hash::make($requestData['no_mof']),
+                'is_active' => 0,
+            ]);
+            $user->assignRole("Penggiat Industri");
+            
+            $maklumatData = [
+                'name' => $requestData['name'],
+                'email' => $requestData['email'],
+                'jenis_industri' => $requestData['jenis_industri'],
+                'no_mof' => $requestData['no_mof'],
+                'address1' => $requestData['address1'],
+                'address2' => $requestData['address2'],
+                'postcode' => $requestData['postcode'],
+                'locality' => $requestData['locality'],
+                'state' => $requestData['state'],
+                'no_ssm' => $requestData['no_ssm'],
+                'bilPekerja' => $requestData['bilPekerja'],
+                'mediaSosial_penggiat' => $requestData['mediaSosial_penggiat'],
+            ];
+            
+            if ($requestData['jenis_industri'] === 'Perunding' || $requestData['jenis_industri'] === 'Kontraktor' || $requestData['jenis_industri'] === 'Pembekal') {
+                $maklumatData = array_merge($maklumatData, [
+                    'pekerja' => $requestData['pekerja'],
+                ]);
+            }
+            if ($requestData['jenis_industri'] === 'Perunding' || $requestData['jenis_industri'] === 'Kontraktor') {
+                $maklumatData = array_merge($maklumatData, [
+                    'status_eperunding' => $requestData['status_eperunding'],
+                    'pengalaman' => $requestData['pengalaman'],
+                ]);
+            }
+            if ($requestData['jenis_industri'] === 'Perunding') {
+                $maklumatData = array_merge($maklumatData, [
+                    'no_ilam' => $requestData['no_ilam'],
+                    'tarikh_luput_ilam' => $requestData['tarikh_luput_ilam'],
+                ]);
+            }
+            if ($requestData['jenis_industri'] === 'Kontraktor') {
+                $maklumatData = array_merge($maklumatData, [
+                    'kelas_kontraktor' => $requestData['kelas_kontraktor'],
+                    'no_cidb' => $requestData['no_cidb'],
+                    'taraf_bumiputera' => $requestData['taraf_bumiputera'],
+                    'bidang_kepakaran' => $requestData['bidang_kepakaran'],
+                ]);
+            }
+            if ($requestData['jenis_industri'] === 'Pembekal') {
+                $maklumatData = array_merge($maklumatData, [
+                    'bidang_pembekal' => $requestData['bidang_pembekal'],
+                    'bidang_lain_pembekal' => $requestData['bidang_lain_pembekal'],
+                    'saiz_nurseri' => $requestData['saiz_nurseri'],
+                    'produk' => $requestData['produk'],
+                ]);
+            }
+            
+            $maklumat = MaklumatPenggunaPenggiatIndustri::create($maklumatData);
+            $maklumatData['id_elind'] = $maklumat->id_elind;
 
-        $user->assignRole($request->roles);
+            $maklumat = MaklumatPenggunaPenggiatIndustri_draf::create($maklumatData);
 
-        //redirect to
-        return redirect()->route('pengurusan.eLIND.index')->with('successMessage', 'Maklumat telah berjaya disimpan');
+        }else if($requestData['jenis_industri'] === 'Pertubuhan Antarabangsa' || $requestData['jenis_industri'] === 'NGO / Badan Ikhtisas' || $requestData['jenis_industri'] === 'Institusi Pendidikan'){
+            $maklumatData = [
+                'name' => $requestData['name'],
+                'email' => $requestData['email'],
+                'jenis_industri' => $requestData['jenis_industri'],
+                'address1' => $requestData['address1'],
+                'address2' => $requestData['address2'],
+                'postcode' => $requestData['postcode'],
+                'locality' => $requestData['locality'],
+                'state' => $requestData['state'],
+                'mediaSosial_penggiat' => $requestData['mediaSosial_penggiat'],
+            ];
+            
+            if ($requestData['jenis_industri'] === 'Pertubuhan Antarabangsa' || $requestData['jenis_industri'] === 'NGO / Badan Ikhtisas') {
+                $maklumatData = array_merge($maklumatData, [
+                    'nama_presiden' => $requestData['nama_presiden'],
+                ]);
+            }
+            if ($requestData['jenis_industri'] === 'NGO / Badan Ikhtisas') {
+                $maklumatData = array_merge($maklumatData, [
+                    'kategori_ngo' => $requestData['kategori_ngo'],
+                ]);
+            }
+            if ($requestData['jenis_industri'] === 'Pertubuhan Antarabangsa') {
+                $maklumatData = array_merge($maklumatData, [
+                    'wakil_negara' => $requestData['wakil_negara'],
+                ]);
+            }
+            if ($requestData['jenis_industri'] === 'Institusi Pendidikan') {
+                $maklumatData = array_merge($maklumatData, [
+                    'jenis_institusi' => $requestData['jenis_institusi'],
+                ]);
+            }
+            $maklumat = MaklumatPenggunaPenggiatIndustri::create($maklumatData);
+            $maklumatData['id_elind'] = $maklumat->id_elind;
+
+            $maklumat = MaklumatPenggunaPenggiatIndustri_draf::create($maklumatData);
+
+        }else{
+            return redirect()->route('pengurusan.eLIND.create',['type' => $type])->with('errorMessage', 'Maklumat '.$requestData['jenis_industri'].' tidak berjaya disimpan.');
+        }
+        return redirect()->route('pengurusan.eLIND.index',['type' => $type])->with('successMessage', 'Maklumat '.$requestData['jenis_industri'].' telah berjaya disimpan.');
     }
+
+
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\User  $record
+     * @param  \App\Model\eLIND  $eLIND
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($type, $id)
     {
-        return view('pengurusan.eLIND.show', ['user' => $user]);
+        $eLIND = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id)->first();
+        $paparan_portal = MaklumatPenggunaPenggiatIndustri::where('id_elind', $eLIND->id_elind)->first();
+
+        if ($paparan_portal) {
+            $status = $paparan_portal->status;
+        }
+        return view('pengurusan.eLIND.show', [
+            'eLIND' => $eLIND,
+            'status' => $status,
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\User  $record
+     * @param  \App\Model\eLIND  $eLIND
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit($type, $id)
     {
-        $roles = Role::pluck('name', 'name')->all();
-        $userRole = $user->roles->pluck('name', 'name')->all();
-
-        return view('pengurusan.eLIND.edit', ['user' => $user, 'roles' => $roles, 'userRole' => $userRole]);
+        $eLIND = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id)->first();
+        // dd($eLIND);
+        return view('pengurusan.eLIND.edit', ['eLIND' => $eLIND]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $record
+     * @param  \App\Model\eLIND  $eLIND
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
-    {dump($request->all());
-        // Mula Rule validation
-        $rules = [
-            'name' => 'required',
-            'email' => 'required|email|unique:eLIND,email,' . $user->id,
-            'password' => 'nullable|same:confirm-password',
-            'roles' => 'required|array|min:1', // Ensure roles is an array and has at least one role
-            'is_active' => 'required|boolean',
-        ];
-        //Selaras bentuk mesej yang sama; attributes berbeza
-        $messages = [
-            'required' => ':attribute diperlukan.',
-            'email.unique' => 'E-mel telah digunakan.',
-            'password.same' => 'Kata laluan dan pengesahan kata laluan tidak sama.',
-            'roles.required' => 'Sekurang-kurangnya satu peranan mesti dipilih.',
-            'roles.array' => 'Peranan mesti dalam bentuk senarai.',
-            'roles.min' => 'Sekurang-kurangnya satu peranan mesti dipilih.',
-            'boolean' => ':attribute mesti benar atau palsu.',
-        ];
+    public function update(Request $request, $type, $id)
+    {
+        $eLIND = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind_draf', $id)->first();
+        $requestData = ($request->all());
 
-        $attributes = [
-            'is_active' => 'Status Aktif',
-            'roles' => 'Peranan',
-        ];
-        // Before updating
-        $previousStatus = $user->is_active;
+        $paparan_portal = isset($requestData['status']) && $requestData['status'] == "on" ? "approved" : "draft";
+        $userId = auth()->id();
+        // dd($requestData);
+        if ($request->input('action') === 'update') {
 
-        $validator = Validator::make($request->all(), $rules, $messages, $attributes);
-        // if ($validator->fails()) {
-        //     return redirect()->back()->withErrors($validator)->withInput();
-        // }
-        $input = $request->all();
-        if (!empty($input['password'])) {
-            $input['password'] = Hash::make($request->password);
-        } else {
-            $input = Arr::except($input, ['password']);
-        }
+            $mediaSosial_penggiat = collect($requestData['mediaSosial_penggiat'] ?? [])
+                ->map(function($item) {
+                    return $item;
+                })
+                ->toArray();
+            $requestData['mediaSosial_penggiat'] = json_encode($mediaSosial_penggiat);
 
+            if(isset($requestData['pekerja'])){
+                $mergedPekerja = [];
+                $pekerjaArr = $requestData['pekerja'];
+                foreach ($pekerjaArr as $key => $value) {
+                    $pekerja_penggiat = collect($value ?? [])
+                    ->map(function($item) {
+                        return $item;
+                    })
+                    ->toArray();
+                    if ($pekerja_penggiat['nama'] !== null) {
+                        $mergedPekerja[] = $pekerja_penggiat;
+                    }
+                }
+                $requestData['pekerja'] = json_encode($mergedPekerja);
+            }
 
-        // define data field of Model
-        $user->update($input);
+            if(isset($requestData['pengalaman'])){
+                $mergedPengalaman = [];
+                $pengalamanArr = $requestData['pengalaman'];
+                foreach ($pengalamanArr as $key => $value) {
+                    $pekerja_penggiat = collect($value ?? [])
+                    ->map(function($item) {
+                        return $item;
+                    })
+                    ->toArray();
+                    if ($pekerja_penggiat['tajuk'] !== null) {
+                        $mergedPengalaman[] = $pekerja_penggiat;
+                    }
+                }
+                $requestData['pengalaman'] = json_encode($mergedPengalaman);
+            }
 
-        DB::table('model_has_roles')->where('model_id', $user->id)->delete();
-
-        $user->assignRole($request->input('roles'));
-
-        // redirect to
-        // return redirect()->route('pengurusan.users.index')->with('successMessage', 'Maklumat telah berjaya disimpan');
-        // Send an email if user is active
-        if (!$previousStatus && $user->is_active) {
-            $details = [
-                'title' => 'User Activation Notification',
-                'body' => 'Your account has been activated.',
-                'email' => $user->email,
+            if(isset($requestData['produk'])){
+                $mergedproduk = [];
+                $produkArr = $requestData['produk'];
+                foreach ($produkArr as $key => $value) {
+                    for ($i=1; $i <= 2; $i++) { 
+                        $idGambar = 'gambar_produk_'.$i;
+                        if (isset($value[$idGambar]) && $value[$idGambar] instanceof \Illuminate\Http\UploadedFile) {
+                            $file = $value[$idGambar];
+                            if ($file->isValid()) {
+                                $folderName = str_replace(' ', '_', $requestData['name']); 
+                                $subfolderName = str_replace(' ', '_', $value['nama']); 
+                                $filename = time() . '_' .$file->getClientOriginalName();
+                                $path = $file->storeAs('public/uploads/eLIND/' . $folderName . '/' . $subfolderName, $filename);
+                                $value[$idGambar] = $filename;
+                            }
+                        }else if(isset($value['existing_image'.$i])){
+                            $value[$idGambar] = $value['existing_image'.$i];
+                            unset($value['existing_image'.$i]);
+                        }else{
+                            // $value[$idGambar] = null;
+                        }
+                    }
+                    $produk_penggiat = collect($value ?? [])
+                    ->map(function($item) {
+                        return $item;
+                    })
+                    ->toArray();
+                    if ($produk_penggiat['nama'] !== null) {
+                        $mergedproduk[] = $produk_penggiat;
+                    }
+                }
+                $requestData['produk'] = json_encode($mergedproduk);
+            }
+            // dd($requestData);
+            $eLIND_update = $eLIND->update($requestData);
+            // dd($eLIND);
+            if ($eLIND_update) {
+                return redirect()->route('pengurusan.eLIND.edit', ['type' => $type, 'id' => $eLIND->id_elind])->with('successMessage', 'Maklumat '.$requestData['jenis_industri'].' telah berjaya dikemaskini');
+            }
+        } elseif ($request->input('action') === 'approve') {
+            $eLIND->status = $paparan_portal;
+            $eLIND->save();
+            $eLIND_approve = MaklumatPenggunaPenggiatIndustri::where('id_elind', $eLIND->id_elind)->first();
+            if ($eLIND_approve) {
+                $dataToUpdate = $eLIND->getAttributes();
+                $eLIND_approve->update($dataToUpdate);
+            }
+            return redirect()->route('pengurusan.eLIND.show', ['type' => $type, 'id' => $eLIND->id_elind])->with('successMessage', 'Maklumat '.$requestData['jenis_industri'].' telah berjaya disimpan');
+        } elseif ($request->input('action') === 'prestasi') {
+            // $eLIND->prestasi = $requestData['prestasi'];
+            // $eLIND->komen = $requestData['komen'];
+            $timestamp = now()->format('Y-m-d H:i:s');
+            // dd($requestData);
+            $index = false;
+            if($eLIND == null){
+                $index = true;
+                $eLIND = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id)->first();
+                $requestData['jenis_industri'] = $eLIND->jenis_industri;
+            }
+            
+            $newprestasi = [
+                'prestasi' => $requestData['prestasi'],
+                'timestamp' => $timestamp,
             ];
+            if ($eLIND->prestasi) {
+                $prestasiData = json_decode($eLIND->prestasi, true);
+            } else {
+                $prestasiData = [];
+            }
+            $prestasiData[] = $newprestasi;
+            $eLIND->prestasi = json_encode($prestasiData);
 
-            Mail::raw($details['body'], function ($message) use ($details) {
-                $message->to($details['email'])  // Replace with your test email address
-                        ->subject($details['title']);
-            });
+
+            $newkomen = [
+                'komen' => $requestData['komen'],
+                'timestamp' => $timestamp,
+            ];
+            if ($eLIND->komen) {
+                $komenData = json_decode($eLIND->komen, true);
+            } else {
+                $komenData = [];
+            }
+            $komenData[] = $newkomen;
+            $eLIND->komen = json_encode($komenData);
+
+
+            $newPentaksir = [
+                'pentaksir' => $userId,
+                'timestamp' => $timestamp,
+            ];
+            if ($eLIND->pentaksir) {
+                $pentaksirData = json_decode($eLIND->pentaksir, true);
+            } else {
+                $pentaksirData = [];
+            }
+            $pentaksirData[] = $newPentaksir;
+            $eLIND->pentaksir = json_encode($pentaksirData);
+
+            $eLIND->save();
+
+            $eLIND_prestasi = MaklumatPenggunaPenggiatIndustri::where('id_elind', $eLIND->id_elind)->first();
+            if ($eLIND_prestasi) {
+                $eLIND_prestasi->prestasi = $eLIND->prestasi;
+                $eLIND_prestasi->komen = $eLIND->komen;
+                $eLIND_prestasi->pentaksir = $eLIND->pentaksir;
+                $eLIND_prestasi->save();
+            }
+            if($index){
+                return redirect()->route('pengurusan.eLIND.index', ['type' => $type])->with('successMessage', 'Maklumat Prestasi telah berjaya disimpan');
+            }
+            return redirect()->route('pengurusan.eLIND.show', ['type' => $type, 'id' => $eLIND->id_elind])->with('successMessage', 'Maklumat '.$requestData['jenis_industri'].' telah berjaya disimpan');
         }
-
-        // Redirect with success message
-        return redirect()->route('pengurusan.eLIND.index')->with('successMessage', 'Maklumat telah berjaya disimpan' . ((!$previousStatus && $user->is_active) ? ' dan e-mel telah dihantar!' : '!'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\User  $record
+     * @param  \App\Model\eLIND  $eLIND
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy($type, $id)
     {
-        if ($user->delete()) {
-            return redirect()->route('pengurusan.eLIND.index')->with('successMessage', 'Maklumat telah berjaya dihapuskan');
+        $delete_draf = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id)->first();
+        $delete_main = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id)->first();
+
+        if ($delete_main) {
+            if ($delete_draf) {
+                $delete_draf->delete();
+            }
+            $delete_main->delete();
         }
-        return redirect()->route('pengurusan.eLIND.index')->with('errorMessage', 'Maklumat telah gagal dihapuskan');
+        return redirect()->route('pengurusan.eLIND.index', ['type' => $type])->with('successMessage', 'Maklumat Penggiat Industri Landskap telah dihapuskan');
     }
-
-
-    public function profile_show()
-    {
-        $id = Auth::user()->id;
-        $user = User::find($id);
-        return view('pengurusan.eLIND.profile.show', ['user' => $user]);
-        # code...
-    }
-
-    public function profile_edit()
-    {
-        $id = Auth::user()->id;
-        $user = User::find($id);
-        return view('pengurusan.eLIND.profile.edit', ['user' => $user]);
-        # code...
-    }
-    public function profile_update(Request $request, User $user)
-    {
-        // Mula Rule validation
-        $rules = [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'same:confirm-password',
-            'roles' => 'required'
-        ];
-        //Selaras bentuk mesej yang sama; attributes berbeza
-        $messages = [
-            'required' => ':attribute diperlukan.',
-            'min' => ':attribute terlalu ringkas.',
-            'max' => ':attribute terlalu panjang.',
-            'regex' => ':attribute tidak sah.',
-        ];
-        // Rename field ke perkataan boleh difaham (jika perlu/berlainan)
-        $attributes = [];
-
-        $validator = Validator::make($request->all(), $rules, $messages, $attributes);
-
-        $input = $request->all();
-        if (!empty($input['password'])) {
-            $input['password'] = Hash::make($request->password);
-        } else {
-            $input = Arr::except($input, ['password']);
-        }
-
-
-        // define data field of Model
-        $user->update($input);
-
-        // redirect to
-        return redirect()->route('pengurusan.eLIND.profile.show')->with('successMessage', 'Maklumat telah berjaya disimpan');
-    }
-
-
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function export_all()
-    {
-
-        $users = User::all();
-        return (new UsersExport($users))->download('users-collection-' . time() . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
-    }
-
-
 }

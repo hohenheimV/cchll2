@@ -39,7 +39,13 @@
 
     <!-- CSS:percentage -->
     <link rel="stylesheet" href="{{ asset('css/percentage.css') }}">
-
+    <style>
+        @media only screen and (max-width: 768px) {
+            .mobile-gone {
+                display: none;
+            }
+        }
+    </style>
     <!-- Yield:insert_style -->
     @yield('insert_style')
 </head>
@@ -87,7 +93,89 @@
 
     <!-- AdminLTE App -->
     <script src="{{ asset('js/adminlte.js') }}"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+    
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#exampleNP').DataTable({
+                responsive: true,
+                paging: true,
+                pageLength: 5,
+                searching: true,
+                info: true,
+                autoWidth: false,
+                ordering: true,
+                columnDefs: [
+                    {
+                        targets: [0, 1, -1],
+                        orderable: true
+                    },
+                    {
+                        targets: '_all',
+                        orderable: false
+                    }
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'copy',
+                        exportOptions: {
+                            columns: ':not(:eq(5), :eq(-1))'  // Only include the first, second, and second last columns in the "Copy" export
+                        }
+                    },
+                    {
+                        extend: 'csv',
+                        exportOptions: {
+                            columns: ':not(:eq(5), :eq(-1))'  // Only include the first, second, and second last columns in the "CSV" export
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: ':not(:eq(5), :eq(-1))'  // Only include the first, second, and second last columns in the "Excel" export
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: ':not(:eq(5), :eq(-1))'  // Only include the first, second, and second last columns in the "PDF" export
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        exportOptions: {
+                            columns: ':not(:eq(5), :eq(-1))'  // Only include the first, second, and second last columns in the "Print" export
+                        }
+                    }
+                ],
+                language: {
+                    search: "Carian:",  // Custom text for the search input
+                    searchPlaceholder: "Cari sesuatu...",  // Placeholder text in the search box
+                    info: "Menunjukkan baris _START_ hingga baris _END_ daripada _TOTAL_ jumlah data",  // Info text
+                    infoEmpty: "Tiada rekod yang ditemui",  // Info text when no data is available
+                    infoFiltered: "(disaring daripada _MAX_ jumlah data keseluruhan)",  // Info when filtering
+                    lengthMenu: "Tunjukkan _MENU_ jumlah data",  // Text for "Show entries"
+                    paginate: {
+                        first: "Pertama",  // First page button
+                        previous: "Sebelumnya",  // Previous page button
+                        next: "Seterusnya",  // Next page button
+                        last: "Terakhir"  // Last page button
+                    }
+                }
+            });
 
+        });
+    </script>
     <!-- Yield:insert_js -->
     @yield('insert_js')
 </body>

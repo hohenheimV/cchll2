@@ -54,7 +54,8 @@ class UsersController extends Controller
         })
         ->where(function ($query) {
             $query->whereHas('roles', function ($query) {
-                $query->where('name', 'Penggiat Industri');
+                // $query->where('name', 'Penggiat Industri');
+                // $query->whereRaw('is_active = ? ', ['0']);    
                     //   ->orWhere('name', 'Perunding');
             })
             ->orWhereDoesntHave('roles'); // Include users with no roles
@@ -93,6 +94,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         // Mula Rule validation
         $rules = [
             'name' => 'required',
@@ -114,7 +116,7 @@ class UsersController extends Controller
 
 
         $input = $request->all();
-
+        // dd($request->all());
         if (!empty($input['password'])) {
             $input['password'] = Hash::make($request->password);
         } else {
@@ -163,7 +165,8 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user)
-    {dump($request->all());
+    {
+        // dd($request->all());
         // Mula Rule validation
         $rules = [
             'name' => 'required',

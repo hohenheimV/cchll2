@@ -200,6 +200,7 @@
                                                                 <button 
                                                                     type="button" 
                                                                     class="btn btn-primary btn-sm" 
+                                                                    data-jenis="{{ $keyword }}" 
                                                                     data-title="{{ $user->name }}" 
                                                                     data-address="@if(isset($user->email)) {{ $user->email.',' }}@endif
                                                                     @if(isset($user->address1)) {{ $user->address1.',' }}@endif
@@ -209,17 +210,59 @@
                                                                     @if(isset($user->state)) {{ $user->state.',' }}@endif"
                                                                     data-no_telefon="{{ $user->mediaSosial_penggiat }}"
                                                                     data-emel="{{ $user->email }}"
+                                                                    @if($keyword == "Pembekal" || $keyword == "Perunding" || $keyword == "Kontraktor") 
                                                                     data-no_ssm="{{ $user->no_ssm }}"
                                                                     data-no_mof="{{ $user->no_mof }}"
-                                                                    data-no_cidb="{{ $user->no_cidb }}"
-                                                                    data-taraf_bumiputera="{{ $user->taraf_bumiputera }}"
-                                                                    data-bidang_kepakaran="{{ $user->bidang_kepakaran }}"
-                                                                    data-pengalaman="{{ $user->pengalaman }}"
+                                                                    @endif
+                                                                    @if($keyword == "Kontraktor") 
+                                                                        data-no_cidb="{{ $user->no_cidb }}" 
+                                                                        data-taraf_bumiputera="{{ $user->taraf_bumiputera }}"
+                                                                        data-bidang_kepakaran="{{ $user->bidang_kepakaran }}"
+                                                                    @endif
+                                                                    @if($keyword == "Perunding") 
+                                                                        data-no_ilam="{{ $user->no_ilam }}" 
+                                                                        data-tarikh_luput_ilam="{{ $user->tarikh_luput_ilam }}"
+                                                                    @endif
+                                                                    @if($keyword == "Pembekal") 
+                                                                        data-produk="{{ $user->produk }}" 
+                                                                    @endif
+                                                                    @if($keyword == "Perunding" || $keyword == "Kontraktor") 
+                                                                        data-pengalaman="{{ $user->pengalaman }}" 
+                                                                    @endif
+                                                                    @if($keyword == "Institusi Pendidikan") 
+                                                                        data-jenis_institusi="{{ $user->jenis_institusi }}"
+                                                                    @endif
+                                                                    @if($keyword == "Pertubuhan Antarabangsa" || $keyword == "NGO / Badan Ikhtisas") 
+                                                                        data-nama_presiden="{{ $user->nama_presiden }}"
+                                                                    @endif
+                                                                    @if($keyword == "NGO / Badan Ikhtisas") 
+                                                                        data-kategori_ngo="{{ $user->kategori_ngo }}"
+                                                                    @endif
                                                                     data-toggle="modal" 
                                                                     data-target="#parkModal"
                                                                 >
                                                                     <i class="fas fa-search"></i>
                                                                 </button>
+                                                                @if($user->no_cidb && $keyword == "Kontraktor")
+                                                                    &nbsp;
+                                                                    <button 
+                                                                        type="button" 
+                                                                        id="link_cidb"
+                                                                        class="btn btn-success btn-sm" 
+                                                                        style="color: white;"
+                                                                    >
+                                                                        CIDB
+                                                                    </button>
+
+                                                                    <script>
+                                                                        document.getElementById('link_cidb').addEventListener('click', function(event) {
+                                                                            event.preventDefault();
+                                                                            const link_cidb = "{{ $user->no_cidb }}";
+                                                                            const url = `https://mcp.cidb.gov.my/MCP/ContractorSearch?CidbRegNo=${link_cidb}`;
+                                                                            window.open(url, '_blank');
+                                                                        });
+                                                                    </script>
+                                                                @endif
                                                             </div>
                                                         </td>
                                                         @php
@@ -314,27 +357,6 @@
                 border-radius: 8px;
             }
         </style>
-        <style>
-            .col-separator {
-                position: relative;
-                padding-left: 15px; /* Optional padding */
-            }
-
-            .col-separator::before {
-                content: '';
-                position: absolute;
-                top: 15%;   /* Adjust the starting position of the gradient */
-                bottom: 5%; /* Adjust the ending position of the gradient */
-                left: 0;
-                width: 3px;   /* Border thickness */
-                background: linear-gradient(to bottom, #ff7f50, #00bfff); /* Gradient effect */
-            }
-
-            /* Optionally, you can remove the border for the first column */
-            .col-separator:first-child::before {
-                background: none; /* Remove the left border for the first column */
-            }
-        </style>
         <div id="parkModal" class="modal">
             <div class="modal-content" style="background-color:rgb(25, 98, 92) !important;">
                 <div class="modal-header justify-content-center bg-white">
@@ -342,6 +364,36 @@
                 </div>
 
                 <div class="modal-body bg-white">
+                    @if($keyword == "Pertubuhan Antarabangsa" || $keyword == "NGO / Badan Ikhtisas") 
+                    <div class="row">
+                        <div class="col-5 col-xs-12">
+                            <p><strong>Presiden</strong></p>
+                        </div>
+                        <div class="col-7 col-xs-12">
+                            <p id="nama_presiden">Tiada Maklumat</p>
+                        </div>
+                    </div>
+                    @endif
+                    @if($keyword == "NGO / Badan Ikhtisas") 
+                    <div class="row">
+                        <div class="col-5 col-xs-12">
+                            <p><strong>Kategori</strong></p>
+                        </div>
+                        <div class="col-7 col-xs-12">
+                            <p id="kategori_ngo">Tiada Maklumat</p>
+                        </div>
+                    </div>
+                    @endif
+                    @if($keyword == "Institusi Pendidikan") 
+                    <div class="row">
+                        <div class="col-5 col-xs-12">
+                            <p><strong>Jenis Institusi</strong></p>
+                        </div>
+                        <div class="col-7 col-xs-12">
+                            <p id="jenis_institusi">Tiada Maklumat</p>
+                        </div>
+                    </div>
+                    @endif
                     <div class="row">
                         <div class="col-5 col-xs-12">
                             <p><strong>Alamat</strong></p>
@@ -370,6 +422,7 @@
                             <p id="emel">Tiada Maklumat</p>
                         </div>
                     </div>
+                    @if($keyword == "Pembekal" || $keyword == "Perunding" || $keyword == "Kontraktor") 
                     <div class="row">
                         <div class="col-5 col-xs-12">
                             <p><strong>No. Pendaftaran Syarikat (SSM)</strong></p>
@@ -386,6 +439,8 @@
                             <p id="no_mof">Tiada Maklumat</p>
                         </div>
                     </div>
+                    @endif
+                    @if($keyword == "Kontraktor") 
                     <div class="row">
                         <div class="col-5 col-xs-12">
                             <p><strong>No. Pendaftaran PKK/ CIDB</strong></p>
@@ -410,7 +465,36 @@
                             <p id="bidang_kepakaran">Tiada Maklumat</p>
                         </div>
                     </div>
-                    
+                    @endif
+                    @if($keyword == "Perunding") 
+                    <div class="row">
+                        <div class="col-5 col-xs-12">
+                            <p><strong>No. Pendaftaran ILAM</strong></p>
+                        </div>
+                        <div class="col-7 col-xs-12">
+                            <p id="no_ilam">Tiada Maklumat</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 col-xs-12">
+                            <p><strong>Tarikh Luput Keahlian ILAM</strong></p>
+                        </div>
+                        <div class="col-7 col-xs-12">
+                            <p id="tarikh_luput_ilam">Tiada Maklumat</p>
+                        </div>
+                    </div>
+                    @endif
+                    @if($keyword == "Pembekal") 
+                    <div class="row">
+                        <div class="col-5 col-xs-12">
+                            <p><strong>Bidang</strong></p>
+                        </div>
+                        <div class="col-7 col-xs-12">
+                            <p id="bidang_pembekal">Tiada Maklumat</p>
+                        </div>
+                    </div>
+                    @endif
+                    @if($keyword == "Perunding" || $keyword == "Kontraktor") 
                     <div class="form-group">
                         <label class="col-xs-4 control-label"></label>
                         <div class="col-xs-12">
@@ -456,8 +540,58 @@
                             </div>
                         </div>
                     </div>
+                    @endif
 
-                    <div class="park-images">
+                    @if($keyword == "Pembekal") 
+                    <div class="form-group">
+                        <label class="col-xs-4 control-label"></label>
+                        <div class="col-xs-12">
+                            <h4 class="d-flex align-items-center justify-content-between">
+                                Senarai produk
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="table-responsive">
+                                <table id="produk_table" class="table table-bordered table-hover">
+                                    <thead class="thead-dark">
+                                        <style>
+                                            #produk_table th, #produk_table td {
+                                                padding: 2px 5px; /* Minimal padding for smaller cells */
+                                                text-align: center; /* Center text horizontally */
+                                                height: auto; /* Let the height adjust based on content */
+                                            }
+
+                                            #produk_table td input {
+                                                padding: 3px 5px; /* Small padding inside input fields */
+                                                height: 25px; /* Small height for input fields */
+                                                font-size: 12px; /* Smaller font size for compact input fields */
+                                            }
+
+                                            #produk_table th {
+                                                padding: 3px 5px; /* Slightly more padding for headers */
+                                                font-size: 12px; /* Smaller font size for headers */
+                                            }
+                                        </style>
+                                        <tr>
+                                            <th class="w-1">Bil</th>
+                                            <th class="w-30">Nama Produk</th>
+                                            <th class="w-5">Kos</th>
+                                            <th class="w-5">Tahun</th>
+                                            <th class="w-5">Status</th>
+                                            <th class="w-5">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="produk_container">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
+                    <div class="park-images" style="display: none;">
                         <img id="parkImage1" src="" alt="Park Image 1" class="park-img" style="border: 0.5px solid black;">
                         <img id="parkImage2" src="" alt="Park Image 2" class="park-img" style="border: 0.5px solid black;">
                         <img id="parkImage3" src="" alt="Park Image 3" class="park-img" style="border: 0.5px solid black;">
@@ -478,17 +612,26 @@
             $(document).ready(function() {
                 $('#parkModal').on('show.bs.modal', function (event) {
                     var button = $(event.relatedTarget);
+                    var jenis = button.data('jenis');
                     var title = button.data('title');
                     var address = button.data('address');
                     var no_telefon = button.data('no_telefon');
                     var emel = button.data('emel');
                     var no_ssm = button.data('no_ssm');
                     var no_mof = button.data('no_mof');
+                    var pengalaman = button.data('pengalaman');
+                    var produk = button.data('produk');
                     var no_cidb = button.data('no_cidb');
                     var taraf_bumiputera = button.data('taraf_bumiputera');
                     var bidang_kepakaran = button.data('bidang_kepakaran');
-                    var pengalaman = button.data('pengalaman');
+                    var no_ilam = button.data('no_ilam');
+                    var tarikh_luput_ilam = button.data('tarikh_luput_ilam');
+                    var nama_presiden = button.data('nama_presiden');
+                    var kategori_ngo = button.data('kategori_ngo');
+                    var jenis_institusi = button.data('jenis_institusi');
+                    var bidang_pembekal = button.data('bidang_pembekal');
                     let telefon = '';
+                    let folder = title.replace(/ /g, '_');
 
                     for (let key in no_telefon) {
                         if (no_telefon.hasOwnProperty(key)) {
@@ -500,6 +643,7 @@
                             }
                         }
                     }
+
                     // Update the modal's content
                     var modal = $(this);
                     modal.find('.modal-content').scrollTop(0);
@@ -515,22 +659,101 @@
                     if (emel && emel !== '') {
                         modal.find('#emel').text(emel);
                     }
-                    if (no_ssm && no_ssm !== '') {
-                        modal.find('#no_ssm').text(no_ssm);
+
+                    if(jenis == "Kontraktor"){
+                        const bidangKepakaranMap = {
+                            1: 'LANDSKAP ARKITEK',
+                            2: 'ELEKTRIK',
+                            3: 'SIVIL DAN STRUKTUR',
+                            4: 'UKURBAHAN',
+                            0: 'TIADA MAKLUMAT'
+                        };
+
+                        const tarafBumiputeraMap = {
+                            1: 'BUMIPUTERA',
+                            2: 'BUKAN BUMIPUTERA',
+                            0: 'TIADA MAKLUMAT'
+                        };
+                        if (taraf_bumiputera && taraf_bumiputera !== '') {
+                            // Map the numeric value to the corresponding name
+                            const tarafBumiputeraName = tarafBumiputeraMap[taraf_bumiputera];
+                            console.log(tarafBumiputeraName);  // Console log the name
+                            modal.find('#taraf_bumiputera').text(tarafBumiputeraName);
+                        }
+
+                        if (bidang_kepakaran && bidang_kepakaran !== '') {
+                            // Map the numeric value to the corresponding name
+                            const bidangKepakaranName = bidangKepakaranMap[bidang_kepakaran];
+                            console.log(bidangKepakaranName);  // Console log the name
+                            modal.find('#bidang_kepakaran').text(bidangKepakaranName);
+                        }
+                        if (no_cidb && no_cidb !== '') {
+                            modal.find('#no_cidb').text(no_cidb);
+                        }
                     }
-                    if (no_mof && no_mof !== '') {
-                        modal.find('#no_mof').text(no_mof);
+                    if(jenis == "Perunding"){
+                        if (no_ilam && no_ilam !== '') {
+                            modal.find('#no_ilam').text(no_ilam);
+                        }
+                        if (tarikh_luput_ilam && tarikh_luput_ilam !== '') {
+                            modal.find('#tarikh_luput_ilam').text(tarikh_luput_ilam);
+                        }
                     }
-                    if (no_cidb && no_cidb !== '') {
-                        modal.find('#no_cidb').text(no_cidb);
+                    if(jenis == "Pembekal"){
+                        const bidangPembekalMap = {
+                            1: 'Nurseri & Landskap Kejur',
+                            2: 'Alat Permainan',
+                            3: 'Lain-lain',
+                            0: 'Tiada Maklumat'
+                        };
+                        if (bidang_pembekal && bidang_pembekal !== '') {
+                            const bidangPembekalName = bidangPembekalMap[bidang_pembekal];
+                            modal.find('#bidang_pembekal').text(bidangPembekalName);
+                        }
                     }
-                    if (taraf_bumiputera && taraf_bumiputera !== '') {
-                        modal.find('#taraf_bumiputera').text(taraf_bumiputera);
+                    if(jenis == "NGO / Badan Ikhtisas"){
+                        const kategoriNgoMap = {
+                            1: 'Badan Bukan Kerajaan (NGO)',
+                            2: 'Badan Ikhtisas',
+                            0: 'Tiada Maklumat'
+                        };
+                        if (kategori_ngo && kategori_ngo !== '') {
+                            const kategoriNgoName = kategoriNgoMap[kategori_ngo];
+                            modal.find('#kategori_ngo').text(kategoriNgoName);
+                        }
                     }
-                    if (bidang_kepakaran && bidang_kepakaran !== '') {
-                        modal.find('#bidang_kepakaran').text(bidang_kepakaran);
+                    if(jenis == "Institusi Pendidikan"){
+                        const jenisInstitusiMap = {
+                            1: 'IPTA',
+                            2: 'IPTS',
+                            3: 'KOLEJ',
+                            4: 'SEKOLAH',
+                            0: 'TIADA MAKLUMAT'
+                        };
+                        if (jenis_institusi && jenis_institusi !== '') {
+                            const jenisInstitusiName = jenisInstitusiMap[jenis_institusi];
+                            modal.find('#jenis_institusi').text(jenisInstitusiName);
+                        }
                     }
-                    populateTable(pengalaman)
+                    if(jenis == "NGO / Badan Ikhtisas" || jenis == "Pertubuhan Antarabangsa"){
+                        if (nama_presiden && nama_presiden !== '') {
+                            modal.find('#nama_presiden').text(nama_presiden);
+                        }
+                    }
+                    if(jenis == "Kontraktor" || jenis == "Perunding" || jenis == "Pembekal"){
+                        if (no_ssm && no_ssm !== '') {
+                            modal.find('#no_ssm').text(no_ssm);
+                        }
+                        if (no_mof && no_mof !== '') {
+                            modal.find('#no_mof').text(no_mof);
+                        }
+                    }
+                    if(jenis == "Kontraktor" || jenis == "Perunding"){
+                        populateTablePengalaman(pengalaman);
+                    }
+                    if(jenis == "Pembekal"){
+                        populateTableProduk(produk, folder);
+                    }
                 });
 
                 $('#parkModal').on('hidden.bs.modal', function () {
@@ -546,7 +769,7 @@
                     $(this).find('.modal-content').scrollTop(0);
                 });
 
-                function populateTable(data) {
+                function populateTablePengalaman(data) {
                     // Get the table body element
                     var tableBody = document.getElementById("pengalaman_container");
 
@@ -586,6 +809,73 @@
                         var statusCell = document.createElement("td");
                         statusCell.textContent = item.status;  // Display the status value
                         row.appendChild(statusCell);
+
+                        // Append the row to the table body
+                        tableBody.appendChild(row);
+                    });
+                }
+
+                
+                function populateTableProduk(data, folder) {
+                    // Get the table body element
+                    var tableBody = document.getElementById("produk_container");
+                    // Check if data is empty
+                    if (data.length === 0) {
+                        // If no data, add a row indicating no information available
+                        tableBody.innerHTML = "<tr><td colspan='6' class='text-center'>Tiada Maklumat</td></tr>";
+                        return;
+                    }
+
+                    // Loop through the data array and create table rows dynamically
+                    data.forEach(function(item, index) {
+                        var row = document.createElement("tr");
+
+                        // Create and append the 'Bil' column
+                        var bilCell = document.createElement("td");
+                        bilCell.textContent = index + 1;  // 'Bil' is the row number
+                        row.appendChild(bilCell);
+
+                        // Create and append the 'Nama Produk' column
+                        var namaCell = document.createElement("td");
+                        namaCell.textContent = item.nama;  // Display the nama value
+                        let subfolder = item.nama.replace(/ /g, '_');
+                        row.appendChild(namaCell);
+
+                        // Create and append the 'Keterangan' column
+                        var keteranganCell = document.createElement("td");
+                        keteranganCell.textContent = item.keterangan;  // Display the keterangan value
+                        row.appendChild(keteranganCell);
+
+                        // Create and append the 'Harga' column
+                        var hargaCell = document.createElement("td");
+                        hargaCell.textContent = item.harga;  // Display the harga value
+                        row.appendChild(hargaCell);
+
+                        let imagePath = `/storage/uploads`;
+
+                        // Create and append the 'Gambar Produk 1' column (Image 1)
+                        var gambarProduk1Cell = document.createElement("td");
+                        var gambarProduk1Img = document.createElement("img");
+                        gambarProduk1Img.src = imagePath + '/eLIND/' + folder+'/'+subfolder+'/'+item.gambar_produk_1 || '';
+                        gambarProduk1Img.onerror = function () {
+                            gambarProduk1Img.src = `${imagePath}/no-photos.png`;
+                        };
+                        gambarProduk1Img.alt = "Gambar Produk 1";
+                        gambarProduk1Img.style.width = "100px";  // Set a fixed width for the image
+                        gambarProduk1Cell.appendChild(gambarProduk1Img);
+                        row.appendChild(gambarProduk1Cell);
+
+                        // Create and append the 'Gambar Produk 2' column (Image 2)
+                        var gambarProduk2Cell = document.createElement("td");
+                        var gambarProduk2Img = document.createElement("img");
+                        gambarProduk2Img.src = imagePath + '/eLIND/' + folder+'/'+subfolder+'/'+item.gambar_produk_2 || '';
+                        gambarProduk2Img.onerror = function () {
+                            gambarProduk2Img.src = `${imagePath}/no-photos.png`;
+                        };
+                        gambarProduk2Img.alt = "Gambar Produk 2";
+                        gambarProduk2Img.style.width = "100px";  // Set a fixed width for the image
+                        gambarProduk2Cell.appendChild(gambarProduk2Img);
+                        row.appendChild(gambarProduk2Cell);
 
                         // Append the row to the table body
                         tableBody.appendChild(row);

@@ -47,10 +47,7 @@ class EPACTController extends Controller
     {
         $kategories = Kategori::where('type', 2)->pluck('name', 'id');
         $epact = new ePACT(); // Create a new instance for the form
-        $subkat = $epact->kate 
-            ? Subkategori::where('kategori_id', $epact->kate)->pluck('name', 'id') 
-            : [];
-        return view('pengurusan.epact.create', compact('epact', 'kategories', 'subkat'));
+        return view('pengurusan.epact.create', compact('epact', 'kategories'));
     }
 
     /**
@@ -161,8 +158,7 @@ class EPACTController extends Controller
     public function edit(ePACT $epact)
     {
        $kategories = Kategori::where('type', 2)->pluck('name', 'id');
-        $subkat = Subkategori::where('kategori_id', $epact->kate)->pluck('name', 'id');
-        return view('pengurusan.epact.edit', compact('epact', 'kategories', 'subkat'));
+        return view('pengurusan.epact.edit', compact('epact', 'kategories'));
     }
 
     /**
@@ -231,13 +227,5 @@ class EPACTController extends Controller
         $epact->delete();
         return redirect()->route('pengurusan.epact.index')->with('successMessage', 'Maklumat epact telah dihapuskan');
     }
-
-    public function getSubkategori($kategoriId)
-    {
-        $subcategories = Subkategori::where('kategori_id', $kategoriId)->get(['id', 'name']);
-        return response()->json($subcategories);
-    }
-
-
     
 }

@@ -21,61 +21,38 @@
     </div>
 </div>
 
-<!-- PBT and Agensi -->
+<!-- Negeri and PBT Fields -->
 <div class="form-row">
     <div class="form-group col-md-4">
-        {{ Form::label('pbt', 'PBT/Agensi') }}
-        {{ Form::select('pbt', [
-            'MPKL' => 'Majlis Perbandaran Kuala Langat (MPKL)',
-            'MPKJ' => 'Majlis Perbandaran Kajang (MPKJ)',
-            'DBKL' => 'Dewan Bandaraya Kuala Lumpur (DBKL)',
-            'MDT' => 'Majlis Daerah Tanjong Malim (MDT)',
-            'MBPJ' => 'Majlis Bandaraya Petaling Jaya (MBPJ)',
-            'MDKT' => 'Majlis Daerah Kuala Terengganu (MDKT)',
-            'MBSA' => 'Majlis Bandaraya Shah Alam (MBSA)',
-            'MBJB' => 'Majlis Bandaraya Johor Bahru (MBJB)',
-            'MBMB' => 'Majlis Bandaraya Melaka Bersejarah (MBMB)',
-            'MPPP' => 'Majlis Perbandaran Pulau Pinang (MPPP)',
-            'MPK' => 'Majlis Perbandaran Kuantan (MPK)',
-            'MPAJ' => 'Majlis Perbandaran Ampang Jaya (MPAJ)',
-            'MPKBBI' => 'Majlis Perbandaran Kulim Bandar Baharu (MPKBBI)',
-            'MPSP' => 'Majlis Perbandaran Seberang Perai (MPSP)',
-            'MPSJ' => 'Majlis Perbandaran Subang Jaya (MPSJ)',
-            'MPM' => 'Majlis Perbandaran Manjung (MPM)',
-            'MPBP' => 'Majlis Perbandaran Batu Pahat (MPBP)',
-            'MPHTJ' => 'Majlis Perbandaran Hang Tuah Jaya (MPHTJ)',
-            'MPS' => 'Majlis Perbandaran Selayang (MPS)',
-            'MPK' => 'Majlis Perbandaran Klang (MPK)',
-            'MPPD' => 'Majlis Perbandaran Port Dickson (MPPD)',
-            'MPSPK' => 'Majlis Perbandaran Sungai Petani Kedah (MPSPK)',
-            'MPB' => 'Majlis Perbandaran Bentong (MPB)',
-            'MPKK' => 'Majlis Perbandaran Kota Kinabalu (MPKK)',
-            'MPK' => 'Majlis Perbandaran Kemaman (MPK)',
-            'MPKB' => 'Majlis Perbandaran Kota Bharu (MPKB)',
-            'NGO' => 'Lain - Lain (NGO)',
-        ], null, [
-            'class' => 'form-control' . Html::isInvalid($errors, 'pbt'),
-            'placeholder' => 'Pilih PBT/Agensi'
+        {{ Form::label('negeri', 'Negeri') }}
+        {{ Form::select('negeri', $negeri ?? [], old('negeri', $ktp->negeri ?? null), [
+            'placeholder' => 'Pilih Negeri',
+            'class' => 'form-control select2',
+            'id' => 'negeri',
+            'onchange' => 'updatePBT()'
         ]) }}
-        {!! Html::hasError($errors, 'pbt') !!}
     </div>
-
     <div class="form-group col-md-4">
-            {{ Form::label('jumlah_pokok', 'Jumlah Keseluruhan Pokok Ditanam') }}
-            {{ Form::text('jumlah_pokok', null, ['class' => 'form-control ' . ($errors->has('jumlah_pokok') ? 'is-invalid' : ''), 'readonly' => true]) }}
-            @if ($errors->has('jumlah_pokok'))
-                <div class="invalid-feedback">
-                    {{ $errors->first('jumlah_pokok') }}
-                </div>
-            @endif
+        {{ Form::label('pbt', 'Pihak Berkuasa Tempatan / Agensi') }} 
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" style="display: none;">Muatnaik Maklumat...</div>
+        {{ Form::select('pbt', $pbt ?? [], old('pbt', $ktp->pbt ?? null), [
+            'class' => 'form-control select2',
+            'data-toggle' => 'tooltip',
+            'title' => 'Sila Pilih Negeri Terlebih Dahulu',
+            'id' => 'pbt',
+            'autocomplete' => 'off',
+        ]) }}
     </div>
-    
 </div>
 
 <!-- Spesis Pokok & Jumlah Pokok -->
 <div class="form-row">
     <div class="form-group col-md-8">
         {{ Form::label('maklumat', 'Maklumat Pokok') }}
+        <div>
+            <button type="button" class="btn btn-light btn-sm mt-2" id="add_spesis_pokok"><i class="fas fa-plus"></i> Tambah Spesis</button>
+        </div>
         <div class="table-responsive">
             <table id="spesis-pokok-table" class="table table-bordered table-hover mt-2">
                 <thead class="thead-dark">
@@ -115,8 +92,16 @@
                     @endif
                 </tbody>
             </table>
-            <div>
-                <button type="button" class="btn btn-light btn-sm mt-2" id="add_spesis_pokok"><i class="fas fa-plus"></i> Tambah Spesis</button>
+            
+
+            <div class="form-group col-md-10">
+                    {{ Form::label('jumlah_pokok', 'Jumlah Keseluruhan Pokok Ditanam') }}
+                    {{ Form::text('jumlah_pokok', null, ['class' => 'form-control ' . ($errors->has('jumlah_pokok') ? 'is-invalid' : ''), 'readonly' => true]) }}
+                    @if ($errors->has('jumlah_pokok'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('jumlah_pokok') }}
+                        </div>
+                    @endif
             </div>
         </div>
 
@@ -201,5 +186,92 @@
         // Initial calculation
         updateJumlahPokok();
     });
+
+    // Function to populate Negeri dropdown on page load
+    function updateFields() {
+        var $negeri = $('#negeri');
+        $negeri.prop('disabled', true);
+        $('#loading-spinner').show();
+        
+        $.getJSON('/data/negeri', function(data) {
+            $negeri.empty().append('<option value="">Pilih Negeri</option>');
+            $.each(data, function(index, negeri) {
+                $negeri.append($('<option>', {
+                    value: negeri.id,
+                    text: capitalizeWords(negeri.name)
+                }));
+            });
+            // Add 'lain-lain' option
+            $negeri.append($('<option>', {
+                value: 'lain-lain',
+                text: 'Lain-lain'
+            }));
+            
+            $negeri.prop('disabled', false);
+            $('#loading-spinner').hide();
+            $negeri.select2({ theme: 'bootstrap4', allowClear: false });
+
+            // Set the selected value if editing
+            var selectedNegeri = '{{ old('negeri', $ktp->negeri ?? '') }}';
+            if (selectedNegeri) {
+                $negeri.val(selectedNegeri).trigger('change');
+            }
+        }).fail(function() {
+            $negeri.prop('disabled', false);
+            $('#loading-spinner').hide();
+            alert('Failed to load Negeri data.');
+        });
+    }
+
+    // Function to update PBT based on selected Negeri
+    function updatePBT() {
+        const negeriId = $('#negeri').val();
+        const $pbt = $('#pbt');
+
+        // Reset PBT dropdown
+        $pbt.empty().append('<option value="">Pilih PBT/Agensi</option>');
+        $('#loading-spinner').show();
+
+        if (!negeriId) {
+            $('#loading-spinner').hide();
+            return;
+        }
+
+        $.getJSON('/data/pbt/' + negeriId, function(data) {
+            $.each(data, function(index, pbt) {
+                $pbt.append($('<option>', {
+                    value: capitalizeWords(pbt.name), // Change value to name
+                    text: capitalizeWords(pbt.name)
+                }));
+            });
+            // Add 'lain-lain' option
+            $pbt.append($('<option>', {
+                value: 'NGO',
+                text: 'NGO'
+            }));
+
+            $('#loading-spinner').hide();
+
+            // Set the selected value if editing
+            var selectedPbt = '{{ old('pbt', $ktp->pbt ?? '') }}';
+            if (selectedPbt) {
+                $pbt.val(selectedPbt).trigger('change');
+            }
+        }).fail(function() {
+            $('#loading-spinner').hide();
+            alert('Failed to load PBT. Sila isi Nama Pihak Berkuasa Tempatan.');
+        });
+    }
+
+    // Utility function to capitalize each word
+    function capitalizeWords(str) {
+        return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    }
+
+    // Run function on page load
+    $(document).ready(function() {
+        updateFields();
+    });
+
 </script>
 @endsection

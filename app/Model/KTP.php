@@ -41,7 +41,8 @@ class KTP extends Model implements Auditable
         'lokasi',
         'pbt',
         'spesis_pokok',
-        'jumlah_pokok'
+        'jumlah_pokok',
+        'negeri'
     ];
 
 }

@@ -757,16 +757,22 @@
                 });
 
                 $('#parkModal').on('hidden.bs.modal', function () {
-                    $(this).find('#title').text('');
-                    $(this).find('#address').text('');
-                    $(this).find('#no_telefon').text('');
-                    $(this).find('#emel').text('');
-                    $(this).find('#no_ssm').text('');
-                    $(this).find('#no_mof').text('');
-                    $(this).find('#no_cidb').text('');
-                    $(this).find('#taraf_bumiputera').text('');
-                    $(this).find('#bidang_kepakaran').text('');
-                    $(this).find('.modal-content').scrollTop(0);
+                    var modal = $(this);
+                    modal.find('#title').text('');
+                    modal.find('#address').text('');
+                    modal.find('#no_telefon').text('');
+                    modal.find('#emel').text('');
+                    modal.find('#no_ssm').text('');
+                    modal.find('#no_mof').text('');
+                    modal.find('#no_cidb').text('');
+                    modal.find('#taraf_bumiputera').text('');
+                    modal.find('#bidang_kepakaran').text('');
+                    modal.find('#kategori_ngo').text('');
+                    modal.find('#jenis_institusi').text('');
+                    modal.find('#nama_presiden').text('');
+                    modal.find('#produk_container').empty();
+                    modal.find('#pengalaman_container').empty();
+                    modal.find('.modal-content').scrollTop(0);
                 });
 
                 function populateTablePengalaman(data) {
@@ -856,10 +862,14 @@
                         // Create and append the 'Gambar Produk 1' column (Image 1)
                         var gambarProduk1Cell = document.createElement("td");
                         var gambarProduk1Img = document.createElement("img");
-                        gambarProduk1Img.src = imagePath + '/eLIND/' + folder+'/'+subfolder+'/'+item.gambar_produk_1 || '';
-                        gambarProduk1Img.onerror = function () {
+                        if(item.gambar_produk_1){
+                            gambarProduk1Img.src = imagePath + '/eLIND/' + folder+'/'+subfolder+'/'+item.gambar_produk_1 || '';
+                            gambarProduk1Img.onerror = function () {
+                                gambarProduk1Img.src = `${imagePath}/no-photos.png`;
+                            };
+                        }else{
                             gambarProduk1Img.src = `${imagePath}/no-photos.png`;
-                        };
+                        }
                         gambarProduk1Img.alt = "Gambar Produk 1";
                         gambarProduk1Img.style.width = "100px";  // Set a fixed width for the image
                         gambarProduk1Cell.appendChild(gambarProduk1Img);
@@ -868,10 +878,14 @@
                         // Create and append the 'Gambar Produk 2' column (Image 2)
                         var gambarProduk2Cell = document.createElement("td");
                         var gambarProduk2Img = document.createElement("img");
-                        gambarProduk2Img.src = imagePath + '/eLIND/' + folder+'/'+subfolder+'/'+item.gambar_produk_2 || '';
-                        gambarProduk2Img.onerror = function () {
+                        if(item.gambar_produk_2){
+                            gambarProduk2Img.src = imagePath + '/eLIND/' + folder+'/'+subfolder+'/'+item.gambar_produk_2 || '';
+                            gambarProduk2Img.onerror = function () {
+                                gambarProduk2Img.src = `${imagePath}/no-photos.png`;
+                            };
+                        }else{
                             gambarProduk2Img.src = `${imagePath}/no-photos.png`;
-                        };
+                        }
                         gambarProduk2Img.alt = "Gambar Produk 2";
                         gambarProduk2Img.style.width = "100px";  // Set a fixed width for the image
                         gambarProduk2Cell.appendChild(gambarProduk2Img);

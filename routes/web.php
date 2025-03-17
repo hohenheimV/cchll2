@@ -274,7 +274,7 @@ Route::name('website.')
         })->name('search');
 
         Route::get('/epalm-taman/{keyword?}', function ($keyword = null) {
-            dd(ePALM::where('status', 'approved')->first());
+            dd($keyword);
             // return ePALM::where('is_komponen', null)->latest()->paginate(10);
             // $ePALM = ePALM::/* where('is_komponen', null)-> */where('status', 'approved')->latest()->paginate(5);//ePALM::latest()->paginate(15);
             $ePALM = ePALM::where('status', 'approved')
@@ -285,7 +285,6 @@ Route::name('website.')
                 ->orderBy('created_at', 'asc')
                 ->orderBy('nama_pbt')
                 ->paginate(10);
-            dd($ePALM);
             foreach ($ePALM as $item) {
                 if ($item->nama_pbt == "Landskap Perbandaran") {
                     $ePALM_komponen = ePALM::where('id_taman', $item->is_komponen)->first();

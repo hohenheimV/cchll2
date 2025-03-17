@@ -285,6 +285,7 @@ Route::name('website.')
                 ->orderBy('created_at', 'asc')
                 ->orderBy('nama_pbt')
                 ->paginate(10);
+            dd($ePALM);
             foreach ($ePALM as $item) {
                 if ($item->nama_pbt == "Landskap Perbandaran") {
                     $ePALM_komponen = ePALM::where('id_taman', $item->is_komponen)->first();

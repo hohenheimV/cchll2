@@ -92,8 +92,8 @@ Route::get('/T4', function () {
     $counter = Home::findOrFail(1);
     views($counter)->cooldown(now()->addHours(1))->record();
     $popup = Slider::where('popup',1)->first();
-    return view('website.T4welcome', compact('popup'));
-})->name('welcomeT4');
+    return view('website.T3welcome', compact('popup'));
+})->name('welcomeT3');
 
 Route::get('/api/negeri', [RegisterController::class, 'getNegeri']);
 // Route::get('/api/daerah/{negeriId}', [RegisterController::class, 'getDaerah']);

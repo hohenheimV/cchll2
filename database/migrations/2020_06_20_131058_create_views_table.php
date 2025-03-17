@@ -27,11 +27,11 @@ class CreateViewsTable extends Migration
      */
     public function __construct()
     {
-        $this->schema = Schema::connection(
-            config('eloquent-viewable.models.view.connection')
-        );
+        // $this->schema = Schema::connection(
+        //     config('eloquent-viewable.models.view.connection')
+        // );
 
-        $this->table = config('eloquent-viewable.models.view.table_name');
+        // $this->table = config('eloquent-viewable.models.view.table_name');
     }
 
     /**
@@ -41,13 +41,13 @@ class CreateViewsTable extends Migration
      */
     public function up()
     {
-        $this->schema->create($this->table, function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->morphs('viewable');
-            $table->text('visitor')->nullable();
-            $table->string('collection')->nullable();
-            $table->timestamp('viewed_at')->useCurrent();
-        });
+        // $this->schema->create($this->table, function (Blueprint $table) {
+        //     $table->bigIncrements('id');
+        //     $table->morphs('viewable');
+        //     $table->text('visitor')->nullable();
+        //     $table->string('collection')->nullable();
+        //     $table->timestamp('viewed_at')->useCurrent();
+        // });
     }
 
     /**
@@ -57,6 +57,6 @@ class CreateViewsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists($this->table);
+        // Schema::dropIfExists($this->table);
     }
 }

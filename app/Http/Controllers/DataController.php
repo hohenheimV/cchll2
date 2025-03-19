@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Model\ePALM;
 use App\Model\ePALM_draf;
 use App\Model\MaklumatPenggunaPbt;
+use App\Model\MaklumatPenggunaPenggiatIndustri;
+use App\Model\Negeri;
 use Illuminate\Support\Facades\DB;
 
 
@@ -425,6 +427,12 @@ class DataController extends Controller
                     break; // Stop the loop once we find the first match
                 }
             }
+            $kod_negeri = Negeri::select('kod_negeri')
+                ->where('nama_negeri', 'ilike', "%$shortName%")
+                ->first();
+            if ($kod_negeri) {
+                $negeri = $kod_negeri->kod_negeri;
+            }
         }
 
         // $organizedData = $this->parseAndOrganizeTable($htmlContent);
@@ -515,10 +523,19 @@ class DataController extends Controller
                     // Extract data from the second and third columns
                     $locality = trim($columns->item(1)->textContent);
                     $state = trim($columns->item(2)->textContent);
-
+                    
+                    $kod_negeri = Negeri::select('kod_negeri')
+                        ->where('nama_negeri', 'ilike', "%$state%")
+                        ->first();
+                    if ($kod_negeri) {
+                        $kod_negeri = $kod_negeri->kod_negeri;
+                    } else {
+                        $kod_negeri = null;
+                    }
                     $data = [
                         'locality' => $locality,
                         'state' => $state,
+                        'kod_negeri' => $kod_negeri,
                         'country' => 'Malaysia' // Assuming country is always Malaysia for this case
                     ];
 
@@ -669,4 +686,15 @@ class DataController extends Controller
         return response()->json($visitorCounts);
     }
 
+    public function getPenggiatIndustri()
+    {
+        $penggiat = MaklumatPenggunaPenggiatIndustri::select('id_elind', 'name')->orderBy('id_elind', 'asc')->get();
+        return response()->json($penggiat);
+    }
+
+    public function getPbtName()
+    {
+        $penggiat = MaklumatPenggunaPbt::select('id', 'pbt_name')->orderBy('state', 'asc')->get();
+        return response()->json($penggiat);
+    }
 }

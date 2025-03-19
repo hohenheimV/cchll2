@@ -72,18 +72,16 @@
                                             'class'=>'btn btn-info btn-sm',
                                             'onclick'=>"window.location='".route('pengurusan.MIB.show',$rakan_taman)."'"
                                             ]) !!}
-                                            @can('rakan_taman-edit')
                                             {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
                                             'class'=>'btn btn-warning btn-sm',
                                             'onclick'=>"window.location='".route('pengurusan.MIB.edit',$rakan_taman)."'"
                                             ]) !!}
-                                            @endcan
-                                            @can('rakan_taman-delete')
-                                            {!! Form::button('<i class="fas fa-trash"></i>', ['class'=>'btn btn-danger
-                                            btn-sm',
-                                            'data-url'=>route('pengurusan.MIB.destroy',$rakan_taman->id),
-                                            'data-toggle'=>'modal','data-target'=>'#modalDelete']) !!}
-                                            @endcan
+                                            @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem'))
+                                                {!! Form::button('<i class="fas fa-trash"></i>', ['class'=>'btn btn-danger
+                                                btn-sm',
+                                                'data-url'=>route('pengurusan.MIB.destroy',$rakan_taman->id),
+                                                'data-toggle'=>'modal','data-target'=>'#modalDelete']) !!}
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

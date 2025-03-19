@@ -8,6 +8,7 @@ use App\Model\ePALM_draf;
 use Illuminate\Http\Request;
 use App\Model\MaklumatPenggunaPbt;
 use App\User;
+use Illuminate\Support\Facades\Mail;
 
 class ePALMController extends Controller
 {
@@ -18,10 +19,10 @@ class ePALMController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['role_or_permission:Pentadbir Sistem|Pegawai|Pihak Berkuasa Tempatan|ePALM-list']);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|Pegawai|Pihak Berkuasa Tempatan|ePALM-create'], ['only' => ['create', 'store']]);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|Pegawai|Pihak Berkuasa Tempatan|ePALM-edit'], ['only' => ['edit', 'update']]);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|Pegawai|Pihak Berkuasa Tempatan|ePALM-delete'], ['only' => ['destroy']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|epalm-list']);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|epalm-create'], ['only' => ['create', 'store']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|epalm-edit'], ['only' => ['edit', 'update']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|epalm-delete'], ['only' => ['destroy']]);
     }
 
     public function index()
@@ -30,10 +31,14 @@ class ePALMController extends Controller
         $userId = auth()->id();
         $user = User::find($userId);
         if($user->hasRole('Pihak Berkuasa Tempatan')){
-            $email = $user->email;
-            $pbt = MaklumatPenggunaPbt::where('email', '=', $email)->first();
+            $email = $user->bahagian_jln;
+            $pbt = MaklumatPenggunaPbt::where('id', '=', $email)->first();
             $totalCount = ePALM::where('nama_pbt', $pbt->pbt_name)->count();
             $ePALM = ePALM::where('nama_pbt', $pbt->pbt_name)->where('is_komponen', null)->orderBy('id_taman', 'desc')->paginate($totalCount);
+            foreach ($ePALM as $key => $value) {
+                $ePALM_draf = ePALM_draf::where('id_taman', $value->id_taman)->first();
+                $value->status = $ePALM_draf->status;
+            }
         }else{
             $totalCount = ePALM::count();
             $ePALM = ePALM::where('is_komponen', null)->latest()->paginate($totalCount);
@@ -47,8 +52,8 @@ class ePALMController extends Controller
         $user = User::find($userId);
         $pbt = null; 
         if($user->hasRole('Pihak Berkuasa Tempatan')){
-            $email = $user->email;
-            $pbt = MaklumatPenggunaPbt::where('email', '=', $email)->first();
+            $email = $user->bahagian_jln;
+            $pbt = MaklumatPenggunaPbt::where('id', '=', $email)->first();
         }
         return view('pengurusan.ePALM.create', compact('pbt'));
     }
@@ -265,7 +270,82 @@ class ePALMController extends Controller
             if ($ePALM_draf) {
                 $updateDraf = $ePALM_draf->update($requestData);
             }
+            // dd($ePALM_draf);
             if ($updateDraf) {
+                $kategori = ($ePALM_draf->kategori_taman);
+                
+                $kategoriToBahagian = [
+                    'Taman Awam' => 2,
+                    'Landskap Perbandaran' => 3,
+                    'Persekitaran Kehidupan' => 4,
+                    'Taman Botani' => 5,
+                    'Pemuliharaan Dan Penyelidikan Landskap' => 5,
+                ];
+                $bahagian_jln = $kategoriToBahagian[$kategori] ?? null;
+                if ($bahagian_jln) {
+                    $userArr = User::where(function ($query) use ($bahagian_jln) {
+                        $query->whereHas('roles', function ($query) {
+                            $query->where('name', 'Pegawai');
+                        })
+                        ->where('bahagian_jln', $bahagian_jln);
+                    })
+                    ->get();
+                } else {
+                    $userArr = [];
+                }
+
+                $user_email = [];
+                foreach ($userArr as $key => $value) {
+                    $user_email[] = ['address' => $value->email, 'name' => $value->name];
+                }
+
+                $emailBTM = User::where(function ($query) use ($bahagian_jln) {
+                    $query->whereHas('roles', function ($query) {
+                            $query->where('name', 'Pentadbir Sistem');
+                        });
+                    })
+                    ->orWhere(function ($query) use ($bahagian_jln) {
+                        $query->whereHas('roles', function ($query) {
+                            $query->where('name', 'Pegawai');
+                        })
+                        ->where('bahagian_jln', '7');
+                    })
+                    ->get();
+                $btm_email = [];
+                foreach ($emailBTM as $key => $value) {
+                    $btm_email[] = ['address' => $value->email, 'name' => $value->name];
+                }
+                // dd($btm_email);
+                $nama_pemohon = isset($PBTArr->pbt_name) ? $PBTArr->pbt_name : 'Jabatan Landskap Negara';
+                if (config('mail.enabled')) {
+                    try {
+                        $emailData = [
+                            "email_to" => $user_email,
+                            "email_cc" => [
+                                ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
+                                ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
+                            ],//$btm_email,
+                            "subject" => 'Modul Pengurusan Taman & Landskap (ePALM)',
+                        ];
+        
+                        Mail::send('pengurusan.ePALM.mails.perubahan', ['epalm' => $ePALM_draf], function ($message) use ($emailData) {
+                            $message->subject($emailData["subject"]);
+                            // Loop through to array and add each email
+                            foreach ($emailData['email_to'] as $to) {
+                                $message->to($to['address'], $to['name']);
+                            }
+        
+                            // Loop through cc array and add each email
+                            foreach ($emailData['email_cc'] as $cc) {
+                                $message->cc($cc['address'], $cc['name']);
+                            }
+                        });
+                    } catch (\Exception $exception) {
+                        \Log::error("Error sending registration email: " . $exception->getMessage());
+                       dd("Error sending registration email: " . $exception->getMessage());
+                    }
+                    // dd($emailData);
+                }
                 return redirect()->route('pengurusan.ePALM.edit', [$ePALM_draf])->with('successMessage', 'Maklumat taman telah berjaya dikemaskini');
             }
         } elseif ($request->input('action') === 'approve') {

@@ -59,7 +59,7 @@
     </div>
 
     <!-- Fields for PBT Account Type -->
-    <div id="pbt_fields" style="display: block;">
+    <div id="pbt_fields" style="display: block;" class="inertClass">
         <div class="form-group mb-3">
             {{ Form::label('negeri', 'Negeri') }}
             <br>
@@ -89,16 +89,27 @@
                         </tr>
                     </thead>
                     <tbody id="senarai_kawasan_lapang">
-                        @foreach($MIB->kawasan as $key => $kawasan)
+                        @if(isset($MIB->kawasan))
+                            @foreach($MIB->kawasan as $key => $kawasan)
+                                <tr>
+                                    <td style="vertical-align:middle;">
+                                        <input type="text" name="kawasan[{{ $key }}][nama]" class="form-control" maxlength="150" value="{{ $kawasan['nama'] ?? '' }}">
+                                    </td>
+                                    <td style="vertical-align:middle;">
+                                        <input type="text" name="kawasan[{{ $key }}][keluasan]" class="form-control decimal" maxlength="20" value="{{ $kawasan['keluasan'] ?? '' }}">
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
                             <tr>
                                 <td style="vertical-align:middle;">
-                                    <input type="text" name="kawasan[{{ $key }}][nama]" class="form-control" maxlength="150" value="{{ $kawasan['nama'] ?? '' }}">
+                                    <input type="text" name="kawasan[][nama]" class="form-control" maxlength="150" value="">
                                 </td>
                                 <td style="vertical-align:middle;">
-                                    <input type="text" name="kawasan[{{ $key }}][keluasan]" class="form-control decimal" maxlength="20" value="{{ $kawasan['keluasan'] ?? '' }}">
+                                    <input type="text" name="kawasan[][keluasan]" class="form-control decimal" maxlength="20" value="">
                                 </td>
                             </tr>
-                        @endforeach
+                        @endif
                     </tbody>
 
                     <tfoot>
@@ -298,30 +309,66 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @if(isset($rakanTaman[0]))
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Pengerusi <span class="font-red"> * </span></td>
                         <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="pengerusi_nama" name="pengerusi_nama" class="form-control" maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[0]['pengerusi_nama'] : '' }}"></td>
                         <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="pengerusi_tel_bimbit" name="pengerusi_tel_bimbit" class="form-control" maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[0]['pengerusi_tel_bimbit'] : '' }}"></td>
                         <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="pengerusi_email" name="pengerusi_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[0]['pengerusi_email'] : '' }}"></td>
                     </tr>
+                    @else
+                    <tr>
+                        <td style="padding: 4px 8px; line-height: 1;">Pengerusi <span class="font-red"> * </span></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="pengerusi_nama" name="pengerusi_nama" class="form-control" maxlength="150" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="pengerusi_tel_bimbit" name="pengerusi_tel_bimbit" class="form-control" maxlength="20" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="pengerusi_email" name="pengerusi_email" class="form-control lowercase" maxlength="100" value=""></td>
+                    </tr>
+                    @endif
+                    @if(isset($rakanTaman[1]))
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Timbalan Pengerusi <span class="font-red"> * </span></td>
                         <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="timbalan_pengerusi_nama" name="timbalan_pengerusi_nama" class="form-control" maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[1]['timbalan_pengerusi_nama'] : '' }}"></td>
                         <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="timbalan_pengerusi_tel_bimbit" name="timbalan_pengerusi_tel_bimbit" class="form-control" maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[1]['timbalan_pengerusi_tel_bimbit'] : '' }}"></td>
                         <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="timbalan_pengerusi_email" name="timbalan_pengerusi_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[1]['timbalan_pengerusi_email'] : '' }}"></td>
                     </tr>
+                    @else
+                    <tr>
+                        <td style="padding: 4px 8px; line-height: 1;">Timbalan Pengerusi <span class="font-red"> * </span></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="timbalan_pengerusi_nama" name="timbalan_pengerusi_nama" class="form-control" maxlength="150" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="timbalan_pengerusi_tel_bimbit" name="timbalan_pengerusi_tel_bimbit" class="form-control" maxlength="20" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="timbalan_pengerusi_email" name="timbalan_pengerusi_email" class="form-control lowercase" maxlength="100" value=""></td>
+                    </tr>
+                    @endif
+                    @if(isset($rakanTaman[2]))
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Setiausaha <span class="font-red"> * </span></td>
                         <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="setiausaha_nama" name="setiausaha_nama" class="form-control " maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[2]['setiausaha_nama'] : '' }}" ></td>
                         <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="setiausaha_tel_bimbit" name="setiausaha_tel_bimbit" class="form-control" maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[2]['setiausaha_tel_bimbit'] : '' }}" ></td>
                         <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="setiausaha_email" name="setiausaha_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[2]['setiausaha_email'] : '' }}"></td>
                     </tr>
+                    @else
+                    <tr>
+                        <td style="padding: 4px 8px; line-height: 1;">Setiausaha <span class="font-red"> * </span></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="setiausaha_nama" name="setiausaha_nama" class="form-control " maxlength="150" value="" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="setiausaha_tel_bimbit" name="setiausaha_tel_bimbit" class="form-control" maxlength="20" value="" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="setiausaha_email" name="setiausaha_email" class="form-control lowercase" maxlength="100" value=""></td>
+                    </tr>
+                    @endif
+                    @if(isset($rakanTaman[3]))
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Bendahari <span class="font-red"> * </span></td>
                         <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="bendahari_nama" name="bendahari_nama" class="form-control " maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[3]['bendahari_nama'] : '' }}" ></td>
                         <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="bendahari_tel_bimbit" name="bendahari_tel_bimbit" class="form-control " maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[3]['bendahari_tel_bimbit'] : '' }}" ></td>
                         <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="bendahari_email" name="bendahari_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[3]['bendahari_email'] : '' }}"></td>
                     </tr>
+                    @else
+                    <tr>
+                        <td style="padding: 4px 8px; line-height: 1;">Bendahari <span class="font-red"> * </span></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="bendahari_nama" name="bendahari_nama" class="form-control " maxlength="150" value="" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="bendahari_tel_bimbit" name="bendahari_tel_bimbit" class="form-control " maxlength="20" value="" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="bendahari_email" name="bendahari_email" class="form-control lowercase" maxlength="100" value=""></td>
+                    </tr>
+                    @endif
                     <!-- Repeat for other rows with similar structure -->
                     @for ($i = 1; $i <= 6; $i++)
                         <tr>
@@ -457,7 +504,7 @@
             alert('Failed to load data');
         });
         
-        let rowIndex = '{{ count($MIB->kawasan) ?? 0 }}';
+        let rowIndex = '{{ isset($MIB->kawasan) ? count($MIB->kawasan) : 0 }}';
         // alert(rowIndex);
         // Function to Add New Row
         $('#addKawasan').click(function() {

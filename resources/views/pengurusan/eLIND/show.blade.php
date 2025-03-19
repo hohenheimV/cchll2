@@ -125,7 +125,7 @@
                 <div class="card-footer">
                     {!! Form::button('Kembali', ['onclick' => "window.location='".route('pengurusan.eLIND.index', ['type' => $lastSegment])."'", 'class' => 'btn btn-secondary']) !!}
                     {!! 
-                        Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini', ['onclick'=>"window.location='".route('pengurusan.eLIND.edit', ['type' => $lastSegment, 'id' => $eLIND])."'", 'class'=>'btn bg-warning', Html::tooltip('Kemaskini PIL')]); 
+                        Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini', ['onclick'=>"window.location='".route('pengurusan.eLIND.edit', ['type' => $lastSegment, 'id' => $eLIND->id_elind])."'", 'class'=>'btn bg-warning', Html::tooltip('Kemaskini PIL')]); 
                     !!}
 
                     @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))

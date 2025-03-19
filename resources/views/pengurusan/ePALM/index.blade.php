@@ -41,8 +41,8 @@
                                     <th class="text-center w-5">Kategori Taman</th>
                                     @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|TKP/B JLN'))
                                         <th class="text-center w-10">PBT</th>
-                                        <th class="text-center w-12">Paparan Portal</th>
                                     @endif
+                                        <th class="text-center w-12">Paparan Portal</th>
                                     
                                         <th class="text-center w-5">Tindakan</th>
                                     
@@ -75,10 +75,14 @@
                                             <td>
                                                 {{ $taman->nama_pbt }}
                                             </td>
-                                            <td>
-                                                <span style="white-space: normal; text-align: centre;width: 100%;" class="badge {{ $paparan_portal[$taman->status == 'approved' ? 0 : 1]['label'] }}">{{ $paparan_portal[$taman->status == 'approved' ? 0 : 1]['id'] }}</span>
-                                            </td>
                                             @endif
+                                            <td>
+                                                @if(Auth::user()->hasRole('Pihak Berkuasa Tempatan'))
+                                                    <span style="white-space: normal; text-align: centre;width: 100%;" class="badge {{ $paparan_portal[$taman->status == 'approved' ? 0 : 1]['label'] }}">{{ $taman->status == 'approved' ? 'Perubahan telah disahkan' : 'Perubahan belum disahkan' }}</span>
+                                                @else
+                                                    <span style="white-space: normal; text-align: centre;width: 100%;" class="badge {{ $paparan_portal[$taman->status == 'approved' ? 0 : 1]['label'] }}">{{ $paparan_portal[$taman->status == 'approved' ? 0 : 1]['id'] }}</span>
+                                                @endif
+                                            </td>
                                             
                                             <td>
                                                 <div class="btn-group">

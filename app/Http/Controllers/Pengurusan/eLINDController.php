@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon; 
+use Illuminate\Support\Facades\Mail;
 
 class eLINDController extends Controller
 {
@@ -21,10 +22,10 @@ class eLINDController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['role_or_permission:Pentadbir Sistem|Penggiat Industri|eLIND-list']);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|Penggiat Industri|eLIND-create'], ['only' => ['create', 'store']]);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|Penggiat Industri|eLIND-edit'], ['only' => ['edit', 'update']]);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|Penggiat Industri|eLIND-delete'], ['only' => ['destroy']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|elind-list']);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|elind-create'], ['only' => ['create', 'store']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|elind-edit'], ['only' => ['edit', 'update']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|elind-delete'], ['only' => ['destroy']]);
     }
 
     /**
@@ -37,39 +38,85 @@ class eLINDController extends Controller
     public function index($type)
     {
         // dd($type);
-        switch ($type) {
-            case 'kontraktor':
-                $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Kontraktor')->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Kontraktor')->count());
-                $view = 'pengurusan.eLIND.index';
-                break;
+        if(auth()->user()->hasRole('Penggiat Industri')){
+            $user = User::find(auth()->id());
+            $id_elind = $user->bahagian_jln;
+            // $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Kontraktor')->first();
+            // dd($data->jenis_industri);
+            switch ($type) {
+                case 'kontraktor':
+                    $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Kontraktor')->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Kontraktor')->count());
+                    $view = 'pengurusan.eLIND.index';
+                    break;
 
-            case 'perunding':
-                $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Perunding')->latest()->paginate(10);
-                $view = 'pengurusan.eLIND.index';
-                break;
+                case 'perunding':
+                    $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Perunding')->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Perunding')->count());
+                    $view = 'pengurusan.eLIND.index';
+                    break;
 
-            case 'pembekal':
-                $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Pembekal')->latest()->paginate(10);
-                $view = 'pengurusan.eLIND.index';
-                break;
-            case 'antarabangsa':
-                $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Pertubuhan Antarabangsa')->latest()->paginate(5);
-                $view = 'pengurusan.eLIND.index';
-                break;
+                case 'pembekal':
+                    $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Pembekal')->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Pembekal')->count());
+                    $view = 'pengurusan.eLIND.index';
+                    break;
+                case 'antarabangsa':
+                    $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Pertubuhan Antarabangsa')->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Pertubuhan Antarabangsa')->count());
+                    $view = 'pengurusan.eLIND.index';
+                    break;
 
-            case 'ngo':
-                $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'NGO / Badan Ikhtisas')->latest()->paginate(10);
-                $view = 'pengurusan.eLIND.index';
-                break;
+                case 'ngo':
+                    $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'NGO / Badan Ikhtisas')->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'NGO / Badan Ikhtisas')->count());
+                    $view = 'pengurusan.eLIND.index';
+                    break;
 
-            case 'pendidikan':
-                $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Institusi Pendidikan')->latest()->paginate(10);
-                $view = 'pengurusan.eLIND.index';
-                break;
+                case 'pendidikan':
+                    $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Institusi Pendidikan')->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Institusi Pendidikan')->count());
+                    $view = 'pengurusan.eLIND.index';
+                    break;
 
-            default:
-                dd($type);
-                abort(404); 
+                default:
+                    dd($type);
+                    abort(404); 
+            }
+            $dataDraf = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id_elind)->first();
+            $data[0]->status = $dataDraf->status;
+            // dd($data[0]);
+            // dd($dataDraf);
+            // dd($data[0]->status);
+        }else{
+            switch ($type) {
+                case 'kontraktor':
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Kontraktor')->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Kontraktor')->count());
+                    $view = 'pengurusan.eLIND.index';
+                    break;
+
+                case 'perunding':
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Perunding')->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Perunding')->count());
+                    $view = 'pengurusan.eLIND.index';
+                    break;
+
+                case 'pembekal':
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Pembekal')->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Pembekal')->count());
+                    $view = 'pengurusan.eLIND.index';
+                    break;
+                case 'antarabangsa':
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Pertubuhan Antarabangsa')->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Pertubuhan Antarabangsa')->count());
+                    $view = 'pengurusan.eLIND.index';
+                    break;
+
+                case 'ngo':
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'NGO / Badan Ikhtisas')->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'NGO / Badan Ikhtisas')->count());
+                    $view = 'pengurusan.eLIND.index';
+                    break;
+
+                case 'pendidikan':
+                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Institusi Pendidikan')->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Institusi Pendidikan')->count());
+                    $view = 'pengurusan.eLIND.index';
+                    break;
+
+                default:
+                    dd($type);
+                    abort(404); 
+            }
         }
         // dd($data);
         return view($view, ['eLIND' => $data]);
@@ -167,18 +214,18 @@ class eLINDController extends Controller
             $requestData['produk'] = json_encode($mergedproduk);
         }
         // dd($requestData);
-        if(isset($requestData['email']) && $requestData['email'] !== null && isset($requestData['no_mof'])){
+        if(isset($requestData['no_mof'])){
             $existingMof = MaklumatPenggunaPenggiatIndustri::where('no_mof', $requestData['no_mof'])->first();
             if ($existingMof) {
                 return redirect()->route('pengurusan.eLIND.create',['type' => $type])->with('errorMessage', 'The MOF registration number has already been taken. Please choose another one.');
             }
-            $user = User::create([
-                'name' => $requestData['name'],
-                'email' => $requestData['email'],
-                'password' => Hash::make($requestData['no_mof']),
-                'is_active' => 0,
-            ]);
-            $user->assignRole("Penggiat Industri");
+            // $user = User::create([
+            //     'name' => $requestData['name'],
+            //     'email' => $requestData['email'],
+            //     'password' => Hash::make($requestData['no_mof']),
+            //     'is_active' => 0,
+            // ]);
+            // $user->assignRole("Penggiat Industri");
             
             $maklumatData = [
                 'name' => $requestData['name'],
@@ -288,16 +335,63 @@ class eLINDController extends Controller
      */
     public function show($type, $id)
     {
-        $eLIND = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id)->first();
-        $paparan_portal = MaklumatPenggunaPenggiatIndustri::where('id_elind', $eLIND->id_elind)->first();
+        // $eLIND = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id)->first();
+        $paparan_portal = '';
+        
+        if(auth()->user()->hasRole('Penggiat Industri')){
+            $user = User::find(auth()->id());
+            $id_elind = $user->bahagian_jln;
+            $eLIND = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id_elind)->where('id_elind', $id)->first();
+            if($eLIND){
+                switch ($type) {
+                    case 'kontraktor':
+                        $data = 'Kontraktor';
+                        break;
+    
+                    case 'perunding':
+                        $data = 'Perunding';
+                        break;
+    
+                    case 'pembekal':
+                        $data = 'Pembekal';
+                        break;
+                    case 'antarabangsa':
+                        $data = 'Pertubuhan Antarabangsa';
+                        break;
+    
+                    case 'ngo':
+                        $data = 'NGO / Badan Ikhtisas';
+                        break;
+    
+                    case 'pendidikan':
+                        $data = 'Institusi Pendidikan';
+                        break;
+    
+                    default:
+                        abort(404); 
+                }
+                if ($data !== $eLIND->jenis_industri) {
+                    abort(403, 'User does not have any of the necessary access rights. '); 
+                }
+            }
+        }else{
+            $eLIND = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id)->first();
+            $paparan_portal = MaklumatPenggunaPenggiatIndustri::where('id_elind', $eLIND->id_elind)->first();
+        }
 
         if ($paparan_portal) {
             $status = $paparan_portal->status;
+        }else{
+            $status = '';
         }
-        return view('pengurusan.eLIND.show', [
-            'eLIND' => $eLIND,
-            'status' => $status,
-        ]);
+        if($eLIND){
+            return view('pengurusan.eLIND.show', [
+                'eLIND' => $eLIND,
+                'status' => $status,
+            ]);
+        }else{
+            abort(403, 'User does not have any of the necessary access rights. '); 
+        }
     }
 
     /**
@@ -308,9 +402,54 @@ class eLINDController extends Controller
      */
     public function edit($type, $id)
     {
-        $eLIND = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id)->first();
-        // dd($eLIND);
-        return view('pengurusan.eLIND.edit', ['eLIND' => $eLIND]);
+        if(auth()->user()->hasRole('Penggiat Industri')){
+            $user = User::find(auth()->id());
+            $id_elind = $user->bahagian_jln;
+            $eLIND = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id_elind)->where('id_elind', $id)->first();
+            if($eLIND){
+                switch ($type) {
+                    case 'kontraktor':
+                        $data = 'Kontraktor';
+                        break;
+    
+                    case 'perunding':
+                        $data = 'Perunding';
+                        break;
+    
+                    case 'pembekal':
+                        $data = 'Pembekal';
+                        break;
+                    case 'antarabangsa':
+                        $data = 'Pertubuhan Antarabangsa';
+                        break;
+    
+                    case 'ngo':
+                        $data = 'NGO / Badan Ikhtisas';
+                        break;
+    
+                    case 'pendidikan':
+                        $data = 'Institusi Pendidikan';
+                        break;
+    
+                    default:
+                        abort(404); 
+                }
+                if ($data !== $eLIND->jenis_industri) {
+                    abort(403, 'User does not have any of the necessary access rights. '); 
+                }
+            }
+        }else{
+            $eLIND = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id)->first();
+        }
+        // dd($id);
+        // return view('pengurusan.eLIND.edit', ['eLIND' => $eLIND]);
+        if($eLIND){
+            return view('pengurusan.eLIND.edit', [
+                'eLIND' => $eLIND,
+            ]);
+        }else{
+            abort(403, 'User does not have any of the necessary access rights. '); 
+        }
     }
 
     /**
@@ -402,10 +541,74 @@ class eLINDController extends Controller
                 }
                 $requestData['produk'] = json_encode($mergedproduk);
             }
+            $requestData['status'] = "draft";
             // dd($requestData);
             $eLIND_update = $eLIND->update($requestData);
             // dd($eLIND);
             if ($eLIND_update) {
+                $bahagian_jln = 8;
+                $userArr = []; $user_email = []; $btm_email = [];
+                if ($bahagian_jln) {
+                    $userArr = User::where(function ($query) use ($bahagian_jln) {
+                        $query->whereHas('roles', function ($query) {
+                            $query->where('name', 'Pegawai');
+                        })
+                        ->where('bahagian_jln', $bahagian_jln);
+                    })
+                    ->get();
+                }
+                foreach ($userArr as $key => $value) {
+                    $user_email[] = ['address' => $value->email, 'name' => $value->name];
+                }
+
+                $emailBTM = User::where(function ($query) use ($bahagian_jln) {
+                    $query->whereHas('roles', function ($query) {
+                            $query->where('name', 'Pentadbir Sistem');
+                        });
+                    })
+                    ->orWhere(function ($query) use ($bahagian_jln) {
+                        $query->whereHas('roles', function ($query) {
+                            $query->where('name', 'Pegawai');
+                        })
+                        ->where('bahagian_jln', '7');
+                    })
+                    ->get();
+                foreach ($emailBTM as $key => $value) {
+                    $btm_email[] = ['address' => $value->email, 'name' => $value->name];
+                }
+                dd($user_email);
+                if (config('mail.enabled')) {
+                    try {
+                        $emailData = [
+                            "email_to" => [
+                                ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
+                                ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
+                            ],//$user_email,
+                            "email_cc" => [
+                                ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
+                                ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
+                            ],//$btm_email,
+                            "subject" => 'Modul Pengurusan Maklumat Industri Landskap (eLIND)',
+                        ];
+        
+                        Mail::send('pengurusan.eLIND.mails.perubahan', ['elind' => $eLIND, 'jenis' => $requestData['jenis_industri']], function ($message) use ($emailData) {
+                            $message->subject($emailData["subject"]);
+                            // Loop through to array and add each email
+                            foreach ($emailData['email_to'] as $to) {
+                                $message->to($to['address'], $to['name']);
+                            }
+        
+                            // Loop through cc array and add each email
+                            foreach ($emailData['email_cc'] as $cc) {
+                                $message->cc($cc['address'], $cc['name']);
+                            }
+                        });
+                    } catch (\Exception $exception) {
+                        \Log::error("Error sending registration email: " . $exception->getMessage());
+                       dd("Error sending registration email: " . $exception->getMessage());
+                    }
+                    // dd($emailData);
+                }
                 return redirect()->route('pengurusan.eLIND.edit', ['type' => $type, 'id' => $eLIND->id_elind])->with('successMessage', 'Maklumat '.$requestData['jenis_industri'].' telah berjaya dikemaskini');
             }
         } elseif ($request->input('action') === 'approve') {

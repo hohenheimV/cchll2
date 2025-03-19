@@ -14,7 +14,7 @@
         scrollbar-width: none; /* Hide scrollbar for Firefox */
     }
 </style>
-<aside class="main-sidebar  elevation-4 collapsed" style="background-color: white;">
+<aside class="main-sidebar  elevation-4 collapsed" style="background-color:rgb(200, 200, 200) !important;">
     <!-- Brand Logo -->
     <a href="{{ route('pengurusan.dashboard') }}" class="brand-link navbar">
         <img src="{{ asset('img/logo-jln-sm.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
@@ -43,7 +43,13 @@
                     ['onclick'=>"window.location='".route('pengurusan.dashboard')."'",
                     'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.dashboard')]) !!}
                 </li>
-                <li class="nav-header text-uppercase">Jabatan Landskap Negara</li>
+                @if ((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai')))
+                    <li class="nav-header text-uppercase">Jabatan Landskap Negara</li>
+                @elseif ((Auth::user()->hasRole('Pihak Berkuasa Tempatan')))
+                    <li class="nav-header text-uppercase">Pihak Berkuasa Tempatan</li>
+                @elseif ((Auth::user()->hasRole('Penggiat Industri')))
+                    <li class="nav-header text-uppercase">Penggiat Industri</li>
+                @endif
                 @if ((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai|Pihak Berkuasa Tempatan')))
                     @foreach(['eLAPS', 'ePALM', 'ePIL'] as $item)
                         <li class="nav-item">
@@ -66,7 +72,7 @@
                         ]) !!}
                     </li>
                 @endif
-                @if ((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai|Penggiat Industri')))
+                @if ((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai')))
                     @php
                         $types = [
                             'kontraktor' => ['label' => 'Kontraktor', 'icon' => 'fas fa-user-tie'],
@@ -88,6 +94,41 @@
                                         'class' => 'nav-link btn btn-block btn-link text-left ' . (isset($lastSegment) && $lastSegment === $type ? 'active' : '')
                                     ]) !!}
                                 </li>
+                            @endforeach
+                        </ul>
+                    </li>
+                @endif
+                @if ((Auth::user()->hasRole('Penggiat Industri')))
+                    @php
+                        $user = Auth::user();
+                        $id_elind = $user->bahagian_jln;
+                        $userDetails = \App\Model\MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->first();
+                        $jenis = $userDetails->jenis_industri;
+                        //dd($jenis);
+                    @endphp
+                    @php
+                        $types = [
+                            'kontraktor' => ['label' => 'Kontraktor', 'icon' => 'fas fa-user-tie'],
+                            'perunding' => ['label' => 'Perunding', 'icon' => 'fas fa-briefcase'],
+                            'pembekal' => ['label' => 'Pembekal', 'icon' => 'fas fa-truck'],
+                            'antarabangsa' => ['label' => 'Pertubuhan Antarabangsa', 'icon' => 'fas fa-globe'],
+                            'ngo' => ['label' => 'NGO & Badan Ikhtisas', 'icon' => 'fas fa-hands-helping'],
+                            'pendidikan' => ['label' => 'Institusi Pendidikan', 'icon' => 'fas fa-university']
+                        ];
+                    @endphp
+
+                    <li class="nav-item has-treeview {{ Html::active(['pengurusan.eLIND.*'], 'menu-open') }}">
+                        {!! Html::buttonSidebarNavLinkTreeview('eLIND', 'fas fa-chart-pie', ['class' => 'nav-link btn btn-block btn-link text-left']) !!}
+                        <ul class="nav nav-treeview">
+                            @foreach($types as $type => $data)
+                            <?php if($data['label'] == $jenis){ ?>
+                                <li class="nav-item">
+                                    {!! Html::buttonSidebarNavLink($data['label'], $data['icon'], [
+                                        'onclick' => "window.location='".route('pengurusan.eLIND.index', ['type' => $type])."'",
+                                        'class' => 'nav-link btn btn-block btn-link text-left ' . (isset($lastSegment) && $lastSegment === $type ? 'active' : '')
+                                    ]) !!}
+                                </li>
+                            <?php } ?>
                             @endforeach
                         </ul>
                     </li>

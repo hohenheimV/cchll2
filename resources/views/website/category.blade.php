@@ -40,9 +40,10 @@
     }
 
 </style>
-
-<section id="posts" class="bg-white pt-lg-5">
-
+<div class="mobile-fone">
+    <br><br><br><br><br>
+</div>
+<section id="posts" class="bg-white pt-lg-5 mib">
     <div class="container-fluid pt-lg-5 pb-lg-4 py-2 mb-2 bg-olive">
         <h1 class="text-center text-capitalize my-3">{{ $category}}</h1>
     </div>
@@ -56,7 +57,7 @@
                 </div>
             </div>
             <!-- Post Content Column -->
-            <div class="col-lg-8">
+            <div class="col-lg-9">
                 @forelse ($articles as $article)
                 <div class="card">
                     @if ($article->page_image)

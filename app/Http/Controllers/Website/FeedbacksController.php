@@ -71,7 +71,7 @@ class FeedbacksController extends Controller
 
         $data["email"] = $feedback->email;
         $data["client_name"] = $feedback->name;
-        $data["subject"] = "ADUAN DAN PERTANYAAN TAMAN PERSEKUTUAN BUKIT KIARA (No Ruj: $feedback->ref_num)";
+        $data["subject"] = "ADUAN DAN PERTANYAAN JABATAN LANDSKAP NEGARA (No Ruj: $feedback->ref_num)";
 
         try {
 
@@ -97,7 +97,7 @@ class FeedbacksController extends Controller
 
         $data["email"] = config('mail.from.address'); //'kpjln@jln.gov.my';
         $data["client_name"] = config('mail.from.name'); //'KP JLN';
-        $data["subject"] = "ADUAN DAN PERTANYAAN TAMAN PERSEKUTUAN BUKIT KIARA (No Ruj: $feedback->ref_num)";
+        $data["subject"] = "ADUAN DAN PERTANYAAN JABATA (No Ruj: $feedback->ref_num)";
 
         try {
 

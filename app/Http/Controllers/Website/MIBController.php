@@ -116,12 +116,13 @@ class MIBController extends Controller
         $data['registered_at'] = Carbon::now()->format('Y-m-d H:i:s');
         
         $MIB = MIB::create($data);
-        dd($MIB);
+        // dd($MIB);
 		//Hold
         if(config('mail.enabled')){//MAIL ACTIVE, fungsi email enable
             $this->sendmailtopemohon($MIB);
             $this->sendmailtoadmin($MIB);
         }
+        dd($MIB);
         return view('website.MIB.register')->with('successMessage', 'Maklumat telah berjaya disimpan');
     }
 
@@ -130,7 +131,7 @@ class MIBController extends Controller
 
         $data["email"] = $MIB->email;
         $data["client_name"] = $MIB->name;
-        $data["subject"] = "ADUAN DAN PERTANYAAN TAMAN PERSEKUTUAN BUKIT KIARA (No Ruj: $MIB->ref_num)";
+        $data["subject"] = "Permohonan Pendaftaran Rakan Taman (No Ruj: $MIB->ref_num)";
 
         try {
 
@@ -156,7 +157,7 @@ class MIBController extends Controller
 
         $data["email"] = config('mail.from.address'); //'kpjln@jln.gov.my';
         $data["client_name"] = config('mail.from.name'); //'KP JLN';
-        $data["subject"] = "ADUAN DAN PERTANYAAN TAMAN PERSEKUTUAN BUKIT KIARA (No Ruj: $MIB->ref_num)";
+        $data["subject"] = "Permohonan Pendaftaran Rakan Taman (No Ruj: $MIB->ref_num)";
 
         try {
 

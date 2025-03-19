@@ -14,7 +14,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title') | {{ config('app.name', 'Taman Persekutuan Bukit Kiara') }}</title>
+    <title>@yield('title') | {{ config('app.name', 'Jabatan Landskap Negara') }}</title>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">

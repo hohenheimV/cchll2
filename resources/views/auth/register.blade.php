@@ -341,6 +341,17 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="form-group mb-3 col-md-12">
+                                {{ Form::label('nama_syarikat', 'Nama Syarikat') }}
+                                <input id="nama_syarikat" type="text" class="form-control" name="nama_syarikat" placeholder="Nama Syarikat" required>
+                                @error('nama_syarikat')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
                         <!-- <div class="input-group mb-3">
                             <select id="jenis_penggiat" class="form-control select2" name="jenis_penggiat" onchange="updateJenisIndustri()">
                                 <option value="">Pilih Jenis Penggiat</option>
@@ -351,11 +362,9 @@
                         </div> -->
 
                         <!-- Kontraktor Specific Fields -->
-                        <div id="kontraktor_fields" style="display: none;">
+                        <!-- <div id="kontraktor_fields" style="display: none;">
                             <div class="row">
-                                <!-- Kelas Kontraktor Field -->
                                 <div class="input-group mb-3 col-md-6">
-                                    <!-- <label class="mobile-label" >State:</label> -->
                                     <select id="kelas-kontraktor" class="form-control select2" name="kelas_kontraktor" required>
                                         <option value="" selected>Pilih Kelas Kontraktor</option>
                                         <option value="A">A</option>
@@ -369,9 +378,7 @@
                                     </select>
                                 </div>
 
-                                <!-- Taraf Bumiputera Field -->
                                 <div class="input-group mb-3 col-md-6">
-                                    <!-- <label class="mobile-label" >State:</label> -->
                                     <select id="taraf-bumiputera" class="form-control select2" name="taraf_bumiputera" required>
                                         <option value="" selected>Pilih Taraf Bumiputera</option>
                                         <option value="bumiputera">Bumiputera</option>
@@ -380,29 +387,15 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <!-- No. Pendaftaran PKK/ CIDB Field -->
                                 <div class="input-group mb-3 col-md-6">
-                                    <!-- <label class="mobile-label" >State:</label> -->
                                     <input id="no-pendaftaran-pkk-cidb" type="text" class="form-control" name="no_pendaftaran_pkk_cidb" placeholder="No. Pendaftaran PKK/ CIDB" required>
-                                    <!-- <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-id-card"></span>
-                                        </div>
-                                    </div> -->
                                 </div>
 
-                                <!-- No. Pendaftaran MoF Field -->
                                 <div class="input-group mb-3 col-md-6">
-                                    <!-- <label class="mobile-label" >State:</label> -->
                                     <input id="no-pendaftaran-mof" type="text" class="form-control" name="no_pendaftaran_mof" placeholder="No. Pendaftaran MoF" required>
-                                    <!-- <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-id-card"></span>
-                                        </div>
-                                    </div> -->
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                     
@@ -449,7 +442,8 @@
                             </div>
                             <div class="form-group mb-3 col-md-6">
                                 {{ Form::label('state', 'Negeri') }}
-                                <input id="state" type="text" class="form-control" name="state" placeholder="State">
+                                <input id="state_PBT" type="text" class="form-control" name="state" placeholder="State">
+                                {{ Form::select('state', [], null, ['class' => 'form-control', 'id' => 'state_PI']) }}
                                 @error('state')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -538,6 +532,8 @@
                 // $('#postcode').val('');
                 // $('#locality').val('');
                 // $('#state').val('');
+                $('#state_PBT').show();
+                $('#state_PI').hide();
             } else if (accountType === 'Penggiat Industri') {
                 $pbtFields.hide();
                 $pbtFields.find('input, select').prop('disabled', true);
@@ -548,6 +544,29 @@
                 $passwordConfirmField.show();
                 $address.show();
                 $daftarButton.show();
+                $('#state_PBT').hide();
+                $('#state_PI').show();
+                $.ajax({
+                    url: '/get-negeri',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#state_PI').empty();
+                        $('#state_PI').append('<option value="">Pilih Negeri</option>');
+
+                        $.each(data, function(key, value) {
+                            var capitalizedNamaNegeri = value.nama_negeri
+                            .toLowerCase()
+                            .replace(/\b\w/g, function(char) {
+                                return char.toUpperCase();
+                            });
+                            $('#state_PI').append('<option value="' + value.kod_negeri + '">' + capitalizedNamaNegeri + '</option>');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error fetching Negeri data: ", error);
+                    }
+                });
                 // $('#address1').val('');
                 // $('#address2').val('');
                 // $('#postcode').val('');
@@ -607,11 +626,11 @@
         function updatePostcode() {
             var postcode = $('#postcode').val();
             var locality = $('#locality');
-            var state = $('#state');
+            var state = $('#state_PI');
             var country = $('#country');
 
             // Check if the input has exactly 5 digits
-            if (postcode.length === 5 && /^\d+$/.test(postcode)) {
+            if (postcode.length === 5 && /^\d+$/.test(postcode) && $('#roles').val() === 'Penggiat Industri') {
                 // Disable the PBT dropdown and show the spinner
                 // $pbt.prop('disabled', true);
                 $('#loading-spinner').show(); // Show the spinner
@@ -623,7 +642,7 @@
                         // Check if the dropdown contains a matching value
                         var stateValue = data.state;
                         
-                        var $negeri = $('#state');
+                        var $negeri = $('#state_PI');
                         // Disable the PBT dropdown and show the spinner
                         // $negeri.prop('disabled', true);
                         // $('#loading-spinner').show(); // Show the spinner
@@ -733,7 +752,7 @@
             var address1	 = $('#address1');
             var postcode = $('#postcode');
             var locality = $('#locality');
-            var state = $('#state');
+            var state = $('#state_PBT');
             var country = $('#country');
 
             // Check if the input has exactly 5 digits

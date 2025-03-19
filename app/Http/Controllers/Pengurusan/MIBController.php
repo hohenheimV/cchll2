@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Exports\MIBExport;
 use App\Model\MIB;
 use App\Model\MIB_laporan;
+use App\Model\MaklumatPenggunaPbt;
+use App\User;
 use Carbon\Carbon;
 use Error;
 use Illuminate\Http\Request;
@@ -28,10 +30,10 @@ class MIBController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['role_or_permission:Pentadbir Sistem|MIB-list']);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|MIB-create'], ['only' => ['create', 'store']]);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|MIB-edit'], ['only' => ['edit', 'update']]);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|MIB-delete'], ['only' => ['destroy']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|mib-list']);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|mib-create'], ['only' => ['create', 'store']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|mib-edit'], ['only' => ['edit', 'update']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|mib-delete'], ['only' => ['destroy']]);
         
         $status = ['Baru', 'Diperakui', 'Diluluskan'];
         $this->statusArr = array_combine($status, $status);
@@ -175,6 +177,9 @@ class MIBController extends Controller
                 $data['notes'] = null;
                 $MIB->update($data);
                 // send email to JLN Promosi
+                if(config('mail.enabled')){
+                    $this->sendmailtoadmin($MIB);
+                }
                 return redirect()->route('pengurusan.MIB.index')->with('successMessage', 'Maklumat telah berjaya disimpan');
             }
             if (strtolower($request->status) == 'diluluskan') {
@@ -184,6 +189,9 @@ class MIBController extends Controller
                 $data['notes'] = null;
                 $MIB->update($data);
                 // send email to PBT
+                if(config('mail.enabled')){
+                    $this->sendmailtopemohon($MIB);
+                }
                 return redirect()->route('pengurusan.MIB.index')->with('successMessage', 'Maklumat telah berjaya disimpan');
             }
         }
@@ -280,7 +288,7 @@ class MIBController extends Controller
         if (strtolower($request->status) == 'diluluskan') {
             // send email to PBT
         }
-        dd($MIB);
+        // dd($MIB);
         // redirect to
         return redirect()->route('pengurusan.MIB.index')->with('successMessage', 'Maklumat telah berjaya disimpan');
     }
@@ -348,6 +356,89 @@ class MIBController extends Controller
 
 
         return view('pengurusan.MIB.export', compact('status'));
+    }
+
+    private function sendmailtopemohon($MIB)
+    {
+        $PBT = MaklumatPenggunaPbt::where('pbt_name', '=', $MIB->pbt)->first();
+        $PBTArr = ($PBT) !== null ? $PBT : [];
+        $PBTid = $PBTArr->id ?? '';
+        $PBTuser = User::where('bahagian_jln', '=', $PBTid)->where('is_active', 1)->get();
+        $PBTemail = [];
+        foreach ($PBTuser as $key => $value) {
+            $PBTemail[] = ['address' => $value->email, 'name' => $value->name];
+        }
+        // dd($PBTemail);
+        $data["email"] = $MIB->email;
+        $data["client_name"] = $MIB->name;
+        $data["subject"] = "Permohonan Pendaftaran Rakan Taman (No Ruj: $MIB->ref_num)";
+
+        try {
+
+            Mail::send('pengurusan.MIB.mails.salinan', ['MIB' => $MIB], function ($message) use ($data, $PBTemail) {
+                $message->subject($data["subject"]);
+                foreach ($PBTemail as $recipient) {
+                    $message->to($recipient['address'], $recipient['name']);
+                }
+                $message->cc($data['email'], $data['client_name']);
+            });
+        } catch (Error $exception) {
+            
+             $exception->getMessage();
+        }
+
+       
+        return true;
+        // return redirect()->route('website.activities.index')->with($this->statuscode, $this->statusdesc);
+    }
+
+    private function sendmailtoadmin($MIB)
+    {
+        $bahagian_jln = 8;  //Bahagian Promosi
+        $user_email = [];
+
+        $emailArr = User::where(function ($query) use ($bahagian_jln) {
+            $query->whereHas('roles', function ($query) {
+                    $query->where('name', 'Pentadbir Sistem');
+                });
+            })
+            ->orWhere(function ($query) use ($bahagian_jln) {
+                $query->whereHas('roles', function ($query) {
+                    $query->where('name', 'Pegawai');
+                })
+                ->where('bahagian_jln', '7');
+            })
+            ->orWhere(function ($query) use ($bahagian_jln) {
+                $query->whereHas('roles', function ($query) {
+                    $query->where('name', 'Pegawai');
+                })
+                ->where('bahagian_jln', $bahagian_jln);
+            })
+            ->get();
+        foreach ($emailArr as $key => $value) {
+            $user_email[] = ['address' => $value->email, 'name' => $value->name];
+        }
+        // dd($user_email);
+
+        $data["email"] = config('mail.from.address'); //'kpjln@jln.gov.my';
+        $data["client_name"] = config('mail.from.name'); //'KP JLN';
+        $data["subject"] = "Permohonan Pendaftaran Rakan Taman (No Ruj: $MIB->ref_num)";
+
+        try {
+
+            Mail::send('pengurusan.MIB.mails.permohonan', ['MIB' => $MIB], function ($message) use ($data, $user_email) {
+                $message->subject($data["subject"]);
+                foreach ($user_email as $recipient) {
+                    // $message->to($recipient['address'], $recipient['name']);
+                }
+                $message->cc($data['email'], $data['client_name']);
+            });
+        } catch (Error $exception) {
+             $exception->getMessage();
+        }
+        
+        return true;
+        // return redirect()->route('website.activities.index')->with($this->statuscode, $this->statusdesc);
     }
 
 }

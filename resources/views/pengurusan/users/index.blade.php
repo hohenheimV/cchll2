@@ -53,7 +53,7 @@
                                         <th class="align-middle text-center wpx-50">No</th>
                                         <th class="align-middle">Nama</th>
                                         <th class="align-middle">Emel</th>
-                                        <th class="align-middle">Peranan</th>
+                                        <th class="align-middle w-1">Peranan</th>
                                         <th class="text-center align-middle wpx-100">Tarikh Daftar</th>
                                         <th class="text-center align-middle wpx-100">Tarikh Kemaskini</th>
                                         <th class="align-middle text-center wpx-100">Tindakan</th>
@@ -72,6 +72,26 @@
                                             <label class="badge badge-success font-weight-normal">{{ $v }}</label>
                                             @endforeach
                                             @endif
+                                            @if(in_array('Pegawai', $user->getRoleNames()->toArray()))
+                                                <?php
+                                                    $bahagian_jln = [
+                                                        '0' => 'Tiada Maklumat',
+                                                        '1' => 'Bahagian Pengurusan Landskap',
+                                                        '2' => 'Bahagian Taman Awam',
+                                                        '3' => 'Bahagian Pembangunan Landskap',
+                                                        '4' => 'Bahagian Khidmat Teknikal',
+                                                        '5' => 'Bahagian Penyelidikan & Pemulihan',
+                                                        '6' => 'Bahagian Penilaian & Penyelenggaraan',
+                                                        '7' => 'Bahagian Teknologi Maklumat',
+                                                        '8' => 'Bahagian Promosi & Industri Landskap',
+                                                        '9' => 'Bahagian Dasar & Pengurusan Korporat',
+                                                        '10' => 'Bahagian Kontrak & Ukur Bahan',
+                                                    ];
+                                                ?>
+                                                <br>
+                                                <label class="badge badge-primary font-weight-normal">{{ $user->bahagian_jln > 0 ? $bahagian_jln[$user->bahagian_jln] : '' }}</label>
+                                            @endif
+                                            
                                         </td>
                                         <td class="text-center">{!! Html::datetime($user->created_at,'d-m-Y') !!}
                                         </td>

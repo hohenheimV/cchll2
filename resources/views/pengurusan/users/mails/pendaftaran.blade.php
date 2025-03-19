@@ -1,21 +1,21 @@
 @extends('layouts.pengurusan.email')
-@section('title', 'New User Registration Notification')
+@section('title', 'Pendaftaran Pengguna Baru')
 
 @section('body')
 <p>YBhg. Dato’ Sri / Datuk / Dr. / Tuan / Puan</p>
-<p>We have a new user registration with the following details:</p>
+<p>Terdapat satu (1) Pendaftaran Pengguna Baru melalui laman web dan butiran lanjut seperti berikut:</p>
 @php($style = 'border: 1px solid #ddd; padding: 8px; vertical-align: top;')
 <table style="border-collapse: collapse; width:100%;">
     <tr>
-        <th colspan="2">USER REGISTRATION DETAILS</th>
+        <th colspan="2">Pendaftaran Pengguna Baru</th>
     </tr>
     <tr>
-        <th style="width: 220px; {!! $style !!}">Name</th>
-        <td style="{!! $style !!}">{{ $user->name ?? 'No Information' }}</td>
+        <th style="width: 220px; {!! $style !!}">Nama</th>
+        <td style="{!! $style !!}">{{ $user->name ?? 'Tiada Maklumat' }}</td>
     </tr>
     <tr>
-        <th style="{!! $style !!}">Email</th>
-        <td style="{!! $style !!}">{{ $user->email ?? 'No Information' }}</td>
+        <th style="{!! $style !!}">Emel</th>
+        <td style="{!! $style !!}">{{ $user->email ?? 'Tiada Maklumat' }}</td>
     </tr>
     <tr>
         <th style="{!! $style !!}">Status</th>
@@ -29,5 +29,10 @@
             {{ $accountType }}
         </td>
     </tr>
+    <tr>
+        <th style="{!! $style !!}" colspan="2">{{ $name }}</th>
+    </tr>
 </table>
+
+<p>Mohon semakan untuk tindakan pengaktifan pengguna.</p>
 @endsection

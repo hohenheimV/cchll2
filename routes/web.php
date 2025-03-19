@@ -113,6 +113,8 @@ Route::post('/test-upload', [DataController::class, 'testUpload']);
 Route::get('/fetchComponents/{id_taman}', [DataController::class, 'fetchComponents']);
 Route::get('/get-pbt-statistics', [DataController::class, 'getPBTStatistics']);
 Route::get('/get-visitor-statistics', [DataController::class, 'getVisitorStatistics']);
+Route::get('/get-penggiat-industri', [DataController::class, 'getPenggiatIndustri']);
+Route::get('/get-pbt', [DataController::class, 'getPbtName']);
 
 
 // Route::get('your-form-url', [LocationController::class, 'create']);

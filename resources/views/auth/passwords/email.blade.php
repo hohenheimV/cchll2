@@ -4,13 +4,13 @@
 
 @section('content')
 <div class="row">
-    <div class="col-lg-5 col-md-4 col-12 d-none d-lg-block rounded-left bg-gradient-olive p-5" style="min-height: 380px">
+    <!-- <div class="col-lg-5 col-md-4 col-12 d-none d-lg-block rounded-left bg-gradient-olive p-5" style="min-height: 380px">
         <div class="login-logo h-100 d-flex flex-column justify-content-center align-items-center">
             <img height="96" src="{{ asset('img/logo-jln.png') }}" />
             <div><span class="font-weight-bold text-light">{{config('app.name_short')}}</span> {{config('app.agency_short')}}</div>
         </div>
-    </div>
-    <div class="col-lg-7 col-12 rounded-right bg-white">
+    </div> -->
+    <div class="col-lg-12 col-12 rounded-right bg-white">
         <div class="card-body h-100 d-flex flex-column justify-content-center align-items-center"  style="width: 400px !important">
 
             <h4 class="login-box-msg text-dark">@yield('title')</h4>

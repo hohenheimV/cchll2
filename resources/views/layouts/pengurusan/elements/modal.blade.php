@@ -441,7 +441,7 @@
 
         // BS4 Modal Via JavaScript
         $('#modalDelete').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);        // Button that triggered the modal
+            var button = $(event.relatedTarget);       
             var url = button.data('url'); // Extract info from data-* attributes
             $('#modalFormDelete').attr('action', url);
             console.log(url);
@@ -495,8 +495,8 @@
 
 
         $('#modalSerahan').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var elapsId = button.data('elaps-id'); // Extract the eLAPS ID from the button
+            var button = $(event.relatedTarget);
+            var elapsId = button.data('elaps-id');
 
             // Update the hidden input field with the eLAPS ID
             $('#eLAPS_id').val(elapsId);
@@ -506,8 +506,8 @@
         });
 
         $('#modalKeputusan').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var elapsId = button.data('elaps-id'); // Extract the eLAPS ID from the button
+            var button = $(event.relatedTarget);
+            var elapsId = button.data('elaps-id');
 
             // Update the hidden input field with the eLAPS ID
             $('#eLAPS_idK').val(elapsId);
@@ -517,8 +517,8 @@
         });
 
         $('#modalStatusProjek').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var elapsId = button.data('elaps-id'); // Extract the eLAPS ID from the button
+            var button = $(event.relatedTarget);
+            var elapsId = button.data('elaps-id');
 
             // Update the hidden input field with the eLAPS ID
             $('#eLAPS_idP').val(elapsId);
@@ -538,14 +538,34 @@
         });
 
         $('#modalKomenPrestasi').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
+            var button = $(event.relatedTarget);
             var elindId = button.data('elind-id'); // Extract the elind ID from the button
 
             // Update the hidden input field with the elind ID
             $('#elind_idP').val(elindId);
             let url = document.querySelector('#modalKomenPrestasi form').getAttribute('action');
             document.querySelector('#modalKomenPrestasi form').setAttribute('action', url + '/' + elindId);
+            console.log(document.querySelector('#modalKomenPrestasi form'));
+            alert(url);
         });
+
+        
+        $('#modalSerahan').on('hidden.bs.modal', function (event) {
+            document.querySelector('#modalSerahan form').setAttribute('action', '{{ route("pengurusan.eLAPS.update", "") }}');
+        });
+        
+        $('#modalKeputusan').on('hidden.bs.modal', function (event) {
+            document.querySelector('#modalKeputusan form').setAttribute('action', '{{ route("pengurusan.eLAPS.update", "") }}');
+        });
+        
+        $('#modalStatusProjek').on('hidden.bs.modal', function (event) {
+            document.querySelector('#modalStatusProjek form').setAttribute('action', '{{ route("pengurusan.eLAPS.update", "") }}');
+        });
+        
+        $('#modalKomenPrestasi').on('hidden.bs.modal', function (event) {
+            document.querySelector('#modalKomenPrestasi form').setAttribute('action', '{{ route("pengurusan.eLAPS.update", "") }}');
+        });
+
 
 
 

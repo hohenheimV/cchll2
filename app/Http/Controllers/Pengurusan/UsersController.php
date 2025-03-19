@@ -57,9 +57,11 @@ class UsersController extends Controller
                 // $query->where('name', 'Penggiat Industri');
                 // $query->whereRaw('is_active = ? ', ['0']);    
                     //   ->orWhere('name', 'Perunding');
-            })
-            ->orWhereDoesntHave('roles'); // Include users with no roles
+            })->orderBy('roles', 'desc')
+            ->orWhereDoesntHave('roles');
         })
+        ->orderBy('bahagian_jln', 'asc')
+        ->orderBy('created_at', 'desc')
         ->paginate(20);
 
         $users->appends($request->only('keyword'));

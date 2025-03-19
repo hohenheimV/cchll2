@@ -651,7 +651,7 @@
                             }
 
                             const timestamp = new Date().getTime();
-                            const chunkSize = 10 * 1024 * 1024; // 10MB per chunk
+                            const chunkSize = 20 * 1024 * 1024; // 10MB per chunk
                             const totalChunks = Math.ceil(file.size / chunkSize);
                             let currentChunk = 0;
                             const destinationFolder = `ePIL/`+`{{$folder}}`+`/`;

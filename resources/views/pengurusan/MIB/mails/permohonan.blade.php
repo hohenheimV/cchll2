@@ -16,21 +16,19 @@
         <td style="{!! $style !!}">{!! $MIB->ref_num ?? $null !!}</td>
     </tr>
     <tr>
-        <th style="width: 220px; {!! $style !!}">Tarikh</th>
-        <td style="{!! $style !!}">{!! $MIB->created_at ?? $null !!}</td>
-    </tr>
-    <tr>
-        <th style="{!! $style !!}">Nama Wakil</th>
-        <td style="{!! $style !!}">{!! $MIB->name ?? $null !!}</td>
-    </tr>
-    <tr>
-        <th style="{!! $style !!}">Alamat E-mel</th>
-        <td style="{!! $style !!}">{!! $MIB->email ?? $null !!}</td>
+        <th style="{!! $style !!}">Pihak Berkuasa Tempatan</th>
+        <td style="{!! $style !!}">{!! $MIB->pbt ?? $null !!}</td>
     </tr>
     <tr>
         <th style="{!! $style !!}">Taman Perumahan</th>
         <td style="{!! $style !!}">{!! $MIB->taman ?? $null !!}</td>
     </tr>
+    <tr>
+        <th style="width: 220px; {!! $style !!}">Status</th>
+        <td style="{!! $style !!}">{!! $MIB->status ?? $null !!}</td>
+    </tr>
 </table>
+
+<p>Mohon semakan untuk tindakan kelulusan.</p>
 
 @endsection

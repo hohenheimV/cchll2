@@ -16,6 +16,21 @@
                 {!! Form::model($MIB, ['route' => ['pengurusan.MIB.update', $MIB],
                 'method'=>'PUT','id'=>'formFeedbacks','files' => true]) !!}
                 <div class="card-body">
+                    <style>
+                        .inertClass {
+                            pointer-events: none;
+                        }
+
+                        .inertClass input,
+                        .inertClass span,
+                        .inertClass textarea,
+                        .inertClass select {
+                            background-color: rgb(215, 215, 215); /* Light grey background for input/select */
+                            color: rgb(65, 60, 60); /* Light grey text color */
+                            cursor: not-allowed;
+                            pointer-events: none;
+                        }
+                    </style>
                     @include('pengurusan.MIB._form')
 
                 </div>

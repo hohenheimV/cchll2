@@ -437,7 +437,7 @@
     <div class="hero-content">
         <h1>Sistem Pengurusan Maklumat Landskap (eLANDSKAP)</h1>
         <p>Direktori taman-taman dan penggiat industri landskap di Malaysia.</p>
-        <p style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0, 0, 0), -2px -2px 4px rgba(0, 0, 0), 2px -2px 4px rgba(0, 0, 0), -2px 2px 4px rgba(0, 0, 0);">Direktori yang mengumpulkan maklumat taman-taman dan penggiat-penggiat industri landskap di Malaysia.</p>
+        <!-- <p style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0, 0, 0), -2px -2px 4px rgba(0, 0, 0), 2px -2px 4px rgba(0, 0, 0), -2px 2px 4px rgba(0, 0, 0);">Direktori yang mengumpulkan maklumat taman-taman dan penggiat-penggiat industri landskap di Malaysia.</p> -->
 
         <div class="cta-buttons">
             <a href="#taman" class="primary">Direktori Taman</a>

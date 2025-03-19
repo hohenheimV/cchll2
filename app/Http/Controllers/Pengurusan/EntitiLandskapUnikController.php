@@ -15,10 +15,10 @@ class EntitiLandskapUnikController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['role_or_permission:Pentadbir Sistem|entiti-landskap-unik-list']);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|entiti-landskap-unik-create'], ['only' => ['create', 'store']]);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|entiti-landskap-unik-edit'], ['only' => ['edit', 'update']]);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|entiti-landskap-unik-delete'], ['only' => ['destroy']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|entiti-list']);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|entiti-create'], ['only' => ['create', 'store']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|entiti-edit'], ['only' => ['edit', 'update']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|entiti-delete'], ['only' => ['destroy']]);
     }
 
     public function index()

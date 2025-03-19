@@ -1,5 +1,5 @@
 @extends('layouts.pengurusan.email')
-@section('title', 'ADUAN DAN MAKLUMBALAS TAMAN PERSEKUTUAN BUKIT KIARA')
+@section('title', 'ADUAN DAN MAKLUMBALAS JABATAN LANDSKAP NEGARA')
 
 
 @section('body')

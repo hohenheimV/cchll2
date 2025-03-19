@@ -9,8 +9,8 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta name="title" content="Taman Persekutuan Bukit Kiara, TPBK">
-    <meta name="description" content="Taman Persekutuan Bukit Kiara, Jabatan Landskap Negara">
+    <meta name="title" content="Jabatan Landskap Negara">
+    <meta name="description" content="Jabatan Landskap Negara, Jabatan Landskap Negara">
     <meta name="keywords" content="Taman, Pesekutuan, Bukit, Kiara, Jabatan, Landskap, Negara, TPBK, JLN, KPKT, Taman Awam, Rekreasi">
     <meta name="robots" content="index, follow">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -21,7 +21,7 @@
 
     <meta name="google-site-verification" content="H9AQXvBj0Cnj11LZWLCzYI2lIZ5srIczvWXwKu4Xmig" />
 
-    <title>@yield('title') | {{ config('app.name', 'Taman Persekutuan Bukit Kiara') }}</title>
+    <title>@yield('title') | {{ config('app.name', 'Jabatan Landskap Negara') }}</title>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">

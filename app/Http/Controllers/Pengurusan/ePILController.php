@@ -10,6 +10,7 @@ use App\Model\MaklumatPenggunaPbt;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 
 
 class ePILController extends Controller
@@ -21,10 +22,10 @@ class ePILController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['role_or_permission:Pentadbir Sistem|Pegawai|Pihak Berkuasa Tempatan|ePIL-list']);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|Pegawai|Pihak Berkuasa Tempatan|ePIL-create'], ['only' => ['create', 'store']]);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|Pegawai|Pihak Berkuasa Tempatan|ePIL-edit'], ['only' => ['edit', 'update']]);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|Pegawai|Pihak Berkuasa Tempatan|ePIL-delete'], ['only' => ['destroy']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|epil-list']);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|epil-create'], ['only' => ['create', 'store']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|epil-edit'], ['only' => ['edit', 'update']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|epil-delete'], ['only' => ['destroy']]);
     }
 
     public function index()
@@ -33,10 +34,14 @@ class ePILController extends Controller
         $userId = auth()->id();
         $user = User::find($userId);
         if($user->hasRole('Pihak Berkuasa Tempatan')){
-            $email = $user->email;
-            $pbt = MaklumatPenggunaPbt::where('email', '=', $email)->first();
+            $email = $user->bahagian_jln;
+            $pbt = MaklumatPenggunaPbt::where('id', '=', $email)->first();
             $totalCount = ePIL::where('nama_pbt', $pbt->pbt_name)->count();
             $ePIL = ePIL::where('nama_pbt', $pbt->pbt_name)->orderBy('id_pelan', 'desc')->paginate($totalCount);
+            foreach ($ePIL as $key => $value) {
+                $ePIL_draf = ePIL_draf::where('id_pelan', $value->id_pelan)->first();
+                $value->status = $ePIL_draf->status;
+            }
         }else{
             $totalCount = ePIL::count();
             $ePIL = ePIL::paginate($totalCount);
@@ -59,8 +64,8 @@ class ePILController extends Controller
         $user = User::find($userId);
         $pbt = null; 
         if($user->hasRole('Pihak Berkuasa Tempatan')){
-            $email = $user->email;
-            $pbt = MaklumatPenggunaPbt::where('email', '=', $email)->first();
+            $email = $user->bahagian_jln;
+            $pbt = MaklumatPenggunaPbt::where('id', '=', $email)->first();
         }
         return view('pengurusan.ePIL.create', compact('pbt'));
     }
@@ -149,6 +154,7 @@ class ePILController extends Controller
     {
         $ePIL_draf = ePIL_draf::where('id_pelan', $ePIL->id_pelan)->first();
         $ePIL_dokumen = ePIL_dokumen::where('id_pelan', $ePIL->id_pelan)->orderBy('id_dokumen_pelan', 'asc')->get();
+        // dd($ePIL_dokumen);
         if($ePIL_dokumen){
             $ePIL_draf->dokumen = $ePIL_dokumen;
         }
@@ -173,7 +179,7 @@ class ePILController extends Controller
         
         if ($request->input('action') === 'update') {
             $id_pelan = $ePIL->id_pelan;
-
+            $requestData['status'] = "draft";
             if(isset($requestData['pelan'])){
                 $pelanArr = $requestData['pelan'];
                 foreach ($pelanArr as $key => $value) {
@@ -219,8 +225,71 @@ class ePILController extends Controller
 
             $requestData['id_pelan'] = $id_pelan;
             $ePIL_update = $ePIL->update($requestData);
-            // dump($requestData);
+            // dd($ePIL);
             if ($ePIL_update) {
+                /* $bahagian_jln = 4;
+                $userArr = []; $user_email = []; $btm_email = [];
+                if ($bahagian_jln) {
+                    $userArr = User::where(function ($query) use ($bahagian_jln) {
+                        $query->whereHas('roles', function ($query) {
+                            $query->where('name', 'Pegawai');
+                        })
+                        ->where('bahagian_jln', $bahagian_jln);
+                    })
+                    ->get();
+                }
+                foreach ($userArr as $key => $value) {
+                    $user_email[] = ['address' => $value->email, 'name' => $value->name];
+                }
+
+                $emailBTM = User::where(function ($query) use ($bahagian_jln) {
+                    $query->whereHas('roles', function ($query) {
+                            $query->where('name', 'Pentadbir Sistem');
+                        });
+                    })
+                    ->orWhere(function ($query) use ($bahagian_jln) {
+                        $query->whereHas('roles', function ($query) {
+                            $query->where('name', 'Pegawai');
+                        })
+                        ->where('bahagian_jln', '7');
+                    })
+                    ->get();
+                foreach ($emailBTM as $key => $value) {
+                    $btm_email[] = ['address' => $value->email, 'name' => $value->name];
+                }
+                // dd($user_email);
+                if (config('mail.enabled')) {
+                    try {
+                        $emailData = [
+                            "email_to" => [
+                                ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
+                                ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
+                            ],//$user_email,
+                            "email_cc" => [
+                                ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
+                                ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
+                            ],//$btm_email,
+                            "subject" => 'Modul Pelan Induk Landskap (ePIL)',
+                        ];
+        
+                        Mail::send('pengurusan.ePIL.mails.perubahan', ['epil' => $ePIL], function ($message) use ($emailData) {
+                            $message->subject($emailData["subject"]);
+                            // Loop through to array and add each email
+                            foreach ($emailData['email_to'] as $to) {
+                                $message->to($to['address'], $to['name']);
+                            }
+        
+                            // Loop through cc array and add each email
+                            foreach ($emailData['email_cc'] as $cc) {
+                                $message->cc($cc['address'], $cc['name']);
+                            }
+                        });
+                    } catch (\Exception $exception) {
+                        \Log::error("Error sending registration email: " . $exception->getMessage());
+                       dd("Error sending registration email: " . $exception->getMessage());
+                    }
+                    // dd($emailData);
+                } */
                 return redirect()->route('pengurusan.ePIL.edit', [$id_pelan])->with('successMessage', 'Maklumat pelan telah berjaya dikemaskini');
             }
         } elseif ($request->input('action') === 'approve') {

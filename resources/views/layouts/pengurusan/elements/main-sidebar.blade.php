@@ -14,7 +14,7 @@
         scrollbar-width: none; /* Hide scrollbar for Firefox */
     }
 </style>
-<aside class="main-sidebar  elevation-4 collapsed" style="background-color: white;">
+<aside class="main-sidebar  elevation-4 collapsed" style="background-color:rgb(200, 200, 200) !important;">
     <!-- Brand Logo -->
     <a href="{{ route('pengurusan.dashboard') }}" class="brand-link navbar">
         <img src="{{ asset('img/logo-jln-sm.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"

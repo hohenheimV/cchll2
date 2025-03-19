@@ -449,17 +449,20 @@
 
                                             <td style="text-align: center; vertical-align: middle;">
                                                 @if($value['nama_dokumen_pelan'])
-                                                    <canvas id="pdf-render-{{ $value['id_dokumen_pelan'] }}" width="200" height="250"></canvas>
-                                                    <?php
-                                                        if(isset($value['nama_dokumen_pelan'])){
-                                                            $filePath = storage_path('app/public/uploads/ePIL/'.$folder.'/'.$value['nama_dokumen_pelan']);
-                                                            if (file_exists($filePath)) {
-                                                                $fileSizeInBytes = filesize($filePath);
-                                                                $fileSizeInMB = number_format($fileSizeInBytes / 1048576, 2);
+                                                    <div style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                                        <canvas id="pdf-render-{{ $value['id_dokumen_pelan'] }}" width="200" height="250"></canvas>
+                                                        <?php
+                                                            $fileSizeInMB = '';
+                                                            if (isset($value['nama_dokumen_pelan'])) {
+                                                                $filePath = storage_path('app/public/uploads/ePIL/'.$folder.'/'.$value['nama_dokumen_pelan']);
+                                                                if (file_exists($filePath)) {
+                                                                    $fileSizeInBytes = filesize($filePath);
+                                                                    $fileSizeInMB = number_format($fileSizeInBytes / 1048576, 2);
+                                                                }
                                                             }
-                                                        }
-                                                    ?>
-                                                    {{ $fileSizeInMB . " MB" }}
+                                                        ?>
+                                                        <p>{{ $fileSizeInMB ? $fileSizeInMB . " MB" : '' }}</p>
+                                                    </div>
                                                 @else
                                                     No PDF available
                                                 @endif

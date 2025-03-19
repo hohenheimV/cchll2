@@ -62,6 +62,7 @@
                                             <td style="text-align: center;">
                                                 <?php 
                                                     $folder = str_replace(' ', '_', $pelan->nama_pelan); 
+                                                    $fileSizeInMB = '';
                                                     if(isset($pelan->nama_dokumen_pelan)){
                                                         $filePath = storage_path('app/public/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan);
                                                         if (file_exists($filePath)) {
@@ -84,7 +85,7 @@
                                                         </canvas>
                                                     </div>
                                                 </a>
-                                                {{ $fileSizeInMB . " MB" }}
+                                                <p>{{ $fileSizeInMB ? $fileSizeInMB . " MB" : '' }}</p>
                                             </td>
                                             
                                             @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem'))

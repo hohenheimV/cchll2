@@ -100,8 +100,8 @@
                         @include('pengurusan.MIB._form')
                     </div>
 
-                    @if(auth()->user()->hasRole('Pentadbir Sistem|Pihak Berkuasa Tempatan'))
-                        @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai')) <div inert> @endif
+                    @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai|Pihak Berkuasa Tempatan'))
+                        @if($MIB->status == "Diperakui" || $MIB->status == "Diluluskan") <div inert> @endif
                             {{ Form::label('ulasan_lawatan', 'KEGUNAAN PIHAK BERKUASA TEMPATAN :', ['class' => 'col-form-label']) }}<br>
                             <div class="p-3 bg-gray">
                                 <div class="form-row">
@@ -118,7 +118,7 @@
                                     <div class="col-6 col-md-3">
                                         <div class="form-group">
                                             {{ Form::label('status', 'Status') }}
-                                            {{ Form::select('status', $status, 'Diperakui', ['placeholder' => '', 'disabled' => 'disabled','class' => 'form-control notselect2']) }}
+                                            {{ Form::select('status', $status, 'Diperakui', ['placeholder' => '','class' => 'form-control notselect2']) }}
                                             {!! Html::hasError($errors,'status') !!}
                                         </div>
                                     </div>
@@ -127,13 +127,13 @@
                                     <div class="col-12">
                                         <div class="form-group">
                                             {{ Form::label('notes', 'Catatan') }}
-                                            {{ Form::textarea('notes',$MIB->form_attachment ? $MIB->form_attachment : null,['rows'=>6,'placeholder'=>'Sila masukkan Catatan Permohonan', 'disabled' => 'disabled','class' => 'form-control '.Html::isInvalid($errors,'notes')]) }}
+                                            {{ Form::textarea('notes',$MIB->form_attachment ? $MIB->form_attachment : null,['rows'=>6,'placeholder'=>'Sila masukkan Catatan Permohonan','class' => 'form-control '.Html::isInvalid($errors,'notes')]) }}
                                             {!! Html::hasError($errors,'notes') !!}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai')) </div> @endif
+                        @if($MIB->status == "Diperakui" || $MIB->status == "Diluluskan") </div> @endif
                     @endif
 
                     @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))
@@ -181,7 +181,7 @@
                             Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini', ['onclick'=>"window.location='".route('pengurusan.MIB.edit',$MIB)."'", 'class'=>'btn bg-warning', Html::tooltip('Kemaskini PIL')]); 
                         !!}
                     --}}
-                    @if($MIB->status != "Diluluskan")
+                    @if((auth()->user()->hasRole('Pentadbir Sistem|Pegawai') && $MIB->status == "Diperakui") || (auth()->user()->hasRole('Pihak Berkuasa Tempatan') && $MIB->status == "Baru"))
                         {!! Form::button('<i class="fas fa-save"></i> Pengesahan', [
                             'class' => 'btn btn-primary', 
                             'type' => 'submit', 

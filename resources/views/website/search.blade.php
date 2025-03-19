@@ -41,7 +41,7 @@
 
 </style>
 
-<section id="posts" class="bg-white pt-lg-5 pt-3">
+<section id="posts" class="bg-white pt-lg-5 pt-3 mib">
     <div class="container pt-lg-5">
         {{-- <h1 class="text-center text-capitalize">@yield('title')</h1> --}}
         <div class="row">

@@ -37,7 +37,7 @@
                                     </div>
                                 </div>
                                 {{ Form::close() }}
-
+                                @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|TKP/B JLN'))
                                 <div class="btn-group" role="group" aria-label="First group">
                                     {!! Form::button('<i class="fas fa-plus"></i> Daftar', [
                                     'class'=>'btn btn-success btn-sm',
@@ -45,6 +45,7 @@
                                     Html::tooltip('Daftar')
                                     ]) !!}
                                 </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -60,8 +61,8 @@
                                         @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem'))
                                         <th class="text-center w-5" style="display: none;">Tarikh Daftar</th>
                                         <th class="text-center w-5">Prestasi</th>
-                                        <th class="text-center w-5">Paparan Portal</th>
                                         @endif
+                                        <th class="text-center w-5">Paparan Portal</th>
                                         <th class="text-center w-5">Tindakan</th>
                                     </tr>
                                 </thead>
@@ -107,35 +108,41 @@
                                                         {{ $prestasi[$prestasiDB-1 ?? '4']['id'] }}
                                                     </span>
                                                 </td>
-                                                <td>
-                                                    <span style="white-space: normal; text-align: centre;width: 100%;" class="badge {{ $paparan_portal[$user->status == 'approved' ? 0 : 1]['label'] }}">{{ $paparan_portal[$user->status == 'approved' ? 0 : 1]['id'] }}</span>
-                                                </td>
                                             @endif
+                                                <td>
+                                                    @if(Auth::user()->hasRole('Penggiat Industri'))
+                                                        <span style="white-space: normal; text-align: centre;width: 100%;" class="badge {{ $paparan_portal[$user->status == 'approved' ? 0 : 1]['label'] }}">{{ $user->status == 'approved' ? 'Perubahan telah disahkan' : 'Perubahan belum disahkan' }}</span>
+                                                    @else
+                                                        <span style="white-space: normal; text-align: centre;width: 100%;" class="badge {{ $paparan_portal[$user->status == 'approved' ? 0 : 1]['label'] }}">{{ $paparan_portal[$user->status == 'approved' ? 0 : 1]['id'] }}</span>
+                                                    @endif
+                                                </td>
                                             <td>
                                                 <div class="btn-group">
                                                 {{-- $eLIND[0] --}}
+
                                                     {!! Form::button('<i class="fas fa-search"></i>', [
                                                     'class'=>'btn btn-info btn-sm',
                                                     'onclick'=>"window.location='".route('pengurusan.eLIND.show', ['type' => $lastSegment, 'id' => $user])."'"
                                                     ]) !!}
-                                                    @can('user-edit')
+
                                                     {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
                                                     'class'=>'btn btn-warning btn-sm',
                                                     'onclick'=>"window.location='".route('pengurusan.eLIND.edit', ['type' => $lastSegment, 'id' => $user])."'"
                                                     ]) !!}
-                                                    @endcan
-                                                    @can('user-delete')
-                                                    {!! Form::button('<i class="fas fa-trash"></i>', ['class'=>'btn btn-danger btn-sm',
-                                                    'data-url'=>route('pengurusan.eLIND.destroy', ['type' => $lastSegment, 'id' => $user]),
-                                                    'data-toggle'=>'modal','data-target'=>'#modalDelete']) !!}
-                                                    @endcan
-                                                    {!! Form::button('<i class="fas fa-sticky-note"></i>', 
+
+                                                    @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|TKP/B JLN'))
+                                                        {!! Form::button('<i class="fas fa-trash"></i>', ['class'=>'btn btn-danger btn-sm',
+                                                        'data-url'=>route('pengurusan.eLIND.destroy', ['type' => $lastSegment, 'id' => $user]),
+                                                        'data-toggle'=>'modal','data-target'=>'#modalDelete']) !!}
+
+                                                        {!! Form::button('<i class="fas fa-sticky-note"></i>', 
                                                             ['class' => 'btn btn-success btn-sm', 
                                                             'data-elind-id' => $user->id_elind,
                                                             'data-toggle' => 'modal', 
                                                             'data-target' => '#modalKomenPrestasi', 
                                                             Html::tooltip('Simpan Prestasi')
                                                         ])  !!}
+                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>

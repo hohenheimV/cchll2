@@ -821,11 +821,18 @@
                     ['label' => 'Kawasan terbiar', 'id' => '5'],
                     ['label' => 'Lain-lain (nyatakan) : ', 'id' => '6', 'has_input' => true],
                 ];
+                if(isset($eLAPS->guna_tanah)){
+                    $gunaTanahData = json_decode($eLAPS->guna_tanah, true);
+                    //dd($gunaTanahData['jenis']);
+                }
             @endphp
 
             @foreach ($guna_tanah as $index => $item)
                 @php
-                    $isChecked = (isset($eLAPS->guna_tanah) && $eLAPS->guna_tanah == $item['label']);
+                    if(isset($eLAPS->guna_tanah)){
+                        $isChecked = isset($eLAPS->guna_tanah) ? in_array($item['id'], $gunaTanahData['jenis']) : 'false';
+                        //dump($isChecked);
+                    }
                 @endphp
                 @if ($index % 2 == 0)
                     <div class="form-group row">
@@ -833,16 +840,16 @@
 
                     <div class="col-md-6">
                         <div class="form-check d-flex align-items-center">
-                            {{ Form::checkbox('guna_tanah[jenis]', $item['label'], $isChecked, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'guna_tanah_' . $item['id'], 'onclick' => 'onlyOne6(this)']) }}
+                            {{ Form::checkbox('guna_tanah[jenis][]', $item['id'], $isChecked ?? '', ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'guna_tanah_' . $item['id'], 'onclick' => 'onlyOne6(this)']) }}
                             {{ Form::label('guna_tanah_' . $item['id'], $item['label'], ['class' => 'form-check-label bigger-label space-label ms-2']) }}
                             
                             @if (isset($item['has_input']))
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                {{ Form::text('guna_tanah[keterangan]', null, [
+                                {{ Form::text('guna_tanah[keterangan]', $gunaTanahData['keterangan'] ?? '', [
                                     'class' => 'form-control d-inline-block ms-2',
                                     'placeholder' => 'Masukkan butiran jika ada',
                                     'style' => 'width: 50%; margin-top: 0;',
-                                    'disabled' => $isChecked,
+                                    'disabled' => !$isChecked,
                                     'id' => 'guna_tanah_details_' . $item['id']
                                 ]) }}
                             @endif
@@ -853,28 +860,16 @@
                     </div>
                 @endif
             @endforeach
-            @php
-                $findString = (isset($eLAPS->guna_tanah)) ? $eLAPS->guna_tanah : '';
-                $isMatch = !in_array($findString, array_column($guna_tanah, 'label'));
-            @endphp
-
-            @if($isMatch && isset($eLAPS->guna_tanah))
-                <script>
-                    document.getElementById('guna_tanah_6').checked = true;
-                    document.getElementById('guna_tanah_details_6').disabled = false;
-                    document.getElementById('guna_tanah_details_6').value = "{{$eLAPS->guna_tanah ?? ''}}";
-                </script>
-            @endif
 
             <script>
                 function onlyOne6(checkbox6) {
                     var checkboxes6 = document.querySelectorAll('input[name="guna_tanah[jenis]"]');
                     
-                    checkboxes6.forEach(function(item6) {
-                        if (item6 !== checkbox6) {
-                            item6.checked = false;
-                        }
-                    });
+                    // checkboxes6.forEach(function(item6) {
+                    //     if (item6 !== checkbox6) {
+                    //         item6.checked = false;
+                    //     }
+                    // });
 
                     // Ensure text input is properly targeted
                     var textInput = document.getElementById('guna_tanah_details_6');
@@ -885,7 +880,7 @@
                                 textInput.focus();
                             }, 100);
                         } else {
-                            textInput.disabled = true;
+                            // textInput.disabled = true;
                         }
                     }
                 }

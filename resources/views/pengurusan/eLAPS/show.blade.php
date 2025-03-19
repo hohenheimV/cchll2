@@ -9,7 +9,7 @@
             <div class="card card-olive card-outline">
                 <div class="card-header p-0 m-0">
                     <h5 class="card-title p-1 m-1 font-weight-bold">@yield('title')</h5>
-                    <div class="card-tools p-1 m-1 font-weight-bold">
+                    <!-- <div class="card-tools p-1 m-1 font-weight-bold">
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                             <div class="btn-group" role="group" aria-label="First group">
 
@@ -18,7 +18,7 @@
                                     'class'=>'btn bg-success btn-sm', Html::tooltip('Daftar eLAPS')]) !!}
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="card-body table-hardscape form-hardscape text-sm">

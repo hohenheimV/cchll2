@@ -72,7 +72,7 @@ class LoginController extends Controller
 
         // Check if the credentials are correct but user is inactive
         if (Auth::getProvider()->retrieveByCredentials($this->credentials($request))) {
-            $errors[$this->username()] = 'Your account is not active.';
+            $errors[$this->username()] = 'Salah emel atau katalaluan.';
         }
 
         throw \Illuminate\Validation\ValidationException::withMessages($errors);

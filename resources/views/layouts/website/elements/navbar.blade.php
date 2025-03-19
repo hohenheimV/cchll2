@@ -29,21 +29,40 @@
         padding: 10px 20px;
         border: none;
         color: white; */
-        background-color: #36458e00;; /* Semi-transparent background */
+        background-color: rgb(13, 50, 47);
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease; /* Smooth transition for color change */
+        background-image: url("{{asset('storage/img/bg-pattern-leaves.png')}}");
         
     }
 
     .scroll-button.scrolled {
-        background-color: rgba(82, 105, 218, 1); /* Solid color when scrolled */
+        /* background-color: rgba(82, 105, 218, 1); */
+        background-color: rgb(25, 98, 92);
     }
     /* Media query for mobile screens */
     @media (max-width: 768px) {
         .scroll-button {
-            background-color: rgba(82, 105, 218, 1); /* Solid color for mobile */
+            background-color: rgb(25, 98, 92);
         }
+    }
+
+    @media (min-width: 768px) and (max-width: 1024px) {
+        .scroll-button {
+            background-color:rgb(13, 50, 47);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .scroll-button.scrolled {
+            background-color: rgb(25, 98, 92);
+        }
+    }
+    .mib {
+        background-color:rgb(25, 98, 92) !important;
+        background-image: url("{{asset('storage/img/bg-pattern-leaves.png')}}");
+        /* background-image: url("https://www.transparenttextures.com/patterns/flowers.png"); */
     }
 </style>
 <div id="main-navbar" class="row align-items-center scroll-button fixeded-top">
@@ -56,7 +75,7 @@
             <a class="navbar-brand" href="{{ route('welcome') }}">
                 <img src="{{ asset('images/logo2.png') }}" height="70" alt="">
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"  style="background-color: #36458e;">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"  style="background-color:rgba(54, 69, 142, 0);  border: none;">
                 <span class="navbar-toggler-icon"  style="color: white;"><i class="fas fa-bars"></i></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">

@@ -108,7 +108,17 @@
                                         {{ $pelan->nama_pbt }}
                                     </td>
                                     <td style="text-align: center;">
-                                        <?php $folder = str_replace(' ', '_', $pelan->nama_pelan); ?>
+                                        <?php 
+                                            $folder = str_replace(' ', '_', $pelan->nama_pelan); 
+                                            $fileSizeInMB = '';
+                                            if(isset($pelan->nama_dokumen_pelan)){
+                                                $filePath = storage_path('app/public/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan);
+                                                if (file_exists($filePath)) {
+                                                    $fileSizeInBytes = filesize($filePath);
+                                                    $fileSizeInMB = number_format($fileSizeInBytes / 1048576, 2);
+                                                }
+                                            }
+                                        ?>
                                         <a href="{{ asset($pelan->nama_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan : 'storage/uploads/no-photos.png' ) }}" 
                                             target="_blank" download>
                                             <div id="pdf-viewer-{{$pelan->id_dokumen_pelan ?? $pelan->id_pelan}}" 
@@ -123,6 +133,7 @@
                                                 </canvas>
                                             </div>
                                         </a>
+                                        <p>{{ $fileSizeInMB ? $fileSizeInMB . " MB" : '' }}</p>
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group">

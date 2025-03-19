@@ -55,6 +55,17 @@
                             <object data="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}" type="application/pdf" width="70%" height="1100">
                                 <p>Your browser does not support PDFs. <a href="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}">Download the PDF</a>.</p>
                             </object>
+                            <?php
+                                $fileSizeInMB = '';
+                                if (isset($dokumen->nama_dokumen_pelan)) {
+                                    $filePath = storage_path('app/public/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan);
+                                    if (file_exists($filePath)) {
+                                        $fileSizeInBytes = filesize($filePath);
+                                        $fileSizeInMB = number_format($fileSizeInBytes / 1048576, 2);
+                                    }
+                                }
+                            ?>
+                            <p>{{ $fileSizeInMB ? $fileSizeInMB . " MB" : '' }}</p>
                         @endif
                     </div>
                     <div class="form-group">

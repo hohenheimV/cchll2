@@ -44,7 +44,9 @@ class RegisterController extends Controller
 
             // Redirect to the dashboard
             // return redirect($this->redirectTo);
-            return redirect()->route('register')->with('successMessage', 'Maklumat telah berjaya dihapuskan');
+            if($user){
+                return redirect()->route('register')->with('successMessage', 'Maklumat telah berjaya disimpan.<br> Sila tunggu emel pengesahan sebelum mula<br> log masuk.<br> Proses pengesahan dalam 5 hari bekerja.');
+            }
         } else {
             // return redirect()->route('auth.register')->withInput($request->all())->with('roles', $request->input('roles'));
         }
@@ -89,68 +91,126 @@ class RegisterController extends Controller
         //     }
         // }
         // Create a new user
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'is_active' => 0, // Set to inactive initially
-        ]);
-        $user->assignRole($data['roles'] );
+        // $user = User::create([
+        //     'name' => $data['name'],
+        //     'email' => $data['email'],
+        //     'password' => Hash::make($data['password']),
+        //     'is_active' => 0, // Set to inactive initially
+        // ]);
+        // $user->assignRole($data['roles'] );
         $accountType = $data['roles'] ? $data['roles'] : "-" ;
-
         if($accountType == "Pihak Berkuasa Tempatan"){
-            $maklumat = MaklumatPenggunaPbt::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'pbt_name' => $data['pbt'],
-                'address1' => $data['address1'],
-                'address2' => $data['address2'],
-                'postcode' => $data['postcode'],
-                'locality' => $data['locality'],
-                'state' => $data['state'],
-            ]);
+            $existingPbt = MaklumatPenggunaPbt::where('pbt_name', $data['pbt'])->first();
+            if ($existingPbt) {
+                $maklumat = $existingPbt;
+                $id = $existingPbt->id;
+                $name = $existingPbt->pbt_name;
+                $existingPbt->update([
+                    'name' => $data['pbt'],
+                    'address1' => $data['address1'],
+                    'address2' => $data['address2'],
+                    'postcode' => $data['postcode'],
+                    'locality' => $data['locality'],
+                    'state' => $data['state'],
+                ]);
+                //proceed without creating new row
+            }else{
+                $maklumat = MaklumatPenggunaPbt::create([
+                    'name' => $data['pbt'],
+                    'email' => $data['email'],
+                    'pbt_name' => $data['pbt'],
+                    'address1' => $data['address1'],
+                    'address2' => $data['address2'],
+                    'postcode' => $data['postcode'],
+                    'locality' => $data['locality'],
+                    'state' => $data['state'],
+                ]);
+                $id = $maklumat->id;
+                $name = $maklumat->pbt_name;
+            }
         }else if($accountType == "Penggiat Industri"){
             $existingMof = MaklumatPenggunaPenggiatIndustri::where('no_mof', $data['no_mof'])->first();
             if ($existingMof) {
-                return redirect()->back()->withErrors(['no_mof' => 'The MOF registration number has already been taken. Please choose another one.']);
+                $maklumat = $existingMof;
+                $id = $existingMof->id_elind;
+                $name = $existingMof->name;
+                $existingMof->update([
+                    'name' => $data['nama_syarikat'],
+                    'address1' => $data['address1'],
+                    'address2' => $data['address2'],
+                    'postcode' => $data['postcode'],
+                    'locality' => $data['locality'],
+                    'state' => $data['state'],
+                ]);
+
+                //proceed without creating new row
+            }else{
+                $maklumat = MaklumatPenggunaPenggiatIndustri::create([
+                    'name' => $data['nama_syarikat'],
+                    // 'email' => $data['email'],
+                    'jenis_industri' => $data['jenis_penggiat'],
+                    'no_mof' => $data['no_mof'],
+                    'address1' => $data['address1'],
+                    'address2' => $data['address2'],
+                    'postcode' => $data['postcode'],
+                    'locality' => $data['locality'],
+                    'state' => $data['state'],
+                ]);
+                $id = $maklumat->id_elind;
+                $name = $maklumat->name;
             }
-            $maklumat = MaklumatPenggunaPenggiatIndustri::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'jenis_industri' => $data['jenis_penggiat'],
-                'no_mof' => $data['no_mof'],
-                'address1' => $data['address1'],
-                'address2' => $data['address2'],
-                'postcode' => $data['postcode'],
-                'locality' => $data['locality'],
-                'state' => $data['state'],
-            ]);
             $accountType = $data['roles']." ({$data['jenis_penggiat']})";
         }else{
-            return redirect()->route('auth.register')->with('errorMessage', 'Maklumat telah berjaya dihapuskan');
+            return redirect()->route('auth.register')->with('errorMessage', 'Maklumat tidak berjaya disimpan');
+        }
+
+        if($maklumat){
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'is_active' => 0,
+                'bahagian_jln' => $id,
+            ]);
+            $user->assignRole($data['roles'] );
         }
 
         // Send email notification (if enabled)
         if (config('mail.enabled')) {
+            $bahagian_jln = 7;  //BTM
+            $user_email = [];
+
+            $emailArr = User::where(function ($query) use ($bahagian_jln) {
+                $query->whereHas('roles', function ($query) {
+                        $query->where('name', 'Pentadbir Sistem');
+                    });
+                })
+                ->orWhere(function ($query) use ($bahagian_jln) {
+                    $query->whereHas('roles', function ($query) {
+                        $query->where('name', 'Pegawai');
+                    })
+                    ->where('bahagian_jln', $bahagian_jln);
+                })
+                ->get();
+            foreach ($emailArr as $key => $value) {
+                $user_email[] = ['address' => $value->email, 'name' => $value->name];
+            }
             try {
                 $emailData = [
-                    "email_to_address" => 'admin@example.com',
-                    "email_to_name" => 'Admin',
                     "email_cc_address" => 'cc@example.com',
                     "email_cc_name" => 'CC Recipient',
-                    "subject" => 'New User Registration Notification',
-                    "status" => $user->is_active ? 'Active' : 'Inactive',
+                    "subject" => 'Pendaftaran Pengguna Baru',
                 ];
 
-                Mail::send('pengurusan.users.mails.pendaftaran', ['user' => $user, 'accountType' => $accountType], function ($message) use ($emailData) {
+                Mail::send('pengurusan.users.mails.pendaftaran', ['user' => $user, 'accountType' => $accountType, 'name' => $name], function ($message) use ($emailData, $user_email) {
                     $message->subject($emailData["subject"])
-                            ->to($emailData["email_to_address"], $emailData["email_to_name"])
                             ->cc($emailData["email_cc_address"], $emailData["email_cc_name"]);
+                    foreach ($user_email as $recipient) {
+                        // $message->to($recipient['address'], $recipient['name']);
+                    }
                 });
             } catch (\Exception $exception) {
-                // Handle mail sending error
-                // You can log the exception or display an error message
-                // \Log::error("Error sending registration email: " . $exception->getMessage());
+                \Log::error("Error sending registration email: " . $exception->getMessage());
             }
         }
 

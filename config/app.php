@@ -13,7 +13,7 @@ return [
     |
      */
 
-    'name' => env('APP_NAME', 'Taman Persekutuan Bukit Kiara'),
+    'name' => env('APP_NAME', 'Jabatan Landskap Negara'),
     'name_short' => env('APP_NAME_SHORT', 'eLANDSKAP'),
     'agency' => env('APP_AGENCY', 'Jabatan Landskap Negara'),
     'agency_short' => env('APP_AGENCY_SHORT', 'JLN'),

@@ -34,8 +34,8 @@
                 {{ Form::open(['route' =>['login'],'novalidate','class'=>'m-lg-5']) }}
                 <h4 class="login-box-msg text-dark">@yield('title')</h4>
                 <div class="input-group mb-3">
-                    {{ Form::label('email', 'Nama Bahagian',['class'=>'sr-only']) }}
-                    {{ Form::email('email',null,['placeholder'=>'E-mel','class' => 'form-control '.Html::isInvalid($errors,'email')]) }}
+                    {{ Form::label('email', 'Emel',['class'=>'sr-only']) }}
+                    {{ Form::email('email',null,['placeholder'=>'Emel','class' => 'form-control '.Html::isInvalid($errors,'email')]) }}
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-envelope"></span>
@@ -44,8 +44,8 @@
                     {!! Html::hasError($errors,'email') !!}
                 </div>
                 <div class="input-group mb-3">
-                    {{ Form::label('password', 'Kata Laluan',['class'=>'sr-only']) }}
-                    {{ Form::password('password', ['placeholder'=>'Kata Laluan','class' => 'form-control '.Html::isInvalid($errors,'password')]) }}
+                    {{ Form::label('password', 'Katalaluan',['class'=>'sr-only']) }}
+                    {{ Form::password('password', ['placeholder'=>'Katalaluan','class' => 'form-control '.Html::isInvalid($errors,'password')]) }}
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-lock"></span>

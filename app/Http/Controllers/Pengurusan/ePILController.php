@@ -115,7 +115,11 @@ class ePILController extends Controller
                     if($dokumenRecord){
                         $oldPath = storage_path('app/public/uploads/ePIL/temp/'.$value['nama_dokumen_pelan']); // Current file location
                         $newPath = storage_path('app/public/uploads/ePIL/'.$folderName.'/'.$value['nama_dokumen_pelan']); // New location
+                        $newFolderPath = storage_path('app/public/uploads/ePIL/'.$folderName); // Folder path where the file will be moved to
 
+                        if (!file_exists($newFolderPath)) {
+                            mkdir($newFolderPath, 0777, true);
+                        }
                         if (file_exists($oldPath)) {
                             rename($oldPath, $newPath);
                         }

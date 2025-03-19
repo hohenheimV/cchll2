@@ -243,7 +243,7 @@
         $(document).ready(function () {
             $(document).ready(function() {
                 $('#example').DataTable({
-                    responsive: true,
+                    responsive: false,
                     paging: false,  // Disable pagination
                     searching: false, // Disable the search bar
                     info: false,      // Disable the "Showing X to Y of Z entries" text

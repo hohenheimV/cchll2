@@ -56,6 +56,7 @@ class KTPController extends Controller
         $validatedData = $request->validate([
             'tajuk' => ['required', 'min:3'],
             'lokasi' => ['required', 'min:3', 'regex:/^[a-zA-Z0-9\s,.-]+$/'],
+            'negeri' => ['required'],
             'pbt' => ['required'],
             'jumlah_pokok' => ['required', 'integer', 'min:1'],
             'spesis_pokok' => 'required|array',
@@ -73,6 +74,7 @@ class KTPController extends Controller
         ], [
             'tajuk' => 'Nama Program',
             'lokasi' => 'Lokasi',
+            'negeri' => 'Negeri',
             'pbt' => 'PBT/Agensi',
             'jumlah_pokok' => 'Jumlah Keseluruhan Pokok',
             'spesis_pokok' => 'Spesis Pokok',
@@ -96,6 +98,7 @@ class KTPController extends Controller
         $kempen = KTP::create([
             'tajuk' => $validatedData['tajuk'],
             'lokasi' => $validatedData['lokasi'],
+            'negeri' => $validatedData['negeri'],
             'pbt' => $validatedData['pbt'],
             'jumlah_pokok' => $validatedData['jumlah_pokok'],
             'spesis_pokok' => json_encode($spesisPokok)
@@ -155,6 +158,7 @@ class KTPController extends Controller
         $validatedData = $request->validate([
             'tajuk' => ['required', 'min:3'],
             'lokasi' => ['required', 'min:3', 'regex:/^[a-zA-Z0-9\s,.-]+$/'],
+            'negeri' => ['required'],
             'pbt' => ['required'],
             'jumlah_pokok' => ['required', 'integer', 'min:1'],
             'spesis_pokok' => 'required|array',
@@ -172,6 +176,7 @@ class KTPController extends Controller
         ], [
             'tajuk' => 'Nama Program',
             'lokasi' => 'Lokasi',
+            'negeri' => 'Negeri',
             'pbt' => 'PBT/Agensi',
             'jumlah_pokok' => 'Jumlah Keseluruhan Pokok',
             'spesis_pokok' => 'Spesis Pokok',
@@ -195,6 +200,7 @@ class KTPController extends Controller
         $ktp->update([
             'tajuk' => $validatedData['tajuk'],
             'lokasi' => $validatedData['lokasi'],
+            'negeri' => $validatedData['negeri'],
             'pbt' => $validatedData['pbt'],
             'jumlah_pokok' => $validatedData['jumlah_pokok'],
             'spesis_pokok' => json_encode($spesisPokok)

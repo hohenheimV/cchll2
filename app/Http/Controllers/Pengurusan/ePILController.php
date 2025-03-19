@@ -87,10 +87,11 @@ class ePILController extends Controller
         if(isset($requestData['pelan'])){
             $pelanArr = $requestData['pelan'];
             foreach ($pelanArr as $key => $value) {
-                if ((isset($value['gambar']) && $value['gambar'] instanceof \Illuminate\Http\UploadedFile) || isset($value['large_file_name_new'])) {
+                $folderName = str_replace(' ', '_', $requestData['nama_pelan']); 
+                if ((isset($value['gambar']) && $value['gambar'] instanceof \Illuminate\Http\UploadedFile)) {
                     $file = $value['gambar'];
                     if ($file->isValid()) {
-                        $folderName = str_replace(' ', '_', $requestData['nama_pelan']); 
+                        // $folderName = str_replace(' ', '_', $requestData['nama_pelan']); 
                         $filename = time() . '_' .$file->getClientOriginalName() . '.' . $file->extension();
                         $path = $file->storeAs('public/uploads/ePIL/' . $folderName, $filename);
                         $value['gambar_dokumen_pelan'] = $filename;
@@ -98,11 +99,18 @@ class ePILController extends Controller
                     }
                     $requestData['gambar_dokumen_pelan'] = $filename;
                     $newRecord->gambar_dokumen_pelan = $requestData['gambar_dokumen_pelan'];
+                }
+                if(isset($value['large_file_name_new'])){
 
                     $value['nama_fail'] = $value['nama_fail'];
                     $value['nama_dokumen_pelan'] = $value['large_file_name_new'];
                     $value['keterangan_dokumen_pelan'] = $value['keterangan'];
                     $value['id_pelan'] = $id_pelan;
+                    $activeDokumen = ePIL_dokumen::where('status', 'active')->where('id_pelan', $id_pelan)->first();
+                    // dd($activeDokumen);
+                    if (!$activeDokumen) {
+                        $value['status'] = 'active';
+                    }
                     $dokumenRecord = ePIL_dokumen::create($value);
                     if($dokumenRecord){
                         $oldPath = storage_path('app/public/uploads/ePIL/temp/'.$value['nama_dokumen_pelan']); // Current file location

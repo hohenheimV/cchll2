@@ -41,7 +41,7 @@
 
 </style>
 
-<section id="posts" class="bg-white pt-5">
+<section id="posts" class="bg-white pt-5 mib">
     <div class="container pt-5">
 
         <div class="row">

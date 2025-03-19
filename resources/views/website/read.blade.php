@@ -41,11 +41,10 @@
 
 </style>
 
-<section id="posts" class="bg-white pt-5">
+<section id="posts" class="bg-white pt-5 mib">
     <div class="container pt-5">
-
         <div class="row">
-            <div class="col-12 mt-5 d-lg-none">
+            <div class="col-12 mt-5 d-lg-none mobile-gone">
 
                 <!-- Search Widget -->
                 <div class="card mb-4 d-none d-lg-block">
@@ -104,7 +103,7 @@
         <div class="card-deck text-dark">
             @foreach ($relateds as $related)
             <div class="card">
-                <img style="max-height: 180px;" src="{{ url(str_replace('10.28.203.150/tpbk', 'tpbk.jln.gov.my', $related->page_image)) }}" class="card-img-top" alt="...">
+                <img style="max-height: 180px;" src="{{ isset($related->page_image) ? url(str_replace('10.28.203.150/tpbk', 'tpbk.jln.gov.my', $related->page_image)) : asset('storage/img/bg-pattern-leaves.png') }}" class="card-img-top" alt="...">
                 <div class="card-body">
                     <a href="{{ url($related->type . '/' . $related->slug)  }}">
                         <h5>{{ $related->title }}</h5>

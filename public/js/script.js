@@ -9,7 +9,6 @@ function swalSuccess(message){
             Swal.showLoading();
         },
         willClose: () => {
-            console.log('Modal closed');
         }
     });
 }
@@ -25,7 +24,6 @@ function swalLoad(message){
             Swal.showLoading();
         },
         willClose: () => {
-            console.log('Modal closed');
         }
     });
 }
@@ -41,7 +39,6 @@ function swalError(message){
             Swal.showLoading();
         },
         willClose: () => {
-            console.log('Modal closed');
         }
     });
 }
@@ -57,7 +54,6 @@ function swalWarning(message){
             Swal.showLoading();
         },
         willClose: () => {
-            console.log('Modal closed');
         }
     });
 }
@@ -73,7 +69,6 @@ function swalQuestion(message){
             Swal.showLoading();
         },
         willClose: () => {
-            console.log('Modal closed');
         }
     });
 }

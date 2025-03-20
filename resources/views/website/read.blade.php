@@ -67,7 +67,9 @@
                         <h1>{!! $articles->title !!}</h1>
                         <ul class="list-unstyled list-inline">
                             <li class="list-inline-item text-muted"><i class="fa fa-calendar-check"></i> {{ $articles->created_at->format('F d, Y') }}</li>
+                            @if($articles->users->name != 'Pentadbir Sistem Utama')
                             <li class="list-inline-item text-muted"><i class="fa fa-user"></i> {{ $articles->users->name }}</li>
+                            @endif
                             <li class="list-inline-item text-muted"><i class="fas fa-book"></i> {{ $articles->category->name }}</li>
                             <li class="list-inline-item text-muted"><i class="fas fa-eye"></i> {{ $articles->visited() }}</li>
                         </ul>
@@ -114,8 +116,21 @@
             @if ($loop->iteration == 2)
             <div class="w-100 d-lg-none"></div>
             @endif
+            <?php $iterate = $loop->iteration; ?>
 
             @endforeach
+
+            @for ($i = $iterate; $i < 4; $i++)
+            <div class="card">
+                <img style="max-height: 180px;" src="{{ asset('storage/img/bg-pattern-leaves.png') }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <a href="#">
+                        <h5>Artikel masih dalam proses kemaskini</h5>
+                        <p class="card-text"></p>
+                    </a>
+                </div>
+            </div>
+            @endfor
         </div>
 
     </div>

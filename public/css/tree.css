@@ -1,6 +1,17 @@
 :root {
     --themeColor: #31D5C8;
     }
+    .nav-link:hover {
+        background-color: var(--themeColor);
+        color: #fff !important;
+    }
+    .nav-item.has-treeview:hover > .nav-link {
+        background-color: rgb(41, 168, 157) !important;
+        color: #fff;
+    }
+    .nav-item.has-treeview.menu-open > .nav-link.active {
+        background-color: rgb(41, 168, 157) !important;
+      }
     .nav-pills .nav-link.active,.nav-pills .show>.nav-link{color:#fff;background-color:var(--themeColor)}
     .sidebar-dark-olive .nav-sidebar>.nav-item>.nav-link.active,.sidebar-light-olive .nav-sidebar>.nav-item>.nav-link.active{background-color:var(--themeColor);color:#fff}.sidebar-dark-olive .nav-sidebar.nav-legacy>.nav-item>.nav-link.active,.sidebar-light-olive .nav-sidebar.nav-legacy>.nav-item>.nav-link.active{border-color:var(--themeColor)}
     .nav-pills .nav-link:not(.active):hover{color:var(--themeColor)}
@@ -92,4 +103,4 @@
         color: #ffffff;
         background-color: var(--themeColor);
         border-color: #dee2e6;
-      }
+    }

@@ -43,8 +43,23 @@
                     ['onclick'=>"window.location='".route('pengurusan.dashboard')."'",
                     'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.dashboard')]) !!}
                 </li>
+                <?php
+                    $bahagian_jln = [
+                        '0' => 'Jabatan Landskap Negara',
+                        '1' => 'Bahagian Pengurusan Landskap',
+                        '2' => 'Bahagian Taman Awam',
+                        '3' => 'Bahagian Pembangunan Landskap',
+                        '4' => 'Bahagian Khidmat Teknikal',
+                        '5' => 'Bahagian Penyelidikan & Pemulihan',
+                        '6' => 'Bahagian Penilaian & Penyelenggaraan',
+                        '7' => 'Bahagian Teknologi Maklumat',
+                        '8' => 'Bahagian Promosi & Industri Landskap',
+                        '9' => 'Bahagian Dasar & Pengurusan Korporat',
+                        '10' => 'Bahagian Kontrak & Ukur Bahan',
+                    ];
+                ?>
                 @if ((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai')))
-                    <li class="nav-header text-uppercase">Jabatan Landskap Negara</li>
+                    <li class="nav-header text-uppercase">{{ $bahagian_jln[Auth::user()->bahagian_jln ? Auth::user()->bahagian_jln : 0] }}</li>
                 @elseif ((Auth::user()->hasRole('Pihak Berkuasa Tempatan')))
                     <li class="nav-header text-uppercase">Pihak Berkuasa Tempatan</li>
                 @elseif ((Auth::user()->hasRole('Penggiat Industri')))
@@ -52,25 +67,43 @@
                 @endif
                 @if ((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai|Pihak Berkuasa Tempatan')))
                     @foreach(['eLAPS', 'ePALM', 'ePIL'] as $item)
+                        @if(
+                            (Auth::user()->hasRole('Pentadbir Sistem')) ||
+                            (!(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [1, 2, 3, 4, 5, 6, 7])) && $item == 'eLAPS') ||
+                            (!(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [2, 3, 4, 5, 7])) && $item == 'ePALM') ||
+                            (!(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [3, 7])) && $item == 'ePIL')
+                        )
                         <li class="nav-item">
                             {!! Html::buttonSidebarNavLink($item, 'fas fa-chart-pie', [
                                 'onclick' => "window.location='" . route('pengurusan.' . ($item) . '.index') . "'",
                                 'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.' . ($item) . '.index')
                             ]) !!}
                         </li>
+                        @endif
                     @endforeach
+                    @if((Auth::user()->hasRole('Pentadbir Sistem')) || !(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [8, 7])))
                     <li class="nav-item">
                         {!! Html::buttonSidebarNavLink('Kempen Tanam Pokok', 'fas fa-chart-pie', [
                             'onclick' => "window.location='" . route('pengurusan.ktp.index') . "'",
                             'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.ktp.')
                         ]) !!}
                     </li>
+                    @endif
+                    @if((Auth::user()->hasRole('Pentadbir Sistem')) || !(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [8, 7])))
                     <li class="nav-item">
                         {!! Html::buttonSidebarNavLink('Malaysia in Bloom (MiB)', 'fas fa-chart-pie', [
                             'onclick' => "window.location='" . route('pengurusan.MIB.index') . "'",
                             'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.MIB.')
                         ]) !!}
                     </li>
+                    @endif
+                    <!-- <li class="nav-item">
+                        <button onclick="window.location='http://127.0.0.1:8000/pengurusan/MIB'" class="nav-link btn btn-block btn-link text-left {{ Html::active('pengurusan.MIB.') }}">
+                            <img src="{{ asset('storage/images/logo.png') }}" alt="" style="height:30px;">
+                            &nbsp;
+                            <p>Malaysia in Bloom (MiB)</p>
+                        </button>
+                    </li> -->
                 @endif
                 @if ((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai')))
                     @php
@@ -83,7 +116,7 @@
                             'pendidikan' => ['label' => 'Institusi Pendidikan', 'icon' => 'fas fa-university']
                         ];
                     @endphp
-
+                    @if((Auth::user()->hasRole('Pentadbir Sistem')) || !(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [10, 8, 7])))
                     <li class="nav-item has-treeview {{ Html::active(['pengurusan.eLIND.*'], 'menu-open') }}">
                         {!! Html::buttonSidebarNavLinkTreeview('eLIND', 'fas fa-chart-pie', ['class' => 'nav-link btn btn-block btn-link text-left']) !!}
                         <ul class="nav nav-treeview">
@@ -97,6 +130,7 @@
                             @endforeach
                         </ul>
                     </li>
+                    @endif
                 @endif
                 @if ((Auth::user()->hasRole('Penggiat Industri')))
                     @php
@@ -135,27 +169,36 @@
                 @endif
                 @if ((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai')))
                     @foreach(['eREAD', 'eLAD', 'ePACT'] as $item)
+                        @if(
+                            (Auth::user()->hasRole('Pentadbir Sistem')) || 
+                            (!(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [5, 7])) && $item == 'eREAD') ||
+                            (!(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [1, 4, 7])) && $item == 'eLAD') ||
+                            (!(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [9, 10, 7])) && $item == 'ePACT')
+                        )
                         <li class="nav-item">
                             {!! Html::buttonSidebarNavLink($item, 'fas fa-chart-pie', [
                                 'onclick' => "window.location='" . route('pengurusan.' . strtolower($item) . '.index') . "'",
                                 'class' => 'nav-link btn btn-block btn-link text-left ' .  Html::active('pengurusan.' . strtolower($item) . '.index') 
                             ]) !!}
                         </li>
+                        @endif
                     @endforeach
+                    @if((Auth::user()->hasRole('Pentadbir Sistem')) || !(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [5, 7])))
                     <li class="nav-item">
                         {!! Html::buttonSidebarNavLink('Entiti Landskap', 'fas fa-chart-pie', [
                             'onclick' => "window.location='" . route('pengurusan.entiti-landskap-unik.index') . "'",
                             'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.entiti-landskap-unik.')
                         ]) !!}
                     </li>
+                    @endif
                     <li class="nav-item">
                         {!! Html::buttonSidebarNavLink('eMAP JLN','fas fa-chart-pie',
                         ['onclick'=>"window.location='#'",
                         'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.peta')]) !!}
                     </li>
-                    @if ((Auth::user()->hasRole('Pentadbir Sistem')))
+                    @if ((Auth::user()->hasRole('Pentadbir Sistem|Pegawai')))
                         <li class="nav-header text-uppercase">Laman Web</li>
-                        <li class="nav-item has-treeview {{Html::active(['pengurusan.page.'],'menu-open')}}">
+                        <li class="nav-item has-treeview {{Html::active(['pengurusan.article.'],'menu-open')}}">
                             {!! Html::buttonSidebarNavLinkTreeview('Artikel','fas fa-copy', ['class'=>'nav-link btn btn-block
                             btn-link text-left']) !!}
                             <ul class="nav nav-treeview">
@@ -190,7 +233,7 @@
                                 <li class="nav-item">
                                     {!! Html::buttonSidebaNavItemTree('Senarai Page',
                                     ['onclick'=>"window.location='".route('pengurusan.page.index')."'",
-                                    'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.page.')]) !!}
+                                    'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.page.index')]) !!}
                                 </li>
                                 <li class="nav-item">
                                     {!! Html::buttonSidebaNavItemTree('Daftar Page',
@@ -211,7 +254,7 @@
                             ['onclick'=>"window.location='".route('pengurusan.feedbacks.index')."'",
                             'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.feedbacks.')]) !!}
                         </li>
-
+                        @if ((Auth::user()->hasRole('Pentadbir Sistem')))
                         <li class="nav-header text-uppercase">Pentadbiran</li>
                         <li class="nav-item has-treeview {{Html::active(['pengurusan.users.','pengurusan.roles.','pengurusan.permissions.'],'menu-open')}}">
                             {!! Html::buttonSidebarNavLinkTreeview('Akses Sistem','fas fa-user-shield', ['class'=>'nav-link btn
@@ -259,6 +302,7 @@
                                 </li>
                             </ul>
                         </li>
+                        @endif
                         
                     @endif
                 @endif

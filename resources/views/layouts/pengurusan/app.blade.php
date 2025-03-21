@@ -52,6 +52,7 @@
 
     @yield('page-css-style')
     <link rel="stylesheet" href="{{ asset('css/tree.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.16/dist/sweetalert2.min.css">
     <!-- <style>
         .nav-pills .active {
             background-color: #84cd73 !important
@@ -224,6 +225,8 @@
 
     <!-- AdminLTE App -->
     <script src="{{ asset('js/adminlte.js') }}"></script>
+    <script src="{{ asset('js/script.js') }}"></script>
+    
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
     
@@ -236,7 +239,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.16/dist/sweetalert2.min.js"></script>
     @yield('logout')
     @yield('modal')
     <script>

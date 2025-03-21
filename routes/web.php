@@ -308,7 +308,7 @@ Route::name('website.')
                     // dump($item);
                 }
                 $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->negeri_taman)->orderBy('nama_negeri', 'asc')->first();
-                $item->negeri = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 
+                $item->negeri = isset($negeris->nama_negeri) ? ucwords(strtolower($negeris->nama_negeri)) : ''; 
             }
             return view('website.ePALM', ['ePALM_all' => $ePALM, 'keyword' => $keyword]);
         })->name('epalm');

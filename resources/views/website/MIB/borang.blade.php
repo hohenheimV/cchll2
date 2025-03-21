@@ -24,7 +24,7 @@
                 }
 
                 let file = fileInput.files[0];
-                let chunkSize = 20 * 1024 * 1024;  // 10MB per chunk
+                let chunkSize = 15 * 1024 * 1024;  // 10MB per chunk
                 let totalChunks = Math.ceil(file.size / chunkSize);
                 let currentChunk = 0;
 

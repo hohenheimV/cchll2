@@ -449,7 +449,20 @@
 
                                             <td style="text-align: center; vertical-align: middle;">
                                                 @if($value['nama_dokumen_pelan'])
-                                                    <canvas id="pdf-render-{{ $value['id_dokumen_pelan'] }}" width="200" height="250"></canvas>
+                                                    <div style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                                        <canvas id="pdf-render-{{ $value['id_dokumen_pelan'] }}" width="200" height="250"></canvas>
+                                                        <?php
+                                                            $fileSizeInMB = '';
+                                                            if (isset($value['nama_dokumen_pelan'])) {
+                                                                $filePath = storage_path('app/public/uploads/ePIL/'.$folder.'/'.$value['nama_dokumen_pelan']);
+                                                                if (file_exists($filePath)) {
+                                                                    $fileSizeInBytes = filesize($filePath);
+                                                                    $fileSizeInMB = number_format($fileSizeInBytes / 1048576, 2);
+                                                                }
+                                                            }
+                                                        ?>
+                                                        <p>{{ $fileSizeInMB ? $fileSizeInMB . " MB" : '' }}</p>
+                                                    </div>
                                                 @else
                                                     No PDF available
                                                 @endif
@@ -651,7 +664,7 @@
                             }
 
                             const timestamp = new Date().getTime();
-                            const chunkSize = 20 * 1024 * 1024; // 10MB per chunk
+                            const chunkSize = 15 * 1024 * 1024; // 10MB per chunk
                             const totalChunks = Math.ceil(file.size / chunkSize);
                             let currentChunk = 0;
                             const destinationFolder = `ePIL/`+`{{$folder}}`+`/`;

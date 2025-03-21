@@ -50,13 +50,6 @@
         <div class="container pt-5">
 
             <div class="row">
-                <div class="col-12 mt-5 d-lg-none">
-
-                    <!-- Search Widget -->
-                    <div class="card mb-4 d-none d-lg-block">
-                        {!! website_sidebar_search() !!}
-                    </div>
-                </div>
                 <!-- Post Content Column -->
                 <div class="col-12 col-lg-9">
                     @include('website.ePALM_form')

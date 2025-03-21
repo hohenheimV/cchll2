@@ -242,26 +242,6 @@
         z-index: 1000 !important;  /* Ensure backdrop is below modal */
     }
 
-    .modal-content {
-        position: relative;
-        background-color: white;
-        margin: 5% auto;
-        padding: 30px;
-        width: 80%;
-        max-width: 900px;
-        max-height: 80%;
-        overflow-y: auto; /* Makes the modal content scrollable */
-        background-image: url("{{ asset('storage/img/bg-pattern-leaves.png') }}");
-    }
-
-    .modal-content h2 {
-        text-align: center;
-    }
-
-    .modal-content span {
-        text-align: right;
-    }
-
     .close-btn {
         position: absolute;
         top: 10px;
@@ -291,9 +271,21 @@
         height: 195px;
         border-radius: 8px;
     }
+
+    #customModalContent {
+        position: relative;
+        background-color: white;
+        margin: 5% auto;
+        padding: 30px;
+        width: 80%;
+        max-width: 900px;
+        max-height: 80%;
+        overflow-y: auto; /* Makes the modal content scrollable */
+        background-image: url("{{ asset('storage/img/bg-pattern-leaves.png') }}");
+    }
 </style>
 <div id="parkModal" class="modal">
-    <div class="modal-content" style="background-color:rgb(25, 98, 92) !important;">
+    <div class="modal-content" id="customModalContent" style="background-color:rgb(25, 98, 92) !important;">
         <div class="modal-header justify-content-center bg-white">
             <h2 class="modal-title" id="title" style="text-align: center;">Park Name</h2>
         </div>

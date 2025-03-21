@@ -12,7 +12,7 @@
                 {!! Form::button('Batal', ['class'=>'btn btn-danger btn-lg btn-flat btn-block m-0
                 mr-1','data-dismiss'=>'modal']) !!}
                 {!! Form::button('Log Keluar', ['onclick'=>'event.preventDefault();
-                document.getElementById(\'logout-form\').submit();','class'=>'btn bg-olive btn-lg btn-flat btn-block m-0
+                document.getElementById(\'logout-form\').submit();','class'=>'btn bg-green btn-lg btn-flat btn-block m-0
                 ml-1']) !!}
                 {!! Form::open(['id'=>'logout-form','style'=>'display: none;','method'=>'POST','route'=>['logout']]) !!}
                 {!! Form::close() !!}

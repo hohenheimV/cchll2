@@ -104,7 +104,7 @@
                                     <td>{{ $index++ }}</td>
                                     <td>{{ isset($page->category) ? $page->category->name : '' }}</td>
                                     <td>{{ $page->title }} {!! $page->is_status != 'publish' ? '<span class="badge badge-warning">'.$page->is_status.'</span>':'' !!}</td>
-                                    <td>{!! isset($page->users['name']) ? $page->users['name'] : '<span class="badge badge-warning">Kuntum Renjung</span>' !!}</td>
+                                    <td>{!! isset($page->users['name']) ? $page->users['name'] : '<span class="badge badge-warning">Tiada Maklumat</span>' !!}</td>
                                     <td class="text-center">{!! $page->visited() !!}</td>
                                     <td class="text-center">{!! Html::datetime($page->published_at,'d-m-Y') !!}</td>
                                     <td class="text-center">{!! Html::datetime($page->created_at,'d-m-Y') !!}</td>

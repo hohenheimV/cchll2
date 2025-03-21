@@ -4,7 +4,7 @@
 
 @section('body')
 <p>YBhg. Dato’ Sri / Datuk / Dr. / Tuan / Puan</p>
-<p>Emel ini untuk memaklumkan bahawa aduan dan maklumbalas anda telah berjaya dihantar kepada Bahagian Taman Persekutuan, Jabatan Landskap Negara</p>
+<p>Emel ini untuk memaklumkan bahawa aduan dan maklumbalas anda telah berjaya dihantar kepada Jabatan Landskap Negara</p>
 <p>Butiran aduan dan maklumbalas adalah seperti berikut:</p>
 {{-- @php($null = 'Tiada Maklumat') --}}
 <table width="100%">

@@ -47,23 +47,35 @@ class MIBController extends Controller
     public function index(Request $request)
     {
         //validate
-        if ($request->only('keyword')) {
-            $request->validate([
-                'keyword' => 'required|min:3|max:255|regex:/(^[A-Za-z0-9\/\-\_\@ ]+$)+/',
-            ]);
+        // if ($request->only('keyword')) {
+        //     $request->validate([
+        //         'keyword' => 'required|min:3|max:255|regex:/(^[A-Za-z0-9\/\-\_\@ ]+$)+/',
+        //     ]);
+        // }
+        // // dd(MIB::count());
+        // $count = MIB::count();
+        // $MIB = MIB::when($request->keyword, function ($q) use ($request) { //Bila ada keyword
+        //     $q->where(function ($query) use ($request) {
+		// 		$query->whereRaw('lower(name) LIKE ? ', ['%' . trim(strtolower($request->keyword)) . '%'])
+		// 			->orWhereRaw('lower(status) LIKE ? ', ['%' . trim(strtolower($request->keyword)) . '%'])
+        //             ->orWhereRaw('lower(ref_num) LIKE ? ', ['%' . trim(strtolower($request->keyword)) . '%']);
+        //     });
+        // })->latest()->paginate($count);
+
+        // $MIB->appends($request->only('keyword'));
+
+        $userId = auth()->id();
+        $user = User::find($userId);
+        if($user->hasRole('Pihak Berkuasa Tempatan')){
+            $email = $user->bahagian_jln;
+            $pbt = MaklumatPenggunaPbt::where('id', '=', $email)->first();
+            $totalCount = MIB::where('pbt', $pbt->pbt_name)->count();
+            $MIB = MIB::where('pbt', $pbt->pbt_name)->latest()->paginate($totalCount);
+        }else{
+            $totalCount = MIB::count();
+            $MIB = MIB::latest()->paginate($totalCount);
         }
-        // dd(MIB::count());
-        $count = MIB::count();
-        $MIB = MIB::when($request->keyword, function ($q) use ($request) { //Bila ada keyword
-            $q->where(function ($query) use ($request) {
-				$query->whereRaw('lower(name) LIKE ? ', ['%' . trim(strtolower($request->keyword)) . '%'])
-					->orWhereRaw('lower(status) LIKE ? ', ['%' . trim(strtolower($request->keyword)) . '%'])
-                    ->orWhereRaw('lower(ref_num) LIKE ? ', ['%' . trim(strtolower($request->keyword)) . '%']);
-            });
-        })->latest()->paginate($count);
-
-        $MIB->appends($request->only('keyword'));
-
+        // dd($MIB);
         return view('pengurusan.MIB.index', ['MIB' => $MIB]);
     }
 
@@ -177,7 +189,7 @@ class MIBController extends Controller
                 $data['notes'] = null;
                 $MIB->update($data);
                 // send email to JLN Promosi
-                if(config('mail.enabled')){
+                if(/*config('mail.enabled')*/ false){
                     $this->sendmailtoadmin($MIB);
                 }
                 return redirect()->route('pengurusan.MIB.index')->with('successMessage', 'Maklumat telah berjaya disimpan');
@@ -189,7 +201,7 @@ class MIBController extends Controller
                 $data['notes'] = null;
                 $MIB->update($data);
                 // send email to PBT
-                if(config('mail.enabled')){
+                if(/*config('mail.enabled')*/ false){
                     $this->sendmailtopemohon($MIB);
                 }
                 return redirect()->route('pengurusan.MIB.index')->with('successMessage', 'Maklumat telah berjaya disimpan');

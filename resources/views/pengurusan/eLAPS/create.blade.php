@@ -9,6 +9,13 @@
             <div class="card card-olive card-outline">
                 <div class="card-header p-0 m-0">
                     <h5 class="card-title p-1 m-1 font-weight-bold">@yield('title')</h5>
+                    <div class="d-flex justify-content-end" role="group" aria-label="First group">
+                        {!! Form::button('Informasi&nbsp;&nbsp;&nbsp;<i class="fas fa-info"></i>', [
+                            'class'=>'btn btn-success btn-sm',
+                            'data-toggle'=>'modal','data-target'=>'#pelanModal',
+                        ]) !!}
+                        &nbsp;
+                    </div>
                 </div>
 
                 {{ Form::open(['route' =>['pengurusan.eLAPS.store'], 'enctype'=>'multipart/form-data']) }}

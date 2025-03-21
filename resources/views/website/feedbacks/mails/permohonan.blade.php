@@ -4,7 +4,7 @@
 
 @section('body')
 <p>YBhg. Dato’ Sri / Datuk / Dr. / Tuan / Puan</p>
-<p>Terdapat satu (1) aduan dan maklumbalas berkaitan Taman Persekutuan Bukit Kiara melalui laman web dan butiran lanjut seperti berikut:</p>
+<p>Terdapat satu (1) aduan dan maklumbalas berkaitan Jabatan Landskap Negara melalui laman web dan butiran lanjut seperti berikut:</p>
 {{-- @php($null = 'Tiada Maklumat') --}}
 <table width="100%">
     <tr>

@@ -92,8 +92,19 @@ Route::get('/T4', function () {
     $counter = Home::findOrFail(1);
     views($counter)->cooldown(now()->addHours(1))->record();
     $popup = Slider::where('popup',1)->first();
-    return view('website.T4welcome', compact('popup'));
-})->name('welcomeT4');
+    $sliders = [
+        (object) [
+            'title' => 'Slider 1 Title',
+            'url' => 'https://tpbk.jln.gov.my/storage/images/shares/sliders/Slider%20_4.jpg',
+        ],
+        (object) [
+            'title' => 'Slider 2 Title',
+            'url' => 'https://tpbk.jln.gov.my/storage/images/shares/sliders/slider_1.jpg',
+        ],
+        // Add more sliders as needed
+    ];
+    return view('website.welcome', compact('popup', 'sliders'));
+})->name('welcome');
 
 Route::get('/api/negeri', [RegisterController::class, 'getNegeri']);
 // Route::get('/api/daerah/{negeriId}', [RegisterController::class, 'getDaerah']);
@@ -400,7 +411,7 @@ Route::name('website.')
                 }
             }
             return view('website.eLIND', ['eLIND' => $data, 'keyword' => ($type)]);
-        })->name('eLIND');
+        })->name('website.eLIND');
     });
 
 Route::middleware(['auth'])

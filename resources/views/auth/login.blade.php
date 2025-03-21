@@ -61,7 +61,7 @@
                 </div>
                 {{ Form::close() }}
                 <!--hold-->
-                @if(config('mail.enabled'))
+                @if(/*config('mail.enabled')*/ false)
             <p class="my-3 text-center">
                     {!! Form::button('Lupa Kata Laluan', ['onclick'=>"window.location='".route('password.request')."'",'class'=>'btn btn-link btn-sm']) !!}
                 </p>

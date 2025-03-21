@@ -7,6 +7,7 @@ use App\Model\Category;
 use App\Model\Faq;
 use App\Model\Menu;
 use App\Model\Slider;
+use App\Model\ePALM;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -119,6 +120,66 @@ if (!function_exists('in_arrayi')) {
             $carousel = config('website.carousel');
 
             $sliders = Slider::active()->get();
+            
+            /* $ePALM = ePALM::select('nama_taman', 'nama_pbt', 'is_komponen', 'gambar_taman')->where('status', 'approved')->whereNotNull('gambar_taman')->get();
+            foreach ($ePALM as $item) {
+                if ($item->nama_pbt == "Landskap Perbandaran") {
+                    $ePALM_komponen = ePALM::where('id_taman', $item->is_komponen)->first();
+                    $item->nama_taman = str_replace(' ', '_', $ePALM_komponen->nama_taman)."/".str_replace(' ', '_', $item->nama_taman);
+                    $item->nama_pbt = $ePALM_komponen->nama_pbt;
+                    $item->gambar_taman = str_replace('gambar_input_modal_', 'Xgambar_input_modal_', $item->gambar_taman);
+                }
+            }
+            // dd($ePALM);
+            $count = count($ePALM);
+            $html = '<div class="carousel-inner">';
+            foreach ($ePALM as $key => $slider) {
+                // dump($slider);
+                
+                if(isset($slider->gambar_taman)){
+                    $folderName = str_replace(' ', '_', $slider->nama_taman);
+                    $gambar_tamanData = json_decode($slider->gambar_taman, true);
+
+                    $Xgambar_input_modal_1 = isset($gambar_tamanData['Xgambar_input_modal_1']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_1'] : null;
+                    $Xgambar_input_modal_2 = isset($gambar_tamanData['Xgambar_input_modal_2']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_2'] : null;
+                    $Xgambar_input_modal_3 = isset($gambar_tamanData['Xgambar_input_modal_3']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_3'] : null;
+                    $Xgambar_input_modal_4 = isset($gambar_tamanData['Xgambar_input_modal_4']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_4'] : null;
+                    //dd($gambar_tamanData);
+                }
+
+                $active = ($key == 0 ? 'active' : '');
+                for ($i = 1; $i <= 4; $i++) {
+                    $active = ($i == 1) ? 'active' : ''; // Add the 'active' class to the first item
+                    // Dynamically create the variable name
+                    $Xgambar_input_modal = 'Xgambar_input_modal_' . $i;
+
+                    // Make sure the variable exists before using it
+                    if (isset($$Xgambar_input_modal)) {
+                        $imagePath = $$Xgambar_input_modal; // Access the value of the dynamic variable
+
+                        // Construct the full path to the image
+                        $filePath = public_path('storage/uploads/ePALM/' . $imagePath);
+
+                        // Check if the file exists before adding to HTML
+                        if (file_exists($filePath)) {
+                            // Build the HTML structure only if the file exists
+                            $html .= '<div class="carousel-item ' . $active . '">';
+                            $html .= '<div class="embed-responsive embed-responsive-16by9">';
+                            $html .= '<img src="' . asset('storage/uploads/ePALM/' . $imagePath) . '" class="card-img-top embed-responsive-item" alt="Slider">';
+
+                            $html .= '<div class="carousel-caption d-none d-md-block" style="top: 50%;">';
+                            $html .= '</div>';
+
+                            $html .= '</div>';
+                            $html .= '</div>';
+                        } else {
+                            // File does not exist, skip this iteration
+                            continue;
+                        }
+                    }
+                }
+            } */
+            
             $count = count($sliders);
             $html = '<div class="carousel-inner">';
             foreach ($sliders as $key => $slider) {
@@ -412,7 +473,6 @@ if (!function_exists('in_arrayi')) {
                     $html .= '<li class="nav-item"><a target="_blank" class="btn bg-olive btn-sm mr-1" href="' . $social['link'] . '"><i class="' . $social['icon'] . '"></i></a>';
                 }
             }
-            $html .= '<li class="nav-item"><a target="_blank" class="btn bg-olive btn-sm mr-1" href="/login"><i class="fas fa-lock"></i></a>';
             
             $html .= '</ul></div>';
             return $html;

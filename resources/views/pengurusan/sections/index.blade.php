@@ -10,21 +10,23 @@
         <div class="card-body">
             <div class="row">
                 @foreach ($modules as $item)
-                @if ($item['route'])
-                <div class="col-md-3">
-                    <div class="small-box bg-default">
-                        <div class="inner">
-                            <h3>{!! $item['title'] !!}</h3>
-                            <p class="card-text">{!! $item['subtitle'] !!}</p>
+                    @if ($item['route'])
+                        <div class="col-md-3 col-sm-6 col-12">
+                            <div class="small-box bg-default d-flex flex-column justify-content-between h-100">
+                                <div class="inner">
+                                    <h3>{!! $item['title'] !!}</h3>
+                                    <p class="card-text">{!! $item['subtitle'] !!}</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-cube"></i>
+                                </div>
+                                <a href="{{ $item['route'] ? route($item['route']) : url('#') }}" class="small-box-footer bg-cyan">
+                                    Maklumat Lanjut <i class="fas fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                            <!-- /.card -->
                         </div>
-                        <div class="icon">
-                            <i class="fa fa-cube"></i>
-                        </div>
-                        <a href="{{ $item['route'] ? route($item['route']) : url('#') }}" class="small-box-footer bg-cyan">Maklumat Lanjut <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                    <!-- /.card -->
-                </div>
-                @endif
+                    @endif
                 @endforeach
             </div><!-- /.row -->
         </div><!-- /.card-body -->

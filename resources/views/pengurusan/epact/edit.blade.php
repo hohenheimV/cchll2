@@ -27,19 +27,11 @@
                             <!-- Right Column: Upload Form -->
                             <div class="col-md-6">
                                 <div class="row">
-                                    <!-- <div class="col-md-5 d-flex justify-content-center align-items-center"> 
-                                        <div class="card text-center">
-                                            <div class="row justify-content-center">   
-                                                <img src="{{ asset($epact->imej ? 'storage/images/shares/epact/images/' . $epact->imej : 'img/no-photos.png') }}" alt="Imej Hadapan" width="80%" height="300">
-                                            </div>
-                                            <p class="m-0 ml-2 text-info">Imej Hadapan</p>  
-                                        </div>  
-                                    </div> -->
                                     <div class="col-md-5 d-flex justify-content-center align-items-center">
                                         <div class="card text-center">
                                             <div class="row justify-content-center">
-                                                <iframe src="{{ asset($epact->dokumen ? 'storage/images/shares/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}" width="80%" height="300">
-                                                        This browser does not support PDFs. Please download the PDF to view it: <a href="{{ asset($epact->dokumen ? 'storage/images/shares/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}">Download PDF</a>
+                                                <iframe src="{{ asset($epact->dokumen ? 'storage/uploads/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}" width="80%" height="300">
+                                                        This browser does not support PDFs. Please download the PDF to view it: <a href="{{ asset($epact->dokumen ? 'storage/uploads/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}">Download PDF</a>
                                                 </iframe>
                                             </div>
                                             <p class="m-0 ml-2 text-info">Dokumen</p>
@@ -70,35 +62,34 @@
         $(document).ready(function() {
 
             $('#epactForm').ajaxForm({
-                beforeSend: function() {
-                    var percentage = '0';
-                },
-                uploadProgress: function(event, position, total, percentComplete) {
-                    var percentage = percentComplete;
-                    $('.progress .progress-bar').css("width", percentage + '%', function() {
-                        return $(this).attr("aria-valuenow", percentage) + "%";
-                    })
-                },
-                complete: function(xhr) {
-                    // Simulate an HTTP redirect:
-                    console.log('File has uploaded');
-                    window.location.replace("{{ route('pengurusan.epact.index') }}");
-                }
-            });
+            complete: function(xhr) {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Maklumat Berjaya Dikemaskini',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.replace("{{ route('pengurusan.epact.index') }}");
+                    }
+                });
+            }
+        });
 
+            
+        $('input.tarikh').daterangepicker({
+           singleDatePicker: true,
+            timePicker: false,
+            showDropdowns: true,
+            startDate: moment(), // Set start date to current date
+            maxDate: moment().format('DD-MM-YYYY'), // Tarikh mula 01/01/TahunDepan
+            drops: "down",
+            autoUpdateInput: false,
+            locale: {
+                format: 'DD-MM-YYYY'
+            }
+        });
 
-            $('input.tarikh').daterangepicker({
-                singleDatePicker: true,
-                timePicker: false,
-                showDropdowns: true,
-                minDate: moment().subtract(1, 'month').subtract(10, 'year').format('DD-MM-YYYY'),
-                maxDate: moment().format('DD-MM-YYYY'), //Tarikh mula 01/01/TahunDepan
-                drops: "down",
-                autoUpdateInput: false,
-                locale: {
-                    format: 'DD-MM-YYYY'
-                }
-            });
 
             $('input.tarikh').on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('DD-MM-YYYY'));

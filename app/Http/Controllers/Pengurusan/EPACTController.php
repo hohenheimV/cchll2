@@ -7,8 +7,8 @@ use App\Model\ePACT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use App\Model\Kategori;
-use App\Model\Subkategori;
 
 
 class EPACTController extends Controller
@@ -58,14 +58,9 @@ class EPACTController extends Controller
      */
     public function store(Request $request)
     {
-
-        // dd($request->all());
-
         $request->validate([
             'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
             'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
-            'fail_dokumen' => 'required|mimes:pdf|max:20480', // PDF
-            'fail_imej' => 'nullable|image|max:20480',//image
             'tarikh' => 'required',
         ], [
             'required' => ':attribute diperlukan.',
@@ -73,50 +68,46 @@ class EPACTController extends Controller
             'regex' => ':attribute format tidak sah.',
         ]);
 
-        //Semak sekiranya wujud input fail_dokumen
-        // Handle file upload for dokumen
-        $dokumenData = [];
-        if ($request->hasFile('fail_dokumen')) {
-            $dokumenFile = $request->file('fail_dokumen');
-            $dokumenName = 'epact_' . time() . '.' . $dokumenFile->getClientOriginalExtension();
+        $largeFileName = $request->input('large_file_name_new');
+        $file_size = $request->input('file_size');
+        $file_type = $request->input('file_type');
+        $file_mime = $request->input('file_mime');
 
-            $dokumenData = [
-                'dokumen' => $dokumenName,
-                'extension' => $dokumenFile->getClientOriginalExtension(),
-                'mimes' => $dokumenFile->getMimeType(),
-                'size' => $dokumenFile->getSize(),
-            ];
+        if (null !== $largeFileName) {
+            $oldPath = storage_path('app/public/uploads/epact/temp/' . $largeFileName); // Current file location
+            $newPath = storage_path('app/public/uploads/epact/dokumen/' . $largeFileName); // New location
 
-            // Store file
-            $dokumenFile->storeAs('public/images/shares/epact/dokumen', $dokumenName);
+            if (file_exists($oldPath)) {
+                $destinationDir = dirname($newPath);
+                if (!file_exists($destinationDir)) {
+                    if (!mkdir($destinationDir, 0777, true) && !is_dir($destinationDir)) {
+                        \Log::error('Failed to create directory: ' . $destinationDir);
+                        return redirect()->back()->withErrors(['error' => 'Failed to create directory for file upload.']);
+                    }
+                }
+
+                if (!rename($oldPath, $newPath)) {
+                    \Log::error('Failed to move file from ' . $oldPath . ' to ' . $newPath);
+                    return redirect()->back()->withErrors(['error' => 'Failed to move uploaded file.']);
+                }
+            } else {
+                \Log::error('File not found: ' . $oldPath);
+                return redirect()->back()->withErrors(['error' => 'Uploaded file not found.']);
+            }
+
+            $request->request->add([
+                'dokumen' => $largeFileName,
+                'extension' => pathinfo($largeFileName, PATHINFO_EXTENSION),
+                'mimes' => $file_mime,
+                'size' => $file_size,
+            ]);
         }
 
-        // Handle file upload for imej
-        $imejData = [];
-        if ($request->hasFile('fail_imej')) {
-            $imejFile = $request->file('fail_imej');
-            $imejName = 'epact_' . time() . '.' . $imejFile->getClientOriginalExtension();
+        epact::create($request->all());
 
-            $imejData = ['imej' => $imejName];
-
-            // Store file
-            $imejFile->storeAs('public/images/shares/epact/images', $imejName);
-        }
-
-        // Merge additional data for database insertion
-        $requestData = array_merge($request->all(), $dokumenData, $imejData, [
-            'tarikh' => date('Y-m-d', strtotime($request->tarikh)),
-        ]);
-
-        // Debugging: Log data before saving
-        \Log::info('Data to be stored:', $requestData);
-
-        // Store data in database
-        ePACT::create($requestData);
-
-        // Redirect with success message
-        return redirect()->route('pengurusan.epact.index')->with('success', 'Data telah berjaya disimpan.');
+        return redirect()->route('pengurusan.epact.index')->with('successMessage', 'Maklumat Telah Disimpan');
     }
+
 
     /**
      * Display the specified resource.
@@ -138,7 +129,7 @@ class EPACTController extends Controller
     public function download(ePACT $epact)
     {
         return Storage::download(
-            'public/images/shares/epact/' . $epact->dokumen,
+            'public/uploads/epact' . $epact->dokumen,
             Str::slug(Str::lower($epact->tajuk), '-') . '.' . $epact->extension,
             [
                 'Content-Description' => $epact->tajuk,
@@ -170,50 +161,55 @@ class EPACTController extends Controller
      */
     public function update(Request $request, ePACT $epact)
     {
-
         $request->validate([
             'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
             'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
-            'fail_dokumen' => 'nullable|max:20480',
+            'fail_dokumen' => ['nullable','mimes:pdf'],
             'tarikh' => 'required',
-            
         ], [
             'required' => ':attribute diperlukan.',
             'min' => ':attribute terlalu ringkas, minima 3 aksara.',
             'regex' => ':attribute format tidak sah.',
         ]);
 
-        //Semak sekiranya wujud input fail_dokumen
-        if ($request->hasFile('fail_dokumen')) {
-            //nama baru bagi fail yg di upload
-            //akan disimpan ke dalm fields imej
-            $filename = 'epact_' . time() . '.' . $request->fail_dokumen->extension();
-            $filenameMime = $request->fail_dokumen->getClientMimeType();
-            $filenameExtension = $request->fail_dokumen->extension();
-            $filenameSize = $request->fail_dokumen->getSize();
+        $largeFileName = $request->input('large_file_name_new');
+        $file_size = $request->input('file_size');
+        $file_type = $request->input('file_type');
+        $file_mime = $request->input('file_mime');
 
-            //storage/app/images
-            $request->fail_dokumen->storeAs('public/images/shares/epact/dokumen', $filename);
-            $request->request->add(['dokumen' => $filename, 'extension' => $filenameExtension, 'mimes' => $filenameMime, 'size' => $filenameSize]);
+        if (null !== $largeFileName) {
+            $oldPath = storage_path('app/public/uploads/epact/temp/' . $largeFileName); // Current file location
+            $newPath = storage_path('app/public/uploads/epact/dokumen/' . $largeFileName); // New location
+
+            if (file_exists($oldPath)) {
+                $destinationDir = dirname($newPath);
+                if (!file_exists($destinationDir)) {
+                    if (!mkdir($destinationDir, 0777, true) && !is_dir($destinationDir)) {
+                        \Log::error('Failed to create directory: ' . $destinationDir);
+                        return redirect()->back()->withErrors(['error' => 'Failed to create directory for file upload.']);
+                    }
+                }
+
+                if (!rename($oldPath, $newPath)) {
+                    \Log::error('Failed to move file from ' . $oldPath . ' to ' . $newPath);
+                    return redirect()->back()->withErrors(['error' => 'Failed to move uploaded file.']);
+                }
+            } else {
+                \Log::error('File not found: ' . $oldPath);
+                return redirect()->back()->withErrors(['error' => 'Uploaded file not found.']);
+            }
+
+            $request->request->add([
+                'dokumen' => $largeFileName,
+                'extension' => pathinfo($largeFileName, PATHINFO_EXTENSION),
+                'mimes' => $file_mime,
+                'size' => $file_size,
+            ]);
         }
-            //Semak sekiranya wujud input fail_imej
-            if ($request->hasFile('fail_imej')) {
-            $filename = 'epact' . time() . '.' . $request->fail_imej->extension();
 
-            //storage/app/images
-            $request->fail_imej->storeAs('public/images/shares/epact/images', $filename);
-
-            $request->request->add(['imej' => $filename]);
-        }
-        $request->merge(['tarikh' => date('Y-m-d', strtotime($request->tarikh))]);
-
-        //define data field of Model
         $epact->update($request->all());
-        //$request->merge(['keterangan' =>'null']);
 
-        //redirect to 'user.designations'
-         return response()->json(['success'=>'You have successfully update file.']);
-        //return redirect()->route('pengurusan.epact.index')->with('successMessage', 'Maklumat epact telah berjaya disimpan');
+        return redirect()->route('pengurusan.epact.index')->with('successMessage', 'Maklumat Telah Dikemaskini');
     }
 
     /**

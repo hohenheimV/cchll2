@@ -52,7 +52,7 @@
                                             </td>
                                             <td class="text-center">{!! Html::datetime($eread->created_at, 'Y') !!}</td>
                                             <td class="text-center">
-                                                <a href="{{ asset($eread->dokumen ? 'storage/images/shares/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}" 
+                                                <a href="{{ asset($eread->dokumen ? 'storage/uploads/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}" 
                                                 data-toggle="lightbox" 
                                                 data-title="{{ $eread->tajuk }}" 
                                                 data-gallery="gallery"
@@ -120,7 +120,7 @@
         const ereads = @json($ereads);
 
         ereads.data.forEach(eread => {
-            const url = eread.dokumen ? `{{ asset('storage/images/shares/eread/dokumen') }}/${eread.dokumen}` : `{{ asset('img/no-photos.png') }}`;
+            const url = eread.dokumen ? `{{ asset('storage/uploads/eread/dokumen') }}/${eread.dokumen}` : `{{ asset('img/no-photos.png') }}`;
             
             pdfjsLib.getDocument(url).promise.then(function(pdf) {
                 return pdf.getPage(1);

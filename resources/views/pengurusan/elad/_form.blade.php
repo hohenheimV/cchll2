@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="form-group col-md-6">
     {{ Form::label('kate', 'Kategori') }}
     {{ Form::select('kate', $kategories, old('kate', $elad->kate ?? null), [
         'placeholder' => 'Pilih Kategori',
@@ -7,6 +7,20 @@
     ]) }}
     {!! Html::hasError($errors, 'kate') !!}
 </div>
+
+<div class="form-group col-md-6">
+    {{ Form::label('tarikh', 'Tarikh') }}
+    {{ Form::text('tarikh', null, ['autocomplete'=>'off','placeholder' => 'Sila Masukkan Tarikh', 'class' => 'form-control tarikh ' . Html::isInvalid($errors, 'tarikh'), 'id' => 'tarikh']) }}
+    {!! Html::hasError($errors, 'tarikh') !!}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tarikhInput = document.getElementById('tarikh');
+        const today = new Date().toISOString().split('T')[0];
+        tarikhInput.value = today;
+    });
+</script>
 
 <div class="form-group col-md-12">
     {{ Form::label('tajuk', 'Tajuk') }}
@@ -17,10 +31,4 @@
     {{ Form::label('keterangan', 'Keterangan') }}
     {{ Form::textarea('keterangan', old('keterangan', $elad->keterangan ?? null), ['placeholder' => 'Sila Masukkan Keterangan', 'rows' => 5, 'class' => 'form-control ' . Html::isInvalid($errors, 'keterangan')]) }}
     {!! Html::hasError($errors, 'keterangan') !!}
-</div>
-
-<div class="form-group col-md-12">
-    {{ Form::label('tarikh', 'Tarikh') }}
-    {{ Form::text('tarikh', old('tarikh', $elad->tarikh ?? null), ['autocomplete'=>'off','placeholder' => 'Sila Masukkan Tarikh', 'class' => 'form-control tarikh ' . Html::isInvalid($errors, 'tarikh')]) }}
-    {!! Html::hasError($errors, 'tarikh') !!}
 </div>

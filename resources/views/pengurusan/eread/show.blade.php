@@ -38,11 +38,11 @@
                         <div class="col-md-5 d-flex justify-content-center align-items-center">
                             <div class="card text-center">
                                 <div class="row justify-content-center">
-                                    <iframe src="{{ asset($eread->dokumen ? 'storage/images/shares/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}" width="80%" height="300">
-                                            This browser does not support PDFs. Please download the PDF to view it: <a href="{{ asset($eread->dokumen ? 'storage/images/shares/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}">Download PDF</a>
+                                    <iframe src="{{ asset($eread->dokumen ? 'storage/uploads/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}" width="80%" height="300">
+                                            This browser does not support PDFs. Please download the PDF to view it: <a href="{{ asset($eread->dokumen ? 'storage/uploads/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}">Download PDF</a>
                                     </iframe>
                                 </div>
-                                <p class="m-0 ml-2 text-info"><a href="{{ asset($eread->dokumen ? 'storage/images/shares/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}" data-toggle="lightbox" data-title="{{ $eread->tajuk }}" data-gallery="gallery"><small>Klik Sini Untuk Paparan Penuh</small></a></p>
+                                <p class="m-0 ml-2 text-info"><a href="{{ asset($eread->dokumen ? 'storage/uploads/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}" data-toggle="lightbox" data-title="{{ $eread->tajuk }}" data-gallery="gallery"><small>Klik Sini Untuk Paparan Penuh</small></a></p>
                             </div>
                         </div>                 
                         <div class="col-md-5 text-sm">                                  

@@ -59,13 +59,9 @@ class EREADController extends Controller
      */
     public function store(Request $request)
     {
-
-        // dd($request->all());
-
         $request->validate([
             'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
             'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
-            'fail_dokumen' => 'required|mimes:pdf|max:51200', // 50MB in KB , PDF
             'tarikh' => 'required',
         ], [
             'required' => ':attribute diperlukan.',
@@ -73,37 +69,44 @@ class EREADController extends Controller
             'regex' => ':attribute format tidak sah.',
         ]);
 
-        //Semak sekiranya wujud input fail_dokumen
-        // Handle file upload for dokumen
-        $dokumenData = [];
-        if ($request->hasFile('fail_dokumen')) {
-            $dokumenFile = $request->file('fail_dokumen');
-            $dokumenName = 'eread_' . time() . '.' . $dokumenFile->getClientOriginalExtension();
+        $largeFileName = $request->input('large_file_name_new');
+        $file_size = $request->input('file_size');
+        $file_type = $request->input('file_type');
+        $file_mime = $request->input('file_mime');
 
-            $dokumenData = [
-                'dokumen' => $dokumenName,
-                'extension' => $dokumenFile->getClientOriginalExtension(),
-                'mimes' => $dokumenFile->getMimeType(),
-                'size' => $dokumenFile->getSize(),
-            ];
+        if (null !== $largeFileName) {
+            $oldPath = storage_path('app/public/uploads/eread/temp/' . $largeFileName); // Current file location
+            $newPath = storage_path('app/public/uploads/eread/dokumen/' . $largeFileName); // New location
 
-            // Store file
-            $dokumenFile->storeAs('public/images/shares/eread/dokumen', $dokumenName);
+            if (file_exists($oldPath)) {
+                $destinationDir = dirname($newPath);
+                if (!file_exists($destinationDir)) {
+                    if (!mkdir($destinationDir, 0777, true) && !is_dir($destinationDir)) {
+                        \Log::error('Failed to create directory: ' . $destinationDir);
+                        return redirect()->back()->withErrors(['error' => 'Failed to create directory for file upload.']);
+                    }
+                }
+
+                if (!rename($oldPath, $newPath)) {
+                    \Log::error('Failed to move file from ' . $oldPath . ' to ' . $newPath);
+                    return redirect()->back()->withErrors(['error' => 'Failed to move uploaded file.']);
+                }
+            } else {
+                \Log::error('File not found: ' . $oldPath);
+                return redirect()->back()->withErrors(['error' => 'Uploaded file not found.']);
+            }
+
+            $request->request->add([
+                'dokumen' => $largeFileName,
+                'extension' => pathinfo($largeFileName, PATHINFO_EXTENSION),
+                'mimes' => $file_mime,
+                'size' => $file_size,
+            ]);
         }
 
-        // Merge additional data for database insertion
-        $requestData = array_merge($request->all(), $dokumenData, [
-            'tarikh' => date('Y-m-d', strtotime($request->tarikh)),
-        ]);
+        eread::create($request->all());
 
-        // Debugging: Log data before saving
-        \Log::info('Data to be stored:', $requestData);
-
-        // Store data in database
-        eREAD::create($requestData);
-
-        // Redirect with success message
-        return redirect()->route('pengurusan.eread.index')->with('successMessage', 'Maklumat Telah Berjaya Ditambah');
+        return redirect()->route('pengurusan.eread.index')->with('successMessage', 'Maklumat Telah Disimpan');
     }
 
     /**
@@ -126,7 +129,7 @@ class EREADController extends Controller
     public function download(eREAD $eread)
     {
         return Storage::download(
-            'public/images/shares/eread/' . $eread->dokumen,
+            'public/uploads/eread/' . $eread->dokumen,
             Str::slug(Str::lower($eread->tajuk), '-') . '.' . $eread->extension,
             [
                 'Content-Description' => $eread->tajuk,
@@ -160,47 +163,54 @@ class EREADController extends Controller
         $request->validate([
             'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
             'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
-            'fail_dokumen' => 'nullable|max:20480',
+            'fail_dokumen' => ['nullable','mimes:pdf'],
             'tarikh' => 'required',
-            
         ], [
             'required' => ':attribute diperlukan.',
             'min' => ':attribute terlalu ringkas, minima 3 aksara.',
             'regex' => ':attribute format tidak sah.',
         ]);
 
-        //Semak sekiranya wujud input fail_dokumen
-        if ($request->hasFile('fail_dokumen')) {
-            //nama baru bagi fail yg di upload
-            //akan disimpan ke dalm fields imej
-            $filename = 'eread_' . time() . '.' . $request->fail_dokumen->extension();
-            $filenameMime = $request->fail_dokumen->getClientMimeType();
-            $filenameExtension = $request->fail_dokumen->extension();
-            $filenameSize = $request->fail_dokumen->getSize();
+        $largeFileName = $request->input('large_file_name_new');
+        $file_size = $request->input('file_size');
+        $file_type = $request->input('file_type');
+        $file_mime = $request->input('file_mime');
 
-            //storage/app/images
-            $request->fail_dokumen->storeAs('public/images/shares/eread/dokumen', $filename);
-            $request->request->add(['dokumen' => $filename, 'extension' => $filenameExtension, 'mimes' => $filenameMime, 'size' => $filenameSize]);
+        if (null !== $largeFileName) {
+            $oldPath = storage_path('app/public/uploads/eread/temp/' . $largeFileName); // Current file location
+            $newPath = storage_path('app/public/uploads/eread/dokumen/' . $largeFileName); // New location
+
+            if (file_exists($oldPath)) {
+                $destinationDir = dirname($newPath);
+                if (!file_exists($destinationDir)) {
+                    if (!mkdir($destinationDir, 0777, true) && !is_dir($destinationDir)) {
+                        \Log::error('Failed to create directory: ' . $destinationDir);
+                        return redirect()->back()->withErrors(['error' => 'Failed to create directory for file upload.']);
+                    }
+                }
+
+                if (!rename($oldPath, $newPath)) {
+                    \Log::error('Failed to move file from ' . $oldPath . ' to ' . $newPath);
+                    return redirect()->back()->withErrors(['error' => 'Failed to move uploaded file.']);
+                }
+            } else {
+                \Log::error('File not found: ' . $oldPath);
+                return redirect()->back()->withErrors(['error' => 'Uploaded file not found.']);
+            }
+
+            $request->request->add([
+                'dokumen' => $largeFileName,
+                'extension' => pathinfo($largeFileName, PATHINFO_EXTENSION),
+                'mimes' => $file_mime,
+                'size' => $file_size,
+            ]);
         }
-            //Semak sekiranya wujud input fail_imej
-            if ($request->hasFile('fail_imej')) {
-            $filename = 'eread' . time() . '.' . $request->fail_imej->extension();
 
-            //storage/app/images
-            $request->fail_imej->storeAs('public/images/shares/eread/images', $filename);
-
-            $request->request->add(['imej' => $filename]);
-        }
-        $request->merge(['tarikh' => date('Y-m-d', strtotime($request->tarikh))]);
-
-        //define data field of Model
         $eread->update($request->all());
-        //$request->merge(['keterangan' =>'null']);
 
-        //redirect to 'user.designations'
         return redirect()->route('pengurusan.eread.index')->with('successMessage', 'Maklumat Telah Dikemaskini');
-        
     }
+
 
     /**
      * Remove the specified resource from storage.

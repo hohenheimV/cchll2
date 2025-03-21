@@ -52,7 +52,7 @@
                                             </td>
                                             <td class="text-center">{!! Html::datetime($epact->created_at, 'Y') !!}</td>
                                             <td class="text-center">
-                                                <a href="{{ asset($epact->dokumen ? 'storage/images/shares/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}" 
+                                                <a href="{{ asset($epact->dokumen ? 'storage/uploads/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}" 
                                                 data-toggle="lightbox" 
                                                 data-title="{{ $epact->tajuk }}" 
                                                 data-gallery="gallery"
@@ -119,7 +119,7 @@
         const epacts = @json($epacts);
 
         epacts.data.forEach(epact => {
-            const url = epact.dokumen ? `{{ asset('storage/images/shares/epact/dokumen') }}/${epact.dokumen}` : `{{ asset('img/no-photos.png') }}`;
+            const url = epact.dokumen ? `{{ asset('storage/uploads/epact/dokumen') }}/${epact.dokumen}` : `{{ asset('img/no-photos.png') }}`;
             
             pdfjsLib.getDocument(url).promise.then(function(pdf) {
                 return pdf.getPage(1);

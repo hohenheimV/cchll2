@@ -41,29 +41,27 @@
         $(document).ready(function() {
 
             $('#eladForm').ajaxForm({
-                beforeSend: function() {
-                    var percentage = '0';
-                },
-                uploadProgress: function(event, position, total, percentComplete) {
-                    var percentage = percentComplete;
-                    $('.progress .progress-bar').css("width", percentage + '%', function() {
-                        return $(this).attr("aria-valuenow", percentage) + "%";
-                    })
-                },
-                complete: function(xhr) {
-                    // Simulate an HTTP redirect:
-                    console.log('File has uploaded');
-                    window.location.replace("{{ route('pengurusan.elad.index') }}");
-                }
-            });
+            complete: function(xhr) {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Maklumat Berjaya Disimpan',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.replace("{{ route('pengurusan.elad.index') }}");
+                    }
+                });
+            }
+        });
 
 
         $('input.tarikh').daterangepicker({
            singleDatePicker: true,
             timePicker: false,
             showDropdowns: true,
-            minDate: moment().subtract(1, 'month').subtract(10, 'year').format('DD-MM-YYYY'),
-            maxDate: moment().format('DD-MM-YYYY'), //Tarikh mula 01/01/TahunDepan
+            startDate: moment(), // Set start date to current date
+            maxDate: moment().format('DD-MM-YYYY'), // Tarikh mula 01/01/TahunDepan
             drops: "down",
             autoUpdateInput: false,
             locale: {

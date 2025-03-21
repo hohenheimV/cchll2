@@ -30,19 +30,15 @@
                                     <div class="col-md-5 d-flex justify-content-center align-items-center">
                                         <div class="card text-center">
                                             <div class="row justify-content-center">
-                                                <iframe src="{{ asset($elad->dokumen ? 'storage/images/shares/elad/dokumen/' . $elad->dokumen : 'img/no-photos.png') }}" width="80%" height="300">
-                                                        This browser does not support PDFs. Please download the PDF to view it: <a href="{{ asset($elad->dokumen ? 'storage/images/shares/elad/dokumen/' . $elad->dokumen : 'img/no-photos.png') }}">Download PDF</a>
+                                                <iframe src="{{ asset($elad->dokumen ? 'storage/uploads/elad/dokumen/' . $elad->dokumen : 'img/no-photos.png') }}" width="80%" height="300">
+                                                        This browser does not support PDFs. Please download the PDF to view it: <a href="{{ asset($elad->dokumen ? 'storage/uploads/elad/dokumen/' . $elad->dokumen : 'img/no-photos.png') }}">Download PDF</a>
                                                 </iframe>
                                             </div>
                                             <p class="m-0 ml-2 text-info">Dokumen</p>
                                         </div>
                                     </div>  
                                 </div>
-                                <div class="form-group">
-                                    {{ Form::label('fail_dokumen', 'Muat Naik Dokumen') }}
-                                    {{ Form::file('fail_dokumen', ['class' => 'form-control ' . Html::isInvalid($errors, 'fail_dokumen')]) }}
-                                    {!! Html::hasError($errors, 'fail_dokumen') !!}
-                                </div>
+                                @include('pengurusan.elad._upload')
                             </div>
                         </div>
                     </div>
@@ -66,35 +62,34 @@
         $(document).ready(function() {
 
             $('#eladForm').ajaxForm({
-                beforeSend: function() {
-                    var percentage = '0';
-                },
-                uploadProgress: function(event, position, total, percentComplete) {
-                    var percentage = percentComplete;
-                    $('.progress .progress-bar').css("width", percentage + '%', function() {
-                        return $(this).attr("aria-valuenow", percentage) + "%";
-                    })
-                },
-                complete: function(xhr) {
-                    // Simulate an HTTP redirect:
-                    console.log('File has uploaded');
-                    window.location.replace("{{ route('pengurusan.elad.index') }}");
-                }
-            });
+            complete: function(xhr) {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Maklumat Berjaya Dikemaskini',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.replace("{{ route('pengurusan.elad.index') }}");
+                    }
+                });
+            }
+        });
 
 
-            $('input.tarikh').daterangepicker({
-                singleDatePicker: true,
-                timePicker: false,
-                showDropdowns: true,
-                minDate: moment().subtract(1, 'month').subtract(10, 'year').format('DD-MM-YYYY'),
-                maxDate: moment().format('DD-MM-YYYY'), //Tarikh mula 01/01/TahunDepan
-                drops: "down",
-                autoUpdateInput: false,
-                locale: {
-                    format: 'DD-MM-YYYY'
-                }
-            });
+        $('input.tarikh').daterangepicker({
+           singleDatePicker: true,
+            timePicker: false,
+            showDropdowns: true,
+            startDate: moment(), // Set start date to current date
+            maxDate: moment().format('DD-MM-YYYY'), // Tarikh mula 01/01/TahunDepan
+            drops: "down",
+            autoUpdateInput: false,
+            locale: {
+                format: 'DD-MM-YYYY'
+            }
+        });
+
 
             $('input.tarikh').on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('DD-MM-YYYY'));

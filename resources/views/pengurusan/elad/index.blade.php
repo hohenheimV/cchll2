@@ -62,7 +62,7 @@
                                                 <td class="text-center">{!! Html::datetime($elad->created_at, 'Y') !!}</td>
                                                 <td class="text-center">
                                                     <div id="pdf-viewer-{{$elad->id}}" style="width: 200px; height: 250px; border: 1px solid #ddd; margin: auto; cursor: pointer;"
-                                                        onclick="window.location='{{ route('pengurusan.elad.show', $elad) }}'">
+                                                        onclick="window.location='{{ route('pengurusan.elad.show', $elad)}}'">
                                                         <div id="loading-{{$elad->id}}" class="text-center" style="padding-top: 80px;">
                                                             <i class="fas fa-spinner fa-spin"></i>
                                                         </div>
@@ -193,7 +193,7 @@
 
             function renderPDF(elads) {
                 elads.data.forEach(elad => {
-                    const url = elad.dokumen ? `{{ asset('storage/images/shares/elad/dokumen') }}/${elad.dokumen}` : `{{ asset('img/no-photos.png') }}`;
+                    const url = elad.dokumen ? `{{ asset('storage/uploads/elad/dokumen') }}/${elad.dokumen}` : `{{ asset('img/no-photos.png') }}`;
 
                     pdfjsLib.getDocument(url).promise.then(function(pdf) {
                         return pdf.getPage(1);

@@ -40,7 +40,10 @@ return [
             'icon' => 'fab fa-instagram',
             'link' => 'https://www.instagram.com/landskapnegara',
         ],
-
+        'login' => [
+            'icon' => 'fas fa-lock',
+            'link' => '/login',
+        ],
     ],
 
     /*
@@ -58,14 +61,6 @@ return [
         [
             'title'=>'Slider','route'=>'pengurusan.sliders.index','icon'=>'fa fa-cube',
             'subtitle'=>'Senarai slider dan notifikasi di laman utama.'
-        ],
-        [
-            'title'=>'Sejarah Lembut','route'=>'pengurusan.softscape.history','icon'=>'fa fa-cube',
-            'subtitle'=>'Fungsi salin sejarah rekod landskap lembut bagi tahun lalu.'
-        ],
-        [
-            'title'=>'Sejarah Kejur','route'=>'pengurusan.hardscape.history','icon'=>'fa fa-cube',
-            'subtitle'=>'Fungsi salin sejarah rekod landskap kejur bagi tahun lalu.'
         ],
     ],
 

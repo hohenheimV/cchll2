@@ -36,7 +36,11 @@ class EntitiLandskapUnikController extends Controller
     public function store(Request $request)
     {
         $requestData = $request->all();
-
+        $pbt = [
+            'negeri' => $requestData['negeri'],
+            'pbt' => $requestData['pbt'],
+        ];
+        $requestData['pbt'] = json_encode($pbt);
         $filenames = [];
         for ($i = 1; $i <= 4; $i++) {
             $inputField = 'gambar_input_modal_' . $i;
@@ -102,6 +106,11 @@ class EntitiLandskapUnikController extends Controller
         }
         $request->merge(['gambar' => json_encode($filenames)]);
         $requestData = $request->all();
+        $pbt = [
+            'negeri' => $requestData['negeri'],
+            'pbt' => $requestData['pbt'],
+        ];
+        $requestData['pbt'] = json_encode($pbt);
         // dd($requestData);
         $updateEntiti = $entitiLandskapUnik->update($requestData);
         if($updateEntiti){

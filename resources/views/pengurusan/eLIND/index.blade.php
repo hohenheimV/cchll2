@@ -103,8 +103,15 @@
                                                         }else{
                                                             $prestasiDB = 5;
                                                         }
+
+                                                        if($user->komen != null){
+                                                            $datakomen = json_decode($user->komen, true);
+                                                            $komenDB = end($datakomen)['komen'] ?? 5;
+                                                        }else{
+                                                            $komenDB = 5;
+                                                        }
                                                     ?>
-                                                    <span  class="badge {{ $prestasi[$prestasiDB-1 ?? '4']['label'] }}" style="white-space: normal; text-align: centre;width: 100%;">
+                                                    <span  class="badge {{ $prestasi[$prestasiDB-1 ?? '4']['label'] }}" style="white-space: normal; text-align: centre;width: 100%;" data-toggle="tooltip" data-tooltip="tooltip" data-placement="top" data-original-title="{{ $komenDB ?? 'Tiada Komen' }}">
                                                         {{ $prestasi[$prestasiDB-1 ?? '4']['id'] }}
                                                     </span>
                                                 </td>
@@ -147,7 +154,7 @@
                                             </td>
                                         </tr>
                                         @empty
-                                        {!! Html::forelse_alert(request('keyword'),'User') !!}
+                                        {!! Html::forelse_alert(request('keyword'),'Penggiat Industri') !!}
                                         @endforelse
                                     @endif
                                 </tbody>

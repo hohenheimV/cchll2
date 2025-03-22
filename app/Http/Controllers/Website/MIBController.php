@@ -118,11 +118,11 @@ class MIBController extends Controller
         $MIB = MIB::create($data);
         // dd($MIB);
 		//Hold
-        if(config('mail.enabled')){//MAIL ACTIVE, fungsi email enable
+        if(/*config('mail.enabled')*/ false){//MAIL ACTIVE, fungsi email enable
             $this->sendmailtopemohon($MIB);
             $this->sendmailtoadmin($MIB);
         }
-        dd($MIB);
+        // dd($MIB);
         return view('website.MIB.register')->with('successMessage', 'Maklumat telah berjaya disimpan');
     }
 

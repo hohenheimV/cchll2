@@ -12,6 +12,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon; 
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 
 class eLINDController extends Controller
 {
@@ -47,6 +48,7 @@ class eLINDController extends Controller
                 case 'kontraktor':
                     $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Kontraktor')->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Kontraktor')->count());
                     $view = 'pengurusan.eLIND.index';
+                    // dd($data);
                     break;
 
                 case 'perunding':
@@ -77,8 +79,14 @@ class eLINDController extends Controller
                     dd($type);
                     abort(404); 
             }
-            $dataDraf = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id_elind)->first();
-            $data[0]->status = $dataDraf->status;
+            if($data->isEmpty()){
+                dump("Akaun Industri anda tidak wujud. Sila hubungi Pentadbir eLANDSKAP");
+                Auth::logout();
+                return redirect()->route('login');
+            }else{
+                $dataDraf = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id_elind)->first();
+                $data[0]->status = $dataDraf->status;
+            }
             // dd($data[0]);
             // dd($dataDraf);
             // dd($data[0]->status);
@@ -576,8 +584,8 @@ class eLINDController extends Controller
                 foreach ($emailBTM as $key => $value) {
                     $btm_email[] = ['address' => $value->email, 'name' => $value->name];
                 }
-                dd($user_email);
-                if (config('mail.enabled')) {
+                // dd($user_email);
+                if (/*config('mail.enabled')*/ false) {
                     try {
                         $emailData = [
                             "email_to" => [

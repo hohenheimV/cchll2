@@ -80,7 +80,7 @@
                                         </td>
                                     </tr>
                                     @empty
-                                    {!! Html::forelse_alert(request('keyword'),'Kategori') !!}
+                                    {!! Html::forelse_alert(request('keyword'),'Aktiviti') !!}
                                     @endforelse
                                 </tbody>
                             </table>
@@ -100,7 +100,7 @@
                         @include('pengurusan.MIB._form')
                     </div>
 
-                    @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai|Pihak Berkuasa Tempatan'))
+                    @if(auth()->user()->hasRole('Pentadbir Sistem|Pihak Berkuasa Tempatan') || (auth()->user()->hasRole('Pegawai') && $MIB->status == "Diperakui"))
                         @if($MIB->status == "Diperakui" || $MIB->status == "Diluluskan") <div inert> @endif
                             {{ Form::label('ulasan_lawatan', 'KEGUNAAN PIHAK BERKUASA TEMPATAN :', ['class' => 'col-form-label']) }}<br>
                             <div class="p-3 bg-gray">

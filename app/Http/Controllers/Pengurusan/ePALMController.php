@@ -317,7 +317,7 @@ class ePALMController extends Controller
                 }
                 // dd($btm_email);
                 $nama_pemohon = isset($PBTArr->pbt_name) ? $PBTArr->pbt_name : 'Jabatan Landskap Negara';
-                if (config('mail.enabled')) {
+                if (/*config('mail.enabled')*/ false) {
                     try {
                         $emailData = [
                             "email_to" => $user_email,

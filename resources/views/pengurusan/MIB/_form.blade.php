@@ -172,7 +172,7 @@
                         <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['pelan_lokasi_1']) }}" alt="Pelan Lokasi 1" class="img-thumbnail" width="100">
                         <br>
                         <input type="hidden" name="fail[pelan_lokasi_1]" value="{{ $MIB->fail['pelan_lokasi_1'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['pelan_lokasi_1']) }}" target="_blank" class="showButton">View File</a>
+                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['pelan_lokasi_1']) }}" target="_blank" class="showButton">Lihat Gambar</a>
                     </div>
                 @else
                     <input type="file" name="fail[pelan_lokasi_1]" class="form-control showButton"><br>
@@ -188,7 +188,7 @@
                         <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['pelan_lokasi_2']) }}" alt="Pelan Lokasi 2" class="img-thumbnail" width="100">
                         <br>
                         <input type="hidden" name="fail[pelan_lokasi_2]" value="{{ $MIB->fail['pelan_lokasi_2'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['pelan_lokasi_2']) }}" target="_blank" class="showButton">View File</a>
+                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['pelan_lokasi_2']) }}" target="_blank" class="showButton">Lihat Gambar</a>
                     </div>
                 @else
                     <input type="file" name="fail[pelan_lokasi_2]" class="form-control showButton"><br>
@@ -204,7 +204,7 @@
                         <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['pelan_lokasi_3']) }}" alt="Pelan Lokasi 3" class="img-thumbnail" width="100">
                         <br>
                         <input type="hidden" name="fail[pelan_lokasi_3]" value="{{ $MIB->fail['pelan_lokasi_3'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['pelan_lokasi_3']) }}" target="_blank" class="showButton">View File</a>
+                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['pelan_lokasi_3']) }}" target="_blank" class="showButton">Lihat Gambar</a>
                     </div>
                 @else
                     <input type="file" name="fail[pelan_lokasi_3]" class="form-control showButton"><br>
@@ -222,7 +222,7 @@
                         <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_1']) }}" alt="Gambar Kawasan Lapang 1" class="img-thumbnail" width="100">
                         <br>
                         <input type="hidden" name="fail[gambar_kawasan_lapang_1]" value="{{ $MIB->fail['gambar_kawasan_lapang_1'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_1']) }}" target="_blank" class="showButton">View File</a>
+                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_1']) }}" target="_blank" class="showButton">Lihat Gambar</a>
                     </div>
                 @else
                     <input type="file" name="fail[gambar_kawasan_lapang_1]" class="form-control showButton"><br>
@@ -238,7 +238,7 @@
                         <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_2']) }}" alt="Gambar Kawasan Lapang 2" class="img-thumbnail" width="100">
                         <br>
                         <input type="hidden" name="fail[gambar_kawasan_lapang_2]" value="{{ $MIB->fail['gambar_kawasan_lapang_2'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_2']) }}" target="_blank" class="showButton">View File</a>
+                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_2']) }}" target="_blank" class="showButton">Lihat Gambar</a>
                     </div>
                 @else
                     <input type="file" name="fail[gambar_kawasan_lapang_2]" class="form-control showButton"><br>
@@ -254,7 +254,7 @@
                         <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_3']) }}" alt="Gambar Kawasan Lapang 3" class="img-thumbnail" width="100">
                         <br>
                         <input type="hidden" name="fail[gambar_kawasan_lapang_3]" value="{{ $MIB->fail['gambar_kawasan_lapang_3'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_3']) }}" target="_blank" class="showButton">View File</a>
+                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_3']) }}" target="_blank" class="showButton">Lihat Gambar</a>
                     </div>
                 @else
                     <input type="file" name="fail[gambar_kawasan_lapang_3]" class="form-control showButton"><br>

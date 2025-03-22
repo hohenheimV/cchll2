@@ -32,17 +32,35 @@
             margin: 0;
             padding: 0;
         }
+
         .hero-section {
             position: relative;
             height: 100vh;
-            /* background-image: url('https://tpbk.jln.gov.my/storage/images/shares/sliders/slider_1.jpg'); */
-            background-image: url('https://elandskap.jln.gov.my/elandskap/media/transfer/img/65810b7a4a19a.jpeg');
-            /* background-image: url("{{asset('storage/img/bg-pattern-leaves.png')}}"); */
             background-size: cover;
             background-position: center;
             color: white;
             text-align: center;
-            padding: 50px 20px;
+            padding: 0; /* Remove padding to ensure full-height */
+            overflow: hidden; /* Prevent content from overflowing */
+        }
+
+        #carouselBanner3 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%; /* Ensure the carousel fills the section */
+            z-index: 0; /* Place carousel below the hero content */
+        }
+
+        #particles-js {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Place particles behind both carousel and content */
+            background-color: rgba(0, 0, 0, 0.14);
         }
 
         .hero-content {
@@ -51,7 +69,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-            z-index: 2;
+            z-index: 2; /* Ensure content is on top of carousel and particles */
         }
 
         .hero-content h1 {
@@ -63,16 +81,6 @@
             font-size: 1.2rem;
             margin-bottom: 30px;
             text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.97);
-
-        }
-        #particles-js {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1; /* Place particles above the carousel */
-            background-color: rgba(0, 0, 0, 0.14);
         }
 
         .cta-buttons {
@@ -106,6 +114,9 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            .hero-section {
+                background-image: url('https://elandskap.jln.gov.my/elandskap/media/transfer/img/65810b7a4a19a.jpeg');
+            }
             .hero-content {
                 top: 40%;
                 left: 50%;
@@ -118,6 +129,9 @@
                 font-size: 1rem;
             }
             #particles-js {
+                display: none;
+            }
+            #carouselBanner3 {
                 display: none;
             }
         }
@@ -433,20 +447,38 @@
 
 @section('content')
 <section class="hero-section">
+    <!-- <div id="carouselBanner3" class="carousel slide" data-ride="carousel">
+        {!! website_slider('carouselBanner3') !!}
+    </div> -->
+    <div id="carouselBanner3" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            @foreach ($sliders as $key => $slider)
+                <?php
+                    $active = ($key == 0 ? 'active' : '');
+                ?>
+                <div class="carousel-item {{ $active }}">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <img src="{{ $slider->url }}" class="card-img-top embed-responsive-item" alt="Slider {{ $slider->title }}">
+                        <div class="carousel-caption d-none d-md-block" style="top: 50%;">
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
     <div id="particles-js" class="particles-js"></div>
     <div class="hero-content">
         <h1>Sistem Pengurusan Maklumat Landskap (eLANDSKAP)</h1>
-        <p>Direktori taman-taman dan penggiat industri landskap di Malaysia.</p>
-        <!-- <p style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0, 0, 0), -2px -2px 4px rgba(0, 0, 0), 2px -2px 4px rgba(0, 0, 0), -2px 2px 4px rgba(0, 0, 0);">Direktori yang mengumpulkan maklumat taman-taman dan penggiat-penggiat industri landskap di Malaysia.</p> -->
-
+        <p>komprehensif dan mudah dicapai untuk panduan serta rujukan.</p>
         <div class="cta-buttons">
-            <a href="#taman" class="primary">Direktori Taman</a>
+            <a href="/epalm-taman" class="primary">Direktori Taman</a>
             <a href="#penggiat_industri" class="secondary">Penggiat Industri Landskap</a>
         </div>
     </div>
 </section>
 
-<section id="taman" class="mib"><br>
+
+<!-- <section id="taman" class="mib"><br>
     <div class="mobile-gone">
         <br>
         <br>
@@ -518,7 +550,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 <!-- <section id="hero" class="mib">
     <div class="mobile-gone">
@@ -594,7 +626,7 @@
     </div>
 </section> -->
 
-<section id="why-chose-area" class="bg-gray mib2">
+<!-- <section id="why-chose-area" class="bg-gray mib2">
     <div class="container py-5">
         <div class="row">
             <div class="col-lg-6 col-12">
@@ -624,7 +656,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 <!-- <section id="new" class="mib">
     <div class="container py-5">
@@ -666,7 +698,7 @@
                     <br>
                 </div>
                 <p>
-                    Wakil PBT boleh mendaftar dan membuat permohonan projek melalu Borang ISO digital.
+                    Wakil PBT boleh mendaftar dan membuat permohonan projek melalui Borang ISO digital.
                 </p>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sit amet sem sed augue pretium gravida.</p>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sit amet sem sed augue pretium gravida.</p>
@@ -674,7 +706,7 @@
                     <br>
                     <br>
                 </div>
-                <a class="btn bg-light" href="{{ route('website.activities.index') }}">Maklumat Lanjut</a>
+                <a class="btn bg-light" href="{{ route('register') }}">Maklumat Lanjut</a>
             </div>
         </div>
     </div>
@@ -709,7 +741,7 @@
                             <div class="card-body p-0">
                                 <h5>Kontraktor Landskap</h5>
                                 <p class="mobile-gone"> Realisasikan pelan idea anda dengan kepakaran dan komitmen kontraktor landskap. Setiap perincian dilaksanakan dengan sempurna!</p>
-                                <a class="btn bg-olive mb-3" href="{{ route('website.peta') }}">Maklumat Lanjut</a>
+                                <a class="btn bg-olive mb-3" href="penggiat-industri/kontraktor">Maklumat Lanjut</a>
                             </div>
                         </div>
                     </div>
@@ -727,7 +759,7 @@
                             <div class="card-body p-0">
                                 <h5>Perunding Landskap</h5>
                                 <p class="mobile-gone">Visualkan idea impian anda menjadi rancangan nyata dengan cadangan dan reka bentuk daripada Perunding Landskap, disesuaikan mengikut keperluan dan visi anda!</p>
-                                <a class="btn bg-olive mb-3" href="{{ route('website.konsultasi') }}">Maklumat Lanjut</a>
+                                <a class="btn bg-olive mb-3" href="penggiat-industri/perunding">Maklumat Lanjut</a>
                             </div>
                         </div>
                     </div>
@@ -748,7 +780,7 @@
                             <div class="card-body p-0">
                                 <h5>Pembekal Landskap</h5>
                                 <p class="mobile-gone">Dapatkan segala keperluan landskap anda di satu tempat - dari tumbuhan hingga bahan binaan. Semuanya untuk mewujudkan ruang luar impian anda!</p>
-                                <a class="btn bg-olive mb-3" href="{{ route('website.konsultasi') }}">Maklumat Lanjut</a>
+                                <a class="btn bg-olive mb-3" href="penggiat-industri/pembekal">Maklumat Lanjut</a>
                             </div>
                         </div>
                     </div>
@@ -767,7 +799,7 @@
                             <div class="card-body p-0">
                                 <h5>Anda Penggiat Industri?</h5>
                                 <p class="mobile-gone"> Penggunaan Taman Persekutuan Bukit Kiara perlu mendapatkan kelulusan daripada Jabatan Landskap Negara sebelum sesuatu program/aktiviti  dijalankan dan perlu mematuhi syarat-syarat yang telah ditetapkan.</p>
-                                <a class="btn bg-olive mb-3" href="{{ route('website.peta') }}">Maklumat Lanjut</a>
+                                <a class="btn bg-olive mb-3" href="{{ route('register') }}">Maklumat Lanjut</a>
                             </div>
                         </div>
                     </div>

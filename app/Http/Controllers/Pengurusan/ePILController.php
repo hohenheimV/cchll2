@@ -239,7 +239,7 @@ class ePILController extends Controller
             $ePIL_update = $ePIL->update($requestData);
             // dd($ePIL);
             if ($ePIL_update) {
-                /* $bahagian_jln = 4;
+                $bahagian_jln = 4;
                 $userArr = []; $user_email = []; $btm_email = [];
                 if ($bahagian_jln) {
                     $userArr = User::where(function ($query) use ($bahagian_jln) {
@@ -270,7 +270,7 @@ class ePILController extends Controller
                     $btm_email[] = ['address' => $value->email, 'name' => $value->name];
                 }
                 // dd($user_email);
-                if (config('mail.enabled')) {
+                if (/*config('mail.enabled')*/ false) {
                     try {
                         $emailData = [
                             "email_to" => [
@@ -301,7 +301,7 @@ class ePILController extends Controller
                        dd("Error sending registration email: " . $exception->getMessage());
                     }
                     // dd($emailData);
-                } */
+                }
                 return redirect()->route('pengurusan.ePIL.edit', [$id_pelan])->with('successMessage', 'Maklumat pelan telah berjaya dikemaskini');
             }
         } elseif ($request->input('action') === 'approve') {

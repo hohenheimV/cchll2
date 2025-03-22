@@ -39,7 +39,45 @@
                 {!! Html::hasError($errors, 'agensi') !!}
             </div>
         </div>
-        <div class="form-row">
+        <div class="form-row" style="">
+            @php
+                if(isset($entitiLandskapUnik->pbt)){
+                    $dataPbt = json_decode($entitiLandskapUnik->pbt, true);
+                    if ($dataPbt === null) {
+                        $dataPbt = [];
+                    } elseif (!is_array($dataPbt)) {
+                        $dataPbt = (string) $dataPbt;
+                    }else{
+                        $negeri = $dataPbt['negeri'];
+                        $pbt = $dataPbt['pbt'];
+                    }
+                } else {
+                    $dataPbt = [];
+                }
+                //dd($dataPbt);
+            @endphp
+            <div class="form-group col-md-3">
+                {{ Form::label('negeri', 'Negeri') }}
+                <br>
+                <select id="negeri" class="form-control select2" name="negeri">
+                    <option value="">Pilih Negeri</option>
+                </select>
+            </div>
+
+            <div class="form-group col-md-5">
+                {{ Form::label('pbt', 'Pihak Berkuasa Tempatan') }}
+                <input value="{{ isset($pbt) ? $pbt : $entitiLandskapUnik->pbt }}" type="text" name="pbt" id="pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" >
+                <datalist id="data_pbt">
+                </datalist>
+            </div>
+
+            <div class="form-group col-md-4">
+                {{ Form::label('lokasi', 'Lokasi') }}
+                {{ Form::text('lokasi', null, ['placeholder' => 'Masukkan Lokasi', 'class' => 'form-control' . Html::isInvalid($errors, 'lokasi')]) }}
+                {!! Html::hasError($errors, 'lokasi') !!}
+            </div>
+        </div>
+        <!-- <div class="form-row">
             <div class="form-group col-md-6">
                 {{ Form::label('pbt', 'Pihak Berkuasa Tempatan') }}
                 {{ Form::text('pbt', null, ['placeholder' => 'Masukkan Pihak Berkuasa Tempatan', 'class' => 'form-control' . Html::isInvalid($errors, 'pbt')]) }}
@@ -51,7 +89,7 @@
                 {{ Form::text('lokasi', null, ['placeholder' => 'Masukkan Lokasi', 'class' => 'form-control' . Html::isInvalid($errors, 'lokasi')]) }}
                 {!! Html::hasError($errors, 'lokasi') !!}
             </div>
-        </div>
+        </div> -->
         <div class="form-group">
             {{ Form::label('keterangan', 'Keterangan') }}
             {{ Form::textarea('keterangan',null,['placeholder'=>'Sila masukkan keterangan','rows'=>3,'class' => 'form-control '.Html::isInvalid($errors,'keterangan')]) }}
@@ -206,6 +244,48 @@
                     // Handle file input change event
                     inputElement.addEventListener('change', function(event) {
                         previewImage(event.target, previewContainer);
+                    });
+                });
+            </script>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                $(document).ready(function() {
+                    $.getJSON('/data/negeri', function(data) {
+                        
+                        $.each(data, function(index, negeri) {
+                            let pname = negeri.name;
+                            $('#negeri').append($('<option>', {
+                                value: negeri.id,
+                                text: negeri.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+                            }));
+                        });
+                        var negeriSelected = "{{ isset($negeri) ? $negeri : '' }}"; // Assuming you have $ePALM->negeri
+                        if (negeriSelected) {
+                            $('#negeri').val(negeriSelected).trigger('change');
+                        }
+                        $('#negeri').prop('disabled', false);
+
+                    }).fail(function() {
+                        $('#negeri').prop('disabled', false);
+                        alert('Failed to load data');
+                    });
+
+                    $('#negeri').change(function() {
+                        const negeriId = $('#negeri').val();
+                        const $datalist = $('#data_pbt');
+                        $datalist.empty();
+
+                        $.getJSON('/data/pbt/' + negeriId, function(data) {
+                            $.each(data, function(index, pbt) {
+                                $datalist.append($('<option>', {
+                                    value: pbt.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+                                    // text: pbt.id,
+                                    'data-id': pbt.id,
+                                }));
+                            });
+                        }).fail(function() {
+                            alert('Failed to load data. Sila isi Nama Pihak Berkuasa Tempatan.');
+                        });
                     });
                 });
             </script>

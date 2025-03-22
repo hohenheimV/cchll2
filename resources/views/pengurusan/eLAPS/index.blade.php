@@ -83,6 +83,7 @@
 
                                 @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|Pihak Berkuasa Tempatan|TKP/B JLN'))
                                     @forelse($eLAPS as $permohonan)
+                                        @if(!($permohonan->status_permohonan == 1 && ((Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6) || Auth::user()->hasRole('TKP/B JLN'))))
                                         <tr>
                                             <td>{{ $index++ }}</td>
                                             <td>{{ strtoupper($permohonan->projectTitle) }}</td>
@@ -100,7 +101,7 @@
                                             <td class="text-center">
                                                 {!! Html::datetime($permohonan->created_at, 'd-m-Y') ? Html::datetime($permohonan->created_at, 'd-m-Y') : '-' !!}
                                             </td>
-                                            <td>
+                                            <td> 
                                                 @if(Auth::user()->hasRole('Pihak Berkuasa Tempatan'))
                                                     @php($currentStatus = ($permohonan->status_permohonan <= 8 && $permohonan->status_permohonan > 3) ? 3 : $permohonan->status_permohonan)
                                                 @else
@@ -118,7 +119,7 @@
                                                         ]) !!}
                                                     @endif
 
-                                                    @if($permohonan->status_permohonan == 1 && (Auth::user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem')))
+                                                    @if($permohonan->status_permohonan == 1 && (Auth::user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem') || Auth::user()->id == $permohonan->id_pemohon ))
                                                         {!! 
                                                             Form::button('<i class="fas fa-pencil-alt"></i>', [
                                                                 'onclick' => "window.location='".route('pengurusan.eLAPS.edit', $permohonan)."'",
@@ -135,7 +136,7 @@
                                                                 Html::tooltip('Padam Draf Permohonan')
                                                             ]) 
                                                         !!}
-                                                    @elseif($permohonan->status_permohonan == 3 && (Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN')))
+                                                    @elseif($permohonan->status_permohonan == 3 && (Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN') || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6)))
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
                                                             'class' => 'btn btn-warning btn-sm', 
                                                             'data-toggle'=>'modal', 
@@ -150,7 +151,7 @@
                                                             'data-target'=>'#modalKeputusan', 
                                                             'data-elaps-id' => $permohonan->id
                                                         ]) !!}
-                                                    @elseif(($permohonan->status_permohonan == 10 || $permohonan->status_permohonan == 12) && (Auth::user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem')))
+                                                    @elseif(($permohonan->status_permohonan == 10 || $permohonan->status_permohonan == 12) && (Auth::user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem') || Auth::user()->id == $permohonan->id_pemohon))
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
                                                             ['class' => 'btn btn-warning btn-sm', 
                                                             'data-elaps-id' => $permohonan->id,
@@ -179,6 +180,7 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        @endif
                                     @empty
                                         <tr><td colspan="7" class="text-center">No data available</td></tr>
                                     @endforelse

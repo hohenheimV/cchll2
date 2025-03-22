@@ -44,7 +44,23 @@
                                     <td>{{ $index++ }}</td>
                                     <td>{{ $entiti->nama_entiti }}</td>
                                     <td>{{ $entiti->keterangan }} </td>
-                                    <td class="text-center">{{ $entiti->pbt }}</td>
+                                    <?php
+                                        if(isset($entiti->pbt)){
+                                            $dataPbt = json_decode($entiti->pbt, true);
+                                            if ($dataPbt === null) {
+                                                $dataPbt = [];
+                                            } elseif (!is_array($dataPbt)) {
+                                                $dataPbt = (string) $dataPbt;
+                                            }else{
+                                                $negeri = $dataPbt['negeri'];
+                                                $pbt = $dataPbt['pbt'];
+                                            }
+                                        } else {
+                                            $dataPbt = [];
+                                        }
+                                        //dd($dataPbt);
+                                    ?>
+                                    <td class="text-center">{{ isset($pbt) ? $pbt : $entiti->pbt }}</td>
                                     <td class="text-center">{{ $entiti->lokasi }}</td>
                                     <td class="p-0">
                                         <?php

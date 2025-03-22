@@ -33,14 +33,6 @@
                                     Html::tooltip('Daftar')
                                     ]) !!}
                                 </div>
-                                &nbsp;
-                                <div class="btn-group" role="group" aria-label="First group">
-                                    {!! Form::button('<i class="fas fa-plus"></i> eLIND', [
-                                    'class'=>'btn btn-success btn-sm',
-                                    'onclick'=>"window.location='".route('pengurusan.users.velind')."'",
-                                    Html::tooltip('eLIND')
-                                    ]) !!}
-                                </div>
                             </div>
                         </div>
                     </div>

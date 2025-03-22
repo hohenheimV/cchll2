@@ -13,18 +13,6 @@
 
                     <div class="card-tools">
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                            {{ Form::open(['class'=>'form-inline','method' => 'get']) }}
-                            <div class="input-group mr-2">
-                                {{ Form::search('keyword',request('keyword'),['aria-label'=>'Search','placeholder'=>'Carian Pantas','class' => 'form-control form-control-sm '.Html::isInvalid($errors,'keyword')]) }}
-                                <div class="input-group-append">
-                                    {!! Form::button('<i class="fas fa-search"></i>', ['class'=>'btn btn-default
-                                    btn-sm','type'=>'submit']) !!}
-                                    {!! Form::button('Reset',
-                                    ['onclick'=>"window.location='".route('pengurusan.MIB.index')."'",'class'=>'btn
-                                    btn-secondary btn-sm']) !!}
-                                </div>
-                            </div>
-                            {{ Form::close() }}
 
                             <div class="btn-group" role="group" aria-label="First group">
                                 {!! Form::button('<i class="fas fa-plus"></i> Daftar', [
@@ -39,7 +27,7 @@
                 <!-- /.card-header -->
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table id="example" class="responsive table table-bordered table-hover table-striped table-sm mb-0">
+                        <table id="exampleNP" class="responsive table table-bordered table-hover table-striped table-sm mb-0">
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="w-5"></th>
@@ -47,6 +35,9 @@
                                     <th class="text-center align-middle w-8">Tarikh Mohon</th>
                                     <th class="text-center align-middle">Nama/E-Mel</th>
                                     <th class="text-center align-middle">Taman Perumahan</th>
+                                    @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|TKP/B JLN'))
+                                        <th class="text-center w-10">PBT</th>
+                                    @endif
                                     <th class="text-center align-middle wpx-7">Status</th>
                                     <th class="text-center align-middle w-5">Tindakan</th>
                                 </tr>
@@ -65,6 +56,11 @@
                                     <td class="text-center">{!! $rakan_taman->created_at->format('d-m-Y') !!}</td>
                                     <td>{!! $rakan_taman->name.'<br />'.$rakan_taman->email !!}</td>
                                     <td>{{ $rakan_taman->taman }}</td>
+                                    @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem'))
+                                        <td>
+                                            {{ $rakan_taman->pbt }}
+                                        </td>
+                                    @endif
                                     <td>{!! '<span class="badge badge-primary">'.$rakan_taman->status.'</span>' !!}</td>
                                     <td>
                                         <div class="btn-group">
@@ -86,7 +82,7 @@
                                     </td>
                                 </tr>
                                 @empty
-                                {!! Html::forelse_alert(request('keyword'),'Kategori') !!}
+                                {!! Html::forelse_alert(request('keyword'),'Rakan Taman') !!}
                                 @endforelse
                             </tbody>
                         </table>

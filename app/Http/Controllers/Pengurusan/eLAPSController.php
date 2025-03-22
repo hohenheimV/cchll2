@@ -23,7 +23,7 @@ class eLAPSController extends Controller
         $this->middleware(['role_or_permission:Pentadbir Sistem|elaps-list']);
         $this->middleware(['role_or_permission:Pentadbir Sistem|elaps-create'], ['only' => ['create', 'store']]);
         $this->middleware(['role_or_permission:Pentadbir Sistem|elaps-edit'], ['only' => ['edit', 'update']]);
-        $this->middleware(['role_or_permission:Pentadbir Sistem|elaps-delete'], ['only' => ['destroy']]);
+        $this->middleware(['role_or_permission:Pentadbir Sistem|Pegawai|elaps-delete'], ['only' => ['destroy']]);
     }
 
     public function index()
@@ -34,23 +34,34 @@ class eLAPSController extends Controller
         if($user->hasRole('Pihak Berkuasa Tempatan')){
             $totalCount = eLAPS::where('id_pemohon', $user->bahagian_jln)->count();
             $eLAPS = eLAPS::where('id_pemohon', $user->bahagian_jln)->orderBy('id', 'desc')->paginate($totalCount);
-        }elseif($user->hasRole('TKP/B JLN|Pentadbir Sistem')){
+        }elseif($user->hasRole('TKP/B JLN|Pentadbir Sistem') || ($user->hasRole('Pegawai') && $user->bahagian_jln == 6)){
             $totalCount = eLAPS::count();
             $eLAPS = eLAPS::orderByRaw('CAST(status_permohonan AS INT) ASC')->orderBy('id', 'desc')->paginate($totalCount);
         }else{
             // $totalCount = eLAPS::where('status_permohonan', '!=', $userId)->count();
             // $eLAPS = eLAPS::where('status_permohonan', '!=', $userId)->orderBy('id', 'desc')->paginate($totalCount);
-            $totalCount = eLAPS::where('bahagian_jln', $user->bahagian_jln)->count();
-            $eLAPS = eLAPS::orderByRaw('CAST(status_permohonan AS INT) ASC')->where('bahagian_jln', $user->bahagian_jln)->orderBy('id', 'desc')->paginate($totalCount);
+            $totalCount = eLAPS::where('bahagian_jln', $user->bahagian_jln)->orWhere('id_pemohon', $user->id)->count();
+            $eLAPS = eLAPS::where('bahagian_jln', $user->bahagian_jln)->orWhere('id_pemohon', $user->id)->orderByRaw('CAST(status_permohonan AS INT) ASC')->orderBy('id', 'desc')->paginate($totalCount);
         }
 
         $eLAPS->getCollection()->transform(function ($eLAP) {
-            $email = User::find($eLAP->id_pemohon)->bahagian_jln;
-            $pbt = MaklumatPenggunaPbt::where('id', '=', $email)->first();
+            $audits = ($eLAP->audits);
+            foreach ($audits as $audit) {
+                if ($audit->event === 'created') {  // Check if it's the 'created' event
+                    $createdByUserId = $audit->user_id ?? '';  // Get the ID of the user who created the record
+                    // dump( "Record was created by user with ID: " . $createdByUserId);
+                    break;
+                }
+            }
+            $id_pemohon = $createdByUserId ?? $eLAP->id_pemohon;
+            $email = User::find($id_pemohon);
             
-            // Add the pbt_name to each eLAP record
-            $eLAP->pbt_name = $pbt ? $pbt->pbt_name : null;
-
+            if($email->hasRole('Pihak Berkuasa Tempatan')){
+                $pbt = MaklumatPenggunaPbt::where('id', '=', $email->bahagian_jln)->first();
+                $eLAP->pbt_name = $pbt ? $pbt->pbt_name : null;
+            }else{
+                $eLAP->pbt_name = "Jabatan Landskap Negara";
+            }
             // $eLAPSTemp = eLAPS::findOrFail($eLAP->id);
             // $currentYear = Carbon::now()->year;
             // $recordCount = $eLAP->id - 32;
@@ -123,7 +134,7 @@ class eLAPSController extends Controller
                 'daerah' => 'required',
                 'mukim' => 'required',
                 'parlimen' => 'required',
-                'dun' => 'required',
+                // 'dun' => 'required',
                 'aktiviti_semasa' => 'required',
                 'jumlah_penduduk' => 'required|numeric', 
             ]);
@@ -239,7 +250,11 @@ class eLAPSController extends Controller
         // dd($request->all());
         $userId = auth()->id();
         $user = User::whereRaw('id = ?', [$userId])->first();
-        $id_pbt = $user->bahagian_jln;
+        if($user->hasRole('Pihak Berkuasa Tempatan')){
+            $id_pemohon = $user->bahagian_jln;
+        }else{
+            $id_pemohon = $userId;
+        }
         // dd($user->name); // Now you can access the 'name' attribute
 
         // Get the current year
@@ -249,7 +264,7 @@ class eLAPSController extends Controller
         $referenceNumber = "JLN/{$currentYear}/{$referenceNumber}";
         $request->merge(['referenceNumber' => $referenceNumber]);
 
-        $request->merge(['id_pemohon' => $id_pbt ]);
+        $request->merge(['id_pemohon' => $id_pemohon ]);
         $request->merge(['status_permohonan' => 1 ]);
         // // $request->merge(['projectTitle' => trim($request->input('projectTitle'))]);
         // $cleanedValue = str_replace(',', '', $request->input('anggaranKos'));
@@ -286,7 +301,7 @@ class eLAPSController extends Controller
 
         // Redirect back to the list page with a success message
         if($elaps){
-            // if (config('mail.enabled')) {
+            // if (/*config('mail.enabled')*/ false) {
             //     try {
             //         $emailData = [
             //             "email_to" => [
@@ -354,6 +369,12 @@ class eLAPSController extends Controller
         if($user->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem')){
             $eLAPS = eLAPS::findOrFail($id);
             return view('pengurusan.eLAPS.edit', compact('eLAPS'));
+        }else if($user->hasRole('Pegawai')){
+            $eLAPS = eLAPS::findOrFail($id);
+            if($eLAPS->id_pemohon == $user->id){
+                return view('pengurusan.eLAPS.edit', compact('eLAPS'));
+            }
+            abort(403, 'You are not authorized to access this page.');
         }else{
             abort(403, 'You are not authorized to access this page.');
         }
@@ -445,6 +466,7 @@ class eLAPSController extends Controller
         $nama_pemohon = isset($PBTArr->pbt_name) ? $PBTArr->pbt_name : 'Jabatan Landskap Negara';
 
         // dd($user_email);
+        $request->merge(['anggaranKos' => str_replace(',', '', $request->input('anggaranKos')) ]);
 
         if ($request->input('action') === 'update') {
             $validated = $this->validateData($request->all());
@@ -487,7 +509,7 @@ class eLAPSController extends Controller
             // dd($status);
             if($hantarPermohonan){
                 //email
-                if (config('mail.enabled')) {
+                if (/*config('mail.enabled')*/ false) {
                     try {
                         $emailData = [
                             "email_to" => $user_email,
@@ -525,7 +547,7 @@ class eLAPSController extends Controller
             
             if($serahPermohonan){
                 //email
-                if (config('mail.enabled')) {
+                if (/*config('mail.enabled')*/ false) {
                     try {
                         $emailData = [
                             "email_to" => $user_email,
@@ -568,7 +590,7 @@ class eLAPSController extends Controller
             
             if($hantarUlasan){
                 //email to ?
-                if (config('mail.enabled')) {
+                if (/*config('mail.enabled')*/ false) {
                     try {
                         $emailData = [
                             "email_to" => $user_email,
@@ -604,7 +626,7 @@ class eLAPSController extends Controller
             
             if($keputusanPermohonan){
                 //email
-                if (config('mail.enabled')) {
+                if (/*config('mail.enabled')*/ false) {
                     try {
                         $emailData = [
                             "email_to" => $PBTemail,
@@ -641,7 +663,7 @@ class eLAPSController extends Controller
             
             if($statusProjek){
                 //email to JLN for portal display
-                if (config('mail.enabled')) {
+                if (/*config('mail.enabled')*/ false) {
                     try {
                         $emailData = [
                             "email_to" => $user_email,
@@ -671,9 +693,29 @@ class eLAPSController extends Controller
                         $duplicateData = new ePALM();
                         $duplicateData->nama_taman = $permohonan->projectTitle;
                         $duplicateData->kategori_taman = $permohonan->category;
-                        $duplicateData->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
-                            ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
-                            : 'Jabatan Landskap Negara';
+                        // $duplicateData->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
+                        //     ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
+                        //     : 'Jabatan Landskap Negara';
+
+                        $audits = ($permohonan->audits);
+                        foreach ($audits as $audit) {
+                            // dump($audit->event);
+                            if (isset($audit->event)) {  // Check if it's the 'created' event
+                                if ($audit->event === 'created') {  // Check if it's the 'created' event
+                                    $createdByUserId = $audit->user_id ?? '';
+                                    break;
+                                }
+                            }
+                        }
+                        $id_pemohon = $createdByUserId ?? $permohonan->id_pemohon;
+                        $email = User::find($id_pemohon);
+                        if($email->hasRole('Pihak Berkuasa Tempatan')){
+                            $pbt = MaklumatPenggunaPbt::where('id', '=', $email->bahagian_jln)->first();
+                            $duplicateData->nama_pbt = $pbt ? $pbt->pbt_name : null;
+                        }else{
+                            $duplicateData->nama_pbt = "Jabatan Landskap Negara";
+                        }
+
                         $duplicateData->keluasan_taman = $permohonan->keluasan;
                         $duplicateData->keluasan_unit = $permohonan->unit_keluasan;
                         $duplicateData->panjang_taman = $permohonan->panjang;
@@ -702,6 +744,25 @@ class eLAPSController extends Controller
                             $duplicateData_draf->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
                                 ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
                                 : 'Jabatan Landskap Negara';
+                            $audits = ($permohonan->audits);
+                            foreach ($audits as $audit) {
+                                // dump($audit->event);
+                                if (isset($audit->event)) {  // Check if it's the 'created' event
+                                    if ($audit->event === 'created') {  // Check if it's the 'created' event
+                                        $createdByUserId = $audit->user_id ?? '';
+                                        break;
+                                    }
+                                }
+                            }
+                            $id_pemohon = $createdByUserId ?? $permohonan->id_pemohon;
+                            $email = User::find($id_pemohon);
+                            if($email->hasRole('Pihak Berkuasa Tempatan')){
+                                $pbt = MaklumatPenggunaPbt::where('id', '=', $email->bahagian_jln)->first();
+                                $duplicateData_draf->nama_pbt = $pbt ? $pbt->pbt_name : null;
+                            }else{
+                                $duplicateData_draf->nama_pbt = "Jabatan Landskap Negara";
+                            }  
+
                             $duplicateData_draf->keluasan_taman = $permohonan->keluasan;
                             $duplicateData_draf->keluasan_unit = $permohonan->unit_keluasan;
                             $duplicateData_draf->panjang_taman = $permohonan->panjang;
@@ -726,9 +787,28 @@ class eLAPSController extends Controller
                     if ($permohonan->category == "Pelan Induk Landskap") {
                         $duplicateData = new ePIL();
                         $duplicateData->nama_pelan = $permohonan->projectTitle;
-                        $duplicateData->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
-                            ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
-                            : 'Jabatan Landskap Negara';
+                        // $duplicateData->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
+                        //     ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
+                        //     : 'Jabatan Landskap Negara';
+
+                        $audits = ($permohonan->audits);
+                        foreach ($audits as $audit) {
+                            // dump($audit->event);
+                            if (isset($audit->event)) {  // Check if it's the 'created' event
+                                if ($audit->event === 'created') {  // Check if it's the 'created' event
+                                    $createdByUserId = $audit->user_id ?? '';
+                                    break;
+                                }
+                            }
+                        }
+                        $id_pemohon = $createdByUserId ?? $permohonan->id_pemohon;
+                        $email = User::find($id_pemohon);
+                        if($email->hasRole('Pihak Berkuasa Tempatan')){
+                            $pbt = MaklumatPenggunaPbt::where('id', '=', $email->bahagian_jln)->first();
+                            $duplicateData->nama_pbt = $pbt ? $pbt->pbt_name : null;
+                        }else{
+                            $duplicateData->nama_pbt = "Jabatan Landskap Negara";
+                        }
 
                         $duplicateData->negeri_pelan = $permohonan->negeri;
                         $duplicateData->daerah_pelan = $permohonan->daerah;
@@ -744,9 +824,28 @@ class eLAPSController extends Controller
                             $duplicateData_draf = new ePIL_draf();
                             $duplicateData_draf->id_pelan = $duplicateDataId;
                             $duplicateData_draf->nama_pelan = $permohonan->projectTitle;
-                            $duplicateData_draf->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
-                                ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
-                                : 'Jabatan Landskap Negara';
+                            // $duplicateData_draf->nama_pbt = isset($this->getPBT($permohonan->id_pemohon)->pbt_name) 
+                            //     ? $this->getPBT($permohonan->id_pemohon)->pbt_name 
+                            //     : 'Jabatan Landskap Negara';
+
+                            $audits = ($permohonan->audits);
+                            foreach ($audits as $audit) {
+                                // dump($audit->event);
+                                if (isset($audit->event)) {  // Check if it's the 'created' event
+                                    if ($audit->event === 'created') {  // Check if it's the 'created' event
+                                        $createdByUserId = $audit->user_id ?? '';
+                                        break;
+                                    }
+                                }
+                            }
+                            $id_pemohon = $createdByUserId ?? $permohonan->id_pemohon;
+                            $email = User::find($id_pemohon);
+                            if($email->hasRole('Pihak Berkuasa Tempatan')){
+                                $pbt = MaklumatPenggunaPbt::where('id', '=', $email->bahagian_jln)->first();
+                                $duplicateData_draf->nama_pbt = $pbt ? $pbt->pbt_name : null;
+                            }else{
+                                $duplicateData_draf->nama_pbt = "Jabatan Landskap Negara";
+                            }
 
                             $duplicateData_draf->negeri_pelan = $permohonan->negeri;
                             $duplicateData_draf->daerah_pelan = $permohonan->daerah;
@@ -768,9 +867,24 @@ class eLAPSController extends Controller
 
     public function destroy($id)
     {
-        dd($id);
-        $permohonan = eLAPS::findOrFail($id);
-        $permohonan->delete();
-        return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat permohonan telah dihapuskan');
+        $user = $this->getUser();
+        if($user->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem')){
+            $permohonan = eLAPS::findOrFail($id);
+            $deletePermohonan = $permohonan->delete();
+        }else if($user->hasRole('Pegawai')){
+            $permohonan = eLAPS::findOrFail($id);
+            if($permohonan->id_pemohon == $user->id){
+                $deletePermohonan = $permohonan->delete();
+            }
+        }else{
+            abort(403, 'You are not authorized to access this page.');
+        }
+        // $permohonan = eLAPS::findOrFail($id);
+        // $permohonan->delete();
+        if($deletePermohonan){
+            return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat permohonan telah dihapuskan');
+        }else{
+            return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat permohonan tidak berjaya dihapuskan');
+        }
     }
 }

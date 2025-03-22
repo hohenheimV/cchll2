@@ -46,16 +46,16 @@
                 <?php
                     $bahagian_jln = [
                         '0' => 'Jabatan Landskap Negara',
-                        '1' => 'Bahagian Pengurusan Landskap',
-                        '2' => 'Bahagian Taman Awam',
-                        '3' => 'Bahagian Pembangunan Landskap',
-                        '4' => 'Bahagian Khidmat Teknikal',
-                        '5' => 'Bahagian Penyelidikan & Pemulihan',
-                        '6' => 'Bahagian Penilaian & Penyelenggaraan',
-                        '7' => 'Bahagian Teknologi Maklumat',
-                        '8' => 'Bahagian Promosi & Industri Landskap',
-                        '9' => 'Bahagian Dasar & Pengurusan Korporat',
-                        '10' => 'Bahagian Kontrak & Ukur Bahan',
+                        '1' => 'B. Pengurusan Landskap',
+                        '2' => 'B. Taman Awam',
+                        '3' => 'B. Pembangunan Landskap',
+                        '4' => 'B. Khidmat Teknikal',
+                        '5' => 'B. Penyelidikan & Pemulihan',
+                        '6' => 'B. Penilaian & Penyelenggaraan',
+                        '7' => 'B. Teknologi Maklumat',
+                        '8' => 'B. Promosi & Industri Landskap',
+                        '9' => 'B. Dasar & Pengurusan Korporat',
+                        '10' => 'B. Kontrak & Ukur Bahan',
                     ];
                 ?>
                 @if ((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai')))
@@ -243,12 +243,14 @@
                                 </li>
                             </ul>
                         </li>
+                        @if ((Auth::user()->hasRole('Pentadbir Sistem')))
                         <li class="nav-item">
                             {!! Html::buttonSidebarNavLink('Seksyen','fas fa-boxes',
                             ['onclick'=>"window.location='".route('pengurusan.sections')."'",
                             'class'=>'nav-link btn btn-block btn-link text-left
                             '.Html::active(['pengurusan.sections','pengurusan.menu.','pengurusan.sliders.'])]) !!}
                         </li>
+                        @endif
                         <li class="nav-item">
                             {!! Html::buttonSidebarNavLink('Maklumbalas','fas fa-comment-alt',
                             ['onclick'=>"window.location='".route('pengurusan.feedbacks.index')."'",

@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Model\MaklumatPenggunaPbt;
 use App\Model\MaklumatPenggunaPenggiatIndustri;
+use App\Model\MaklumatPenggunaPenggiatIndustri_draf;
 
 class RegisterController extends Controller
 {
@@ -142,7 +143,15 @@ class RegisterController extends Controller
                     'locality' => $data['locality'],
                     'state' => $data['state'],
                 ]);
-
+                $existingMof_draf = MaklumatPenggunaPenggiatIndustri::where('no_mof', $data['no_mof'])->first();
+                $existingMof_draf->update([
+                    'name' => $data['nama_syarikat'],
+                    'address1' => $data['address1'],
+                    'address2' => $data['address2'],
+                    'postcode' => $data['postcode'],
+                    'locality' => $data['locality'],
+                    'state' => $data['state'],
+                ]);
                 //proceed without creating new row
             }else{
                 $maklumat = MaklumatPenggunaPenggiatIndustri::create([
@@ -158,6 +167,17 @@ class RegisterController extends Controller
                 ]);
                 $id = $maklumat->id_elind;
                 $name = $maklumat->name;
+                $maklumat_draf = MaklumatPenggunaPenggiatIndustri_draf::create([
+                    'name' => $data['nama_syarikat'],
+                    'id_elind' => $id,
+                    'jenis_industri' => $data['jenis_penggiat'],
+                    'no_mof' => $data['no_mof'],
+                    'address1' => $data['address1'],
+                    'address2' => $data['address2'],
+                    'postcode' => $data['postcode'],
+                    'locality' => $data['locality'],
+                    'state' => $data['state'],
+                ]);
             }
             $accountType = $data['roles']." ({$data['jenis_penggiat']})";
         }else{
@@ -176,7 +196,7 @@ class RegisterController extends Controller
         }
 
         // Send email notification (if enabled)
-        if (config('mail.enabled')) {
+        if (/*config('mail.enabled')*/ false) {
             $bahagian_jln = 7;  //BTM
             $user_email = [];
 

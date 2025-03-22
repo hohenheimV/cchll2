@@ -129,18 +129,27 @@ class DashboardController extends Controller
         if(Auth::user()->hasRole(['Penggiat Industri'])){
             // dd(Auth::user()->bahagian_jln);
             $id_elind = Auth::user()->bahagian_jln;
-            $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->count());
-            // MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->latest()->first();
-            foreach ($data as $item) {
-                $type = $item->jenis_industri;
-                $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->state)->orderBy('nama_negeri', 'asc')->first();
-                if($negeris){
-                    $item->state = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 
-                }else{
-                    $item->state = 'Tiada Maklumat';
+            $type = '';
+            if($id_elind){
+                $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->count());
+                // MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->latest()->first();
+                foreach ($data as $item) {
+                    $type = $item->jenis_industri;
+                    $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->state)->orderBy('nama_negeri', 'asc')->first();
+                    if($negeris){
+                        $item->state = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 
+                    }else{
+                        $item->state = 'Tiada Maklumat';
+                    }
                 }
+            }else{
+                $data = []; 
             }
-            // dd($data);
+            if($type || $data->isEmpty()){
+                dump("Akaun Industri anda tidak wujud. Sila hubungi Pentadbir eLANDSKAP");
+                Auth::logout();
+                return redirect()->route('login');
+            }
 
             return view('pengurusan.dashboard.index', ['eLIND' => $data, 'keyword' => ($type)]);
 

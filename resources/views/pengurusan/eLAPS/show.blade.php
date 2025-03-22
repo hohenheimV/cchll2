@@ -27,7 +27,7 @@
                         @include('pengurusan.eLAPS._form')
                     </div>
 
-                    @if(isset($eLAPS->file_path) && auth()->user()->hasRole('Pentadbir Sistem|TKP/B JLN'))
+                    @if(isset($eLAPS->file_path) && (auth()->user()->hasRole('Pentadbir Sistem|TKP/B JLN') || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6)))
                         <div class="col-md-12">
                             <div class="d-flex align-items-center">
                                 @php
@@ -49,6 +49,25 @@
                                 @endif
                             </div>
                         </div>
+                    @else
+                        @php
+                            $folderName = isset($eLAPS->file_path) ? 'eLAPS/'.str_replace('/', '', $eLAPS->referenceNumber).'/'.$eLAPS->file_path : null;
+                        @endphp
+                        
+                        @if($folderName == null)
+                        <div class="col-md-12">
+                            <div class="d-flex align-items-center">
+                                <a class="" style="border: 0px solid #ddd; border-radius: 10px; padding: 10px; display: inline-block; text-align: center; background-color: #fff;">
+                                    <div class="product-image">
+                                        <img src="https://img.icons8.com/fluency/48/winrar.png" class="br-5" alt="" style="width: 48px; height: 48px; border-radius: 5px; margin-bottom: 10px;">
+                                    </div>
+                                    <div class="product-image">
+                                        <span class="file-name-1" style="background-color: #008000; padding: 5px 10px; border-radius: 5px; color: #fff; font-weight: 600; display: inline-block; font-size: 14px;">Tiada Dokumen</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        @endif
                     @endif
 
                     <!-- @include('pengurusan.eLAPS._upload') -->
@@ -63,7 +82,7 @@
                 </div>
                 <div class="card-footer">
                     {!! Form::button('Kembali', ['onclick' => "window.location='".route('pengurusan.eLAPS.index')."'", 'class' => 'btn btn-secondary']) !!}
-                    @if(auth()->user()->hasRole('Pentadbir Sistem|TKP/B JLN') && in_array($eLAPS->status_permohonan, [2, 3]))
+                    @if((auth()->user()->hasRole('Pentadbir Sistem|TKP/B JLN') || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6)) && in_array($eLAPS->status_permohonan, [2, 3]))
                         {!! Form::button('<i class="fas fa-pencil-alt"></i> Serah Permohonan ke Bahagian', [
                             'class' => 'btn btn-warning', 
                             'data-toggle'=>'modal', 
@@ -91,8 +110,8 @@
                             'name' => 'ulasan', 
                             'value' => 'draf'
                         ]) !!}
-                    @endif
-                    @if($eLAPS->status_permohonan == 7 && auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))
+                    {{--@endif
+                    @if($eLAPS->status_permohonan == 7 && auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))--}}
                         {!! Form::button('<i class="fas fa-pencil-alt"></i> Hantar Ulasan', [
                             'class' => 'btn btn-success', 
                             'type' => 'submit', 
@@ -110,7 +129,7 @@
                         ]) !!}
                     @endif
 
-                    @if(($eLAPS->status_permohonan == 10 || $eLAPS->status_permohonan == 12) && (auth()->user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem')))
+                    @if(($eLAPS->status_permohonan == 10 || $eLAPS->status_permohonan == 12) && (auth()->user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem') || Auth::user()->id == $eLAPS->id_pemohon))
                         {!! Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini Status Projek', [
                             'class' => 'btn btn-warning', 
                             'data-toggle'=>'modal', 

@@ -66,7 +66,7 @@
                         '4' => 'Bahagian Khidmat Teknikal',
                         '5' => 'Bahagian Penyelidikan & Pemulihan'
                     ], null, ['class' => 'form-control']) !!}
-                    {!! Form::text('eLAPS_id', null, ['id' => 'eLAPS_id']) !!}
+                    {!! Form::hidden('eLAPS_id', null, ['id' => 'eLAPS_id']) !!}
                 </div>
             </div>
 
@@ -97,7 +97,7 @@
                         '10' => 'Lulus',
                         '11' => 'Gagal'
                     ], null, ['class' => 'form-control']) !!}
-                    {!! Form::text('eLAPS_id', null, ['id' => 'eLAPS_idK']) !!}
+                    {!! Form::hidden('eLAPS_id', null, ['id' => 'eLAPS_idK']) !!}
                 </div>
             </div>
 
@@ -125,7 +125,7 @@
                 <p><strong>Sila pilih Status Projek:</strong></p>
                 <div class="form-group">
                     {!! Form::select('statusProjek', [], null, ['class' => 'form-control', 'id' => 'statusProjekSelect']) !!}
-                    {{ Form::text('eLAPS_id', null, ['id' => 'eLAPS_idP']) }}
+                    {{ Form::hidden('eLAPS_id', null, ['id' => 'eLAPS_idP']) }}
                 </div>
             </div>
 
@@ -166,7 +166,7 @@
                     {!! Form::label('komen', 'Komen:') !!}
                     {!! Form::textarea('komen', null, ['class' => 'form-control', 'id' => 'komenTextarea', 'rows' => 3, 'placeholder' => 'Masukkan komen di sini...']) !!}
                 </div>
-                {{ Form::text('elind_id', null, ['id' => 'elind_idP']) }}
+                {{ Form::hidden('elind_id', null, ['id' => 'elind_idP']) }}
                 <input type="hidden" class="form-control" id="action" name="action" value="prestasi">
             </div>
 
@@ -546,7 +546,7 @@
             let url = document.querySelector('#modalKomenPrestasi form').getAttribute('action');
             document.querySelector('#modalKomenPrestasi form').setAttribute('action', url + '/' + elindId);
             console.log(document.querySelector('#modalKomenPrestasi form'));
-            alert(url);
+            // alert(url);
         });
 
         

@@ -672,6 +672,8 @@
                             // Show progress bar
                             const progressContainer = document.getElementById(`progress-container_${rowId}`);
                             progressContainer.style.display = 'block';
+                            document.getElementById(`progress_${rowId}`).style.width = '0%';
+                            document.getElementById(`progress-text_${rowId}`).textContent = '0%';
 
                             function uploadNextChunk() {
                                 let start = currentChunk * chunkSize;

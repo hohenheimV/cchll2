@@ -3,14 +3,15 @@
     {{ Form::select('kate', $kategories, $epact->kate ?? null, [
         'placeholder' => 'Pilih Kategori',
         'class' => 'form-control',
-        'id' => 'kate'
+        'id' => 'kate',
+        'required' => true
     ]) }}
     {!! Html::hasError($errors, 'kate') !!}
 </div>
 
 <div class="form-group col-md-6">
     {{ Form::label('tarikh', 'Tarikh') }}
-    {{ Form::text('tarikh', null, ['autocomplete'=>'off','placeholder' => 'Sila Masukkan Tarikh', 'class' => 'form-control tarikh ' . Html::isInvalid($errors, 'tarikh'), 'id' => 'tarikh']) }}
+    {{ Form::text('tarikh', null, ['required' => true, 'autocomplete'=>'off','placeholder' => 'Sila Masukkan Tarikh', 'class' => 'form-control tarikh ' . Html::isInvalid($errors, 'tarikh'), 'id' => 'tarikh']) }}
     {!! Html::hasError($errors, 'tarikh') !!}
 </div>
 
@@ -24,7 +25,7 @@
 
 <div class="form-group col-md-12">
     {{ Form::label('tajuk', 'Tajuk') }}
-    {{ Form::text('tajuk', null, ['placeholder' => 'Sila Masukkan Tajuk', 'class' => 'form-control ' . Html::isInvalid($errors, 'tajuk')]) }}
+    {{ Form::text('tajuk', null, ['required' => true, 'placeholder' => 'Sila Masukkan Tajuk', 'class' => 'form-control ' . Html::isInvalid($errors, 'tajuk')]) }}
     {!! Html::hasError($errors, 'tajuk') !!}
 </div>
 <div class="form-group col-md-12">

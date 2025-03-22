@@ -27,22 +27,32 @@
         {{ Form::label('negeri', 'Negeri') }}
         {{ Form::select('negeri', $negeri ?? [], old('negeri', $ktp->negeri ?? null), [
             'placeholder' => 'Pilih Negeri',
-            'class' => 'form-control select2',
+            'class' => 'form-control select2 ' . ($errors->has('negeri') ? 'is-invalid' : ''),
             'id' => 'negeri',
             'onchange' => 'updatePBT()'
         ]) }}
+        @if ($errors->has('negeri'))
+            <div class="invalid-feedback">
+                {{ $errors->first('negeri') }}
+            </div>
+        @endif
     </div>
     <div class="form-group col-md-4">
         {{ Form::label('pbt', 'Pihak Berkuasa Tempatan / Agensi') }} 
         <!-- Loading Spinner -->
         <div id="loading-spinner" style="display: none;">Muatnaik Maklumat...</div>
         {{ Form::select('pbt', $pbt ?? [], old('pbt', $ktp->pbt ?? null), [
-            'class' => 'form-control select2',
+            'class' => 'form-control select2 ' . ($errors->has('pbt') ? 'is-invalid' : ''),
             'data-toggle' => 'tooltip',
             'title' => 'Sila Pilih Negeri Terlebih Dahulu',
             'id' => 'pbt',
             'autocomplete' => 'off',
         ]) }}
+        @if ($errors->has('pbt'))
+            <div class="invalid-feedback">
+                {{ $errors->first('pbt') }}
+            </div>
+        @endif
     </div>
 </div>
 
@@ -71,30 +81,35 @@
                     </tr>
                 </thead>
                 <tbody id="spesis_pokok_container" class="align-items-center">
-                    @if(isset($spesisPokokJumlahPairs) && count($spesisPokokJumlahPairs) > 0)
-                        @foreach ($spesisPokokJumlahPairs as $index => $pair)
-                        <tr>
-                            <td><input type="text" name="spesis_pokok[]" class="form-control" value="{{ $pair['spesis'] }}" placeholder="Spesis Pokok"></td>
-                            <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok" value="{{ $pair['bilangan'] }}" placeholder="Bilangan" min="1"></td>
-                            <td><input type="number" name="tinggi_pokok[]" class="form-control" value="{{ $pair['tinggi'] }}" placeholder="Tinggi" min="0"></td>
-                            <td><input type="number" name="diameter_pokok[]" class="form-control" value="{{ $pair['diameter'] }}" placeholder="Diameter" min="0"></td>
-                            <td><button type="button" class="btn btn-danger btn-sm remove_field"><i class="fas fa-trash"></i></button></td>
-                        </tr>
-                        @endforeach
-                    @else
-                        <tr>
-                            <td><input type="text" name="spesis_pokok[]" class="form-control" placeholder="Spesis Pokok"></td>
-                            <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok" placeholder="Bilangan" min="1"></td>
-                            <td><input type="number" name="tinggi_pokok[]" class="form-control" placeholder="Tinggi" min="0"></td>
-                            <td><input type="number" name="diameter_pokok[]" class="form-control" placeholder="Diameter" min="0"></td>
-                            <td><button type="button" class="btn btn-danger btn-sm remove_field"><i class="fas fa-trash"></i></button></td>
-                        </tr>
-                    @endif
-                </tbody>
+                        @if(isset($spesisPokokJumlahPairs) && count($spesisPokokJumlahPairs) > 0)
+                            @foreach ($spesisPokokJumlahPairs as $index => $pair)
+                            <tr>
+                                <td><input type="text" name="spesis_pokok[]" class="form-control @error('spesis_pokok.*') is-invalid @enderror" value="{{ $pair['spesis'] }}" placeholder="Spesis Pokok"></td>
+                                <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok @error('bilangan_pokok.*') is-invalid @enderror" value="{{ $pair['bilangan'] }}" placeholder="Bilangan" min="1" max="10000"></td>
+                                <td><input type="number" name="tinggi_pokok[]" class="form-control @error('tinggi_pokok.*') is-invalid @enderror" value="{{ $pair['tinggi'] }}" placeholder="Tinggi" min="0" max="1000"></td>
+                                <td><input type="number" name="diameter_pokok[]" class="form-control @error('diameter_pokok.*') is-invalid @enderror" value="{{ $pair['diameter'] }}" placeholder="Diameter" min="0" max="1000"></td>
+                                <td><button type="button" class="btn btn-danger btn-sm remove_field"><i class="fas fa-trash"></i></button></td>
+                            </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td><input type="text" name="spesis_pokok[]" class="form-control @error('spesis_pokok.*') is-invalid @enderror" placeholder="Spesis Pokok"></td>
+                                <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok @error('bilangan_pokok.*') is-invalid @enderror" placeholder="Bilangan"  min="1" max="10000"></td>
+                                <td><input type="number" name="tinggi_pokok[]" class="form-control @error('tinggi_pokok.*') is-invalid @enderror" placeholder="Tinggi"  min="0" max="1000"></td>
+                                <td><input type="number" name="diameter_pokok[]" class="form-control @error('diameter_pokok.*') is-invalid @enderror" placeholder="Diameter"  min="0" max="1000"></td>
+                                <td><button type="button" class="btn btn-danger btn-sm remove_field"><i class="fas fa-trash"></i></button></td>
+                            </tr>
+                        @endif
+                        @error('spesis_pokok.*')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </tbody>
             </table>
             
 
-            <div class="form-group col-md-10">
+            <div class="form-group col-md-4">
                     {{ Form::label('jumlah_pokok', 'Jumlah Keseluruhan Pokok Ditanam') }}
                     {{ Form::text('jumlah_pokok', null, ['class' => 'form-control ' . ($errors->has('jumlah_pokok') ? 'is-invalid' : ''), 'readonly' => true]) }}
                     @if ($errors->has('jumlah_pokok'))

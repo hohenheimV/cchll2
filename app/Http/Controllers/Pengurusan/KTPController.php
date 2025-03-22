@@ -55,18 +55,18 @@ class KTPController extends Controller
         // Validate the request
         $validatedData = $request->validate([
             'tajuk' => ['required', 'min:3'],
-            'lokasi' => ['required', 'min:3', 'regex:/^[a-zA-Z0-9\s,.-]+$/'],
+            'lokasi' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
             'negeri' => ['required'],
             'pbt' => ['required'],
-            'jumlah_pokok' => ['required', 'integer', 'min:1'],
             'spesis_pokok' => 'required|array',
             'spesis_pokok.*' => 'required|string|min:3',
             'bilangan_pokok' => 'required|array',
-            'bilangan_pokok.*' => 'required|integer|min:1',
+            'bilangan_pokok.*' => 'required|integer|min:1|max:10000',
             'tinggi_pokok' => 'required|array',
-            'tinggi_pokok.*' => 'required|integer|min:1',
+            'tinggi_pokok.*' => 'required|integer|min:1|max:10000',
             'diameter_pokok' => 'required|array',
-            'diameter_pokok.*' => 'required|integer|min:1',
+            'diameter_pokok.*' => 'required|integer|min:1|max:10000',
+            'jumlah_pokok' => 'nullable|integer',
         ], [
             'required' => ':attribute diperlukan.',
             'min' => ':attribute terlalu ringkas, minima 3 aksara.',
@@ -76,7 +76,6 @@ class KTPController extends Controller
             'lokasi' => 'Lokasi',
             'negeri' => 'Negeri',
             'pbt' => 'PBT/Agensi',
-            'jumlah_pokok' => 'Jumlah Keseluruhan Pokok',
             'spesis_pokok' => 'Spesis Pokok',
             'bilangan_pokok' => 'Bilangan Pokok',
             'tinggi_pokok' => 'Tinggi Pokok',
@@ -106,7 +105,7 @@ class KTPController extends Controller
 
         // Redirect back to the list page with a success message
         return redirect()->route('pengurusan.ktp.index')
-                        ->with('successMessage', 'Maklumat Program Telah Berjaya Disimpan');
+                        ->with('successMessage', 'Maklumat Berjaya Disimpan');
     }
 
     /**
@@ -157,18 +156,18 @@ class KTPController extends Controller
         // Validate the request
         $validatedData = $request->validate([
             'tajuk' => ['required', 'min:3'],
-            'lokasi' => ['required', 'min:3', 'regex:/^[a-zA-Z0-9\s,.-]+$/'],
+            'lokasi' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
             'negeri' => ['required'],
             'pbt' => ['required'],
-            'jumlah_pokok' => ['required', 'integer', 'min:1'],
             'spesis_pokok' => 'required|array',
             'spesis_pokok.*' => 'required|string|min:3',
             'bilangan_pokok' => 'required|array',
-            'bilangan_pokok.*' => 'required|integer|min:1',
+            'bilangan_pokok.*' => 'required|integer|min:1|max:10000',
             'tinggi_pokok' => 'required|array',
-            'tinggi_pokok.*' => 'required|integer|min:1',
+            'tinggi_pokok.*' => 'required|integer|min:1|max:10000',
             'diameter_pokok' => 'required|array',
-            'diameter_pokok.*' => 'required|integer|min:1',
+            'diameter_pokok.*' => 'required|integer|min:1|max:10000',
+            'jumlah_pokok' => 'nullable|integer',
         ], [
             'required' => ':attribute diperlukan.',
             'min' => ':attribute terlalu ringkas, minima 3 aksara.',
@@ -178,7 +177,6 @@ class KTPController extends Controller
             'lokasi' => 'Lokasi',
             'negeri' => 'Negeri',
             'pbt' => 'PBT/Agensi',
-            'jumlah_pokok' => 'Jumlah Keseluruhan Pokok',
             'spesis_pokok' => 'Spesis Pokok',
             'bilangan_pokok' => 'Bilangan Pokok',
             'tinggi_pokok' => 'Tinggi Pokok',
@@ -207,7 +205,7 @@ class KTPController extends Controller
         ]);
 
         // Redirect with success message
-        return redirect()->route('pengurusan.ktp.index')->with('successMessage', 'Maklumat Program Telah Berjaya Dikemaskini');
+        return redirect()->route('pengurusan.ktp.index')->with('successMessage', 'Maklumat Berjaya Dikemaskini');
     }
 
     /**
@@ -219,6 +217,6 @@ class KTPController extends Controller
     public function destroy(KTP $ktp)
     {
         $ktp->delete();
-        return redirect()->route('pengurusan.ktp.index')->with('successMessage', 'Maklumat Program Telah Dihapuskan');
+        return redirect()->route('pengurusan.ktp.index')->with('successMessage', 'Maklumat Telah Dihapuskan');
     }
 }

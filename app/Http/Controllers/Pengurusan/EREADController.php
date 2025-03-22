@@ -60,8 +60,8 @@ class EREADController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
-            'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
+            'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
+            'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
             'tarikh' => 'required',
         ], [
             'required' => ':attribute diperlukan.',
@@ -106,7 +106,7 @@ class EREADController extends Controller
 
         eread::create($request->all());
 
-        return redirect()->route('pengurusan.eread.index')->with('successMessage', 'Maklumat Telah Disimpan');
+        return redirect()->route('pengurusan.eread.index')->with('successMessage', 'Maklumat Berjaya Disimpan');
     }
 
     /**
@@ -161,8 +161,8 @@ class EREADController extends Controller
     {
 
         $request->validate([
-            'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
-            'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
+            'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
+            'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
             'fail_dokumen' => ['nullable','mimes:pdf'],
             'tarikh' => 'required',
         ], [
@@ -208,7 +208,7 @@ class EREADController extends Controller
 
         $eread->update($request->all());
 
-        return redirect()->route('pengurusan.eread.index')->with('successMessage', 'Maklumat Telah Dikemaskini');
+        return redirect()->route('pengurusan.eread.index')->with('successMessage', 'Maklumat Berjaya Dikemaskini');
     }
 
 

@@ -95,11 +95,35 @@ Route::get('/T4', function () {
     $sliders = [
         (object) [
             'title' => 'Slider 1 Title',
-            'url' => 'https://tpbk.jln.gov.my/storage/images/shares/sliders/Slider%20_4.jpg',
+            'url' => '/storage/sliderBen/1.jpg',
         ],
         (object) [
             'title' => 'Slider 2 Title',
-            'url' => 'https://tpbk.jln.gov.my/storage/images/shares/sliders/slider_1.jpg',
+            'url' => '/storage/sliderBen/2.jpg',
+        ],
+        (object) [
+            'title' => 'Slider 2 Title',
+            'url' => '/storage/sliderBen/3.jpg',
+        ],
+        (object) [
+            'title' => 'Slider 2 Title',
+            'url' => '/storage/sliderBen/4.jpg',
+        ],
+        (object) [
+            'title' => 'Slider 2 Title',
+            'url' => '/storage/sliderBen/5.jpg',
+        ],
+        (object) [
+            'title' => 'Slider 2 Title',
+            'url' => '/storage/sliderBen/6.jpg',
+        ],
+        (object) [
+            'title' => 'Slider 2 Title',
+            'url' => '/storage/sliderBen/7.jpg',
+        ],
+        (object) [
+            'title' => 'Slider 2 Title',
+            'url' => '/storage/sliderBen/8.jpg',
         ],
         // Add more sliders as needed
     ];

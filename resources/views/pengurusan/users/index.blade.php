@@ -47,7 +47,7 @@
                                         <th class="align-middle">Emel</th>
                                         <th class="align-middle w-1">Peranan</th>
                                         <th class="text-center align-middle wpx-100">Tarikh Daftar</th>
-                                        <th class="text-center align-middle wpx-100">Tarikh Kemaskini</th>
+                                        <th class="text-center align-middle wpx-100">Status</th>
                                         <th class="align-middle text-center wpx-100">Tindakan</th>
                                     </tr>
                                 </thead>
@@ -73,7 +73,12 @@
                                         <td class="text-center">{!! Html::datetime($user->created_at,'d-m-Y') !!}
                                         </td>
                                         <td class="text-center">
-                                            {!! Html::datetime($user->updated_at,'d-m-Y') !!}</td>
+                                            @if($user->is_active == 1)
+                                                <span style="white-space: normal; text-align: centre;width: 100%;" class="badge badge-success">Aktif</span>
+                                            @else
+                                                <span style="white-space: normal; text-align: centre;width: 100%;" class="badge badge-danger">Tidak Aktif</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             <div class="btn-group">
                                                 {!! Form::button('<i class="fas fa-search"></i>', [

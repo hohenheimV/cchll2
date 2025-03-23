@@ -24,7 +24,7 @@ return [
     |
     */
 
-    'driver' => env('MAIL_MAILER', 'smtp'),
+    'driver' => env('MAIL_DRIVER', 'smtp'),
 
     /*
     |--------------------------------------------------------------------------
@@ -36,7 +36,8 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'smtp.mailtrap.io'),
+    //'host' => env('MAIL_HOST', '10.24.251.125'),
+    'host' => env('MAIL_HOST', 'postmaster.mygovuc.gov.my'),
 
     /*
     |--------------------------------------------------------------------------
@@ -47,7 +48,7 @@ return [
     |
     */
 
-    'port' => env('MAIL_PORT', 2525),
+    'port' => env('MAIL_PORT', 25),
 
     /*
     |--------------------------------------------------------------------------
@@ -60,8 +61,12 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'from@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Laravel App'),
+        'address' => env('MAIL_FROM_ADDRESS', 'kpjln@jln.gov.my'),
+        'name' => env('MAIL_FROM_NAME', 'Ketua Pengarah JLN'),
+    ],
+    'cc' => [
+        'address' => env('MAIL_CC_ADDRESS', 'tpbk@jln.gov.my'),
+        'name' => env('MAIL_CC_NAME', 'Taman Persekutuan Bukit Kiara'),
     ],
 
     /*
@@ -74,7 +79,7 @@ return [
     |
     */
 
-    'encryption' => env('MAIL_ENCRYPTION', null),
+    'encryption' => env('MAIL_ENCRYPTION', ''),
 
     /*
     |--------------------------------------------------------------------------

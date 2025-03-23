@@ -872,11 +872,15 @@ Route::middleware(['auth'])
             'title' => 'Mail from Laravel App',
             'body' => 'This is a test email sent from Laravel application.'
         ];
-
-        Mail::raw($details['body'], function ($message) use ($details) {
-            $message->to('your_test_email@example.com')  // Replace with your test email address
-                    ->subject($details['title']);
-        });
+        if(config('mail.enabled')){
+            // Mail::raw($details['body'], function ($message) use ($details) {
+            // $message->to('your_test_email@example.com')  // Replace with your test email address
+            //         ->subject($details['title']);
+            // });
+            echo "enabled";
+        }else{
+            echo "disabled";
+        }
 
         return 'Email sent!';
     });

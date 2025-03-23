@@ -60,30 +60,15 @@
                                         <td>{{ $user->email }}</td>
                                         <td>
                                             @if(!empty($user->getRoleNames()))
-                                            @foreach($user->getRoleNames() as $v)
-                                            <label class="badge badge-success font-weight-normal">{{ $v }}</label>
-                                            @endforeach
+                                                @foreach($user->getRoleNames() as $v)
+                                                <label class="badge badge-success font-weight-normal">{{ $v }}</label>
+                                                @endforeach
                                             @endif
-                                            @if(in_array('Pegawai', $user->getRoleNames()->toArray()))
-                                                <?php
-                                                    $bahagian_jln = [
-                                                        '0' => 'Tiada Maklumat',
-                                                        '1' => 'Bahagian Pengurusan Landskap',
-                                                        '2' => 'Bahagian Taman Awam',
-                                                        '3' => 'Bahagian Pembangunan Landskap',
-                                                        '4' => 'Bahagian Khidmat Teknikal',
-                                                        '5' => 'Bahagian Penyelidikan & Pemulihan',
-                                                        '6' => 'Bahagian Penilaian & Penyelenggaraan',
-                                                        '7' => 'Bahagian Teknologi Maklumat',
-                                                        '8' => 'Bahagian Promosi & Industri Landskap',
-                                                        '9' => 'Bahagian Dasar & Pengurusan Korporat',
-                                                        '10' => 'Bahagian Kontrak & Ukur Bahan',
-                                                    ];
-                                                ?>
-                                                <br>
-                                                <label class="badge badge-primary font-weight-normal">{{ $user->bahagian_jln > 0 ? $bahagian_jln[$user->bahagian_jln] : '' }}</label>
+                                            <br>
+                                            @if(in_array('Penggiat Industri', $user->getRoleNames()->toArray()))
+                                                <label class="badge badge-warning font-weight-normal">{{ isset($user->jenis) ? $user->jenis : '' }}</label> - 
                                             @endif
-                                            
+                                            <label class="badge badge-primary font-weight-normal">{{ isset($user->bahagian) ? $user->bahagian : '' }}</label>
                                         </td>
                                         <td class="text-center">{!! Html::datetime($user->created_at,'d-m-Y') !!}
                                         </td>

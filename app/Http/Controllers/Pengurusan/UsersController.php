@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Pengurusan;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Model\MaklumatPenggunaPbt;
+use App\Model\MaklumatPenggunaPenggiatIndustri;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -60,11 +62,41 @@ class UsersController extends Controller
             })->orderBy('roles', 'desc')
             ->orWhereDoesntHave('roles');
         })
-        ->orderBy('bahagian_jln', 'asc')
-        ->orderBy('created_at', 'desc')
+        ->latest() 
+        // ->orderBy('bahagian_jln', 'asc')
+        // ->orderBy('created_at', 'desc')
         ->paginate(20);
 
         $users->appends($request->only('keyword'));
+
+        foreach ($users as $key => $value) {
+            // dump($value->getRoleNames());
+            if (in_array('Penggiat Industri', $value->getRoleNames()->toArray()) && $value->bahagian_jln != null) {
+                $syarikat = MaklumatPenggunaPenggiatIndustri::select('name', 'jenis_industri')->where('id_elind', $value->bahagian_jln)->first();
+                $value->bahagian = $syarikat->name;
+                $value->jenis = $syarikat->jenis_industri;
+            }elseif (in_array('Pihak Berkuasa Tempatan', $value->getRoleNames()->toArray()) && $value->bahagian_jln != null) {
+                $syarikat = MaklumatPenggunaPbt::where('id', $value->bahagian_jln)->first();
+                $value->bahagian = $syarikat->pbt_name;
+            }elseif (in_array('Pegawai', $value->getRoleNames()->toArray())) {
+                $bahagian_jln = [
+                    '0' => 'Tiada Maklumat',
+                    '1' => 'Bahagian Pengurusan Landskap',
+                    '2' => 'Bahagian Taman Awam',
+                    '3' => 'Bahagian Pembangunan Landskap',
+                    '4' => 'Bahagian Khidmat Teknikal',
+                    '5' => 'Bahagian Penyelidikan & Pemulihan',
+                    '6' => 'Bahagian Penilaian & Penyelenggaraan',
+                    '7' => 'Bahagian Teknologi Maklumat',
+                    '8' => 'Bahagian Promosi & Industri Landskap',
+                    '9' => 'Bahagian Dasar & Pengurusan Korporat',
+                    '10' => 'Bahagian Kontrak & Ukur Bahan',
+                ];
+                $value->bahagian = $value->bahagian_jln > 0 ? $bahagian_jln[$value->bahagian_jln] : '';
+            }
+            // dump($value);
+        }
+        // dump($users);
 
         return view('pengurusan.users.index', ['users' => $users]);
     }

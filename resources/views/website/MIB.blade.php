@@ -1,5 +1,5 @@
 @extends('layouts.website.secondary')
-@section('title', 'Direktori R&D Landskap')
+@section('title', 'Direktori Rakan Taman')
 
 @section('content')
 
@@ -61,7 +61,7 @@
                 <div class="col-12 col-lg-9">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title font-weight-bold my-1">Direktori R&D Landskap</h3>
+                            <h3 class="card-title font-weight-bold my-1">Direktori Rakan Taman</h3>
                         </div>
 
                         <div class="card-body">
@@ -82,63 +82,30 @@
                                         <thead style="background-color:rgb(0, 0, 0) !important;color: white;">
                                             <tr>
                                                 <th class="w-1">Bil.</th>
-                                                <th class="w-15">Tajuk </th>
-                                                <th class="text-center w-5">Kategori</th>
-                                                <th class="text-center w-5">Tahun</th>
-                                                <th class="w-3">Saiz</th>
+                                                <th class="w-15">Taman Perumahan </th>
+                                                <th class="text-center w-5">PBT</th>
                                                 <th class="text-center w-1">Tindakan</th>
                                                 
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @php
-                                                $index = $ereads->firstItem();
+                                                $index = $mibs->firstItem();
                                             @endphp
-                                            @if($ereads->isNotEmpty())
-                                                @foreach($ereads as $eread)
+                                            @if($mibs->isNotEmpty())
+                                                @foreach($mibs as $mib)
                                                     <tr>
                                                         <td>{{ $index++ }}</td>
-                                                        <td>{{ $eread->tajuk }}</td>
+                                                        <td>{{ $mib->taman }}</td>
                                                         <td>
-                                                            {{ $eread->kategori->name ?? 'Tiada Maklumat' }}
-                                                        </td>
-                                                        <td class="text-center">
-                                                            {!! Html::datetime($eread->tarikh, 'd-m-Y') !!}
-                                                        </td>
-                                                        <td style="text-align: center;">
-                                                            <!-- <a href="{{ asset($eread->dokumen ? 'storage/images/shares/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}" 
-                                                                data-toggle="lightbox" 
-                                                                data-title="{{ $eread->tajuk }}" 
-                                                                data-gallery="gallery"
-                                                                target="_blank">
-                                                                <div id="pdf-viewer-{{$eread->id}}" style="width: 100px; height: 150px; border: 1px solid #ddd; margin: auto; cursor: pointer; display: flex; justify-content: center; align-items: center;">
-                                                                    <div id="loading-{{$eread->id}}" class="text-center" style="padding-top: 80px;">
-                                                                        <i class="fas fa-spinner fa-spin"></i>
-                                                                    </div>
-                                                                    <canvas id="pdf-render-{{$eread->id}}" style="width: 100%; height: 100%; object-fit: contain; display: none;"></canvas>
-                                                                </div>
-                                                            </a> -->
-                                                            {{ $eread->sizeName . ' MB' }}
+                                                            {{ $mib->pbt ?? 'Tiada Maklumat' }}
                                                         </td>
                                                         <td class="text-center">
                                                             <div class="btn-group">
-                                                                @if ($eread->dokumen && file_exists(public_path('storage/images/shares/eread/dokumen/' . $eread->dokumen)))
-                                                                    <button 
-                                                                        type="button" 
-                                                                        class="btn btn-primary btn-sm" 
-                                                                        data-title="{{ $eread->tajuk }}" 
-                                                                        data-eread="{{ asset($eread->dokumen ? 'storage/images/shares/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}"
-                                                                        data-toggle="modal" 
-                                                                        data-target="#readModal"
-                                                                    >
-                                                                        <i class="fas fa-search"></i>
-                                                                    </button>
-                                                                    <a href="{{ asset('storage/images/shares/eread/dokumen/' . $eread->dokumen) }}" target="_blank" download>
-                                                                        {!! Form::button('<i class="fas fa-download"></i>', [
-                                                                            'class' => 'btn btn-success btn-sm'
-                                                                        ]) !!}
-                                                                    </a>
-                                                                @endif
+                                                                {!! Form::button('<i class="fas fa-search"></i>', [
+                                                                'class'=>'btn btn-info btn-sm',
+                                                                'onclick'=>"window.location='".route('website.MIB_aktiviti', ['keyword' => $mib->id])."'"
+                                                                ]) !!}
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -150,9 +117,9 @@
 
                                     </table>
                                 </div>
-                                @if(count($ereads) > 0)
+                                @if(count($mibs) > 0)
                                     <div class="card-footer bg-light p-2 border-top-0 d-flex flex-column justify-content-center align-items-end">
-                                        {!! Html::pagination($ereads) !!}
+                                        {!! Html::pagination($mibs) !!}
                                     </div>
                                     <!-- /.card-footer -->
                                 @endif
@@ -205,7 +172,7 @@
                 </div>
 
                 <div class="modal-body bg-white">
-                    <iframe id="ereadPdf" src="" width="100%" height="500px"></iframe>
+                    <iframe id="mibPdf" src="" width="100%" height="500px"></iframe>
                 </div>
                 <div class="modal-footer bg-white">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -222,7 +189,7 @@
                 $('#readModal').on('show.bs.modal', function (event) {
                     var button = $(event.relatedTarget);
                     var title = button.data('title');
-                    var eread = button.data('eread');
+                    var mib = button.data('mib');
                     
                     // Update the modal's content
                     var modal = $(this);
@@ -230,8 +197,8 @@
                     if (title && title !== '') {
                         modal.find('#modalNama').text(title);
                     }
-                    if (eread && eread !== '') {
-                        $('#ereadPdf').attr('src', eread);
+                    if (mib && mib !== '') {
+                        $('#mibPdf').attr('src', mib);
                     }
                 });
 
@@ -247,16 +214,16 @@
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
             document.addEventListener('DOMContentLoaded', function() {
-                const ereads = @json($ereads);
+                const mibs = @json($mibs);
 
-                ereads.data.forEach(eread => {
-                    const url = eread.dokumen ? `{{ asset('storage/images/shares/eread/dokumen') }}/${eread.dokumen}` : `{{ asset('img/no-photos.png') }}`;
+                mibs.data.forEach(mib => {
+                    const url = mib.dokumen ? `{{ asset('storage/images/shares/mib/dokumen') }}/${mib.dokumen}` : `{{ asset('img/no-photos.png') }}`;
 
                     pdfjsLib.getDocument(url).promise.then(function(pdf) {
                         return pdf.getPage(1);
                     }).then(function(page) {
-                        const canvas = document.getElementById('pdf-render-' + eread.id);
-                        const loadingElement = document.getElementById('loading-' + eread.id);
+                        const canvas = document.getElementById('pdf-render-' + mib.id);
+                        const loadingElement = document.getElementById('loading-' + mib.id);
                         const context = canvas.getContext('2d');
 
                         const originalViewport = page.getViewport({ scale: 0.5 });
@@ -283,9 +250,9 @@
                             canvas.style.display = 'block';
                         });
                     }).catch(function(error) {
-                console.error('Error loading PDF for ID ' + eread.id + ':', error);
+                console.error('Error loading PDF for ID ' + mib.id + ':', error);
                 // Show a placeholder or error message
-                const viewerElement = document.getElementById('pdf-viewer-' + eread.id);
+                const viewerElement = document.getElementById('pdf-viewer-' + mib.id);
                         if (viewerElement) {
                             viewerElement.innerHTML = '<div class="text-center text-muted"><img src="http://127.0.0.1:8000/storage/uploads/no-photos.png" class="img-fluid" alt="Responsive image"></div>';
                         }

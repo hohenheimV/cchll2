@@ -22,9 +22,12 @@ use App\Model\Page;
 use App\Model\Slider;
 use App\Model\ePALM;
 use App\Model\eREAD;
+use App\Model\ePACT;
 use App\Model\eLAD;
 use App\Model\ePIL;
 use App\Model\ePIL_dokumen;
+use App\Model\MIB;
+use App\Model\MIB_laporan;
 use App\Model\Negeri;
 use App\Model\MaklumatPenggunaPenggiatIndustri;
 use Illuminate\Http\Request;
@@ -50,20 +53,48 @@ Route::get('/vtour-bukit-kiara', function () {
 
 Route::get('/', function () {
     // remove before git pull
-    return abort(403, 'Page under maintenence!');
+    // return abort(403, 'Page under maintenence!');
     // remove before git pull
     $counter = Home::findOrFail(1);
     views($counter)->cooldown(now()->addHours(1))->record();
     $popup = Slider::where('popup',1)->first();
-    $iconBoxes = [
-        ['icon' => 'bi bi-house', 'title' => 'Icon Box 1'],
-        ['icon' => 'bi bi-gear', 'title' => 'Icon Box 2'],
-        // Add more icon boxes here
-    ];
 
-    // return view('website.index', compact('iconBoxes'));
-    // return view('website.welcome2', compact('popup'));
-    return view('website.welcome', compact('popup'));
+    $sliders = [
+        (object) [
+            'title' => 'Slider 1 Title',
+            'url' => '/storage/sliderBen/1.jpg',
+        ],
+        (object) [
+            'title' => 'Slider 2 Title',
+            'url' => '/storage/sliderBen/2.jpg',
+        ],
+        (object) [
+            'title' => 'Slider 2 Title',
+            'url' => '/storage/sliderBen/3.jpg',
+        ],
+        (object) [
+            'title' => 'Slider 2 Title',
+            'url' => '/storage/sliderBen/4.jpg',
+        ],
+        (object) [
+            'title' => 'Slider 2 Title',
+            'url' => '/storage/sliderBen/5.jpg',
+        ],
+        (object) [
+            'title' => 'Slider 2 Title',
+            'url' => '/storage/sliderBen/6.jpg',
+        ],
+        (object) [
+            'title' => 'Slider 2 Title',
+            'url' => '/storage/sliderBen/7.jpg',
+        ],
+        (object) [
+            'title' => 'Slider 2 Title',
+            'url' => '/storage/sliderBen/8.jpg',
+        ],
+        // Add more sliders as needed
+    ];
+    return view('website.welcome', compact('popup', 'sliders'));
 })->name('welcome');
 
 Route::post('/T1', function () {
@@ -127,8 +158,8 @@ Route::get('/T4', function () {
         ],
         // Add more sliders as needed
     ];
-    return view('website.welcome', compact('popup', 'sliders'));
-})->name('welcome');
+    return view('website.T4welcome', compact('popup', 'sliders'));
+})->name('welcomeT4');
 
 Route::get('/api/negeri', [RegisterController::class, 'getNegeri']);
 // Route::get('/api/daerah/{negeriId}', [RegisterController::class, 'getDaerah']);
@@ -378,6 +409,27 @@ Route::name('website.')
             $ereads = eREAD::with('kategori')->orderBy('tarikh', 'desc')->paginate($totalCount);
             return view('website.eREAD', ['ereads' => $ereads, 'keyword' => $keyword]);
         })->name('eREAD');
+
+        Route::get('/epact-dokumen/{keyword?}', function ($keyword = null) {
+            $totalCount = ePACT::with('kategori')->whereIn('kate', [67/* , 72, 78, 85, 93, 102 */, 112]) ->count();
+            $epacts = ePACT::with('kategori')->whereIn('kate', [67/* , 72, 78, 85, 93, 102 */, 112]) ->orderBy('tarikh', 'desc')->paginate($totalCount);
+            return view('website.ePACT', ['epacts' => $epacts, 'keyword' => $keyword]);
+        })->name('ePACT');
+
+        Route::get('/mib', function ($keyword = null) {
+            $totalCount = MIB::where('status', 'Diluluskan')->count();
+            $mibs = MIB::where('status', 'Diluluskan')->orderBy('negeri', 'asc')->orderBy('pbt', 'asc')->paginate($totalCount);
+            // dd($mibs);
+            return view('website.MIB', ['mibs' => $mibs, 'keyword' => $keyword]);
+        })->name('MIB');
+
+        Route::get('/mib/{keyword}', function ($keyword = null) {
+            $MIB = MIB::where('id', $keyword)->first();
+            $count = MIB_laporan::where('id_rakan', $keyword)->count();
+            $MIB_laporan = MIB_laporan::where('id_rakan', $keyword)->latest()->paginate($count);
+            // dd($MIB_laporan);
+            return view('website.MIB_aktiviti', ['MIB_laporan' => $MIB_laporan, 'MIB' => $MIB, 'keyword' => $keyword]);
+        })->name('MIB_aktiviti');
 
         Route::get('/elad-dokumen/{keyword}', function ($keyword) {
             if($keyword == "lembut"){

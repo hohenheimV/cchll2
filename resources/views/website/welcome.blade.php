@@ -86,7 +86,7 @@
         .cta-buttons {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
@@ -94,14 +94,14 @@
             text-decoration: none;
             background-color: #00b300;
             color: white;
-            padding: 15px 30px;
-            font-size: 1.1rem;
+            padding: 10px 20px; /* Reduced padding for smaller buttons */
+            font-size: 0.9rem; /* Smaller font size */
             border-radius: 5px;
             transition: background-color 0.3s;
         }
 
         .cta-buttons a:hover {
-            background-color: #007a00;
+            background-color:rgb(20, 92, 199);
         }
 
         .cta-buttons a.secondary {
@@ -469,10 +469,13 @@
     <div id="particles-js" class="particles-js"></div>
     <div class="hero-content">
         <h1>Sistem Pengurusan Maklumat Landskap (eLANDSKAP)</h1>
-        <p>komprehensif dan mudah dicapai untuk panduan serta rujukan.</p>
+        <p>Komprehensif dan mudah dicapai untuk panduan serta rujukan.</p>
         <div class="cta-buttons">
             <a href="/epalm-taman" class="primary">Direktori Taman</a>
-            <a href="#penggiat_industri" class="secondary">Penggiat Industri Landskap</a>
+            <a href="#penggiat_industri" class="primary">Penggiat Industri Landskap</a>
+            <a href="/epil-pelan" class="primary">Pelan Induk Landskap</a>
+            <!-- <a href="/epalm-taman" class="primary">Entiti Landksap Unik</a>
+            <a href="#penggiat_industri" class="primary">Kempen Tanam Pokok</a> -->
         </div>
     </div>
 </section>

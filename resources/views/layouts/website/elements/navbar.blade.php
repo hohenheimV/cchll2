@@ -29,7 +29,7 @@
         padding: 10px 20px;
         border: none;
         color: white; */
-        background-color: rgb(13, 50, 47);
+        background-color: rgba(13, 50, 47, 0.65);
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease; /* Smooth transition for color change */
@@ -44,7 +44,7 @@
     /* Media query for mobile screens */
     @media (max-width: 768px) {
         .scroll-button {
-            background-color: rgb(25, 98, 92);
+            background-color: rgba(82, 105, 218, 1);
         }
     }
 
@@ -75,7 +75,7 @@
             <a class="navbar-brand" href="{{ route('welcome') }}">
                 <img src="{{ asset('images/logo2.png') }}" height="70" alt="">
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"  style="background-color:rgba(54, 69, 142, 0);  border: none;">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"  style="background-color: #36458e;">
                 <span class="navbar-toggler-icon"  style="color: white;"><i class="fas fa-bars"></i></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">

@@ -1,5 +1,5 @@
 @extends('layouts.website.secondary')
-@section('title', 'Direktori R&D Landskap')
+@section('title', 'Direktori Maklumat Polisi Landskap')
 
 @section('content')
 
@@ -61,7 +61,7 @@
                 <div class="col-12 col-lg-9">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title font-weight-bold my-1">Direktori R&D Landskap</h3>
+                            <h3 class="card-title font-weight-bold my-1">Direktori Maklumat Polisi Landskap</h3>
                         </div>
 
                         <div class="card-body">
@@ -92,48 +92,48 @@
                                         </thead>
                                         <tbody>
                                             @php
-                                                $index = $ereads->firstItem();
+                                                $index = $epacts->firstItem();
                                             @endphp
-                                            @if($ereads->isNotEmpty())
-                                                @foreach($ereads as $eread)
+                                            @if($epacts->isNotEmpty())
+                                                @foreach($epacts as $epact)
                                                     <tr>
                                                         <td>{{ $index++ }}</td>
-                                                        <td>{{ $eread->tajuk }}</td>
+                                                        <td>{{ $epact->tajuk }}</td>
                                                         <td>
-                                                            {{ $eread->kategori->name ?? 'Tiada Maklumat' }}
+                                                            {{ $epact->kategori->name ?? 'Tiada Maklumat' }}
                                                         </td>
                                                         <td class="text-center">
-                                                            {!! Html::datetime($eread->tarikh, 'd-m-Y') !!}
+                                                            {!! Html::datetime($epact->tarikh, 'd-m-Y') !!}
                                                         </td>
                                                         <td style="text-align: center;">
-                                                            <!-- <a href="{{ asset($eread->dokumen ? 'storage/images/shares/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}" 
+                                                            <!-- <a href="{{ asset($epact->dokumen ? 'storage/images/shares/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}" 
                                                                 data-toggle="lightbox" 
-                                                                data-title="{{ $eread->tajuk }}" 
+                                                                data-title="{{ $epact->tajuk }}" 
                                                                 data-gallery="gallery"
                                                                 target="_blank">
-                                                                <div id="pdf-viewer-{{$eread->id}}" style="width: 100px; height: 150px; border: 1px solid #ddd; margin: auto; cursor: pointer; display: flex; justify-content: center; align-items: center;">
-                                                                    <div id="loading-{{$eread->id}}" class="text-center" style="padding-top: 80px;">
+                                                                <div id="pdf-viewer-{{$epact->id}}" style="width: 100px; height: 150px; border: 1px solid #ddd; margin: auto; cursor: pointer; display: flex; justify-content: center; align-items: center;">
+                                                                    <div id="loading-{{$epact->id}}" class="text-center" style="padding-top: 80px;">
                                                                         <i class="fas fa-spinner fa-spin"></i>
                                                                     </div>
-                                                                    <canvas id="pdf-render-{{$eread->id}}" style="width: 100%; height: 100%; object-fit: contain; display: none;"></canvas>
+                                                                    <canvas id="pdf-render-{{$epact->id}}" style="width: 100%; height: 100%; object-fit: contain; display: none;"></canvas>
                                                                 </div>
                                                             </a> -->
-                                                            {{ $eread->sizeName . ' MB' }}
+                                                            {{ $epact->sizeName . ' MB' }}
                                                         </td>
                                                         <td class="text-center">
                                                             <div class="btn-group">
-                                                                @if ($eread->dokumen && file_exists(public_path('storage/images/shares/eread/dokumen/' . $eread->dokumen)))
+                                                                @if ($epact->dokumen && file_exists(public_path('storage/images/shares/epact/dokumen/' . $epact->dokumen)))
                                                                     <button 
                                                                         type="button" 
                                                                         class="btn btn-primary btn-sm" 
-                                                                        data-title="{{ $eread->tajuk }}" 
-                                                                        data-eread="{{ asset($eread->dokumen ? 'storage/images/shares/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}"
+                                                                        data-title="{{ $epact->tajuk }}" 
+                                                                        data-epact="{{ asset($epact->dokumen ? 'storage/images/shares/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}"
                                                                         data-toggle="modal" 
                                                                         data-target="#readModal"
                                                                     >
                                                                         <i class="fas fa-search"></i>
                                                                     </button>
-                                                                    <a href="{{ asset('storage/images/shares/eread/dokumen/' . $eread->dokumen) }}" target="_blank" download>
+                                                                    <a href="{{ asset('storage/images/shares/epact/dokumen/' . $epact->dokumen) }}" target="_blank" download>
                                                                         {!! Form::button('<i class="fas fa-download"></i>', [
                                                                             'class' => 'btn btn-success btn-sm'
                                                                         ]) !!}
@@ -150,9 +150,9 @@
 
                                     </table>
                                 </div>
-                                @if(count($ereads) > 0)
+                                @if(count($epacts) > 0)
                                     <div class="card-footer bg-light p-2 border-top-0 d-flex flex-column justify-content-center align-items-end">
-                                        {!! Html::pagination($ereads) !!}
+                                        {!! Html::pagination($epacts) !!}
                                     </div>
                                     <!-- /.card-footer -->
                                 @endif
@@ -205,7 +205,7 @@
                 </div>
 
                 <div class="modal-body bg-white">
-                    <iframe id="ereadPdf" src="" width="100%" height="500px"></iframe>
+                    <iframe id="epactPdf" src="" width="100%" height="500px"></iframe>
                 </div>
                 <div class="modal-footer bg-white">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -222,7 +222,7 @@
                 $('#readModal').on('show.bs.modal', function (event) {
                     var button = $(event.relatedTarget);
                     var title = button.data('title');
-                    var eread = button.data('eread');
+                    var epact = button.data('epact');
                     
                     // Update the modal's content
                     var modal = $(this);
@@ -230,8 +230,8 @@
                     if (title && title !== '') {
                         modal.find('#modalNama').text(title);
                     }
-                    if (eread && eread !== '') {
-                        $('#ereadPdf').attr('src', eread);
+                    if (epact && epact !== '') {
+                        $('#epactPdf').attr('src', epact);
                     }
                 });
 
@@ -247,16 +247,16 @@
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
             document.addEventListener('DOMContentLoaded', function() {
-                const ereads = @json($ereads);
+                const epacts = @json($epacts);
 
-                ereads.data.forEach(eread => {
-                    const url = eread.dokumen ? `{{ asset('storage/images/shares/eread/dokumen') }}/${eread.dokumen}` : `{{ asset('img/no-photos.png') }}`;
+                epacts.data.forEach(epact => {
+                    const url = epact.dokumen ? `{{ asset('storage/images/shares/epact/dokumen') }}/${epact.dokumen}` : `{{ asset('img/no-photos.png') }}`;
 
                     pdfjsLib.getDocument(url).promise.then(function(pdf) {
                         return pdf.getPage(1);
                     }).then(function(page) {
-                        const canvas = document.getElementById('pdf-render-' + eread.id);
-                        const loadingElement = document.getElementById('loading-' + eread.id);
+                        const canvas = document.getElementById('pdf-render-' + epact.id);
+                        const loadingElement = document.getElementById('loading-' + epact.id);
                         const context = canvas.getContext('2d');
 
                         const originalViewport = page.getViewport({ scale: 0.5 });
@@ -283,9 +283,9 @@
                             canvas.style.display = 'block';
                         });
                     }).catch(function(error) {
-                console.error('Error loading PDF for ID ' + eread.id + ':', error);
+                console.error('Error loading PDF for ID ' + epact.id + ':', error);
                 // Show a placeholder or error message
-                const viewerElement = document.getElementById('pdf-viewer-' + eread.id);
+                const viewerElement = document.getElementById('pdf-viewer-' + epact.id);
                         if (viewerElement) {
                             viewerElement.innerHTML = '<div class="text-center text-muted"><img src="http://127.0.0.1:8000/storage/uploads/no-photos.png" class="img-fluid" alt="Responsive image"></div>';
                         }

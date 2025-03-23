@@ -4,9 +4,9 @@
         <div class="card-tools">
             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group" role="group" aria-label="First group">
-                    <select id="negeri" name="negeri" onchange="handleSelectChange()">
+                    <!-- <select id="negeri" name="negeri" onchange="handleSelectChange()">
                         <option value="">Papar Semua</option>
-                    </select>
+                    </select> -->
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                     <script>
                         // Fetch and populate the Negeri dropdown with data

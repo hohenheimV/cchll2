@@ -29,17 +29,31 @@
 <script>
      $(document).ready(function() {
         const timestamp = new Date().getTime();
+        const isEditPage = window.location.href.includes('edit');
+        
+        if (!isEditPage) {
+            $('button[type="submit"]').prop('disabled', true); 
+        }
+
         $('#supporting_documents').change(function() {
+            if (this.files.length > 0) {
+                $('button[type="submit"]').prop('disabled', false); 
+            } else if (!isEditPage) {
+                $('button[type="submit"]').prop('disabled', true); 
+            }
+        });
+
+        $('#supporting_documents').change(function() {
+            if (this.files.length === 0) {
+                Swal.fire('Error', 'No file selected!', 'error');
+                return;
+            }
+
             $('button[type="submit"]').prop('disabled', true);
             $('#supporting_documents').prop('disabled', true);
             let destinationFolder = 'elad/temp/';
             let deleteThis = $('#large_file_name_old').val();
             let fileInput = $('#supporting_documents')[0];
-            if (fileInput.files.length === 0) {
-                Swal.fire('Error', 'No file selected!', 'error');
-                return;
-            }
-
             let file = fileInput.files[0];
             if (file.type !== 'application/pdf') {
                 Swal.fire('Error', 'Hanya Fail PDF Sahaja Dibenarkan!', 'error');
@@ -51,7 +65,7 @@
             console.log(file);
             let file_size = file.size;
             let file_type = file.type;
-            let file_mime = file.type; // Corrected this line
+            let file_mime = file.type; 
             let chunkSize = 15 * 1024 * 1024;  // 15MB per chunk
             let totalChunks = Math.ceil(file.size / chunkSize);
             let currentChunk = 0;

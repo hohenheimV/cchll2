@@ -58,8 +58,9 @@ class ELADController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
-            'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
+            'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
+            'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
+            'fail_dokumen' => ['nullable','mimes:pdf'],
             'tarikh' => 'required',
         ], [
             'required' => ':attribute diperlukan.',
@@ -104,7 +105,7 @@ class ELADController extends Controller
 
         eLAD::create($request->all());
 
-        return redirect()->route('pengurusan.elad.index')->with('successMessage', 'Maklumat Telah Disimpan');
+        return redirect()->route('pengurusan.elad.index')->with('successMessage', 'Maklumat Berjaya Disimpan');
     }
 
     /**
@@ -158,8 +159,8 @@ class ELADController extends Controller
     public function update(Request $request, eLAD $elad)
     {
         $request->validate([
-            'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
-            'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`]+$/'],
+            'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
+            'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
             'fail_dokumen' => ['nullable','mimes:pdf'],
             'tarikh' => 'required',
         ], [
@@ -205,7 +206,7 @@ class ELADController extends Controller
 
         $elad->update($request->all());
 
-        return redirect()->route('pengurusan.elad.index')->with('successMessage', 'Maklumat Telah Dikemaskini');
+        return redirect()->route('pengurusan.elad.index')->with('successMessage', 'Maklumat Berjaya Dikemaskini');
     }
 
     /**
@@ -217,6 +218,6 @@ class ELADController extends Controller
     public function destroy(eLAD $elad)
     {
         $elad->delete();
-        return redirect()->route('pengurusan.elad.index')->with('successMessage', 'Maklumat elad telah dihapuskan');
+        return redirect()->route('pengurusan.elad.index')->with('successMessage', 'Maklumat Telah Dihapuskan');
     }
 }

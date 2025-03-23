@@ -688,6 +688,18 @@
     </div>
 </section> -->
 
+
+<section id="taman" class="bg-white mib2">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 style="color: white;">Taman Pilihan</h1>
+            </div>
+        </div>
+        {!! website_carousel_taman() !!}
+    </div>
+</section>
+
 <section id="activities" class="bg-gray mib">
     <div class="container py-5">
         <div class="row">
@@ -850,7 +862,7 @@
         <p class="text-center">Kami sentiasa berusaha untuk meningkatkan mutu perkhidmatan dari semasa ke semasa. Utarakan sebarang cadangan, aduan, atau pertanyaan anda kepada kami. Kami menghargai setiap maklumbalas yang kami terima.</p>
         <hr class="mb-4">
         <div class="row">
-            <div class="col-12 col-lg-5 text-center text-lg-left">
+            <div class="col-12 col-lg-5 text-center text-lg-left" style="color: white;">
                 {!! website_contact() !!}
             </div>
             <!--start contact form-->

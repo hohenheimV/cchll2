@@ -270,7 +270,7 @@ class ePILController extends Controller
                     $btm_email[] = ['address' => $value->email, 'name' => $value->name];
                 }
                 // dd($user_email);
-                if (/*config('mail.enabled')*/ false) {
+                if (config('mail.enabled')) {
                     try {
                         $emailData = [
                             "email_to" => [

@@ -50,7 +50,7 @@ class FeedbacksController extends Controller
         $feedback = Feedback::create($data);
 
 		//Hold
-        if(/*config('mail.enabled')*/ false){//MAIL ACTIVE, fungsi email enable
+        if(config('mail.enabled')){//MAIL ACTIVE, fungsi email enable
             $this->sendmailtopemohon($feedback);
             $this->sendmailtoadmin($feedback);
         }

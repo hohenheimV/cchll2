@@ -189,7 +189,7 @@ class MIBController extends Controller
                 $data['notes'] = null;
                 $MIB->update($data);
                 // send email to JLN Promosi
-                if(/*config('mail.enabled')*/ false){
+                if(config('mail.enabled')){
                     $this->sendmailtoadmin($MIB);
                 }
                 return redirect()->route('pengurusan.MIB.index')->with('successMessage', 'Maklumat telah berjaya disimpan');
@@ -201,7 +201,7 @@ class MIBController extends Controller
                 $data['notes'] = null;
                 $MIB->update($data);
                 // send email to PBT
-                if(/*config('mail.enabled')*/ false){
+                if(config('mail.enabled')){
                     $this->sendmailtopemohon($MIB);
                 }
                 return redirect()->route('pengurusan.MIB.index')->with('successMessage', 'Maklumat telah berjaya disimpan');

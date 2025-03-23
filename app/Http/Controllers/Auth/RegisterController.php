@@ -196,7 +196,7 @@ class RegisterController extends Controller
         }
 
         // Send email notification (if enabled)
-        if (/*config('mail.enabled')*/ false) {
+        if (config('mail.enabled')) {
             $bahagian_jln = 7;  //BTM
             $user_email = [];
 

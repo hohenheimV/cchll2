@@ -301,7 +301,7 @@ class eLAPSController extends Controller
 
         // Redirect back to the list page with a success message
         if($elaps){
-            // if (/*config('mail.enabled')*/ false) {
+            // if (config('mail.enabled')) {
             //     try {
             //         $emailData = [
             //             "email_to" => [
@@ -509,7 +509,7 @@ class eLAPSController extends Controller
             // dd($status);
             if($hantarPermohonan){
                 //email
-                if (/*config('mail.enabled')*/ false) {
+                if (config('mail.enabled')) {
                     try {
                         $emailData = [
                             "email_to" => $user_email,
@@ -547,7 +547,7 @@ class eLAPSController extends Controller
             
             if($serahPermohonan){
                 //email
-                if (/*config('mail.enabled')*/ false) {
+                if (config('mail.enabled')) {
                     try {
                         $emailData = [
                             "email_to" => $user_email,
@@ -590,7 +590,7 @@ class eLAPSController extends Controller
             
             if($hantarUlasan){
                 //email to ?
-                if (/*config('mail.enabled')*/ false) {
+                if (config('mail.enabled')) {
                     try {
                         $emailData = [
                             "email_to" => $user_email,
@@ -626,7 +626,7 @@ class eLAPSController extends Controller
             
             if($keputusanPermohonan){
                 //email
-                if (/*config('mail.enabled')*/ false) {
+                if (config('mail.enabled')) {
                     try {
                         $emailData = [
                             "email_to" => $PBTemail,
@@ -663,7 +663,7 @@ class eLAPSController extends Controller
             
             if($statusProjek){
                 //email to JLN for portal display
-                if (/*config('mail.enabled')*/ false) {
+                if (config('mail.enabled')) {
                     try {
                         $emailData = [
                             "email_to" => $user_email,

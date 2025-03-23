@@ -648,50 +648,65 @@ if (!function_exists('in_arrayi')) {
                 }
             }
             $html = '<div class="owl-carousel owl-theme">';
+            if(!$ePALM->isEmpty()){
+                foreach ($ePALM as $article) {
+                    if(isset($article->gambar_taman)){
+                        $folderName = str_replace(' ', '_', $article->nama_taman);
+                        $gambar_tamanData = json_decode($article->gambar_taman, true);
 
-            foreach ($ePALM as $article) {
-                if(isset($article->gambar_taman)){
-                    $folderName = str_replace(' ', '_', $article->nama_taman);
-                    $gambar_tamanData = json_decode($article->gambar_taman, true);
+                        $Xgambar_input_modal_1 = isset($gambar_tamanData['Xgambar_input_modal_1']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_1'] : null;
+                        $Xgambar_input_modal_2 = isset($gambar_tamanData['Xgambar_input_modal_2']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_2'] : null;
+                        $Xgambar_input_modal_3 = isset($gambar_tamanData['Xgambar_input_modal_3']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_3'] : null;
+                        $Xgambar_input_modal_4 = isset($gambar_tamanData['Xgambar_input_modal_4']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_4'] : null;
+                        // dd($gambar_tamanData);
+                    }
+                    $nama = Str::limit($article->nama, 30);
+                    $keterangan_taman = Str::limit((($article->keterangan_taman)), 50);
+                    $nama_pbt = $article->nama_pbt;
+                    $negeri_taman = $article->negeri_taman;
 
-                    $Xgambar_input_modal_1 = isset($gambar_tamanData['Xgambar_input_modal_1']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_1'] : null;
-                    $Xgambar_input_modal_2 = isset($gambar_tamanData['Xgambar_input_modal_2']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_2'] : null;
-                    $Xgambar_input_modal_3 = isset($gambar_tamanData['Xgambar_input_modal_3']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_3'] : null;
-                    $Xgambar_input_modal_4 = isset($gambar_tamanData['Xgambar_input_modal_4']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_4'] : null;
-                    // dd($gambar_tamanData);
+                
+                    $html .= '<div class="item">';
+                    $html .= '<a href="/epalm-taman/'.$negeri_taman.'">';
+                    $html .= '<div class="card border">';
+                    $html .= '<div class="embed-responsive embed-responsive-4by3">';
+                    // $html .= '<img src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" class="card-img-top embed-responsive-item" alt="' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '">';
+                    for ($i = 1; $i <= 4; $i++) {
+                        $Xgambar_input_modal = 'Xgambar_input_modal_' . $i;
+                        if (isset($$Xgambar_input_modal)) {
+                            $url = $$Xgambar_input_modal ? asset('storage/uploads/ePALM/' . $$Xgambar_input_modal) : asset('storage/uploads/no-photos.png');
+                        }else{
+                            // $url = asset('storage/uploads/no-photos.png');
+                        }
+                        // $html .= '<img src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" class="card-img-top embed-responsive-item" alt="' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '">';
+                    }
+                    $html .= '<img src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" class="card-img-top embed-responsive-item" alt="' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '">';
+                    $html .= '</div>';
+                    $html .= '<div class="card-body" style="height:200px">';
+                    $html .= '<h5 class="text-capitalize">' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '</h5>';
+                    $html .= '<p class="card-text">' . htmlspecialchars($keterangan_taman, ENT_QUOTES, 'UTF-8') . '</p>';
+                    $html .= '<p class="card-text"><small class="text-muted">' . htmlspecialchars($nama_pbt, ENT_QUOTES, 'UTF-8') . '</small></p>';
+                    $html .= '</div>';
+                    $html .= '</div>';
+                    $html .= '</a>';
+                    $html .= '</div>';
                 }
-                $nama = Str::limit($article->nama, 30);
-                $keterangan_taman = Str::limit((($article->keterangan_taman)), 50);
-                $nama_pbt = $article->nama_pbt;
-                $negeri_taman = $article->negeri_taman;
-
-            
+            }else{
                 $html .= '<div class="item">';
-                $html .= '<a href="/epalm-taman/'.$negeri_taman.'">';
+                $html .= '<a href="">';
                 $html .= '<div class="card border">';
                 $html .= '<div class="embed-responsive embed-responsive-4by3">';
-                // $html .= '<img src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" class="card-img-top embed-responsive-item" alt="' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '">';
-                for ($i = 1; $i <= 4; $i++) {
-                    $Xgambar_input_modal = 'Xgambar_input_modal_' . $i;
-                    if (isset($$Xgambar_input_modal)) {
-                        $url = $$Xgambar_input_modal ? asset('storage/uploads/ePALM/' . $$Xgambar_input_modal) : asset('storage/uploads/no-photos.png');
-                    }else{
-                        // $url = asset('storage/uploads/no-photos.png');
-                    }
-                    // $html .= '<img src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" class="card-img-top embed-responsive-item" alt="' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '">';
-                }
-                $html .= '<img src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" class="card-img-top embed-responsive-item" alt="' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '">';
+                $html .= '<img src="http://127.0.0.1:8000/storage/img/bg-pattern-leaves.png" class="card-img-top embed-responsive-item" >';
                 $html .= '</div>';
                 $html .= '<div class="card-body" style="height:200px">';
-                $html .= '<h5 class="text-capitalize">' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '</h5>';
-                $html .= '<p class="card-text">' . htmlspecialchars($keterangan_taman, ENT_QUOTES, 'UTF-8') . '</p>';
-                $html .= '<p class="card-text"><small class="text-muted">' . htmlspecialchars($nama_pbt, ENT_QUOTES, 'UTF-8') . '</small></p>';
+                $html .= '<h5 class="text-capitalize">Maklumat taman belum tersedia</h5>';
+                $html .= '<p class="card-text">Maklumat taman belum tersedia</p>';
+                $html .= '<p class="card-text"><small class="text-muted">Maklumat taman belum tersedia</small></p>';
                 $html .= '</div>';
                 $html .= '</div>';
                 $html .= '</a>';
                 $html .= '</div>';
             }
-            
             $html .= '</div>';
             // dd($html);
             return $html;

@@ -342,7 +342,7 @@ Route::name('website.')
         })->name('search');
 
         Route::get('/epalm-taman/{keyword?}', function ($keyword = null) {
-            // dd($keyword);
+            dd(ePALM::where('status', 'approved')->first());
             // return ePALM::where('is_komponen', null)->latest()->paginate(10);
             // $ePALM = ePALM::/* where('is_komponen', null)-> */where('status', 'approved')->latest()->paginate(5);//ePALM::latest()->paginate(15);
             $ePALM = ePALM::where('status', 'approved')

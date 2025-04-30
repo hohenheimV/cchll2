@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use App\Model\MaklumatPenggunaPbt;
+use App\Model\MaklumatPenggunaPenggiatIndustri;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\LengthAwarePaginator;
 use OwenIt\Auditing\Models\Audit as Audit;
@@ -59,6 +63,47 @@ class AppServiceProvider extends ServiceProvider
         Audit::creating(function (Audit $model) {
             if (empty($model->old_values) && empty($model->new_values)) {
                 return false;
+            }
+        });
+
+        // 🔄 Share user bahagian info with all views
+        View::composer('*', function ($view) {
+            $user = Auth::user();
+
+            if ($user) {
+                $user->bahagian = 'Tiada Maklumat';
+                $user->jenis = null;
+
+                if (in_array('Penggiat Industri', $user->getRoleNames()->toArray()) && $user->bahagian_jln) {
+                    $syarikat = MaklumatPenggunaPenggiatIndustri::select('name', 'jenis_industri')
+                        ->where('id_elind', $user->bahagian_jln)
+                        ->first();
+
+                    $user->bahagian = $syarikat->name ?? 'Tiada Maklumat';
+                    $user->jenis = $syarikat->jenis_industri ?? 'Tiada Maklumat';
+
+                } elseif (in_array('Pihak Berkuasa Tempatan', $user->getRoleNames()->toArray()) && $user->bahagian_jln) {
+                    $syarikat = MaklumatPenggunaPbt::where('id', $user->bahagian_jln)->first();
+                    $user->bahagian = $syarikat->pbt_name ?? 'Tiada Maklumat';
+
+                } elseif (in_array('Pegawai', $user->getRoleNames()->toArray())) {
+                    $bahagian_jln = [
+                        '0' => 'Tiada Maklumat',
+                        '1' => 'Bahagian Pengurusan Landskap',
+                        '2' => 'Bahagian Taman Awam',
+                        '3' => 'Bahagian Pembangunan Landskap',
+                        '4' => 'Bahagian Khidmat Teknikal',
+                        '5' => 'Bahagian Penyelidikan & Pemulihan',
+                        '6' => 'Bahagian Penilaian & Penyelenggaraan',
+                        '7' => 'Bahagian Teknologi Maklumat',
+                        '8' => 'Bahagian Promosi & Industri Landskap',
+                        '9' => 'Bahagian Dasar & Pengurusan Korporat',
+                        '10' => 'Bahagian Kontrak & Ukur Bahan',
+                    ];
+                    $user->bahagian = $bahagian_jln[$user->bahagian_jln] ?? null;
+                }
+
+                View::share('user_bahagian', $user->bahagian);
             }
         });
     }

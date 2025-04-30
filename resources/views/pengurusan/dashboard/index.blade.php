@@ -10,6 +10,49 @@
         background-image: url("{{asset('storage/img/bg-pattern-leaves.png')}}");
     }
 </style>
+<div class="container-fluid">
+    <div class="row" id="elaps">
+        {!! stats_card('Jumlah Permohonan Projek', app_dashboard_permohonan(), 'javascript:void(0)', 'fas fa-paper-plane', '#17a2b8') !!}
+        {!! stats_card('Projek B. Pengurusan Landskap', app_dashboard_permohonan(1), route('pengurusan.eLAPS.index'), 'fas fa-paper-plane', '#1bc3de') !!}
+        {!! stats_card('Projek B. Taman Awam', app_dashboard_permohonan(2), route('pengurusan.eLAPS.index'), 'fas fa-paper-plane', '#1fb3ff') !!}
+        {!! stats_card('Projek B. Pembangunan Landskap', app_dashboard_permohonan(3), route('pengurusan.eLAPS.index'), 'fas fa-paper-plane', '#1fa4ff') !!}
+        {!! stats_card('Projek B. Khidmat Teknikal', app_dashboard_permohonan(4), route('pengurusan.eLAPS.index'), 'fas fa-paper-plane', '#1f95ff') !!}
+        {!! stats_card('Projek B. Penyelidikan & Pemulihan', app_dashboard_permohonan(5), route('pengurusan.eLAPS.index'), 'fas fa-paper-plane', '#1f86ff') !!}
+    </div>
+    <div class="row" id="epalm">
+        {!! stats_card('Jumlah Taman Setakat ' . date('Y'), app_dashboard_taman(), 'javascript:void(0)', 'fas fa-leaf', ' #145a32 ') !!}
+        {!! stats_card('Jumlah Taman Awam', app_dashboard_taman(1), route('pengurusan.ePALM.index'), 'fas fa-leaf', ' #196f3d ') !!}
+        {!! stats_card('Jumlah Taman Botani', app_dashboard_taman(2), route('pengurusan.ePALM.index'), 'fas fa-leaf', ' #1e8449 ') !!}
+        {!! stats_card('Jumlah Landskap Perbandaran', app_dashboard_taman(3), route('pengurusan.ePALM.index'), 'fas fa-leaf', ' #229954 ') !!}
+        {!! stats_card('Jumlah Persekitaran Kehidupan', app_dashboard_taman(4), route('pengurusan.ePALM.index'), 'fas fa-leaf', ' #27ae60 ') !!}
+        {!! stats_card('Jumlah Taman Persekutuan', app_dashboard_taman(5), route('pengurusan.ePALM.index'), 'fas fa-leaf', ' #16a085 ') !!}
+        {!! stats_card('Jumlah Lain-lain Jenis Taman', app_dashboard_taman(6), route('pengurusan.ePALM.index'), 'fas fa-leaf', ' #1abc9c ') !!}
+    </div>
+    <div class="row" id="epil">
+        {!! stats_card('Jumlah Pelan Induk Landskap', app_dashboard_pelan(), route('pengurusan.ePIL.index'), 'fas fa-drafting-compass', ' #7d6608 ') !!}
+    </div>
+    <div class="row" id="ktp">
+        {!! stats_card('Jumlah Pokok Ditanam Setakat ' . date('Y'), app_dashboard_pokok(), route('pengurusan.ktp.index'), 'fas fa-tree', ' #186a3b ') !!}
+    </div>
+    <div class="row" id="mib">
+        {!! stats_card('Jumlah Rakan Taman', app_dashboard_mib(), 'javascript:void(0)', 'fas fa-users', ' #4a235a  ') !!}
+        {!! stats_card('Status: Aktif', app_dashboard_mib('Aktif'), route('pengurusan.MIB.index'), 'fas fa-users', '  #5b2c6f  ') !!}
+        {!! stats_card('Status: Tidak Aktif', app_dashboard_mib('Tidak Aktif'), route('pengurusan.MIB.index'), 'fas fa-users', '  #6c3483  ') !!}
+        {!! stats_card('Status: Digugurkan', app_dashboard_mib('Digugurkan'), route('pengurusan.MIB.index'), 'fas fa-users', '  #7d3c98  ') !!}
+    </div>
+    <div class="row" id="elind">
+        {!! stats_card('Jumlah Penggiat Industri Landskap', app_dashboard_industri(), 'javascript:void(0)', 'fas fa-seedling', '  #6e2c00   ') !!}
+        {!! stats_card('Kontraktor', app_dashboard_industri('Kontraktor'), route('pengurusan.eLIND.index', ['type' => 'kontraktor']), 'fas fa-user-tie', '   #873600   ') !!}
+        {!! stats_card('Perunding', app_dashboard_industri('Perunding'), route('pengurusan.eLIND.index', ['type' => 'perunding']), 'fas fa-briefcase', '   #a04000   ') !!}
+        {!! stats_card('Pembekal', app_dashboard_industri('Pembekal'), route('pengurusan.eLIND.index', ['type' => 'pembekal']), 'fas fa-truck', '   #ba4a00   ') !!}
+        {!! stats_card('Pertubuhan Antarabangsa', app_dashboard_industri('Pertubuhan Antarabangsa'), route('pengurusan.eLIND.index', ['type' => 'antarabangsa']), 'fas fa-globe', '   #d35400   ') !!}
+        {!! stats_card('NGO / Badan Ikhtisas', app_dashboard_industri('NGO / Badan Ikhtisas'), route('pengurusan.eLIND.index', ['type' => 'ngo']), 'fas fa-hands-helping', '   #d35400   ') !!}
+        {!! stats_card('Institusi Pendidikan', app_dashboard_industri('Institusi Pendidikan'), route('pengurusan.eLIND.index', ['type' => 'pendidikan']), 'fas fa-university', '   #e67e22   ') !!}
+    </div>
+    <div class="row" id="entiti">
+        {!! stats_card('Jumlah Entiti Landskap Unik', app_dashboard_entiti(), route('pengurusan.entiti-landskap-unik.index'), 'fas fa-dna', '  #616a6b  ') !!}
+    </div>
+</div>
 @if(Auth::user()->hasRole('Penggiat Industri'))
     <div class="container-fluid">
         <div class="row">
@@ -166,6 +209,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3 col-6">
+                <a href="{{ route('pengurusan.ktp.index') }}" style="text-decoration: none; color: inherit;">
                 <div class="small-box bg-info">
                     <div class="inner">
                         <h3>{{ app_dashboard_pokok() }}</h3>
@@ -175,6 +219,7 @@
                         <i class="fa fa-tree" aria-hidden="true"></i>
                     </div>
                 </div>
+                </a>
             </div>
             <div class="col-md-3 col-6">
                 <div class="small-box" style="background-color: #1bc3de; color: white;">
@@ -369,6 +414,82 @@
                                 .catch(error => {
                                     console.error('There was an issue fetching visitor data:', error);
                                 });
+                        </script>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header d-flex p-0">
+                        <h3 class="card-title p-3">Statistik Pengguna Jabatan</h3>
+                    </div><!-- /.card-header -->
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                        <style>
+                            canvas {
+                                max-width: 100%;
+                                height: auto;
+                            }
+                        </style>
+                        <canvas id="jlnChart" width="800" height="400"></canvas>
+                        <script>
+                            // Fetch jln data from the backend (via the DataController)
+                            fetch('/get-jln-statistics')
+                            .then(response => response.json())
+                            .then(data => {
+                                const labels = [];
+                                const jlnCounts = [];
+
+                                // Extract bahagian labels and counts from data.data
+                                for (const [key, value] of Object.entries(data.data)) {
+                                    labels.push(key);      // e.g., "bahagian_jln 1"
+                                    jlnCounts.push(value); // e.g., 25
+                                }
+
+                                // Get chart context
+                                const ctx = document.getElementById('jlnChart').getContext('2d');
+
+                                // Create the chart
+                                new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: labels,
+                                        datasets: [{
+                                            label: `Statistik Pengguna Jabatan (${data.month})`,
+                                            data: jlnCounts,
+                                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                                            borderColor: 'rgba(75, 192, 192, 1)',
+                                            borderWidth: 1
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        scales: {
+                                            x: {
+                                                title: {
+                                                    display: false,
+                                                    text: 'Bahagian'
+                                                }
+                                            },
+                                            y: {
+                                                beginAtZero: true,
+                                                title: {
+                                                    display: true,
+                                                    text: 'Statistik Pengguna Jabatan'
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            })
+                            .catch(error => {
+                                console.error('There was an issue fetching jln data:', error);
+                            });
+
                         </script>
                         <!-- /.table-responsive -->
                     </div>

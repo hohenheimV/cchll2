@@ -81,27 +81,27 @@ class DashboardController extends Controller
             $data = MaklumatPenggunaPbt::where('id', $id_pbt)->latest()->first();
             $ePALM = ePALM::where('nama_pbt', $data->pbt_name)->where('status', 'approved')->paginate(ePALM::where('nama_pbt', $data->pbt_name)->where('status', 'approved')->count());
             foreach ($ePALM as $instance) {
-                    $ePALM_komponen = ePALM::where('is_komponen', $instance->id_taman)->get();
-                    if($ePALM_komponen){
-                        foreach ($ePALM_komponen as $item) {
-                            $item->komponen = str_replace(' ', '_', $instance->nama_taman)."/".str_replace(' ', '_', $item->nama_taman);
-                            $item->nama_pbt = $instance->nama_pbt;
-                            $item->gambar_taman = str_replace('gambar_input_modal_', 'Xgambar_input_modal_', $item->gambar_taman);
-                            $item->kategori_taman = $instance->kategori_taman;
-                            $item->fasiliti = $instance->fasiliti;
-                            $item->lat = $instance->lat;
-                            $item->lng = $instance->lng;
-                            $item->keluasan_taman = $instance->keluasan_taman;
-                            $item->keluasan_unit = $instance->keluasan_unit;
-                            $item->waktuMula_taman = $instance->waktuMula_taman;
-                            $item->waktuTamat_taman = $instance->waktuTamat_taman;
-                            $item->negeri_taman = $instance->negeri_taman;
-                            $item->nama_taman = "Komponen: ".$item->nama_taman;
-                            $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $instance->negeri_taman)->orderBy('nama_negeri', 'asc')->first();
-                            $item->negeri = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 
-                            $ePALM->push($item);
-                        }
-                    }
+                    // $ePALM_komponen = ePALM::where('is_komponen', $instance->id_taman)->get();
+                    // if($ePALM_komponen){
+                    //     foreach ($ePALM_komponen as $item) {
+                    //         $item->komponen = str_replace(' ', '_', $instance->nama_taman)."/".str_replace(' ', '_', $item->nama_taman);
+                    //         $item->nama_pbt = $instance->nama_pbt;
+                    //         $item->gambar_taman = str_replace('gambar_input_modal_', 'Xgambar_input_modal_', $item->gambar_taman);
+                    //         $item->kategori_taman = $instance->kategori_taman;
+                    //         $item->fasiliti = $instance->fasiliti;
+                    //         $item->lat = $instance->lat;
+                    //         $item->lng = $instance->lng;
+                    //         $item->keluasan_taman = $instance->keluasan_taman;
+                    //         $item->keluasan_unit = $instance->keluasan_unit;
+                    //         $item->waktuMula_taman = $instance->waktuMula_taman;
+                    //         $item->waktuTamat_taman = $instance->waktuTamat_taman;
+                    //         $item->negeri_taman = $instance->negeri_taman;
+                    //         $item->nama_taman = "Komponen: ".$item->nama_taman;
+                    //         $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $instance->negeri_taman)->orderBy('nama_negeri', 'asc')->first();
+                    //         $item->negeri = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 
+                    //         $ePALM->push($item);
+                    //     }
+                    // }
                 $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $instance->negeri_taman)->orderBy('nama_negeri', 'asc')->first();
                 $instance->negeri = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 
             }
@@ -145,7 +145,7 @@ class DashboardController extends Controller
             }else{
                 $data = []; 
             }
-            if($type || $data->isEmpty()){
+            if(!$type || $data->isEmpty()){
                 dump("Akaun Industri anda tidak wujud. Sila hubungi Pentadbir eLANDSKAP");
                 Auth::logout();
                 return redirect()->route('login');

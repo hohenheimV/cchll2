@@ -8,6 +8,7 @@ use App\Model\Mukim;
 use App\Model\Parlimen;
 use App\Model\Dun;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class LocationController extends Controller
 {
@@ -16,6 +17,16 @@ class LocationController extends Controller
     {
         $negeris = Negeri::orderBy('nama_negeri', 'asc')->get();  // Fetch all Negeri data
         return response()->json($negeris); // Return as JSON response
+    }
+    public function salt()
+    {
+        $negeris = Negeri::orderBy('nama_negeri', 'asc')->get();
+        $negeris->transform(function ($item) {
+            $item->kod_negeri_encrypted = Crypt::encryptString($item->kod_negeri);
+            // unset($item->kod_negeri);
+            return $item;
+        });
+        return response()->json($negeris);
     }
     public function getNegeri($kod_negeri)
     {

@@ -8,6 +8,8 @@ use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Storage;
 use App\Model\ePALM;
 use App\Model\ePALM_draf;
+use OwenIt\Auditing\Models\Audit as Audit;
+use App\User;
 use App\Model\MaklumatPenggunaPbt;
 use App\Model\MaklumatPenggunaPenggiatIndustri;
 use App\Model\Negeri;
@@ -979,20 +981,134 @@ class DataController extends Controller
         return response()->json($visitorCounts);
     }
 
-    public function getPenggiatIndustri($jenis)
+    public function getJlnStatistics()
     {
-        if(isset($jenis)){
-            $penggiat = MaklumatPenggunaPenggiatIndustri::select('id_elind', 'name')->where('jenis_industri', $jenis)->orderBy('id_elind', 'asc')->get();
-        }else{
-            $penggiat = MaklumatPenggunaPenggiatIndustri::select('id_elind', 'name')->orderBy('id_elind', 'asc')->get();
+        $bahagianList = [
+            '1' => 'B. Pengurusan Landskap',
+            '2' => 'B. Taman Awam',
+            '3' => 'B. Pembangunan Landskap',
+            '4' => 'B. Khidmat Teknikal',
+            '5' => 'B. Penyelidikan & Pemulihan',
+            '6' => 'B. Penilaian & Penyelenggaraan',
+            '7' => 'B. Teknologi Maklumat',
+            '8' => 'B. Promosi & Industri Landskap',
+            '9' => 'B. Dasar & Pengurusan Korporat',
+            '10' => 'B. Kontrak & Ukur Bahan',
+        ];
+    
+        // Get the start and end of the current month
+        $startOfMonth = now()->startOfMonth();
+        $endOfMonth = now()->endOfMonth();
+
+        $audits = Audit::with('user')
+        ->where('event', 'Logged In')
+        ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+        ->whereHasMorph(
+            'user',
+            [User::class],
+            function ($query) {
+                $query->whereDoesntHave('roles', function ($q) {
+                    $q->whereIn('name', ['Penggiat Industri', 'Pihak Berkuasa Tempatan']);
+                });
+            }
+        )
+        ->get();
+
+        // Group audits by user's bahagian_jln (null if no user or no value)
+        $grouped = $audits->groupBy(function ($audit) {
+            return optional($audit->user)->bahagian_jln ?? 'null';
+        });
+
+        // Prepare results for known bahagian_jln 1-10
+        $result = [];
+        foreach (range(1, 10) as $key) {
+            $result["$bahagianList[$key]"] = isset($grouped[$key]) ? $grouped[$key]->count() : 0;
         }
-        // dd($penggiat = MaklumatPenggunaPenggiatIndustri::select('jenis_industri', 'name')->orderBy('id_elind', 'asc')->get());
+
+        // Handle null or missing bahagian_jln
+        $result['Lain-lain'] = isset($grouped['null']) ? $grouped['null']->count() : 0;
+
+        return response()->json([
+            'month' => now()->format('F'),
+            'data' => $result,
+        ]);
+    
+        // $audits = Audit::where('event', 'Logged in')
+        // ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+        // ->get();
+
+        // $logged = Audit::with('user')->where('event', 'Logged In')->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+        //     // ->when($request->keyword, function ($q) use ($request) {
+        //     //     $q->whereHasMorph('user', [User::class], function ($query) use ($request) {
+        //     //         $name  = $request->keyword;
+        //     //         $name  = strtolower($name);
+        //     //         $query->whereRaw("lower(users.name) LIKE '%$name%'");
+        //     //     });
+
+        //     //     if (filter_var($request->keyword, FILTER_VALIDATE_IP)) {
+        //     //         $q->orWhere('ip_address', $request->keyword);
+        //     //     }
+        //     //     if (strtotime($request->keyword) !== false) {
+        //     //         $date = date('Y-m-d', strtotime($request->keyword));
+        //     //         $q->orWhereDate('created_at', $date);
+        //     //     }
+        //     // })
+        //     ->latest()->paginate(20);
+
+        // // Group by bahagian_jln
+        // $grouped = $audits->groupBy(fn($audit) => $audit->user->bahagian_jln ?? 'null');
+
+        // $result = [];
+
+        // foreach (range(1, 10) as $key) {
+        //     $result["bahagian_jln $key"] = isset($grouped[$key]) ? $grouped[$key]->count() : 0;
+        // }
+
+        // // Count where bahagian_jln is null
+        // $result['bahagian_jln null'] = isset($grouped['null']) ? $grouped['null']->count() : 0;
+        
+        // return response()->json([
+        //     'month' => now()->format('F'),
+        //     'audits' => $audits,
+        //     'logged' => $logged,
+        //     'data' => $result,
+        // ]);
+    }
+
+    public function getPenggiatIndustri($jenis = null)
+    {
+        $penggiat = collect();
+
+        if ($jenis) {
+            $penggiat = MaklumatPenggunaPenggiatIndustri::select('name', 'no_ssm', 'address1', 'address2', 'postcode', 'locality', 'state', 'jenis_industri')
+                ->where('no_ssm', $jenis)
+                ->limit(1)
+                ->get();
+
+            if ($penggiat->isEmpty() && auth()->check()) {
+                $penggiat = MaklumatPenggunaPenggiatIndustri::select('id_elind', 'name')
+                    ->where('jenis_industri', $jenis)
+                    ->orderBy('id_elind')
+                    ->get();
+            }
+        } elseif (auth()->check()) {
+            $penggiat = MaklumatPenggunaPenggiatIndustri::select('name', 'no_ssm', 'address1', 'address2', 'postcode', 'locality', 'state')
+                ->get();
+        }
+
+        if ($penggiat->isEmpty()) {
+            return response()->json(['success' => false, 'message' => 'No data found']);
+        }
+
         return response()->json($penggiat);
     }
 
     public function getPbtName()
     {
-        $penggiat = MaklumatPenggunaPbt::select('id', 'pbt_name')->orderBy('state', 'asc')->get();
-        return response()->json($penggiat);
+        if((auth()->check())){
+            $pbt = MaklumatPenggunaPbt::select('id', 'pbt_name')->orderBy('state', 'asc')->get();
+            return response()->json($pbt);
+        }
+        return response()->json(['success' => false, 'message' => 'No data found']);
     }
 }

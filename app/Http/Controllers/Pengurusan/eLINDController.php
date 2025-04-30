@@ -155,6 +155,9 @@ class eLINDController extends Controller
         $requestData['email'] = $requestData['mediaSosial_penggiat']['Emel'];
 
         $mediaSosial_penggiat = collect($requestData['mediaSosial_penggiat'] ?? [])
+            ->filter(function($item) {
+                return $item !== null;
+            })
             ->map(function($item) {
                 return $item;
             })
@@ -193,39 +196,39 @@ class eLINDController extends Controller
             $requestData['pengalaman'] = json_encode($mergedPengalaman);
         }
         
-        if(isset($requestData['produk'])){
-            $mergedproduk = [];
-            $produkArr = $requestData['produk'];
-            foreach ($produkArr as $key => $value) {
-                for ($i=1; $i <= 2; $i++) { 
-                    $idGambar = 'gambar_produk_'.$i;
-                    if (isset($value[$idGambar]) && $value[$idGambar] instanceof \Illuminate\Http\UploadedFile) {
-                        $file = $value[$idGambar];
-                        if ($file->isValid()) {
-                            $folderName = str_replace(' ', '_', $requestData['name']); 
-                            $subfolderName = str_replace(' ', '_', $value['nama']); 
-                            $filename = time() . '_' .$file->getClientOriginalName();
-                            $path = $file->storeAs('public/uploads/eLIND/' . $folderName . '/' . $subfolderName, $filename);
-                            $value[$idGambar] = $filename;
-                        }
-                    }
-                }
-                $produk_penggiat = collect($value ?? [])
-                ->map(function($item) {
-                    return $item;
-                })
-                ->toArray();
-                if ($produk_penggiat['nama'] !== null) {
-                    $mergedproduk[] = $produk_penggiat;
-                }
-            }
-            $requestData['produk'] = json_encode($mergedproduk);
-        }
+        // if(isset($requestData['produk'])){
+        //     $mergedproduk = [];
+        //     $produkArr = $requestData['produk'];
+        //     foreach ($produkArr as $key => $value) {
+        //         for ($i=1; $i <= 2; $i++) { 
+        //             $idGambar = 'gambar_produk_'.$i;
+        //             if (isset($value[$idGambar]) && $value[$idGambar] instanceof \Illuminate\Http\UploadedFile) {
+        //                 $file = $value[$idGambar];
+        //                 if ($file->isValid()) {
+        //                     $folderName = str_replace(' ', '_', $requestData['name']); 
+        //                     $subfolderName = str_replace(' ', '_', $value['nama']); 
+        //                     $filename = time() . '_' .$file->getClientOriginalName();
+        //                     $path = $file->storeAs('public/uploads/eLIND/' . $folderName . '/' . $subfolderName, $filename);
+        //                     $value[$idGambar] = $filename;
+        //                 }
+        //             }
+        //         }
+        //         $produk_penggiat = collect($value ?? [])
+        //         ->map(function($item) {
+        //             return $item;
+        //         })
+        //         ->toArray();
+        //         if ($produk_penggiat['nama'] !== null) {
+        //             $mergedproduk[] = $produk_penggiat;
+        //         }
+        //     }
+        //     $requestData['produk'] = json_encode($mergedproduk);
+        // }
         // dd($requestData);
-        if(isset($requestData['no_mof'])){
-            $existingMof = MaklumatPenggunaPenggiatIndustri::where('no_mof', $requestData['no_mof'])->first();
+        if(isset($requestData['no_ssm'])){
+            $existingMof = MaklumatPenggunaPenggiatIndustri::where('no_ssm', $requestData['no_ssm'])->first();
             if ($existingMof) {
-                return redirect()->route('pengurusan.eLIND.create',['type' => $type])->with('errorMessage', 'The MOF registration number has already been taken. Please choose another one.');
+                return redirect()->route('pengurusan.eLIND.create',['type' => $type])->withInput()->with('errorMessage', 'No. Pendaftaran Syarikat (SSM) telah wujud.');
             }
             // $user = User::create([
             //     'name' => $requestData['name'],
@@ -253,12 +256,12 @@ class eLINDController extends Controller
             if ($requestData['jenis_industri'] === 'Perunding' || $requestData['jenis_industri'] === 'Kontraktor' || $requestData['jenis_industri'] === 'Pembekal') {
                 $maklumatData = array_merge($maklumatData, [
                     'pekerja' => $requestData['pekerja'],
+                    'pengalaman' => $requestData['pengalaman'],
                 ]);
             }
             if ($requestData['jenis_industri'] === 'Perunding' || $requestData['jenis_industri'] === 'Kontraktor') {
                 $maklumatData = array_merge($maklumatData, [
                     'status_eperunding' => $requestData['status_eperunding'],
-                    'pengalaman' => $requestData['pengalaman'],
                 ]);
             }
             if ($requestData['jenis_industri'] === 'Perunding') {
@@ -280,12 +283,44 @@ class eLINDController extends Controller
                     'bidang_pembekal' => $requestData['bidang_pembekal'],
                     'bidang_lain_pembekal' => $requestData['bidang_lain_pembekal'],
                     'saiz_nurseri' => $requestData['saiz_nurseri'],
-                    'produk' => $requestData['produk'],
+                    // 'produk' => $requestData['produk'],
                 ]);
             }
-            
+            // dd($maklumatData);
             $maklumat = MaklumatPenggunaPenggiatIndustri::create($maklumatData);
             $maklumatData['id_elind'] = $maklumat->id_elind;
+
+            if(isset($requestData['produk'])){
+                $mergedproduk = [];
+                $produkArr = $requestData['produk'];
+                foreach ($produkArr as $key => $value) {
+                    for ($i=1; $i <= 2; $i++) { 
+                        $idGambar = 'gambar_produk_'.$i;
+                        if (isset($value[$idGambar]) && $value[$idGambar] instanceof \Illuminate\Http\UploadedFile) {
+                            $file = $value[$idGambar];
+                            if ($file->isValid()) {
+                                $folderName = str_replace(' ', '_', $maklumat->id_elind.' '.$maklumatData['name']); 
+                                $subfolderName = str_replace(' ', '_', $value['nama']); 
+                                $filename = time() . '_' .$file->getClientOriginalName();
+                                $path = $file->storeAs('public/uploads/eLIND/' . $folderName . '/' . $subfolderName, $filename);
+                                $value[$idGambar] = $filename;
+                            }
+                        }
+                    }
+                    $produk_penggiat = collect($value ?? [])
+                    ->map(function($item) {
+                        return $item;
+                    })
+                    ->toArray();
+                    if ($produk_penggiat['nama'] !== null) {
+                        $mergedproduk[] = $produk_penggiat;
+                    }
+                }
+                $maklumatData['produk'] = json_encode($mergedproduk);
+                $maklumat->update([
+                    'produk' => $maklumatData['produk'],
+                ]);
+            }
 
             $maklumat = MaklumatPenggunaPenggiatIndustri_draf::create($maklumatData);
 
@@ -392,10 +427,12 @@ class eLINDController extends Controller
         }else{
             $status = '';
         }
+        $latestAudit = $eLIND->status != 'approved' ? $eLIND->audits()->latest()->take(3)->get() : null;
         if($eLIND){
             return view('pengurusan.eLIND.show', [
                 'eLIND' => $eLIND,
                 'status' => $status,
+                'latestAudit' => $latestAudit,
             ]);
         }else{
             abort(403, 'User does not have any of the necessary access rights. '); 
@@ -470,6 +507,9 @@ class eLINDController extends Controller
     public function update(Request $request, $type, $id)
     {
         $eLIND = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind_draf', $id)->first();
+        $request->request->remove('name');
+        $request->request->remove('no_ssm');
+        $request->request->remove('jenis_industri');
         $requestData = ($request->all());
 
         $paparan_portal = isset($requestData['status']) && $requestData['status'] == "on" ? "approved" : "draft";
@@ -478,12 +518,15 @@ class eLINDController extends Controller
         if ($request->input('action') === 'update') {
 
             $mediaSosial_penggiat = collect($requestData['mediaSosial_penggiat'] ?? [])
+                ->filter(function($item) {
+                    return $item !== null;
+                })
                 ->map(function($item) {
                     return $item;
                 })
                 ->toArray();
             $requestData['mediaSosial_penggiat'] = json_encode($mediaSosial_penggiat);
-
+            // dd( $requestData['mediaSosial_penggiat']);
             if(isset($requestData['pekerja'])){
                 $mergedPekerja = [];
                 $pekerjaArr = $requestData['pekerja'];
@@ -525,7 +568,7 @@ class eLINDController extends Controller
                         if (isset($value[$idGambar]) && $value[$idGambar] instanceof \Illuminate\Http\UploadedFile) {
                             $file = $value[$idGambar];
                             if ($file->isValid()) {
-                                $folderName = str_replace(' ', '_', $requestData['name']); 
+                                $folderName = str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name); 
                                 $subfolderName = str_replace(' ', '_', $value['nama']); 
                                 $filename = time() . '_' .$file->getClientOriginalName();
                                 $path = $file->storeAs('public/uploads/eLIND/' . $folderName . '/' . $subfolderName, $filename);
@@ -586,38 +629,38 @@ class eLINDController extends Controller
                 }
                 // dd($user_email);
                 if (config('mail.enabled')) {
-                    try {
-                        $emailData = [
-                            "email_to" => [
-                                ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
-                                ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
-                            ],//$user_email,
-                            "email_cc" => [
-                                ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
-                                ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
-                            ],//$btm_email,
-                            "subject" => 'Modul Pengurusan Maklumat Industri Landskap (eLIND)',
-                        ];
+                    // try {
+                    //     $emailData = [
+                    //         "email_to" => [
+                    //             ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
+                    //             ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
+                    //         ],//$user_email,
+                    //         "email_cc" => [
+                    //             ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
+                    //             ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
+                    //         ],//$btm_email,
+                    //         "subject" => 'Modul Pengurusan Maklumat Industri Landskap (eLIND)',
+                    //     ];
         
-                        Mail::send('pengurusan.eLIND.mails.perubahan', ['elind' => $eLIND, 'jenis' => $requestData['jenis_industri']], function ($message) use ($emailData) {
-                            $message->subject($emailData["subject"]);
-                            // Loop through to array and add each email
-                            foreach ($emailData['email_to'] as $to) {
-                                $message->to($to['address'], $to['name']);
-                            }
+                    //     Mail::send('pengurusan.eLIND.mails.perubahan', ['elind' => $eLIND, 'jenis' => $requestData['jenis_industri']], function ($message) use ($emailData) {
+                    //         $message->subject($emailData["subject"]);
+                    //         // Loop through to array and add each email
+                    //         foreach ($emailData['email_to'] as $to) {
+                    //             $message->to($to['address'], $to['name']);
+                    //         }
         
-                            // Loop through cc array and add each email
-                            foreach ($emailData['email_cc'] as $cc) {
-                                $message->cc($cc['address'], $cc['name']);
-                            }
-                        });
-                    } catch (\Exception $exception) {
-                        \Log::error("Error sending registration email: " . $exception->getMessage());
-                       dd("Error sending registration email: " . $exception->getMessage());
-                    }
+                    //         // Loop through cc array and add each email
+                    //         foreach ($emailData['email_cc'] as $cc) {
+                    //             $message->cc($cc['address'], $cc['name']);
+                    //         }
+                    //     });
+                    // } catch (\Exception $exception) {
+                    //     \Log::error("Error sending registration email: " . $exception->getMessage());
+                    //    dd("Error sending registration email: " . $exception->getMessage());
+                    // }
                     // dd($emailData);
                 }
-                return redirect()->route('pengurusan.eLIND.edit', ['type' => $type, 'id' => $eLIND->id_elind])->with('successMessage', 'Maklumat '.$requestData['jenis_industri'].' telah berjaya dikemaskini');
+                return redirect()->route('pengurusan.eLIND.edit', ['type' => $type, 'id' => $eLIND->id_elind])->with('successMessage', 'Maklumat '.$eLIND->jenis_industri.' telah berjaya dikemaskini');
             }
         } elseif ($request->input('action') === 'approve') {
             $eLIND->status = $paparan_portal;
@@ -627,14 +670,14 @@ class eLINDController extends Controller
                 $dataToUpdate = $eLIND->getAttributes();
                 $eLIND_approve->update($dataToUpdate);
             }
-            return redirect()->route('pengurusan.eLIND.show', ['type' => $type, 'id' => $eLIND->id_elind])->with('successMessage', 'Maklumat '.$requestData['jenis_industri'].' telah berjaya disimpan');
+            return redirect()->route('pengurusan.eLIND.show', ['type' => $type, 'id' => $eLIND->id_elind])->with('successMessage', 'Maklumat '.$eLIND->jenis_industri.' telah berjaya disimpan');
         } elseif ($request->input('action') === 'prestasi') {
             // $eLIND->prestasi = $requestData['prestasi'];
             // $eLIND->komen = $requestData['komen'];
             $timestamp = now()->format('Y-m-d H:i:s');
             // dd($requestData);
             $index = false;
-            if($eLIND == null){
+            if($request->input('elind_id')){
                 $index = true;
                 $eLIND = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id)->first();
                 $requestData['jenis_industri'] = $eLIND->jenis_industri;
@@ -678,8 +721,8 @@ class eLINDController extends Controller
             $pentaksirData[] = $newPentaksir;
             $eLIND->pentaksir = json_encode($pentaksirData);
 
+            // dd($eLIND->komen);
             $eLIND->save();
-
             $eLIND_prestasi = MaklumatPenggunaPenggiatIndustri::where('id_elind', $eLIND->id_elind)->first();
             if ($eLIND_prestasi) {
                 $eLIND_prestasi->prestasi = $eLIND->prestasi;
@@ -687,10 +730,11 @@ class eLINDController extends Controller
                 $eLIND_prestasi->pentaksir = $eLIND->pentaksir;
                 $eLIND_prestasi->save();
             }
+            // dd($eLIND_prestasi);
             if($index){
                 return redirect()->route('pengurusan.eLIND.index', ['type' => $type])->with('successMessage', 'Maklumat Prestasi telah berjaya disimpan');
             }
-            return redirect()->route('pengurusan.eLIND.show', ['type' => $type, 'id' => $eLIND->id_elind])->with('successMessage', 'Maklumat '.$requestData['jenis_industri'].' telah berjaya disimpan');
+            return redirect()->route('pengurusan.eLIND.show', ['type' => $type, 'id' => $eLIND->id_elind])->with('successMessage', 'Maklumat '.$eLIND->jenis_industri.' telah berjaya disimpan');
         }
     }
 

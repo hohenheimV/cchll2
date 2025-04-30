@@ -32,7 +32,7 @@
                     <!-- @include('pengurusan.eLIND._upload') -->
                 </div>
                 <div class="card-footer">
-                    {!! Form::button('Batal dan Kembali', ['onclick'=>"window.location='".route('pengurusan.eLIND.index', ['type' => $lastSegment])."'",'class'=>'btn btn-secondary']) !!}
+                    {!! Form::button('Kembali', ['onclick'=>"window.location='".route('pengurusan.eLIND.index', ['type' => $lastSegment])."'",'class'=>'btn btn-secondary']) !!}
                     {!! Form::button('<i class="fas fa-save"></i> Daftar', ['class'=>'btn btn-success','type'=>'submit']) !!}
                 </div>
                 {!! Form::close() !!}

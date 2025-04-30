@@ -25,7 +25,7 @@
                         <h5 class="card-title">@yield('title')</h5>
                         <div class="card-tools">
                             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                                {{ Form::open(['class'=>'form-inline','method' => 'get']) }}
+                                {{-- Form::open(['class'=>'form-inline','method' => 'get']) }}
                                 <div class="input-group mr-2">
                                     {{ Form::search('keyword',request('keyword'),['aria-label'=>'Search','placeholder'=>'Carian Pantas','class' => 'form-control form-control-sm '.Html::isInvalid($errors,'keyword')]) }}
                                     <div class="input-group-append">
@@ -36,7 +36,7 @@
                                         'class'=>'btn btn-secondary btn-sm']) !!}
                                     </div>
                                 </div>
-                                {{ Form::close() }}
+                                {{ Form::close() --}}
                                 @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|TKP/B JLN'))
                                 <div class="btn-group" role="group" aria-label="First group">
                                     {!! Form::button('<i class="fas fa-plus"></i> Daftar', [
@@ -106,9 +106,9 @@
 
                                                         if($user->komen != null){
                                                             $datakomen = json_decode($user->komen, true);
-                                                            $komenDB = end($datakomen)['komen'] ?? 5;
+                                                            $komenDB = end($datakomen)['komen'] ?? null;
                                                         }else{
-                                                            $komenDB = 5;
+                                                            $komenDB = null;
                                                         }
                                                     ?>
                                                     <span  class="badge {{ $prestasi[$prestasiDB-1 ?? '4']['label'] }}" style="white-space: normal; text-align: centre;width: 100%;" data-toggle="tooltip" data-tooltip="tooltip" data-placement="top" data-original-title="{{ $komenDB ?? 'Tiada Komen' }}">
@@ -132,16 +132,20 @@
                                                     'onclick'=>"window.location='".route('pengurusan.eLIND.show', ['type' => $lastSegment, 'id' => $user])."'"
                                                     ]) !!}
 
-                                                    {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
-                                                    'class'=>'btn btn-warning btn-sm',
-                                                    'onclick'=>"window.location='".route('pengurusan.eLIND.edit', ['type' => $lastSegment, 'id' => $user])."'"
-                                                    ]) !!}
+                                                    @if((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Penggiat Industri')))
+                                                        {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
+                                                        'class'=>'btn btn-warning btn-sm',
+                                                        'onclick'=>"window.location='".route('pengurusan.eLIND.edit', ['type' => $lastSegment, 'id' => $user])."'"
+                                                        ]) !!}
+                                                    @endif
 
-                                                    @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|TKP/B JLN'))
+                                                    @if((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN')))
                                                         {!! Form::button('<i class="fas fa-trash"></i>', ['class'=>'btn btn-danger btn-sm',
                                                         'data-url'=>route('pengurusan.eLIND.destroy', ['type' => $lastSegment, 'id' => $user]),
                                                         'data-toggle'=>'modal','data-target'=>'#modalDelete']) !!}
+                                                    @endif
 
+                                                    @if((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai')))
                                                         {!! Form::button('<i class="fas fa-sticky-note"></i>', 
                                                             ['class' => 'btn btn-success btn-sm', 
                                                             'data-elind-id' => $user->id_elind,

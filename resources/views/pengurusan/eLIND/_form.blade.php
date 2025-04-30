@@ -1,27 +1,51 @@
-<style>
-    .col-separator {
-        position: relative;
-        padding-left: 15px; /* Optional padding */
-    }
+    <style>
+        .col-separator {
+            position: relative;
+            padding-left: 15px; /* Optional padding */
+        }
 
-    .col-separator::before {
-        content: '';
-        position: absolute;
-        top: 15%;   /* Adjust the starting position of the gradient */
-        bottom: 5%; /* Adjust the ending position of the gradient */
-        left: 0;
-        width: 3px;   /* Border thickness */
-        background: linear-gradient(to bottom, #ff7f50, #00bfff); /* Gradient effect */
-    }
+        .col-separator::before {
+            content: '';
+            position: absolute;
+            top: 15%;   /* Adjust the starting position of the gradient */
+            bottom: 5%; /* Adjust the ending position of the gradient */
+            left: 0;
+            width: 3px;   /* Border thickness */
+            background: linear-gradient(to bottom, #ff7f50, #00bfff); /* Gradient effect */
+        }
 
-    /* Optionally, you can remove the border for the first column */
-    .col-separator:first-child::before {
-        background: none; /* Remove the left border for the first column */
-    }
-</style>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        /* Optionally, you can remove the border for the first column */
+        .col-separator:first-child::before {
+            background: none; /* Remove the left border for the first column */
+        }
+    </style>
+    @php
+        $arrChanges = [];
+    @endphp
+
+    @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem') && isset($latestAudit))
+        @foreach ($latestAudit as $audit)
+            @foreach ($audit->new_values as $field => $newValue)
+                @php
+                    if($field == 'mediaSosial_penggiat'){
+                        $mediaSosial_penggiatData = json_decode($newValue, true);
+                        $oldValue = json_decode($audit->old_values[$field] ?? '{}', true);
+                        foreach ($mediaSosial_penggiatData as $key => $value) {
+                            if (!isset($oldValue[$key]) || $oldValue[$key] !== $value) {
+                                $arrChanges[] = $field . '.' . $key;
+                            }
+                        }
+                    }else{
+                        $arrChanges[] = $field;
+                    }
+                    //dump($arrChanges);
+                @endphp
+            @endforeach
+        @endforeach
+    @endif
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <div class="row">
-        <div class="col-lg col-separator">
+        <div class="col-lg col-separator inertShow">
             <div class="form-group">
                 <label class="col-xs-4 control-label"></label>
                 <div class="col-xs-12">
@@ -38,14 +62,14 @@
 
             <div class="row">
                 <div class="form-group required col-md-6">
-                    <label for="address1" class="col-md-4 control-label">Alamat 1</label>
+                    <label for="address1" class="col-md-4 control-label">Alamat 1 {!! in_array('address1', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                     <div class="col-md-12">
                         <input value="{{isset($eLIND->address1) ? $eLIND->address1 : ''}}" name="address1" class="form-control" maxlength="50" type="text" id="address1" >
                     </div>
                 </div>
 
                 <div class="form-group required col-md-6">
-                    <label for="address2" class="col-md-4 control-label">Alamat 2</label>
+                    <label for="address2" class="col-md-4 control-label">Alamat 2 {!! in_array('address2', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                     <div class="col-md-12">
                         <input value="{{isset($eLIND->address2) ? $eLIND->address2 : ''}}" name="address2" class="form-control" maxlength="50" type="text" id="address2">
                     </div>
@@ -53,21 +77,21 @@
             </div>
             <div class="row">
                 <div class="form-group required col-md-2">
-                    <label for="postcode" class="col-md-12 control-label">Poskod</label>
+                    <label for="postcode" class="col-md-12 control-label">Poskod {!! in_array('postcode', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                     <div class="col-md-12">
                         <input value="{{isset($eLIND->postcode) ? $eLIND->postcode : ''}}" name="postcode" class="form-control" type="char" id="postcode" >
                     </div>
                 </div>
 
                 <div class="form-group required col-md-4">
-                    <label for="locality" class="col-md-12 control-label">Bandar</label>
+                    <label for="locality" class="col-md-12 control-label">Bandar {!! in_array('locality', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                     <div class="col-md-12">
                         <input value="{{isset($eLIND->locality) ? $eLIND->locality : ''}}" name="locality" class="form-control" maxlength="50" type="text" id="locality">
                     </div>
                 </div>
 
                 <div class="form-group required col-md-6">
-                    <label for="state" class="col-md-12 control-label">Negeri</label>
+                    <label for="state" class="col-md-12 control-label">Negeri {!! in_array('state', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                     <div class="col-md-12">
                         <!-- <input value="{{isset($eLIND->state) ? $eLIND->state : ''}}" name="state" class="form-control" type="char" id="state" > -->
                         {{ Form::select('state', [], null, ['class' => 'form-control', 'id' => 'negeri']) }}
@@ -324,7 +348,7 @@
 
         </div>
 
-        <div class="col-lg col-separator">
+        <div class="col-lg col-separator inertShow">
             <div class="form-group">
                 <label class="col-xs-4 control-label"></label>
                 <div class="col-xs-12">
@@ -333,21 +357,50 @@
             </div>
             @if($capitalizedSegment == 'Kontraktor' || $capitalizedSegment == 'Perunding' || $capitalizedSegment == 'Pembekal')
                 <div class="row">
-                    <div class="form-group required col-md-4">
-                        <label for="no_ssm" class="col-md-12 control-label">No. Pendaftaran Syarikat (SSM)</label>
+                    <div class="form-group required col-md-4 inertClass">
+                        <label for="no_ssm" class="col-md-12 control-label">No. Pendaftaran SSM {!! in_array('no_ssm', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                         <div class="col-md-12">
-                            <input value="{{isset($eLIND->no_ssm) ? $eLIND->no_ssm : ''}}" name="no_ssm" class="form-control" maxlength="50" type="text" id="no_ssm" >
+                            <input required value="{{isset($eLIND->no_ssm) ? $eLIND->no_ssm : ''}}" name="no_ssm" class="form-control" maxlength="50" type="text" id="no_ssm" >
                         </div>
+                        <script>
+                            $(document).ready(function() {
+                                let initialNoSsm = "{{ isset($eLIND->no_ssm) ? $eLIND->no_ssm : '' }}";
+                                $('#no_ssm').on('blur', function() {
+                                    let no_ssm = $(this).val().trim();
+
+                                    if (no_ssm === initialNoSsm) return;
+                                    if (no_ssm.length === 0) return;
+                                    if (no_ssm.length !== 12 /* || !/^\d{12}$/.test(no_ssm) */) {
+                                        alert('No. SSM mestilah tepat 12 digit.');
+                                        // $('#no_ssm').val('');
+                                        return;
+                                    }
+
+                                    $.get(`/XyZ83hQ2d8A9/${no_ssm}`, function(response) {
+                                        console.log(response)
+                                        if (Array.isArray(response) && response.length > 0) {
+                                            alert('No. SSM telah wujud dalam sistem.');
+                                            $('#no_ssm').val('');
+                                            // $('#no_ssm')[0].setCustomValidity('No SSM already exists.');
+                                        }
+                                    }).fail(function() {
+                                        console.error('Request failed or no data found');
+                                        alert('You are making requests too quickly. Please wait a moment before trying again.');
+                                        $('#no_ssm').val('');
+                                    });
+                                });
+                            });
+                        </script>
                     </div>
 
                     <div class="form-group required col-md-4">
-                        <label for="no_mof" class="col-md-12 control-label">No. Pendaftaran MoF</label>
+                        <label for="no_mof" class="col-md-12 control-label">No. Pendaftaran MoF {!! in_array('no_mof', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                         <div class="col-md-12">
                             <input value="{{isset($eLIND->no_mof) ? $eLIND->no_mof : ''}}" name="no_mof" class="form-control" maxlength="50" type="text" id="no_mof" >
                         </div>
                     </div>
                     <div class="form-group required col-md-4">
-                        <label for="bilPekerja" class="col-md-12 control-label">Bilangan Pekerja</label>
+                        <label for="bilPekerja" class="col-md-12 control-label">Bilangan Pekerja {!! in_array('bilPekerja', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                         <div class="col-md-12">
                             <input value="{{isset($eLIND->bilPekerja) ? $eLIND->bilPekerja : ''}}" name="bilPekerja" class="form-control" type="number" id="bilPekerja" min="0">
                         </div>
@@ -356,7 +409,7 @@
                 @if($capitalizedSegment == 'Kontraktor')
                     <div class="row">
                         <div class="form-group required col-md-8">
-                            <label for="kelas_kontraktor" class="col-md-4 control-label">Kelas Kontraktor</label>
+                            <label for="kelas_kontraktor" class="col-md-4 control-label">Kelas Kontraktor {!! in_array('kelas_kontraktor', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 {!! Form::select('kelas_kontraktor', [
                                     1 => 'A',
@@ -373,7 +426,7 @@
                         </div>
 
                         <div class="form-group required">
-                            <label for="no_cidb" class="col-md-12 control-label">No. Pendaftaran PKK/ CIDB</label>
+                            <label for="no_cidb" class="col-md-12 control-label">No. Pendaftaran PKK/ CIDB {!! in_array('no_cidb', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 <input value="{{isset($eLIND->no_cidb) ? $eLIND->no_cidb : ''}}" name="no_cidb" class="form-control" maxlength="50" type="text" id="no_cidb" >
                             </div>
@@ -382,7 +435,7 @@
 
                     <div class="row">
                         <div class="form-group required col-md-4">
-                            <label for="taraf_bumiputera" class="col-md-12 control-label">Taraf Bumiputera</label>
+                            <label for="taraf_bumiputera" class="col-md-12 control-label">Taraf Bumiputera {!! in_array('taraf_bumiputera', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 {!! Form::select('taraf_bumiputera', [
                                     1 => 'BUMIPUTERA',
@@ -392,7 +445,7 @@
                             </div>
                         </div>
                         <div class="form-group required col-md-4">
-                            <label for="status_eperunding" class="col-md-12 control-label">Status e-Perunding</label>
+                            <label for="status_eperunding" class="col-md-12 control-label">Status e-Perunding {!! in_array('status_eperunding', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 {!! Form::select('status_eperunding', [
                                     1 => 'BERDAFTAR',
@@ -402,7 +455,7 @@
                             </div>
                         </div>
                         <div class="form-group required col-md-4">
-                            <label for="bidang_kepakaran" class="col-md-12 control-label">Bidang Kepakaran</label>
+                            <label for="bidang_kepakaran" class="col-md-12 control-label">Bidang Kepakaran {!! in_array('bidang_kepakaran', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 {!! Form::select('bidang_kepakaran', [
                                     1 => 'LANDSKAP ARKITEK',
@@ -417,20 +470,20 @@
                 @elseif($capitalizedSegment == 'Perunding')
                     <div class="row">
                         <div class="form-group required col-md-4">
-                            <label for="no_ilam" class="col-md-12 control-label">No. Pendaftaran ILAM</label>
+                            <label for="no_ilam" class="col-md-12 control-label">No. Pendaftaran ILAM {!! in_array('no_ilam', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 <input value="{{isset($eLIND->no_ilam) ? $eLIND->no_ilam : ''}}" name="no_ilam" class="form-control" maxlength="50" type="text" id="no_ilam" >
                             </div>
                         </div>
 
                         <div class="form-group required col-md-4">
-                            <label for="tarikh_luput_ilam" class="col-md-12 control-label">Tarikh Luput Keahlian ILAM</label>
+                            <label for="tarikh_luput_ilam" class="col-md-12 control-label">Tarikh Luput Keahlian ILAM {!! in_array('tarikh_luput_ilam', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 <input value="{{isset($eLIND->tarikh_luput_ilam) ? $eLIND->tarikh_luput_ilam : ''}}" name="tarikh_luput_ilam" class="form-control" maxlength="50" type="date" id="tarikh_luput_ilam" >
                             </div>
                         </div>
                         <div class="form-group required col-md-4">
-                            <label for="status_eperunding" class="col-md-12 control-label">Status e-Perunding</label>
+                            <label for="status_eperunding" class="col-md-12 control-label">Status e-Perunding {!! in_array('status_eperunding', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 {!! Form::select('status_eperunding', [
                                     1 => 'BERDAFTAR',
@@ -443,7 +496,7 @@
                 @elseif($capitalizedSegment == 'Pembekal')
                     <div class="row">
                         <div class="form-group required col-md-6">
-                            <label for="bidang_pembekal" class="col-md-12 control-label">Bidang</label>
+                            <label for="bidang_pembekal" class="col-md-12 control-label">Bidang {!! in_array('bidang_pembekal', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 {!! Form::select('bidang_pembekal', [
                                     1 => 'Nurseri & Landskap Kejur',
@@ -454,14 +507,14 @@
                             </div>
                         </div>
                         <div class="form-group required col-md-6" style="display: none;" id="lainLainDiv">
-                            <label for="bidang_lain_pembekal" class="col-md-12 control-label">Sila Nyatakan (Contoh: Pasu, Baja, Bunga dll.)</label>
+                            <label for="bidang_lain_pembekal" class="col-md-12 control-label">Sila Nyatakan (Contoh: Pasu, Baja, Bunga dll.) {!! in_array('bidang_lain_pembekal', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 <input value="{{isset($eLIND->bidang_lain_pembekal) ? $eLIND->bidang_lain_pembekal : ''}}" name="bidang_lain_pembekal" class="form-control" maxlength="50" type="text" id="bidang_lain_pembekal">
                             </div>
                         </div>
 
                         <div class="form-group required col-md-6" style="display: none;" id="nurseriDiv">
-                            <label for="saiz_nurseri" class="col-md-12 control-label">Saiz Nurseri</label>
+                            <label for="saiz_nurseri" class="col-md-12 control-label">Saiz Nurseri {!! in_array('saiz_nurseri', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 {!! Form::select('saiz_nurseri', [
                                     1 => '< 2 EKAR',
@@ -501,14 +554,14 @@
             @elseif($lastSegment == 'antarabangsa')
                 <div class="row">
                     <div class="form-group required col-md-6">
-                        <label for="nama_presiden" class="col-md-12 control-label">Presiden/Pengurus  {{ $capitalizedSegment }}</label>
+                        <label for="nama_presiden" class="col-md-12 control-label">Presiden/Pengurus  {{ $capitalizedSegment }} {!! in_array('nama_presiden', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                         <div class="col-md-12">
                             <input value="{{isset($eLIND->nama_presiden) ? $eLIND->nama_presiden : ''}}" name="nama_presiden" class="form-control" maxlength="50" type="text" id="nama_presiden" >
                         </div>
                     </div>
 
                     <div class="form-group required col-md-6">
-                        <label for="wakil_negara" class="col-md-12 control-label">Wakil Negara/Asia</label>
+                        <label for="wakil_negara" class="col-md-12 control-label">Wakil Negara/Asia {!! in_array('wakil_negara', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                         <div class="col-md-12">
                             <input value="{{isset($eLIND->wakil_negara) ? $eLIND->wakil_negara : ''}}" name="wakil_negara" class="form-control" maxlength="50" type="text" id="wakil_negara" >
                         </div>
@@ -517,7 +570,7 @@
             @elseif($lastSegment == 'ngo')
                 <div class="row">
                     <div class="form-group required col-md-6">
-                        <label for="kategori_ngo" class="col-md-12 control-label">Kategori  {{ $capitalizedSegment }}</label>
+                        <label for="kategori_ngo" class="col-md-12 control-label">Kategori  {{ $capitalizedSegment }} {!! in_array('kategori_ngo', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                         <div class="col-md-12">
                             {!! Form::select('kategori_ngo', [
                                 1 => 'Badan Bukan Kerajaan (NGO)',
@@ -527,7 +580,7 @@
                         </div>
                     </div>
                     <div class="form-group required col-md-6">
-                        <label for="nama_presiden" class="col-md-12 control-label">Presiden/Pengurus  {{ $capitalizedSegment }}</label>
+                        <label for="nama_presiden" class="col-md-12 control-label">Presiden/Pengurus  {{ $capitalizedSegment }} {!! in_array('nama_presiden', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                         <div class="col-md-12">
                             <input value="{{isset($eLIND->nama_presiden) ? $eLIND->nama_presiden : ''}}" name="nama_presiden" class="form-control" maxlength="50" type="text" id="nama_presiden" >
                         </div>
@@ -536,7 +589,7 @@
             @elseif($lastSegment == 'pendidikan')
                 <div class="row">
                     <div class="form-group required col-md-12">
-                        <label for="jenis_institusi" class="col-md-12 control-label">Jenis {{ $capitalizedSegment }}</label>
+                        <label for="jenis_institusi" class="col-md-12 control-label">Jenis {{ $capitalizedSegment }} {!! in_array('jenis_institusi', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                         <div class="col-md-12">
                             {!! Form::select('jenis_institusi', [
                                 1 => 'IPTA',
@@ -550,8 +603,80 @@
                 </div>
             @endif
 
-            
-            <div class="row">
+            <div class="row" id="dynamic-media-fields">
+                @php
+                    if(isset($eLIND->mediaSosial_penggiat)){
+                        $mediaSosial_penggiatData = json_decode($eLIND->mediaSosial_penggiat, true);
+                        $mediaData = json_decode($eLIND->mediaSosial_penggiat, true);
+                        //$media1 = isset($mediaSosial_penggiatData['Telefon']) ? $mediaSosial_penggiatData['Telefon'] : '';
+                        //$media2 = isset($mediaSosial_penggiatData['Emel']) ? $mediaSosial_penggiatData['Emel'] : '';
+                        //$media3 = isset($mediaSosial_penggiatData['Web']) ? $mediaSosial_penggiatData['Web'] : '';
+                        //$media4 = isset($mediaSosial_penggiatData['Facebook']) ? $mediaSosial_penggiatData['Facebook'] : '';
+                        //$media5 = isset($mediaSosial_penggiatData['Instagram']) ? $mediaSosial_penggiatData['Instagram'] : '';
+                        //$media6 = isset($mediaSosial_penggiatData['LinkedIn']) ? $mediaSosial_penggiatData['LinkedIn'] : '';
+                        //$media7 = isset($mediaSosial_penggiatData['Twitter']) ? $mediaSosial_penggiatData['Twitter'] : '';
+                        //$media8 = isset($mediaSosial_penggiatData['TikTok']) ? $mediaSosial_penggiatData['TikTok'] : '';
+                    }else{
+                        $media1 = $media2 = $media3 = $media4 = $media5 = $media6 = $media7 = $media8 = null;
+                        $mediaData = null;
+                    }
+                    $fixedFields = ['Emel', 'Web', 'Telefon', 'Facebook'];
+                    //dd($arrChanges);
+                @endphp
+
+                @foreach ($fixedFields as $index => $field)
+                    @php $value = $mediaData[$field] ?? ''; @endphp
+                    <div class="form-group required {{ $field == 'Emel' || $field == 'Web' ? 'col-md-6' : 'col-md-3' }}">
+                        <label for="mediaSosial" class="col-md-12 control-label">{{ $field == 'Web' ? 'Laman Web' : $field }} {!! in_array('mediaSosial_penggiat.'.$field, $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                        <div class="col-md-12">
+                            <input value="{{ $value }}" name="mediaSosial_penggiat[{{ $field }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]">
+                        </div>
+                    </div>
+                @endforeach
+                @if (isset($mediaData))
+                    @foreach ($mediaData as $key => $value)
+                        @if (!in_array($key, $fixedFields))
+                            <div class="form-group required col-md-3">
+                                <label for="mediaSosial" class="col-md-12 control-label">{{ $key }} {!! in_array('mediaSosial_penggiat.'.$key, $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                                <div class="col-md-12">
+                                    <input value="{{ $value }}" name="mediaSosial_penggiat[{{ $key }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]">
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                @endif
+
+            </div>
+            <div class="form-group col-md-3 showButton">
+                <button type="button" onclick="addMedia()" class="btn btn-primary">Add Media Sosial</button>
+            </div>
+
+            <script>
+                function addMedia() {
+                    const name = prompt("Masukkan nama media sosial (contoh: TikTok)");
+                    if (!name) return;
+
+                    const key = name.trim().replace(/\s+/g, ''); // safer key
+                    const container = document.getElementById('dynamic-media-fields');
+
+                    // Avoid duplicates
+                    if (document.querySelector(`[name="mediaSosial_penggiat[${key}]"]`)) {
+                        alert("Media sosial ini telah ditambah.");
+                        return;
+                    }
+
+                    const div = document.createElement('div');
+                    div.classList.add('form-group', 'required', 'col-md-3');
+                    div.innerHTML = `
+                        <label class="col-md-12 control-label">${name}</label>
+                        <div class="col-md-12">
+                            <input name="mediaSosial_penggiat[${key}]" class="form-control" maxlength="50" type="text">
+                        </div>
+                    `;
+                    container.appendChild(div);
+                }
+            </script>
+            <!-- <div class="row">
                 @php
                     if(isset($eLIND->mediaSosial_penggiat)){
                         $mediaSosial_penggiatData = json_decode($eLIND->mediaSosial_penggiat, true);
@@ -631,19 +756,22 @@
                         <input value="{{$media8}}" name="mediaSosial_penggiat[TikTok]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]" >
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         
     </div>
 @if($capitalizedSegment == 'Kontraktor' || $capitalizedSegment == 'Perunding' || $capitalizedSegment == 'Pembekal')
     <div class="col-lg">
         <div class="row col-md-12">
-            <div class="col-lg col-separator">
+            <div class="col-lg col-separator inertShow">
                 <div class="form-group">
                     <label class="col-xs-4 control-label"></label>
                     <div class="col-xs-12">
                         <h4 class="d-flex align-items-center justify-content-between">
-                            Senarai Pekerja
+                            <div class="d-flex align-items-center">
+                                Senarai Pekerja
+                                {!! in_array('pekerja', $arrChanges) ? '<span class="text-danger newC ms-1">&nbsp;!</span>' : '' !!}
+                            </div>
                             <button type="button" class="btn btn-primary btn-sm showButton" id="addPekerja">
                                 Tambah Pekerja
                             </button>
@@ -715,19 +843,18 @@
 
                 <script>
                     $(document).ready(function() {
-                        let rowCount = {{ count($dataPekerja ?? []) }};  // Start counting based on existing data
-
+                        let rowCount = {{ isset($dataPekerja) ? count($dataPekerja) : 0 }};
+                        // alert(rowCount);
                         // Add a new row
-                        function addNewRow() {
+                        function addNewRowPekerja() {
                             rowCount++;
-
                             let newRow = `
                                 <tr id="pekerja_row-${rowCount}">
                                     <td>${rowCount}</td>
                                     <td><input type="text" name="pekerja[${rowCount}][nama]" class="form-control" placeholder="Nama"></td>
                                     <td><input type="text" name="pekerja[${rowCount}][jawatan]" class="form-control" placeholder="Jawatan"></td>
                                     <td style="text-align: center;">
-                                        <button type="button" class="btn btn-danger btn-sm delete-row" data-row="pekerja_row-${rowCount}" style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
+                                        <button type="button" class="btn btn-danger btn-sm delete-rowPekerja" data-row="pekerja_row-${rowCount}" style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
                                             <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
                                         </button>
                                     </td>
@@ -737,13 +864,17 @@
                             // Append new row to the table
                             $('#pekerja_container').append(newRow);
                             $('#pekerja_rowD').hide();  // Hide the "Tiada Maklumat" row if it exists
-                            const rows = document.querySelectorAll('#pekerja_container tr');
-                            rows.forEach((row, index) => {
-                                if (row.id !== 'pekerja_row') {  // Skip the "Tiada Maklumat" row (id="pekerja_row")
-                                    const bilCell = row.querySelector('td:first-child');
-                                    bilCell.textContent = index + 1;  // Update the "Bil" (row number)
-                                }
-                            });
+                            updateBilPekerja();
+                            // const rows = document.querySelectorAll('#pekerja_container tr');
+                            // if(rows.length == 1){
+                            //     $('#pekerja_rowD').show();
+                            // }
+                            // rows.forEach((row, index) => {
+                            //     if (row.id !== 'pekerja_rowD') {  // Skip the "Tiada Maklumat" row (id="pekerja_row")
+                            //         const bilCell = row.querySelector('td:first-child');
+                            //         bilCell.textContent = index + {{ isset($dataPekerja) ? 1 : 0 }};  // Update the "Bil" (row number)
+                            //     }
+                            // });
                         }
 
                         window.confirmDelete_pekerja = function(button) {
@@ -752,33 +883,34 @@
                                 // If the user confirms, delete the row
                                 let rowId = $(button).data('row');
                                 $(`#${rowId}`).remove();
-                                const rows = document.querySelectorAll('#pekerja_container tr');
-                                rows.forEach((row, index) => {
-                                    if (row.id !== 'pekerja_row') {  // Skip the "Tiada Maklumat" row (id="pekerja_row")
-                                        const bilCell = row.querySelector('td:first-child');
-                                        bilCell.textContent = index + 1;  // Update the "Bil" (row number)
-                                    }
-                                });
+                                updateBilPekerja();
+                                // const rows = document.querySelectorAll('#pekerja_container tr');
+                                // rows.forEach((row, index) => {
+                                //     if (row.id !== 'pekerja_rowD') {  // Skip the "Tiada Maklumat" row (id="pekerja_row")
+                                //         const bilCell = row.querySelector('td:first-child');
+                                //         bilCell.textContent = index + {{ isset($dataPekerja) ? 1 : 0 }};  // Update the "Bil" (row number)
+                                //     }
+                                // });
                             }
                         };
 
                         // Add a new row when the "Tambah Pekerja" button is clicked
                         $('#addPekerja').on('click', function() {
-                            addNewRow();  // Add new empty row
+                            addNewRowPekerja();  // Add new empty row
                         });
 
                         // Handle row deletion
-                        $(document).on('click', '.delete-row', function() {
+                        $(document).on('click', '.delete-rowPekerja', function() {
                             let rowId = $(this).data('row');
                             $(`#${rowId}`).remove();
-                            const rows = document.querySelectorAll('#pekerja_container tr');
-                            rows.forEach((row, index) => {
-                                if (row.id !== 'pekerja_row') {  // Skip the "Tiada Maklumat" row (id="pekerja_row")
-                                    const bilCell = row.querySelector('td:first-child');
-                                    bilCell.textContent = index + 1;  // Update the "Bil" (row number)
-                                }
-                            });
-                            
+                            // const rows = document.querySelectorAll('#pekerja_container tr');
+                            // rows.forEach((row, index) => {
+                            //     if (row.id !== 'pekerja_rowD') {  // Skip the "Tiada Maklumat" row (id="pekerja_row")
+                            //         const bilCell = row.querySelector('td:first-child');
+                            //         bilCell.textContent = index + {{ isset($dataPekerja) ? 1 : 0 }};  // Update the "Bil" (row number)
+                            //     }
+                            // });
+                            updateBilPekerja();
                             // if ($('#pekerja_container tr').length === 0) {
                             //     $('#pekerja_rowD').show();
                             // }
@@ -788,24 +920,30 @@
                         function updateBilPekerja() {
                             const rows = document.querySelectorAll('#pekerja_container tr');
                             rows.forEach((row, index) => {
-                                if (row.id !== 'pekerja_row') {  // Skip the "Tiada Maklumat" row (id="pekerja_row")
+                                if (row.id !== 'pekerja_rowD') {  // Skip the "Tiada Maklumat" row (id="pekerja_row")
                                     const bilCell = row.querySelector('td:first-child');
-                                    bilCell.textContent = index + 1;  // Update the "Bil" (row number)
+                                    bilCell.textContent = index + {{ isset($dataPekerja) ? 1 : 0 }};  // Update the "Bil" (row number)
                                 }
                             });
+                            if(rows.length == 1){
+                                $('#pekerja_rowD').show();
+                            }
                         }
                     });
                 </script>
             </div>
         </div>
-        @if($capitalizedSegment == 'Kontraktor' || $capitalizedSegment == 'Perunding')
+        @if($capitalizedSegment == 'Kontraktor' || $capitalizedSegment == 'Perunding' || $capitalizedSegment == 'Pembekal')
         <div class="row col-md-12">
-            <div class="col-lg col-separator">
+            <div class="col-lg col-separator inertShow">
                 <div class="form-group">
                     <label class="col-xs-4 control-label"></label>
                     <div class="col-xs-12">
                         <h4 class="d-flex align-items-center justify-content-between">
-                            Senarai Pengalaman
+                            <div class="d-flex align-items-center">
+                                Senarai Pengalaman
+                                {!! in_array('pengalaman', $arrChanges) ? '<span class="text-danger newC ms-1">&nbsp;!</span>' : '' !!}
+                            </div>
                             <button type="button" class="btn btn-primary btn-sm showButton" id="addPengalaman">
                                 Tambah Pengalaman
                             </button>
@@ -865,14 +1003,14 @@
                                         </tr>
                                     @empty
                                         <tr id="pengalaman_rowD">
-                                            <td colspan="4" class="text-center">Tiada Maklumat</td>
+                                            <td colspan="6" class="text-center">Tiada Maklumat</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
                                 @else
                                 <tbody id="pengalaman_container">
                                     <tr id="pengalaman_rowD">
-                                        <td colspan="4" class="text-center">Tiada Maklumat</td>
+                                        <td colspan="6" class="text-center">Tiada Maklumat</td>
                                     </tr>
                                 </tbody>
                                 @endif
@@ -883,10 +1021,10 @@
 
                 <script>
                     $(document).ready(function() {
-                        let rowCount = {{ count($dataPengalaman ?? []) }};  // Start counting based on existing data
+                        let rowCount = {{ isset($dataPengalaman) ? count($dataPengalaman) : 0 }};
 
                         // Function to add a new row
-                        function addNewRow() {
+                        function addNewRowPengalaman() {
                             // Increase row count
                             rowCount++;
 
@@ -899,7 +1037,7 @@
                                     <td><input type="text" name="pengalaman[${rowCount}][tahun]" placeholder="Tahun" class="form-control"></td>
                                     <td><input type="text" name="pengalaman[${rowCount}][status]" placeholder="Status" class="form-control"></td>
                                     <td style="padding: 0; vertical-align: middle; text-align: center;">
-                                        <button type="button" class="btn btn-danger btn-sm delete-row" data-row="pengalaman_row-${rowCount}" 
+                                        <button type="button" class="btn btn-danger btn-sm delete-rowPengalaman" data-row="pengalaman_row-${rowCount}" 
                                                 style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
                                             <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
                                         </button>
@@ -910,13 +1048,14 @@
                             // Append the new row to the table
                             $('#pengalaman_container').append(newRow);
                             $('#pengalaman_rowD').hide();  // Hide the "Tiada Maklumat" row if it exists
-                            const rows = document.querySelectorAll('#pengalaman_container tr');
-                            rows.forEach((row, index) => {
-                                if (row.id !== 'pengalaman_row') {
-                                    const bilCell = row.querySelector('td:first-child');
-                                    bilCell.textContent = index+1 ;
-                                }
-                            });
+                            updateBilPengalaman();
+                            // const rows = document.querySelectorAll('#pengalaman_container tr');
+                            // rows.forEach((row, index) => {
+                            //     if (row.id !== 'pengalaman_rowD') {
+                            //         const bilCell = row.querySelector('td:first-child');
+                            //         bilCell.textContent = index + {{ isset($dataPengalaman) ? 1 : 0 }};
+                            //     }
+                            // });
                         }
 
                         window.confirmDelete_pengalaman = function(button) {
@@ -925,13 +1064,14 @@
                                 // If the user confirms, delete the row
                                 let rowId = $(button).data('row');
                                 $(`#${rowId}`).remove();
-                                const rows = document.querySelectorAll('#pengalaman_container tr');
-                                rows.forEach((row, index) => {
-                                    if (row.id !== 'pengalaman_row') {
-                                        const bilCell = row.querySelector('td:first-child');
-                                        bilCell.textContent = index+1 ;
-                                    }
-                                });  // Recalculate the row numbers after deletion
+                                updateBilPengalaman();
+                                // const rows = document.querySelectorAll('#pengalaman_container tr');
+                                // rows.forEach((row, index) => {
+                                //     if (row.id !== 'pengalaman_rowD') {
+                                //         const bilCell = row.querySelector('td:first-child');
+                                //         bilCell.textContent = index + {{ isset($dataPengalaman) ? 1 : 0 }};
+                                //     }
+                                // });  // Recalculate the row numbers after deletion
                             }
                         };
 
@@ -939,41 +1079,49 @@
                         function updateBilPengalaman() {
                             const rows = document.querySelectorAll('#pengalaman_container tr');
                             rows.forEach((row, index) => {
-                                if (row.id !== 'pengalaman_row') {
+                                if (row.id !== 'pengalaman_rowD') {
                                     const bilCell = row.querySelector('td:first-child');
-                                    bilCell.textContent = index ;
+                                    bilCell.textContent = index + {{ isset($dataPengalaman) ? 1 : 0 }};
                                 }
                             });
-                        }
-                        $('#addPengalaman').on('click', function() {
-                            addNewRow();
-                        });
-                        $(document).on('click', '.delete-row', function() {
-                            let rowId = $(this).data('row');
-                            $(`#${rowId}`).remove();
-                            const rows = document.querySelectorAll('#pengalaman_container tr');
-                            rows.forEach((row, index) => {
-                                if (row.id !== 'pengalaman_row') {
-                                    const bilCell = row.querySelector('td:first-child');
-                                    bilCell.textContent = index+1 ;
-                                }
-                            });
-                            if ($('#pengalaman_container tr').length === 0) {
+                            if(rows.length == 1){
                                 $('#pengalaman_rowD').show();
                             }
+                        }
+                        $('#addPengalaman').on('click', function() {
+                            addNewRowPengalaman();
+                        });
+                        $(document).on('click', '.delete-rowPengalaman', function() {
+                            let rowId = $(this).data('row');
+                            $(`#${rowId}`).remove();
+                            updateBilPengalaman();
+                            // const rows = document.querySelectorAll('#pengalaman_container tr');
+                            // rows.forEach((row, index) => {
+                            //     if (row.id !== 'pengalaman_rowD') {
+                            //         const bilCell = row.querySelector('td:first-child');
+                            //         bilCell.textContent = index + {{ isset($dataPengalaman) ? 1 : 0 }};
+                            //     }
+                            // });
+                            // if ($('#pengalaman_container tr').length === 0) {
+                            //     $('#pengalaman_rowD').show();
+                            // }
                         });
                     });
                 </script>
             </div>
         </div>
-        @elseif($capitalizedSegment == 'Pembekal')
+        @endif
+        @if($capitalizedSegment == 'Pembekal')
             <div class="row col-md-12">
                 <div class="col-lg col-separator">
                     <div class="form-group">
                         <label class="col-xs-4 control-label"></label>
                         <div class="col-xs-12">
                             <h4 class="d-flex align-items-center justify-content-between">
-                                Produk {{$capitalizedSegment}}
+                                <div class="d-flex align-items-center">
+                                    Senarai Produk
+                                    {!! in_array('produk', $arrChanges) ? '<span class="text-danger newC ms-1">&nbsp;!</span>' : '' !!}
+                                </div>
                                 <button type="button" class="btn btn-primary btn-sm showButton" id="addProductBtn">
                                     Tambah Produk
                                 </button>
@@ -1098,34 +1246,120 @@
                                             @forelse ($dataProduk as $index => $product)
                                                 <tr id="produk_row-{{ $index + 1 }}">
                                                     <td>{{ ($index + 1) }}</td>
-                                                    <td><input type="text" class="form-control" name="produk[{{ $index + 1 }}][nama]" value="{{ $product['nama'] }}" placeholder="Masukkan Nama Produk"></td>
-                                                    <td><input type="text" class="form-control" name="produk[{{ $index + 1 }}][keterangan]" value="{{ $product['keterangan'] }}" placeholder="Masukkan Keterangan Produk"></td>
-                                                    <td><input type="number" class="form-control" name="produk[{{ $index + 1 }}][harga]" value="{{ $product['harga'] }}" placeholder="Masukkan Harga" min="1"></td>
+                                                    <td><input required type="text" class="form-control inertShow inertClass" name="produk[{{ $index + 1 }}][nama]" value="{{ $product['nama'] }}" placeholder="Masukkan Nama Produk" style="background-color: rgb(215, 215, 215);"></td>
+                                                    <td><input required type="text" class="form-control inertShow" name="produk[{{ $index + 1 }}][keterangan]" value="{{ $product['keterangan'] }}" placeholder="Masukkan Keterangan Produk"></td>
+                                                    <td><input required type="number" class="form-control inertShow" name="produk[{{ $index + 1 }}][harga]" value="{{ $product['harga'] }}" placeholder="Masukkan Harga" min="1"></td>
                                                     <td>
-                                                        <div class="grid-container">
+                                                        <!-- <div class="grid-container">
                                                             <div class="grid-item">
-                                                                <input type="file" class="form-control-file showButton" id="gambar_produk_1_{{ $index + 1 }}" name="produk[{{ $index + 1 }}][gambar_produk_1]" accept="image/*">
-                                                                <div id="imagePreviewContainer_1_{{ $index + 1 }}" class="image-preview-container">
+                                                                <input required type="file" class="form-control-file showButton" id="gambar_produk_1_{{ $index + 1 }}" name="produk[{{ $index + 1 }}][gambar_produk_1]" accept="image/*">
+                                                                <div id="imagePreviewContainer_1_{{ $index + 1 }}" class="image-preview-container" data-image="{{ isset($product['gambar_produk_1']) ? asset('storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name) . '/' . str_replace(' ', '_', $product['nama']). '/' . $product['gambar_produk_1']) : asset('storage/uploads/no-photos.png') }}">
                                                                     @if(isset($product['gambar_produk_1']))
-                                                                        <input type="hidden" class="form-control" name="produk[{{ $index + 1 }}][existing_image1]" value="{{ $product['gambar_produk_1'] }}" placeholder="Masukkan Harga" min="1">
-                                                                        <img src="{{ asset('storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->name) . '/' . str_replace(' ', '_', $product['nama']). '/' . $product['gambar_produk_1']) }}" alt="Image Preview">
+                                                                        <input required type="hidden" class="form-control" name="produk[{{ $index + 1 }}][existing_image1]" value="{{ $product['gambar_produk_1'] }}" placeholder="Masukkan Harga" min="1">
+                                                                        <img src="{{ asset('storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name) . '/' . str_replace(' ', '_', $product['nama']). '/' . $product['gambar_produk_1']) }}" alt="Image Preview">
                                                                     @else
                                                                         <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="No Image">
                                                                     @endif
                                                                 </div>
                                                             </div>
                                                             <div class="grid-item">
-                                                                <input type="file" class="form-control-file showButton" id="gambar_produk_2_{{ $index + 1 }}" name="produk[{{ $index + 1 }}][gambar_produk_2]" accept="image/*">
-                                                                <div id="imagePreviewContainer_2_{{ $index + 1 }}" class="image-preview-container">
+                                                                <input required type="file" class="form-control-file showButton" id="gambar_produk_2_{{ $index + 1 }}" name="produk[{{ $index + 1 }}][gambar_produk_2]" accept="image/*">
+                                                                <div id="imagePreviewContainer_2_{{ $index + 1 }}" class="image-preview-container" data-image="{{ isset($product['gambar_produk_2']) ? asset('storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name) . '/' . str_replace(' ', '_', $product['nama']). '/' . $product['gambar_produk_2']) : asset('storage/uploads/no-photos.png') }}">
                                                                     @if(isset($product['gambar_produk_2']))
-                                                                        <input type="hidden" class="form-control" name="produk[{{ $index + 1 }}][existing_image2]" value="{{ $product['gambar_produk_2'] }}" placeholder="Masukkan Harga" min="1">
-                                                                        <img src="{{ asset('storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->name) . '/' . str_replace(' ', '_', $product['nama']). '/' . $product['gambar_produk_2']) }}" alt="Image Preview">
+                                                                        <input required type="hidden" class="form-control" name="produk[{{ $index + 1 }}][existing_image2]" value="{{ $product['gambar_produk_2'] }}" placeholder="Masukkan Harga" min="1">
+                                                                        <img src="{{ asset('storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name) . '/' . str_replace(' ', '_', $product['nama']). '/' . $product['gambar_produk_2']) }}" alt="Image Preview">
                                                                     @else
                                                                         <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="No Image">
                                                                     @endif
+                                                                </div>
+                                                            </div>
+                                                        </div> -->
+                                                        <div class="grid-container">
+                                                            @php
+                                                                $basePath = 'storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->id_elind . ' ' . $eLIND->name) . '/' . str_replace(' ', '_', $product['nama']) . '/';
+                                                                $noImage = asset('storage/uploads/no-photos.png');
+                                                            @endphp
+
+                                                            @for ($i = 1; $i <= 2; $i++)
+                                                                @php
+                                                                    $imageKey = 'gambar_produk_' . $i;
+                                                                    $imageVal = $product[$imageKey] ?? null;
+                                                                    $imagePath = $imageVal ? asset($basePath . $imageVal) : $noImage;
+                                                                    $previewId = "imagePreviewContainer_{$i}_".($index + 1);
+                                                                    $inputId = "{$imageKey}_".($index + 1);
+                                                                @endphp
+
+                                                                <div class="grid-item">
+                                                                    <input type="file"
+                                                                        class="form-control-file showButton"
+                                                                        id="{{ $inputId }}"
+                                                                        name="produk[{{ $index + 1 }}][{{ $imageKey }}]"
+                                                                        accept="image/*">
+
+                                                                    <div id="{{ $previewId }}"
+                                                                        class="image-preview-container"
+                                                                        data-image="{{ $imagePath }}"
+                                                                        style="cursor: zoom-in"
+                                                                        title="Klik untuk lihat gambar lebih besar">
+
+                                                                        @if($imageVal)
+                                                                            <input type="hidden"
+                                                                                name="produk[{{ $index + 1 }}][existing_image{{ $i }}]"
+                                                                                value="{{ $imageVal }}">
+                                                                        @endif
+
+                                                                        <img src="{{ $imagePath }}" alt="Image Preview">
+                                                                    </div>
+                                                                </div>
+                                                            @endfor
+                                                        </div>
+
+                                                        <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-body text-center p-0">
+                                                                        <img id="modalImage" src="" class="img-fluid w-100" alt="Full Size Image">
+                                                                    </div>
+                                                                    <div class="modal-footer py-2">
+                                                                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
+
+                                                        <script>
+                                                            document.addEventListener("DOMContentLoaded", function () {
+                                                                const fallbackImage = "{{ asset('storage/uploads/no-photos.png') }}";
+
+                                                                // Preview file on selection
+                                                                document.querySelectorAll('.form-control-file.showButton').forEach(input => {
+                                                                    input.addEventListener('change', function () {
+                                                                        const file = this.files[0];
+                                                                        if (!file) return;
+
+                                                                        const reader = new FileReader();
+                                                                        reader.onload = function (e) {
+                                                                            const previewId = this.inputId.replace('gambar_produk_', 'imagePreviewContainer_');
+                                                                            const previewContainer = document.getElementById(previewId);
+                                                                            const img = previewContainer.querySelector('img');
+                                                                            img.src = e.target.result;
+                                                                            previewContainer.dataset.image = e.target.result;
+                                                                        }.bind({ inputId: this.id });
+
+                                                                        reader.readAsDataURL(file);
+                                                                    });
+                                                                });
+
+                                                                // Show modal on preview click
+                                                                document.querySelectorAll('.image-preview-container').forEach(container => {
+                                                                    container.addEventListener('click', function () {
+                                                                        const imageUrl = this.dataset.image || fallbackImage;
+                                                                        document.getElementById('modalImage').src = imageUrl;
+                                                                        $('#imageModal').modal('show');
+                                                                    });
+                                                                });
+                                                            });
+                                                        </script>
                                                         {{ Form::label('', '***Muatnaik semula akan menggantikan gambar sedia ada.', ['class' => 'col-form-label required-field-create showButton', 'style' => 'font-size: 12px;']) }}
                                                     </td>
                                                     <td>
@@ -1148,6 +1382,18 @@
                                     </tbody>
                                     @endif
                                 </table>
+                                <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-body text-center p-0">
+                                                <img id="modalImage" src="" class="img-fluid w-100" alt="Full Size Image">
+                                            </div>
+                                            <div class="modal-footer py-2">
+                                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1156,7 +1402,7 @@
 
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    let bilCount = {{ count($dataProduk ?? []) }} + 1;
+                    let bilCount = {{ isset($dataProduk) ? count($dataProduk) : 0 }};
                     let currentRow = null; // To store the current row when selecting images
 
                     document.getElementById('projek_container').addEventListener('change', function(event) {
@@ -1170,6 +1416,7 @@
 
                     // Add new product row when "Tambah Produk" is clicked
                     document.getElementById('addProductBtn').addEventListener('click', function() {
+                        bilCount++;
                         var newRow = document.createElement('tr');
                         newRow.innerHTML = `
                             <td>${bilCount}</td>
@@ -1196,13 +1443,13 @@
                             </td>
                         `;
                         document.getElementById('projek_container').appendChild(newRow);
-                        bilCount++;
 
                         // Hide the dummy row if it's there
-                        var dummyRow = document.getElementById('dummy_row');
-                        if (dummyRow) {
-                            dummyRow.remove();
-                        }
+                        $('#produk_rowD').hide();
+                        // var dummyRow = document.getElementById('produk_rowD');
+                        // if (dummyRow) {
+                        //     dummyRow.remove();
+                        // }
 
                         updateBilNumbers();
                     });
@@ -1215,8 +1462,9 @@
 
                     // Remove a row when "Hapus" button is clicked
                     document.addEventListener('click', function(event) {
-                        if (event.target.classList.contains('remove_field')) {
-                            event.target.closest('tr').remove();
+                        const removeButton = event.target.closest('.remove_field');
+                        if (removeButton) {
+                            removeButton.closest('tr').remove();
                             updateBilNumbers();
                         } else if (event.target.classList.contains('image-button')) {
                             openImageModal(event.target); // Open the image modal for the specific row
@@ -1236,9 +1484,14 @@
                     function updateBilNumbers() {
                         const rows = document.querySelectorAll('#projek_container tr');
                         rows.forEach((row, index) => {
-                            const bilCell = row.querySelector('td:first-child');
-                            bilCell.textContent = index + 1;
+                            if(row.id != 'produk_rowD'){
+                                const bilCell = row.querySelector('td:first-child');
+                                bilCell.textContent = index + {{ isset($dataProduk) ? 1 : 0 }};
+                            }
                         });
+                        if(rows.length == 1){
+                            $('#produk_rowD').show();
+                        }
                     }
 
                     window.confirmDelete_produk = function(button) {

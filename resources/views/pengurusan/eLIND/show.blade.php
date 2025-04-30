@@ -53,16 +53,32 @@
                             .inertShow span,
                             .inertShow textarea,
                             .inertShow select {
-                                background-color: rgb(215, 215, 215); /* Light grey background for input/select */
-                                color: rgb(65, 60, 60); /* Light grey text color */
+                                /* background-color: rgb(215, 215, 215); */
+                                /* color: rgb(65, 60, 60); */
                                 cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
                                 pointer-events: none; /* Ensure no interactions are possible */
                             }
                             table th:last-child, table td:last-child {
                                 display: none;
                             }
+                            @keyframes blink {
+                                0% {
+                                    opacity: 1;
+                                }
+                                50% {
+                                    opacity: 0;
+                                }
+                                100% {
+                                    opacity: 1;
+                                }
+                            }
+
+                            .newC {
+                                animation: blink 3s infinite;
+                                background-color: rgb(255, 255, 255) !important;
+                            }
                         </style>
-                        <div inert class="inertShow">
+                        <div>
                             @include('pengurusan.eLIND._form')
                         </div>
 
@@ -100,14 +116,14 @@
                                     '2' => 'Baik',
                                     '3' => 'Sederhana',
                                     '4' => 'Lemah',
-                                    '0' => 'Tiada Maklumat'
-                                ], $prestasiDB ?? 0, ['class' => 'form-control', 'id' => 'prestasiSelect']) !!}
+                                    '5' => 'Tiada Maklumat'
+                                ], $prestasiDB ?? 5, ['class' => 'form-control', 'id' => 'prestasiSelect']) !!}
 
                                 {!! Form::label('komen', 'Komen:') !!}
                                 {!! Form::textarea('komen', $komenDB ?? '', ['class' => 'form-control', 'id' => 'komenTextarea', 'rows' => 3, 'placeholder' => 'Masukkan komen di sini...']) !!}
 
                                 @php($dataPentaksir = json_decode($eLIND->pentaksir, true))
-                                {!! Form::label('pentaksir', 'Pentaksir:') !!}
+                                {!! Form::label('pentaksir', 'Pentaksir:', ['style' => auth()->user()->hasRole('Pentadbir Sistem') ? '' : 'display:none;']) !!}
                                 {!! Form::text('pentaksir', 
                                     auth()->user()->hasRole('Pentadbir Sistem') ? 
                                         ($eLIND->pentaksir ? App\User::find($pentaksirDB)->name . $timestamp : '') : '', 
@@ -115,7 +131,7 @@
                                         'class' => 'form-control',
                                         'id' => 'pentaksir',
                                         'inert' => 'inert',
-                                        'style' => auth()->user()->hasRole('Pentadbir Sistem') ? '' : 'display:none;' // Hide for non-admin users
+                                        'style' => auth()->user()->hasRole('Pentadbir Sistem') ? '' : 'display:none;'
                                     ]
                                 ) !!}
                             </div>
@@ -124,17 +140,13 @@
                 </div>
                 <div class="card-footer">
                     {!! Form::button('Kembali', ['onclick' => "window.location='".route('pengurusan.eLIND.index', ['type' => $lastSegment])."'", 'class' => 'btn btn-secondary']) !!}
-                    {!! 
-                        Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini', ['onclick'=>"window.location='".route('pengurusan.eLIND.edit', ['type' => $lastSegment, 'id' => $eLIND->id_elind])."'", 'class'=>'btn bg-warning', Html::tooltip('Kemaskini PIL')]); 
-                    !!}
+                    @if((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Penggiat Industri')) || (Auth::user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == 7 || Auth::user()->bahagian_jln == 8)))
+                        {!! 
+                            Form::button('<i class="fas fa-pencil-alt"></i>', ['onclick'=>"window.location='".route('pengurusan.eLIND.edit', ['type' => $lastSegment, 'id' => $eLIND->id_elind])."'", 'class'=>'btn bg-warning', Html::tooltip('Kemaskini PIL')]); 
+                        !!}
+                    @endif
 
                     @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))
-                        {!! Form::button('<i class="fas fa-save"></i> Pengesahan', [
-                            'class' => 'btn btn-primary', 
-                            'type' => 'submit', 
-                            'name' => 'action', 
-                            'value' => 'approve'
-                        ]) !!}
                         {!! Form::button('<i class="fas fa-sticky-note"></i> Simpan Prestasi', [
                             'class' => 'btn btn-success', 
                             'type' => 'submit', 
@@ -142,10 +154,78 @@
                             'value' => 'prestasi'
                         ]) !!}
                     @endif
+                    @if((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN') || (Auth::user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == 7 || Auth::user()->bahagian_jln == 8))))
+                        {!! Form::button('<i class="fas fa-save"></i> Pengesahan', [
+                            'class' => 'btn btn-primary', 
+                            'type' => 'submit', 
+                            'name' => 'action', 
+                            'id' => 'pengesahan', 
+                            'style' => 'display: none;', 
+                            'value' => 'approve'
+                        ]) !!}
+                        <button type="button" class="btn btn-primary" id="triggerApprovalModal">
+                            <i class="fas fa-save"></i> Pengesahan
+                        </button>
+                    @endif
                 </div>
                 {!! Form::close() !!}
             </div>
         </div>
     </div>
 </div>
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmApprovalModal" tabindex="-1" aria-labelledby="confirmApprovalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmApprovalLabel">Pengesahan Perubahan</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">x</button>
+      </div>
+      <div class="modal-body">
+        <!-- <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="modalToggleStatus">
+          <label class="form-check-label" for="modalToggleStatus">Paparan ke portal</label>
+        </div> -->
+        <div class="row" style="max-height: 40px; display: flex; justify-content: flex-start;">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <p>Adakah anda ingin <strong>paparkan ke portal?</strong></p>
+                </div>
+                <div class="col-auto">
+                    <label class="switch">
+                        <input class="form-check-input" type="checkbox" id="modalToggleStatus">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        <button type="button" id="confirmApproveBtn" class="btn btn-primary">Sahkan</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggleInput = document.querySelector('input[name="status"]');
+        const modalToggle = document.getElementById('modalToggleStatus');
+        const approvalModal = new bootstrap.Modal(document.getElementById('confirmApprovalModal'));
+
+        document.getElementById('triggerApprovalModal').addEventListener('click', function () {
+            modalToggle.checked = toggleInput?.checked ?? false;
+            approvalModal.show();
+        });
+
+        document.getElementById('confirmApproveBtn').addEventListener('click', function () {
+            if (toggleInput) {
+                toggleInput.checked = modalToggle.checked;
+            }
+            document.getElementById('pengesahan').click();
+        });
+    });
+</script>
+
+
 @endsection

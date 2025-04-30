@@ -22,7 +22,7 @@
                     <h5 class="card-title p-1 m-1 font-weight-bold">@yield('title')</h5>
                     </div>
 
-                    {!! Form::model($eLIND, ['route' => ['pengurusan.eLIND.update', 'type' => $lastSegment, 'id' => $eLIND], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
+                    {!! Form::model($eLIND, ['id' => 'fong', 'route' => ['pengurusan.eLIND.update', 'type' => $lastSegment, 'id' => $eLIND], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
                     <div class="card-body table-hardscape form-hardscape text-sm">
                         @if(isset($eLIND->name))
                             <style>
@@ -44,7 +44,7 @@
                         @include('pengurusan.eLIND._form')
                     </div>
                     <div class="card-footer">
-                        {!! Form::button('Batal dan Kembali',
+                        {!! Form::button('Kembali',
                         ['onclick'=>"window.location='".route('pengurusan.eLIND.index', ['type' => $lastSegment])."'",'class'=>'btn btn-secondary']) !!}
                         {!! Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini', [
                             'class' => 'btn btn-warning', 

@@ -32,7 +32,7 @@ class MIB_laporanController extends Controller
     {
         // dd($request->all());
         $requestData = $request->all();
-
+        $folder = $requestData['id_rakan'].' '.$requestData['taman'];
         $filenames = [];
         for ($i = 1; $i <= 4; $i++) {
             $inputField = 'gambar_input_modal_' . $i;
@@ -40,7 +40,7 @@ class MIB_laporanController extends Controller
                 $file = $request->file($inputField);
                 
                 if ($file->isValid()) {
-                    $folderName = str_replace(' ', '_', $request->input('taman'));
+                    $folderName = str_replace(' ', '_', $folder);
                     $filename = time() . '_' . $i . '.' . $file->extension();
                     $file->storeAs('public/uploads/MIB/' . $folderName, $filename);
                     $filenames[$inputField] = $filename;
@@ -49,10 +49,22 @@ class MIB_laporanController extends Controller
             }
         }
         if (!empty($filenames)) {
-            $requestData['fail'] = ($filenames);
+            $requestData['gambar'] = ($filenames);
+        }
+
+        if ($request->hasFile('fail')) {
+            $file = $request->file('fail');
+            
+            if ($file->isValid()) {
+                $folderName = str_replace(' ', '_', $folder);
+                $filename = time() . '.' . $file->extension();
+                $file->storeAs('public/uploads/MIB/' . $folderName, $filename);
+            }
+            $requestData['fail'] = $filename;
         }
         // dd($requestData);
         $report = MIB_laporan::create($requestData);  // Save the new record to the database
+        dd($report);
         $rakanTaman = MIB::findOrFail($report->id_rakan);
 
         return redirect()->route('pengurusan.MIB.show', [$rakanTaman])->with('successMessage', 'Maklumat telah berjaya disimpan.');
@@ -75,16 +87,18 @@ class MIB_laporanController extends Controller
     // Update the record
     public function update(Request $request, $id)
     {
+        $requestData = $request->all();
+        $folder = $requestData['id_rakan'].' '.$requestData['taman'];
         $report = MIB_laporan::findOrFail($id);
         $filenames = [];
-        $gambar = ($report->fail) ?? '';
+        $gambar = ($report->gambar) ?? '';
         for ($i = 1; $i <= 4; $i++) {
             $inputField = 'gambar_input_modal_' . $i;
             if ($request->hasFile($inputField)) {
                 $file = $request->file($inputField);
                 
                 if ($file->isValid()) {
-                    $folderName = str_replace(' ', '_', $request->input('taman'));
+                    $folderName = str_replace(' ', '_', $folder);
                     $filename = time() . '_' . $i . '.' . $file->extension();
                     $file->storeAs('public/uploads/MIB/' . $folderName, $filename);
                     $filenames[$inputField] = $filename;
@@ -96,9 +110,20 @@ class MIB_laporanController extends Controller
                 }
             }
         }
-        $request->merge(['fail' => ($filenames)]);
+        // $request->merge(['fail' => ($filenames)]);
+        $requestData['gambar'] = ($filenames);
+        
+        if ($request->hasFile('fail')) {
+            $file = $request->file('fail');
+            
+            if ($file->isValid()) {
+                $folderName = str_replace(' ', '_', $folder);
+                $filename = time() . '.' . $file->extension();
+                $file->storeAs('public/uploads/MIB/' . $folderName, $filename);
+            }
+            $requestData['fail'] = $filename;
+        }
 
-        $requestData = $request->all();
         $report->update($requestData);
         $rakanTaman = MIB::findOrFail($report->id_rakan);
 

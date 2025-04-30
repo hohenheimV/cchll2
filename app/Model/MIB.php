@@ -19,6 +19,7 @@ class MIB extends Model implements Auditable
     // The attributes that are mass assignable
     protected $fillable = [
         'ref_num',
+        'no_siri',
         'name',
         'email',
         'negeri',
@@ -29,21 +30,16 @@ class MIB extends Model implements Auditable
         'penduduk',
         'jawatankuasa',
         'alamat',
-        'registered_at',
-        'notes',
-        'officer',
-        'form_attachment',
-        'responsed_by',
-        'responsed_at',
         'approved_by',
         'approved_at',
-        'status'
+        'status',
+        'catatan_jln',
+        'peruntukan',
+        'status_keahlian',
     ];
 
     // The attributes that should be mutated to dates
     protected $dates = [
-        'registered_at',
-        'responsed_at',
         'approved_at',
         'deleted_at',
     ];
@@ -57,6 +53,6 @@ class MIB extends Model implements Auditable
 
     // The default values for the model's attributes
     protected $attributes = [
-        'status' => 'Baru',
+        'status' => 'Diperakui',
     ];
 }

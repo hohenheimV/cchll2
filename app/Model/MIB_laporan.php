@@ -23,6 +23,7 @@ class MIB_laporan extends Model implements Auditable
         'taman',
         'laporan',
         'fail',
+        'gambar',
     ];
 
     // The attributes that should be mutated to dates
@@ -35,5 +36,6 @@ class MIB_laporan extends Model implements Auditable
     // The attributes that should be cast to native types
     protected $casts = [
         'fail' => 'array',
+        'gambar' => 'array',
     ];
 }

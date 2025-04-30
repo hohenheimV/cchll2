@@ -16,6 +16,7 @@ class CreateRakanTamanTable extends Migration
         Schema::create('maklumat_rakan_taman', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('ref_num', 45)->nullable();
+            $table->string('no_siri', 45)->nullable();
             $table->string('name', 255)->nullable();
             $table->string('email', 255)->nullable();
             $table->string('negeri', 255)->nullable();
@@ -25,16 +26,13 @@ class CreateRakanTamanTable extends Migration
             $table->json('fail')->nullable();
             $table->string('penduduk', 255)->nullable();
             $table->json('jawatankuasa')->nullable();
-            $table->string('alamat', 255)->nullable();
-            $table->dateTime('registered_at')->nullable();
-            $table->text('notes')->nullable();
-            $table->string('officer', 255)->nullable();
-            $table->string('form_attachment',255)->nullable();
-            $table->string('responsed_by')->nullable();
-            $table->dateTime('responsed_at')->nullable();
+            $table->text('alamat')->nullable();
             $table->string('approved_by')->nullable();
             $table->dateTime('approved_at')->nullable();
-            $table->string('status', 255)->nullable()->default('Baru');
+            $table->text('catatan_jln')->nullable();
+            $table->string('peruntukan', 255)->nullable();
+            $table->enum('status', ['Diperakui', 'Diluluskan'])->default('Diperakui');
+            $table->enum('status_keahlian', ['Aktif', 'Tidak Aktif', 'Digugurkan'])->default('Tidak Aktif');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -45,7 +43,8 @@ class CreateRakanTamanTable extends Migration
             $table->string('name', 255)->nullable();
             $table->string('taman', 255)->nullable();
             $table->text('laporan')->nullable();
-            $table->json('fail')->nullable();
+            $table->string('fail', 255)->nullable();
+            $table->json('gambar')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

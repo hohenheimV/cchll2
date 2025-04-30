@@ -31,22 +31,63 @@
         <div class="form-row">
             <div class="form-group col-md-12">
                 {{ Form::label('name', 'Nama Aktiviti') }}
-                {{ Form::text('name', $MIB_laporan->name ?? '', ['placeholder' => 'Masukkan Nama Aktiviti', 'class' => 'form-control' . Html::isInvalid($errors, 'name')]) }}
+                {{ Form::text('name', $MIB_laporan->name ?? '', ['placeholder' => 'Masukkan Nama Aktiviti', 'required' => 'true', 'class' => 'inertShow form-control' . Html::isInvalid($errors, 'name')]) }}
                 {!! Html::hasError($errors, 'name') !!}
             </div>
             <div style="display: none;">
-                {{ Form::text('taman', $MIB->taman ?? ($MIB_laporan->taman ?? ''), ['placeholder' => 'Masukkan Anggaran Nilai', 'class' => 'form-control' . Html::isInvalid($errors, 'taman')]) }}
+                {{ Form::text('taman', $MIB->taman ?? ($MIB_laporan->taman ?? ''), ['placeholder' => 'Masukkan Anggaran Nilai', 'class' => 'inertShow form-control' . Html::isInvalid($errors, 'taman')]) }}
                 {!! Html::hasError($errors, 'taman') !!}
                 <input type="text" name="id_rakan" value="{{ $MIB->id ?? ($MIB_laporan->id_rakan ?? '') }}" required>
             </div>
         </div>
         <div class="form-group">
             {{ Form::label('laporan', 'Laporan') }}
-            {{ Form::textarea('laporan',$MIB_laporan->laporan ?? '',['placeholder'=>'Sila masukkan laporan','rows'=>14,'class' => 'form-control '.Html::isInvalid($errors,'laporan')]) }}
+            {{ Form::textarea('laporan',$MIB_laporan->laporan ?? '',['placeholder'=>'Sila masukkan laporan', 'required' => 'true','rows'=>10,'class' => 'inertShow form-control '.Html::isInvalid($errors,'laporan')]) }}
             {!! Html::hasError($errors,'laporan') !!}
         </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                {{ Form::label('fail', 'Fail Laporan') }}
+                {{ Form::file('fail', ['class' => 'inertShow form-control ms-2 showButton', 'multiple' => false, 'accept' => '.pdf,.docx,.pptx']) }}
+                    @if(isset($MIB_laporan->fail))
+                        {{ Form::label('', '***Muatnaik semula akan menggantikan fail sedia ada.', ['class' => 'col-form-label required-field-create showButton', 'style' => 'font-weight: strong;']) }}
+                        <br>
+                        <div class="col-md-12">
+                            <div class="d-flex align-items-center">
+                                @php
+                                    $folderName = isset($MIB_laporan->fail) ? 'MIB/'.str_replace(' ', '_', $MIB_laporan->id_rakan.' '.$MIB_laporan->taman).'/'.$MIB_laporan->fail : null;
+
+                                    $fileExtension = isset($MIB_laporan->fail) ? pathinfo($MIB_laporan->fail, PATHINFO_EXTENSION) : '';
+                                    $extensionIcon = null;
+                                    if ($fileExtension === 'pdf') {
+                                        $extensionIcon = "https://img.icons8.com/plasticine/100/pdf-2.png";
+                                    } elseif ($fileExtension === 'docx') {
+                                        $extensionIcon = "https://img.icons8.com/plasticine/100/google-docs--v2.png";
+                                    } elseif ($fileExtension === 'pptx') {
+                                        $extensionIcon = "https://img.icons8.com/plasticine/100/google-slides.png";
+                                    }
+                                @endphp
+                                
+                                @if($folderName != null)
+                                    <a href="{{ asset('storage/uploads/' . $folderName) }}" target="_blank" class="" style="border: 0px solid #ddd; border-radius: 10px; padding: 10px; display: inline-block; text-align: center; background-color: #fff;">
+                                        <div class="product-image">
+                                            <img src="{{ $extensionIcon }}" class="br-5" alt="" style="width: 100px; height: 100px; border-radius: 5px; margin-bottom: 10px;">
+                                        </div>
+                                        <div class="product-image">
+                                            <span class="file-name-1" style="background-color: #008000; padding: 5px 10px; border-radius: 5px; color: #fff; font-weight: 600; display: inline-block; font-size: 14px;">Fail Laporan <i class="fas fa-download"></i></span>
+                                        </div>
+                                        <div class="product-image">
+                                            <span class="file-name-1">{{ $MIB_laporan->fail ?? '' }}</span>
+                                        </div>
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+            </div>
+        </div>
     </div>
-    <div class="col-lg col-separator inertShow">
+    <div class="col-lg col-separator ">
         <div class="form-group">
             <label class="col-xs-4 control-label"></label>
             <div class="col-xs-12">
@@ -55,11 +96,11 @@
         </div>
         <div class="row">
             <div class="form-group required col-md-12">
-                <label for="konsep_rekabentuk" class="col-md-12 control-label">Gambar Aktiviti</label>
+                <label for="gambar" class="col-md-12 control-label">Gambar Aktiviti</label>
                 @php
-                    if(isset($MIB_laporan->fail)){
-                        $folderName = str_replace(' ', '_', $MIB->taman ?? ($MIB_laporan->taman ?? 'temp'));
-                        $gambarData = $MIB_laporan->fail;
+                    if(isset($MIB_laporan->gambar)){
+                        $folderName = str_replace(' ', '_', $MIB_laporan->id_rakan.' '.($MIB->taman ?? ($MIB_laporan->taman ?? 'temp')));
+                        $gambarData = $MIB_laporan->gambar;
 
                         $gambar_input_modal_1 = isset($gambarData['gambar_input_modal_1']) ? $folderName.'/'.$gambarData['gambar_input_modal_1'] : null;
                         $gambar_input_modal_2 = isset($gambarData['gambar_input_modal_2']) ? $folderName.'/'.$gambarData['gambar_input_modal_2'] : null;
@@ -132,30 +173,46 @@
                     </style>
                     <div class="grid-container">
                         <div class="grid-item">
-                            <input type="file" class="form-control-file" id="gambar_input_modal_1" name="gambar_input_modal_1" accept="image/*" style="display: none;">
+                            @if(strpos(request()->url(), 'show') === false)
+                            <input type="file" class="inertShow form-control-file" id="gambar_input_modal_1" name="gambar_input_modal_1" accept="image/*" style="display: none;">
+                            @endif
                             <div id="imagePreviewContainer1" class="image-preview-container">
-                                <img src="{{ isset($gambar_input_modal_1) ? asset('storage/uploads/MIB/'.$gambar_input_modal_1) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                <a href="{{ (isset($gambar_input_modal_1) && strpos(request()->url(), 'show') !== false) ? asset('storage/uploads/MIB/'.$gambar_input_modal_1) : 'javascript:void(0);' }}" target="{{ (isset($gambar_input_modal_1) && strpos(request()->url(), 'show') !== false) ? '_blank' : '' }}">
+                                    <img src="{{ isset($gambar_input_modal_1) ? asset('storage/uploads/MIB/'.$gambar_input_modal_1) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                </a>
                             </div>
                         </div>
                         <br class="mobile-done">
                         <div class="grid-item">
-                            <input type="file" class="form-control-file" id="gambar_input_modal_2" name="gambar_input_modal_2" accept="image/*" style="display: none;">
+                            @if(strpos(request()->url(), 'show') === false)
+                            <input type="file" class="inertShow form-control-file" id="gambar_input_modal_2" name="gambar_input_modal_2" accept="image/*" style="display: none;">
+                            @endif
                             <div id="imagePreviewContainer2" class="image-preview-container">
-                                <img src="{{ isset($gambar_input_modal_2) ? asset('storage/uploads/MIB/'.$gambar_input_modal_2) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                <a href="{{ (isset($gambar_input_modal_2) && strpos(request()->url(), 'show') !== false) ? asset('storage/uploads/MIB/'.$gambar_input_modal_2) : 'javascript:void(0);' }}" target="{{ (isset($gambar_input_modal_2) && strpos(request()->url(), 'show') !== false) ? '_blank' : '' }}">
+                                    <img src="{{ isset($gambar_input_modal_2) ? asset('storage/uploads/MIB/'.$gambar_input_modal_2) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                </a>
                             </div>
                         </div>
                         <br class="mobile-done">
                         <div class="grid-item">
-                            <input type="file" class="form-control-file" id="gambar_input_modal_3" name="gambar_input_modal_3" accept="image/*" style="display: none;">
+                            @if(strpos(request()->url(), 'show') === false)
+                            <input type="file" class="inertShow form-control-file" id="gambar_input_modal_3" name="gambar_input_modal_3" accept="image/*" style="display: none;">
+                            @endif
                             <div id="imagePreviewContainer3" class="image-preview-container">
-                                <img src="{{ isset($gambar_input_modal_3) ? asset('storage/uploads/MIB/'.$gambar_input_modal_3) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                <a href="{{ (isset($gambar_input_modal_3) && strpos(request()->url(), 'show') !== false) ? asset('storage/uploads/MIB/'.$gambar_input_modal_3) : 'javascript:void(0);' }}" target="{{ (isset($gambar_input_modal_3) && strpos(request()->url(), 'show') !== false) ? '_blank' : '' }}">
+                                    <img src="{{ isset($gambar_input_modal_3) ? asset('storage/uploads/MIB/'.$gambar_input_modal_3) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                </a>
                             </div>
                         </div>
                         <br class="mobile-done">
                         <div class="grid-item">
-                            <input type="file" class="form-control-file" id="gambar_input_modal_4" name="gambar_input_modal_4" accept="image/*" style="display: none;">
+                            @if(strpos(request()->url(), 'show') === false)
+                            <input type="file" class="inertShow form-control-file" id="gambar_input_modal_4" name="gambar_input_modal_4" accept="image/*" style="display: none;">
+                            @endif
                             <div id="imagePreviewContainer4" class="image-preview-container">
-                                <img src="{{ isset($gambar_input_modal_4) ? asset('storage/uploads/MIB/'.$gambar_input_modal_4) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                <a href="{{ (isset($gambar_input_modal_4) && strpos(request()->url(), 'show') !== false) ? asset('storage/uploads/MIB/'.$gambar_input_modal_4) : 'javascript:void(0);' }}" target="{{ (isset($gambar_input_modal_4) && strpos(request()->url(), 'show') !== false) ? '_blank' : '' }}">
+                                    <img src="{{ isset($gambar_input_modal_4) ? asset('storage/uploads/MIB/'.$gambar_input_modal_4) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                </a>
                             </div>
                         </div>
                     </div>

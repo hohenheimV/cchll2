@@ -35,7 +35,7 @@
 ?>
 
 
-    <div id="user_details" style="display: block;">
+    <!-- <div id="user_details" style="display: block;">
         <div class="row">
             <div class="form-group mb-3 col-md-6">
                 {{ Form::label('name', 'Nama Wakil') }}
@@ -56,14 +56,14 @@
                 @enderror
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Fields for PBT Account Type -->
     <div id="pbt_fields" style="display: block;" class="inertClass">
         <div class="form-group mb-3">
             {{ Form::label('negeri', 'Negeri') }}
             <br>
-            {{ Form::select('negeri', [], null, ['class' => 'form-control', 'id' => 'negeri', 'onchange' => 'updatePBT()']) }}
+            {{ Form::select('negeri', [], null, ['class' => 'form-control', 'id' => 'negeri']) }}
         </div>
         <div class="form-group mb-3">
             {{ Form::label('pbt', 'Pihak Berkuasa Tempatan') }}
@@ -103,10 +103,10 @@
                         @else
                             <tr>
                                 <td style="vertical-align:middle;">
-                                    <input type="text" name="kawasan[][nama]" class="form-control" maxlength="150" value="">
+                                    <input type="text" name="kawasan[0][nama]" class="form-control" maxlength="150" value="">
                                 </td>
                                 <td style="vertical-align:middle;">
-                                    <input type="text" name="kawasan[][keluasan]" class="form-control decimal" maxlength="20" value="">
+                                    <input type="text" name="kawasan[0][keluasan]" class="form-control decimal" maxlength="20" value="">
                                 </td>
                             </tr>
                         @endif
@@ -162,17 +162,17 @@
             </div>
         </div>
 
-
+        @if(strpos(request()->url(), 'edit') !== false || strpos(request()->url(), 'create') !== false)
         <div class="row">
             <div class="form-group mb-3 col-md-4">
                 <label for="pelan_lokasi_1">Pelan Lokasi 1 <span class="font-red"> * </span></label>
                 @if(isset($MIB->fail['pelan_lokasi_1']) && $MIB->fail['pelan_lokasi_1'] != null)
                     <input type="file" name="fail[pelan_lokasi_1]" class="form-control showButton"><br>
                     <div class="center-content">
-                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['pelan_lokasi_1']) }}" alt="Pelan Lokasi 1" class="img-thumbnail" width="100">
+                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_1']) }}" alt="Pelan Lokasi 1" class="img-thumbnail" width="100">
                         <br>
                         <input type="hidden" name="fail[pelan_lokasi_1]" value="{{ $MIB->fail['pelan_lokasi_1'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['pelan_lokasi_1']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_1']) }}" target="_blank" class="showButton">Lihat Gambar</a>
                     </div>
                 @else
                     <input type="file" name="fail[pelan_lokasi_1]" class="form-control showButton"><br>
@@ -185,10 +185,10 @@
                 @if(isset($MIB->fail['pelan_lokasi_2']) && $MIB->fail['pelan_lokasi_2'] != null)
                     <input type="file" name="fail[pelan_lokasi_1]" class="form-control showButton"><br>
                     <div class="center-content">
-                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['pelan_lokasi_2']) }}" alt="Pelan Lokasi 2" class="img-thumbnail" width="100">
+                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_2']) }}" alt="Pelan Lokasi 2" class="img-thumbnail" width="100">
                         <br>
                         <input type="hidden" name="fail[pelan_lokasi_2]" value="{{ $MIB->fail['pelan_lokasi_2'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['pelan_lokasi_2']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_2']) }}" target="_blank" class="showButton">Lihat Gambar</a>
                     </div>
                 @else
                     <input type="file" name="fail[pelan_lokasi_2]" class="form-control showButton"><br>
@@ -201,10 +201,10 @@
                 @if(isset($MIB->fail['pelan_lokasi_3']) && $MIB->fail['pelan_lokasi_3'] != null)
                     <input type="file" name="fail[pelan_lokasi_1]" class="form-control showButton"><br>
                     <div class="center-content">
-                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['pelan_lokasi_3']) }}" alt="Pelan Lokasi 3" class="img-thumbnail" width="100">
+                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_3']) }}" alt="Pelan Lokasi 3" class="img-thumbnail" width="100">
                         <br>
                         <input type="hidden" name="fail[pelan_lokasi_3]" value="{{ $MIB->fail['pelan_lokasi_3'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['pelan_lokasi_3']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_3']) }}" target="_blank" class="showButton">Lihat Gambar</a>
                     </div>
                 @else
                     <input type="file" name="fail[pelan_lokasi_3]" class="form-control showButton"><br>
@@ -219,10 +219,10 @@
                 @if(isset($MIB->fail['gambar_kawasan_lapang_1']) && $MIB->fail['gambar_kawasan_lapang_1'] != null)
                     <input type="file" name="fail[pelan_lokasi_1]" class="form-control showButton"><br>
                     <div class="center-content">
-                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_1']) }}" alt="Gambar Kawasan Lapang 1" class="img-thumbnail" width="100">
+                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_1']) }}" alt="Gambar Kawasan Lapang 1" class="img-thumbnail" width="100">
                         <br>
                         <input type="hidden" name="fail[gambar_kawasan_lapang_1]" value="{{ $MIB->fail['gambar_kawasan_lapang_1'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_1']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_1']) }}" target="_blank" class="showButton">Lihat Gambar</a>
                     </div>
                 @else
                     <input type="file" name="fail[gambar_kawasan_lapang_1]" class="form-control showButton"><br>
@@ -235,10 +235,10 @@
                 @if(isset($MIB->fail['gambar_kawasan_lapang_2']) && $MIB->fail['gambar_kawasan_lapang_2'] != null)
                     <input type="file" name="fail[pelan_lokasi_1]" class="form-control showButton"><br>
                     <div class="center-content">
-                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_2']) }}" alt="Gambar Kawasan Lapang 2" class="img-thumbnail" width="100">
+                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_2']) }}" alt="Gambar Kawasan Lapang 2" class="img-thumbnail" width="100">
                         <br>
                         <input type="hidden" name="fail[gambar_kawasan_lapang_2]" value="{{ $MIB->fail['gambar_kawasan_lapang_2'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_2']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_2']) }}" target="_blank" class="showButton">Lihat Gambar</a>
                     </div>
                 @else
                     <input type="file" name="fail[gambar_kawasan_lapang_2]" class="form-control showButton"><br>
@@ -251,10 +251,10 @@
                 @if(isset($MIB->fail['gambar_kawasan_lapang_3']) && $MIB->fail['gambar_kawasan_lapang_3'] != null)
                     <input type="file" name="fail[pelan_lokasi_1]" class="form-control showButton"><br>
                     <div class="center-content">
-                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_3']) }}" alt="Gambar Kawasan Lapang 3" class="img-thumbnail" width="100">
+                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_3']) }}" alt="Gambar Kawasan Lapang 3" class="img-thumbnail" width="100">
                         <br>
                         <input type="hidden" name="fail[gambar_kawasan_lapang_3]" value="{{ $MIB->fail['gambar_kawasan_lapang_3'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_3']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_3']) }}" target="_blank" class="showButton">Lihat Gambar</a>
                     </div>
                 @else
                     <input type="file" name="fail[gambar_kawasan_lapang_3]" class="form-control showButton"><br>
@@ -268,7 +268,7 @@
                 <p class="help-block font-red"> <i class="fa fa-info-circle"></i> Format yang dibenarkan: pdf, gif, jpg, png, jpeg. Saiz maksimum fail adalah  10MB.</p>
             </div>
         </div>
-        
+        @endif
         <div class="row">
             <div class="form-group mb-6 col-md-12">
                 {{ Form::label('penduduk', 'Anggaran Penduduk * ') }}
@@ -312,61 +312,61 @@
                     @if(isset($rakanTaman[0]))
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Pengerusi <span class="font-red"> * </span></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="pengerusi_nama" name="pengerusi_nama" class="form-control" maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[0]['pengerusi_nama'] : '' }}"></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="pengerusi_tel_bimbit" name="pengerusi_tel_bimbit" class="form-control" maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[0]['pengerusi_tel_bimbit'] : '' }}"></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="pengerusi_email" name="pengerusi_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[0]['pengerusi_email'] : '' }}"></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="pengerusi_nama" name="pengerusi_nama" class="form-control" maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[0]['pengerusi_nama'] : '' }}"></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="pengerusi_tel_bimbit" name="pengerusi_tel_bimbit" class="form-control" maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[0]['pengerusi_tel_bimbit'] : '' }}"></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="email" id="pengerusi_email" name="pengerusi_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[0]['pengerusi_email'] : '' }}"></td>
                     </tr>
                     @else
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Pengerusi <span class="font-red"> * </span></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="pengerusi_nama" name="pengerusi_nama" class="form-control" maxlength="150" value=""></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="pengerusi_tel_bimbit" name="pengerusi_tel_bimbit" class="form-control" maxlength="20" value=""></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="pengerusi_email" name="pengerusi_email" class="form-control lowercase" maxlength="100" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="pengerusi_nama" name="pengerusi_nama" class="form-control" maxlength="150" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="pengerusi_tel_bimbit" name="pengerusi_tel_bimbit" class="form-control" maxlength="20" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="email" id="pengerusi_email" name="pengerusi_email" class="form-control lowercase" maxlength="100" value=""></td>
                     </tr>
                     @endif
                     @if(isset($rakanTaman[1]))
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Timbalan Pengerusi <span class="font-red"> * </span></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="timbalan_pengerusi_nama" name="timbalan_pengerusi_nama" class="form-control" maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[1]['timbalan_pengerusi_nama'] : '' }}"></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="timbalan_pengerusi_tel_bimbit" name="timbalan_pengerusi_tel_bimbit" class="form-control" maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[1]['timbalan_pengerusi_tel_bimbit'] : '' }}"></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="timbalan_pengerusi_email" name="timbalan_pengerusi_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[1]['timbalan_pengerusi_email'] : '' }}"></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="timbalan_pengerusi_nama" name="timbalan_pengerusi_nama" class="form-control" maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[1]['timbalan_pengerusi_nama'] : '' }}"></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="timbalan_pengerusi_tel_bimbit" name="timbalan_pengerusi_tel_bimbit" class="form-control" maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[1]['timbalan_pengerusi_tel_bimbit'] : '' }}"></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="email" id="timbalan_pengerusi_email" name="timbalan_pengerusi_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[1]['timbalan_pengerusi_email'] : '' }}"></td>
                     </tr>
                     @else
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Timbalan Pengerusi <span class="font-red"> * </span></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="timbalan_pengerusi_nama" name="timbalan_pengerusi_nama" class="form-control" maxlength="150" value=""></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="timbalan_pengerusi_tel_bimbit" name="timbalan_pengerusi_tel_bimbit" class="form-control" maxlength="20" value=""></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="timbalan_pengerusi_email" name="timbalan_pengerusi_email" class="form-control lowercase" maxlength="100" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="timbalan_pengerusi_nama" name="timbalan_pengerusi_nama" class="form-control" maxlength="150" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="timbalan_pengerusi_tel_bimbit" name="timbalan_pengerusi_tel_bimbit" class="form-control" maxlength="20" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="email" id="timbalan_pengerusi_email" name="timbalan_pengerusi_email" class="form-control lowercase" maxlength="100" value=""></td>
                     </tr>
                     @endif
                     @if(isset($rakanTaman[2]))
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Setiausaha <span class="font-red"> * </span></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="setiausaha_nama" name="setiausaha_nama" class="form-control " maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[2]['setiausaha_nama'] : '' }}" ></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="setiausaha_tel_bimbit" name="setiausaha_tel_bimbit" class="form-control" maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[2]['setiausaha_tel_bimbit'] : '' }}" ></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="setiausaha_email" name="setiausaha_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[2]['setiausaha_email'] : '' }}"></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="setiausaha_nama" name="setiausaha_nama" class="form-control " maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[2]['setiausaha_nama'] : '' }}" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="setiausaha_tel_bimbit" name="setiausaha_tel_bimbit" class="form-control" maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[2]['setiausaha_tel_bimbit'] : '' }}" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="email" id="setiausaha_email" name="setiausaha_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[2]['setiausaha_email'] : '' }}"></td>
                     </tr>
                     @else
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Setiausaha <span class="font-red"> * </span></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="setiausaha_nama" name="setiausaha_nama" class="form-control " maxlength="150" value="" ></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="setiausaha_tel_bimbit" name="setiausaha_tel_bimbit" class="form-control" maxlength="20" value="" ></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="setiausaha_email" name="setiausaha_email" class="form-control lowercase" maxlength="100" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="setiausaha_nama" name="setiausaha_nama" class="form-control " maxlength="150" value="" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="setiausaha_tel_bimbit" name="setiausaha_tel_bimbit" class="form-control" maxlength="20" value="" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="email" id="setiausaha_email" name="setiausaha_email" class="form-control lowercase" maxlength="100" value=""></td>
                     </tr>
                     @endif
                     @if(isset($rakanTaman[3]))
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Bendahari <span class="font-red"> * </span></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="bendahari_nama" name="bendahari_nama" class="form-control " maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[3]['bendahari_nama'] : '' }}" ></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="bendahari_tel_bimbit" name="bendahari_tel_bimbit" class="form-control " maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[3]['bendahari_tel_bimbit'] : '' }}" ></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="bendahari_email" name="bendahari_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[3]['bendahari_email'] : '' }}"></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="bendahari_nama" name="bendahari_nama" class="form-control " maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[3]['bendahari_nama'] : '' }}" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="bendahari_tel_bimbit" name="bendahari_tel_bimbit" class="form-control " maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[3]['bendahari_tel_bimbit'] : '' }}" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="email" id="bendahari_email" name="bendahari_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[3]['bendahari_email'] : '' }}"></td>
                     </tr>
                     @else
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Bendahari <span class="font-red"> * </span></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="bendahari_nama" name="bendahari_nama" class="form-control " maxlength="150" value="" ></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="bendahari_tel_bimbit" name="bendahari_tel_bimbit" class="form-control " maxlength="20" value="" ></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="bendahari_email" name="bendahari_email" class="form-control lowercase" maxlength="100" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="bendahari_nama" name="bendahari_nama" class="form-control " maxlength="150" value="" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="bendahari_tel_bimbit" name="bendahari_tel_bimbit" class="form-control " maxlength="20" value="" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="email" id="bendahari_email" name="bendahari_email" class="form-control lowercase" maxlength="100" value=""></td>
                     </tr>
                     @endif
                     <!-- Repeat for other rows with similar structure -->
@@ -375,15 +375,15 @@
                             <td style="padding: 4px 8px; line-height: 1;">AJK {{ $i }}</td>
                             <td style="padding: 4px 8px; line-height: 1;">
                                 <input type="text" id="ajk{{ $i }}_nama" name="ajk{{ $i }}_nama" class="form-control" maxlength="150" 
-                                    value="{{ isset($rakanTaman[$i+3]) ? $rakanTaman[$i+3]['ajk'.$i.'_nama'] : '' }}">
+                                    value="{{ isset($rakanTaman[$i+4]) ? $rakanTaman[$i+4]['ajk'.$i.'_nama'] : '' }}">
                             </td>
                             <td style="padding: 4px 8px; line-height: 1;">
                                 <input type="text" id="ajk{{ $i }}_tel_bimbit" name="ajk{{ $i }}_tel_bimbit" class="form-control" maxlength="20" 
-                                    value="{{ isset($rakanTaman[$i+3]) ? $rakanTaman[$i+3]['ajk'.$i.'_tel_bimbit'] : '' }}">
+                                    value="{{ isset($rakanTaman[$i+4]) ? $rakanTaman[$i+4]['ajk'.$i.'_tel_bimbit'] : '' }}">
                             </td>
                             <td style="padding: 4px 8px; line-height: 1;">
                                 <input type="email" id="ajk{{ $i }}_email" name="ajk{{ $i }}_email" class="form-control lowercase" maxlength="100" 
-                                    value="{{ isset($rakanTaman[$i+3]) ? $rakanTaman[$i+3]['ajk'.$i.'_email'] : '' }}">
+                                    value="{{ isset($rakanTaman[$i+4]) ? $rakanTaman[$i+4]['ajk'.$i.'_email'] : '' }}">
                             </td>
                         </tr>
                     @endfor
@@ -394,10 +394,54 @@
                         <td style="padding: 4px 8px; line-height: 1;"><input type="text" id="penyelaras_tel_bimbit" name="penyelaras_tel_bimbit" class="form-control" maxlength="20" value=""></td>
                         <td style="padding: 4px 8px; line-height: 1;"><input type="email" id="penyelaras_email" name="penyelaras_email" class="form-control lowercase" maxlength="100" value=""></td>
                     </tr> -->
+                    
+                    @if(isset($rakanTaman[4]))
+                    <tr>
+                        <td style="padding: 4px 8px; line-height: 1;">Penyelaras <span class="font-red"> * </span></td>
+                        <td style="padding: 4px 8px; line-height: 1;">
+                            <input required type="text" id="penyelaras_nama" name="penyelaras_nama" class="form-control @error('penyelaras_nama') is-invalid @enderror" maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[4]['penyelaras_nama'] : '' }}" >
+                            @error('penyelaras_nama')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="penyelaras_tel_bimbit" name="penyelaras_tel_bimbit" class="form-control " maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[4]['penyelaras_tel_bimbit'] : '' }}" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;">
+                            <input required type="email" id="penyelaras_email" name="penyelaras_email" class="form-control lowercase @error('penyelaras_email') is-invalid @enderror" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[4]['penyelaras_email'] : '' }}">
+                            @error('penyelaras_email')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </td>
+                    </tr>
+                    @else
+                    <tr>
+                        <td style="padding: 4px 8px; line-height: 1;">Penyelaras <span class="font-red"> * </span></td>
+                        <td style="padding: 4px 8px; line-height: 1;">
+                            <input required type="text" id="penyelaras_nama" name="penyelaras_nama" class="form-control @error('penyelaras_nama') is-invalid @enderror" maxlength="150" value="{{ isset($MIB->name) ? $MIB->name : '' }}" >
+                            @error('penyelaras_nama')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="penyelaras_tel_bimbit" name="penyelaras_tel_bimbit" class="form-control " maxlength="20" value="" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;">
+                            <input required type="email" id="penyelaras_email" name="penyelaras_email" class="form-control lowercase @error('penyelaras_email') is-invalid @enderror" maxlength="100" value="{{ isset($MIB->email) ? $MIB->email : '' }}">
+                            @error('penyelaras_email')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </td>
+                    </tr>
+                    @endif
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Alamat Surat Menyurat Penyelaras <span class="font-red"> * </span></td>
                         <td colspan="3" style="padding: 4px 8px; line-height: 1;">
-                            <textarea id="alamat" name="alamat" class="form-control" rows="5">{{ $MIB->alamat ?? '' }}"</textarea>
+                            <textarea id="alamat" name="alamat" class="form-control" rows="5">{{ $MIB->alamat ?? '' }}</textarea>
                         </td>
                     </tr>
                 </tbody>
@@ -484,27 +528,65 @@
 
     // Initialize fields based on the default dropdown value
     $(document).ready(function() {
-        $.getJSON('/data/negeri', function(data) {
+        // $.getJSON('/data/negeri', function(data) {
             
-            $.each(data, function(index, negeri) {
-                let pname = negeri.name;
-                $('#negeri').append($('<option>', {
-                    value: negeri.id,
-                    text: negeri.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-                }));
-            });
-            // Re-enable the negeri dropdown and hide the spinner
-            $('#negeri').prop('disabled', false);
-            $('#loading-spinner').hide(); // Hide the spinner
+        //     $.each(data, function(index, negeri) {
+        //         let pname = negeri.name;
+        //         $('#negeri').append($('<option>', {
+        //             value: negeri.id,
+        //             text: negeri.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+        //         }));
+        //     });
+        //     // Re-enable the negeri dropdown and hide the spinner
+        //     $('#negeri').prop('disabled', false);
+        //     $('#loading-spinner').hide(); // Hide the spinner
 
-        }).fail(function() {
-            // Handle errors if needed
-            $('#negeri').prop('disabled', false);
-            $('#loading-spinner').hide(); // Hide the spinner in case of error
-            alert('Failed to load data');
+        // }).fail(function() {
+        //     // Handle errors if needed
+        //     $('#negeri').prop('disabled', false);
+        //     $('#loading-spinner').hide(); // Hide the spinner in case of error
+        //     alert('Failed to load data');
+        // });
+
+        $.ajax({
+            url: '/get-negeri', // API endpoint to get negeri data
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                // Populate the Negeri dropdown with the data
+                $('#negeri').empty(); // Clear current options
+                $('#negeri').append('<option value="">Pilih Negeri</option>');
+
+                $.each(data, function(key, value) {
+                    $('#negeri').append('<option value="' + value.kod_negeri + '">' + value.nama_negeri + '</option>');
+                });
+                var negeriSelected = "{{ isset($MIB->negeri) ? $MIB->negeri : '' }}"; // Assuming you have $ePALM->negeri
+                if (negeriSelected) {
+                    $('#negeri').val(negeriSelected);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching Negeri data: ", error);
+            }
         });
+
+        $('#negeri').change(function() {
+            var negeriId = $(this).val();
+            var negeriText = $(this).find('option:selected').text();
+            $('#data_pbt').empty();
+            $.getJSON('/data/pbt/' + negeriText, function(data) {
+                $.each(data, function(index, pbt) {
+                    $('#data_pbt').append($('<option>', {
+                        value: pbt.name,
+                        'data-id': pbt.id,
+                    }));
+                });
+            });
+        });
+
+
         
-        let rowIndex = '{{ isset($MIB->kawasan) ? count($MIB->kawasan) : 0 }}';
+        let rowIndex = '{{ isset($MIB->kawasan) ? count($MIB->kawasan) : 1 }}';
         // alert(rowIndex);
         // Function to Add New Row
         $('#addKawasan').click(function() {

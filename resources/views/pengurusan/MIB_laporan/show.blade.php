@@ -16,12 +16,31 @@
                 {!! Form::model($MIB_laporan, ['route' => ['pengurusan.MIB_laporan.update', $MIB_laporan],
                 'method'=>'PUT','id'=>'formFeedbacks','files' => true]) !!}
                 <div class="card-body">
-                    <div inert>
+                    <style>
+                        .showButton{
+                            display: none;
+                        }
+                        .inertShow {
+                            pointer-events: none; /* Ensure no interactions are possible */
+                        }
+
+                        .inertShow input,
+                        .inertShow span,
+                        .inertShow textarea,
+                        .inertShow input[type="file"],
+                        .inertShow select {
+                            background-color: rgb(215, 215, 215); /* Light grey background for input/select */
+                            color: rgb(65, 60, 60); /* Light grey text color */
+                            cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
+                            pointer-events: none; /* Ensure no interactions are possible */
+                        }
+                    </style>
+                    <div >
                         @include('pengurusan.MIB_laporan._form')
                     </div>
                 </div>
                 <div class="card-footer">
-                    {!! Form::button('Batal dan Kembali',
+                    {!! Form::button('Kembali',
                     ['onclick'=>"window.location='".route('pengurusan.MIB.show',$MIB_laporan->id_rakan)."'",
                     'class'=>'btn btn-secondary']) !!}
                     {{--

@@ -22,7 +22,7 @@
     <div class="col-12 col-md-6">
         <div class="form-group">
             {{ Form::label('password', 'Kata Laluan') }}
-            {{ Form::password('password', ['placeholder' => 'Sila Masukkan Kata Laluan', 'class' => 'form-control']) }}
+            {{ Form::password('password', ['placeholder' => 'Sila Masukkan Kata Laluan', 'class' => 'form-control', 'autocomplete' => 'new-password']) }}
             @error('password')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
@@ -98,8 +98,9 @@
             @enderror
             <script>
                 $(document).ready(function() {
+                    let jenis = '{{ $user->jenis }}';
                     $.ajax({
-                        url: '/get-penggiat-industri',
+                        url: '/XyZ83hQ2d8A9/' + jenis,
                         type: 'GET',
                         dataType: 'json',
                         success: function(data) {
@@ -107,7 +108,7 @@
                             $('#bahagian_jln').append('<option value="">Pilih Syarikat</option>');
 
                             $.each(data, function(key, value) {
-                                $('#bahagian_jln').append('<option value="' + value.id_elind + '">' + value.name + '</option>');
+                                $('#bahagian_jln').append('<option value="' + value.id_elind + '">' + value.name.toUpperCase() + '</option>');
                             });
                             var bahagianSelected = "{{ isset($user->bahagian_jln) ? $user->bahagian_jln : '' }}";
                             if (bahagianSelected) {
@@ -141,7 +142,7 @@
                             $('#bahagian_jln').append('<option value="">Pilih Pihak Berkuasa Tempatan</option>');
 
                             $.each(data, function(key, value) {
-                                $('#bahagian_jln').append('<option value="' + value.id + '">' + value.pbt_name + '</option>');
+                                $('#bahagian_jln').append('<option value="' + value.id + '">' + value.pbt_name.toUpperCase() + '</option>');
                             });
                             var bahagianSelected = "{{ isset($user->bahagian_jln) ? $user->bahagian_jln : '' }}";
                             if (bahagianSelected) {

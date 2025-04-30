@@ -39,7 +39,7 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="example" class="responsive table table-bordered table-hover table-striped table-sm mb-0">
+                            <table id="exampleNP" class="responsive table table-bordered table-hover table-striped table-sm mb-0">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th class="align-middle text-center wpx-50">No</th>

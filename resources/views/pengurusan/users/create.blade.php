@@ -25,7 +25,7 @@
                     <!-- /.card-body -->
 
                     <div class="card-footer">
-                        {!! Form::button('Batal dan Kembali',
+                        {!! Form::button('Kembali',
                         ['onclick'=>"window.location='".route('pengurusan.users.index')."'",'class'=>'btn btn-secondary']) !!}
                         {!! Form::button('<i class="fas fa-save"></i> Daftar', ['class'=>'btn btn-success','type'=>'submit']) !!}
                     </div>

@@ -244,7 +244,7 @@
             $.each(data, function(index, negeri) {
                 $negeri.append($('<option>', {
                     value: negeri.kod_negeri,
-                    text: capitalizeWords(negeri.nama_negeri)
+                    text: negeri.nama_negeri.toUpperCase()
                 }));
             });
             // Add 'lain-lain' option
@@ -311,8 +311,8 @@
 
             $.each(data, function(index, pbt) {
                 $dropdown.append($('<option>', {
-                    value: capitalizeWords(pbt.name), // Change value to name
-                    text: capitalizeWords(pbt.name)
+                    value: pbt.name,
+                    text: pbt.name.toUpperCase()
                 }));
             });
 
@@ -340,9 +340,9 @@
     }
 
     // Utility function to capitalize each word
-    function capitalizeWords(str) {
-        return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    }
+    // function capitalizeWords(str) {
+    //     return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    // }
 
     // Run function on page load
     $(document).ready(function() {

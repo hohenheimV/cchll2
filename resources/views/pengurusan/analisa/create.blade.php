@@ -19,7 +19,7 @@
                         @include('pengurusan.analisa._upload')
                     </div>
                     <div class="card-footer">
-                        {!! Form::button('Batal dan Kembali', [
+                        {!! Form::button('Kembali', [
                             'onclick' => "window.location='" . route('pengurusan.analisa.index') . "'",
                             'class' => 'btn btn-secondary',
                         ]) !!}

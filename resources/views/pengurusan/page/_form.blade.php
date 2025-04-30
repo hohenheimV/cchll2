@@ -197,7 +197,7 @@ $url = config('app.url')
 <script>
     $(document).ready(function () {
 
-        var route_prefix = "{{ $url }}filemanager";
+        var route_prefix = "{{ $url }}/filemanager";
 
         $('#lfm').filemanager('image', {prefix: route_prefix});
         $('#lfmlink').filemanager('file', {prefix: route_prefix});

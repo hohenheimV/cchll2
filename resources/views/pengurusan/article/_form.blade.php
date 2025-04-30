@@ -35,11 +35,11 @@
             </style>
             
             <!-- Form group with Summernote -->
-            <div class="form-group mb-1">
+            <!-- <div class="form-group mb-1">
                 {{ Form::label('content', 'Kandungan') }}
                 {{ Form::textarea('content', null, ['id' => 'kandunganSN', 'placeholder' => 'Kandungan', 'class' => 'form-control ' . Html::isInvalid($errors, 'content')]) }}
                 {!! Html::hasError($errors, 'content') !!}
-            </div>
+            </div> -->
 
             <!-- Initialize Summernote with code view enabled -->
             <script>
@@ -191,7 +191,7 @@
 
     $(document).ready(function () {
 
-        var route_prefix = "{{ $url }}filemanager";
+        var route_prefix = "{{ $url }}/filemanager";
 
 
 

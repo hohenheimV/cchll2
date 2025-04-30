@@ -160,7 +160,7 @@
         function imgupload(){
 
 
-            var route_prefix = "{{ $url }}filemanager";
+            var route_prefix = "{{ $url }}/filemanager";
 
                 $('a#del').click(function() {
                     if (confirm('Are you sure?')) {

@@ -17,7 +17,7 @@
                         @include('pengurusan.zon._form')
                     </div>
                     <div class="card-footer">
-                        {!! Form::button('Batal dan Kembali', [
+                        {!! Form::button('Kembali', [
                             'onclick' => "window.location='" . route('pengurusan.zon.index') . "'",
                             'class' => 'btn btn-secondary',
                         ]) !!}

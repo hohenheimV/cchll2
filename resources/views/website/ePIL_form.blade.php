@@ -77,7 +77,7 @@
                     }
                     
                 </style>
-                <table id="exampleNP" class="responsive table table-bordered table-hover table-striped mb-0" style="font-size: 12px;">
+                <table id="exampleNP" class="responsive table table-bordered table-hover table-striped mb-0">
                     <thead style="background-color:rgb(0, 0, 0) !important;color: white;">
                         <tr>
                             <th class="w-1">Bil.</th>
@@ -109,18 +109,25 @@
                                     </td>
                                     <td style="text-align: center;">
                                         <?php 
-                                            $folder = str_replace(' ', '_', $pelan->nama_pelan); 
+                                            $folder = str_replace(' ', '_', $pelan->id_pelan.' '.$pelan->nama_pelan); 
                                             $fileSizeInMB = '';
-                                            if(isset($pelan->nama_dokumen_pelan)){
-                                                $filePath = storage_path('app/public/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan);
+                                            if(isset($pelan->gambar_dokumen_pelan)){
+                                                $filePath = storage_path('app/public/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan);
                                                 if (file_exists($filePath)) {
                                                     $fileSizeInBytes = filesize($filePath);
                                                     $fileSizeInMB = number_format($fileSizeInBytes / 1048576, 2);
                                                 }
                                             }
                                         ?>
-                                        <a href="{{ asset($pelan->nama_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan : 'storage/uploads/no-photos.png' ) }}" 
-                                            target="_blank" download>
+                                        @if ($pelan->gambar_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan)))
+                                        <!-- <a href="{{ asset($pelan->gambar_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan : 'storage/uploads/no-photos.png' ) }}" 
+                                            target="_blank" download> -->
+                                        <button 
+                                            data-title="{{ $pelan->nama_pelan }}" 
+                                            data-pelan="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan) }}"
+                                            data-toggle="modal" 
+                                            data-target="#pelanModal"
+                                        >
                                             <div id="pdf-viewer-{{$pelan->id_dokumen_pelan ?? $pelan->id_pelan}}" 
                                                 style="width: 100px; height: 150px; border: 1px solid #ddd; margin: auto; cursor: pointer;">
                                                 <div id="loading-{{$pelan->id_dokumen_pelan}}" 
@@ -132,23 +139,30 @@
                                                         style="width: 100%; height: 100%; object-fit: contain; display: none;">
                                                 </canvas>
                                             </div>
-                                        </a>
+                                        </button>
+                                        <!-- </a> -->
                                         <p>{{ $fileSizeInMB ? $fileSizeInMB . " MB" : '' }}</p>
+                                        @else
+                                            Tiada dokumen
+                                        @endif
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group">
-                                            @if ($pelan->nama_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan)))
-                                            <button 
+                                            @if ($pelan->gambar_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan)))
+                                            <!-- <button 
                                                 type="button" 
                                                 class="btn btn-primary btn-sm" 
                                                 data-title="{{ $pelan->nama_pelan }}" 
-                                                data-pelan="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan) }}"
+                                                data-pelan="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan) }}"
                                                 data-toggle="modal" 
                                                 data-target="#pelanModal"
-                                            >
+                                            > -->
+                                            <a href="{{ asset($pelan->gambar_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan : 'storage/uploads/no-photos.png' ) }}" 
+                                            target="_blank" type="button" class="btn btn-primary btn-sm" >
                                                 <i class="fas fa-search"></i>
-                                            </button>
-                                                <a href="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan) }}" target="_blank" download>
+                                            </a>
+                                            <!-- </button> -->
+                                                <a href="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan) }}" target="_blank" download>
                                                     {!! Form::button('<i class="fas fa-download"></i>', [
                                                         'class' => 'btn btn-success btn-sm'
                                                     ]) !!}
@@ -200,9 +214,9 @@
         background-color: white;
         margin: 5% auto;
         padding: 30px;
-        width: 80%;
-        max-width: 900px;
-        max-height: 80%;
+        width: 100%;
+        max-width: 100%;
+        max-height: 100%;
         overflow-y: auto; /* Makes the modal content scrollable */
         background-image: url("{{ asset('storage/img/bg-pattern-leaves.png') }}");
     }
@@ -262,9 +276,11 @@
         // Use ePIL.data to loop through the records
         ePIL.data.forEach(pelan => {
             // console.log(pelan);
-            let folder = pelan.nama_pelan.replace(/\s+/g, '_'); // Replace spaces with underscores in folder name
-            const url = pelan.nama_dokumen_pelan ?
-                `/storage/uploads/ePIL/${folder}/${pelan.nama_dokumen_pelan}` : 
+            // let folder = pelan.nama_pelan.replace(/\s+/g, '_'); // Replace spaces with underscores in folder name
+            let namaFolder = pelan.id_pelan+' '+pelan.nama_pelan;
+            let folder = namaFolder.replace(/\s+/g, '_');
+            const url = pelan.gambar_dokumen_pelan ?
+                `/storage/uploads/ePIL/${folder}/${pelan.gambar_dokumen_pelan}` : 
                 '/img/no-photos.png';
 
             // Load and render the first page of the PDF document
@@ -302,7 +318,7 @@
                 // console.error('Error loading PDF for ID ' + pelan.id_dokumen_pelan + ':', error);
                 const viewerElement = document.getElementById('pdf-viewer-' + pelan.id_pelan);
                 if (viewerElement) {
-                    viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Preview not available</div>';
+                    viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Dokumen tidak dapat dipaparkan</div>';
                 }
             });
         });

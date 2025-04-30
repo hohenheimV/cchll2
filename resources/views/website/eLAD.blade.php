@@ -78,7 +78,7 @@
                                         }
                                         
                                     </style>
-                                    <table id="exampleNP" class="responsive table table-bordered table-hover table-striped mb-0" style="font-size: 12px;">
+                                    <table id="exampleNP" class="responsive table table-bordered table-hover table-striped mb-0">
                                         <thead style="background-color:rgb(0, 0, 0) !important;color: white;">
                                             <tr>
                                                 <th class="w-1">Bil.</th>

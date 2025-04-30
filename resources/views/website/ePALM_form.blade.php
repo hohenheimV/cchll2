@@ -23,7 +23,7 @@
                             }
 
                             $.ajax({
-                                url: '/get-negeri', // API endpoint to get negeri data
+                                url: '/get-negeri-salt', // API endpoint to get negeri data
                                 type: 'GET',
                                 dataType: 'json',
                                 success: function(data) {
@@ -33,10 +33,11 @@
 
                                     $.each(data, function(key, value) {
                                         // Add each Negeri to the dropdown
-                                        $('#negeri').append('<option value="' + value.kod_negeri + '">' + capitalizeWords(value.nama_negeri) + '</option>');
+                                        $('#negeri').append('<option value="' + value.kod_negeri  + '">' + (value.nama_negeri) + '</option>');
                                     });
 
                                     var negeriSelected = "{{ isset($keyword) ? $keyword : '' }}";
+                                    // alert(negeriSelected);
                                     if (negeriSelected) {
                                         $('#negeri').val(negeriSelected);
                                     }
@@ -78,7 +79,7 @@
                     }
                     
                 </style>
-                <table id="example" class="responsive table table-bordered table-hover table-striped mb-0" style="font-size: 12px;">
+                <table id="example" class="responsive table table-bordered table-hover table-striped mb-0">
                     <thead style="background-color:rgb(0, 0, 0) !important;color: white;">
                         <tr>
                             <th class="w-1">Bil.</th>
@@ -597,7 +598,7 @@
             // console.log(gambar);
             for (let i = 1; i <= 4; i++) {
                 let imageId = `parkImage${i}`;
-                let imageSource = `Xgambar_input_modal_${i}`;
+                let imageSource = `XGIM_${i}`;
                 let imagePath = `/storage/uploads`;
 
                 let img = document.getElementById(imageId);

@@ -77,13 +77,13 @@
                     }
                     
                 </style>
-                <table id="exampleNP" class="responsive table table-bordered table-hover table-striped mb-0" style="font-size: 12px;">
+                <table id="exampleNP" class="responsive table table-bordered table-hover table-striped mb-0">
                     <thead style="background-color:rgb(0, 0, 0) !important;color: white;">
                         <tr>
                             <th class="w-1">Bil.</th>
                             <th class="w-15">Nama</th>
                             <th class="w-5">Alamat</th>
-                            <th class="text-center w-5">Prestasi</th>
+                            <!-- <th class="text-center w-5">Prestasi</th> -->
                             <th class="text-center w-1">Tindakan</th>
                             
                         </tr>
@@ -113,14 +113,14 @@
                                     <td>{{ $index++ }}</td>
                                     <td>{{ strtoupper($user->name) }}</td>
                                     <td>
-                                    @if(isset($user->email)) {{ $user->email }}<br>@endif
-                                    @if(isset($user->address1)) {{ $user->address1 }}<br>@endif
-                                    @if(isset($user->address2)) {{ $user->address2 }}<br>@endif
-                                    @if(isset($user->postcode)) {{ $user->postcode }}<br>@endif
-                                    @if(isset($user->locality)) {{ $user->locality }}<br>@endif
-                                    @if(isset($user->state)) {{ $user->state }}<br>@endif
+                                        {{--@if(isset($user->email)) {{ $user->email }}<br>@endif--}}
+                                        @if(isset($user->address1)) {{ $user->address1.',' }}<br>@endif
+                                        @if(isset($user->address2)) {{ $user->address2.',' }}<br>@endif
+                                        @if(isset($user->postcode)) {{ $user->postcode }}@endif
+                                        @if(isset($user->locality)) {{ $user->locality.', ' }}@endif
+                                        @if(isset($user->state)) {{ $user->state.'.' }}<br>@endif
                                     </td>
-                                    <td class="text-center">
+                                    <!-- <td class="text-center">
                                         <?php
                                             if($user->prestasi != null){
                                                 $dataprestasi = json_decode($user->prestasi, true);
@@ -132,7 +132,7 @@
                                         <span  class="badge {{ $prestasi[$prestasiDB-1 ?? '4']['label'] }}" style="white-space: normal; text-align: centre;width: 100%;">
                                             {{ $prestasi[$prestasiDB-1 ?? '4']['id'] }}
                                         </span>
-                                    </td>
+                                    </td> -->
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <button 
@@ -140,13 +140,13 @@
                                                 class="btn btn-primary btn-sm" 
                                                 data-jenis="{{ $keyword }}" 
                                                 data-title="{{ $user->name }}" 
-                                                data-address="@if(isset($user->email)) {{ $user->email.',' }}@endif
+                                                data-address="{{--@if(isset($user->email)) {{ $user->email.',' }}@endif--}}
                                                 @if(isset($user->address1)) {{ $user->address1.',' }}@endif
                                                 @if(isset($user->address2)) {{ $user->address2.',' }}@endif
-                                                @if(isset($user->postcode)) {{ $user->postcode.',' }}@endif
-                                                @if(isset($user->locality)) {{ $user->locality.',' }}@endif
-                                                @if(isset($user->state)) {{ $user->state.',' }}@endif"
-                                                data-no_telefon="{{ $user->mediaSosial_penggiat }}"
+                                                @if(isset($user->postcode)) {{ $user->postcode }}@endif
+                                                @if(isset($user->locality)) {{ $user->locality.', ' }}@endif
+                                                @if(isset($user->state)) {{ $user->state.'.' }}@endif"
+                                                data-media_sosial="{{ $user->mediaSosial_penggiat }}"
                                                 data-emel="{{ $user->email }}"
                                                 @if($keyword == "Pembekal" || $keyword == "Perunding" || $keyword == "Kontraktor") 
                                                 data-no_ssm="{{ $user->no_ssm }}"
@@ -163,8 +163,9 @@
                                                 @endif
                                                 @if($keyword == "Pembekal") 
                                                     data-produk="{{ $user->produk }}" 
+                                                    data-folder="{{ str_replace(' ', '_', $user->id_elind . ' ' . $user->name) }}" 
                                                 @endif
-                                                @if($keyword == "Perunding" || $keyword == "Kontraktor") 
+                                                @if($keyword == "Pembekal" || $keyword == "Perunding" || $keyword == "Kontraktor") 
                                                     data-pengalaman="{{ $user->pengalaman }}" 
                                                 @endif
                                                 @if($keyword == "Institusi Pendidikan") 
@@ -333,7 +334,7 @@
                     <p id="state">Tiada Maklumat</p> -->
                 </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-5 col-xs-12">
                     <p><strong>No Telefon</strong></p>
                 </div>
@@ -348,7 +349,7 @@
                 <div class="col-7 col-xs-12">
                     <p id="emel">Tiada Maklumat</p>
                 </div>
-            </div>
+            </div> -->
             @if($keyword == "Pembekal" || $keyword == "Perunding" || $keyword == "Kontraktor") 
             <div class="row">
                 <div class="col-5 col-xs-12">
@@ -421,7 +422,17 @@
                 </div>
             </div>
             @endif
-            @if($keyword == "Perunding" || $keyword == "Kontraktor") 
+
+            <div id="mediaSosial">
+                <div class="col-5 col-xs-12">
+                    <p><strong>Media</strong></p>
+                </div>
+                <div class="col-7 col-xs-12">
+                    <p id="">Tiada Maklumat</p>
+                </div>
+            </div>
+
+            @if($keyword == "Pembekal" || $keyword == "Perunding" || $keyword == "Kontraktor") 
             <div class="form-group">
                 <label class="col-xs-4 control-label"></label>
                 <div class="col-xs-12">
@@ -541,12 +552,13 @@
             var jenis = button.data('jenis');
             var title = button.data('title');
             var address = button.data('address');
-            var no_telefon = button.data('no_telefon');
+            var media_sosial = button.data('media_sosial');
             var emel = button.data('emel');
             var no_ssm = button.data('no_ssm');
             var no_mof = button.data('no_mof');
             var pengalaman = button.data('pengalaman');
             var produk = button.data('produk');
+            let folder = button.data('folder');
             var no_cidb = button.data('no_cidb');
             var taraf_bumiputera = button.data('taraf_bumiputera');
             var bidang_kepakaran = button.data('bidang_kepakaran');
@@ -557,18 +569,56 @@
             var jenis_institusi = button.data('jenis_institusi');
             var bidang_pembekal = button.data('bidang_pembekal');
             let telefon = '';
-            let folder = title.replace(/ /g, '_');
+            // let folder = title.replace(/ /g, '_');
 
-            for (let key in no_telefon) {
-                if (no_telefon.hasOwnProperty(key)) {
-                    if (no_telefon[key] && key == "Telefon") {
-                        telefon = no_telefon[key];
-                        console.log(no_telefon[key]);
-                    } else {
-                        console.log(key, no_telefon[key]);
-                    }
-                }
+            // for (let key in no_telefon) {
+            //     if (no_telefon.hasOwnProperty(key)) {
+            //         if (no_telefon[key] && key == "Telefon") {
+            //             telefon = no_telefon[key];
+            //             console.log(no_telefon[key]);
+            //         } else {
+            //             console.log(key, no_telefon[key]);
+            //         }
+            //         console.log(key);
+            //     }
+            // }
+
+            const container = document.getElementById("mediaSosial");
+
+            // Clear existing (optional)
+            container.innerHTML = "";
+
+            const priorityOrder = ["Emel", "Telefon", "Web"];
+            function appendRow(labelText, valueText) {
+                const row = document.createElement("div");
+                row.className = "row";
+
+                const colLabel = document.createElement("div");
+                colLabel.className = "col-5 col-xs-12";
+                colLabel.innerHTML = `<p><strong>${labelText}</strong></p>`;
+
+                const colValue = document.createElement("div");
+                colValue.className = "col-7 col-xs-12";
+                colValue.innerHTML = `<p>${valueText || 'Tiada Maklumat'}</p>`;
+
+                row.appendChild(colLabel);
+                row.appendChild(colValue);
+                container.appendChild(row);
             }
+
+            // Add in priority order
+            priorityOrder.forEach(key => {
+                if (media_sosial.hasOwnProperty(key)) {
+                    appendRow(key, media_sosial[key]);
+                }
+            });
+
+            // Add the remaining keys
+            Object.keys(media_sosial).forEach(key => {
+                if (!priorityOrder.includes(key)) {
+                    appendRow(key, media_sosial[key]);
+                }
+            });
 
             // Update the modal's content
             var modal = $(this);
@@ -579,12 +629,12 @@
             if (address && address !== '') {
                 modal.find('#address').text(address);
             }
-            if (telefon && telefon !== '') {
-                modal.find('#no_telefon').text(telefon);
-            }
-            if (emel && emel !== '') {
-                modal.find('#emel').text(emel);
-            }
+            // if (telefon && telefon !== '') {
+            //     modal.find('#no_telefon').text(telefon);
+            // }
+            // if (emel && emel !== '') {
+            //     modal.find('#emel').text(emel);
+            // }
 
             if(jenis == "Kontraktor"){
                 const bidangKepakaranMap = {
@@ -674,7 +724,7 @@
                     modal.find('#no_mof').text(no_mof);
                 }
             }
-            if(jenis == "Kontraktor" || jenis == "Perunding"){
+            if(jenis == "Kontraktor" || jenis == "Perunding" || jenis == "Pembekal"){
                 populateTablePengalaman(pengalaman);
             }
             if(jenis == "Pembekal"){
@@ -788,33 +838,71 @@
                 // Create and append the 'Gambar Produk 1' column (Image 1)
                 var gambarProduk1Cell = document.createElement("td");
                 var gambarProduk1Img = document.createElement("img");
-                if(item.gambar_produk_1){
-                    gambarProduk1Img.src = imagePath + '/eLIND/' + folder+'/'+subfolder+'/'+item.gambar_produk_1 || '';
+                var gambarProduk1Link = document.createElement("a");
+
+                if (item.gambar_produk_1) {
+                    var fullImagePath = imagePath + '/eLIND/' + folder + '/' + subfolder + '/' + item.gambar_produk_1;
+                    gambarProduk1Img.src = fullImagePath;
+                    gambarProduk1Link.href = fullImagePath;
                     gambarProduk1Img.onerror = function () {
                         gambarProduk1Img.src = `${imagePath}/no-photos.png`;
+                        gambarProduk1Link.href = `${imagePath}/no-photos.png`;
                     };
-                }else{
+                } else {
                     gambarProduk1Img.src = `${imagePath}/no-photos.png`;
+                    gambarProduk1Link.href = `${imagePath}/no-photos.png`;
                 }
+
                 gambarProduk1Img.alt = "Gambar Produk 1";
-                gambarProduk1Img.style.width = "100px";  // Set a fixed width for the image
-                gambarProduk1Cell.appendChild(gambarProduk1Img);
+                gambarProduk1Img.style.width = "100px";
+
+                gambarProduk1Link.target = "_blank";
+                gambarProduk1Link.appendChild(gambarProduk1Img);
+
+                gambarProduk1Cell.appendChild(gambarProduk1Link);
                 row.appendChild(gambarProduk1Cell);
 
+
                 // Create and append the 'Gambar Produk 2' column (Image 2)
+                // var gambarProduk2Cell = document.createElement("td");
+                // var gambarProduk2Img = document.createElement("img");
+                // if(item.gambar_produk_2){
+                //     gambarProduk2Img.src = imagePath + '/eLIND/' + folder+'/'+subfolder+'/'+item.gambar_produk_2 || '';
+                //     gambarProduk2Img.onerror = function () {
+                //         gambarProduk2Img.src = `${imagePath}/no-photos.png`;
+                //     };
+                // }else{
+                //     gambarProduk2Img.src = `${imagePath}/no-photos.png`;
+                // }
+                // gambarProduk2Img.alt = "Gambar Produk 2";
+                // gambarProduk2Img.style.width = "100px";  // Set a fixed width for the image
+                // gambarProduk2Cell.appendChild(gambarProduk2Img);
+                // row.appendChild(gambarProduk2Cell);
+
                 var gambarProduk2Cell = document.createElement("td");
                 var gambarProduk2Img = document.createElement("img");
-                if(item.gambar_produk_2){
-                    gambarProduk2Img.src = imagePath + '/eLIND/' + folder+'/'+subfolder+'/'+item.gambar_produk_2 || '';
+                var gambarProduk2Link = document.createElement("a");
+
+                if (item.gambar_produk_2) {
+                    var fullImagePath = imagePath + '/eLIND/' + folder + '/' + subfolder + '/' + item.gambar_produk_2;
+                    gambarProduk2Img.src = fullImagePath;
+                    gambarProduk2Link.href = fullImagePath;
                     gambarProduk2Img.onerror = function () {
                         gambarProduk2Img.src = `${imagePath}/no-photos.png`;
+                        gambarProduk2Link.href = `${imagePath}/no-photos.png`;
                     };
-                }else{
+                } else {
                     gambarProduk2Img.src = `${imagePath}/no-photos.png`;
+                    gambarProduk2Link.href = `${imagePath}/no-photos.png`;
                 }
+
                 gambarProduk2Img.alt = "Gambar Produk 2";
-                gambarProduk2Img.style.width = "100px";  // Set a fixed width for the image
-                gambarProduk2Cell.appendChild(gambarProduk2Img);
+                gambarProduk2Img.style.width = "100px";
+
+                gambarProduk2Link.target = "_blank";
+                gambarProduk2Link.appendChild(gambarProduk2Img);
+
+                gambarProduk2Cell.appendChild(gambarProduk2Link);
                 row.appendChild(gambarProduk2Cell);
 
                 // Append the row to the table body

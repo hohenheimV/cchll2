@@ -30,10 +30,12 @@ use App\Model\MIB;
 use App\Model\MIB_laporan;
 use App\Model\Negeri;
 use App\Model\MaklumatPenggunaPenggiatIndustri;
+use App\Model\EntitiLandskapUnik;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\LocationController;
@@ -41,6 +43,8 @@ use App\Http\Controllers\Pengurusan\eLINDController;
 use App\Http\Controllers\Pengurusan\eLAPSController;
 use App\Http\Controllers\Pengurusan\ePALMController;
 use App\Http\Controllers\Pengurusan\MIB_laporanController;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 // use App\Http\Controllers\Pengurusan\eMohonController;
 
 Route::get('/vtour-bukit-kiara', function () {
@@ -94,6 +98,12 @@ Route::get('/', function () {
         ],
         // Add more sliders as needed
     ];
+    $sliders = Slider::active()->get()->map(function ($slider) {
+        return (object) [
+            'title' => $slider->title,
+            'url'   => $slider->slider_image,
+        ];
+    });
     return view('website.welcome', compact('popup', 'sliders'));
 })->name('welcome');
 
@@ -179,12 +189,16 @@ Route::post('/test-upload', [DataController::class, 'testUpload']);
 Route::get('/fetchComponents/{id_taman}', [DataController::class, 'fetchComponents']);
 Route::get('/get-pbt-statistics', [DataController::class, 'getPBTStatistics']);
 Route::get('/get-visitor-statistics', [DataController::class, 'getVisitorStatistics']);
-Route::get('/get-penggiat-industri', [DataController::class, 'getPenggiatIndustri']);
+Route::get('/get-jln-statistics', [DataController::class, 'getJlnStatistics']);
+Route::middleware(['throttle:10,1'])->group(function () {
+    Route::get('/XyZ83hQ2d8A9/{jenis?}', [DataController::class, 'getPenggiatIndustri']);
+});
 Route::get('/get-pbt', [DataController::class, 'getPbtName']);
 
 
 // Route::get('your-form-url', [LocationController::class, 'create']);
 Route::get('get-negeri', [LocationController::class, 'create']);
+Route::get('get-negeri-salt', [LocationController::class, 'salt']);
 Route::get('get-negeri/{kod_negeri?}', [LocationController::class, 'getNegeri']);
 Route::get('get-daerah/{kod_negeri}', [LocationController::class, 'getDaerah']);
 Route::get('get-mukim/{kod_negeri}/{kod_daerah}', [LocationController::class, 'getMukim']);
@@ -342,12 +356,14 @@ Route::name('website.')
         })->name('search');
 
         Route::get('/epalm-taman/{keyword?}', function ($keyword = null) {
+            $keywordSalt = $keyword;// ? Crypt::decryptString($keyword) : null;
             // dd($keyword);
             // return ePALM::where('is_komponen', null)->latest()->paginate(10);
             // $ePALM = ePALM::/* where('is_komponen', null)-> */where('status', 'approved')->latest()->paginate(5);//ePALM::latest()->paginate(15);
             $ePALM = ePALM::where('status', 'approved')
-                ->when($keyword, function($query) use ($keyword) {
-                    return $query->where('negeri_taman', 'like', "%$keyword%");
+                ->where('nama_pbt', '!=', 'Landskap Perbandaran')
+                ->when($keywordSalt, function($query) use ($keywordSalt) {
+                    return $query->where('negeri_taman', 'like', "%$keywordSalt%");
                 })
                 ->orderBy('negeri_taman')
                 ->orderBy('created_at', 'asc')
@@ -359,7 +375,8 @@ Route::name('website.')
                     $item->komponen = str_replace(' ', '_', $ePALM_komponen->nama_taman)."/".str_replace(' ', '_', $item->nama_taman);
                     // dump($ePALM_komponen);
                     $item->nama_pbt = $ePALM_komponen->nama_pbt;
-                    $item->gambar_taman = str_replace('gambar_input_modal_', 'Xgambar_input_modal_', $item->gambar_taman);
+                    // $item->gambar_taman = str_replace('gambar_input_modal_', 'Xgambar_input_modal_', $item->gambar_taman);
+                    // $item->gambar_taman = preg_replace('/\b(X?gambar_input_modal_|GIM_)/', 'XGIM_', $item->gambar_taman);
                     $item->kategori_taman = $ePALM_komponen->kategori_taman;
                     // $item->keterangan_taman = $ePALM_komponen->nama_pbt;
                     $item->fasiliti = $ePALM_komponen->fasiliti;
@@ -371,8 +388,9 @@ Route::name('website.')
                     $item->waktuTamat_taman = $ePALM_komponen->waktuTamat_taman;
                     $item->negeri_taman = $ePALM_komponen->negeri_taman;
                     $item->nama_taman = "Komponen: ".$item->nama_taman;
-                    // dump($item);
                 }
+                $item->gambar_taman = preg_replace('/\b(X?gambar_input_modal_|GIM_)/', 'XGIM_', $item->gambar_taman);
+                // dump($item->gambar_taman);
                 $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->negeri_taman)->orderBy('nama_negeri', 'asc')->first();
                 $item->negeri = isset($negeris->nama_negeri) ? ucwords(strtolower($negeris->nama_negeri)) : ''; 
             }
@@ -410,9 +428,16 @@ Route::name('website.')
             return view('website.eREAD', ['ereads' => $ereads, 'keyword' => $keyword]);
         })->name('eREAD');
 
-        Route::get('/epact-dokumen/{keyword?}', function ($keyword = null) {
-            $totalCount = ePACT::with('kategori')->whereIn('kate', [67/* , 72, 78, 85, 93, 102 */, 112]) ->count();
-            $epacts = ePACT::with('kategori')->whereIn('kate', [67/* , 72, 78, 85, 93, 102 */, 112]) ->orderBy('tarikh', 'desc')->paginate($totalCount);
+        Route::get('/epact-dokumen/{keyword}', function ($keyword = null) {
+            // 67 => "Dasar-Dasar Berkaitan Landskap"
+            // 72 => "Akta Akta Berkaitan Dengan Pembangunan Landskap"
+            // 78 => "Garis Panduan Landskap"
+            // 85 => "Ordinan Enakmen"
+            // 93 => "Peraturan Taman Landskap"
+            // 102 => "Dasar Semasa"
+            // 112 => "Polisi Luar Negara"
+            $totalCount = ePACT::with('kategori')->where('kate', $keyword) ->count();
+            $epacts = ePACT::with('kategori')->where('kate', $keyword) ->orderBy('tarikh', 'desc')->paginate($totalCount);
             return view('website.ePACT', ['epacts' => $epacts, 'keyword' => $keyword]);
         })->name('ePACT');
 
@@ -448,17 +473,17 @@ Route::name('website.')
             switch ($keyword) {
                 case 'kontraktor':
                     $type = 'Kontraktor';
-                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+                    $data = MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->count());
                     break;
     
                 case 'perunding':
                     $type = 'Perunding';
-                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+                    $data = MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->count());
                     break;
     
                 case 'pembekal':
                     $type = 'Pembekal';
-                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+                    $data = MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->count());
                     break;
                 case 'antarabangsa':
                     $type = 'Pertubuhan Antarabangsa';
@@ -488,6 +513,48 @@ Route::name('website.')
             }
             return view('website.eLIND', ['eLIND' => $data, 'keyword' => ($type)]);
         })->name('website.eLIND');
+
+        Route::get('/entiti-landskap/{keyword?}', function ($keyword = null) {
+            $keywordSalt = $keyword;// ? Crypt::decryptString($keyword) : null;
+            // dd($keyword);
+            // return ePALM::where('is_komponen', null)->latest()->paginate(10);
+            // $ePALM = ePALM::/* where('is_komponen', null)-> */where('status', 'approved')->latest()->paginate(5);//ePALM::latest()->paginate(15);
+            $ePALM = ePALM::where('status', 'approved')
+                ->where('nama_pbt', '!=', 'Landskap Perbandaran')
+                ->when($keywordSalt, function($query) use ($keywordSalt) {
+                    return $query->where('negeri_taman', 'like', "%$keywordSalt%");
+                })
+                ->orderBy('negeri_taman')
+                ->orderBy('created_at', 'asc')
+                ->orderBy('nama_pbt')
+                ->paginate(10);
+            foreach ($ePALM as $item) {
+                if ($item->nama_pbt == "Landskap Perbandaran") {
+                    $ePALM_komponen = ePALM::where('id_taman', $item->is_komponen)->first();
+                    $item->komponen = str_replace(' ', '_', $ePALM_komponen->nama_taman)."/".str_replace(' ', '_', $item->nama_taman);
+                    // dump($ePALM_komponen);
+                    $item->nama_pbt = $ePALM_komponen->nama_pbt;
+                    // $item->gambar_taman = str_replace('gambar_input_modal_', 'Xgambar_input_modal_', $item->gambar_taman);
+                    // $item->gambar_taman = preg_replace('/\b(X?gambar_input_modal_|GIM_)/', 'XGIM_', $item->gambar_taman);
+                    $item->kategori_taman = $ePALM_komponen->kategori_taman;
+                    // $item->keterangan_taman = $ePALM_komponen->nama_pbt;
+                    $item->fasiliti = $ePALM_komponen->fasiliti;
+                    $item->lat = $ePALM_komponen->lat;
+                    $item->lng = $ePALM_komponen->lng;
+                    $item->keluasan_taman = $ePALM_komponen->keluasan_taman;
+                    $item->keluasan_unit = $ePALM_komponen->keluasan_unit;
+                    $item->waktuMula_taman = $ePALM_komponen->waktuMula_taman;
+                    $item->waktuTamat_taman = $ePALM_komponen->waktuTamat_taman;
+                    $item->negeri_taman = $ePALM_komponen->negeri_taman;
+                    $item->nama_taman = "Komponen: ".$item->nama_taman;
+                }
+                $item->gambar_taman = preg_replace('/\b(X?gambar_input_modal_|GIM_)/', 'XGIM_', $item->gambar_taman);
+                // dump($item->gambar_taman);
+                $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->negeri_taman)->orderBy('nama_negeri', 'asc')->first();
+                $item->negeri = isset($negeris->nama_negeri) ? ucwords(strtolower($negeris->nama_negeri)) : ''; 
+            }
+            return view('website.ePALM', ['ePALM_all' => $ePALM, 'keyword' => $keyword]);
+        })->name('epalm');
     });
 
 Route::middleware(['auth'])
@@ -534,6 +601,9 @@ Route::middleware(['auth'])
             Route::get('profile/', 'UsersController@profile_show')->name('profile.show');
             Route::get('profile/edit', 'UsersController@profile_edit')->name('profile.edit');
             Route::patch('profile/{user}', 'UsersController@profile_update')->name('profile.update');
+            Route::get('pbt/', 'UsersController@pbt_show')->name('pbt.show');
+            Route::get('pbt/edit', 'UsersController@pbt_edit')->name('pbt.edit');
+            Route::patch('pbt/{user}', 'UsersController@pbt_update')->name('pbt.update');
             // New route for eLIND
             Route::get('velind', 'UsersController@velind')->name('velind');
         });
@@ -745,6 +815,9 @@ Route::middleware(['auth'])
          * Route MIBController
          */
         Route::resource('MIB', 'MIBController');
+        Route::get('/generate-certificate/{serialNumber}', 'MIBController@generateCertificate')->name('MIB.generateCertificate');
+        // Route::get('/generate-certificate/{serialNumber}', [MIBController::class, 'generateCertificate']);
+
 
         /**
          * Route MIB_laporanController

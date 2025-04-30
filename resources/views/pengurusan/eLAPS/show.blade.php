@@ -26,8 +26,7 @@
                     <div inert>
                         @include('pengurusan.eLAPS._form')
                     </div>
-
-                    @if(isset($eLAPS->file_path) && (auth()->user()->hasRole('Pentadbir Sistem|TKP/B JLN') || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6)))
+                    @if(isset($eLAPS->file_path) && (auth()->user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pihak Berkuasa Tempatan') || (Auth::user()->hasRole('Pegawai'))))
                         <div class="col-md-12">
                             <div class="d-flex align-items-center">
                                 @php
@@ -70,15 +69,44 @@
                         @endif
                     @endif
 
+                    @if(Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 3) || ( Auth::user()->id == $eLAPS->id_pemohon))
+                        <div class="row">
+                            <div class="form-group mb-6 col-md-12" style="background-color:#fef7f8; border-left: 5px solid #f0868e; padding: 15px;">
+                                <label for="acknowledgement"><h4>Pengesahan dan pengakuan pemohon:</h4></label>
+                                <div style="background-color: transparent; border: none; padding: 10px; width: 100%; font-size: 16px;">
+                                    Dengan ini saya mengesahkan segala maklumat yang diberikan adalah <strong>betul, tepat, lengkap</strong> dan sebarang kesalahan dan percanggahan maklumat adalah dibawah tanggungan pihak saya sendiri. Diperakukan bahawa tapak cadangan ini tidak terlibat dengan pembangunan-pembangunan semasa dan pihak saya juga tidak mengemukakan apa-apa permohonan selain cadangan pembangunan yang dipohon untuk projek ini sahaja.
+                                </div>
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" type="checkbox" id="acknowledgement" name="acknowledgement" required {{ isset($eLAPS->created_at) ? 'checked inert' : '' }}>
+                                    <label class="form-check-label" for="acknowledgement" {{ isset($eLAPS->created_at) ? 'inert' : '' }}>
+                                        Saya mengakui dan bersetuju dengan pengesahan di atas. {{ isset($eLAPS->created_at) ? ' - [Pengesahan dan pengakuan pemohon pada ' . $eLAPS->created_at . ']' : '' }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     <!-- @include('pengurusan.eLAPS._upload') -->
-                    @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai') && $eLAPS->status_permohonan >= 6)
+                     {{ ($eLAPS->status_permohonan == 5) }}
+                    @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai') && $eLAPS->status_permohonan >= 6 && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln || Auth::user()->bahagian_jln == 6))
                         @if($eLAPS->status_permohonan > 7) <div inert> @endif
                             {{ Form::label('ulasan_lawatan', 'KEGUNAAN JABATAN :', ['class' => 'col-form-label']) }}<br>
-                            {{ Form::label('ulasan_lawatan', 'Ulasan Lawatan Kawasan Tapak :', ['class' => 'col-form-label']) }}
+                            {{ Form::label('ulasan_lawatan', 'Ulasan :', ['class' => 'col-form-label ulasan']) }}
                         
-                            {{ Form::textarea('ulasan_lawatan', $eLAPS->ulasan_lawatan, ['class' => 'form-control summernote', 'rows' => 3, 'cols' => 20, 'placeholder' => 'Masukkan butiran jika ada']) }}
+                            {{ Form::textarea('ulasan_lawatan', $eLAPS->ulasan_lawatan, ['class' => 'form-control summernote', 'rows' => 3, 'cols' => 20, 'placeholder' => 'Masukkan butiran jika ada', 'required' => true]) }}
                         @if($eLAPS->status_permohonan > 7) </div> @endif
                     @endif
+                    <script>
+                        @if($eLAPS->status_permohonan >= 5)
+                        let firstError = document.querySelector('.ulasan');
+                        if (firstError) {
+                            firstError.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center'
+                            });
+                        }
+                        @endif
+                    </script>
                 </div>
                 <div class="card-footer">
                     {!! Form::button('Kembali', ['onclick' => "window.location='".route('pengurusan.eLAPS.index')."'", 'class' => 'btn btn-secondary']) !!}
@@ -103,7 +131,7 @@
                         --}}
                     @endif
 
-                    @if(($eLAPS->status_permohonan == 6 || $eLAPS->status_permohonan == 7) && auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))
+                    @if(($eLAPS->status_permohonan == 6 || $eLAPS->status_permohonan == 7) && (auth()->user()->hasRole('Pentadbir Sistem|Pegawai') && Auth::user()->bahagian_jln == $eLAPS->bahagian_jln))
                         {!! Form::button('<i class="fas fa-pencil-alt"></i> Simpan Draf Ulasan', [
                             'class' => 'btn btn-primary', 
                             'type' => 'submit', 
@@ -111,7 +139,7 @@
                             'value' => 'draf'
                         ]) !!}
                     {{--@endif
-                    @if($eLAPS->status_permohonan == 7 && auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))--}}
+                    @if($eLAPS->status_permohonan == 7 && (auth()->user()->hasRole('Pentadbir Sistem|Pegawai') && Auth::user()->bahagian_jln == $eLAPS->bahagian_jln))--}}
                         {!! Form::button('<i class="fas fa-pencil-alt"></i> Hantar Ulasan', [
                             'class' => 'btn btn-success', 
                             'type' => 'submit', 
@@ -120,8 +148,8 @@
                         ]) !!}
                     @endif
 
-                    @if(($eLAPS->status_permohonan == 8 || $eLAPS->status_permohonan == 9) && auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))
-                        {!! Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini Status JPT', [
+                    @if(($eLAPS->status_permohonan == 8 || $eLAPS->status_permohonan == 9) && (auth()->user()->hasRole('Pentadbir Sistem|Pegawai') && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln || Auth::user()->bahagian_jln == 6)))
+                        {!! Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini Status Permohonan', [
                             'class' => 'btn btn-warning', 
                             'data-toggle'=>'modal', 
                             'data-target'=>'#modalKeputusan', 
@@ -129,7 +157,7 @@
                         ]) !!}
                     @endif
 
-                    @if(($eLAPS->status_permohonan == 10 || $eLAPS->status_permohonan == 12) && (auth()->user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem') || Auth::user()->id == $eLAPS->id_pemohon))
+                    @if(($eLAPS->status_permohonan == 10 || $eLAPS->status_permohonan == 12) && (auth()->user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem') || Auth::user()->id == $eLAPS->id_pemohon || (auth()->user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln || Auth::user()->bahagian_jln == 6))))
                         {!! Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini Status Projek', [
                             'class' => 'btn btn-warning', 
                             'data-toggle'=>'modal', 

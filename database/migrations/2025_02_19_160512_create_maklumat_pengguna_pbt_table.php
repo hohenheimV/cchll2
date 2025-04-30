@@ -15,8 +15,8 @@ class CreateMaklumatPenggunaPbtTable extends Migration
     {
         Schema::create('maklumat_pengguna_pbt', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('name')->nullable();
+            $table->string('email')->nullable();
             $table->string('pbt_name');
             
             // Nullable address columns

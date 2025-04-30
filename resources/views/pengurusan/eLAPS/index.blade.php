@@ -12,10 +12,11 @@
         <div class="col-lg-12">
             <div class="card card-olive card-outline">
                 <div class="card-header">
-                @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem'))
-                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan Pegawai JLN]</h3>
-                @elseif(Auth::user()->hasRole('TKP/B JLN|Pentadbir Sistem'))
+                @if(Auth::user()->hasRole('TKP/B JLN|Pentadbir Sistem') || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6))
                     <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan KP/TKP/B. Penilaian]</h3>
+                
+                @elseif(Auth::user()->hasRole('Pegawai|Pentadbir Sistem'))
+                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan Pegawai JLN]</h3>
                 @elseif(Auth::user()->hasRole('Pihak Berkuasa Tempatan'))
                     <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan PBT]</h3>
                 @endif
@@ -72,10 +73,10 @@
                                     ['id' => 'Lawatan Kawasan Tapak', 'label' => 'bg-success'], //6
                                     ['id' => 'Draf Ulasan Lawatan Kawasan Tapak', 'label' => 'bg-warning'], //7
                                     ['id' => 'Ulasan Lawatan Kawasan Tapak diterima', 'label' => 'bg-info'], //8
-                                    ['id' => 'Permohonan dibawa ke JPT', 'label' => 'bg-primary'], //9
-                                    ['id' => 'Permohonan Lulus', 'label' => 'bg-success'], //10
-                                    ['id' => 'Permohonan Gagal', 'label' => 'bg-danger'], //11
-                                    ['id' => 'Projek dalam pembinaan', 'label' => 'bg-secondary'], //12
+                                    ['id' => 'Permohonan dalam pertimbangan', 'label' => 'bg-primary'], //9
+                                    ['id' => 'Permohonan Lengkap', 'label' => 'bg-success'], //10
+                                    ['id' => 'Permohonan Tidak Lengkap', 'label' => 'bg-danger'], //11
+                                    ['id' => 'Projek Dalam Pelaksanaan', 'label' => 'bg-secondary'], //12
                                     ['id' => 'Projek Batal', 'label' => 'bg-dark'], //13
                                     ['id' => 'Projek Siap', 'label' => 'bg-success'] //14
                                 ])
@@ -146,12 +147,12 @@
                                                         ]) !!}
                                                     @elseif(($permohonan->status_permohonan == 8 || $permohonan->status_permohonan == 9) && (Auth::user()->hasRole('Pentadbir Sistem|Pegawai')))
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
-                                                            ['class'=>'btn btn-warning btn-sm', Html::tooltip('Kemaskini Status JPT'),
+                                                            ['class'=>'btn btn-warning btn-sm', Html::tooltip('Kemaskini Status Permohonan'),
                                                             'data-toggle'=>'modal', 
                                                             'data-target'=>'#modalKeputusan', 
                                                             'data-elaps-id' => $permohonan->id
                                                         ]) !!}
-                                                    @elseif(($permohonan->status_permohonan == 10 || $permohonan->status_permohonan == 12) && (Auth::user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem') || Auth::user()->id == $permohonan->id_pemohon))
+                                                    @elseif(($permohonan->status_permohonan == 10 || $permohonan->status_permohonan == 12) && ((Auth::user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem') || Auth::user()->id == $permohonan->id_pemohon) || (Auth::user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == 6 || Auth::user()->bahagian_jln == $permohonan->bahagian_jln))))
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
                                                             ['class' => 'btn btn-warning btn-sm', 
                                                             'data-elaps-id' => $permohonan->id,

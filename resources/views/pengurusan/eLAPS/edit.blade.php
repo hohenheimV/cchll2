@@ -30,7 +30,7 @@
                 </div>
                 <div class="card-footer">
                     <!-- Cancel Button (redirect to eLAPS index) -->
-                    {!! Form::button('Batal dan Kembali', ['onclick' => "window.location='".route('pengurusan.eLAPS.index')."'", 'class' => 'btn btn-secondary']) !!}
+                    {!! Form::button('Kembali', ['onclick' => "window.location='".route('pengurusan.eLAPS.index')."'", 'class' => 'btn btn-secondary']) !!}
 
                     <!-- Update Button (Kemaskini) -->
                     {!! Form::button('<i class="fas fa-save"></i> Kemaskini', [

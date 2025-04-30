@@ -15,8 +15,15 @@
         <td style="border: none; padding: 8px; text-align: left;">
             {{ Form::label('anggaranKos', '&nbsp;&nbsp;&nbsp;&nbsp;ANGGARAN KOS PEMBANGUNAN (RM):', ['class' => 'col-form-label required-field-create']) }}
         </td>
+        
         <td style="border: none; padding: 8px; text-align: left;">
-            {{ Form::text('anggaranKos', null, ['class' => 'form-control currency-input', 'placeholder' => '0.00', 'style' => 'text-align: right; width: 70%; margin-left: auto; margin-right: 0;', 'oninput' => 'formatCurrency(this);']) }}
+            {{ Form::text('anggaranKos', null, [
+                'id' => 'anggaranKos',  // Add an ID for targeting in JS
+                'class' => 'form-control currency-input'. (in_array('anggaranKos', session('errorFields', [])) ? ' is-invalid' : ''), 
+                'placeholder' => '0,000,000', 
+                'style' => 'text-align: right; width: 70%; margin-left: auto; margin-right: 0;', 
+                'oninput' => 'formatCurrency(this);'
+            ]) }}
         </td>
         <style>
             .currency-input {
@@ -28,17 +35,14 @@
 
         <script>
             function formatCurrency(input) {
-                // Remove non-numeric characters except for the decimal point
-                let value = input.value.replace(/[^\d]/g, '');  // Only keep digits
-                
-                // Format the integer part with commas
-                let integer = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-                // Set the input value to the formatted integer with commas
-                input.value = integer;
+                let value = input.value;
+                value = value.replace(/[^\d.]/g, '');
+                let integerPart = value.split('.')[0];
+                let formattedValue = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                input.value = formattedValue;
             }
             let anggaran = document.getElementById('anggaranKos');
-            if(anggaran != null){
+            if (anggaran != null && anggaran.value !== '') {
                 formatCurrency(anggaran);
             }
         </script>
@@ -56,8 +60,8 @@
         <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('projectCategory', '3.&nbsp;&nbsp;&nbsp;&nbsp;KATEGORI PROJEK:', ['class' => 'col-form-label required-field']) }}</td>
     </tr>
     <!-- Third Row: Rancangan Pembangunan (checkboxes with input fields) -->
-    <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
-        <td style="border: none; padding: 8px; text-align: left;"  colspan="6">
+    <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" class="{{ in_array('category', session('errorFields', [])) ? 'is-invalid' : '' }}">
+        <td style="border: none; padding: 8px; text-align: left;" colspan="6">
 
             <style>
                 /* Add space before the checkbox */
@@ -136,6 +140,19 @@
                     document.getElementById('lain_lain_text').value = "{{$eLAPS->category ?? ''}}";
                 </script>
             @endif
+            @if((in_array('category.lain-lain', session('errorFields', []))))
+                <script>
+                    var checkboxes1 = document.querySelectorAll('input[name="category[]"]');
+                    checkboxes1.forEach(function(item1) {
+                        item1.checked = false;
+                    });
+                    document.getElementById('category_lain').checked = true;
+                    
+                    document.getElementById('lain_lain_details').style.display = 'block';
+                    document.getElementById('lain_lain_text').disabled = false;
+                    document.getElementById('lain_lain_text').classList.add('is-invalid');
+                </script>
+            @endif
 
             <script>
                 function onlyOne1(checkbox1) {
@@ -185,6 +202,11 @@
             </script>
 
         </td>
+        @if ($errors->has('category'))
+            <div class="invalid-feedback">
+                {{ $errors->first('category') }}
+            </div>
+        @endif
     </tr>
     <!-- Third Row: Rancangan Pembangunan (checkbox and text box) -->
     <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
@@ -192,7 +214,7 @@
     </tr>
 
     <!-- Third Row: Rancangan Pembangunan (checkboxes with input fields) -->
-    <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
+    <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" class="{{ (in_array('rancangan_pembangunan.jenis', session('errorFields', [])) || in_array('rancangan_pembangunan.keterangan', session('errorFields', []))) ? 'is-invalid' : '' }}">
         <td style="border: none; padding: 8px; text-align: left;"  colspan="6">
             @php
                 $rancangan_pembangunan = [
@@ -206,7 +228,7 @@
             @php
                 if(isset($eLAPS->rancangan_pembangunan)){
                     $rancanganPembangunanData = json_decode($eLAPS->rancangan_pembangunan, true);
-                    //dd($rancanganPembangunanData)
+                    //dd($rancanganPembangunanData);
                 }
             @endphp
             @foreach ($rancangan_pembangunan as $index => $item)
@@ -217,13 +239,52 @@
                     <div class="{{ $index == count($rancangan_pembangunan) - 1 ? 'col-md-12' : 'col-md-6' }}">
                         <div class="form-check d-flex align-items-center">
                             @php
-                                if(isset($eLAPS->rancangan_pembangunan) && isset($rancanganPembangunanData['jenis'])){
-                                    $isChecked = $rancanganPembangunanData['jenis'] == str_replace('&nbsp;', '', $item['label']);
+                                $isChecked = false;
+                                if (isset($rancanganPembangunanData['jenis'])) {
+                                    // Check if 'jenis' is an array and check if the current item is in the array
+                                    if (is_array($rancanganPembangunanData['jenis'])) {
+                                        $isChecked = in_array(str_replace('&nbsp;', '', $item['label']), $rancanganPembangunanData['jenis']);
+                                    } else {
+                                        // If 'jenis' is not an array, check if it matches the current item
+                                        $isChecked = $rancanganPembangunanData['jenis'] == str_replace('&nbsp;', '', $item['label']);
+                                    }
                                 }
                             @endphp
-                            {{ Form::checkbox('rancangan_pembangunan[jenis]', str_replace('&nbsp;', '', $item['label']), $isChecked, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'rancangan_pembangunan_' . $item['id'], 'onclick' => 'onlyOne2(this)']) }}
+
+                            {{ Form::checkbox('rancangan_pembangunan[jenis][]', str_replace('&nbsp;', '', $item['label']), $isChecked, ['class' => 'form-check-input bigger-checkbox space-checkbox', 'id' => 'rancangan_pembangunan_' . $item['id'], 'onclick' => 'onlyOne2(this)']) }}
                             {{ Form::label('rancangan_pembangunan_' . $item['id'], str_replace('&nbsp;', '', $item['label']) . ' :&nbsp;&nbsp;&nbsp;&nbsp;', ['class' => 'form-check-label bigger-label space-label ms-2']) }}
-                            {{ Form::text('rancangan_pembangunan[keterangan]', $isChecked ? $rancanganPembangunanData['keterangan'] : null, ['class' => 'form-control d-inline-block ms-2', 'id' => 'rancangan_pembangunan_details_' . str_replace('&nbsp;', '', $item['id']), 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'width: 50%; margin-top: 0;', 'disabled' => !$isChecked]) }}
+
+                            @php
+                                $keteranganValue = null;
+                                if (isset($rancanganPembangunanData['keterangan']) && $isChecked) {
+                                    if (is_array($rancanganPembangunanData['keterangan'])) {
+                                        $key = array_search(str_replace('&nbsp;', '', $item['label']), $rancanganPembangunanData['jenis']);
+                                        if (is_array($rancanganPembangunanData['keterangan'])) {
+                                            $keteranganValue = isset($rancanganPembangunanData['keterangan'][str_replace('&nbsp;', '', $item['label'])]) ? $rancanganPembangunanData['keterangan'][str_replace('&nbsp;', '', $item['label'])] : reset($rancanganPembangunanData['keterangan']);
+                                        } else {
+                                            $keteranganValue = $rancanganPembangunanData['keterangan'];
+                                        }
+                                        //if ($key !== false) {
+                                            //$keteranganValue = isset($rancanganPembangunanData['keterangan'][str_replace('&nbsp;', '', $item['label'])]) ? $rancanganPembangunanData['keterangan'][str_replace('&nbsp;', '', $item['label'])] : '';
+                                        //}
+                                    } else {
+                                        $keteranganValue = $rancanganPembangunanData['keterangan'];
+                                    }
+                                }
+                            @endphp
+
+                            {{ Form::text('rancangan_pembangunan[keterangan]['.str_replace('&nbsp;', '', $item['label']).']', $keteranganValue, ['class' => 'form-control d-inline-block ms-2 '.(in_array('rancangan_pembangunan.keterangan.'.(str_replace('&nbsp;', '', $item['label'])), session('errorFields', [])) ? 'is-invalid' : ''), 'id' => 'rancangan_pembangunan_details_' . str_replace('&nbsp;', '', $item['id']), 'placeholder' => 'Masukkan butiran jika ada', 'style' => 'width: 50%; margin-top: 0;', 'disabled' => !$isChecked]) }}
+                            
+                            @if (in_array('rancangan_pembangunan.keterangan.'.(str_replace('&nbsp;', '', $item['label'])), session('errorFields', [])))
+                                    <script>
+                                        document.getElementById(`rancangan_pembangunan_`+`{{ $item['id'] }}`).checked = true;
+                                        document.getElementById(`rancangan_pembangunan_details_`+`{{ $item['id'] }}`).disabled = false;
+                                        setTimeout(function() {
+                                            document.getElementById(`rancangan_pembangunan_details_`+`{{ $item['id'] }}`).focus();
+                                        }, 100);
+                                        // alert(`rancangan_pembangunan_`+`{{ $item['id'] }}`);
+                                    </script>
+                            @endif
                         </div>
                     </div>
 
@@ -235,19 +296,39 @@
             <script>
                 // JavaScript function to ensure only one checkbox is selected
                 function onlyOne2(checkbox2) {
-                    var checkboxes2 = document.querySelectorAll('input[name="rancangan_pembangunan[jenis]"]');
-                    checkboxes2.forEach(function(item2) {
-                        let id = item2.id.replace("rancangan_pembangunan", "rancangan_pembangunan_details");
-                        if (item2 !== checkbox2) {
-                            item2.checked = false;
-                            document.getElementById(id).disabled = true;
-                        }else{
-                            document.getElementById(id).disabled = false;
-                            setTimeout(function() {
-                                document.getElementById(id).focus();
-                            }, 100); 
-                        }
-                    });
+                    let idText = checkbox2.id.replace("rancangan_pembangunan", "rancangan_pembangunan_details");
+                    var textInput = document.getElementById(idText);
+                    if(checkbox2.checked){
+                        textInput.disabled = !checkbox2.checked;
+                        setTimeout(function() {
+                            textInput.focus();
+                        }, 100);
+                    }else{
+                        textInput.disabled = !checkbox2.checked;
+                    }
+                    // if (textInput) {
+                    //     if (checkbox6.id === 'guna_tanah_6') {
+                    //         textInput.disabled = !checkbox6.checked;
+                    //         setTimeout(function() {
+                    //             textInput.focus();
+                    //         }, 100);
+                    //     } else {
+                    //         // textInput.disabled = true;
+                    //     }
+                    // }
+                    // var checkboxes2 = document.querySelectorAll('input[name="rancangan_pembangunan[jenis]"]');
+                    // checkboxes2.forEach(function(item2) {
+                    //     let id = item2.id.replace("rancangan_pembangunan", "rancangan_pembangunan_details");
+                    //     if (item2 !== checkbox2) {
+                    //         item2.checked = false;
+                    //         document.getElementById(id).disabled = true;
+                    //     }else{
+                    //         document.getElementById(id).disabled = false;
+                    //         setTimeout(function() {
+                    //             document.getElementById(id).focus();
+                    //         }, 100); 
+                    //     }
+                    // });
 
                     // switch(checkbox2.id) {
                     //     case 'rancangan_pembangunan_1':
@@ -292,17 +373,17 @@
 
     <!-- Fourth Row: PERIHAL TAPAK -->
     <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
-        <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('tapak_details', '5.&nbsp;&nbsp;&nbsp;&nbsp;PERIHAL TAPAK:', ['class' => 'col-form-label required-field']) }}</td>
+        <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('tapak_details', '5.&nbsp;&nbsp;&nbsp;&nbsp;PERIHAL TAPAK:', ['class' => 'col-form-label']) }}</td>
     </tr>
 
     <!-- Fifth Row: Keluasan and Panjang -->
     <tr>
-        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('keluasan', 'a.&nbsp;&nbsp;&nbsp;&nbsp;Keluasan (ekar / hektar) :', ['class' => 'col-form-label required-field']) }}</td>
+        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('keluasan', 'a.&nbsp;&nbsp;&nbsp;&nbsp;Keluasan (ekar / hektar) :', ['class' => 'col-form-label']) }}</td>
         <td style="border: none; padding: 8px; text-align: left;" >{{ Form::text('keluasan', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
 
         <!-- Dropdown for Unit (Keluasan) with fixed width -->
         <td style="border: none; padding: 8px; text-align: left;" >
-            {{ Form::select('unit_keluasan', ['ekar' => 'Ekar', 'hektar' => 'Hektar'], null, ['class' => 'form-control required-field', 'style' => 'width: 150px;']) }}
+            {{ Form::select('unit_keluasan', ['ekar' => 'Ekar', 'hektar' => 'Hektar'], null, ['class' => 'form-control', 'style' => 'width: 150px;']) }}
         </td>
 
         <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('panjang', 'Panjang (Jika berkaitan):', ['class' => 'col-form-label']) }}</td>
@@ -485,7 +566,7 @@
 
     <!-- d. Status Tanah : Diwartakan sebagai tanah lapang /rezab landskap -->
     <tr>
-        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('no_lot', 'd.&nbsp;&nbsp;&nbsp;&nbsp;No Lot/PT :', ['class' => 'col-form-label required-field']) }}</td>
+        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('no_lot', 'd.&nbsp;&nbsp;&nbsp;&nbsp;No Lot/PT :', ['class' => 'col-form-label']) }}</td>
         <td style="border: none; padding: 8px; text-align: left;" >{{ Form::text('no_lot', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
         <td style="border: none; padding: 8px; text-align: left;"  colspan="4">
             <!-- Dropdown for Negeri, Daerah, and Mukim -->
@@ -494,7 +575,7 @@
                     {{ Form::label('negeri', 'Negeri:', ['class' => 'col-form-label required-field']) }}
                 </div>
                 <div class="col-md-3">
-                    {{ Form::select('negeri', [], null, ['class' => 'form-control', 'style' => 'width: 200px;', 'id' => 'negeri']) }}
+                    {{ Form::select('negeri', [], null, ['class' => 'form-control '. (in_array('negeri', session('errorFields', [])) ? ' is-invalid' : ''), 'style' => 'width: 200px;', 'id' => 'negeri']) }}
                 </div>
             <!-- </div>
 
@@ -503,7 +584,7 @@
                     {{ Form::label('daerah', 'Daerah:', ['class' => 'col-form-label required-field']) }}
                 </div>
                 <div class="col-md-3">
-                    {{ Form::select('daerah', [], null, ['class' => 'form-control', 'style' => 'width: 200px;', 'id' => 'daerah']) }}
+                    {{ Form::select('daerah', [], null, ['class' => 'form-control '. (in_array('daerah', session('errorFields', [])) ? ' is-invalid' : ''), 'style' => 'width: 200px;', 'id' => 'daerah']) }}
                 </div>
             <!-- </div>
 
@@ -512,7 +593,7 @@
                     {{ Form::label('mukim', 'Mukim:', ['class' => 'col-form-label required-field']) }}
                 </div>
                 <div class="col-md-3">
-                    {{ Form::select('mukim', [], null, ['class' => 'form-control', 'style' => 'width: 200px;', 'id' => 'mukim']) }}
+                    {{ Form::select('mukim', [], null, ['class' => 'form-control '. (in_array('mukim', session('errorFields', [])) ? ' is-invalid' : ''), 'style' => 'width: 200px;', 'id' => 'mukim']) }}
                 </div>
             </div>
 
@@ -521,7 +602,7 @@
                     {{ Form::label('parlimen', 'Parlimen:', ['class' => 'col-form-label required-field']) }}
                 </div>
                 <div class="col-md-3">
-                    {{ Form::select('parlimen', [], null, ['class' => 'form-control', 'style' => 'width: 200px;', 'id' => 'parlimen']) }}
+                    {{ Form::select('parlimen', [], null, ['class' => 'form-control '. (in_array('parlimen', session('errorFields', [])) ? ' is-invalid' : ''), 'style' => 'width: 200px;', 'id' => 'parlimen']) }}
                 </div>
             <!-- </div>
 
@@ -530,7 +611,7 @@
                     {{ Form::label('dun', 'Dun:', ['class' => 'col-form-label required-field']) }}
                 </div>
                 <div class="col-md-3">
-                    {{ Form::select('dun', [], null, ['class' => 'form-control', 'style' => 'width: 200px;', 'id' => 'dun']) }}
+                    {{ Form::select('dun', [], null, ['class' => 'form-control '. (in_array('dun', session('errorFields', [])) ? ' is-invalid' : ''), 'style' => 'width: 200px;', 'id' => 'dun']) }}
                 </div>
             </div>
 
@@ -691,7 +772,7 @@
                                 $('#dun').empty();
                                 $('#dun').append('<option value="">Pilih Dun</option>');
                                 if (data.length<1) {
-                                    $('#dun').append('<option value="000" selected disabled>TIADA DUN</option>');
+                                    $('#dun').append('<option value="000" selected>TIADA DUN</option>');
                                 }else{
                                     $.each(data, function(key, value) {
                                         $('#dun').append('<option value="' + value.kod_dun + '">' + value.nama_dun + '</option>');
@@ -722,7 +803,7 @@
         <td style="border: none; padding: 8px; text-align: left;"  colspan="5">
             <div class="row">
                 <div class="col-md-3">
-                    {{ Form::label('aktiviti_semasa', 'e.&nbsp;&nbsp;&nbsp;&nbsp;Aktiviti semasa di tapak cadangan :', ['class' => 'col-form-label required-field']) }}
+                    {{ Form::label('aktiviti_semasa', 'e.&nbsp;&nbsp;&nbsp;&nbsp;Aktiviti semasa di tapak cadangan :', ['class' => 'col-form-label']) }}
                 </div>
                 <div class="col-md-9">
                     {{ Form::textarea('aktiviti_semasa', null, ['class' => 'form-control summernote', 'rows' => 3, 'cols' => 20, 'placeholder' => 'Masukkan butiran jika ada']) }}
@@ -754,7 +835,7 @@
         </td>
 
 
-        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('jumlah_penduduk', 'f.&nbsp;&nbsp;&nbsp;&nbsp;Jumlah penduduk (kawasan pentadbiran PBT) :', ['class' => 'col-form-label required-field']) }}<!-- </td>
+        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('jumlah_penduduk', 'f.&nbsp;&nbsp;&nbsp;&nbsp;Jumlah penduduk (kawasan pentadbiran PBT) :', ['class' => 'col-form-label']) }}<!-- </td>
         <td style="border: none; padding: 8px; text-align: left;" > -->{{ Form::text('jumlah_penduduk', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
     </tr>
 
@@ -855,6 +936,7 @@
                                     'placeholder' => 'Masukkan butiran jika ada',
                                     'style' => 'width: 50%; margin-top: 0;',
                                     'disabled' => !$isChecked,
+                                    'required' => 'required',
                                     'id' => 'guna_tanah_details_' . $item['id']
                                 ]) }}
                             @endif
@@ -1048,50 +1130,51 @@
     <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
         <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('projectCategory', '6.&nbsp;&nbsp;&nbsp;&nbsp;MAKLUMAT SOKONGAN:', ['class' => 'col-form-label']) }}</td>
     </tr>
-    @if(Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 3) || ( Auth::user()->id == $eLAPS->id_pemohon))
-    <tr>
-        <td style="border: none; padding: 8px; text-align: left;"  colspan="6" style="height: 20px; padding-top: 5px; padding-bottom: 5px;">
-            {{ Form::label('note1', '&nbsp;&nbsp;&nbsp;&nbsp;Maklumat lain yang perlu disertakan', ['class' => 'col-form-label']) }}
-        </td>
-    </tr>
+    
+    @if((Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || ( Auth::user()->id == $eLAPS->id_pemohon)) && (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 2))
+        <tr>
+            <td style="border: none; padding: 8px; text-align: left;"  colspan="6" style="height: 20px; padding-top: 5px; padding-bottom: 5px;">
+                {{ Form::label('note1', '&nbsp;&nbsp;&nbsp;&nbsp;Maklumat lain yang perlu disertakan', ['class' => 'col-form-label']) }}
+            </td>
+        </tr>
 
-    <tr>
-        <td style="border: none; padding: 8px; text-align: left;"  colspan="6">
-            <div class="form-group row">
-            @php
-                // Define the array of labels
-                $labels = [
-                    'Surat Permohonan Beserta Cop Pengesahan Datuk Bandar/YDP/SU *',
-                    'Pelan ukur terkini (dalam tempoh 3 tahun) yang telah disahkan oleh Juruukur Bertauliah *',
-                    'Pelan guna tanah bagi kawasan tapak cadangan dan sekitarnya *',
-                    'Pelan kontur kawasan tapak cadangan dan sekitarnya *',
-                    'Gambar foto tapak cadangan *',
-                    'Gambar foto kawasan sekitar tapak cadangan *',
-                    'Salinan surat hakmilik tanah untuk setiap lot yang terlibat',
-                    'Salinan surat pewartaan untuk setiap lot yang terlibat',
-                    'Lain-lain gambar',
-                ];
-            @endphp
+        <tr>
+            <td style="border: none; padding: 8px; text-align: left;"  colspan="6">
+                <div class="form-group row">
+                    @php
+                        // Define the array of labels
+                        $labels = [
+                            'Surat Permohonan Beserta Cop Pengesahan Datuk Bandar/YDP/SU *',
+                            'Pelan ukur terkini (dalam tempoh 3 tahun) yang telah disahkan oleh Juruukur Bertauliah *',
+                            'Pelan guna tanah bagi kawasan tapak cadangan dan sekitarnya *',
+                            'Pelan kontur kawasan tapak cadangan dan sekitarnya *',
+                            'Gambar foto tapak cadangan *',
+                            'Gambar foto kawasan sekitar tapak cadangan *',
+                            'Salinan surat hakmilik tanah untuk setiap lot yang terlibat',
+                            'Salinan surat pewartaan untuk setiap lot yang terlibat',
+                            'Lain-lain gambar',
+                        ];
+                    @endphp
 
-            <ol>
-                @foreach($labels as $index => $label)
-                    <li class="mb-2">
-                    @if(strpos($label, '*') !== false)
-                        {!! str_replace('*', '<span style="color: red;">*</span>', $label) !!}
-                    @else
-                        {{ $label }}
-                    @endif
-                    </li>
-                @endforeach
-            </ol>
-            </div>
-        </td>
-    </tr>
+                    <ol>
+                        @foreach($labels as $index => $label)
+                            <li class="mb-2">
+                            @if(strpos($label, '*') !== false)
+                                {!! str_replace('*', '<span style="color: red;">*</span>', $label) !!}
+                            @else
+                                {{ $label }}
+                            @endif
+                            </li>
+                        @endforeach
+                    </ol>
+                </div>
+            </td>
+        </tr>
     @endif
     <!-- File Upload Section -->
     <tr>
         <td style="border: none; padding: 8px; text-align: left;"  colspan="6" style="padding-top: 15px; padding-bottom: 15px;">
-            @if(Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 3) || ( Auth::user()->id == $eLAPS->id_pemohon))
+            @if((Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || ( Auth::user()->id == $eLAPS->id_pemohon)) && (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 2))
                 <div class="form-group row">
                     <div class="col-md-12">
                         {{ Form::label('file_upload', '&nbsp;&nbsp;&nbsp;&nbsp;Sila muat naik dokumen sokongan:', ['class' => 'col-form-label', 'style' => 'font-weight: normal;']) }}
@@ -1104,7 +1187,7 @@
                 <div class="form-group row">
                     <div class="col-md-12">
                         <div class="d-block">
-                            {{ Form::file('supporting_documents', ['class' => 'form-control d-inline-block ms-2', 'id' => 'supporting_documents', 'multiple' => false, 'style' => 'width: 100%;']) }}
+                            {{ Form::file('supporting_documents', ['class' => 'form-control d-inline-block ms-2 '. (in_array('supporting_documents', session('errorFields', [])) ? 'is-invalid' : ''), 'id' => 'supporting_documents', 'multiple' => false, 'style' => 'width: 100%;']) }}
                             <input name="large_file_name_new" type="hidden" id="large_file_name_new">
                             <input name="large_file_name_old" type="hidden" id="large_file_name_old">
                         </div>
@@ -1150,15 +1233,22 @@
             
             @endif
 
-            @if(Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 3) || ( Auth::user()->id == $eLAPS->id_pemohon))
-            <div class="row">
-                <div class="form-group mb-6 col-md-12" style="background-color:#fef7f8; border-left: 5px solid #f0868e; padding: 15px;">
-                    <label for="anggaran_penduduk"><h4>Pengesahan dan pengakuan pemohon:</h4></label>
-                    <div style="background-color: transparent; border: none; padding: 10px; width: 100%; font-size: 16px;">
-                        Dengan ini saya mengesahkan segala maklumat yang diberikan adalah <strong>betul, tepat, lengkap</strong> dan sebarang kesalahan dan percanggahan maklumat adalah dibawah tanggungan pihak saya sendiri. Diperakukan bahawa tapak cadangan ini tidak terlibat dengan pembangunan-pembangunan semasa dan pihak saya juga tidak mengemukakan apa-apa permohonan selain cadangan pembangunan yang dipohon untuk projek ini sahaja.
+            @if((Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || ( Auth::user()->id == $eLAPS->id_pemohon)) && (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 2))
+                <br>
+                <div class="row">
+                    <div class="form-group mb-6 col-md-12" style="background-color:#fef7f8; border-left: 5px solid #f0868e; padding: 15px;">
+                        <label for="acknowledgement"><h4>Pengesahan dan pengakuan pemohon:</h4></label>
+                        <div style="background-color: transparent; border: none; padding: 10px; width: 100%; font-size: 16px;">
+                            Dengan ini saya mengesahkan segala maklumat yang diberikan adalah <strong>betul, tepat, lengkap</strong> dan sebarang kesalahan dan percanggahan maklumat adalah dibawah tanggungan pihak saya sendiri. Diperakukan bahawa tapak cadangan ini tidak terlibat dengan pembangunan-pembangunan semasa dan pihak saya juga tidak mengemukakan apa-apa permohonan selain cadangan pembangunan yang dipohon untuk projek ini sahaja.
+                        </div>
+                        <div class="form-check mt-3">
+                            <input class="form-check-input" type="checkbox" id="acknowledgement" name="acknowledgement" required {{ isset($eLAPS->created_at) ? 'checked inert' : '' }}>
+                            <label class="form-check-label" for="acknowledgement" {{ isset($eLAPS->created_at) ? 'inert' : '' }}>
+                                Saya mengakui dan bersetuju dengan pengesahan di atas. {{ isset($eLAPS->created_at) ? ' - [Pengesahan dan pengakuan pemohon pada ' . $eLAPS->created_at . ']' : '' }}
+                            </label>
+                        </div>
                     </div>
                 </div>
-            </div>
             @endif
         </td>
     </tr>
@@ -1167,6 +1257,17 @@
 <script>
 
     $(document).ready(function() {
+        @if(session('errorFields'))
+            const firstError = document.querySelector('.is-invalid');
+
+            // Scroll to it smoothly
+            if (firstError) {
+                firstError.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center' // You can change this value to 'start' or 'end' if you want a different scroll position
+                });
+            }
+        @endif
         // $("#pelanModal").modal('show');
         // setTimeout(function() {
         //     $("#pelanModal").modal('hide');
@@ -1237,6 +1338,7 @@
                     },
                     error: function(xhr, status, error) {
                         console.log("Error: " + error);
+                        alert("Error: " + error);
                     },
                     complete: function(xhr, status) {
                         // Optionally log the completion of the request
@@ -1272,6 +1374,10 @@
     .form-group {
         margin-bottom: 15px; /* Adds spacing between form groups */
     }
+    .is-invalid {
+        border: 2px solid red !important;  /* You can adjust the color */
+        background-color: #f8d7da; /* Optional: Add background color */
+    }
 </style>
 
 <style>
@@ -1282,7 +1388,7 @@
         }
     }
     .required-field-create::after {
-        content: "***"; /* Add the asterisk */
+        content: "*"; /* Add the asterisk */
         color: red; /* Make the asterisk red */
     }
 </style>
@@ -1290,7 +1396,7 @@
 @if(isset($eLAPS))
     <style>
         .required-field::after {
-            content: "**"; /* Add the asterisk */
+            content: "*"; /* Add the asterisk */
             color: red; /* Make the asterisk red */
         }
     </style>

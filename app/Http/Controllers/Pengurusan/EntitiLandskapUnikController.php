@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Pengurusan;
 
 use App\Http\Controllers\Controller;
-use App\Model\EntitiLandskapUnik;  // Updated to the new model
+use App\Model\EntitiLandskapUnik;
 use Illuminate\Http\Request;
 
 class EntitiLandskapUnikController extends Controller
@@ -23,8 +23,8 @@ class EntitiLandskapUnikController extends Controller
 
     public function index()
     {
-        $entitiLandskapUnik = EntitiLandskapUnik::latest()->paginate(5);
-
+        $entitiLandskapUnik = EntitiLandskapUnik::latest()->paginate(EntitiLandskapUnik::count());
+        // dd($entitiLandskapUnik);
         return view('pengurusan.entiti-landskap-unik.index', ['entitiLandskapUnik' => $entitiLandskapUnik]);
     }
 
@@ -41,6 +41,9 @@ class EntitiLandskapUnikController extends Controller
             'pbt' => $requestData['pbt'],
         ];
         $requestData['pbt'] = json_encode($pbt);
+
+        $newRecord = EntitiLandskapUnik::create($requestData);
+
         $filenames = [];
         for ($i = 1; $i <= 4; $i++) {
             $inputField = 'gambar_input_modal_' . $i;
@@ -60,8 +63,8 @@ class EntitiLandskapUnikController extends Controller
             $requestData['gambar'] = json_encode($filenames);
         }
 
-        $newRecord = EntitiLandskapUnik::create($requestData);
-        // $newRecord->save();
+        $newRecord->gambar = $requestData['gambar'];
+        $newRecord->save();
         
         if($newRecord){
             return redirect()->route('pengurusan.entiti-landskap-unik.index')->with('successMessage', 'Maklumat Entiti Landskap telah berjaya disimpan');
@@ -92,7 +95,7 @@ class EntitiLandskapUnikController extends Controller
                 $file = $request->file($inputField);
                 
                 if ($file->isValid()) {
-                    $folderName = str_replace(' ', '_', $request->input('nama_entiti'));
+                    $folderName = str_replace(' ', '_', $entitiLandskapUnik->id.' '.$request->input('nama_entiti'));
                     $filename = time() . '_' . $i . '.' . $file->extension();
                     $file->storeAs('public/uploads/entiti_landskap/' . $folderName, $filename);
                     $filenames[$inputField] = $filename;
@@ -104,6 +107,10 @@ class EntitiLandskapUnikController extends Controller
                 }
             }
         }
+        foreach ($request->input('delete_images', []) as $deletedField) {
+            unset($filenames[$deletedField]);
+        }
+
         $request->merge(['gambar' => json_encode($filenames)]);
         $requestData = $request->all();
         $pbt = [

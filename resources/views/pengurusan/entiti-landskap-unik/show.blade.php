@@ -13,7 +13,25 @@
 
                 {!! Form::model($entitiLandskapUnik, ['route' => ['pengurusan.entiti-landskap-unik.update', $entitiLandskapUnik], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
                 <div class="card-body table-hardscape form-hardscape text-sm">
-                    <div inert>
+                    <style>
+                        .showButton{
+                            display: none;
+                        }
+                        .inertShow {
+                            pointer-events: none;
+                        }
+
+                        .inertShow input,
+                        .inertShow span:not(.parks span),
+                        .inertShow textarea,
+                        .inertShow select {
+                            background-color: rgb(241, 241, 241);
+                            color: rgb(65, 60, 60);
+                            cursor: not-allowed;
+                            pointer-events: none;
+                        }
+                    </style>
+                    <div>
                         @include('pengurusan.entiti-landskap-unik._form')
                     </div>
                 </div>

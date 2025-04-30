@@ -24,7 +24,7 @@
                 <!-- /.card-header -->
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table id="example" class="responsive table table-bordered table-hover table-striped mb-0">
+                        <table id="exampleNP" class="responsive table table-bordered table-hover table-striped mb-0">
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="w-1">Bil.</th>
@@ -49,23 +49,23 @@
                                             $dataPbt = json_decode($entiti->pbt, true);
                                             if ($dataPbt === null) {
                                                 $dataPbt = [];
+                                                $pbt = strtoupper($entiti->pbt);
                                             } elseif (!is_array($dataPbt)) {
                                                 $dataPbt = (string) $dataPbt;
                                             }else{
                                                 $negeri = $dataPbt['negeri'];
-                                                $pbt = $dataPbt['pbt'];
+                                                $pbt = strtoupper($dataPbt['pbt']);
                                             }
                                         } else {
                                             $dataPbt = [];
                                         }
-                                        //dd($dataPbt);
                                     ?>
-                                    <td class="text-center">{{ isset($pbt) ? $pbt : $entiti->pbt }}</td>
-                                    <td class="text-center">{{ $entiti->lokasi }}</td>
+                                    <td class="text-center">{{ isset($pbt) ? $pbt : strtoupper($entiti->pbt) }}</td>
+                                    <td class="text-center">{{ strtoupper($entiti->lokasi) }}</td>
                                     <td class="p-0">
                                         <?php
                                             if(isset($entiti->gambar)){
-                                                $folderName = str_replace(' ', '_', $entiti->nama_entiti);
+                                                $folderName = str_replace(' ', '_', $entiti->id.' '.$entiti->nama_entiti);
                                                 $gambarData = json_decode($entiti->gambar, true);
 
                                                 $gambar_input_modal = isset($gambarData['gambar_input_modal_4']) ? $folderName.'/'.$gambarData['gambar_input_modal_4'] : null;

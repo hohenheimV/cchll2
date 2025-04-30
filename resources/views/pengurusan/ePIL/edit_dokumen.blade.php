@@ -12,8 +12,83 @@
                 </div>
                 {!! Form::model($dokumen, ['route' => ['pengurusan.ePIL_dokumen.update', $dokumen], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
                 <div class="card-body table-hardscape form-hardscape text-sm">
-                    <!-- Name and Description -->
-                    <div class="form-group">
+                    <!-- <div class="row">
+                        <div class="form-group required col-md-4">
+                            <label for="nama_fail" class="col-md-12 control-label">Nama Fail:</label>
+                            <div class="col-md-12">
+                                <input type="text" name="nama_fail" class="form-control" value="{{ $dokumen->nama_fail }}" required>
+                                <input type="hidden" name="folder" class="form-control" value="{{ $dokumen->folder }}" required readonly>
+                            </div>
+                        </div>
+                        <div class="form-group required col-md-8">
+                            <label for="keterangan_dokumen_pelan" class="col-md-12 control-label">Keterangan:</label>
+                            <div class="col-md-12">
+                                <input type="text" name="keterangan_dokumen_pelan" class="form-control" value="{{ $dokumen->keterangan_dokumen_pelan }}" required>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group required">
+                                <label for="nama_fail" class="control-label">Nama Fail:</label>
+                                <input type="text" name="nama_fail" class="form-control" value="{{ $dokumen->nama_fail }}" required>
+                                <input type="hidden" name="folder" class="form-control" value="{{ $dokumen->folder }}" readonly>
+                            </div>
+
+                            <div class="form-group required">
+                                <label for="keterangan_dokumen_pelan" class="control-label">Keterangan:</label>
+                                <input type="text" name="keterangan_dokumen_pelan" class="form-control" value="{{ $dokumen->keterangan_dokumen_pelan }}" required>
+                            </div>
+
+                            <div class="form-group required">
+                                <label for="nama_dokumen_pelan" class="control-label">Fail:</label>
+                                <input type="file" name="nama_dokumen_pelan" id="nama_dokumen_pelan" class="form-control" accept=".pdf">
+                                {{ Form::label('', '***Muatnaik semula akan menggantikan fail sedia ada.', ['class' => 'col-form-label required-field-create', 'style' => 'font-weight: bold;']) }}
+                                <br>
+
+                                <div id="progress-container" style="display: none;">
+                                    <div id="progress-bar" style="width: 100%; background-color: #ccc;">
+                                        <div id="progress" style="height: 20px; width: 0; background-color: green;"></div>
+                                    </div>
+                                    <p>Uploading: <span id="progress-text">0%</span></p>
+                                </div>
+
+                                <input type="hidden" name="nama_dokumen_pelan_db" class="form-control" value="{{ $dokumen->nama_dokumen_pelan }}">
+                                <input type="hidden" name="large_file_name_new" id="large_file_name_new">
+                                <input type="hidden" name="large_file_name_old" id="large_file_name_old">
+                            </div>
+
+                            <div class="form-group required">
+                                {{ Form::label('status', 'Status Paparan Portal') }}
+                                {{ Form::select('status', ['active' => 'Papar', 'inactive' => 'Tidak Papar'], $dokumen->status ?? 'inactive', ['class' => 'form-control']) }}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6" style="text-align: center;">
+                            @if($dokumen->nama_dokumen_pelan)
+                                <object data="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}" type="application/pdf" width="100%" height="600px">
+                                    <p>Your browser does not support PDFs.
+                                        <a href="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}">Download the PDF</a>.
+                                    </p>
+                                </object>
+
+                                @php
+                                    $fileSizeInMB = '';
+                                    if (isset($dokumen->nama_dokumen_pelan)) {
+                                        $filePath = storage_path('app/public/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan);
+                                        if (file_exists($filePath)) {
+                                            $fileSizeInBytes = filesize($filePath);
+                                            $fileSizeInMB = number_format($fileSizeInBytes / 1048576, 2);
+                                        }
+                                    }
+                                @endphp
+                                <p>{{ $fileSizeInMB ? $fileSizeInMB . " MB" : '' }}</p>
+                            @endif
+                        </div>
+                    </div>
+
+
+                    <!-- <div class="form-group">
                         <label for="nama_fail">Nama Fail:</label>
                         <input type="text" name="nama_fail" class="form-control" value="{{ $dokumen->nama_fail }}" required>
                         <input type="hidden" name="folder" class="form-control" value="{{ $dokumen->folder }}" required readonly>
@@ -22,20 +97,35 @@
                     <div class="form-group">
                         <label for="keterangan_dokumen_pelan">Keterangan:</label>
                         <input type="text" name="keterangan_dokumen_pelan" class="form-control" value="{{ $dokumen->keterangan_dokumen_pelan }}" required>
-                    </div>
-
-                    <!-- Image -->
-                    <!-- <div class="form-group">
-                        <label for="gambar_dokumen_pelan">Image:</label>
-                        @if($dokumen->gambar_dokumen_pelan)
-                            <img src="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->gambar_dokumen_pelan) }}" alt="Image" style="width: 100px; height: 100px;">
-                        @endif
-                        <input type="file" name="gambar_dokumen_pelan" class="form-control" accept="image/*">
-                        <input type="text" name="gambar_dokumen_pelan_db" class="form-control" value="{{ $dokumen->gambar_dokumen_pelan }}">
+                    </div> -->
+                    
+                    <!-- <div class="row">
+                        <div class="form-group required col-md-9">
+                            <label for="nama_dokumen_pelan" class="col-md-12 control-label">Fail:</label>
+                            <div class="col-md-12">
+                                <input type="file" name="nama_dokumen_pelan" id="nama_dokumen_pelan" class="form-control" accept=".pdf">
+                                {{ Form::label('', '***Muatnaik semula akan menggantikan fail sedia ada.', ['class' => 'col-form-label required-field-create', 'style' => 'font-weight: strong;']) }}
+                                <br>
+                                <div id="progress-container" style="display: none;">
+                                    <div id="progress-bar" style="width: 100%; background-color: #ccc;">
+                                        <div id="progress" style="height: 20px; width: 0; background-color: green;"></div>
+                                    </div>
+                                    <p>Uploading: <span id="progress-text">0%</span></p>
+                                </div>
+                                <input type="hidden" name="nama_dokumen_pelan_db" class="form-control" value="{{ $dokumen->nama_dokumen_pelan }}" readonly>
+                                <input name="large_file_name_new" type="hidden" id="large_file_name_new" readonly>
+                                <input name="large_file_name_old" type="hidden" id="large_file_name_old" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group required col-md-3">
+                            {{ Form::label('status', 'Status Aktif') }}
+                            <div class="col-md-12">
+                                {{ Form::select('status', ['active' => 'Aktif', 'inactive' => 'Tidak Aktif'], $dokumen->status ?? 'inactive', ['class' => 'form-control']) }}
+                            </div>
+                        </div>
                     </div> -->
 
-                    <!-- File -->
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="nama_dokumen_pelan">Fail:</label>
                         <input type="file" name="nama_dokumen_pelan" id="nama_dokumen_pelan" class="form-control" accept=".pdf">
                         {{ Form::label('', '***Muatnaik semula akan menggantikan fail sedia ada.', ['class' => 'col-form-label required-field-create', 'style' => 'font-weight: strong;']) }}
@@ -49,10 +139,10 @@
                         <input type="hidden" name="nama_dokumen_pelan_db" class="form-control" value="{{ $dokumen->nama_dokumen_pelan }}" readonly>
                         <input name="large_file_name_new" type="hidden" id="large_file_name_new" readonly>
                         <input name="large_file_name_old" type="hidden" id="large_file_name_old" readonly>
-                    </div>
-                    <div class="form-group" style="text-align: center;">
+                    </div> -->
+                    <!-- <div class="form-group" style="text-align: center;">
                         @if($dokumen->nama_dokumen_pelan)
-                            <object data="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}" type="application/pdf" width="70%" height="1100">
+                            <object data="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}" type="application/pdf" width="100%" height="400">
                                 <p>Your browser does not support PDFs. <a href="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}">Download the PDF</a>.</p>
                             </object>
                             <?php
@@ -67,15 +157,15 @@
                             ?>
                             <p>{{ $fileSizeInMB ? $fileSizeInMB . " MB" : '' }}</p>
                         @endif
-                    </div>
-                    <div class="form-group">
+                    </div> -->
+                    <!-- <div class="form-group">
                         {{ Form::label('status', 'Status Aktif') }}
                         {{ Form::select('status', ['active' => 'Aktif', 'inactive' => 'Tidak Aktif'], $dokumen->status ?? 'inactive', ['class' => 'form-control']) }}
-                    </div>
+                    </div> -->
                 </div>
                 <div class="card-footer">
                     <!-- Cancel Button (redirect to ePIL index) -->
-                    {!! Form::button('Batal dan Kembali', ['onclick'=>"window.location='".route('pengurusan.ePIL.edit',$dokumen->id_pelan)."'", 'class'=>'btn btn-secondary']) !!}
+                    {!! Form::button('Kembali', ['onclick'=>"window.location='".route('pengurusan.ePIL.edit',$dokumen->id_pelan)."'", 'class'=>'btn btn-secondary']) !!}
 
                     <!-- Update Button (Kemaskini) -->
                     {!! Form::button('<i class="fas fa-save"></i> Kemaskini', [
@@ -149,6 +239,7 @@
                                     },
                                     error: function(xhr, status, error) {
                                         console.log("Error: " + error);
+                                        alert("Error: " + error);
                                     },
                                     complete: function(xhr, status) {
                                         // Optionally log the completion of the request

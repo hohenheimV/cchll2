@@ -51,8 +51,8 @@
                                 @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|Pihak Berkuasa Tempatan|TKP/B JLN'))
                                     @php($index = $ePIL->firstItem())
                                     @php($paparan_portal = [
-                                        ['id' => 'Aktif', 'label' => 'bg-success'], // Green background for approved
-                                        ['id' => 'Tidak Aktif', 'label' => 'bg-danger'], // Red background for failed
+                                        ['id' => 'Papar', 'label' => 'bg-success'], // Green background for approved
+                                        ['id' => 'Tidak Papar', 'label' => 'bg-danger'], // Red background for failed
                                     ])
                                     @php($status_count = count($paparan_portal))
                                     @forelse($ePIL as $pelan)
@@ -61,7 +61,7 @@
                                             <td>{{ strtoupper($pelan->nama_pelan) }}</td>
                                             <td style="text-align: center;">
                                                 <?php 
-                                                    $folder = str_replace(' ', '_', $pelan->nama_pelan); 
+                                                    $folder = str_replace(' ', '_', $pelan->id_pelan.' '.$pelan->nama_pelan); 
                                                     $fileSizeInMB = '';
                                                     if(isset($pelan->nama_dokumen_pelan)){
                                                         $filePath = storage_path('app/public/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan);
@@ -71,8 +71,9 @@
                                                         }
                                                     }
                                                 ?>
+                                                @if ($pelan->nama_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan)))
                                                 <a href="{{ asset($pelan->nama_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan : 'storage/uploads/no-photos.png' ) }}" 
-                                                    target="_blank" download>
+                                                    target="_blank">
                                                     <div id="pdf-viewer-{{$pelan->id_dokumen_pelan ?? $pelan->id_pelan}}" 
                                                         style="width: 200px; height: 250px; border: 1px solid #ddd; margin: auto; cursor: pointer;">
                                                         <div id="loading-{{$pelan->id_dokumen_pelan}}" 
@@ -86,11 +87,14 @@
                                                     </div>
                                                 </a>
                                                 <p>{{ $fileSizeInMB ? $fileSizeInMB . " MB" : '' }}</p>
+                                                @else
+                                                    Tiada dokumen
+                                                @endif
                                             </td>
                                             
                                             @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem'))
                                             <td>
-                                                {{ $pelan->nama_pbt }}
+                                                {{ strtoupper($pelan->nama_pbt) }}
                                             </td>
                                             <td>
                                                 @if(Auth::user()->hasRole('Pihak Berkuasa Tempatan'))
@@ -156,13 +160,13 @@
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
     document.addEventListener('DOMContentLoaded', function () {
-        const ePIL = @json($ePIL); // Convert the $ePIL array from PHP to JavaScript
-        console.log(ePIL.data); // Check the array inside the "data" property
+        const ePIL = @json($ePIL);
 
         // Use ePIL.data to loop through the records
         ePIL.data.forEach(pelan => {
             // console.log(pelan);
-            let folder = pelan.nama_pelan.replace(/\s+/g, '_'); // Replace spaces with underscores in folder name
+            let namaFolder = pelan.id_pelan+' '+pelan.nama_pelan;
+            let folder = namaFolder.replace(/\s+/g, '_'); // Replace spaces with underscores in folder name
             const url = pelan.nama_dokumen_pelan ?
                 `/storage/uploads/ePIL/${folder}/${pelan.nama_dokumen_pelan}` : 
                 '/img/no-photos.png';
@@ -202,7 +206,7 @@
                 // console.error('Error loading PDF for ID ' + pelan.id_dokumen_pelan + ':', error);
                 const viewerElement = document.getElementById('pdf-viewer-' + pelan.id_pelan);
                 if (viewerElement) {
-                    viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Preview not available</div>';
+                    viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Dokumen tidak dapat dipaparkan</div>';
                 }
             });
         });

@@ -44,11 +44,12 @@ class ePILController extends Controller
             }
         }else{
             $totalCount = ePIL::count();
-            $ePIL = ePIL::paginate($totalCount);
+            $ePIL = ePIL::orderBy('id_pelan', 'desc')->paginate($totalCount);
         }
+        // dd($ePIL);
         $ePIL->getCollection()->transform(function ($PIL) {
             $dokumen = ePIL_dokumen::where('status', 'active')->where('id_pelan', $PIL->id_pelan)->first();
-            $PIL->nama_dokumen_pelan = $dokumen ? $dokumen->nama_dokumen_pelan : null;
+            $PIL->nama_dokumen_pelan = $dokumen ? $PIL->gambar_dokumen_pelan : null;
             $PIL->id_dokumen_pelan = $dokumen ? $dokumen->id_dokumen_pelan : null;
             // dump($dokumen);
     
@@ -73,8 +74,11 @@ class ePILController extends Controller
     public function store(Request $request)
     {
         $requestData = $request->all();
-        
+        // dd($requestData);
         $mediaSosial_pelan = collect($requestData['mediaSosial_pelan'] ?? [])
+            ->filter(function($item) {
+                return $item !== null;
+            })
             ->map(function($item) {
                 return $item;
             })
@@ -87,7 +91,7 @@ class ePILController extends Controller
         if(isset($requestData['pelan'])){
             $pelanArr = $requestData['pelan'];
             foreach ($pelanArr as $key => $value) {
-                $folderName = str_replace(' ', '_', $requestData['nama_pelan']); 
+                $folderName = str_replace(' ', '_', $id_pelan.' '.$requestData['nama_pelan']); 
                 if ((isset($value['gambar']) && $value['gambar'] instanceof \Illuminate\Http\UploadedFile)) {
                     $file = $value['gambar'];
                     if ($file->isValid()) {
@@ -144,28 +148,31 @@ class ePILController extends Controller
     public function show(ePIL $ePIL)
     {
         $ePIL_draf = ePIL_draf::where('id_pelan', $ePIL->id_pelan)->first();
-        $ePIL_dokumen = ePIL_dokumen::where('id_pelan', $ePIL->id_pelan)->orderBy('id_dokumen_pelan', 'asc')->get();
+        $ePIL_dokumen = ePIL_dokumen::where('id_pelan', $ePIL->id_pelan)->orderBy('status', 'asc')->orderBy('id_dokumen_pelan', 'desc')->get();
         if($ePIL_dokumen){
             $ePIL_draf->dokumen = $ePIL_dokumen;
         }
         // dd($ePIL_draf);
-        $ePIL_dokumen = ePIL_dokumen::where('id_pelan', $ePIL->id_pelan)->get();
-        $ePIL_draf->dokumen = $ePIL_dokumen;
+        // $ePIL_dokumen = ePIL_dokumen::where('id_pelan', $ePIL->id_pelan)->get();
+        // $ePIL_draf->dokumen = $ePIL_dokumen;
         $paparan_portal = ePIL::where('id_pelan', $ePIL->id_pelan)->first();
 
         if ($paparan_portal) {
             $status = $paparan_portal->status;
         }
+        $latestAudit = $ePIL_draf->status != 'approved' ? $ePIL_draf->audits()->latest()->take(3)->get() : null;
+        // dd($latestAudit);
         return view('pengurusan.ePIL.show', [
             'ePIL' => $ePIL_draf,
             'status' => $status,
+            'latestAudit' => $latestAudit,
         ]);
     }
 
     public function edit(ePIL $ePIL)
     {
         $ePIL_draf = ePIL_draf::where('id_pelan', $ePIL->id_pelan)->first();
-        $ePIL_dokumen = ePIL_dokumen::where('id_pelan', $ePIL->id_pelan)->orderBy('id_dokumen_pelan', 'asc')->get();
+        $ePIL_dokumen = ePIL_dokumen::where('id_pelan', $ePIL->id_pelan)->orderBy('status', 'asc')->orderBy('id_dokumen_pelan', 'desc')->get();
         // dd($ePIL_dokumen);
         if($ePIL_dokumen){
             $ePIL_draf->dokumen = $ePIL_dokumen;
@@ -179,8 +186,11 @@ class ePILController extends Controller
     {
         // dd($request->all());
         $requestData = $request->all();
-
+        // dd($requestData);
         $mediaSosial_pelan = collect($requestData['mediaSosial_pelan'] ?? [])
+            ->filter(function($item) {
+                return $item !== null;
+            })
             ->map(function($item) {
                 return $item;
             })
@@ -195,7 +205,7 @@ class ePILController extends Controller
             if(isset($requestData['pelan'])){
                 $pelanArr = $requestData['pelan'];
                 foreach ($pelanArr as $key => $value) {
-                    $folderName = str_replace(' ', '_', $requestData['nama_pelan']); 
+                    $folderName = str_replace(' ', '_', $id_pelan.' '.$requestData['nama_pelan']); 
                     if ((isset($value['gambar']) && $value['gambar'] instanceof \Illuminate\Http\UploadedFile)) {
                         $file = $value['gambar'];
                         if ($file->isValid()) {
@@ -305,6 +315,10 @@ class ePILController extends Controller
                 return redirect()->route('pengurusan.ePIL.edit', [$id_pelan])->with('successMessage', 'Maklumat pelan telah berjaya dikemaskini');
             }
         } elseif ($request->input('action') === 'approve') {
+            $dokumen = ePIL_dokumen::where('status', 'active')->where('id_pelan', $ePIL->id_pelan)->first();
+            if ($dokumen) {
+                $ePIL->gambar_dokumen_pelan = $dokumen->nama_dokumen_pelan;
+            }
             $ePIL->status = $paparan_portal;
             $ePIL->save();
             $ePIL_approve = ePIL::where('id_pelan', $ePIL->id_pelan)->first();

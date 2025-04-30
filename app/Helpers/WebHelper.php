@@ -409,11 +409,12 @@ if (!function_exists('in_arrayi')) {
             //dd($socials);
             $html = '<div class="d-none d-lg-block w-100">';
             $html .= '<ul class="nav navbar-nav navbar-right ml-auto d-flex justify-content-lg-end">';
-            foreach ($socials as $social) {
-                if ($social['link']) {
-                    $html .= '<li class="nav-item"><a target="_blank" class="btn bg-olive btn-sm mr-1" href="' . $social['link'] . '"><i class="' . $social['icon'] . '"></i></a>';
-                }
-            }
+            // foreach ($socials as $social) {
+            //     if ($social['link']) {
+            //         $html .= '<li class="nav-item"><a target="_blank" class="btn bg-olive btn-sm mr-1" href="' . $social['link'] . '"><i class="' . $social['icon'] . '"></i></a>';
+            //     }
+            // }
+            $html .= '<li class="nav-item"><a target="_blank" class="btn bg-olive btn-sm mr-1" href="/login">Log Masuk <i class="fas fa-lock"></i></a>';
             
             $html .= '</ul></div>';
             return $html;
@@ -637,7 +638,7 @@ if (!function_exists('in_arrayi')) {
 
         function website_carousel_taman()
         {
-            $ePALM = ePALM::select('nama_taman', 'nama_pbt', 'is_komponen', 'gambar_taman', 'keterangan_taman', 'negeri_taman')->where('status', 'approved')->whereNotNull('gambar_taman')->get();
+            $ePALM = ePALM::select('id_taman', 'nama_taman', 'nama_pbt', 'is_komponen', 'gambar_taman', 'keterangan_taman', 'negeri_taman')->where('status', 'approved')->where('is_komponen', null)->whereNotNull('gambar_taman')->get();
             foreach ($ePALM as $item) {
                 $item->nama = $item->nama_taman;
                 if ($item->nama_pbt == "Landskap Perbandaran") {
@@ -645,19 +646,20 @@ if (!function_exists('in_arrayi')) {
                     $item->nama_taman = str_replace(' ', '_', $ePALM_komponen->nama_taman)."/".str_replace(' ', '_', $item->nama_taman);
                     $item->nama_pbt = $ePALM_komponen->nama_pbt;
                     $item->gambar_taman = str_replace('gambar_input_modal_', 'Xgambar_input_modal_', $item->gambar_taman);
+                    $item->gambar_taman = str_replace('GIM_', 'XGIM_', $item->gambar_taman);
                 }
             }
             $html = '<div class="owl-carousel owl-theme">';
             if(!$ePALM->isEmpty()){
                 foreach ($ePALM as $article) {
                     if(isset($article->gambar_taman)){
-                        $folderName = str_replace(' ', '_', $article->nama_taman);
+                        $folderName = str_replace(' ', '_', $article->id_taman.' '.$article->nama_taman);
                         $gambar_tamanData = json_decode($article->gambar_taman, true);
 
-                        $Xgambar_input_modal_1 = isset($gambar_tamanData['Xgambar_input_modal_1']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_1'] : null;
-                        $Xgambar_input_modal_2 = isset($gambar_tamanData['Xgambar_input_modal_2']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_2'] : null;
-                        $Xgambar_input_modal_3 = isset($gambar_tamanData['Xgambar_input_modal_3']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_3'] : null;
-                        $Xgambar_input_modal_4 = isset($gambar_tamanData['Xgambar_input_modal_4']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_4'] : null;
+                        $Xgambar_input_modal_1 = isset($gambar_tamanData['Xgambar_input_modal_1']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_1'] : (isset($gambar_tamanData['XGIM_1']) ? $folderName.'/'.$gambar_tamanData['XGIM_1'] : null);
+                        $Xgambar_input_modal_2 = isset($gambar_tamanData['Xgambar_input_modal_2']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_2'] : (isset($gambar_tamanData['XGIM_1']) ? $folderName.'/'.$gambar_tamanData['XGIM_1'] : null);
+                        $Xgambar_input_modal_3 = isset($gambar_tamanData['Xgambar_input_modal_3']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_3'] : (isset($gambar_tamanData['XGIM_1']) ? $folderName.'/'.$gambar_tamanData['XGIM_1'] : null);
+                        $Xgambar_input_modal_4 = isset($gambar_tamanData['Xgambar_input_modal_4']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_4'] : (isset($gambar_tamanData['XGIM_1']) ? $folderName.'/'.$gambar_tamanData['XGIM_1'] : null);
                         // dd($gambar_tamanData);
                     }
                     $nama = Str::limit($article->nama, 30);
@@ -673,13 +675,15 @@ if (!function_exists('in_arrayi')) {
                     // $html .= '<img src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" class="card-img-top embed-responsive-item" alt="' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '">';
                     for ($i = 1; $i <= 4; $i++) {
                         $Xgambar_input_modal = 'Xgambar_input_modal_' . $i;
-                        if (isset($$Xgambar_input_modal)) {
+                        $XGIM = 'XGIM' . $i;
+                        if (isset($$Xgambar_input_modal) || isset($$XGIM)) {
                             $url = $$Xgambar_input_modal ? asset('storage/uploads/ePALM/' . $$Xgambar_input_modal) : asset('storage/uploads/no-photos.png');
                         }else{
                             // $url = asset('storage/uploads/no-photos.png');
                         }
                         // $html .= '<img src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" class="card-img-top embed-responsive-item" alt="' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '">';
                     }
+                    // dump($url);
                     $html .= '<img src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" class="card-img-top embed-responsive-item" alt="' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '">';
                     $html .= '</div>';
                     $html .= '<div class="card-body" style="height:200px">';
@@ -696,7 +700,7 @@ if (!function_exists('in_arrayi')) {
                 $html .= '<a href="">';
                 $html .= '<div class="card border">';
                 $html .= '<div class="embed-responsive embed-responsive-4by3">';
-                $html .= '<img src="http://127.0.0.1:8000/storage/img/bg-pattern-leaves.png" class="card-img-top embed-responsive-item" >';
+                $html .= '<img src="/storage/img/bg-pattern-leaves.png" class="card-img-top embed-responsive-item" >';
                 $html .= '</div>';
                 $html .= '<div class="card-body" style="height:200px">';
                 $html .= '<h5 class="text-capitalize">Maklumat taman belum tersedia</h5>';
@@ -709,6 +713,27 @@ if (!function_exists('in_arrayi')) {
             }
             $html .= '</div>';
             // dd($html);
+            return $html;
+        }
+    }
+
+    if (!function_exists('stats_card')) {
+
+        function stats_card($title = 'Tiada Maklumat', $amount = 0, $route = 'javascript:void(0)', $icon = 'fas fa-tachometer-alt', $color = '#17a2b8')
+        {
+            $html = '<div class="col-md-3 col-6">';
+            $html .= '<a href="' . $route . '" style="text-decoration: none; color: inherit;">';
+            $html .= '<div class="small-box" style="background-color: '. $color. '; color: white;">';
+            $html .= '<div class="inner">';
+            $html .= '<h3>' . $amount . '</h3>';
+            $html .= '<p>' . $title . '</p>';
+            $html .= '</div>';
+            $html .= '<div class="icon">';
+            $html .= '<i class="' .$icon. '" aria-hidden="true"></i>';
+            $html .= '</div>';
+            $html .= '</div>';
+            $html .= '</a>';
+            $html .= '</div>';
             return $html;
         }
     }

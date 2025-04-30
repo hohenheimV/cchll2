@@ -22,6 +22,7 @@
     <meta name="google-site-verification" content="H9AQXvBj0Cnj11LZWLCzYI2lIZ5srIczvWXwKu4Xmig" />
 
     <title>@yield('title') | {{ config('app.name', 'Jabatan Landskap Negara') }}</title>
+    <link rel="icon" type="image/png" href="/img/logo-jln-sm.png">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">

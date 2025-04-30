@@ -4,6 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>@yield('title') | {{ config('app.name', 'Jabatan Landskap Negara') }}</title>
+    <link rel="icon" type="image/png" href="/img/logo-jln-sm.png">
 
     <style>
         body {

@@ -68,11 +68,13 @@ class LoginController extends Controller
      */
     protected function sendFailedLoginResponse(Request $request)
     {
-        $errors = [$this->username() => trans('auth.failed')];
+        $user = Auth::getProvider()->retrieveByCredentials($this->credentials($request));
+        $errors = [$this->username() => trans('Salah emel atau katalaluan.')];
 
-        // Check if the credentials are correct but user is inactive
-        if (Auth::getProvider()->retrieveByCredentials($this->credentials($request))) {
-            $errors[$this->username()] = 'Salah emel atau katalaluan.';
+        if ($user) {
+            if (!$user->is_active) {
+                $errors = [$this->username() => 'Akaun anda belum diaktifkan. Sila hubungi pentadbir.'];
+            }
         }
 
         throw \Illuminate\Validation\ValidationException::withMessages($errors);

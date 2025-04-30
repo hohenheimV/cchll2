@@ -31,27 +31,32 @@
                     <!-- </div> -->
                 </div>
                 <!-- Login form Input Email; Input Password -->
-                {{ Form::open(['route' =>['login'],'novalidate','class'=>'m-lg-5']) }}
+                {{ Form::open(['route' =>['login'],'class'=>'m-lg-5']) }}
                 <h4 class="login-box-msg text-dark">@yield('title')</h4>
                 <div class="input-group mb-3">
                     {{ Form::label('email', 'Emel',['class'=>'sr-only']) }}
-                    {{ Form::email('email',null,['placeholder'=>'Emel','class' => 'form-control '.Html::isInvalid($errors,'email')]) }}
-                    <div class="input-group-append">
+                    {{ Form::text('email',null,['placeholder'=>'Emel', 'required' => 'required', 'class' => 'form-control '.Html::isInvalid($errors,'email')]) }}
+                    <!-- <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-envelope"></span>
                         </div>
-                    </div>
+                    </div> -->
                     {!! Html::hasError($errors,'email') !!}
                 </div>
                 <div class="input-group mb-3">
                     {{ Form::label('password', 'Katalaluan',['class'=>'sr-only']) }}
-                    {{ Form::password('password', ['placeholder'=>'Katalaluan','class' => 'form-control '.Html::isInvalid($errors,'password')]) }}
-                    <div class="input-group-append">
+                    {{ Form::password('password', ['placeholder'=>'Katalaluan', 'required' => 'required', 'class' => 'form-control '.Html::isInvalid($errors,'email')]) }}
+                    <div class="input-group-append" style="background-color: transparent !important;">
+                        <div class="input-group-text" style="background-color: transparent !important;">
+                            <span><i id="toggle-password-visibility" class="fas fa-eye" style="cursor: pointer;"></i> </span>
+                        </div>
+                    </div>
+                    <!-- <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-lock"></span>
                         </div>
-                    </div>
-                    {!! Html::hasError($errors,'password') !!}
+                    </div> -->
+                    {!! Html::hasError($errors,'email') !!}
                 </div>
                 <div class="row">
                     <div class="col-12">
@@ -73,4 +78,23 @@
             </div>
         </div>
     </div>
+    
+    <script>
+        // Toggle password visibility when the eye icon is clicked
+        document.getElementById('toggle-password-visibility').addEventListener('click', function() {
+            const passwordField = document.getElementById('password');
+            const icon = this;
+
+            // Toggle password field type
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    </script>
 @endsection

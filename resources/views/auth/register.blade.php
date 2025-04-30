@@ -251,7 +251,7 @@
                     <div id="user_details" style="display: none;">
                         <div class="row">
                             <div class="form-group mb-3 col-md-6">
-                                {{ Form::label('name', 'Nama') }}
+                                {{ Form::label('name', 'Nama Pemohon') }}
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" placeholder="Nama" required autofocus>
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
@@ -260,7 +260,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3 col-md-6">
-                                {{ Form::label('email', 'Emel') }}
+                                {{ Form::label('email', 'Emel Pemohon') }}
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" placeholder="Emel" required>
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -272,23 +272,67 @@
                         <div class="row">
                             <div class="form-group mb-3 col-md-6">
                                 {{ Form::label('password', 'Katalaluan') }}
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Kata Laluan" required>
+                                <!-- <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Katalaluan" required> -->
+                                <div class="input-group">
+                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Katalaluan" required>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" style="cursor: pointer; background-color: transparent;">
+                                            <i id="toggle-password-visibility" class="fas fa-eye"></i>
+                                        </span>
+                                    </div>
+                                </div>
                                 @error('password')
-                                    <span class="invalid-feedback" role="alert">
+                                    <span class="invalid-feedback d-block" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
                             <div class="form-group mb-3 col-md-6">
                                 {{ Form::label('password_confirmation', 'Pengesahan Katalaluan') }}
-                                <input id="password_confirmation" type="password" class="form-control" name="password_confirmation" placeholder="Sahkan Kata Laluan" required>
-                                @error('password_confirmation')
-                                    <span class="invalid-feedback" role="alert">
+                                <!-- <input id="password_confirmation" type="password" class="form-control" name="password_confirmation" placeholder="Sahkan Katalaluan" required> -->
+                                <div class="input-group">
+                                    <input id="password_confirmation" type="password" class="form-control @error('password') is-invalid @enderror" name="password_confirmation" placeholder="Sahkan Katalaluan" required>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" style="cursor: pointer; background-color: transparent;">
+                                            <i id="toggle-passwordC-visibility" class="fas fa-eye"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                @error('password')
+                                    <span class="invalid-feedback d-block" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
                         </div>
+                        <script>
+                            document.getElementById('toggle-password-visibility').addEventListener('click', function() {
+                                const passwordField = document.getElementById('password');
+                                const icon = this;
+                                if (passwordField.type === 'password') {
+                                    passwordField.type = 'text';
+                                    icon.classList.remove('fa-eye');
+                                    icon.classList.add('fa-eye-slash');
+                                } else {
+                                    passwordField.type = 'password';
+                                    icon.classList.remove('fa-eye-slash');
+                                    icon.classList.add('fa-eye');
+                                }
+                            });
+                            document.getElementById('toggle-passwordC-visibility').addEventListener('click', function() {
+                                const passwordField = document.getElementById('password_confirmation');
+                                const icon = this;
+                                if (passwordField.type === 'password') {
+                                    passwordField.type = 'text';
+                                    icon.classList.remove('fa-eye');
+                                    icon.classList.add('fa-eye-slash');
+                                } else {
+                                    passwordField.type = 'password';
+                                    icon.classList.remove('fa-eye-slash');
+                                    icon.classList.add('fa-eye');
+                                }
+                            });
+                        </script>
                     </div>
 
                     <!-- Fields for PBT Account Type -->
@@ -296,7 +340,7 @@
                         <div class="form-group mb-3">
                             {{ Form::label('negeri', 'Negeri') }}
                             <br>
-                            <select id="negeri" class="form-control select2" name="negeri" onchange="updatePBT()">
+                            <select id="negeri" class="form-control select2" name="negeri" onchange="updatePBT()" required>
                                 <option value="">Pilih Negeri</option>
                             </select>
                         </div>
@@ -311,6 +355,61 @@
                                 <option value="">Pilih PBT</option>
                             </select>
                         </div> -->
+
+                        <div class="row">
+                            <div class="form-group mb-3 col-md-12">
+                                {{ Form::label('department', 'Unit / Jabatan / Bahagian') }}
+                                <input id="department" type="text" class="form-control @error('department') is-invalid @enderror" name="department" placeholder="Contoh: Jabatan Kejuruteraan" value="{{ old('department') }}" required>
+                                @error('department')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group mb-3 col-md-6">
+                                {{ Form::label('phone', 'No. Telefon Pemohon') }}
+                                <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" placeholder="Contoh: 012-3456789" value="{{ old('phone') }}" required>
+                                @error('phone')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-3 col-md-6">
+                                {{ Form::label('position', 'Jawatan Pemohon') }}
+                                <input id="" type="text" class="form-control @error('position') is-invalid @enderror" name="position" placeholder="Contoh: Penolong Jurutera" value="{{ old('position') }}" required>
+                                @error('position')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group mb-3 col-md-6">
+                                {{ Form::label('sv_name', 'Nama Penyelia') }}
+                                <input id="sv_name" type="text" class="form-control @error('sv_name') is-invalid @enderror" name="sv_name" placeholder="Nama Penyelia" value="{{ old('sv_name') }}" required>
+                                @error('sv_name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group mb-3 col-md-6">
+                                {{ Form::label('sv_email', 'Email Penyelia') }}
+                                <input id="sv_email" type="email" class="form-control @error('sv_email') is-invalid @enderror" name="sv_email" placeholder="contoh@email.com" value="{{ old('sv_email') }}" required>
+                                @error('sv_email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Fields for Penggiat Account Type -->
@@ -319,9 +418,9 @@
                         <div class="row">
                             <div class="form-group mb-3 col-md-6">
                                 {{ Form::label('jenis_penggiat', 'Jenis Industri') }}
-                                <select id="jenis_penggiat" class="form-control select2" name="jenis_penggiat" onchange="updateJenisIndustri()">
+                                <select id="jenis_penggiat" class="form-control select2" name="jenis_penggiat" onchange="updateJenisIndustri()" required>
                                     <option value="">Pilih Jenis Industri</option>
-                                    <option value="Pembekal Landskap">Pembekal Landskap</option>
+                                    <option value="Pembekal">Pembekal Landskap</option>
                                     <option value="Perunding">Perunding</option>
                                     <option value="Kontraktor">Kontraktor</option>
                                 </select>
@@ -332,9 +431,43 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3 col-md-6">
-                                {{ Form::label('no_mof', 'No. Pendaftaran MoF') }}
-                                <input id="no_mof" type="text" class="form-control" name="no_mof" placeholder="No. Pendaftaran MoF" required>
-                                @error('no_mof')
+                                {{ Form::label('no_ssm', 'No. Pendaftaran SSM') }}
+                                <input id="no_ssm" type="text" class="form-control" name="no_ssm" placeholder="No. Pendaftaran SSM" required>
+                                
+                                <script>
+                                    $(document).ready(function() {
+                                        $('#no_ssm').on('blur', function() {
+                                            let no_ssm = $(this).val().trim();
+
+                                            if (no_ssm.length === 0) return;
+                                            if (no_ssm.length !== 12 /* || !/^\d{12}$/.test(no_ssm) */) {
+                                                alert('No. Pendaftaran SSM mestilah tepat 12 digit.');
+                                                // $('#no_ssm').val('');
+                                                return;
+                                            }
+
+                                            $.get(`/XyZ83hQ2d8A9/${no_ssm}`, function(response) {
+                                                console.log(response);
+                                                if (Array.isArray(response) && response.length > 0) {
+                                                    const company = response[0];
+                                                    // alert('No. Pendaftaran SSM telah wujud dalam sistem.');
+                                                    $('#nama_syarikat').val(company.name);
+                                                    $('#address1').val(company.address1);
+                                                    $('#address2').val(company.address2);
+                                                    $('#postcode').val(company.postcode);
+                                                    $('#locality').val(company.locality);
+                                                    $('#state_PI').val(company.state);
+                                                    // $('#no_ssm')[0].setCustomValidity('No SSM already exists.');
+                                                }
+                                            }).fail(function() {
+                                                console.error('Request failed or no data found');
+                                                alert('You are making requests too quickly. Please wait a moment before trying again.');
+                                                // $('#no_ssm').val('');
+                                            });
+                                        });
+                                    });
+                                </script>
+                                @error('no_ssm')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -392,7 +525,7 @@
                                 </div>
 
                                 <div class="input-group mb-3 col-md-6">
-                                    <input id="no-pendaftaran-mof" type="text" class="form-control" name="no_pendaftaran_mof" placeholder="No. Pendaftaran MoF" required>
+                                    <input id="no-pendaftaran-mof" type="text" class="form-control" name="no_pendaftaran_mof" placeholder="No. Pendaftaran SSM" required>
                                 </div>
                             </div>
                         </div> -->
@@ -403,7 +536,7 @@
                     <div id="user_address" style="display: none;">
                         <div class="row">
                             <div class="form-group mb-3 col-md-6">
-                                {{ Form::label('address1', 'Address 1') }}
+                                {{ Form::label('address1', 'Alamat 1') }}
                                 <input id="address1" type="text" class="form-control" name="address1" placeholder="Address 1 (House No./Lot No./Floor and Building Name)" required>
                                 @error('address1')
                                     <span class="invalid-feedback" role="alert">
@@ -412,7 +545,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3 col-md-6">
-                                {{ Form::label('address2', 'Address 2') }}
+                                {{ Form::label('address2', 'Alamat 2') }}
                                 <input id="address2" type="text" class="form-control" name="address2" placeholder="Address 2 (Number, Street Name/District)">
                                 @error('address2')
                                     <span class="invalid-feedback" role="alert">
@@ -433,14 +566,14 @@
                             </div>
                             <div class="form-group mb-3 col-md-4">
                                 {{ Form::label('locality', 'Bandar') }}
-                                <input id="locality" type="text" class="form-control" name="locality" placeholder="Locality Name">
+                                <input id="locality" type="text" class="form-control" name="locality" placeholder="Locality Name" required>
                                 @error('locality')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
-                            <div class="form-group mb-3 col-md-6">
+                            <div class="form-group mb-3 col-md-6" id="negeri_pbt">
                                 {{ Form::label('state', 'Negeri') }}
                                 <input id="state_PBT" type="text" class="form-control" name="state" placeholder="State">
                                 {{ Form::select('state', [], null, ['class' => 'form-control', 'id' => 'state_PI']) }}
@@ -450,6 +583,27 @@
                                     </span>
                                 @enderror
                             </div>
+                            <!-- <input id="namaYDP" type="text" class="form-control" name="namaYDP">
+                            <input id="emailYDP" type="text" class="form-control" name="emailYDP"> -->
+                        </div>
+                    </div>
+
+                    <div id="pengesahan" style="display: none;">
+                        <div class="row">
+                            <div class="form-group mb-3 col-md-12" style="background-color:#fef7f8; border-left: 5px solid #f0868e; padding: 15px;">
+                                <textarea style="background-color: transparent; border: none; outline: none; padding: 10px; width: 100%; resize: none; font-weight: bold;" rows="3" class="form-control" readonly disabled>Paparan maklumat adalah bertujuan mempromosikan syarikat/entiti penggiat industri. Oleh itu, nombor telefon, laman web, dan media sosial adalah perlu untuk dipaparkan.</textarea>
+                                
+                                <br>
+                                <div class="form-check ml-4"> <!-- or ms-4 -->
+                                    <input class="form-check-input" type="checkbox" id="acknowledgement" name="acknowledgement" required>
+                                    <label class="form-check-label" for="acknowledgement">
+                                        Dengan mendaftar, anda mengakui dan bersetuju dengan perkara di atas.
+                                    </label>
+                                </div>
+                            </div>
+                        <!-- </div> -->
+                        <!-- <div class="row"> -->
+                            
                         </div>
                     </div>
 
@@ -500,32 +654,51 @@
                 $daftarButton.show();
                 var $negeri = $('#negeri');
                 // Disable the PBT dropdown and show the spinner
-                $negeri.prop('disabled', true);
-                $('#loading-spinner').show(); // Show the spinner
+                // $negeri.prop('disabled', true);
+                // $('#loading-spinner').show(); // Show the spinner
                 // Load Negeri options
-                $.getJSON('/data/negeri', function(data) {
+                // $.getJSON('/data/negeri', function(data) {
                     
-                    $.each(data, function(index, negeri) {
-                        let pname = negeri.name;
-                        $negeri.append($('<option>', {
-                            value: negeri.id,
-                            text: negeri.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-                        }));
-                    });
-                    // Re-enable the negeri dropdown and hide the spinner
-                    $negeri.prop('disabled', false);
-                    $('#loading-spinner').hide(); // Hide the spinner
+                //     $.each(data, function(index, negeri) {
+                //         let pname = negeri.name;
+                //         $negeri.append($('<option>', {
+                //             value: negeri.id,
+                //             text: negeri.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+                //         }));
+                //     });
+                //     // Re-enable the negeri dropdown and hide the spinner
+                //     $negeri.prop('disabled', false);
+                //     $('#loading-spinner').hide(); // Hide the spinner
 
-                    // Initialize Select2
-                    $negeri.select2({
-                        // placeholder: 'Pilih Negeri',
-                        allowClear: false
-                    });
-                }).fail(function() {
-                    // Handle errors if needed
-                    $negeri.prop('disabled', false);
-                    $('#loading-spinner').hide(); // Hide the spinner in case of error
-                    alert('Failed to load data');
+                //     // Initialize Select2
+                //     $negeri.select2({
+                //         // placeholder: 'Pilih Negeri',
+                //         allowClear: false
+                //     });
+                // }).fail(function() {
+                //     // Handle errors if needed
+                //     $negeri.prop('disabled', false);
+                //     $('#loading-spinner').hide(); // Hide the spinner in case of error
+                //     alert('Failed to load data');
+                // });
+
+                $.ajax({
+                    url: '/get-negeri', // API endpoint to get negeri data
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        // Populate the Negeri dropdown with the data
+                        $('#negeri').empty(); // Clear current options
+                        $('#negeri').append('<option value="">Pilih Negeri</option>');
+
+                        $.each(data, function(key, value) {
+                            // Add each Negeri to the dropdown
+                            $('#negeri').append('<option value="' + value.nama_negeri + '">' + value.nama_negeri + '</option>');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error fetching Negeri data: ", error);
+                    }
                 });
                 // $('#address1').val('');
                 // $('#address2').val('');
@@ -534,6 +707,8 @@
                 // $('#state').val('');
                 $('#state_PBT').show();
                 $('#state_PI').hide();
+                $('#negeri_pbt').hide();
+                $('#pengesahan').hide();
             } else if (accountType === 'Penggiat Industri') {
                 $pbtFields.hide();
                 $pbtFields.find('input, select').prop('disabled', true);
@@ -546,6 +721,8 @@
                 $daftarButton.show();
                 $('#state_PBT').hide();
                 $('#state_PI').show();
+                $('#negeri_pbt').show();
+                $('#pengesahan').show();
                 $.ajax({
                     url: '/get-negeri',
                     type: 'GET',
@@ -713,6 +890,8 @@
         // }
 
         function updatePBT() {
+            $('#pbt').val('');
+            $('#user_address input').val('');
             const negeriId = $('#negeri').val();
             const $datalist = $('#data_pbt');  // Target the datalist element
             
@@ -727,8 +906,9 @@
                 $.each(data, function(index, pbt) {
                     // Create a new option element for the datalist
                     $datalist.append($('<option>', {
-                        value: pbt.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+                        // value: pbt.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
                         // text: pbt.id,
+                        value: pbt.name,
                         'data-id': pbt.id,
                     }));
                 });
@@ -750,10 +930,13 @@
             const pbtId = selectedOption.data('id');
 
             var address1	 = $('#address1');
+            var address2	 = $('#address2');
             var postcode = $('#postcode');
             var locality = $('#locality');
             var state = $('#state_PBT');
             var country = $('#country');
+            // var mysms_code = $('#mysms_code');
+            // var emailYDP = $('#emailYDP');
 
             // Check if the input has exactly 5 digits
             // if (postcode.length === 5 && /^\d+$/.test(postcode)) {
@@ -764,12 +947,21 @@
                 $.getJSON('/data/pbt/' + negeriId + '/' + pbtId, function(data) {console.log(data);
                     if(data != null && data != '' && (typeof data === "object" && !Array.isArray(data))){
                         console.log(data);
-                        address1.val(data.alamat1.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
-                        postcode.val(data.poskod);
-                        locality.val(data.kawasan.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
-                        // Check if the dropdown contains a matching value
-                        var stateValue = data.negeri;
-                        state.val(stateValue.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
+                        // address1.val(data.alamat1.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
+                        // postcode.val(data.poskod);
+                        // locality.val(data.kawasan.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
+                        // // Check if the dropdown contains a matching value
+                        // var stateValue = data.negeri;
+                        // state.val(stateValue.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
+                        console.log(data.address1);
+                        console.log(data.address2);
+                        address1.val(data.address1);
+                        address2.val(data.address2);
+                        postcode.val(data.postcode);
+                        locality.val(data.locality);
+                        state.val(data.state);
+                        // mysms_code.val(data.name_short);
+                        // emailYDP.val(data.emailYDP);
                         // country.val(data.country);
                         $('#loading-spinner').hide();
                     }else{

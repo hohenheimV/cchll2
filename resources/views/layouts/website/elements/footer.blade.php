@@ -11,9 +11,9 @@
             border: none;
             width: 50px; /* Fixed width */
             height: 50px; /* Fixed height */
-            border-radius: 50%; /* Circular button */
+            border-radius: 10%; /* Circular button */
             text-align: center;
-            font-size: 24px; /* Font size for the icon */
+            font-size: 15px; /* Font size for the icon */
             line-height: 50px; /* Center icon vertically */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
             transition: background-color 0.3s, transform 0.3s; /* Smooth transitions */
@@ -34,7 +34,7 @@
         }
     </style>
     <!-- Scroll to Top Button -->
-    <a id="scrollToTopBtn" href=""><i class="fas fa-arrow-circle-up"></i></a>
+    <a id="scrollToTopBtn" href="">Top</a>
 
     <!-- JavaScript -->
     <script>

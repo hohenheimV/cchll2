@@ -15,6 +15,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title') | {{ config('app.name', 'Jabatan Landskap Negara') }}</title>
+    <link rel="icon" type="image/png" href="/img/logo-jln-sm.png">
 
 
     <!-- Scripts -->
@@ -252,8 +253,8 @@
                     info: false,      // Disable the "Showing X to Y of Z entries" text
                     autoWidth: false, // Prevent automatic column width calculations
                     ordering: false,
-                    dom: 'Bfrtip', // Position of the buttons
-                    buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+                    // dom: 'Bfrtip', // Position of the buttons
+                    // buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
                 });
                 $('#exampleNP').DataTable({
                     responsive: true,
@@ -264,7 +265,7 @@
                     ordering: true,
                     columnDefs: [
                         {
-                            targets: [0, 1, -2],
+                            targets: [0, 1, 3, -2],
                             orderable: true
                         },
                         // {

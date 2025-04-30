@@ -2,9 +2,9 @@
 <div class="col-lg-3">
 
     <!-- Search Widget -->
-    <div class="card mb-4 d-none d-lg-block">
+    {{--<div class="card mb-4 d-none d-lg-block">
         {!! website_sidebar_search() !!}
-    </div>
+    </div>--}}
 
     @if(isset($eLIND))
         <div class="card my-4">
@@ -39,7 +39,7 @@
         </div>
     </div> --}}
      <!-- Categories Widget -->
-     <div class="card my-4 border border-success mobile-gone">
+     <div class="card mobile-gone">
         <h5 class="card-header bg-olive">Hubungi Kami</h5>
         <div class="card-body">
             <div class="row">

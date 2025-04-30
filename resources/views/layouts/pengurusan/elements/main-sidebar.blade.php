@@ -25,13 +25,13 @@
     <!-- Sidebar -->
     <div class="sidebar" style="overflow-y: auto;">
         <!-- Sidebar user (optional) -->
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="user-panel">
            <!-- <div class="image">
                 <img src="{{ asset('img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
             </div>-->
-            <div class="info">
+            <div class="info" style="white-space: normal;">
                 <a href="#" class="d-block">{{ Auth::user()->name }}</a>
-                {{ Auth::user()->roles->first()->name }}
+                {{-- $user_bahagian --}}
             </div>
         </div>
 
@@ -57,13 +57,27 @@
                         '9' => 'B. Dasar & Pengurusan Korporat',
                         '10' => 'B. Kontrak & Ukur Bahan',
                     ];
+                    $icon = [
+                        'eLAPS' => 'fas fa-paper-plane',
+                        'ePALM' => 'fas fa-leaf',
+                        'ePIL' => 'fas fa-drafting-compass',
+                        'ktp' => 'fas fa-tree',
+                        'MIB' => 'fas fa-users',
+                        'eREAD' => 'fas fa-book',
+                        'ePACT' => 'fas fa-scroll',
+                        'eLAD' => 'fas fa-paint-brush',
+                        'eNTITI' => 'fas fa-dna',
+                        'eMAP' => 'fas fa-map'
+                    ];
+                    
                 ?>
                 @if ((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai')))
-                    <li class="nav-header text-uppercase">{{ $bahagian_jln[Auth::user()->bahagian_jln ? Auth::user()->bahagian_jln : 0] }}</li>
+                    <!-- <li class="nav-header text-uppercase">{{ $bahagian_jln[Auth::user()->bahagian_jln ? Auth::user()->bahagian_jln : 0] }}</li> -->
+                    <li class="nav-header text-uppercase" style="white-space: normal;">Maklumat Landskap</li>
                 @elseif ((Auth::user()->hasRole('Pihak Berkuasa Tempatan')))
-                    <li class="nav-header text-uppercase">Pihak Berkuasa Tempatan</li>
+                    <li class="nav-header text-uppercase" style="white-space: normal;">Pihak Berkuasa Tempatan</li>
                 @elseif ((Auth::user()->hasRole('Penggiat Industri')))
-                    <li class="nav-header text-uppercase">Penggiat Industri</li>
+                    <li class="nav-header text-uppercase" style="white-space: normal;">Penggiat Industri</li>
                 @endif
                 @if ((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai|Pihak Berkuasa Tempatan')))
                     @foreach(['eLAPS', 'ePALM', 'ePIL'] as $item)
@@ -74,16 +88,16 @@
                             (!(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [3, 7])) && $item == 'ePIL')
                         )
                         <li class="nav-item">
-                            {!! Html::buttonSidebarNavLink($item, 'fas fa-chart-pie', [
+                            {!! Html::buttonSidebarNavLink($item, $icon[$item], [
                                 'onclick' => "window.location='" . route('pengurusan.' . ($item) . '.index') . "'",
-                                'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.' . ($item) . '.index')
+                                'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.' . ($item))
                             ]) !!}
                         </li>
                         @endif
                     @endforeach
                     @if((Auth::user()->hasRole('Pentadbir Sistem')) || !(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [8, 7])))
                     <li class="nav-item">
-                        {!! Html::buttonSidebarNavLink('Kempen Tanam Pokok', 'fas fa-chart-pie', [
+                        {!! Html::buttonSidebarNavLink('Kempen Tanam Pokok', $icon['ktp'], [
                             'onclick' => "window.location='" . route('pengurusan.ktp.index') . "'",
                             'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.ktp.')
                         ]) !!}
@@ -91,7 +105,7 @@
                     @endif
                     @if((Auth::user()->hasRole('Pentadbir Sistem')) || !(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [8, 7])))
                     <li class="nav-item">
-                        {!! Html::buttonSidebarNavLink('Malaysia in Bloom (MiB)', 'fas fa-chart-pie', [
+                        {!! Html::buttonSidebarNavLink('Rakan Taman', $icon['MIB'], [
                             'onclick' => "window.location='" . route('pengurusan.MIB.index') . "'",
                             'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.MIB.')
                         ]) !!}
@@ -116,9 +130,9 @@
                             'pendidikan' => ['label' => 'Institusi Pendidikan', 'icon' => 'fas fa-university']
                         ];
                     @endphp
-                    @if((Auth::user()->hasRole('Pentadbir Sistem')) || !(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [10, 8, 7])))
+                    @if((Auth::user()->hasRole('Pentadbir Sistem|Pegawai')) || !(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [10, 8, 7])))
                     <li class="nav-item has-treeview {{ Html::active(['pengurusan.eLIND.*'], 'menu-open') }}">
-                        {!! Html::buttonSidebarNavLinkTreeview('eLIND', 'fas fa-chart-pie', ['class' => 'nav-link btn btn-block btn-link text-left']) !!}
+                        {!! Html::buttonSidebarNavLinkTreeview('eLIND', 'fas fa-seedling', ['class' => 'nav-link btn btn-block btn-link text-left']) !!}
                         <ul class="nav nav-treeview">
                             @foreach($types as $type => $data)
                                 <li class="nav-item">
@@ -152,7 +166,7 @@
                     @endphp
 
                     <li class="nav-item has-treeview {{ Html::active(['pengurusan.eLIND.*'], 'menu-open') }}">
-                        {!! Html::buttonSidebarNavLinkTreeview('eLIND', 'fas fa-chart-pie', ['class' => 'nav-link btn btn-block btn-link text-left']) !!}
+                        {!! Html::buttonSidebarNavLinkTreeview('eLIND', 'fas fa-seedling', ['class' => 'nav-link btn btn-block btn-link text-left']) !!}
                         <ul class="nav nav-treeview">
                             @foreach($types as $type => $data)
                             <?php if($data['label'] == $jenis){ ?>
@@ -176,23 +190,23 @@
                             (!(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [9, 10, 7])) && $item == 'ePACT')
                         )
                         <li class="nav-item">
-                            {!! Html::buttonSidebarNavLink($item, 'fas fa-chart-pie', [
+                            {!! Html::buttonSidebarNavLink($item, $icon[$item], [
                                 'onclick' => "window.location='" . route('pengurusan.' . strtolower($item) . '.index') . "'",
-                                'class' => 'nav-link btn btn-block btn-link text-left ' .  Html::active('pengurusan.' . strtolower($item) . '.index') 
+                                'class' => 'nav-link btn btn-block btn-link text-left ' .  Html::active('pengurusan.' . strtolower($item)) 
                             ]) !!}
                         </li>
                         @endif
                     @endforeach
                     @if((Auth::user()->hasRole('Pentadbir Sistem')) || !(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [5, 7])))
                     <li class="nav-item">
-                        {!! Html::buttonSidebarNavLink('Entiti Landskap', 'fas fa-chart-pie', [
+                        {!! Html::buttonSidebarNavLink('eNTITI', $icon['eNTITI'], [
                             'onclick' => "window.location='" . route('pengurusan.entiti-landskap-unik.index') . "'",
                             'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.entiti-landskap-unik.')
                         ]) !!}
                     </li>
                     @endif
                     <li class="nav-item">
-                        {!! Html::buttonSidebarNavLink('eMAP JLN','fas fa-chart-pie',
+                        {!! Html::buttonSidebarNavLink('eMAP JLN',$icon['eMAP'],
                         ['onclick'=>"window.location='#'",
                         'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.peta')]) !!}
                     </li>
@@ -270,7 +284,7 @@
                                 </li>
                                 <li class="nav-item">
                                     @php
-                                        $inactiveUserCount = \App\User::whereRaw('is_active = ? ', ['0'])->count();
+                                        $inactiveUserCount = \App\User::where('is_active', 0)->where('bahagian_jln', null)->count();
                                     @endphp
 
                                     {!! Html::buttonSidebaNavItemTree('Pengguna <span class="badge badge-danger" style="margin-left: auto;">'.$inactiveUserCount.'</span>',
@@ -278,11 +292,59 @@
                                     'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.users.')])
                                     !!}
 
-                                    <button onclick="window.location='{{ route('pengurusan.users.index') }}'" class="nav-link btn btn-block btn-link text-left">
+                                    <!-- <button onclick="window.location='{{ route('pengurusan.users.index') }}'" class="nav-link btn btn-block btn-link text-left">
                                         &nbsp;<span class="badge badge-danger" style="margin-left: auto;">{{ $inactiveUserCount }}</span>
                                         <p>&nbsp;Pengguna</p>
-                                    </button>
+                                    </button> -->
 
+                                </li>
+                                <li class="nav-item has-treeview {{ Html::active(['pengurusan.users.'], 'menu-open') }}">
+                                    @php
+                                        //$inactiveUserCount = \App\User::whereRaw('is_active = ? ', ['0'])->count();
+                                        $inactiveUserCount = \App\User::where('is_active', 0)
+                                            ->whereDoesntHave('roles', function ($q) {
+                                                $q->whereIn('name', ['Penggiat Industri', 'Pihak Berkuasa Tempatan']);
+                                            })
+                                            ->count();
+                                        //use App\User;
+                                        $inactiveUserCountPI = \App\User::where('is_active', 0)
+                                            ->where(function ($query) {
+                                                $query->whereHas('roles', function ($q) {
+                                                    $q->where('name', 'Penggiat Industri');
+                                                });
+                                            })
+                                            ->count();
+                                        $inactiveUserCountPBT = \App\User::where('is_active', 0)
+                                            ->where(function ($query) {
+                                                $query->whereHas('roles', function ($q) {
+                                                    $q->where('name', 'Pihak Berkuasa Tempatan');
+                                                });
+                                            })
+                                            ->count();
+                                    @endphp
+                                    {!! Html::buttonSidebarNavLinkTreeview('Pengguna', 'fas fa-user', ['class' => 'nav-link btn btn-block btn-link text-left']) !!}
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <button onclick="window.location='{{ route('pengurusan.users.index') }}'" class="nav-link btn btn-block btn-link text-left ">
+                                                &nbsp;<span class="badge badge-danger" style="margin-left: auto;">{{ $inactiveUserCount }}</span>
+                                                <p>&nbsp;Jabatan Landskap Negara</p>
+                                            </button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button onclick="window.location='{{ route('pengurusan.users.index', ['keyword' => 'Pihak Berkuasa Tempatan']) }}'" 
+                                                    class="nav-link btn btn-block btn-link text-left ">
+                                                &nbsp;<span class="badge badge-danger" style="margin-left: auto;">{{ $inactiveUserCountPBT }}</span>
+                                                <p>&nbsp;Pihak Berkuasa Tempatan</p>
+                                            </button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button onclick="window.location='{{ route('pengurusan.users.index', ['keyword' => 'Penggiat Industri']) }}'" 
+                                                class="nav-link btn btn-block btn-link text-left ">
+                                            &nbsp;<span class="badge badge-danger" style="margin-left: auto;">{{ $inactiveUserCountPI }}</span>
+                                            <p>&nbsp;Penggiat Industri</p>
+                                            </button>
+                                        </li>
+                                    </ul>
                                 </li>
                                 <li class="nav-item">
                                     {!! Html::buttonSidebaNavItemTree('Kawalan Capaian',

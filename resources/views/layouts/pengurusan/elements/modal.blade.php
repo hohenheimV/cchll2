@@ -44,6 +44,7 @@
     </div>
 </div>
 
+@if (strpos(request()->url(), 'eLAPS') !== false)
 <!-- Modal Serahan -->
  
 <div class="modal" id="modalSerahan" tabindex="-1" role="dialog" aria-labelledby="modalSerahanLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -87,15 +88,15 @@
         <div class="modal-content">
         {!! Form::open(['method' => 'PUT', 'id' => 'modalFormKeputusan', 'route' => ['pengurusan.eLAPS.update', ''], 'enctype' => 'multipart/form-data']) !!}
             <div class="modal-header d-flex justify-content-center bg-dark border-0">
-                <h5 class="modal-title">Status Keputusan JPT</h5>
+                <h5 class="modal-title">Status Permohonan</h5>
             </div>
 
             <div class="modal-body text-center">
-                <p><strong>Sila pilih Status Keputusan JPT:</strong></p>
+                <p><strong>Sila pilih Status Permohonan:</strong></p>
                 <div class="form-group">
                     {!! Form::select('keputusan', [
-                        '10' => 'Lulus',
-                        '11' => 'Gagal'
+                        '10' => 'Lengkap',
+                        '11' => 'Tidak Lengkap'
                     ], null, ['class' => 'form-control']) !!}
                     {!! Form::hidden('eLAPS_id', null, ['id' => 'eLAPS_idK']) !!}
                 </div>
@@ -137,48 +138,9 @@
         </div>
     </div>
 </div>
+@endif
 
-<div class="modal" id="modalKomenPrestasi" tabindex="-1" role="dialog" aria-labelledby="modalKomenPrestasiLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-l">
-        <div class="modal-content">
-            {!! Form::open(['method'=>'PUT', 'id'=>'modalFormKomenPrestasi']) !!}
-            <div class="modal-header d-flex justify-content-center bg-dark border-0">
-                <h5 class="modal-title">Komen dan Prestasi</h5>
-            </div>
-
-            <div class="modal-body text-center">
-                <p><strong>Sila pilih Prestasi dan masukkan Komen:</strong></p>
-
-                <!-- Prestasi Options -->
-                <div class="form-group">
-                    {!! Form::label('prestasi', 'Prestasi:') !!}
-                    {!! Form::select('prestasi', [
-                        '1' => 'Sangat Baik',
-                        '2' => 'Baik',
-                        '3' => 'Sederhana',
-                        '4' => 'Lemah',
-                        '0' => 'Tiada Maklumat'
-                    ], null, ['class' => 'form-control', 'id' => 'prestasiSelect']) !!}
-                </div>
-
-                <!-- Komen Field -->
-                <div class="form-group">
-                    {!! Form::label('komen', 'Komen:') !!}
-                    {!! Form::textarea('komen', null, ['class' => 'form-control', 'id' => 'komenTextarea', 'rows' => 3, 'placeholder' => 'Masukkan komen di sini...']) !!}
-                </div>
-                {{ Form::hidden('elind_id', null, ['id' => 'elind_idP']) }}
-                <input type="hidden" class="form-control" id="action" name="action" value="prestasi">
-            </div>
-
-            <div class="modal-footer d-flex">
-                {!! Form::button('Batal', ['class'=>'btn btn-danger btn-lg btn-flat btn-block m-0 mr-1', 'data-dismiss'=>'modal']) !!}
-                {!! Form::button('Simpan', ['type'=>'submit', 'class'=>'btn btn-success btn-lg btn-flat btn-block m-0 ml-1']) !!}
-            </div>
-            {!! Form::close() !!}
-        </div>
-    </div>
-</div>
-
+@if (strpos(request()->url(), 'ePALM') !== false)
 <!-- Komponen Landskap Perbandaran -->
  
 <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
@@ -265,25 +227,25 @@
                     <div class="grid2-container">
                         <!-- First Image Preview and File Input -->
                         <div class="grid2-item">
-                            <input type="file" class="form2-control-file" id="gambar_input_modal_1" name="gambar_input_modal_1" accept="image/*">
+                            <input type="file" class="form2-control-file" id="GIM_1" name="GIM_1" accept="image/*">
                             <div id="imagePreviewContainer1" class="image2-preview-container"></div>
                         </div>
 
                         <!-- Second Image Preview and File Input -->
                         <div class="grid2-item">
-                            <input type="file" class="form2-control-file" id="gambar_input_modal_2" name="gambar_input_modal_2" accept="image/*">
+                            <input type="file" class="form2-control-file" id="GIM_2" name="GIM_2" accept="image/*">
                             <div id="imagePreviewContainer2" class="image2-preview-container"></div>
                         </div>
 
                         <!-- Third Image Preview and File Input -->
                         <div class="grid2-item">
-                            <input type="file" class="form2-control-file" id="gambar_input_modal_3" name="gambar_input_modal_3" accept="image/*">
+                            <input type="file" class="form2-control-file" id="GIM_3" name="GIM_3" accept="image/*">
                             <div id="imagePreviewContainer3" class="image2-preview-container"></div>
                         </div>
 
                         <!-- Fourth Image Preview and File Input -->
                         <div class="grid2-item">
-                            <input type="file" class="form2-control-file" id="gambar_input_modal_4" name="gambar_input_modal_4" accept="image/*">
+                            <input type="file" class="form2-control-file" id="GIM_4" name="GIM_4" accept="image/*">
                             <div id="imagePreviewContainer4" class="image2-preview-container"></div>
                         </div>
                     </div>
@@ -373,22 +335,22 @@
                 </style>
                 <div class="grid2-container">
                     <div class="grid2-item">
-                        <input type="file" class="form2-control-file" id="gambar_update_modal_1" name="gambar_update_modal_1" accept="image/*">
+                        <input type="file" class="form2-control-file" id="GUM_1" name="GUM_1" accept="image/*">
                         <div id="imageUpdate1" class="image2-preview-container">
                         </div>
                     </div>
                     <div class="grid2-item">
-                        <input type="file" class="form2-control-file" id="gambar_update_modal_2" name="gambar_update_modal_2" accept="image/*">
+                        <input type="file" class="form2-control-file" id="GUM_2" name="GUM_2" accept="image/*">
                         <div id="imageUpdate2" class="image2-preview-container">
                         </div>
                     </div>
                     <div class="grid2-item">
-                        <input type="file" class="form2-control-file" id="gambar_update_modal_3" name="gambar_update_modal_3" accept="image/*">
+                        <input type="file" class="form2-control-file" id="GUM_3" name="GUM_3" accept="image/*">
                         <div id="imageUpdate3" class="image2-preview-container">
                         </div>
                     </div>
                     <div class="grid2-item">
-                        <input type="file" class="form2-control-file" id="gambar_update_modal_4" name="gambar_update_modal_4" accept="image/*">
+                        <input type="file" class="form2-control-file" id="GUM_4" name="GUM_4" accept="image/*">
                         <div id="imageUpdate4" class="image2-preview-container">
                         </div>
                     </div>
@@ -430,7 +392,50 @@
 
 <!-- Komponen Landskap Perbandaran -->
 
+@endif
 
+@if (strpos(request()->url(), 'eLIND') !== false)
+<div class="modal" id="modalKomenPrestasi" tabindex="-1" role="dialog" aria-labelledby="modalKomenPrestasiLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-l">
+        <div class="modal-content">
+            {!! Form::open(['method'=>'PUT', 'id'=>'modalFormKomenPrestasi']) !!}
+            <div class="modal-header d-flex justify-content-center bg-dark border-0">
+                <h5 class="modal-title">Komen dan Prestasi</h5>
+            </div>
+
+            <div class="modal-body text-center">
+                <p><strong>Sila pilih Prestasi dan masukkan Komen:</strong></p>
+
+                <!-- Prestasi Options -->
+                <div class="form-group">
+                    {!! Form::label('prestasi', 'Prestasi:') !!}
+                    {!! Form::select('prestasi', [
+                        '1' => 'Sangat Baik',
+                        '2' => 'Baik',
+                        '3' => 'Sederhana',
+                        '4' => 'Lemah',
+                        '0' => 'Tiada Maklumat'
+                    ], null, ['class' => 'form-control', 'id' => 'prestasiSelect']) !!}
+                </div>
+
+                <!-- Komen Field -->
+                <div class="form-group">
+                    {!! Form::label('komen', 'Komen:') !!}
+                    {!! Form::textarea('komen', null, ['class' => 'form-control', 'id' => 'komenTextarea', 'rows' => 3, 'placeholder' => 'Masukkan komen di sini...']) !!}
+                </div>
+                {{ Form::hidden('elind_id', null, ['id' => 'elind_idP']) }}
+                <input type="hidden" class="form-control" id="action" name="action" value="prestasi">
+            </div>
+
+            <div class="modal-footer d-flex">
+                {!! Form::button('Batal', ['class'=>'btn btn-danger btn-lg btn-flat btn-block m-0 mr-1', 'data-dismiss'=>'modal']) !!}
+                {!! Form::button('Simpan', ['type'=>'submit', 'class'=>'btn btn-success btn-lg btn-flat btn-block m-0 ml-1']) !!}
+            </div>
+            {!! Form::close() !!}
+        </div>
+    </div>
+</div>
+@endif
 
 
 
@@ -470,20 +475,28 @@
             $('#keterangan_tamanX').val(keterangan_taman);
             $('#gambar_taman').val(JSON.stringify(gambar_taman));
 
-            document.getElementById('gambar_update_modal_1').addEventListener('change', function () {
+            document.getElementById('GUM_1').addEventListener('change', function () {
                 previewImage(this, document.getElementById('imageUpdate1'));
             });
-            document.getElementById('gambar_update_modal_2').addEventListener('change', function () {
+            document.getElementById('GUM_2').addEventListener('change', function () {
                 previewImage(this, document.getElementById('imageUpdate2'));
             });
-            document.getElementById('gambar_update_modal_3').addEventListener('change', function () {
+            document.getElementById('GUM_3').addEventListener('change', function () {
                 previewImage(this, document.getElementById('imageUpdate3'));
             });
-            document.getElementById('gambar_update_modal_4').addEventListener('change', function () {
+            document.getElementById('GUM_4').addEventListener('change', function () {
                 previewImage(this, document.getElementById('imageUpdate4'));
             });
 
             // $('#updateKomponen').attr('action', url);
+        });
+        $('#updateModal').on('hidden.bs.modal', function (event) {
+            for (let i = 1; i <= 4; i++) {
+                $('#imageUpdate' + i).html('');
+            }
+
+            // Optional: clear input values too
+            $('#id_tamanX, #nama_komponenX, #keterangan_tamanX, #gambar_taman').val('');
         });
 
         $('#deleteKomponenModal').on('show.bs.modal', function (event) {
@@ -529,7 +542,7 @@
             var select = $('#statusProjekSelect');
             select.empty();
             if (text === 10) {
-                select.append('<option value="12">Projek dalam pembinaan</option>');
+                select.append('<option value="12">Projek Dalam Pelaksanaan</option>');
             }
             if (text >= 10) {
                 select.append('<option value="13">Projek Batal</option>');

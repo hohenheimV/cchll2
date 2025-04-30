@@ -7,7 +7,8 @@
        
     </ul>
 
-   {{config('app.name')}}, {{config('app.agency')}}
+   {{--{{config('app.name')}}, {{config('app.agency')}}--}}
+   {{ $user_bahagian ?? (config('app.name').', '.config('app.agency')) }}
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">        
         <li class="nav-item">

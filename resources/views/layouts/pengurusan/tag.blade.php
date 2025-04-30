@@ -8,6 +8,7 @@
     <!-- Theme style -->
 
     <title>@yield('title')</title>
+    <link rel="icon" type="image/png" href="/img/logo-jln-sm.png">
     <style>
         html,
         body {

@@ -23,6 +23,7 @@
 
 
     <title>@yield('title') | {{ config('app.name', 'eLANDSKAP , JLN | Jabatan Landskap Negara') }}</title>
+    <link rel="icon" type="image/png" href="/img/logo-jln-sm.png">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">

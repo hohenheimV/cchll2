@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Model\Negeri;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -46,7 +47,7 @@ class RegisterController extends Controller
             // Redirect to the dashboard
             // return redirect($this->redirectTo);
             if($user){
-                return redirect()->route('register')->with('successMessage', 'Maklumat telah berjaya disimpan.<br> Sila tunggu emel pengesahan sebelum mula<br> log masuk.<br> Proses pengesahan dalam 5 hari bekerja.');
+                return redirect()->route('register')->with('successMessage', 'Maklumat telah berjaya disimpan.<br> Sila tunggu emel pengaktifan sebelum mula<br> log masuk.<br> Proses pengesahan dalam 5 hari bekerja.');
             }
         } else {
             // return redirect()->route('auth.register')->withInput($request->all())->with('roles', $request->input('roles'));
@@ -68,14 +69,14 @@ class RegisterController extends Controller
             'required' => ':attribute is required.',
             'email' => ':attribute must be a valid email address.',
             'email.unique' => 'This email address is already in use. Please choose another one.', // Custom message for unique email
-            'password.min' => ':attribute must be at least 8 characters long.',
+            'password.min' => 'Password must be at least 8 characters long.',
             'password.confirmed' => 'Password confirmation does not match.', // Custom message for password confirmation
             'roles.exists' => 'One or more of the selected roles are invalid.',
         ];
 
         // if (isset($data['roles']) && $data['roles'] === 'Penggiat Industri') {
-        //     $rules['no_mof'] = 'required|unique:maklumat_pengguna_penggiat_industri,no_mof';
-        //     $messages['no_mof.unique'] = 'The MOF registration number has already been taken. Please choose another one.';
+        //     $rules['no_ssm'] = 'required|unique:maklumat_pengguna_penggiat_industri,no_ssm';
+        //     $messages['no_ssm.unique'] = 'The MOF registration number has already been taken. Please choose another one.';
         // }    
         // dump($rules);
         // dd($messages);
@@ -86,9 +87,9 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         // if($data['roles'] == "Penggiat Industri"){
-        //     $existingMof = MaklumatPenggunaPenggiatIndustri::where('no_mof', $data['no_mof'])->first();
+        //     $existingMof = MaklumatPenggunaPenggiatIndustri::where('no_ssm', $data['no_ssm'])->first();
         //     if ($existingMof) {
-        //         return redirect()->back()->withErrors(['no_mof' => 'The MOF registration number has already been taken. Please choose another one.']);
+        //         return redirect()->back()->withErrors(['no_ssm' => 'The MOF registration number has already been taken. Please choose another one.']);
         //     }
         // }
         // Create a new user
@@ -101,13 +102,19 @@ class RegisterController extends Controller
         // $user->assignRole($data['roles'] );
         $accountType = $data['roles'] ? $data['roles'] : "-" ;
         if($accountType == "Pihak Berkuasa Tempatan"){
-            $existingPbt = MaklumatPenggunaPbt::where('pbt_name', $data['pbt'])->first();
+            $negeri = Negeri::select('kod_negeri')->where('nama_negeri', $data['state'])->first();
+            $data['state'] = ($negeri['kod_negeri']);
+
+            // $existingPbt = MaklumatPenggunaPbt::where('pbt_name', $data['pbt'])->first();
+            $existingPbt = MaklumatPenggunaPbt::whereRaw('LOWER(pbt_name) = ?', [strtolower($data['pbt'])])->first();
             if ($existingPbt) {
                 $maklumat = $existingPbt;
                 $id = $existingPbt->id;
                 $name = $existingPbt->pbt_name;
                 $existingPbt->update([
-                    'name' => $data['pbt'],
+                    // 'name' => $data['namaYDP'],
+                    // 'email' => $data['emailYDP'],
+                    'pbt_name' => $data['pbt'],
                     'address1' => $data['address1'],
                     'address2' => $data['address2'],
                     'postcode' => $data['postcode'],
@@ -130,20 +137,20 @@ class RegisterController extends Controller
                 $name = $maklumat->pbt_name;
             }
         }else if($accountType == "Penggiat Industri"){
-            $existingMof = MaklumatPenggunaPenggiatIndustri::where('no_mof', $data['no_mof'])->first();
+            $existingMof = MaklumatPenggunaPenggiatIndustri::where('no_ssm', $data['no_ssm'])->first();
             if ($existingMof) {
                 $maklumat = $existingMof;
                 $id = $existingMof->id_elind;
                 $name = $existingMof->name;
-                $existingMof->update([
-                    'name' => $data['nama_syarikat'],
-                    'address1' => $data['address1'],
-                    'address2' => $data['address2'],
-                    'postcode' => $data['postcode'],
-                    'locality' => $data['locality'],
-                    'state' => $data['state'],
-                ]);
-                $existingMof_draf = MaklumatPenggunaPenggiatIndustri::where('no_mof', $data['no_mof'])->first();
+                // $existingMof->update([
+                //     'name' => $data['nama_syarikat'],
+                //     'address1' => $data['address1'],
+                //     'address2' => $data['address2'],
+                //     'postcode' => $data['postcode'],
+                //     'locality' => $data['locality'],
+                //     'state' => $data['state'],
+                // ]);
+                $existingMof_draf = MaklumatPenggunaPenggiatIndustri_draf::where('no_ssm', $data['no_ssm'])->first();
                 $existingMof_draf->update([
                     'name' => $data['nama_syarikat'],
                     'address1' => $data['address1'],
@@ -158,7 +165,7 @@ class RegisterController extends Controller
                     'name' => $data['nama_syarikat'],
                     // 'email' => $data['email'],
                     'jenis_industri' => $data['jenis_penggiat'],
-                    'no_mof' => $data['no_mof'],
+                    'no_ssm' => $data['no_ssm'],
                     'address1' => $data['address1'],
                     'address2' => $data['address2'],
                     'postcode' => $data['postcode'],
@@ -171,7 +178,7 @@ class RegisterController extends Controller
                     'name' => $data['nama_syarikat'],
                     'id_elind' => $id,
                     'jenis_industri' => $data['jenis_penggiat'],
-                    'no_mof' => $data['no_mof'],
+                    'no_ssm' => $data['no_ssm'],
                     'address1' => $data['address1'],
                     'address2' => $data['address2'],
                     'postcode' => $data['postcode'],
@@ -193,6 +200,15 @@ class RegisterController extends Controller
                 'bahagian_jln' => $id,
             ]);
             $user->assignRole($data['roles'] );
+        }
+        if($accountType == "Pihak Berkuasa Tempatan"){
+            $user->update([
+                'department' => $data['department'] ?? null,
+                'phone' => $data['phone'] ?? null,
+                'position' => $data['position'] ?? null,
+                'sv_name' => $data['sv_name'] ?? null,
+                'sv_email' => $data['sv_email'] ?? null,
+            ]);
         }
 
         // Send email notification (if enabled)
@@ -222,13 +238,13 @@ class RegisterController extends Controller
                     "subject" => 'Pendaftaran Pengguna Baru',
                 ];
 
-                Mail::send('pengurusan.users.mails.pendaftaran', ['user' => $user, 'accountType' => $accountType, 'name' => $name], function ($message) use ($emailData, $user_email) {
-                    $message->subject($emailData["subject"])
-                            ->cc($emailData["email_cc_address"], $emailData["email_cc_name"]);
-                    foreach ($user_email as $recipient) {
-                        // $message->to($recipient['address'], $recipient['name']);
-                    }
-                });
+                // Mail::send('pengurusan.users.mails.pendaftaran', ['user' => $user, 'accountType' => $accountType, 'name' => $name], function ($message) use ($emailData, $user_email) {
+                //     $message->subject($emailData["subject"])
+                //             ->cc($emailData["email_cc_address"], $emailData["email_cc_name"]);
+                //     foreach ($user_email as $recipient) {
+                //         // $message->to($recipient['address'], $recipient['name']);
+                //     }
+                // });
             } catch (\Exception $exception) {
                 \Log::error("Error sending registration email: " . $exception->getMessage());
             }

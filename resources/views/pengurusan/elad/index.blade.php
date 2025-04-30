@@ -61,13 +61,22 @@
                                                 </td>
                                                 <td class="text-center">{!! Html::datetime($elad->created_at, 'Y') !!}</td>
                                                 <td class="text-center">
-                                                    <div id="pdf-viewer-{{$elad->id}}" style="width: 200px; height: 250px; border: 1px solid #ddd; margin: auto; cursor: pointer;"
-                                                        onclick="window.location='{{ route('pengurusan.elad.show', $elad)}}'">
-                                                        <div id="loading-{{$elad->id}}" class="text-center" style="padding-top: 80px;">
-                                                            <i class="fas fa-spinner fa-spin"></i>
+                                                    <a href="{{ asset($elad->dokumen ? 'storage/uploads/elad/dokumen/' . $elad->dokumen : 'img/zip-preview.png') }}" 
+                                                    data-toggle="lightbox" 
+                                                    data-title="{{ $elad->tajuk }}" 
+                                                    data-gallery="gallery"
+                                                    target="_blank">
+                                                        <div id="pdf-viewer-{{$elad->id}}" style="width: 200px; height: 250px; border: 1px solid #ddd; margin: auto; cursor: pointer;">
+                                                            @if(Str::endsWith($elad->dokumen, '.zip'))
+                                                                <img src="{{ asset('img/zip-preview.png') }}" alt="ZIP File Preview" style="width: 100%; height: 100%; object-fit: contain;">
+                                                            @else
+                                                                <div id="loading-{{$elad->id}}" class="text-center" style="padding-top: 80px;">
+                                                                    <i class="fas fa-spinner fa-spin"></i>
+                                                                </div>
+                                                                <canvas id="pdf-render-{{$elad->id}}" style="width: 100%; height: 100%; object-fit: contain; display: none;"></canvas>
+                                                            @endif
                                                         </div>
-                                                        <canvas id="pdf-render-{{$elad->id}}" style="width: 100%; height: 100%; object-fit: contain; display: none;"></canvas>
-                                                    </div>
+                                                    </a>
                                                 </td>
                                                 <td>
                                                     <div class="btn-group">
@@ -131,14 +140,23 @@
                                                 </td>
                                                 <td class="text-center">{!! Html::datetime($elad->created_at, 'Y') !!}</td>
                                                 <td class="text-center">
-                                                    <div id="pdf-viewer-{{$elad->id}}" style="width: 200px; height: 250px; border: 1px solid #ddd; margin: auto; cursor: pointer;"
-                                                        onclick="window.location='{{ route('pengurusan.elad.show', $elad) }}'">
-                                                        <div id="loading-{{$elad->id}}" class="text-center" style="padding-top: 80px;">
-                                                            <i class="fas fa-spinner fa-spin"></i>
-                                                        </div>
-                                                        <canvas id="pdf-render-{{$elad->id}}" style="width: 100%; height: 100%; object-fit: contain; display: none;"></canvas>
+                                                <a href="{{ asset($elad->dokumen ? 'storage/uploads/elad/dokumen/' . $elad->dokumen : 'img/zip-preview.png') }}" 
+                                                data-toggle="lightbox" 
+                                                data-title="{{ $elad->tajuk }}" 
+                                                data-gallery="gallery"
+                                                target="_blank">
+                                                    <div id="pdf-viewer-{{$elad->id}}" style="width: 200px; height: 250px; border: 1px solid #ddd; margin: auto; cursor: pointer;">
+                                                        @if(Str::endsWith($elad->dokumen, '.zip'))
+                                                            <img src="{{ asset('img/zip-preview.png') }}" alt="ZIP File Preview" style="width: 100%; height: 100%; object-fit: contain;">
+                                                        @else
+                                                            <div id="loading-{{$elad->id}}" class="text-center" style="padding-top: 80px;">
+                                                                <i class="fas fa-spinner fa-spin"></i>
+                                                            </div>
+                                                            <canvas id="pdf-render-{{$elad->id}}" style="width: 100%; height: 100%; object-fit: contain; display: none;"></canvas>
+                                                        @endif
                                                     </div>
-                                                </td>
+                                                </a>
+                                            </td>
                                                 <td>
                                                     <div class="btn-group">
                                                         {!! Form::button('<i class="fas fa-search"></i>', [
@@ -191,62 +209,94 @@
             const eladsLembut = @json($eladsLembut);
             const eladsKejur = @json($eladsKejur);
 
-            function renderPDF(elads) {
+            // Function to persist active tab state
+            function setActiveTab(tabId) {
+                localStorage.setItem('activeTab', tabId);
+            }
+
+            function getActiveTab() {
+                return localStorage.getItem('activeTab') || '#lembut'; // Default to #lembut tab
+            }
+
+            // Activate the correct tab on page load
+            const activeTab = getActiveTab();
+            $(`a[href="${activeTab}"]`).tab('show');
+
+            // Update active tab state on tab click
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+                const target = $(e.target).attr('href'); // Get the target tab ID
+                setActiveTab(target);
+            });
+
+            function renderDocuments(elads) {
                 elads.data.forEach(elad => {
-                    const url = elad.dokumen ? `{{ asset('storage/uploads/elad/dokumen') }}/${elad.dokumen}` : `{{ asset('img/no-photos.png') }}`;
+                    const viewerElement = document.getElementById('pdf-viewer-' + elad.id);
 
-                    pdfjsLib.getDocument(url).promise.then(function(pdf) {
-                        return pdf.getPage(1);
-                    }).then(function(page) {
-                        const canvas = document.getElementById('pdf-render-' + elad.id);
-                        const loadingElement = document.getElementById('loading-' + elad.id);
-                        const context = canvas.getContext('2d');
-
-                        // Get the viewport at scale 1
-                        const originalViewport = page.getViewport({
-                            scale: 0.5
-                        });
-
-                        // Calculate scale to fit container while maintaining aspect ratio
-                        const containerWidth = 150;
-                        const containerHeight = 200;
-                        const scale = Math.min(
-                            containerWidth / originalViewport.width,
-                            containerHeight / originalViewport.height
-                        );
-
-                        // Get the viewport with calculated scale
-                        const viewport = page.getViewport({
-                            scale: scale
-                        });
-
-                        // Set canvas dimensions
-                        canvas.width = viewport.width;
-                        canvas.height = viewport.height;
-
-                        // Render PDF page
-                        page.render({
-                            canvasContext: context,
-                            viewport: viewport
-                        }).promise.then(() => {
-                            if (loadingElement) {
-                                loadingElement.style.display = 'none';
-                            }
-                            canvas.style.display = 'block';
-                        });
-                    }).catch(function(error) {
-                        console.error('Error loading PDF for ID ' + elad.id + ':', error);
-                        // Show a placeholder or error message
-                        const viewerElement = document.getElementById('pdf-viewer-' + elad.id);
+                    // Check if the file is a ZIP
+                    if (elad.dokumen && elad.dokumen.endsWith('.zip')) {
                         if (viewerElement) {
-                            viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Preview not available</div>';
+                            viewerElement.innerHTML = `<img src="{{ asset('img/zip-preview.png') }}" alt="ZIP File Preview" style="width: 100%; height: 100%; object-fit: contain;">`;
                         }
-                    });
+                        return; // Skip further processing for ZIP files
+                    }
+
+                    // Check if the file is a PDF
+                    if (elad.dokumen && elad.dokumen.endsWith('.pdf')) {
+                        const url = `{{ asset('storage/uploads/elad/dokumen') }}/${elad.dokumen}`;
+
+                        pdfjsLib.getDocument(url).promise.then(function(pdf) {
+                            return pdf.getPage(1);
+                        }).then(function(page) {
+                            const canvas = document.getElementById('pdf-render-' + elad.id);
+                            const loadingElement = document.getElementById('loading-' + elad.id);
+                            const context = canvas.getContext('2d');
+
+                            // Get the viewport at scale 1
+                            const originalViewport = page.getViewport({ scale: 0.5 });
+
+                            // Calculate scale to fit container while maintaining aspect ratio
+                            const containerWidth = 150;
+                            const containerHeight = 200;
+                            const scale = Math.min(
+                                containerWidth / originalViewport.width,
+                                containerHeight / originalViewport.height
+                            );
+
+                            // Get the viewport with calculated scale
+                            const viewport = page.getViewport({ scale: scale });
+
+                            // Set canvas dimensions
+                            canvas.width = viewport.width;
+                            canvas.height = viewport.height;
+
+                            // Render PDF page
+                            page.render({
+                                canvasContext: context,
+                                viewport: viewport
+                            }).promise.then(() => {
+                                if (loadingElement) {
+                                    loadingElement.style.display = 'none';
+                                }
+                                canvas.style.display = 'block';
+                            });
+                        }).catch(function(error) {
+                            console.error('Error loading PDF for ID ' + elad.id + ':', error);
+                            // Show a placeholder or error message
+                            if (viewerElement) {
+                                viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Preview not available</div>';
+                            }
+                        });
+                    } else {
+                        // If the file type is unsupported, show a placeholder
+                        if (viewerElement) {
+                            viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Unsupported file type</div>';
+                        }
+                    }
                 });
             }
 
-            renderPDF(eladsLembut);
-            renderPDF(eladsKejur);
+            renderDocuments(eladsLembut);
+            renderDocuments(eladsKejur);
 
             $('#example-lembut').DataTable({
                 responsive: true,

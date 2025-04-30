@@ -1,6 +1,8 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Maklumat Polisi Landskap (ePACT)')
+{{-- @section('title', 'Maklumat Polisi Landskap (ePACT)') --}}
+
+@section('title', 'Pentadbiran Kontrak dan Polisi Landskap(ePACT)')
 
 @section('content')
 <section class="content">
@@ -30,12 +32,13 @@
                             <table id="example" class="responsive table table-bordered table-hover table-striped mb-0">
                                 <thead class="thead-dark">
                                     <tr>
-                                        <th class="w-5"></th>
-                                        <th>Tajuk</th>
+                                        <th class="w-2">Bil</th>
+                                        <th class="text-center">Tajuk</th>
                                         {{-- <th>Keterangan</th> --}}
                                         <th class="text-center w-10">Saiz</th>
                                         <th class="text-center w-15">Kategori </th>
-                                        <th class="text-center w-5">Tahun</th>
+                                        <th class="text-center w-15">Sumber Terbitan </th>
+                                        <th class="text-center w-5">Tahun Terbitan</th>
                                         <th class="text-center w-15">Imej Hadapan</th>
                                         <th class="text-center w-10">Tindakan</th>
                                     </tr>
@@ -50,9 +53,31 @@
                                             <td class="text-center">
                                                 {{ $epact->kategori->name ?? 'Tiada Maklumat' }}
                                             </td>
-                                            <td class="text-center">{!! Html::datetime($epact->created_at, 'Y') !!}</td>
                                             <td class="text-center">
-                                                <a href="{{ asset($epact->dokumen ? 'storage/uploads/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}" 
+                                            @if ($epact->sumber == '11')
+                                                {{ $epact->subkat ?? 'Tiada Maklumat' }}
+                                            @else
+                                                <?php
+                                                    $sumber = [
+                                                        '0' => 'Tiada Maklumat',
+                                                        '1' => 'Bahagian Pengurusan Landskap',
+                                                        '2' => 'Bahagian Taman Awam',
+                                                        '3' => 'Bahagian Pembangunan Landskap',
+                                                        '4' => 'Bahagian Khidmat Teknikal',
+                                                        '5' => 'Bahagian Penyelidikan & Pemulihan',
+                                                        '6' => 'Bahagian Penilaian & Penyelenggaraan',
+                                                        '7' => 'Bahagian Teknologi Maklumat',
+                                                        '8' => 'Bahagian Promosi & Industri Landskap',
+                                                        '9' => 'Bahagian Dasar & Pengurusan Korporat',
+                                                        '10' => 'Bahagian Kontrak & Ukur Bahan',
+                                                    ];
+                                                ?>
+                                                {{ $sumber[$epact->sumber] ?? 'Tiada Maklumat' }}
+                                            @endif
+                                        </td>
+                                            <td class="text-center">{{ $epact->tahun }}</td>
+                                            <td class="text-center">
+                                                <a href="{{ $epact->dokumen ? asset('storage/uploads/epact/dokumen/' . $epact->dokumen) : asset('img/no-photos.png') }}" 
                                                 data-toggle="lightbox" 
                                                 data-title="{{ $epact->tajuk }}" 
                                                 data-gallery="gallery"
@@ -119,51 +144,62 @@
         const epacts = @json($epacts);
 
         epacts.data.forEach(epact => {
-            const url = epact.dokumen ? `{{ asset('storage/uploads/epact/dokumen') }}/${epact.dokumen}` : `{{ asset('img/no-photos.png') }}`;
+            const url = epact.dokumen 
+                ? `{{ asset('storage/uploads/epact/dokumen') }}/${epact.dokumen}` 
+                : `{{ asset('img/no-photos.png') }}`;
             
-            pdfjsLib.getDocument(url).promise.then(function(pdf) {
-                return pdf.getPage(1);
-            }).then(function(page) {
-                const canvas = document.getElementById('pdf-render-' + epact.id);
-                const loadingElement = document.getElementById('loading-' + epact.id);
-                const context = canvas.getContext('2d');
-                
-                // Get the viewport at scale 1
-                const originalViewport = page.getViewport({ scale: 0.5 });
-                
-                // Calculate scale to fit container while maintaining aspect ratio
-                const containerWidth = 150;
-                const containerHeight = 200;
-                const scale = Math.min(
-                    containerWidth / originalViewport.width,
-                    containerHeight / originalViewport.height
-                );
-                
-                // Get the viewport with calculated scale
-                const viewport = page.getViewport({ scale: scale });
-                
-                // Set canvas dimensions
-                canvas.width = viewport.width;
-                canvas.height = viewport.height;
-                
-                // Render PDF page
-                page.render({
-                    canvasContext: context,
-                    viewport: viewport
-                }).promise.then(() => {
-                    if (loadingElement) {
-                        loadingElement.style.display = 'none';
+            if (epact.dokumen) {
+                // If dokumen exists, try to load the PDF
+                pdfjsLib.getDocument(url).promise.then(function(pdf) {
+                    return pdf.getPage(1);
+                }).then(function(page) {
+                    const canvas = document.getElementById('pdf-render-' + epact.id);
+                    const loadingElement = document.getElementById('loading-' + epact.id);
+                    const context = canvas.getContext('2d');
+                    
+                    // Get the viewport at scale 1
+                    const originalViewport = page.getViewport({ scale: 0.5 });
+                    
+                    // Calculate scale to fit container while maintaining aspect ratio
+                    const containerWidth = 150;
+                    const containerHeight = 200;
+                    const scale = Math.min(
+                        containerWidth / originalViewport.width,
+                        containerHeight / originalViewport.height
+                    );
+                    
+                    // Get the viewport with calculated scale
+                    const viewport = page.getViewport({ scale: scale });
+                    
+                    // Set canvas dimensions
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+                    
+                    // Render PDF page
+                    page.render({
+                        canvasContext: context,
+                        viewport: viewport
+                    }).promise.then(() => {
+                        if (loadingElement) {
+                            loadingElement.style.display = 'none';
+                        }
+                        canvas.style.display = 'block';
+                    });
+                }).catch(function(error) {
+                    console.error('Error loading PDF for ID ' + epact.id + ':', error);
+                    // Show a placeholder or error message
+                    const viewerElement = document.getElementById('pdf-viewer-' + epact.id);
+                    if (viewerElement) {
+                        viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Preview not available</div>';
                     }
-                    canvas.style.display = 'block';
                 });
-            }).catch(function(error) {
-                console.error('Error loading PDF for ID ' + epact.id + ':', error);
-                // Show a placeholder or error message
+            } else {
+                // If dokumen is null, display the no-photos.png image
                 const viewerElement = document.getElementById('pdf-viewer-' + epact.id);
                 if (viewerElement) {
-                    viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Preview not available</div>';
+                    viewerElement.innerHTML = `<img src="{{ asset('img/no-photos.png') }}" alt="No Preview Available" style="width: 100%; height: 100%; object-fit: contain;">`;
                 }
-            });
+            }
         });
     });
     </script>

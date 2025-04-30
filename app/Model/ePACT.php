@@ -28,20 +28,16 @@ class ePACT extends Model implements Auditable
         'mimes',
         'size',
         'extension',
-        'tarikh',
+        'tahun',
         'kate',
         'subkat',
-        'imej'
+        'sumber',
+        'url'
     ];
 
     public function kategori()
     {
         return $this->belongsTo(Kategori::class, 'kate', 'id');
-    }
-
-    public function subkategori()
-    {
-        return $this->belongsTo(Subkategori::class, 'subkat', 'id'); // Adjusted to 'subkat'
     }
 
     public function getSizeNameAttribute()

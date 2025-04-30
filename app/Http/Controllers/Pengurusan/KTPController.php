@@ -7,6 +7,8 @@ use App\Model\KTP;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\User; // Import the User model
+use App\Model\MaklumatPenggunaPbt; // Import the MaklumatPenggunaPbt model
 
 class KTPController extends Controller
 {
@@ -30,7 +32,22 @@ class KTPController extends Controller
      */
     public function index()
     {
-        $ktps = KTP::latest()->paginate(10);
+
+        // tested for displaying only PBT KTP
+        $userId = auth()->id();
+        $user = User::find($userId);
+        if($user->hasRole('Pihak Berkuasa Tempatan')){
+            $id_pbt = $user->bahagian_jln;
+            $pbt = MaklumatPenggunaPbt::where('id', '=', $id_pbt)->first();
+            $totalCount = KTP::where('pbt', $pbt->pbt_name)->count();
+            $ktps = KTP::where('pbt', $pbt->pbt_name)->latest()->paginate($totalCount);
+            //$ktps = KTP::where('pbt', $pbt->pbt_name)->latest()->paginate(10);
+        }else{
+            $totalCount = KTP::count();
+            $ktps = KTP::latest()->paginate($totalCount);
+        }
+        // tested for displaying only PBT KTP
+        //$ktps = KTP::latest()->paginate(10);
         return view('pengurusan.ktp.index', compact('ktps'));
     }
 
@@ -66,11 +83,12 @@ class KTPController extends Controller
             'tinggi_pokok.*' => 'required|integer|min:1|max:10000',
             'diameter_pokok' => 'required|array',
             'diameter_pokok.*' => 'required|integer|min:1|max:10000',
-            'jumlah_pokok' => 'nullable|integer',
+            'jumlah_pokok' => 'required|integer|min:1',
         ], [
             'required' => ':attribute diperlukan.',
             'min' => ':attribute terlalu ringkas, minima 3 aksara.',
             'regex' => ':attribute format tidak sah.',
+            'jumlah_pokok.required' => 'Jumlah Keseluruhan Pokok Ditanam diperlukan.',
         ], [
             'tajuk' => 'Nama Program',
             'lokasi' => 'Lokasi',
@@ -80,6 +98,7 @@ class KTPController extends Controller
             'bilangan_pokok' => 'Bilangan Pokok',
             'tinggi_pokok' => 'Tinggi Pokok',
             'diameter_pokok' => 'Diameter Pokok',
+            'jumlah_pokok' => 'Jumlah Keseluruhan Pokok Ditanam',
         ]);
 
         // Prepare and store species (spesis_pokok), tree count (bilangan_pokok), height (tinggi_pokok), and diameter (diameter_pokok)
@@ -167,11 +186,12 @@ class KTPController extends Controller
             'tinggi_pokok.*' => 'required|integer|min:1|max:10000',
             'diameter_pokok' => 'required|array',
             'diameter_pokok.*' => 'required|integer|min:1|max:10000',
-            'jumlah_pokok' => 'nullable|integer',
+            'jumlah_pokok' => 'required|integer|min:1',
         ], [
             'required' => ':attribute diperlukan.',
             'min' => ':attribute terlalu ringkas, minima 3 aksara.',
             'regex' => ':attribute format tidak sah.',
+            'jumlah_pokok.required' => 'Jumlah Keseluruhan Pokok Ditanam diperlukan.',
         ], [
             'tajuk' => 'Nama Program',
             'lokasi' => 'Lokasi',
@@ -181,6 +201,7 @@ class KTPController extends Controller
             'bilangan_pokok' => 'Bilangan Pokok',
             'tinggi_pokok' => 'Tinggi Pokok',
             'diameter_pokok' => 'Diameter Pokok',
+            'jumlah_pokok' => 'Jumlah Keseluruhan Pokok Ditanam',
         ]);
 
         // Prepare and store species (spesis_pokok), tree count (bilangan_pokok), height (tinggi_pokok), and diameter (diameter_pokok)

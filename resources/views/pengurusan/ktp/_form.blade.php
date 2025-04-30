@@ -1,128 +1,158 @@
+@php
+    $userId = auth()->id();
+    $user = \App\User::find($userId);
+    $isPBTUser = $user->hasRole('Pihak Berkuasa Tempatan');
+    $pbtName = null;
+    $pbtNegeri = null;
+
+    if ($isPBTUser) {
+        $pbtId = $user->bahagian_jln; // Assuming `bahagian_jln` is the PBT ID
+        $pbt = \App\Model\MaklumatPenggunaPbt::find($pbtId);
+        $pbtName = $pbt ? $pbt->pbt_name : 'Unknown PBT';
+        $pbtNegeri = $pbt ? $pbt->state : 'Unknown Negeri'; 
+    }
+@endphp
 <!-- Nama Kempen and Lokasi -->
 <div class="form-row">
-    <div class="form-group col-md-4">
-        {{ Form::label('tajuk', 'Nama Program') }}
-        {{ Form::text('tajuk', null, ['placeholder' => 'Masukkan Nama Program', 'class' => 'form-control ' . ($errors->has('tajuk') ? 'is-invalid' : '')]) }}
-        @if ($errors->has('tajuk'))
-            <div class="invalid-feedback">
-                {{ $errors->first('tajuk') }}
+    <div class="form-group col-md-9"> <!-- Changed from col-md-8 to col-md-9 -->
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                {{ Form::label('tajuk', 'Nama Program') }}
+                {{ Form::text('tajuk', null, [
+                    'placeholder' => 'Masukkan Nama Program',
+                    'class' => 'form-control ' . ($errors->has('tajuk') ? 'is-invalid' : ''),
+                    'oninput' => "this.value = this.value.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); })"
+                ]) }}
+                @if ($errors->has('tajuk'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('tajuk') }}
+                    </div>
+                @endif
             </div>
-        @endif
-    </div>
 
-    <div class="form-group col-md-4">
-        {{ Form::label('lokasi', 'Lokasi') }}
-        {{ Form::text('lokasi', null, ['placeholder' => 'Masukkan Lokasi', 'class' => 'form-control ' . ($errors->has('lokasi') ? 'is-invalid' : '')]) }}
-        @if ($errors->has('lokasi'))
-            <div class="invalid-feedback">
-                {{ $errors->first('lokasi') }}
-            </div>
-        @endif
-    </div>
-</div>
-
-<!-- Negeri and PBT Fields -->
-<div class="form-row">
-    <div class="form-group col-md-4">
-        {{ Form::label('negeri', 'Negeri') }}
-        {{ Form::select('negeri', $negeri ?? [], old('negeri', $ktp->negeri ?? null), [
-            'placeholder' => 'Pilih Negeri',
-            'class' => 'form-control select2 ' . ($errors->has('negeri') ? 'is-invalid' : ''),
-            'id' => 'negeri',
-            'onchange' => 'updatePBT()'
-        ]) }}
-        @if ($errors->has('negeri'))
-            <div class="invalid-feedback">
-                {{ $errors->first('negeri') }}
-            </div>
-        @endif
-    </div>
-    <div class="form-group col-md-4">
-        {{ Form::label('pbt', 'Pihak Berkuasa Tempatan / Agensi') }} 
-        <!-- Loading Spinner -->
-        <div id="loading-spinner" style="display: none;">Muatnaik Maklumat...</div>
-        {{ Form::select('pbt', $pbt ?? [], old('pbt', $ktp->pbt ?? null), [
-            'class' => 'form-control select2 ' . ($errors->has('pbt') ? 'is-invalid' : ''),
-            'data-toggle' => 'tooltip',
-            'title' => 'Sila Pilih Negeri Terlebih Dahulu',
-            'id' => 'pbt',
-            'autocomplete' => 'off',
-        ]) }}
-        @if ($errors->has('pbt'))
-            <div class="invalid-feedback">
-                {{ $errors->first('pbt') }}
-            </div>
-        @endif
-    </div>
-</div>
-
-<!-- Spesis Pokok & Jumlah Pokok -->
-<div class="form-row">
-    <div class="form-group col-md-8">
-        {{ Form::label('maklumat', 'Maklumat Pokok') }}
-        <div>
-            <button type="button" class="btn btn-light btn-sm mt-2" id="add_spesis_pokok"><i class="fas fa-plus"></i> Tambah Spesis</button>
-        </div>
-        <div class="table-responsive">
-            <table id="spesis-pokok-table" class="table table-bordered table-hover mt-2">
-                <thead class="thead-dark">
-                    <style>
-                        #spesis-pokok-table th {
-                            padding: 5px 5px;  /* Adjust the padding for header cells */
-                            text-align: center;  /* Center the text for better alignment */
-                        }
-                    </style>
-                    <tr>
-                        <th class="w-30">Spesis Pokok</th>
-                        <th class="w-15">Bilangan Pokok</th>
-                        <th class="w-15">Tinggi (m)</th>
-                        <th class="w-15">Diameter (cm)</th>
-                        <th class="w-8">Tindakan</th>
-                    </tr>
-                </thead>
-                <tbody id="spesis_pokok_container" class="align-items-center">
-                        @if(isset($spesisPokokJumlahPairs) && count($spesisPokokJumlahPairs) > 0)
-                            @foreach ($spesisPokokJumlahPairs as $index => $pair)
-                            <tr>
-                                <td><input type="text" name="spesis_pokok[]" class="form-control @error('spesis_pokok.*') is-invalid @enderror" value="{{ $pair['spesis'] }}" placeholder="Spesis Pokok"></td>
-                                <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok @error('bilangan_pokok.*') is-invalid @enderror" value="{{ $pair['bilangan'] }}" placeholder="Bilangan" min="1" max="10000"></td>
-                                <td><input type="number" name="tinggi_pokok[]" class="form-control @error('tinggi_pokok.*') is-invalid @enderror" value="{{ $pair['tinggi'] }}" placeholder="Tinggi" min="0" max="1000"></td>
-                                <td><input type="number" name="diameter_pokok[]" class="form-control @error('diameter_pokok.*') is-invalid @enderror" value="{{ $pair['diameter'] }}" placeholder="Diameter" min="0" max="1000"></td>
-                                <td><button type="button" class="btn btn-danger btn-sm remove_field"><i class="fas fa-trash"></i></button></td>
-                            </tr>
-                            @endforeach
-                        @else
-                            <tr>
-                                <td><input type="text" name="spesis_pokok[]" class="form-control @error('spesis_pokok.*') is-invalid @enderror" placeholder="Spesis Pokok"></td>
-                                <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok @error('bilangan_pokok.*') is-invalid @enderror" placeholder="Bilangan"  min="1" max="10000"></td>
-                                <td><input type="number" name="tinggi_pokok[]" class="form-control @error('tinggi_pokok.*') is-invalid @enderror" placeholder="Tinggi"  min="0" max="1000"></td>
-                                <td><input type="number" name="diameter_pokok[]" class="form-control @error('diameter_pokok.*') is-invalid @enderror" placeholder="Diameter"  min="0" max="1000"></td>
-                                <td><button type="button" class="btn btn-danger btn-sm remove_field"><i class="fas fa-trash"></i></button></td>
-                            </tr>
-                        @endif
-                        @error('spesis_pokok.*')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </tbody>
-            </table>
-            
-
-            <div class="form-group col-md-4">
-                    {{ Form::label('jumlah_pokok', 'Jumlah Keseluruhan Pokok Ditanam') }}
-                    {{ Form::text('jumlah_pokok', null, ['class' => 'form-control ' . ($errors->has('jumlah_pokok') ? 'is-invalid' : ''), 'readonly' => true]) }}
-                    @if ($errors->has('jumlah_pokok'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('jumlah_pokok') }}
-                        </div>
-                    @endif
+            <div class="form-group col-md-5">
+                {{ Form::label('lokasi', 'Lokasi') }}
+                {{ Form::text('lokasi', null, ['placeholder' => 'Masukkan Lokasi', 
+                    'class' => 'form-control ' . ($errors->has('lokasi') ? 'is-invalid' : ''),
+                    'oninput' => "this.value = this.value.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); })"
+                ]) }}
+                @if ($errors->has('lokasi'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('lokasi') }}
+                    </div>
+                @endif
             </div>
         </div>
 
-        <!-- Hidden input to store the serialized data -->
-        <input type="hidden" name="serialized_spesis_pokok" id="serialized_spesis_pokok">
-        <input type="hidden" name="jumlah_tanam_pokok" id="jumlah_tanam_pokok">
+        <!-- Negeri and PBT Fields -->
+        @if (!$isPBTUser)
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                {{ Form::label('negeri', 'Negeri') }}
+                {{ Form::select('negeri', $negeri ?? [], old('negeri', $ktp->negeri ?? null), [
+                    'placeholder' => 'Pilih Negeri',
+                    'class' => 'form-control select2 ' . ($errors->has('negeri') ? 'is-invalid' : ''),
+                    'id' => 'negeri',
+                    'onchange' => 'updatePBT()'
+                ]) }}
+                @if ($errors->has('negeri'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('negeri') }}
+                    </div>
+                @endif
+            </div>
+            <div class="form-group col-md-5" id="pbt-container">
+                {{ Form::label('pbt', 'Pihak Berkuasa Tempatan / Agensi') }} 
+                <!-- Loading Spinner -->
+                <div id="loading-spinner" style="display: none;">Muatnaik Maklumat...</div>
+                {{ Form::select('pbt', $pbt ?? [], old('pbt', $ktp->pbt ?? null), [
+                    'class' => 'form-control select2 ' . ($errors->has('pbt') ? 'is-invalid' : ''),
+                    'data-toggle' => 'tooltip',
+                    'title' => 'Sila Pilih Negeri Terlebih Dahulu',
+                    'id' => 'pbt',
+                    'autocomplete' => 'off',
+                    'oninput' => "this.value = this.value.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); })"
+                ]) }}
+                @if ($errors->has('pbt'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('pbt') }}
+                    </div>
+                @endif
+            </div>
+        </div>
+        @else
+            <!-- Display PBT Name -->
+            <div class="form-group col-md-5">
+                <!-- <label for="pbt_name">Pihak Berkuasa Tempatan</label>
+                <input type="text" class="form-control" id="pbt_name" value="{{ $pbtName }}" readonly> -->
+                <input type="hidden" name="negeri" value="{{ $pbtNegeri }}"> <!-- Hidden input for form submission -->
+                <input type="hidden" name="pbt" value="{{ $pbtName }}"> <!-- Hidden input for form submission -->
+            </div>
+        @endif
+        <!-- Spesis Pokok & Jumlah Pokok -->
+        <div class="form-row">
+            <div class="form-group col-md-11">
+                {{ Form::label('maklumat', 'Maklumat Pokok') }}
+                
+                <div class="table-responsive">
+                    <table id="spesis-pokok-table" class="table table-bordered table-hover mt-2">
+                        <thead class="thead-dark">
+                            <style>
+                                #spesis-pokok-table th {
+                                    padding: 5px 5px;  /* Adjust the padding for header cells */
+                                    text-align: center;  /* Center the text for better alignment */
+                                }
+                            </style>
+                            <tr>
+                                <th class="w-30">Spesis Pokok</th>
+                                <th class="w-15">Bilangan Pokok</th>
+                                <th class="w-15">Tinggi (m)</th>
+                                <th class="w-15">Diameter (cm)</th>
+                                <th class="w-8">Tindakan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="spesis_pokok_container" class="align-items-center">
+                                @if(isset($spesisPokokJumlahPairs) && count($spesisPokokJumlahPairs) > 0)
+                                    @foreach ($spesisPokokJumlahPairs as $index => $pair)
+                                    <tr>
+                                        <td><input type="text" name="spesis_pokok[]" class="form-control @error('spesis_pokok.*') is-invalid @enderror" value="{{ $pair['spesis'] }}" placeholder="Spesis Pokok" oninput="this.value = this.value.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); })"></td>
+                                        <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok @error('bilangan_pokok.*') is-invalid @enderror" value="{{ $pair['bilangan'] }}" placeholder="Bilangan" min="1" max="10000"></td>
+                                        <td><input type="number" name="tinggi_pokok[]" class="form-control @error('tinggi_pokok.*') is-invalid @enderror" value="{{ $pair['tinggi'] }}" placeholder="Tinggi" min="0" max="1000"></td>
+                                        <td><input type="number" name="diameter_pokok[]" class="form-control @error('diameter_pokok.*') is-invalid @enderror" value="{{ $pair['diameter'] }}" placeholder="Diameter" min="0" max="1000"></td>
+                                        <td><button type="button" class="btn btn-danger btn-sm remove_field"><i class="fas fa-trash"></i></button></td>
+                                    </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td><input type="text" name="spesis_pokok[]" class="form-control @error('spesis_pokok.*') is-invalid @enderror" placeholder="Spesis Pokok" oninput="this.value = this.value.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); })"></td>
+                                        <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok @error('bilangan_pokok.*') is-invalid @enderror" placeholder="Bilangan"  min="1" max="10000"></td>
+                                        <td><input type="number" name="tinggi_pokok[]" class="form-control @error('tinggi_pokok.*') is-invalid @enderror" placeholder="Tinggi"  min="0" max="1000"></td>
+                                        <td><input type="number" name="diameter_pokok[]" class="form-control @error('diameter_pokok.*') is-invalid @enderror" placeholder="Diameter"  min="0" max="1000"></td>
+                                        <td><button type="button" class="btn btn-danger btn-sm remove_field"><i class="fas fa-trash"></i></button></td>
+                                    </tr>
+                                @endif
+                                @error('spesis_pokok.*')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </tbody>
+                    </table>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-light btn-sm mt-2" id="add_spesis_pokok"><i class="fas fa-plus"></i> Tambah Spesis</button>
+                </div>
+
+                <!-- Hidden input to store the serialized data-->
+                <input type="hidden" name="serialized_spesis_pokok" id="serialized_spesis_pokok">
+                <input type="hidden" name="jumlah_tanam_pokok" id="jumlah_tanam_pokok"> 
+            </div>
+        </div>
+    </div>
+    <div class="form-group col-md-3"> <!-- Changed from col-md-4 to col-md-3 -->
+        {{ Form::label('jumlah_pokok', 'Jumlah Keseluruhan Pokok Ditanam') }}
+        <p id="jumlah_pokok" class="form-control-static" style="font-size: 2.5rem; font-weight: bold; text-align:center;"></p>
+        <input type="hidden" name="jumlah_pokok" id="jumlah_pokok_hidden"> <!-- Hidden input field -->
     </div>
 </div>
 
@@ -134,14 +164,15 @@
             document.querySelectorAll('.bilangan-pokok').forEach(function(input) {
                 total += parseInt(input.value) || 0;
             });
-            document.querySelector('input[name="jumlah_pokok"]').value = total;
+            document.getElementById('jumlah_pokok').textContent = total;
+            document.getElementById('jumlah_pokok_hidden').value = total; // Update hidden input
         }
 
         document.getElementById('add_spesis_pokok').addEventListener('click', function() {
             var container = document.getElementById('spesis_pokok_container');
             var newRow = document.createElement('tr');
             newRow.innerHTML = `
-                <td><input type="text" name="spesis_pokok[]" class="form-control" placeholder="Spesis Pokok"></td>
+                <td><input type="text" name="spesis_pokok[]" class="form-control" placeholder="Spesis Pokok" oninput="this.value = this.value.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); })"></td>
                 <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok" placeholder="Bilangan" min="1"></td>
                 <td><input type="number" name="tinggi_pokok[]" class="form-control" placeholder="Tinggi" min="0"></td>
                 <td><input type="number" name="diameter_pokok[]" class="form-control" placeholder="Diameter" min="0"></td>
@@ -208,18 +239,18 @@
         $negeri.prop('disabled', true);
         $('#loading-spinner').show();
         
-        $.getJSON('/data/negeri', function(data) {
+        $.getJSON('/get-negeri', function(data) {
             $negeri.empty().append('<option value="">Pilih Negeri</option>');
             $.each(data, function(index, negeri) {
                 $negeri.append($('<option>', {
-                    value: negeri.id,
-                    text: capitalizeWords(negeri.name)
+                    value: negeri.kod_negeri,
+                    text: capitalizeWords(negeri.nama_negeri)
                 }));
             });
             // Add 'lain-lain' option
             $negeri.append($('<option>', {
                 value: 'lain-lain',
-                text: 'Lain-lain'
+                text: 'Lain-lain (Agensi/NGO)'
             }));
             
             $negeri.prop('disabled', false);
@@ -241,36 +272,66 @@
     // Function to update PBT based on selected Negeri
     function updatePBT() {
         const negeriId = $('#negeri').val();
-        const $pbt = $('#pbt');
+        const $pbtContainer = $('#pbt-container'); // Wrap the PBT field in a container
 
-        // Reset PBT dropdown
-        $pbt.empty().append('<option value="">Pilih PBT/Agensi</option>');
+        // Reset PBT container
+        $pbtContainer.empty();
         $('#loading-spinner').show();
 
         if (!negeriId) {
             $('#loading-spinner').hide();
+            $pbtContainer.append(`
+                <label for="pbt">Pihak Berkuasa Tempatan</label>
+                <select id="pbt" name="pbt" class="form-control select2">
+                    <option value="">Pilih PBT/Agensi</option>
+                </select>
+            `);
             return;
         }
 
-        $.getJSON('/data/pbt/' + negeriId, function(data) {
+        var negeriText = $('#negeri').find('option:selected').text();
+
+        // Handle "Lain-lain" case
+        if (negeriId === 'lain-lain') {
+            $('#loading-spinner').hide();
+            $pbtContainer.append(`
+                <label for="pbt">Agensi/NGO</label>
+                <input type="text" id="pbt" name="pbt" class="form-control" placeholder="Masukkan Nama Agensi/NGO" value="{{ old('pbt', $ktp->pbt ?? '') }}">
+            `);
+            return;
+        }
+
+        // Fetch PBT data for other Negeri
+        $.getJSON('/data/pbt/' + negeriText, function(data) {
+            const $dropdown = $('<select>', {
+                id: 'pbt',
+                name: 'pbt',
+                class: 'form-control select2'
+            }).append('<option value="">Pilih PBT/Agensi</option>');
+
             $.each(data, function(index, pbt) {
-                $pbt.append($('<option>', {
+                $dropdown.append($('<option>', {
                     value: capitalizeWords(pbt.name), // Change value to name
                     text: capitalizeWords(pbt.name)
                 }));
             });
+
             // Add 'lain-lain' option
-            $pbt.append($('<option>', {
-                value: 'NGO',
-                text: 'NGO'
+            $dropdown.append($('<option>', {
+                value: 'lain-lain',
+                text: 'Lain-lain'
             }));
 
+            $pbtContainer.append(`
+                <label for="pbt">Pihak Berkuasa Tempatan</label>
+            `);
+            $pbtContainer.append($dropdown);
             $('#loading-spinner').hide();
 
             // Set the selected value if editing
             var selectedPbt = '{{ old('pbt', $ktp->pbt ?? '') }}';
             if (selectedPbt) {
-                $pbt.val(selectedPbt).trigger('change');
+                $dropdown.val(selectedPbt).trigger('change');
             }
         }).fail(function() {
             $('#loading-spinner').hide();

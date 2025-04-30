@@ -63,6 +63,7 @@ class EREADController extends Controller
             'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
             'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
             'tarikh' => 'required',
+            'bahagian_jln' => 'required',
         ], [
             'required' => ':attribute diperlukan.',
             'min' => ':attribute terlalu ringkas, minima 3 aksara.',
@@ -165,6 +166,7 @@ class EREADController extends Controller
             'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
             'fail_dokumen' => ['nullable','mimes:pdf'],
             'tarikh' => 'required',
+            'bahagian_jln' => 'required',
         ], [
             'required' => ':attribute diperlukan.',
             'min' => ':attribute terlalu ringkas, minima 3 aksara.',

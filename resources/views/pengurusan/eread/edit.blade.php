@@ -30,11 +30,33 @@
                                     <div class="col-md-5 d-flex justify-content-center align-items-center">
                                         <div class="card text-center">
                                             <div class="row justify-content-center">
-                                                <iframe src="{{ asset($eread->dokumen ? 'storage/uploads/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}" width="80%" height="300">
-                                                        This browser does not support PDFs. Please download the PDF to view it: <a href="{{ asset($eread->dokumen ? 'storage/uploads/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}">Download PDF</a>
-                                                </iframe>
+                                                @if($eread->dokumen)
+                                                    @if(Str::endsWith($eread->dokumen, '.zip'))
+                                                        <img src="{{ asset('img/zip-preview.png') }}" alt="ZIP File Preview" width="80%" height="300">
+                                                        <p class="m-0 ml-2 text-info">
+                                                            <a href="{{ asset('storage/uploads/eread/dokumen/' . $eread->dokumen) }}" download>
+                                                                <p class="m-0 ml-2 text-info">Dokumen</p>
+                                                            </a>
+                                                        </p>
+                                                    @else
+                                                        <iframe src="{{ asset('storage/uploads/eread/dokumen/' . $eread->dokumen) }}" width="80%" height="300">
+                                                            This browser does not support PDFs. Please download the PDF to view it: 
+                                                            <a href="{{ asset('storage/uploads/eread/dokumen/' . $eread->dokumen) }}">Download PDF</a>
+                                                        </iframe>
+                                                        <p class="m-0 ml-2 text-info">
+                                                            <a href="{{ asset('storage/uploads/eread/dokumen/' . $eread->dokumen) }}" data-toggle="lightbox" data-title="{{ $eread->tajuk }}" data-gallery="gallery">
+                                                                <p class="m-0 ml-2 text-info">Dokumen</p>
+                                                            </a>
+                                                        </p>
+                                                    @endif
+                                                @else
+                                                    <p class="text-center">
+                                                        <a href="{{ asset('storage/uploads/eread/dokumen/' . $eread->dokumen) }}" download>
+                                                            Klik Sini Untuk Muat Turun
+                                                        </a>
+                                                    </p>
+                                                @endif
                                             </div>
-                                            <p class="m-0 ml-2 text-info">Dokumen</p>
                                         </div>
                                     </div>  
                                 </div>

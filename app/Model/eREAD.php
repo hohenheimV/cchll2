@@ -29,6 +29,8 @@ class eREAD extends Model implements Auditable
         'size',
         'extension',
         'tarikh',
+        'pautan',
+        'bahagian_jln',
         'kate'
     ];
 

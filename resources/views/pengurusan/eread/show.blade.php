@@ -38,49 +38,80 @@
                         <div class="col-md-5 d-flex justify-content-center align-items-center">
                             <div class="card text-center">
                                 <div class="row justify-content-center">
-                                    <iframe src="{{ asset($eread->dokumen ? 'storage/uploads/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}" width="80%" height="300">
-                                            This browser does not support PDFs. Please download the PDF to view it: <a href="{{ asset($eread->dokumen ? 'storage/uploads/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}">Download PDF</a>
-                                    </iframe>
+                                    @if($eread->dokumen)
+                                        @if(Str::endsWith($eread->dokumen, '.zip'))
+                                            <img src="{{ asset('img/zip-preview.png') }}" alt="ZIP File Preview" width="80%" height="300">
+                                            <p class="m-0 ml-2 text-info">
+                                                <a href="{{ asset('storage/uploads/eread/dokumen/' . $eread->dokumen) }}" download>
+                                                    <small>Klik Sini Untuk Muat Turun</small>
+                                                </a>
+                                            </p>
+                                        @else
+                                            <iframe src="{{ asset('storage/uploads/eread/dokumen/' . $eread->dokumen) }}" width="80%" height="400">
+                                                This browser does not support PDFs. Please download the PDF to view it: 
+                                                <a href="{{ asset('storage/uploads/eread/dokumen/' . $eread->dokumen) }}">Download PDF</a>
+                                            </iframe>
+                                            <p class="m-0 ml-2 text-info">
+                                                <a href="{{ asset('storage/uploads/eread/dokumen/' . $eread->dokumen) }}" data-toggle="lightbox" data-title="{{ $eread->tajuk }}" data-gallery="gallery">
+                                                    <small>Klik Sini Untuk Paparan Penuh</small>
+                                                </a>
+                                            </p>
+                                        @endif
+                                    @else
+                                        <p class="text-center">
+                                            <a href="{{ asset('storage/uploads/eread/dokumen/' . $eread->dokumen) }}" download>
+                                                Klik Sini Untuk Muat Turun
+                                            </a>
+                                        </p>
+                                    @endif
                                 </div>
-                                <p class="m-0 ml-2 text-info"><a href="{{ asset($eread->dokumen ? 'storage/uploads/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}" data-toggle="lightbox" data-title="{{ $eread->tajuk }}" data-gallery="gallery"><small>Klik Sini Untuk Paparan Penuh</small></a></p>
                             </div>
-                        </div>                 
+                        </div>                
                         <div class="col-md-5 text-sm">                                  
                             <div class="card-body">
-                                <dl class="row">
-                                    <dt class="col-6">Tajuk</dt>
-                                    <dd class="col-6">{{ $eread->tajuk }}</dd>
-
-                                    <dt class="col-6">Keterangan</dt>
-                                    <dd class="col-6">{{ $eread->keterangan }}</dd>
-
-                                    <dt class="col-6">Saiz Dokumen</dt>
-                                    <dd class="col-6">{{ $eread->sizeName.' MB' }}</dd>
-                                    
-                                    <dt class="col-6">Kategori</dt>
-                                    <dd class="col-6">
-                                        {{ $eread->kategori->name ?? 'Tiada Maklumat' }}
-                                    </dd>
-
-                                        <dt class="col-6">Tahun</dt>
-                                        <dd class="col-6">{{ date('Y', strtotime($eread->tarikh)) }}</dd>
-
-                                        <dt class="col-6">Jenis Dokumen</dt>
-                                        <dd class="col-6">{{ $eread->mimes }}</dd>
-
-                                        <dt class="col-6">Nama Dokumen</dt>
-                                        <dd class="col-6">{{ $eread->dokumen }}</dd>
-                                            
-                                        <dt class="col-6">Tarikh Daftar</dt>
-                                        <dd class="col-6">{{ $eread->created_at->format('d-m-Y') }}</dd>
-
-                                        <dt class="col-6">Tarikh Kemaskini</dt>
-                                        <dd class="col-6">{{ $eread->updated_at->format('d-m-Y') }}</dd>
-                                    </dl>
-                                    <!-- <a href="{{ route('pengurusan.eread.download', $eread) }}" class="btn btn-primary">Muat Turun</a> -->
-                                </div>
-                            </div>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th class="col-6">Tajuk</th>
+                                        <td class="col-6">{{ $eread->tajuk }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-6">Keterangan</th>
+                                        <td class="col-6">{{ $eread->keterangan }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-6">Saiz Dokumen</th>
+                                        <td class="col-6">{{ $eread->sizeName.' MB' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-6">Kategori</th>
+                                        <td class="col-6">{{ $eread->kategori->name ?? 'Tiada Maklumat' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-6">Tahun</th>
+                                        <td class="col-6">{{ date('Y', strtotime($eread->tarikh)) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-6">Jenis Dokumen</th>
+                                        <td class="col-6">{{ $eread->mimes }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-6">Nama Dokumen</th>
+                                        <td class="col-6">{{ $eread->dokumen }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-6">Tarikh Daftar</th>
+                                        <td class="col-6">{{ $eread->created_at->format('d-m-Y') }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-6">Tarikh Kemaskini</th>
+                                        <td class="col-6">{{ $eread->updated_at->format('d-m-Y') }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- <a href="{{ route('pengurusan.eread.download', $eread) }}" class="btn btn-primary">Muat Turun</a> -->
                         </div>
+                    </div>
                 </div>
             </div>
         </div>

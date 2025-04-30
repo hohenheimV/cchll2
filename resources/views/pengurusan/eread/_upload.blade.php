@@ -3,7 +3,8 @@
         <div class="col-md-12">
             <div class="d-block">
                 {{ Form::label('fail_dokumen', 'Muat Naik Dokumen') }}
-                {{ Form::file('supporting_documents', ['class' => 'form-control d-inline-block ms-2', 'id' => 'supporting_documents', 'multiple' => false, 'style' => 'width: 100%;', 'accept' => 'application/pdf']) }}
+                <p>Hanya satu (1) dokumen (.pdf) atau (.zip) dibenarkan.</p>
+                {{ Form::file('supporting_documents', ['class' => 'form-control d-inline-block ms-2', 'id' => 'supporting_documents', 'multiple' => false, 'style' => 'width: 100%;', 'accept' => 'application/pdf,application/zip']) }}
                 <input name="large_file_name_new" type="hidden" id="large_file_name_new">
                 <input name="large_file_name_old" type="hidden" id="large_file_name_old">
                 <input name="file_type" type="hidden" id="file_type">
@@ -51,18 +52,24 @@
 
             $('button[type="submit"]').prop('disabled', true);
             $('#supporting_documents').prop('disabled', true);
-            let destinationFolder = 'eread/temp/';
-            let deleteThis = $('#large_file_name_old').val();
             let fileInput = $('#supporting_documents')[0];
             let file = fileInput.files[0];
-            if (file.type !== 'application/pdf') {
-                Swal.fire('Error', 'Hanya Fail PDF Sahaja Dibenarkan!', 'error');
-                $('button[type="submit"]').prop('disabled', false);
-                $('#supporting_documents').prop('disabled', false);
+            let fileExtension = file.name.split('.').pop().toLowerCase();
+            let allowedExtensions = ['pdf', 'zip'];
+
+            if (!allowedExtensions.includes(fileExtension)) {
+                Swal.fire('Error', 'Hanya Fail PDF Atau ZIP Sahaja Dibenarkan!', 'error');
+                $('#supporting_documents').val(''); // Clear the file input
+                $('button[type="submit"]').prop('disabled', true); // Keep the submit button disabled
+                $('#supporting_documents').prop('disabled', false); // Re-enable the file input for new selection
                 return;
             }
 
-            console.log(file);
+            //console.log('File Type:', file.type);
+            //console.log('File Extension:', fileExtension);
+
+            let destinationFolder = 'eread/temp/';
+            let deleteThis = $('#large_file_name_old').val();
             let file_size = file.size;
             let file_type = file.type;
             let file_mime = file.type; 

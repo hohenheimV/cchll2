@@ -60,7 +60,6 @@ class ELADController extends Controller
         $request->validate([
             'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
             'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
-            'fail_dokumen' => ['nullable','mimes:pdf'],
             'tarikh' => 'required',
         ], [
             'required' => ':attribute diperlukan.',
@@ -161,7 +160,6 @@ class ELADController extends Controller
         $request->validate([
             'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
             'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
-            'fail_dokumen' => ['nullable','mimes:pdf'],
             'tarikh' => 'required',
         ], [
             'required' => ':attribute diperlukan.',

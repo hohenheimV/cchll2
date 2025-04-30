@@ -26,13 +26,18 @@
 
                             <!-- Right Column: Upload Form -->
                             <div class="col-md-6">
+                                {{ Form::label('dokumen', 'Kemaskini Dokumen') }}
                                 <div class="row">
                                     <div class="col-md-5 d-flex justify-content-center align-items-center">
                                         <div class="card text-center">
                                             <div class="row justify-content-center">
-                                                <iframe src="{{ asset($epact->dokumen ? 'storage/uploads/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}" width="80%" height="300">
-                                                        This browser does not support PDFs. Please download the PDF to view it: <a href="{{ asset($epact->dokumen ? 'storage/uploads/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}">Download PDF</a>
-                                                </iframe>
+                                                @if($epact->dokumen)
+                                                    <iframe src="{{ asset('storage/uploads/epact/dokumen/' . $epact->dokumen) }}" width="80%" height="300">
+                                                        This browser does not support PDFs. Please download the PDF to view it: <a href="{{ asset('storage/uploads/epact/dokumen/' . $epact->dokumen) }}">Download PDF</a>
+                                                    </iframe>
+                                                @else
+                                                    <img src="{{ asset('img/no-photos.png') }}" alt="No Document Available" width="80%" height="300">
+                                                @endif
                                             </div>
                                             <p class="m-0 ml-2 text-info">Dokumen</p>
                                         </div>
@@ -64,7 +69,7 @@
             $('#epactForm').ajaxForm({
             complete: function(xhr) {
                 Swal.fire({
-                    title: 'Success',
+                    title: 'Berjaya',
                     text: 'Maklumat Berjaya Dikemaskini',
                     icon: 'success',
                     confirmButtonText: 'OK'

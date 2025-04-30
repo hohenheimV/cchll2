@@ -25,11 +25,20 @@
 
 <div class="form-group col-md-12">
     {{ Form::label('tajuk', 'Tajuk') }}
-    {{ Form::text('tajuk', old('tajuk', $elad->tajuk ?? null), ['required' => true, 'placeholder' => 'Sila Masukkan Tajuk', 'class' => 'form-control ' . Html::isInvalid($errors, 'tajuk')]) }}
+    {{ Form::text('tajuk', old('tajuk', $elad->tajuk ?? null), [
+        'required' => true, 'placeholder' => 'Sila Masukkan Tajuk', 
+        'class' => 'form-control ' . Html::isInvalid($errors, 'tajuk'),
+        'oninput' => "this.value = this.value.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); })"
+    ]) }}
     {!! Html::hasError($errors, 'tajuk') !!}
 </div>
 <div class="form-group col-md-12">
     {{ Form::label('keterangan', 'Keterangan') }}
-    {{ Form::textarea('keterangan', old('keterangan', $elad->keterangan ?? null), ['placeholder' => 'Sila Masukkan Keterangan', 'rows' => 5, 'class' => 'form-control ' . Html::isInvalid($errors, 'keterangan')]) }}
+    {{ Form::textarea('keterangan', old('keterangan', $elad->keterangan ?? null), [
+        'placeholder' => 'Sila Masukkan Keterangan', 
+        'rows' => 5, 
+        'class' => 'form-control ' . Html::isInvalid($errors, 'keterangan'),
+        'oninput' => "this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1).toLowerCase();"
+    ]) }}
     {!! Html::hasError($errors, 'keterangan') !!}
 </div>

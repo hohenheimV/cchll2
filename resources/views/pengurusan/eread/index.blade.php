@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Maklumat R&D Landskap ')
+@section('title', 'Maklumat Penyelidikan dan Penerbitan Landskap')
 
 @section('content')
 <section class="content">
@@ -34,6 +34,7 @@
                                         <th>Tajuk</th>
                                         {{-- <th>Keterangan</th> --}}
                                         <th class="text-center w-10">Saiz</th>
+                                        <th class="text-center w-15">Terbitan Jabatan</th>
                                         <th class="text-center w-15">Kategori </th>
                                         <th class="text-center w-5">Tahun</th>
                                         <th class="text-center w-15">Imej Hadapan</th>
@@ -48,20 +49,42 @@
                                             <td>{{ $eread->tajuk }}</td>
                                             <td class="text-center">{{ $eread->sizeName . ' MB' }}</td>
                                             <td class="text-center">
+                                                <?php
+                                                    $bahagian_jln = [
+                                                        '0' => 'Tiada Maklumat',
+                                                        '1' => 'Bahagian Pengurusan Landskap',
+                                                        '2' => 'Bahagian Taman Awam',
+                                                        '3' => 'Bahagian Pembangunan Landskap',
+                                                        '4' => 'Bahagian Khidmat Teknikal',
+                                                        '5' => 'Bahagian Penyelidikan & Pemulihan',
+                                                        '6' => 'Bahagian Penilaian & Penyelenggaraan',
+                                                        '7' => 'Bahagian Teknologi Maklumat',
+                                                        '8' => 'Bahagian Promosi & Industri Landskap',
+                                                        '9' => 'Bahagian Dasar & Pengurusan Korporat',
+                                                        '10' => 'Bahagian Kontrak & Ukur Bahan',
+                                                    ];
+                                                ?>
+                                                {{ $bahagian_jln[$eread->bahagian_jln] ?? 'Tiada Maklumat' }}
+                                            </td>
+                                            <td class="text-center">
                                                 {{ $eread->kategori->name ?? 'Tiada Maklumat' }}
                                             </td>
                                             <td class="text-center">{!! Html::datetime($eread->created_at, 'Y') !!}</td>
                                             <td class="text-center">
-                                                <a href="{{ asset($eread->dokumen ? 'storage/uploads/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}" 
+                                                <a href="{{ asset($eread->dokumen ? 'storage/uploads/eread/dokumen/' . $eread->dokumen : 'img/zip-preview.png') }}" 
                                                 data-toggle="lightbox" 
                                                 data-title="{{ $eread->tajuk }}" 
                                                 data-gallery="gallery"
                                                 target="_blank">
                                                     <div id="pdf-viewer-{{$eread->id}}" style="width: 200px; height: 250px; border: 1px solid #ddd; margin: auto; cursor: pointer;">
-                                                        <div id="loading-{{$eread->id}}" class="text-center" style="padding-top: 80px;">
-                                                            <i class="fas fa-spinner fa-spin"></i>
-                                                        </div>
-                                                        <canvas id="pdf-render-{{$eread->id}}" style="width: 100%; height: 100%; object-fit: contain; display: none;"></canvas>
+                                                        @if(Str::endsWith($eread->dokumen, '.zip'))
+                                                            <img src="{{ asset('img/zip-preview.png') }}" alt="ZIP File Preview" style="width: 100%; height: 100%; object-fit: contain;">
+                                                        @else
+                                                            <div id="loading-{{$eread->id}}" class="text-center" style="padding-top: 80px;">
+                                                                <i class="fas fa-spinner fa-spin"></i>
+                                                            </div>
+                                                            <canvas id="pdf-render-{{$eread->id}}" style="width: 100%; height: 100%; object-fit: contain; display: none;"></canvas>
+                                                        @endif
                                                     </div>
                                                 </a>
                                             </td>
@@ -120,51 +143,60 @@
         const ereads = @json($ereads);
 
         ereads.data.forEach(eread => {
-            const url = eread.dokumen ? `{{ asset('storage/uploads/eread/dokumen') }}/${eread.dokumen}` : `{{ asset('img/no-photos.png') }}`;
-            
-            pdfjsLib.getDocument(url).promise.then(function(pdf) {
-                return pdf.getPage(1);
-            }).then(function(page) {
-                const canvas = document.getElementById('pdf-render-' + eread.id);
-                const loadingElement = document.getElementById('loading-' + eread.id);
-                const context = canvas.getContext('2d');
+            // Check if the file is a PDF
+            if (eread.dokumen && eread.dokumen.endsWith('.pdf')) {
+                const url = `{{ asset('storage/uploads/eread/dokumen') }}/${eread.dokumen}`;
                 
-                // Get the viewport at scale 1
-                const originalViewport = page.getViewport({ scale: 0.5 });
-                
-                // Calculate scale to fit container while maintaining aspect ratio
-                const containerWidth = 150;
-                const containerHeight = 200;
-                const scale = Math.min(
-                    containerWidth / originalViewport.width,
-                    containerHeight / originalViewport.height
-                );
-                
-                // Get the viewport with calculated scale
-                const viewport = page.getViewport({ scale: scale });
-                
-                // Set canvas dimensions
-                canvas.width = viewport.width;
-                canvas.height = viewport.height;
-                
-                // Render PDF page
-                page.render({
-                    canvasContext: context,
-                    viewport: viewport
-                }).promise.then(() => {
-                    if (loadingElement) {
-                        loadingElement.style.display = 'none';
+                pdfjsLib.getDocument(url).promise.then(function(pdf) {
+                    return pdf.getPage(1);
+                }).then(function(page) {
+                    const canvas = document.getElementById('pdf-render-' + eread.id);
+                    const loadingElement = document.getElementById('loading-' + eread.id);
+                    const context = canvas.getContext('2d');
+                    
+                    // Get the viewport at scale 1
+                    const originalViewport = page.getViewport({ scale: 0.5 });
+                    
+                    // Calculate scale to fit container while maintaining aspect ratio
+                    const containerWidth = 150;
+                    const containerHeight = 200;
+                    const scale = Math.min(
+                        containerWidth / originalViewport.width,
+                        containerHeight / originalViewport.height
+                    );
+                    
+                    // Get the viewport with calculated scale
+                    const viewport = page.getViewport({ scale: scale });
+                    
+                    // Set canvas dimensions
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+                    
+                    // Render PDF page
+                    page.render({
+                        canvasContext: context,
+                        viewport: viewport
+                    }).promise.then(() => {
+                        if (loadingElement) {
+                            loadingElement.style.display = 'none';
+                        }
+                        canvas.style.display = 'block';
+                    });
+                }).catch(function(error) {
+                    console.error('Error loading PDF for ID ' + eread.id + ':', error);
+                    // Show a placeholder or error message
+                    const viewerElement = document.getElementById('pdf-viewer-' + eread.id);
+                    if (viewerElement) {
+                        viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Preview not available</div>';
                     }
-                    canvas.style.display = 'block';
                 });
-            }).catch(function(error) {
-                console.error('Error loading PDF for ID ' + eread.id + ':', error);
-                // Show a placeholder or error message
+            } else {
+                // If not a PDF, ensure the ZIP preview image is displayed
                 const viewerElement = document.getElementById('pdf-viewer-' + eread.id);
                 if (viewerElement) {
-                    viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Preview not available</div>';
+                    viewerElement.innerHTML = `<img src="{{ asset('img/zip-preview.png') }}" alt="ZIP File Preview" style="width: 100%; height: 100%; object-fit: contain;">`;
                 }
-            });
+            }
         });
     });
     </script>

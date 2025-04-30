@@ -1,5 +1,5 @@
 <div class="form-row">
-        <div class="form-group row">
+        <div class="form-group row col-md-8">
             <div class="col-md-12">
                 <div class="d-block">
                     {{ Form::label('fail_dokumen', 'Muat Naik Dokumen') }}
@@ -21,6 +21,11 @@
                 </div>  
         </div>
     </div>
+    <div class="form-group col-md-8">
+        {{ Form::label('url', 'Pautan URL') }}
+        {{ Form::text('url', $epact->url, ['placeholder' => 'Sila Masukkan Pautan URL', 'class' => 'form-control ' . Html::isInvalid($errors, 'url')]) }}
+        {!! Html::hasError($errors, 'url') !!}
+    </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Include SweetAlert library -->
@@ -31,16 +36,26 @@
         const timestamp = new Date().getTime();
         const isEditPage = window.location.href.includes('edit');
         
+        function toggleSubmitButton() {
+            const hasFile = $('#supporting_documents')[0].files.length > 0;
+            const hasUrl = $('#url').val().trim() !== '';
+            if (hasFile || hasUrl) {
+                $('button[type="submit"]').prop('disabled', false);
+            } else if (!isEditPage) {
+                $('button[type="submit"]').prop('disabled', true);
+            }
+        }
+
         if (!isEditPage) {
             $('button[type="submit"]').prop('disabled', true); 
         }
 
         $('#supporting_documents').change(function() {
-            if (this.files.length > 0) {
-                $('button[type="submit"]').prop('disabled', false); 
-            } else if (!isEditPage) {
-                $('button[type="submit"]').prop('disabled', true); 
-            }
+            toggleSubmitButton();
+        });
+
+        $('#url').on('input', function() {
+            toggleSubmitButton();
         });
 
         $('#supporting_documents').change(function() {

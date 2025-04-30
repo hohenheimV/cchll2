@@ -29,12 +29,34 @@
                                 <div class="row">
                                     <div class="col-md-5 d-flex justify-content-center align-items-center">
                                         <div class="card text-center">
-                                            <div class="row justify-content-center">
-                                                <iframe src="{{ asset($elad->dokumen ? 'storage/uploads/elad/dokumen/' . $elad->dokumen : 'img/no-photos.png') }}" width="80%" height="300">
-                                                        This browser does not support PDFs. Please download the PDF to view it: <a href="{{ asset($elad->dokumen ? 'storage/uploads/elad/dokumen/' . $elad->dokumen : 'img/no-photos.png') }}">Download PDF</a>
-                                                </iframe>
+                                        <div class="row justify-content-center">
+                                                @if($elad->dokumen)
+                                                    @if(Str::endsWith($elad->dokumen, '.zip'))
+                                                        <img src="{{ asset('img/zip-preview.png') }}" alt="ZIP File Preview" width="80%" height="300">
+                                                        <p class="m-0 ml-2 text-info">
+                                                            <a href="{{ asset('storage/uploads/elad/dokumen/' . $elad->dokumen) }}" download>
+                                                                <p class="m-0 ml-2 text-info">Dokumen</p>
+                                                            </a>
+                                                        </p>
+                                                    @else
+                                                        <iframe src="{{ asset('storage/uploads/elad/dokumen/' . $elad->dokumen) }}" width="80%" height="300">
+                                                            This browser does not support PDFs. Please download the PDF to view it: 
+                                                            <a href="{{ asset('storage/uploads/elad/dokumen/' . $elad->dokumen) }}">Download PDF</a>
+                                                        </iframe>
+                                                        <p class="m-0 ml-2 text-info">
+                                                            <a href="{{ asset('storage/uploads/elad/dokumen/' . $elad->dokumen) }}" data-toggle="lightbox" data-title="{{ $elad->tajuk }}" data-gallery="gallery">
+                                                                <p class="m-0 ml-2 text-info">Dokumen</p>
+                                                            </a>
+                                                        </p>
+                                                    @endif
+                                                @else
+                                                    <p class="text-center">
+                                                        <a href="{{ asset('storage/uploads/elad/dokumen/' . $elad->dokumen) }}" download>
+                                                            Klik Sini Untuk Muat Turun
+                                                        </a>
+                                                    </p>
+                                                @endif
                                             </div>
-                                            <p class="m-0 ml-2 text-info">Dokumen</p>
                                         </div>
                                     </div>  
                                 </div>

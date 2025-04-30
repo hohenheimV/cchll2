@@ -45,7 +45,8 @@ class EPACTController extends Controller
      */
     public function create()
     {
-        $kategories = Kategori::where('type', 2)->pluck('name', 'id');
+        /**   $kategories = Kategori::where('type', 2)->pluck('name', 'id');*/
+        $kategories = Kategori::where('type', 4)->pluck('name', 'id');
         $epact = new ePACT(); // Create a new instance for the form
         return view('pengurusan.epact.create', compact('epact', 'kategories'));
     }
@@ -61,49 +62,51 @@ class EPACTController extends Controller
         $request->validate([
             'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
             'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
-            'tarikh' => 'required',
+            'tahun' => 'required|integer|min:1950|max:' . now()->year,
+            'sumber_type' => 'required|in:jln,selain_jln',
+            'sumber' => 'required_if:sumber_type,jln|nullable|integer',
+            'subkat' => 'required_if:sumber_type,selain_jln|nullable|string|max:255',
         ], [
             'required' => ':attribute diperlukan.',
+            'required_if' => ':attribute diperlukan apabila jenis sumber dipilih.',
             'min' => ':attribute terlalu ringkas, minima 3 aksara.',
             'regex' => ':attribute format tidak sah.',
         ]);
 
-        $largeFileName = $request->input('large_file_name_new');
-        $file_size = $request->input('file_size');
-        $file_type = $request->input('file_type');
-        $file_mime = $request->input('file_mime');
+        // Determine the value for 'sumber' and 'subkat'
+        $sumber = $request->sumber_type === 'jln' ? $request->sumber : '11'; // '11' for "Selain JLN"
+        $subkat = $request->sumber_type === 'selain_jln' ? $request->subkat : null;
 
-        if (null !== $largeFileName) {
-            $oldPath = storage_path('app/public/uploads/epact/temp/' . $largeFileName); // Current file location
-            $newPath = storage_path('app/public/uploads/epact/dokumen/' . $largeFileName); // New location
+        // Add the determined values to the request data
+        $request->merge([
+            'sumber' => $sumber,
+            'subkat' => $subkat,
+        ]);
+
+        // Handle file upload if necessary (existing logic)
+        $largeFileName = $request->input('large_file_name_new');
+        if ($largeFileName) {
+            $oldPath = storage_path('app/public/uploads/epact/temp/' . $largeFileName);
+            $newPath = storage_path('app/public/uploads/epact/dokumen/' . $largeFileName);
 
             if (file_exists($oldPath)) {
                 $destinationDir = dirname($newPath);
                 if (!file_exists($destinationDir)) {
-                    if (!mkdir($destinationDir, 0777, true) && !is_dir($destinationDir)) {
-                        \Log::error('Failed to create directory: ' . $destinationDir);
-                        return redirect()->back()->withErrors(['error' => 'Failed to create directory for file upload.']);
-                    }
+                    mkdir($destinationDir, 0777, true);
                 }
-
-                if (!rename($oldPath, $newPath)) {
-                    \Log::error('Failed to move file from ' . $oldPath . ' to ' . $newPath);
-                    return redirect()->back()->withErrors(['error' => 'Failed to move uploaded file.']);
-                }
-            } else {
-                \Log::error('File not found: ' . $oldPath);
-                return redirect()->back()->withErrors(['error' => 'Uploaded file not found.']);
+                rename($oldPath, $newPath);
             }
 
-            $request->request->add([
+            $request->merge([
                 'dokumen' => $largeFileName,
                 'extension' => pathinfo($largeFileName, PATHINFO_EXTENSION),
-                'mimes' => $file_mime,
-                'size' => $file_size,
+                'mimes' => $request->input('file_mime'),
+                'size' => $request->input('file_size'),
             ]);
         }
 
-        epact::create($request->all());
+        // Save the data
+        ePACT::create($request->all());
 
         return redirect()->route('pengurusan.epact.index')->with('successMessage', 'Maklumat Berjaya Disimpan');
     }
@@ -148,7 +151,8 @@ class EPACTController extends Controller
      */
     public function edit(ePACT $epact)
     {
-       $kategories = Kategori::where('type', 2)->pluck('name', 'id');
+    /**   $kategories = Kategori::where('type', 2)->pluck('name', 'id');*/
+       $kategories = Kategori::where('type', 4)->pluck('name', 'id');
         return view('pengurusan.epact.edit', compact('epact', 'kategories'));
     }
 
@@ -164,49 +168,50 @@ class EPACTController extends Controller
         $request->validate([
             'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
             'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
-            'fail_dokumen' => ['nullable','mimes:pdf'],
-            'tarikh' => 'required',
+            'tahun' => 'required|integer|min:1900|max:' . now()->year,
+            'sumber_type' => 'required|in:jln,selain_jln',
+            'sumber' => 'required_if:sumber_type,jln|nullable|integer',
+            'subkat' => 'required_if:sumber_type,selain_jln|nullable|string|max:255',
         ], [
             'required' => ':attribute diperlukan.',
+            'required_if' => ':attribute diperlukan apabila jenis sumber dipilih.',
             'min' => ':attribute terlalu ringkas, minima 3 aksara.',
             'regex' => ':attribute format tidak sah.',
         ]);
 
-        $largeFileName = $request->input('large_file_name_new');
-        $file_size = $request->input('file_size');
-        $file_type = $request->input('file_type');
-        $file_mime = $request->input('file_mime');
+        // Determine the value for 'sumber' and 'subkat'
+        $sumber = $request->sumber_type === 'jln' ? $request->sumber : '11'; // '11' for "Selain JLN"
+        $subkat = $request->sumber_type === 'selain_jln' ? $request->subkat : null;
 
-        if (null !== $largeFileName) {
-            $oldPath = storage_path('app/public/uploads/epact/temp/' . $largeFileName); // Current file location
-            $newPath = storage_path('app/public/uploads/epact/dokumen/' . $largeFileName); // New location
+        // Add the determined values to the request data
+        $request->merge([
+            'sumber' => $sumber,
+            'subkat' => $subkat,
+        ]);
+
+        // Handle file upload if necessary (existing logic)
+        $largeFileName = $request->input('large_file_name_new');
+        if ($largeFileName) {
+            $oldPath = storage_path('app/public/uploads/epact/temp/' . $largeFileName);
+            $newPath = storage_path('app/public/uploads/epact/dokumen/' . $largeFileName);
 
             if (file_exists($oldPath)) {
                 $destinationDir = dirname($newPath);
                 if (!file_exists($destinationDir)) {
-                    if (!mkdir($destinationDir, 0777, true) && !is_dir($destinationDir)) {
-                        \Log::error('Failed to create directory: ' . $destinationDir);
-                        return redirect()->back()->withErrors(['error' => 'Failed to create directory for file upload.']);
-                    }
+                    mkdir($destinationDir, 0777, true);
                 }
-
-                if (!rename($oldPath, $newPath)) {
-                    \Log::error('Failed to move file from ' . $oldPath . ' to ' . $newPath);
-                    return redirect()->back()->withErrors(['error' => 'Failed to move uploaded file.']);
-                }
-            } else {
-                \Log::error('File not found: ' . $oldPath);
-                return redirect()->back()->withErrors(['error' => 'Uploaded file not found.']);
+                rename($oldPath, $newPath);
             }
 
-            $request->request->add([
+            $request->merge([
                 'dokumen' => $largeFileName,
                 'extension' => pathinfo($largeFileName, PATHINFO_EXTENSION),
-                'mimes' => $file_mime,
-                'size' => $file_size,
+                'mimes' => $request->input('file_mime'),
+                'size' => $request->input('file_size'),
             ]);
         }
 
+        // Update the data
         $epact->update($request->all());
 
         return redirect()->route('pengurusan.epact.index')->with('successMessage', 'Maklumat Berjaya Dikemaskini');

@@ -19,8 +19,89 @@
         .col-separator:first-child::before {
             background: none; /* Remove the left border for the first column */
         }
+        .new-change {
+            border: 2px solid red !important;
+            /* background-color:rgb(220, 248, 215); */
+        }
     </style>
-    
+    <!-- <h3>Perubahan Terkini</h3> -->
+    @php
+        $arrChanges = [];
+    @endphp
+
+    <!-- <h3>3 Perubahan Terkini</h3> -->
+
+    @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem') && isset($latestAudit))
+        @foreach ($latestAudit as $audit)
+            <!-- <div style="margin-bottom: 20px;">
+                <p><strong>Dikemaskini oleh:</strong> {{ $audit->user->name ?? 'Sistem' }}</p>
+                <p><strong>Tarikh:</strong> {{ $audit->created_at->format('d-m-Y H:i') }}</p>
+                <table border="1" cellpadding="8" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Medan</th>
+                            <th>Sebelum</th>
+                            <th>Selepas</th>
+                        </tr>
+                    </thead>
+                    <tbody> -->
+                        @foreach ($audit->new_values as $field => $newValue)
+                            @php
+                                if($field == 'mediaSosial_taman'){
+                                    $mediaSosial_tamanData = json_decode($newValue, true);
+                                    
+                                    $oldValue = json_decode($audit->old_values[$field] ?? '{}', true);
+                                    //dd($oldValue);
+
+                                    // Loop through each key of mediaSosial_taman to detect changes
+                                    foreach ($mediaSosial_tamanData as $key => $value) {
+                                        // If the value has changed (or is new)
+                                        if (!isset($oldValue[$key]) || $oldValue[$key] !== $value) {
+                                            // Store the field name that has changed
+                                            $arrChanges[] = $field . '.' . $key;  // You can combine the field name with the key for clarity
+                                        }
+                                    }
+                                }else if ($field == 'gambar_taman') {
+                                    $gambar_tamanData = json_decode($newValue, true);
+                                    $oldValue = json_decode($audit->old_values[$field] ?? '{}', true);
+
+                                    // Check for added/changed values
+                                    foreach ($gambar_tamanData as $key => $value) {
+                                        if (!isset($oldValue[$key]) || $oldValue[$key] !== $value) {
+                                            $arrChanges[] = $field . '.' . $key;
+                                        }
+                                    }
+
+                                    // Check for removed keys
+                                    foreach ($oldValue as $key => $value) {
+                                        if (!isset($gambar_tamanData[$key])) {
+                                            $arrChanges[] = $field . '.' . $key;
+                                        }
+                                    }
+                                }else{
+                                    $arrChanges[] = $field;
+                                }
+                                //dump($arrChanges);
+                            @endphp
+                        @endforeach
+                    <!-- </tbody>
+                </table>
+            </div> -->
+        @endforeach
+    @endif
+
+    {{--
+        @if(isset($arrChanges))
+            <div class="alert alert-info mt-3">
+                <strong>Nota:</strong> Perubahan pada medan berikut tidak akan dipaparkan di portal:
+                <ul>
+                    @foreach($arrChanges as $change)
+                        <li>{{ ucfirst($change) }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    --}}
     <div class="row inertShow">
         <div class="col-lg col-separator">
             <div class="form-group">
@@ -30,34 +111,31 @@
                 </div>
             </div>
             <div class="inertClass">
-                <div class="form-group required">
-                    <label for="nama_taman" class="col-md-12 control-label">Nama Taman</label>
-                    <div class="col-md-12">
-                        {!! Form::textarea('nama_taman', null, ['class' => 'form-control', 'maxlength' => '50', 'rows' => '1', 'id' => 'nama_taman', 'required' => 'required']) !!}
-                        <script>
-                            function resizeTextarea(textarea) {
-                                textarea.style.height = 'auto';  // Reset the height
-                                textarea.style.height = (textarea.scrollHeight) + 'px';
-                            }
-
-                            // Call resize function when the page loads
-                            window.onload = function() {
-                                var textarea = document.getElementById('nama_taman');
-                                resizeTextarea(textarea);
-                            };
-                        </script>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="form-group required col-md-8">
-                        <label for="nama_pbt" class="col-md-12 control-label">Pihak Berkuasa Tempatan</label>
+                        <label for="nama_taman" class="col-md-12 control-label">Nama Taman</label>
                         <div class="col-md-12">
-                            {!! Form::text('nama_pbt', $pbt->pbt_name ?? $ePALM->nama_pbt ?? '', ['class' => 'form-control', 'id' => 'nama_pbt']) !!}
+                            {!! Form::textarea('nama_taman', null, ['class' => 'form-control', 'maxlength' => '150', 'rows' => '1', 'id' => 'nama_taman', 'required' => 'required']) !!}
+                            <script>
+                                function resizeTextarea(textarea) {
+                                    textarea.style.height = 'auto';
+                                    textarea.style.height = (textarea.scrollHeight) + 'px';
+                                }
+
+                                window.onload = function() {
+                                    var textarea = document.getElementById('nama_taman');
+                                    resizeTextarea(textarea);
+                                };
+                                window.onkeyup = function() {
+                                    var textarea = document.getElementById('nama_taman');
+                                    resizeTextarea(textarea);
+                                };
+                            </script>
                         </div>
                     </div>
 
                     <div class="form-group required col-md-4">
-                        <label for="kategori_taman" class="col-md-12 control-label">Jenis Taman</label>
+                        <label for="kategori_taman" class="col-md-12 control-label">Jenis Taman {!! in_array('kategori_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
                         <div class="col-md-12">
                             @php
                                 $options = [
@@ -76,9 +154,73 @@
                                 //dd(array_key_exists("Taman Awamw", $options));
                             @endphp
 
-                            {!! Form::select('kategori_taman', $options, isset($ePALM->kategori_taman) ? $ePALM->kategori_taman : '', ['class' => 'form-control', 'id' => 'kategori_taman', 'required' => 'required']) !!}
+                            {!! Form::select('kategori_taman', $options, isset($ePALM->kategori_taman) ? $ePALM->kategori_taman : '', ['class' => 'form-control ', 'id' => 'kategori_taman', 'required' => 'required']) !!}
                         </div>
                     </div>
+                </div>
+                <!-- <div class="form-group required">
+                    <label for="nama_taman" class="col-md-12 control-label">Nama Taman</label>
+                    <div class="col-md-12">
+                        {!! Form::textarea('nama_taman', null, ['class' => 'form-control', 'maxlength' => '50', 'rows' => '1', 'id' => 'nama_taman', 'required' => 'required']) !!}
+                        <script>
+                            function resizeTextarea(textarea) {
+                                textarea.style.height = 'auto';  // Reset the height
+                                textarea.style.height = (textarea.scrollHeight) + 'px';
+                            }
+
+                            // Call resize function when the page loads
+                            window.onload = function() {
+                                var textarea = document.getElementById('nama_taman');
+                                resizeTextarea(textarea);
+                            };
+                        </script>
+                    </div>
+                </div> -->
+                <div class="row">
+                    <div class="form-group required col-md-4">
+                        <label for="negeri_taman" class="col-md-12 control-label">Negeri {!! in_array('negeri_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                        <div class="col-md-12">
+                            {{ Form::select('negeri_taman', [], null, ['class' => 'form-control', 'id' => 'negeri']) }}
+                        </div>
+                    </div>
+                    <div class="form-group required col-md-8">
+                        <label for="nama_pbt" class="col-md-12 control-label">Pihak Berkuasa Tempatan</label>
+                        <div class="col-md-12">
+                            <input type="text" name="nama_pbt" id="nama_pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" required value="{{ $pbt->pbt_name ?? $ePALM->nama_pbt ?? '' }}">
+                            <datalist id="data_pbt">
+                            </datalist>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group required col-md-8">
+                        <label for="nama_pbt" class="col-md-12 control-label">Pihak Berkuasa Tempatan</label>
+                        <div class="col-md-12">
+                            {!! Form::text('nama_pbt', $pbt->pbt_name ?? $ePALM->nama_pbt ?? '', ['class' => 'form-control', 'id' => 'nama_pbt']) !!}
+                        </div>
+                    </div> -->
+
+                    <!-- <div class="form-group required col-md-4">
+                        <label for="kategori_taman" class="col-md-12 control-label">Jenis Taman {!! in_array('kategori_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                        <div class="col-md-12">
+                            @php
+                                $options = [
+                                    'Taman Awam' => 'Taman Awam',
+                                    'Taman Botani' => 'Taman Botani',
+                                    'Landskap Perbandaran' => 'Landskap Perbandaran',
+                                    'Persekitaran Kehidupan' => 'Persekitaran Kehidupan',
+                                    'Taman Persekutuan' => 'Taman Persekutuan',
+                                    //'6' => 'Lain-lain (sila nyatakan)'
+                                ];
+
+                                // Check if $ePALM->kategori_taman exists and is not in the options list, then append it
+                                if (isset($ePALM->kategori_taman) && !array_key_exists($ePALM->kategori_taman, $options)) {
+                                    $options[$ePALM->kategori_taman] = $ePALM->kategori_taman;  // Add it to options
+                                }
+                                //dd(array_key_exists("Taman Awamw", $options));
+                            @endphp
+
+                            {!! Form::select('kategori_taman', $options, isset($ePALM->kategori_taman) ? $ePALM->kategori_taman : '', ['class' => 'form-control ', 'id' => 'kategori_taman', 'required' => 'required']) !!}
+                        </div>
+                    </div> -->
                 </div>
 
                 <!-- Input field that will be displayed when 'Lain-lain' is selected -->
@@ -91,63 +233,369 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="form-group required col-md-4">
-                        <label for="keluasan_taman" class="col-md-12 control-label">Keluasan</label>
-                        <div class="col-md-12">
-                            {{ Form::text('keluasan_taman', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}
+                
+                <div class="inertClass">
+                    <div class="row">
+                        <!-- <div class="form-group required col-md-4">
+                            <label for="negeri_taman" class="col-md-12 control-label">Negeri {!! in_array('negeri_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                            <div class="col-md-12">
+                                {{ Form::select('negeri_taman', [], null, ['class' => 'form-control', 'id' => 'negeri']) }}
+                            </div>
+                        </div> -->
+
+                        <div class="form-group required col-md-4">
+                            <label for="daerah_taman" class="col-md-12 control-label">Daerah {!! in_array('daerah_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                            <div class="col-md-12">
+                                {{ Form::select('daerah_taman', [], null, ['class' => 'form-control', 'id' => 'daerah']) }}
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group required col-md-2">
-                        <label for="keluasan_unit" class="col-md-12 control-label">&nbsp;</label>
-                        <div class="col-md-12">
-                        {!! Form::select('keluasan_unit', [
-                            'ekar' => 'Ekar',
-                            'm2' => 'm²',
-                            'hektar' => 'Hektar'
-                        ], isset($ePALM->keluasan_unit) ? $ePALM->keluasan_unit : '', ['class' => 'form-control', 'required' => 'required']) !!}
+
+                        <div class="form-group required col-md-4">
+                            <label for="mukim_taman" class="col-md-12 control-label">Mukim {!! in_array('mukim_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                            <div class="col-md-12">
+                                {{ Form::select('mukim_taman', [], null, ['class' => 'form-control', 'id' => 'mukim']) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group required col-md-4">
+                            <label for="parlimen_taman" class="col-md-12 control-label">Parlimen {!! in_array('parlimen_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                            <div class="col-md-12">
+                                {{ Form::select('parlimen_taman', [], null, ['class' => 'form-control', 'id' => 'parlimen']) }}
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-group required col-md-4">
-                        <label for="panjang_taman" class="col-md-12 control-label">Panjang</label>
-                        <div class="col-md-12">
-                            {{ Form::text('panjang_taman', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}
+                    <div class="row">
+                        <div class="form-group required col-md-4">
+                            <label for="dun_taman" class="col-md-12 control-label">Dun {!! in_array('dun_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                            <div class="col-md-12">
+                                {{ Form::select('dun_taman', [], null, ['class' => 'form-control', 'id' => 'dun']) }}
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group required col-md-2">
-                        <label for="unit_panjang" class="col-md-12 control-label">&nbsp;</label>
-                        <div class="col-md-12">
-                        {{ Form::select('unit_panjang', ['meter' => 'Meter', 'kilometer' => 'Kilometer'], null, ['class' => 'form-control']) }}
-                        </div>
+
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script>
+                        $(document).ready(function() {
+                            // Fetch Negeri data on page load (AJAX call)
+                            $.ajax({
+                                url: '/get-negeri', // API endpoint to get negeri data
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function(data) {
+                                    // Populate the Negeri dropdown with the data
+                                    $('#negeri').empty(); // Clear current options
+                                    $('#negeri').append('<option value="">Pilih Negeri</option>');
+                                    $('#daerah').append('<option value="">Pilih Daerah</option>');
+                                    $('#mukim').append('<option value="">Pilih Mukim</option>');
+                                    $('#parlimen').append('<option value="">Pilih Parlimen</option>');
+                                    $('#dun').append('<option value="">Pilih Dun</option>');
+
+                                    $.each(data, function(key, value) {
+                                        // Add each Negeri to the dropdown
+                                        $('#negeri').append('<option value="' + value.kod_negeri + '">' + value.nama_negeri + '</option>');
+                                    });
+                                    var negeriSelected = "{{ isset($ePALM->negeri_taman) ? $ePALM->negeri_taman : '' }}"; // Assuming you have $ePALM->negeri
+                                    if (negeriSelected) {
+                                        $('#negeri').val(negeriSelected).trigger('change');
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error("Error fetching Negeri data: ", error);
+                                }
+                            });
+
+                            // When the 'Negeri' dropdown changes
+                            $('#negeri').change(function() {
+                                var negeriId = $(this).val();
+                                var negeriText = $(this).find('option:selected').text();
+                                if (negeriId) {
+                                    // Make an AJAX request to get the 'Daerah' based on the selected 'Negeri'
+                                    $('#daerah').empty();
+                                    $('#daerah').append('<option value="">Pilih Daerah</option>');
+                                    $('#mukim').empty();
+                                    $('#mukim').append('<option value="">Pilih Mukim</option>');
+                                    $('#parlimen').empty();
+                                    $('#parlimen').append('<option value="">Pilih Parlimen</option>');
+                                    $('#dun').empty();
+                                    $('#dun').append('<option value="">Pilih Dun</option>');
+                                    $.ajax({
+                                        url: '/get-daerah/' + negeriId, // Your existing route to fetch daerah
+                                        type: 'GET',
+                                        dataType: 'json',
+                                        success: function(data) {
+                                            // Populate the 'Daerah' dropdown with the response data
+                                            if (data.length<2) {
+                                                // if (data[0].nama_daerah == 'TIADA DAERAH') {
+                                                //     $('#daerah').append('<option value="000" selected disabled>TIADA DAERAH</option>');
+                                                // }else{
+                                                    $('#daerah').append('<option value="' + data[0].kod_daerah + '" selected>' + data[0].nama_daerah + '</option>');
+                                                // }
+                                                $('#daerah').trigger('change');
+                                            }else{
+                                                $.each(data, function(key, value) {
+                                                    $('#daerah').append('<option value="' + value.kod_daerah + '">' + value.nama_daerah + '</option>');
+                                                    // Check if the name of the daerah is 'TIADA DAERAH'
+                                                    // if (value.nama_daerah == 'TIADA DAERAH') {
+                                                    //     // Set this option as selected
+                                                    //     $('#daerah option[value="' + value.kod_daerah + '"]').prop('selected', true);
+                                                    //     $('#daerah').trigger('change');
+                                                    // }
+                                                });
+                                            }
+                                            var daerahSelected = "{{ isset($ePALM->daerah_taman) ? $ePALM->daerah_taman : '' }}"; // Assuming you have $ePALM->daerah
+                                            if (daerahSelected) {
+                                                $('#daerah').val(daerahSelected).trigger('change');
+                                            }
+                                        }
+                                    });
+
+                                    // Make an AJAX request to get the 'parlimen' based on the selected 'Negeri'
+                                    $.ajax({
+                                        url: '/get-parlimen/' + negeriId, // Your existing route to fetch parlimen
+                                        type: 'GET',
+                                        dataType: 'json',
+                                        success: function(data) {
+                                            // Populate the 'parlimen' dropdown with the response data
+                                            $('#parlimen').empty();
+                                            $('#parlimen').append('<option value="">Pilih Parlimen</option>');
+                                            $.each(data, function(key, value) {
+                                                $('#parlimen').append('<option value="' + value.kod_parlimen + '">' + value.nama_parlimen + '</option>');
+                                            });
+                                            var parlimenSelected = "{{ isset($ePALM->parlimen_taman) ? $ePALM->parlimen_taman : '' }}"; // Assuming you have $ePALM->parlimen
+                                            if (parlimenSelected) {
+                                                $('#parlimen').val(parlimenSelected).trigger('change');
+                                            }
+                                        }
+                                    });
+
+                                    $('#data_pbt').empty();
+                                    $.getJSON('/data/pbt/' + negeriText, function(data) {
+                                        $.each(data, function(index, pbt) {
+                                            $('#data_pbt').append($('<option>', {
+                                                value: pbt.name,
+                                                'data-id': pbt.id,
+                                            }));
+                                        });
+                                    });
+
+                                } else {
+                                    // Reset all child dropdowns if Negeri is cleared
+                                    $('#daerah').empty();
+                                    $('#daerah').append('<option value="">Pilih Daerah</option>');
+                                    $('#mukim').empty();
+                                    $('#mukim').append('<option value="">Pilih Mukim</option>');
+                                    $('#parlimen').empty();
+                                    $('#parlimen').append('<option value="">Pilih Parlimen</option>');
+                                    $('#dun').empty();
+                                    $('#dun').append('<option value="">Pilih Dun</option>');
+                                }
+                            });
+
+                            // When the 'Daerah' dropdown changes
+                            $('#daerah').change(function() {
+                                var daerahId = $(this).val();
+                                var negeriId = $('#negeri').val(); // Get the selected negeri ID
+                                if (daerahId && negeriId) {
+                                    // Make an AJAX request to get the 'Mukim' based on the selected 'Daerah' and 'Negeri'
+                                    $.ajax({
+                                        url: '/get-mukim/' + negeriId + '/' + daerahId, // Updated URL with both negeriId and daerahId
+                                        type: 'GET',
+                                        dataType: 'json',
+                                        success: function(data) {
+                                            // Populate the 'Mukim' dropdown with the response data
+                                            $('#mukim').empty();
+                                            $('#mukim').append('<option value="">Pilih Mukim</option>');
+                                            if (data.length<2) {
+                                                $('#mukim').append('<option value="' + data[0].kod_mukim + '" selected>' + data[0].nama_mukim + '</option>');
+                                            }else{
+                                                $.each(data, function(key, value) {
+                                                    $('#mukim').append('<option value="' + value.kod_mukim + '">' + value.nama_mukim + '</option>');
+                                                });
+                                            }
+                                            var mukimSelected = "{{ isset($ePALM->mukim_taman) ? $ePALM->mukim_taman : '' }}"; // Assuming you have $ePALM->mukim
+                                            if (mukimSelected) {
+                                                $('#mukim').val(mukimSelected).trigger('change');
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    $('#mukim').empty();
+                                    $('#mukim').append('<option value="">Pilih Mukim</option>');
+                                }
+                            });
+
+                            // When the 'parlimen' dropdown changes
+                            $('#parlimen').change(function() {
+                                var parlimenId = $(this).val();
+                                if (parlimenId) {
+                                    // Make an AJAX request to get the 'parlimen' based on the selected 'parlimen'
+                                    $.ajax({
+                                        url: '/get-dun/' + parlimenId, // Your existing route to fetch parlimen
+                                        type: 'GET',
+                                        dataType: 'json',
+                                        success: function(data) {
+                                            // Populate the 'parlimen' dropdown with the response data
+                                            $('#dun').empty();
+                                            $('#dun').append('<option value="">Pilih Dun</option>');
+                                            if (data.length<1) {
+                                                $('#dun').append('<option value="000" selected>TIADA DUN</option>');
+                                            }else{
+                                                $.each(data, function(key, value) {
+                                                    $('#dun').append('<option value="' + value.kod_dun + '">' + value.nama_dun + '</option>');
+                                                });
+                                            }
+                                            var dunSelected = "{{ isset($ePALM->dun_taman) ? $ePALM->dun_taman : '' }}"; // Assuming you have $ePALM->dun
+                                            if (dunSelected) {
+                                                $('#dun').val(dunSelected).trigger('change');
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    $('#dun').empty();
+                                    $('#dun').append('<option value="">Pilih Dun</option>');
+                                }
+                            });
+
+                        });
+                    </script>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg col-separator">
+            <div class="form-group">
+                <label class="col-xs-4 control-label"></label>
+                <div class="col-xs-12">
+                    <h4>&nbsp;</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group required col-md-6">
+                    <label for="alamat1_taman" class="col-md-4 control-label">Alamat 1 {!! in_array('alamat1_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <div class="col-md-12">
+                        <input value="{{isset($ePALM->alamat1_taman) ? $ePALM->alamat1_taman : ''}}" name="alamat1_taman" class="form-control" maxlength="50" type="text" id="alamat1_taman" required="required">
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="form-group required col-md-6">
-                        <label for="hakmilik_tanah_taman" class="col-md-12 control-label">Hakmilik Tanah</label>
-                        <div class="col-md-12">
-                            {{ Form::text('hakmilik_tanah_taman', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}
-                        </div>
+                <div class="form-group required col-md-6">
+                    <label for="alamat2_taman" class="col-md-4 control-label">Alamat 2 {!! in_array('alamat2_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <div class="col-md-12">
+                        <input value="{{isset($ePALM->alamat2_taman) ? $ePALM->alamat2_taman : ''}}" name="alamat2_taman" class="form-control" maxlength="50" type="text" id="alamat2_taman">
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group required col-md-8">
+                    <label for="alamat3_taman" class="col-md-12 control-label">Alamat 3 {!! in_array('alamat3_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <div class="col-md-12">
+                        <input value="{{isset($ePALM->alamat3_taman) ? $ePALM->alamat3_taman : ''}}" name="alamat3_taman" class="form-control" maxlength="50" type="text" id="alamat3_taman">
+                    </div>
+                </div>
 
-                    <div class="form-group required col-md-6">
-                        <label for="status_tanah_taman" class="col-md-12 control-label">Status Tanah</label>
-                        <div class="row">
-                            <div class="col-md-6">
-                                {{ Form::text('status_tanah_taman', 'Proses Perwartaan', ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ Form::date('tarikhWarta_tanah_taman', isset($ePALM->tarikhWarta_tanah_taman) ? $ePALM->tarikhWarta_tanah_taman : '', ['class' => 'form-control d-inline-block ms-2', 'id' => 'tarikhWarta_tanah_taman']) }}
-                            </div>
-                        </div>
+                <div class="form-group required col-md-4">
+                    <label for="poskod_taman" class="col-md-4 control-label">Poskod {!! in_array('poskod_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <div class="col-md-12">
+                        <input value="{{isset($ePALM->poskod_taman) ? $ePALM->poskod_taman : ''}}" name="poskod_taman" class="form-control" type="char" id="poskod_taman" required="required">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="form-group required col-md-4">
+                    <label for="keluasan_taman" class="col-md-12 control-label">Keluasan {!! in_array('keluasan_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <div class="col-md-12">
+                        {{ Form::text('keluasan_taman', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}
+                    </div>
+                </div>
+                <div class="form-group required col-md-2">
+                    <label for="keluasan_unit" class="col-md-12 control-label">&nbsp;</label>
+                    <div class="col-md-12">
+                    {!! Form::select('keluasan_unit', [
+                        'ekar' => 'Ekar',
+                        'm2' => 'm²',
+                        'hektar' => 'Hektar'
+                    ], isset($ePALM->keluasan_unit) ? $ePALM->keluasan_unit : '', ['class' => 'form-control', 'required' => 'required']) !!}
+                    </div>
+                </div>
+
+                <div class="form-group required col-md-4">
+                    <label for="panjang_taman" class="col-md-12 control-label">Panjang {!! in_array('panjang_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <div class="col-md-12">
+                        {{ Form::text('panjang_taman', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}
+                    </div>
+                </div>
+                <div class="form-group required col-md-2">
+                    <label for="unit_panjang" class="col-md-12 control-label">&nbsp;</label>
+                    <div class="col-md-12">
+                    {{ Form::select('unit_panjang', ['meter' => 'Meter', 'kilometer' => 'Kilometer'], null, ['class' => 'form-control']) }}
                     </div>
                 </div>
             </div>
 
             <div class="row">
+                <div class="form-group required col-md-5">
+                    <label for="hakmilik_tanah_taman" class="col-md-12 control-label">Hakmilik Tanah {!! in_array('hakmilik_tanah_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <div class="col-md-12">
+                        {{ Form::text('hakmilik_tanah_taman', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}
+                    </div>
+                </div>
 
-                <!-- Fasiliti -->
+                <div class="form-group required col-md-7">
+                    <label for="status_tanah_taman" class="col-md-12 control-label">Status Tanah {!! in_array('status_tanah_taman', $arrChanges) || in_array('tarikhWarta_tanah_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ Form::text('status_tanah_taman', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ Form::date('tarikhWarta_tanah_taman', isset($ePALM->tarikhWarta_tanah_taman) ? $ePALM->tarikhWarta_tanah_taman : '', ['class' => 'form-control d-inline-block ms-2', 'id' => 'tarikhWarta_tanah_taman']) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="row inertShow">
+        <div class="col-lg col-separator">
+            <div class="form-group">
+                <label class="col-xs-4 control-label"></label>
+                <div class="col-xs-12">
+                    <h4>&nbsp;</h4>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group required col-md-6">
+                    <label for="lat" class="col-md-12 control-label">Koordinat X {!! in_array('lat', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <div class="col-md-12">
+                        {{ Form::text('lat', null, ['class' => 'form-control', 'placeholder' => 'Masukkan koordinat X']) }}
+                    </div>
+                </div>
+                <div class="form-group required col-md-6">
+                    <label for="lng" class="col-md-12 control-label">Koordinat Y {!! in_array('lng', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <div class="col-md-12">
+                        {{ Form::text('lng', null, ['class' => 'form-control', 'placeholder' => 'Masukkan koordinat Y']) }}
+                    </div>
+                </div>
+                <div class="form-group required col-md-6">
+                    <label for="waktuMula_taman" class="col-md-12 control-label">Waktu Mula Operasi {!! in_array('waktuMula_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <div class="col-md-12">
+                        {{ Form::time('waktuMula_taman', null, ['class' => 'form-control', 'placeholder' => 'Masukkan waktu mula operasi']) }}
+                    </div>
+                </div>
+                <div class="form-group required col-md-6">
+                    <label for="waktuTamat_taman" class="col-md-12 control-label">Waktu Tamat Operasi {!! in_array('waktuTamat_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <div class="col-md-12">
+                        {{ Form::time('waktuTamat_taman', null, ['class' => 'form-control', 'placeholder' => 'Masukkan waktu tamat operasi']) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
                 <style>
                     .parks {
                         display: flex;
@@ -246,523 +694,199 @@
 
                 </style>
 
+                @php
+                    if(isset($ePALM->fasiliti) && $ePALM->fasiliti != null){
+                        $fasilitiData = json_decode($ePALM->fasiliti, true);
+                        if (!(is_array($fasilitiData) || is_object($fasilitiData))) {
+                            $fasilitiData = json_decode($ePALM->fasiliti, true);
+                        }
+                    }else{
+                        $fasilitiData = [];
+                    }
+                    $facilityOptions = [
+                        'cctv'    => ['label' => 'CCTV', 'icon' => 'fas fa-video'],
+                        'wifi'    => ['label' => 'WiFi', 'icon' => 'fas fa-wifi'],
+                        'cycling' => ['label' => 'Kemudahan Berbasikal', 'icon' => 'fas fa-bicycle'],
+                        'food'    => ['label' => 'Gerai Makan', 'icon' => 'fas fa-utensils'],
+                        'oku'     => ['label' => 'Kemudahan OKU', 'icon' => 'fas fa-wheelchair'],
+                        'toilet'  => ['label' => 'Tandas Awam', 'icon' => 'fas fa-toilet'],
+                        //'food2'   => ['label' => 'Gerai Makan', 'icon' => 'fas fa-utensils'],
+                        //'oku2'    => ['label' => 'Kemudahan OKU', 'icon' => 'fas fa-wheelchair'],
+                        //'toilet2' => ['label' => 'Tandas Awam', 'icon' => 'fas fa-toilet'],
+                    ];
+
+                    $facilityKeys = array_keys($facilityOptions);
+                    //dd($fasilitiData);
+                @endphp
 
                 <div class="form-group required col-md-12">
-                    <label for="park_facilities" class="col-md-12 control-label">Fasiliti</label>
-                    @php
-                        if(isset($ePALM->fasiliti)){
-                            $fasilitiData = json_decode($ePALM->fasiliti, true);
-                            if (!(is_array($fasilitiData) || is_object($fasilitiData))) {
-                                $fasilitiData = json_decode($ePALM->fasiliti, true);
-                            }
-                            $check1 = isset($fasilitiData['cctv']) && $fasilitiData['cctv'] > 0 ? 'checked' : '';
-                            $check2 = isset($fasilitiData['wifi']) && $fasilitiData['wifi'] > 0 ? 'checked' : '';
-                            $check3 = isset($fasilitiData['cycling']) && $fasilitiData['cycling'] > 0 ? 'checked' : '';
-                            $check4 = isset($fasilitiData['food']) && $fasilitiData['food'] > 0 ? 'checked' : '';
-                            $check5 = isset($fasilitiData['oku']) && $fasilitiData['oku'] > 0 ? 'checked' : '';
-                            $check6 = isset($fasilitiData['toilet']) && $fasilitiData['toilet'] > 0 ? 'checked' : '';
-                            $check7 = isset($fasilitiData['food2']) && $fasilitiData['food2'] > 0 ? 'checked' : '';
-                            $check8 = isset($fasilitiData['oku2']) && $fasilitiData['oku2'] > 0 ? 'checked' : '';
-                            $check9 = isset($fasilitiData['toilet2']) && $fasilitiData['toilet2'] > 0 ? 'checked' : '';
-                            //dd($fasilitiData);
-                        }else{
-                            $check1 = 0; 
-                            $check2 = 0; 
-                            $check3 = 0; 
-                            $check4 = 0; 
-                            $check5 = 0; 
-                            $check6 = 0; 
-                            $check7 = 0; 
-                            $check8 = 0; 
-                            $check9 = 0; 
-                        }
-                    @endphp
+                    <label for="park_facilities" class="col-md-12 control-label">
+                        Kemudahan {!! in_array('fasiliti', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}
+                    </label>
+
                     <div class="col-md-12">
                         <div class="col-xs-12">
-                            <div class="parks">
-                                <div class="col-md-3">
-                                    <!-- CCTV -->
-                                    <label class="facility">
-                                        <input type="checkbox" value="1" name="fasiliti[cctv]" id="cctv" {{$check1}}>
-                                        <span class="parks bg">
-                                            <div class="icon-container">
-                                                <i class="fas fa-video" data-toggle="tooltip" title="CCTV"></i>
-                                            </div>
-                                        </span>
-                                        <span class="facility-label">CCTV</span>
-                                    </label>
-                                </div>
+                            <div class="parks" id="facility-list">
+                                {{-- Loop known facilities --}}
+                                @foreach($facilityOptions as $key => $option)
+                                    @php $isChecked = isset($fasilitiData[$key]) && $fasilitiData[$key] == '1' ? 'checked' : ''; @endphp
+                                    <div class="col-md-3 facility-wrapper">
+                                        <label class="facility">
+                                            <input type="hidden" name="fasiliti[{{ $key }}]" value="0">
+                                            <input type="checkbox" value="1" name="fasiliti[{{ $key }}]" id="{{ $key }}" {{ $isChecked }}>
+                                            <span class="parks bg">
+                                                <div class="icon-container">
+                                                    <i class="{{ $option['icon'] }}" data-toggle="tooltip" title="{{ $option['label'] }}"></i>
+                                                </div>
+                                            </span>
+                                            <span class="facility-label">{{ $option['label'] }}</span>
+                                        </label>
+                                    </div>
+                                @endforeach
 
-                                <div class="col-md-3">
-                                    <!-- WiFi -->
-                                    <label class="facility">
-                                        <input type="checkbox" value="1" name="fasiliti[wifi]" id="wifi" {{$check2}}>
-                                        <span class="parks bg">
-                                            <div class="icon-container">
-                                                <i class="fas fa-wifi" data-toggle="tooltip" title="WiFi"></i>
-                                            </div>
-                                        </span>
-                                        <span class="facility-label">WiFi</span>
-                                    </label>
-                                </div>
+                                {{-- Loop custom (unknown) facilities --}}
+                                @foreach($fasilitiData as $key => $val)
+                                    @if (!in_array($key, $facilityKeys))
+                                        @php $isChecked = isset($fasilitiData[$key]) && $fasilitiData[$key] == '1' ? 'checked' : ''; @endphp
+                                        <div class="col-md-3 facility-wrapper">
+                                            <label class="facility">
+                                                <input type="hidden" name="fasiliti[{{ $key }}]" value="0">
+                                                <input type="checkbox" value="1" name="fasiliti[{{ $key }}]" id="{{ $key }}" {{ $isChecked }}>
+                                                <span class="parks bg">
+                                                    <div class="icon-container">
+                                                        <i class="fas fa-chart-pie" data-toggle="tooltip" title="{{ ucfirst($key) }}"></i>
+                                                    </div>
+                                                </span>
+                                                <span class="facility-label">{{ ucfirst(str_replace('_', ' ', $key)) }}</span>
+                                            </label>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
 
-                                <div class="col-md-3">
-                                    <!-- Kemudahan Berbasikal -->
-                                    <label class="facility">
-                                        <input type="checkbox" value="1" name="fasiliti[cycling]" id="cycling" {{$check3}}>
-                                        <span class="parks bg">
-                                            <div class="icon-container">
-                                                <i class="fas fa-bicycle" data-toggle="tooltip" title="Kemudahan Berbasikal"></i>
-                                            </div>
-                                        </span>
-                                        <span class="facility-label">Kemudahan Berbasikal</span>
-                                    </label>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <!-- Gerai Makan -->
-                                    <label class="facility">
-                                        <input type="checkbox" value="1" name="fasiliti[food]" id="food" {{$check4}}>
-                                        <span class="parks bg">
-                                            <div class="icon-container">
-                                                <i class="fas fa-utensils" data-toggle="tooltip" title="Gerai Makan"></i>
-                                            </div>
-                                        </span>
-                                        <span class="facility-label">Gerai Makan</span>
-                                    </label>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <!-- Kemudahan OKU -->
-                                    <label class="facility">
-                                        <input type="checkbox" value="1" name="fasiliti[oku]" id="oku" {{$check5}}>
-                                        <span class="parks bg">
-                                            <div class="icon-container">
-                                                <i class="fas fa-wheelchair" data-toggle="tooltip" title="Kemudahan OKU"></i>
-                                            </div>
-                                        </span>
-                                        <span class="facility-label">Kemudahan OKU</span>
-                                    </label>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <!-- Tandas Awam -->
-                                    <label class="facility">
-                                        <input type="checkbox" value="1" name="fasiliti[toilet]" id="toilet" {{$check6}}>
-                                        <span class="parks bg">
-                                            <div class="icon-container">
-                                                <i class="fas fa-toilet" data-toggle="tooltip" title="Tandas Awam"></i>
-                                            </div>
-                                        </span>
-                                        <span class="facility-label">Tandas Awam</span>
-                                    </label>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <!-- Gerai Makan -->
-                                    <label class="facility">
-                                        <input type="checkbox" value="1" name="fasiliti[food2]" id="food2" {{$check7}}>
-                                        <span class="parks bg">
-                                            <div class="icon-container">
-                                                <i class="fas fa-utensils" data-toggle="tooltip" title="Gerai Makan"></i>
-                                            </div>
-                                        </span>
-                                        <span class="facility-label">Gerai Makan</span>
-                                    </label>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <!-- Kemudahan OKU -->
-                                    <label class="facility">
-                                        <input type="checkbox" value="1" name="fasiliti[oku2]" id="oku2" {{$check8}}>
-                                        <span class="parks bg">
-                                            <div class="icon-container">
-                                                <i class="fas fa-wheelchair" data-toggle="tooltip" title="Kemudahan OKU"></i>
-                                            </div>
-                                        </span>
-                                        <span class="facility-label">Kemudahan OKU</span>
-                                    </label>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <!-- Tandas Awam -->
-                                    <label class="facility">
-                                        <input type="checkbox" value="1" name="fasiliti[toilet2]" id="toilet2" {{$check9}}>
-                                        <span class="parks bg">
-                                            <div class="icon-container">
-                                                <i class="fas fa-toilet" data-toggle="tooltip" title="Tandas Awam"></i>
-                                            </div>
-                                        </span>
-                                        <span class="facility-label">Tandas Awam</span>
-                                    </label>
-                                </div>
+                            {{-- Add Facility Button --}}
+                            <div class="mt-3 showButton">
+                                <button type="button" class="btn btn-sm btn-primary" onclick="addFacility()">+ Add New Facility</button>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <script>
+                    function addFacility() {
+                        const name = prompt("Enter facility name (e.g. Parking)");
+                        if (!name) return;
+
+                        const key = name.toLowerCase().replace(/\s+/g, '_'); // make safe input name
+                        const container = document.getElementById('facility-list');
+
+                        // Check if already exists
+                        if (document.getElementById(key)) {
+                            alert("Facility already added.");
+                            return;
+                        }
+
+                        const div = document.createElement('div');
+                        div.classList.add('col-md-3', 'facility-wrapper');
+                        div.innerHTML = `
+                            <label class="facility">
+                                <input type="checkbox" value="1" name="fasiliti[${key}]" id="${key}" checked>
+                                <span class="parks bg">
+                                    <div class="icon-container">
+                                        <i class="fas fa-chart-pie" data-toggle="tooltip" title="${name}"></i>
+                                    </div>
+                                </span>
+                                <span class="facility-label">${name}</span>
+                            </label>
+                        `;
+                        container.appendChild(div);
+                    }
+                </script>
             </div>
-
+            
         </div>
-
-        <div class="col-lg col-separator">
+        <div class="col-lg col-separator ">
             <div class="form-group">
                 <label class="col-xs-4 control-label"></label>
                 <div class="col-xs-12">
                     <h4>&nbsp;</h4>
                 </div>
             </div>
-            <div class="row">
-                <div class="form-group required col-md-6">
-                    <label for="alamat1_taman" class="col-md-4 control-label">Alamat 1</label>
-                    <div class="col-md-12">
-                        <input value="{{isset($ePALM->alamat1_taman) ? $ePALM->alamat1_taman : ''}}" name="alamat1_taman" class="form-control" maxlength="50" type="text" id="alamat1_taman" required="required">
-                    </div>
-                </div>
+            
+            <div class="row" id="dynamic-media-fields">
+                @php
+                    if(isset($ePALM->mediaSosial_taman)){
+                        $mediaSosial_tamanData = json_decode($ePALM->mediaSosial_taman, true);
+                        $mediaData = json_decode($ePALM->mediaSosial_taman, true);
+                        //$media1 = isset($mediaSosial_tamanData['Telefon']) ? $mediaSosial_tamanData['Telefon'] : '';
+                        //$media2 = isset($mediaSosial_tamanData['Emel']) ? $mediaSosial_tamanData['Emel'] : '';
+                        //$media3 = isset($mediaSosial_tamanData['Web']) ? $mediaSosial_tamanData['Web'] : '';
+                        //$media4 = isset($mediaSosial_tamanData['Facebook']) ? $mediaSosial_tamanData['Facebook'] : '';
+                        //$media5 = isset($mediaSosial_tamanData['Instagram']) ? $mediaSosial_tamanData['Instagram'] : '';
+                        //$media6 = isset($mediaSosial_tamanData['LinkedIn']) ? $mediaSosial_tamanData['LinkedIn'] : '';
+                        //$media7 = isset($mediaSosial_tamanData['Twitter']) ? $mediaSosial_tamanData['Twitter'] : '';
+                        //$media8 = isset($mediaSosial_tamanData['TikTok']) ? $mediaSosial_tamanData['TikTok'] : '';
+                    }else{
+                        $media1 = $media2 = $media3 = $media4 = $media5 = $media6 = $media7 = $media8 = null;
+                        $mediaData = null;
+                    }
+                    $fixedFields = ['Emel', 'Web', 'Telefon', 'Facebook'];
+                    //dd($arrChanges);
+                @endphp
 
-                <div class="form-group required col-md-6">
-                    <label for="alamat2_taman" class="col-md-4 control-label">Alamat 2</label>
-                    <div class="col-md-12">
-                        <input value="{{isset($ePALM->alamat2_taman) ? $ePALM->alamat2_taman : ''}}" name="alamat2_taman" class="form-control" maxlength="50" type="text" id="alamat2_taman">
+                @foreach ($fixedFields as $index => $field)
+                    @php $value = $mediaData[$field] ?? ''; @endphp
+                    <div class="form-group required {{ $field == 'Emel' || $field == 'Web' ? 'col-md-6' : 'col-md-3' }}">
+                        <label for="mediaSosial" class="col-md-12 control-label">{{ $field == 'Web' ? 'Laman Web' : $field }} {!! in_array('mediaSosial_taman.'.$field, $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                        <div class="col-md-12">
+                            <input value="{{ $value }}" name="mediaSosial_taman[{{ $field }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_taman[]">
+                        </div>
                     </div>
-                </div>
+                @endforeach
+                @if (isset($mediaData))
+                    @foreach ($mediaData as $key => $value)
+                        @if (!in_array($key, $fixedFields))
+                            <div class="form-group required col-md-3">
+                                <label for="mediaSosial" class="col-md-12 control-label">{{ $key }} {!! in_array('mediaSosial_taman.'.$key, $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                                <div class="col-md-12">
+                                    <input value="{{ $value }}" name="mediaSosial_taman[{{ $key }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_taman[]">
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                @endif
+
             </div>
-            <div class="row">
-                <div class="form-group required col-md-8">
-                    <label for="alamat3_taman" class="col-md-12 control-label">Alamat 3</label>
-                    <div class="col-md-12">
-                        <input value="{{isset($ePALM->alamat3_taman) ? $ePALM->alamat3_taman : ''}}" name="alamat3_taman" class="form-control" maxlength="50" type="text" id="alamat3_taman">
-                    </div>
-                </div>
-
-                <div class="form-group required col-md-4">
-                    <label for="poskod_taman" class="col-md-4 control-label">Poskod</label>
-                    <div class="col-md-12">
-                        <input value="{{isset($ePALM->poskod_taman) ? $ePALM->poskod_taman : ''}}" name="poskod_taman" class="form-control" type="char" id="poskod_taman" required="required">
-                    </div>
-                </div>
+            <div class="form-group col-md-3 showButton">
+                <button type="button" onclick="addMedia()" class="btn btn-primary">Add Media Sosial</button>
             </div>
-            <div class="inertClass">
-                <div class="row">
-                    <div class="form-group required col-md-4">
-                        <label for="negeri_taman" class="col-md-12 control-label">Negeri</label>
+
+            <script>
+                function addMedia() {
+                    const name = prompt("Masukkan nama media sosial (contoh: TikTok)");
+                    if (!name) return;
+
+                    const key = name.trim().replace(/\s+/g, ''); // safer key
+                    const container = document.getElementById('dynamic-media-fields');
+
+                    // Avoid duplicates
+                    if (document.querySelector(`[name="mediaSosial_taman[${key}]"]`)) {
+                        alert("Media sosial ini telah ditambah.");
+                        return;
+                    }
+
+                    const div = document.createElement('div');
+                    div.classList.add('form-group', 'required', 'col-md-3');
+                    div.innerHTML = `
+                        <label class="col-md-12 control-label">${name}</label>
                         <div class="col-md-12">
-                            <!-- {{ Form::select('negeri', ['1' => 'JOHOR'], '1', ['class' => 'form-control', 'id' => 'negeri']) }} -->
-                            {{ Form::select('negeri_taman', [], null, ['class' => 'form-control', 'id' => 'negeri']) }}
+                            <input name="mediaSosial_taman[${key}]" class="form-control" maxlength="50" type="text">
                         </div>
-                    </div>
-
-                    <div class="form-group required col-md-4">
-                        <label for="daerah_taman" class="col-md-12 control-label">Daerah</label>
-                        <div class="col-md-12">
-                            {{ Form::select('daerah_taman', [], null, ['class' => 'form-control', 'id' => 'daerah']) }}
-                        </div>
-                    </div>
-
-                    <div class="form-group required col-md-4">
-                        <label for="mukim_taman" class="col-md-12 control-label">Mukim</label>
-                        <div class="col-md-12">
-                            {{ Form::select('mukim_taman', [], null, ['class' => 'form-control', 'id' => 'mukim']) }}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="form-group required col-md-4">
-                        <label for="parlimen_taman" class="col-md-12 control-label">Parlimen</label>
-                        <div class="col-md-12">
-                            {{ Form::select('parlimen_taman', [], null, ['class' => 'form-control', 'id' => 'parlimen']) }}
-                        </div>
-                    </div>
-
-                    <div class="form-group required col-md-4">
-                        <label for="dun_taman" class="col-md-12 control-label">Dun</label>
-                        <div class="col-md-12">
-                            {{ Form::select('dun_taman', [], null, ['class' => 'form-control', 'id' => 'dun']) }}
-                        </div>
-                    </div>
-                </div>
-
-                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                <script>
-                    $(document).ready(function() {
-                        // Fetch Negeri data on page load (AJAX call)
-                        $.ajax({
-                            url: '/get-negeri', // API endpoint to get negeri data
-                            type: 'GET',
-                            dataType: 'json',
-                            success: function(data) {
-                                // Populate the Negeri dropdown with the data
-                                $('#negeri').empty(); // Clear current options
-                                $('#negeri').append('<option value="">Pilih Negeri</option>');
-                                $('#daerah').append('<option value="">Pilih Daerah</option>');
-                                $('#mukim').append('<option value="">Pilih Mukim</option>');
-                                $('#parlimen').append('<option value="">Pilih Parlimen</option>');
-                                $('#dun').append('<option value="">Pilih Dun</option>');
-
-                                $.each(data, function(key, value) {
-                                    // Add each Negeri to the dropdown
-                                    $('#negeri').append('<option value="' + value.kod_negeri + '">' + value.nama_negeri + '</option>');
-                                });
-                                var negeriSelected = "{{ isset($ePALM->negeri_taman) ? $ePALM->negeri_taman : '' }}"; // Assuming you have $ePALM->negeri
-                                if (negeriSelected) {
-                                    $('#negeri').val(negeriSelected).trigger('change');
-                                }
-                            },
-                            error: function(xhr, status, error) {
-                                console.error("Error fetching Negeri data: ", error);
-                            }
-                        });
-
-                        // When the 'Negeri' dropdown changes
-                        $('#negeri').change(function() {
-                            var negeriId = $(this).val();
-                            if (negeriId) {
-                                // Make an AJAX request to get the 'Daerah' based on the selected 'Negeri'
-                                $('#daerah').empty();
-                                $('#daerah').append('<option value="">Pilih Daerah</option>');
-                                $('#mukim').empty();
-                                $('#mukim').append('<option value="">Pilih Mukim</option>');
-                                $('#parlimen').empty();
-                                $('#parlimen').append('<option value="">Pilih Parlimen</option>');
-                                $('#dun').empty();
-                                $('#dun').append('<option value="">Pilih Dun</option>');
-                                $.ajax({
-                                    url: '/get-daerah/' + negeriId, // Your existing route to fetch daerah
-                                    type: 'GET',
-                                    dataType: 'json',
-                                    success: function(data) {
-                                        // Populate the 'Daerah' dropdown with the response data
-                                        if (data.length<2) {
-                                            // if (data[0].nama_daerah == 'TIADA DAERAH') {
-                                            //     $('#daerah').append('<option value="000" selected disabled>TIADA DAERAH</option>');
-                                            // }else{
-                                                $('#daerah').append('<option value="' + data[0].kod_daerah + '" selected>' + data[0].nama_daerah + '</option>');
-                                            // }
-                                            $('#daerah').trigger('change');
-                                        }else{
-                                            $.each(data, function(key, value) {
-                                                $('#daerah').append('<option value="' + value.kod_daerah + '">' + value.nama_daerah + '</option>');
-                                                // Check if the name of the daerah is 'TIADA DAERAH'
-                                                // if (value.nama_daerah == 'TIADA DAERAH') {
-                                                //     // Set this option as selected
-                                                //     $('#daerah option[value="' + value.kod_daerah + '"]').prop('selected', true);
-                                                //     $('#daerah').trigger('change');
-                                                // }
-                                            });
-                                        }
-                                        var daerahSelected = "{{ isset($ePALM->daerah_taman) ? $ePALM->daerah_taman : '' }}"; // Assuming you have $ePALM->daerah
-                                        if (daerahSelected) {
-                                            $('#daerah').val(daerahSelected).trigger('change');
-                                        }
-                                    }
-                                });
-
-                                // Make an AJAX request to get the 'parlimen' based on the selected 'Negeri'
-                                $.ajax({
-                                    url: '/get-parlimen/' + negeriId, // Your existing route to fetch parlimen
-                                    type: 'GET',
-                                    dataType: 'json',
-                                    success: function(data) {
-                                        // Populate the 'parlimen' dropdown with the response data
-                                        $('#parlimen').empty();
-                                        $('#parlimen').append('<option value="">Pilih Parlimen</option>');
-                                        $.each(data, function(key, value) {
-                                            $('#parlimen').append('<option value="' + value.kod_parlimen + '">' + value.nama_parlimen + '</option>');
-                                        });
-                                        var parlimenSelected = "{{ isset($ePALM->parlimen_taman) ? $ePALM->parlimen_taman : '' }}"; // Assuming you have $ePALM->parlimen
-                                        if (parlimenSelected) {
-                                            $('#parlimen').val(parlimenSelected).trigger('change');
-                                        }
-                                    }
-                                });
-                            } else {
-                                // Reset all child dropdowns if Negeri is cleared
-                                $('#daerah').empty();
-                                $('#daerah').append('<option value="">Pilih Daerah</option>');
-                                $('#mukim').empty();
-                                $('#mukim').append('<option value="">Pilih Mukim</option>');
-                                $('#parlimen').empty();
-                                $('#parlimen').append('<option value="">Pilih Parlimen</option>');
-                                $('#dun').empty();
-                                $('#dun').append('<option value="">Pilih Dun</option>');
-                            }
-                        });
-
-                        // When the 'Daerah' dropdown changes
-                        $('#daerah').change(function() {
-                            var daerahId = $(this).val();
-                            var negeriId = $('#negeri').val(); // Get the selected negeri ID
-                            if (daerahId && negeriId) {
-                                // Make an AJAX request to get the 'Mukim' based on the selected 'Daerah' and 'Negeri'
-                                $.ajax({
-                                    url: '/get-mukim/' + negeriId + '/' + daerahId, // Updated URL with both negeriId and daerahId
-                                    type: 'GET',
-                                    dataType: 'json',
-                                    success: function(data) {
-                                        // Populate the 'Mukim' dropdown with the response data
-                                        $('#mukim').empty();
-                                        $('#mukim').append('<option value="">Pilih Mukim</option>');
-                                        if (data.length<2) {
-                                            $('#mukim').append('<option value="' + data[0].kod_mukim + '" selected>' + data[0].nama_mukim + '</option>');
-                                        }else{
-                                            $.each(data, function(key, value) {
-                                                $('#mukim').append('<option value="' + value.kod_mukim + '">' + value.nama_mukim + '</option>');
-                                            });
-                                        }
-                                        var mukimSelected = "{{ isset($ePALM->mukim_taman) ? $ePALM->mukim_taman : '' }}"; // Assuming you have $ePALM->mukim
-                                        if (mukimSelected) {
-                                            $('#mukim').val(mukimSelected).trigger('change');
-                                        }
-                                    }
-                                });
-                            } else {
-                                $('#mukim').empty();
-                                $('#mukim').append('<option value="">Pilih Mukim</option>');
-                            }
-                        });
-
-                        // When the 'parlimen' dropdown changes
-                        $('#parlimen').change(function() {
-                            var parlimenId = $(this).val();
-                            if (parlimenId) {
-                                // Make an AJAX request to get the 'parlimen' based on the selected 'parlimen'
-                                $.ajax({
-                                    url: '/get-dun/' + parlimenId, // Your existing route to fetch parlimen
-                                    type: 'GET',
-                                    dataType: 'json',
-                                    success: function(data) {
-                                        // Populate the 'parlimen' dropdown with the response data
-                                        $('#dun').empty();
-                                        $('#dun').append('<option value="">Pilih Dun</option>');
-                                        if (data.length<1) {
-                                            $('#dun').append('<option value="000" selected>TIADA DUN</option>');
-                                        }else{
-                                            $.each(data, function(key, value) {
-                                                $('#dun').append('<option value="' + value.kod_dun + '">' + value.nama_dun + '</option>');
-                                            });
-                                        }
-                                        var dunSelected = "{{ isset($ePALM->dun_taman) ? $ePALM->dun_taman : '' }}"; // Assuming you have $ePALM->dun
-                                        if (dunSelected) {
-                                            $('#dun').val(dunSelected).trigger('change');
-                                        }
-                                    }
-                                });
-                            } else {
-                                $('#dun').empty();
-                                $('#dun').append('<option value="">Pilih Dun</option>');
-                            }
-                        });
-
-                    });
-                </script>
-            </div>
-            <div class="row">
-                <div class="form-group required col-md-3">
-                    <label for="lat" class="col-md-12 control-label">Koordinat X</label>
-                    <div class="col-md-12">
-                        {{ Form::text('lat', null, ['class' => 'form-control', 'placeholder' => 'Masukkan koordinat X']) }}
-                    </div>
-                </div>
-                <div class="form-group required col-md-3">
-                    <label for="lng" class="col-md-12 control-label">Koordinat Y</label>
-                    <div class="col-md-12">
-                        {{ Form::text('lng', null, ['class' => 'form-control', 'placeholder' => 'Masukkan koordinat Y']) }}
-                    </div>
-                </div>
-                <div class="form-group required col-md-3">
-                    <label for="waktuMula_taman" class="col-md-12 control-label">Waktu Mula Operasi</label>
-                    <div class="col-md-12">
-                        {{ Form::time('waktuMula_taman', null, ['class' => 'form-control', 'placeholder' => 'Masukkan waktu mula operasi']) }}
-                    </div>
-                </div>
-                <div class="form-group required col-md-3">
-                    <label for="waktuTamat_taman" class="col-md-12 control-label">Waktu Tamat Operasi</label>
-                    <div class="col-md-12">
-                        {{ Form::time('waktuTamat_taman', null, ['class' => 'form-control', 'placeholder' => 'Masukkan waktu tamat operasi']) }}
-                    </div>
-                </div>
-                    @php
-                        if(isset($ePALM->mediaSosial_taman)){
-                            $mediaSosial_tamanData = json_decode($ePALM->mediaSosial_taman, true);
-                            $media1 = isset($mediaSosial_tamanData['Telefon']) ? $mediaSosial_tamanData['Telefon'] : '';
-                            $media2 = isset($mediaSosial_tamanData['Emel']) ? $mediaSosial_tamanData['Emel'] : '';
-                            $media3 = isset($mediaSosial_tamanData['Web']) ? $mediaSosial_tamanData['Web'] : '';
-                            $media4 = isset($mediaSosial_tamanData['Facebook']) ? $mediaSosial_tamanData['Facebook'] : '';
-                            $media5 = isset($mediaSosial_tamanData['Instagram']) ? $mediaSosial_tamanData['Instagram'] : '';
-                            $media6 = isset($mediaSosial_tamanData['LinkedIn']) ? $mediaSosial_tamanData['LinkedIn'] : '';
-                            $media7 = isset($mediaSosial_tamanData['Twitter']) ? $mediaSosial_tamanData['Twitter'] : '';
-                            $media8 = isset($mediaSosial_tamanData['TikTok']) ? $mediaSosial_tamanData['TikTok'] : '';
-                            //dd($mediaSosial_tamanData);
-                        }else{
-                            $media1 = ''; 
-                            $media2 = isset($pbt->email) ? $pbt->email : ''; 
-                            $media3 = ''; 
-                            $media4 = ''; 
-                            $media5 = ''; 
-                            $media6 = ''; 
-                            $media7 = ''; 
-                            $media8 = ''; 
-                            $media9 = ''; 
-                        }
-                    @endphp
-                <div class="form-group required col-md-3">
-                    <label for="mediaSosial" class="col-md-12 control-label">Telefon</label>
-                    <div class="col-md-12">
-                        <input value="{{$media1}}" name="mediaSosial_taman[Telefon]" class="form-control" maxlength="50" type="text" id="mediaSosial_taman[]" >
-                    </div>
-                </div>
-
-                <div class="form-group required col-md-3">
-                    <label for="mediaSosial" class="col-md-12 control-label">Emel</label>
-                    <div class="col-md-12">
-                        <input value="{{$media2}}" name="mediaSosial_taman[Emel]" class="form-control" maxlength="50" type="text" id="mediaSosial_taman[]" >
-                    </div>
-                </div>
-
-                <div class="form-group required col-md-3">
-                    <label for="mediaSosial" class="col-md-12 control-label">Laman Web</label>
-                    <div class="col-md-12">
-                        <input value="{{$media3}}" name="mediaSosial_taman[Web]" class="form-control" maxlength="50" type="text" id="mediaSosial_taman[]" >
-                    </div>
-                </div>
-
-                <div class="form-group required col-md-3">
-                    <label for="mediaSosial" class="col-md-12 control-label">Facebook</label>
-                    <div class="col-md-12">
-                        <input value="{{$media4}}" name="mediaSosial_taman[Facebook]" class="form-control" maxlength="50" type="text" id="mediaSosial_taman[]" >
-                    </div>
-                </div>
-
-                <div class="form-group required col-md-3">
-                    <label for="mediaSosial" class="col-md-12 control-label">Instagram</label>
-                    <div class="col-md-12">
-                        <input value="{{$media5}}" name="mediaSosial_taman[Instagram]" class="form-control" maxlength="50" type="text" id="mediaSosial_taman[]" >
-                    </div>
-                </div>
-
-                <div class="form-group required col-md-3">
-                    <label for="mediaSosial" class="col-md-12 control-label">LinkedIn</label>
-                    <div class="col-md-12">
-                        <input value="{{$media6}}" name="mediaSosial_taman[LinkedIn]" class="form-control" maxlength="50" type="text" id="mediaSosial_taman[]" >
-                    </div>
-                </div>
-
-                <div class="form-group required col-md-3">
-                    <label for="mediaSosial" class="col-md-12 control-label">Twitter (X)</label>
-                    <div class="col-md-12">
-                        <input value="{{$media7}}" name="mediaSosial_taman[Twitter]" class="form-control" maxlength="50" type="text" id="mediaSosial_taman[]" >
-                    </div>
-                </div>
-
-                <div class="form-group required col-md-3">
-                    <label for="mediaSosial" class="col-md-12 control-label">TikTok</label>
-                    <div class="col-md-12">
-                        <input value="{{$media8}}" name="mediaSosial_taman[TikTok]" class="form-control" maxlength="50" type="text" id="mediaSosial_taman[]" >
-                    </div>
-                </div>
-            </div>
+                    `;
+                    container.appendChild(div);
+                }
+            </script>
         </div>
-        
     </div>
 
     <div class="row">
@@ -774,7 +898,7 @@
                 </div>
             </div>
             <div class="form-group required inertShow">
-                <label for="keterangan_taman" class="col-md-12 control-label">Keterangan Taman</label>
+                <label for="keterangan_taman" class="col-md-12 control-label">Keterangan Taman {!! in_array('keterangan_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
                 <div class="col-md-12">
                     <textarea name="keterangan_taman" class="form-control" maxlength="250" rows="5" id="keterangan_taman" required="required">{{ isset($ePALM->keterangan_taman) ? $ePALM->keterangan_taman : '' }}</textarea>
                 </div>
@@ -782,8 +906,8 @@
 
             
             <div class="row">
-                <div class="form-group required col-md-9">
-                    <label for="fail_konsep" class="col-md-12 control-label">Konsep Rekabentuk</label>
+                <div class="form-group required col-md-8">
+                    <label for="fail_konsep" class="col-md-12 control-label">Konsep Rekabentuk {!! in_array('fail_konsep', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
                     <div class="col-md-12 showButton">
                         {{ Form::file('fail_konsep', ['class' => 'form-control d-inline-block ms-2', 'multiple' => false, 'accept' => '.pdf,.docx,.pptx']) }}
                         
@@ -794,7 +918,7 @@
                         <div class="col-md-12">
                             <div class="d-flex align-items-center">
                                 @php
-                                    $folderName = isset($ePALM->fail_konsep) ? 'ePALM/'.str_replace(' ', '_', $ePALM->nama_taman).'/'.$ePALM->fail_konsep : null;
+                                    $folderName = isset($ePALM->fail_konsep) ? 'ePALM/'.str_replace(' ', '_', $ePALM->id_taman.' '.$ePALM->nama_taman).'/'.$ePALM->fail_konsep : null;
 
                                     $fileExtension = isset($ePALM->fail_konsep) ? pathinfo($ePALM->fail_konsep, PATHINFO_EXTENSION) : '';
                                     $extensionIcon = null;
@@ -824,9 +948,9 @@
                         </div>
                     @endif
                 </div>
-                <div class="form-group required col-md-3 inertShow">
-                    <div class="inertClass">
-                        <label for="tarikh_siapBina_taman" class="col-md-12 control-label">Tarikh Siap Bina</label>
+                <div class="form-group required col-md-4 ">
+                    <div class="">
+                        <label for="tarikh_siapBina_taman" class="col-md-12 control-label">Tarikh Siap Bina {!! in_array('tarikh_siapBina_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
                         <div class="col-md-12">
                             {{ Form::date('tarikh_siapBina_taman', isset($ePALM->tarikh_siapBina_taman) ? $ePALM->tarikh_siapBina_taman : '', ['class' => 'form-control d-inline-block ms-2', 'id' => 'tarikh_siapBina_taman']) }}
                         </div>
@@ -835,7 +959,7 @@
             </div>
             
         </div>
-        <div class="col-lg col-separator inertShow">
+        <div class="col-lg col-separator ">
             <div class="form-group">
                 <label class="col-xs-4 control-label"></label>
                 <div class="col-xs-12">
@@ -844,36 +968,63 @@
             </div>
             <div class="row">
                 <div class="form-group required col-md-12">
-                    <label for="konsep_rekabentuk" class="col-md-12 control-label">Gambar Taman</label>
+                <label for="gambar_taman" class="col-md-12 control-label">
+                    Gambar Taman 
+                    {!! collect($arrChanges)->contains(fn($i) => Str::startsWith($i, 'gambar_taman')) 
+                        ? '<span class="text-danger newC">!</span>' 
+                        : '' !!}
+                </label>
                     @php
+                        $imageFields = [];
                         if(isset($ePALM->gambar_taman)){
-                            $folderName = str_replace(' ', '_', $ePALM->nama_taman);
+                            $folderName = str_replace(' ', '_', $ePALM->id_taman.' '.$ePALM->nama_taman);
+                            $rootFolder = str_replace(' ', '_', $ePALM->nama_pbt);
                             $gambar_tamanData = json_decode($ePALM->gambar_taman, true);
 
-                            $Xgambar_input_modal_1 = isset($gambar_tamanData['Xgambar_input_modal_1']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_1'] : null;
-                            $Xgambar_input_modal_2 = isset($gambar_tamanData['Xgambar_input_modal_2']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_2'] : null;
-                            $Xgambar_input_modal_3 = isset($gambar_tamanData['Xgambar_input_modal_3']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_3'] : null;
-                            $Xgambar_input_modal_4 = isset($gambar_tamanData['Xgambar_input_modal_4']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_4'] : null;
+                            for ($i = 1; $i <= 6; $i++) {
+                                //$fieldKey = "XGIM_$i";
+                                //$fieldKey2 = "Xgambar_input_modal_$i";
+                                //$imageFields[$fieldKey] = isset($gambar_tamanData[$fieldKey]) ? $folderName . '/' . $gambar_tamanData[$fieldKey] : (isset($gambar_tamanData[$fieldKey2]) ? $folderName . '/' . $gambar_tamanData[$fieldKey2] : null);
+
+                                $fieldKeyX = "XGIM_$i";
+                                $fieldKeyAltX = "Xgambar_input_modal_$i";
+                                $fieldKeyNonX = "GIM_$i";
+                                $fieldKeyAltNonX = "gambar_input_modal_$i";
+
+                                // Decide which actual key has value
+                                if (isset($gambar_tamanData[$fieldKeyX])) {
+                                    $imageFields[$fieldKeyX] = $folderName . '/' . $gambar_tamanData[$fieldKeyX];
+                                } elseif (isset($gambar_tamanData[$fieldKeyAltX])) {
+                                    $imageFields[$fieldKeyAltX] = $folderName . '/' . $gambar_tamanData[$fieldKeyAltX];
+                                } elseif (isset($gambar_tamanData[$fieldKeyNonX])) {
+                                    $imageFields[$fieldKeyNonX] = $rootFolder . '/' . $folderName . '/' . $gambar_tamanData[$fieldKeyNonX];
+                                } elseif (isset($gambar_tamanData[$fieldKeyAltNonX])) {
+                                    $imageFields[$fieldKeyAltNonX] = $rootFolder . '/' . $folderName . '/' . $gambar_tamanData[$fieldKeyAltNonX];
+                                } else {
+                                    $imageFields["XGIM_$i"] = null;
+                                }
+                            }
                             //dd($gambar_tamanData);
                         }else{
-                            $Xgambar_input_modal_1 = null;
-                            $Xgambar_input_modal_2 = null;
-                            $Xgambar_input_modal_3 = null;
-                            $Xgambar_input_modal_4 = null;
+                            for ($i = 1; $i <= 6; $i++) {
+                                $fieldKey = "XGIM_$i";
+                                $imageFields[$fieldKey] = null;
+                            }
                         }
                     @endphp
                     <div class="col-md-12">
                         <style>
-                            /* Container for the grid with files and previews */
                             .grid-container {
                                 display: grid;
-                                grid-template-columns: 1fr 1fr; /* 2 equal-width columns */
-                                gap: 10px; /* Space between grid items */
-                                width: 500px;
-                                max-width: 600px;  /* Limit max width for the grid */
-                                margin: 0 auto; /* Centers the grid container horizontally */
-                                height: auto; /* Allow the height to adjust based on content */
+                                grid-template-columns: repeat(3, 1fr);
+                                gap: 10px;
+                                width: 500px;         /* Fixed width */
+                                height: 450px;        /* Fixed height */
+                                margin: 0 auto;
+                                box-sizing: border-box;
+                                /* overflow: hidden; */
                             }
+
 
                             /* Grid item styling */
                             .grid-item {
@@ -894,13 +1045,14 @@
                             display: grid;
                             place-items: center; /* Center both horizontally and vertically */
                             width: 100%;
-                            height: 100%; /* Optional, adjust as needed */
+                            height: 100%;
                             overflow-y: auto;
                             }
 
                             .image-preview-container img {
-                            width: 200px; /* Adjust the width as needed */
-                            height: 200px; /* Adjust the height as needed */
+                            width: 250px;
+                            max-height: 150px;
+                            height: auto;
                             object-fit: cover;
                             border-radius: 5px;
                             border: 0px solid #ddd;
@@ -918,44 +1070,391 @@
                                 border: 1px solid #ccc;
                                 cursor: pointer;
                             }
+                            @media only screen and (max-width: 768px) {
+                                .grid-container {
+                                    display: grid;
+                                    grid-template-columns: 1fr 1fr ; /* 2 equal-width columns */
+                                    gap: 10px; /* Space between grid items */
+                                    width: 300px;
+                                    max-width: 600px;  /* Limit max width for the grid */
+                                    margin: 0 auto; /* Centers the grid container horizontally */
+                                    height: auto; /* Allow the height to adjust based on content */
+                                }
+                                .image-preview-container img {
+                                    width: 200px; /* Adjust the width as needed */
+                                    height: 100px; /* Adjust the height as needed */
+                                    object-fit: cover;
+                                    border-radius: 10px;
+                                    border: 0px solid #ddd;
+                                    padding: 2px;
+                                }
+                            }
+                            @keyframes blink2 {
+                                0% {
+                                    border-color: #008000;
+                                }
+                                50% {
+                                    border-color: transparent;
+                                }
+                                100% {
+                                    border-color: #008000;
+                                }
+                            }
                         </style>
-                        <div class="grid-container">
-                            <div class="grid-item">
-                                <input type="file" class="form-control-file" id="Xgambar_input_modal_1" name="Xgambar_input_modal_1" accept="image/*" style="display: none;">
-                                <div id="XimagePreviewContainer1" class="image-preview-container">
-                                    <img src="{{ isset($Xgambar_input_modal_1) ? asset('storage/uploads/ePALM/'.$Xgambar_input_modal_1) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                        <!-- <div class="grid-container">
+                            @foreach ($imageFields as $fieldKey => $imagePath)
+                                <div class="grid-item clickable-preview" data-image="{{ isset($imagePath) ? asset('storage/uploads/ePALM/' . $imagePath) : asset('storage/uploads/no-photos.png') }}" {!! in_array('gambar_taman.' . $fieldKey, $arrChanges) ? 'style="border: 2px solid #008000; animation: blink2 3s infinite;"' : '' !!}>
+                                    <input type="file" class="form-control-file" id="{{ $fieldKey }}" name="{{ $fieldKey }}" accept="image/*" style="display: none;">
+                                    <div id="preview_{{ $loop->index + 1 }}" class="image-preview-container">
+                                        <img src="{{ isset($imagePath) ? asset('storage/uploads/ePALM/' . $imagePath) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                    </div>
+                                    <div class="showButton">
+                                        <button type="button" class="btn btn-sm btn-primary trigger-upload" data-target="{{ $fieldKey }}">Upload</button>
+                                        <button type="button" class="btn btn-sm btn-danger delete-image" data-target="{{ $fieldKey }}">Delete</button>
+                                    </div>
+                                    <input type="hidden" name="delete_images[]" value="" id="{{ 'delete_'.$fieldKey }}">
+                                    <script>
+                                        // document.querySelector('.delete-image').addEventListener('click', function() {
+                                        //     const target = this.getAttribute('data-target');
+                                        //     document.getElementById(target).value = ''; // Clear the file input value
+                                        //     document.getElementById('preview_' + ({{ $loop->index + 1 }})).querySelector('img').src = '{{ asset('storage/uploads/no-photos.png') }}'; // Reset the image preview
+                                        //     this.style.display = 'none'; // Hide the delete button
+                                        //     document.getElementById('delete_' + target).value = target; // Set the hidden input value to the deleted image key
+                                        // });
+                                        document.querySelectorAll('.trigger-upload').forEach(button => {
+                                            button.addEventListener('click', function () {
+                                                const field = this.dataset.target;
+                                                document.getElementById(field).click();
+                                            });
+                                        });
+                                        document.querySelectorAll('.delete-image').forEach(button => {
+                                            button.addEventListener('click', function () {
+                                                const field = this.dataset.target;
+                                                const preview = document.getElementById(`preview_${field.split('_')[1]}`);
+                                                const deleteInput = document.getElementById(`delete_${field}`);
+                                                
+                                                // Replace image with placeholder
+                                                preview.querySelector('img').src = '/storage/uploads/no-photos.png';
+
+                                                // Mark as deleted
+                                                deleteInput.value = field;
+                                            });
+                                        });
+                                        document.addEventListener("DOMContentLoaded", function () {
+                                            // document.querySelectorAll('.clickable-preview').forEach(function (el) {
+                                            //     el.addEventListener('click', function () {
+                                            //         const imageUrl = this.dataset.image;
+                                            //         document.getElementById('modalImage').src = imageUrl;
+                                            //         $('#imageModal').modal('show');
+                                            //     });
+                                            // });
+                                            const currentURL = window.location.href;
+                                            const isEditMode = currentURL.includes('/edit');
+                                            const totalImages = 6; // or set dynamically if needed
+
+                                            for (let i = 1; i <= totalImages; i++) {
+                                                const inputId = `XGIM_${i}`;
+                                                const previewId = `preview_${i}`;
+                                                const inputEl = document.getElementById(inputId);
+                                                const previewEl = document.getElementById(previewId);
+
+                                                if (!inputEl || !previewEl) continue;
+
+                                                // Always bind preview on file select
+                                                inputEl.addEventListener('change', (e) => previewImage(e.target, previewEl));
+                                                if (inputEl && previewEl) {
+                                                    // previewEl.addEventListener('click', () => inputEl.click());
+                                                    inputEl.addEventListener('change', (e) => previewImage(e.target, previewEl));
+                                                }
+                                                // if (isEditMode) {
+                                                //     // Enable "Upload" button separately
+                                                //     previewEl.style.cursor = 'default';
+                                                // } else {
+                                                    // View mode: modal preview on click
+                                                    if(!currentURL.includes('/create')){
+                                                        const imageUrl = previewEl.querySelector('img').src;
+                                                        previewEl.parentElement.classList.add('clickable-preview');
+                                                        previewEl.parentElement.dataset.image = previewEl.querySelector('img').src;
+                                                        previewEl.style.cursor = 'zoom-in';
+                                                        previewEl.parentElement.setAttribute('title', 'Lihat Gambar');
+
+                                                        previewEl.addEventListener('click', function (e) {
+                                                            if (e.target.closest('.showButton')) return;
+                                                            document.getElementById('modalImage').src = previewEl.querySelector('img').src;
+                                                            $('#imageModal').modal('show');
+                                                        });
+                                                    }
+                                                // }
+                                            }
+
+                                            if (isEditMode) {
+                                                // Upload buttons (edit mode only)
+                                                document.querySelectorAll('.trigger-upload').forEach(button => {
+                                                    button.addEventListener('click', function () {
+                                                        const target = this.dataset.target;
+                                                        document.getElementById(target).click();
+                                                    });
+                                                });
+
+                                                // Delete buttons (edit mode only)
+                                                document.querySelectorAll('.delete-image').forEach(button => {
+                                                    button.addEventListener('click', function () {
+                                                        const target = this.dataset.target;
+                                                        const preview = document.getElementById('preview_' + target.split('_').pop());
+                                                        const inputHidden = document.getElementById('delete_' + target);
+
+                                                        // Set preview to default image
+                                                        preview.querySelector('img').src = "{{ asset('storage/uploads/no-photos.png') }}";
+
+                                                        // Flag it for deletion
+                                                        inputHidden.value = target;
+                                                    });
+                                                });
+                                            }
+                                        });
+                                    </script>
                                 </div>
-                            </div>
-                            <br class="mobile-done">
-                            <div class="grid-item">
-                                <input type="file" class="form-control-file" id="Xgambar_input_modal_2" name="Xgambar_input_modal_2" accept="image/*" style="display: none;">
-                                <div id="XimagePreviewContainer2" class="image-preview-container">
-                                    <img src="{{ isset($Xgambar_input_modal_2) ? asset('storage/uploads/ePALM/'.$Xgambar_input_modal_2) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
-                                </div>
-                            </div>
-                            <br class="mobile-done">
-                            <div class="grid-item">
-                                <input type="file" class="form-control-file" id="Xgambar_input_modal_3" name="Xgambar_input_modal_3" accept="image/*" style="display: none;">
-                                <div id="XimagePreviewContainer3" class="image-preview-container">
-                                    <img src="{{ isset($Xgambar_input_modal_3) ? asset('storage/uploads/ePALM/'.$Xgambar_input_modal_3) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
-                                </div>
-                            </div>
-                            <br class="mobile-done">
-                            <div class="grid-item">
-                                <input type="file" class="form-control-file" id="Xgambar_input_modal_4" name="Xgambar_input_modal_4" accept="image/*" style="display: none;">
-                                <div id="XimagePreviewContainer4" class="image-preview-container">
-                                    <img src="{{ isset($Xgambar_input_modal_4) ? asset('storage/uploads/ePALM/'.$Xgambar_input_modal_4) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                            @endforeach
+                        </div>
+                        <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body text-center p-0">
+                                        <img id="modalImage" src="" class="img-fluid w-100" alt="Full Size Image">
+                                    </div>
+                                    <div class="modal-footer py-2">
+                                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <script>
+                            const totalImages = 6;
+
+                            function previewImage(inputElement, previewContainer) {
+                                const file = inputElement.files[0];
+                                // if (file) {
+                                //     const reader = new FileReader();
+                                //     reader.onload = function(e) {
+                                //         previewContainer.querySelector('img').src = e.target.result;
+                                //     };
+                                //     reader.readAsDataURL(file);
+                                // }
+                                if (file) {
+                                    const reader = new FileReader();
+                                    reader.onload = function(e) {
+                                        const base64Data = e.target.result;
+
+                                        // Update the image preview
+                                        const imgEl = previewContainer.querySelector('img');
+                                        imgEl.src = base64Data;
+
+                                        // Update the data-image on the parent .grid-item
+                                        const gridItem = previewContainer.closest('.grid-item');
+                                        if (gridItem) {
+                                            gridItem.setAttribute('data-image', base64Data);
+                                        }
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
+                            }
+
+                            // for (let i = 1; i <= totalImages; i++) {
+                            //     const inputId = `XGIM_${i}`;
+                            //     const previewId = `preview_${i}`;
+
+                            //     const inputEl = document.getElementById(inputId);
+                            //     const previewEl = document.getElementById(previewId);
+
+                            //     if (inputEl && previewEl) {
+                            //         previewEl.addEventListener('click', () => inputEl.click());
+                            //         inputEl.addEventListener('change', (e) => previewImage(e.target, previewEl));
+                            //     }
+                            // }
+                            
+                        </script> -->
+                        <div class="grid-container">
+                            @foreach ($imageFields as $fieldKey => $imagePath)
+                                @php
+                                    $imageURL = isset($imagePath)
+                                        ? asset('storage/uploads/ePALM/' . $imagePath)
+                                        : asset('storage/uploads/no-photos.png');
+                                    $isChanged = in_array('gambar_taman.' . $fieldKey, $arrChanges);
+                                @endphp
+
+                                <div class="grid-item clickable-preview"
+                                    data-image="{{ $imageURL }}"
+                                    @if($isChanged)
+                                        style="border: 2px solid #008000; animation: blink2 3s infinite;"
+                                    @endif>
+
+                                    <input type="file" class="form-control-file" id="{{ $fieldKey }}" name="{{ $fieldKey }}" accept="image/*" style="display: none;">
+                                    
+                                    <div id="preview_{{ $loop->index + 1 }}" class="image-preview-container">
+                                        <img src="{{ $imageURL }}" class="img-fluid" alt="Preview">
+                                    </div>
+
+                                    <div class="showButton">
+                                        <button type="button" class="btn btn-sm btn-primary trigger-upload" data-target="{{ $fieldKey }}">Upload</button>
+                                        <button type="button" class="btn btn-sm btn-danger delete-image" data-target="{{ $fieldKey }}">Delete</button>
+                                    </div>
+
+                                    <input type="hidden" name="delete_images[]" value="" id="delete_{{ $fieldKey }}">
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-body text-center p-0">
+                                        <img id="modalImage" src="" class="img-fluid w-100" alt="Full Size Image">
+                                    </div>
+                                    <div class="modal-footer py-2">
+                                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+                                const currentURL = window.location.href;
+                                const isEditMode = currentURL.includes('/edit');
+                                const isCreateMode = currentURL.includes('/create');
+
+                                document.querySelectorAll('.trigger-upload').forEach(button => {
+                                    button.addEventListener('click', function () {
+                                        const field = this.dataset.target;
+                                        document.getElementById(field).click();
+                                    });
+                                });
+
+                                document.querySelectorAll('.delete-image').forEach(button => {
+                                    button.addEventListener('click', function () {
+                                        const field = this.dataset.target;
+                                        const preview = document.querySelector(`#preview_${field.split('_')[1]}`);
+                                        const deleteInput = document.getElementById(`delete_${field}`);
+
+                                        preview.querySelector('img').src = "{{ asset('storage/uploads/no-photos.png') }}";
+                                        deleteInput.value = field;
+                                    });
+                                });
+
+                                const totalImages = 6;
+
+                                for (let i = 1; i <= totalImages; i++) {
+                                    const input = document.getElementById(`XGIM_${i}`);
+                                    const preview = document.getElementById(`preview_${i}`);
+
+                                    if (!input || !preview) continue;
+
+                                    input.addEventListener('change', () => previewImage(input, preview));
+
+                                    if (!isCreateMode) {
+                                        const imageUrl = preview.querySelector('img').src;
+                                        const parent = preview.closest('.grid-item');
+
+                                        if (parent) {
+                                            parent.classList.add('clickable-preview');
+                                            parent.dataset.image = imageUrl;
+                                            preview.style.cursor = 'zoom-in';
+                                            parent.title = 'Lihat Gambar';
+
+                                            preview.addEventListener('click', function (e) {
+                                                if (!e.target.closest('.showButton')) {
+                                                    document.getElementById('modalImage').src = imageUrl;
+                                                    $('#imageModal').modal('show');
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+
+                                function previewImage(inputElement, previewContainer) {
+                                    const file = inputElement.files[0];
+                                    if (!file) return;
+
+                                    const reader = new FileReader();
+                                    reader.onload = function (e) {
+                                        const imgEl = previewContainer.querySelector('img');
+                                        imgEl.src = e.target.result;
+
+                                        const gridItem = previewContainer.closest('.grid-item');
+                                        if (gridItem) {
+                                            gridItem.dataset.image = e.target.result;
+                                        }
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
+                            });
+                        </script>
+                        <br>
+                        {{--
+                        <div class="grid-container" style="display: none;">
+                            <div class="grid-item">
+                                <input type="file" class="form-control-file" id="XGIMtemp_1" name="XGIMtemp_1" accept="image/*" style="display: none;">
+                                <div id="XimagePreviewContainer1" class="image-preview-container">
+                                    <!-- <a href="{{ isset($XGIMtemp_1) ? asset('storage/uploads/ePALM/'.$XGIMtemp_1) : asset('storage/uploads/no-photos.png') }}" target="_blank"> -->
+                                        <img src="{{ isset($XGIMtemp_1) ? asset('storage/uploads/ePALM/'.$XGIMtemp_1) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                    <!-- </a> -->
+                                </div>
+                            </div>
+                            <!-- <br class="mobile-done"> -->
+                            <div class="grid-item">
+                                <input type="file" class="form-control-file" id="XGIMtemp_2" name="XGIMtemp_2" accept="image/*" style="display: none;">
+                                <div id="XimagePreviewContainer2" class="image-preview-container">
+                                    <!-- <a href="{{ isset($XGIMtemp_2) ? asset('storage/uploads/ePALM/'.$XGIMtemp_2) : asset('storage/uploads/no-photos.png') }}" target="_blank"> -->
+                                        <img src="{{ isset($XGIMtemp_2) ? asset('storage/uploads/ePALM/'.$XGIMtemp_2) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                    <!-- </a> -->
+                                </div>
+                            </div>
+                            <!-- <br class="mobile-done"> -->
+                            <div class="grid-item">
+                                <input type="file" class="form-control-file" id="XGIMtemp_3" name="XGIMtemp_3" accept="image/*" style="display: none;">
+                                <div id="XimagePreviewContainer3" class="image-preview-container">
+                                    <!-- <a href="{{ isset($XGIMtemp_3) ? asset('storage/uploads/ePALM/'.$XGIMtemp_3) : asset('storage/uploads/no-photos.png') }}" target="_blank"> -->
+                                        <img src="{{ isset($XGIMtemp_3) ? asset('storage/uploads/ePALM/'.$XGIMtemp_3) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                    <!-- </a> -->
+                                </div>
+                            </div>
+                            <!-- <br class="mobile-done"> -->
+                            <div class="grid-item">
+                                <input type="file" class="form-control-file" id="XGIMtemp_4" name="XGIMtemp_4" accept="image/*" style="display: none;">
+                                <div id="XimagePreviewContainer4" class="image-preview-container">
+                                    <!-- <a href="{{ isset($XGIMtemp_4) ? asset('storage/uploads/ePALM/'.$XGIMtemp_4) : asset('storage/uploads/no-photos.png') }}" target="_blank"> -->
+                                        <img src="{{ isset($XGIMtemp_4) ? asset('storage/uploads/ePALM/'.$XGIMtemp_4) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                    <!-- </a> -->
+                                </div>
+                            </div>
+                            <!-- <br class="mobile-done"> -->
+                            <div class="grid-item">
+                                <input type="file" class="form-control-file" id="XGIMtemp_3" name="XGIMtemp_3" accept="image/*" style="display: none;">
+                                <div id="XimagePreviewContainer3" class="image-preview-container">
+                                    <!-- <a href="{{ isset($XGIMtemp_3) ? asset('storage/uploads/ePALM/'.$XGIMtemp_3) : asset('storage/uploads/no-photos.png') }}" target="_blank"> -->
+                                        <img src="{{ isset($XGIMtemp_3) ? asset('storage/uploads/ePALM/'.$XGIMtemp_3) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                    <!-- </a> -->
+                                </div>
+                            </div>
+                            <!-- <br class="mobile-done"> -->
+                            <div class="grid-item">
+                                <input type="file" class="form-control-file" id="XGIMtemp_4" name="XGIMtemp_4" accept="image/*" style="display: none;">
+                                <div id="XimagePreviewContainer4" class="image-preview-container">
+                                    <!-- <a href="{{ isset($XGIMtemp_4) ? asset('storage/uploads/ePALM/'.$XGIMtemp_4) : asset('storage/uploads/no-photos.png') }}" target="_blank"> -->
+                                        <img src="{{ isset($XGIMtemp_4) ? asset('storage/uploads/ePALM/'.$XGIMtemp_4) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
+                                    <!-- </a> -->
+                                </div>
+                            </div>
+                        </div>
+                        --}}
                     </div>
                 </div>
-                <script>
+                <!-- <script>
                     const fileInputs = [
-                        { inputId: 'Xgambar_input_modal_1', previewContainerId: 'XimagePreviewContainer1' },
-                        { inputId: 'Xgambar_input_modal_2', previewContainerId: 'XimagePreviewContainer2' },
-                        { inputId: 'Xgambar_input_modal_3', previewContainerId: 'XimagePreviewContainer3' },
-                        { inputId: 'Xgambar_input_modal_4', previewContainerId: 'XimagePreviewContainer4' }
+                        { inputId: 'XGIM_1', previewContainerId: 'XimagePreviewContainer1' },
+                        { inputId: 'XGIM_2', previewContainerId: 'XimagePreviewContainer2' },
+                        { inputId: 'XGIM_3', previewContainerId: 'XimagePreviewContainer3' },
+                        { inputId: 'XGIM_4', previewContainerId: 'XimagePreviewContainer4' }
                     ];
 
                     // Function to preview image
@@ -985,19 +1484,19 @@
                             previewImage(event.target, previewContainer);
                         });
                     });
-                </script>
+                </script> -->
             </div>
         </div>
     </div>
-   
-    @if(isset($ePALM->kategori_taman) && ($ePALM->kategori_taman == "Landskap Perbandaran"))
+    
+    @if((isset($ePALM->kategori_taman) /*&& ($ePALM->kategori_taman == "Landskap Perbandaran") || 1*/) && (!$ePALM->komponen->isEmpty() || (strpos(request()->url(), 'edit') !== false)))
         <div class="row">
             <div class="col-lg col-separator">
                 <div class="form-group">
                     <label class="col-xs-4 control-label"></label>
                     <div class="col-xs-12">
                         <h4 class="d-flex align-items-center justify-content-between">
-                            Komponen Landskap (Landskap Perbandaran) {{ $capitalizedSegment ?? '' }}
+                            Komponen Landskap
                             <button type="button" class="btn btn-primary btn-sm showButton" id="addProductBtn">
                                 Tambah Komponen
                             </button>
@@ -1038,7 +1537,7 @@
                                 </thead>
                                 <tbody id="projek_container">
                                     <tr id="dummy_row">
-                                        <td colspan="6" class="text-center">Tiada Maklumat</td>
+                                        <td colspan="5" class="text-center">Tiada Maklumat</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1057,7 +1556,14 @@
 
                     function fetchUpdatedData() {
                         document.getElementById('projek_container').innerHTML = '';
-                        let id_taman = "{{ $ePALM->id_taman }}";
+                        let id_taman = "{{ $ePALM->id_taman ?? '' }}";
+                        // Destroy existing DataTable if initialized
+                        if ($.fn.DataTable.isDataTable('#projek_table')) {
+                            $('#projek_table').DataTable().destroy();
+                        }
+
+                        // Clear tbody manually
+                        $('#projek_container').html('');
                         $.ajax({
                             url: '/fetchComponents/'+id_taman,  // Define this route in your controller to fetch updated components
                             method: 'GET',
@@ -1074,7 +1580,15 @@
                                                 <td>${component.nama_taman}</td>
                                                 <td>${component.keterangan_taman}</td>
                                                 <td>
-                                                    ${component.images.map(url => `<img src="${url}" alt="image" style="width: 50px; height: 50px; object-fit: cover; margin: 2px;">`).join('')}
+                                                    ${component.images.map(url => `
+                                                        <img src="${url}" 
+                                                            alt="Thumbnail" 
+                                                            class="preview-thumbnail" 
+                                                            data-toggle="modal" 
+                                                            data-target="#imagePreviewModal" 
+                                                            data-image="${url}" 
+                                                            style="width: 100px; height: 100px; object-fit: cover; margin: 2px; cursor: zoom-in;">
+                                                    `).join('')}
                                                 </td>
                                                 <td style="padding: 0; vertical-align: middle; text-align: center;">
                                                     <button 
@@ -1111,6 +1625,14 @@
                                             `;
                                             projekContainer.appendChild(newRow);
                                     }
+                                    // Reinitialize DataTable
+                                    $('#projek_table').DataTable({
+                                        "pageLength": 2,
+                                        "lengthChange": false,
+                                        "ordering": true,
+                                        "info": false,
+                                        "searching": true
+                                    });
                                 } else {
                                     alert('Failed to fetch updated components.');
                                 }
@@ -1287,17 +1809,27 @@
                         }
 
                         // Add event listeners for image inputs
-                        document.getElementById('gambar_input_modal_1').addEventListener('change', function () {
+                        document.getElementById('GIM_1').addEventListener('change', function () {
                             previewImage(this, document.getElementById('imagePreviewContainer1'));
                         });
-                        document.getElementById('gambar_input_modal_2').addEventListener('change', function () {
+                        document.getElementById('GIM_2').addEventListener('change', function () {
                             previewImage(this, document.getElementById('imagePreviewContainer2'));
                         });
-                        document.getElementById('gambar_input_modal_3').addEventListener('change', function () {
+                        document.getElementById('GIM_3').addEventListener('change', function () {
                             previewImage(this, document.getElementById('imagePreviewContainer3'));
                         });
-                        document.getElementById('gambar_input_modal_4').addEventListener('change', function () {
+                        document.getElementById('GIM_4').addEventListener('change', function () {
                             previewImage(this, document.getElementById('imagePreviewContainer4'));
+                        });
+
+                        document.body.addEventListener('click', function (e) {
+                            if (e.target.classList.contains('preview-thumbnail')) {
+                                const imgUrl = e.target.getAttribute('data-image');
+                                const modalImg = document.getElementById('modalPreviewImage');
+                                modalImg.src = imgUrl;
+                                const modal = new bootstrap.Modal(document.getElementById('imagePreviewModal'));
+                                modal.show();
+                            }
                         });
                     });
                 </script>
@@ -1308,26 +1840,31 @@
                         // Loop over each komponen and generate image paths
                         foreach ($ePALM->komponen as $komponen) {
                             if (isset($komponen->gambar_taman)) {
-                                $folderName = str_replace(' ', '_', $ePALM->nama_taman);
+                                $folderName = str_replace(' ', '_', $ePALM->id_taman.' '.$ePALM->nama_taman);
                                 $subfolderName = str_replace(' ', '_', $komponen->nama_taman);
                                 $gambar_tamanData = json_decode($komponen->gambar_taman, true);
 
-                                $gambar_input_modal_1 = isset($gambar_tamanData['gambar_input_modal_1']) ? 'ePALM/'.$folderName.'/'.$subfolderName.'/'.$gambar_tamanData['gambar_input_modal_1'] : 'no-photos.png';
-                                $gambar_input_modal_2 = isset($gambar_tamanData['gambar_input_modal_2']) ? 'ePALM/'.$folderName.'/'.$subfolderName.'/'.$gambar_tamanData['gambar_input_modal_2'] : 'no-photos.png';
-                                $gambar_input_modal_3 = isset($gambar_tamanData['gambar_input_modal_3']) ? 'ePALM/'.$folderName.'/'.$subfolderName.'/'.$gambar_tamanData['gambar_input_modal_3'] : 'no-photos.png';
-                                $gambar_input_modal_4 = isset($gambar_tamanData['gambar_input_modal_4']) ? 'ePALM/'.$folderName.'/'.$subfolderName.'/'.$gambar_tamanData['gambar_input_modal_4'] : 'no-photos.png';
-
+                                $GIM_1 = isset($gambar_tamanData['GIM_1']) ? 'ePALM/'.$folderName.'/'.$subfolderName.'/'.$gambar_tamanData['GIM_1'] : 'no-photos.png';
+                                $GIM_2 = isset($gambar_tamanData['GIM_2']) ? 'ePALM/'.$folderName.'/'.$subfolderName.'/'.$gambar_tamanData['GIM_2'] : 'no-photos.png';
+                                $GIM_3 = isset($gambar_tamanData['GIM_3']) ? 'ePALM/'.$folderName.'/'.$subfolderName.'/'.$gambar_tamanData['GIM_3'] : 'no-photos.png';
+                                $GIM_4 = isset($gambar_tamanData['GIM_4']) ? 'ePALM/'.$folderName.'/'.$subfolderName.'/'.$gambar_tamanData['GIM_4'] : 'no-photos.png';
+                                for ($i = 1; $i <= 6; $i++) {
+                                    $fieldKey = "GIM_$i";
+                                    $fieldKey2 = "gambar_input_modal_$i";
+                                    $$fieldKey = isset($gambar_tamanData[$fieldKey]) ? 'ePALM/' . $folderName . '/' . $subfolderName.'/' . $gambar_tamanData[$fieldKey] : (isset($gambar_tamanData[$fieldKey2]) ? 'ePALM/' . $folderName . '/' . $subfolderName.'/' . $gambar_tamanData[$fieldKey2] : 'no-photos.png');
+                                }
                                 // Add to the array of image paths
                                 $imagePaths[] = [
                                     'nama_taman' => $komponen->nama_taman,
                                     'keterangan_taman' => $komponen->keterangan_taman,
                                     'is_komponen' => $komponen->is_komponen,    
-                                    'id_taman' => $komponen->id_taman,    
+                                    'id_taman' => $komponen->id_taman,  
+                                    'status' => $ePALM->status == 'approved' ? $komponen->status : '', 
                                     'images' => [
-                                        asset('storage/uploads/' . $gambar_input_modal_1),
-                                        asset('storage/uploads/' . $gambar_input_modal_2),
-                                        asset('storage/uploads/' . $gambar_input_modal_3),
-                                        asset('storage/uploads/' . $gambar_input_modal_4)
+                                        asset('storage/uploads/' . $GIM_1),
+                                        asset('storage/uploads/' . $GIM_2),
+                                        asset('storage/uploads/' . $GIM_3),
+                                        asset('storage/uploads/' . $GIM_4)
                                     ],
                                     'gambar_taman' => $komponen->gambar_taman
                                 ];
@@ -1357,26 +1894,10 @@
                 @endphp
 
                 <script>
-                    // // Pass PHP variable to JavaScript
-                    // const isKomponen = <?php echo isset($ePALM->komponen[0]->is_komponen) ? 'true' : 'false'; ?>;
-
-                    // // Get the image URLs from the PHP function result
                     let imageURLs = <?php echo isset($ePALM->komponen) ? json_encode($imagePaths) : 'false'; ?>;
-
-                    // // Check if the component exists and proceed to add the row for each komponen
                     if (imageURLs.length > 0) {
-                        // let bilCount = 1;
-
-                        // Remove any previous dummy row
                         document.getElementById('dummy_row')?.remove();
-
-                        // Loop through each imageURLs set and create rows dynamically
-                        // imageURLs.forEach(urlSet => {
-                            createRow();
-                            // bilCount++;
-                        // });
-
-                        // Optionally increment the bilCount (if required) and update row numbers
+                        createRow();
                         updateBilNumbers();
                     } else {
                         console.log('is_komponen is not set or no components found. No rows will be added.');
@@ -1386,15 +1907,24 @@
                         let bilCount = 1;
                         const projekContainer = document.getElementById('projek_container');
                         imageURLs.forEach((component, index) => {
-                            
-                            console.log((component.gambar_taman));
+                            let rowClass = component.status === 'draft' ? 'blink-border' : '';
+                            console.log((component.status));
                             let newRow = document.createElement('tr');
+                            newRow.className = rowClass;
                             newRow.innerHTML = `
                                 <td>${bilCount++}</td>
                                 <td>${component.nama_taman}</td>
                                 <td>${component.keterangan_taman}</td>
                                 <td>
-                                    ${component.images.map(url => `<img src="${url}" alt="${url}" style="width: 50px; height: 50px; object-fit: cover; margin: 2px;">`).join('')}
+                                    ${component.images.map(url => `
+                                        <img src="${url}" 
+                                            alt="Thumbnail" 
+                                            class="preview-thumbnail" 
+                                            data-toggle="modal" 
+                                            data-target="#imagePreviewModal" 
+                                            data-image="${url}" 
+                                            style="width: 100px; height: 100px; object-fit: cover; margin: 2px; cursor: zoom-in;">
+                                    `).join('')}
                                 </td>
                                 <td style="padding: 0; vertical-align: middle; text-align: center;">
                                     <button 
@@ -1425,8 +1955,52 @@
                         });
                     }
                 </script>
+                <style>
+                    @keyframes blink-border {
+                        0%   { border-color: #ff0000; }
+                        50%  { border-color: transparent; }
+                        100% { border-color: #ff0000; }
+                    }
 
+                    .blink-border {
+                        border: 2px solid #ff0000;
+                        animation: blink-border 1.5s infinite;
+                    }
+                </style>
+                <!-- Fullscreen Image Modal -->
+                <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content text-white">
+                            <div class="modal-body text-center p-0">
+                                <img id="modalPreviewImage" src="" class="img-fluid w-100" alt="Full Size Image">
+                            </div>
+                            <div class="modal-footer py-2">
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
+        
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- DataTables CSS & JS -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                @if(!($ePALM->komponen->isEmpty()))
+                $('#projek_table').DataTable({
+                    "pageLength": 2,
+                    "lengthChange": false,
+                    "ordering": true, // if you don’t want sorting
+                    "info": false, // remove the “Showing X to Y” text
+                    "searching": true // optional: disable search if not needed
+                });
+                @endif
+            });
+        </script>
     @endif

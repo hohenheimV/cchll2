@@ -61,8 +61,8 @@
                                     ])
                                     @php($jenis_count = count($jenis_pembangunan))
                                     @php($paparan_portal = [
-                                        ['id' => 'Aktif', 'label' => 'bg-success'], // Green background for approved
-                                        ['id' => 'Tidak Aktif', 'label' => 'bg-danger'], // Red background for failed
+                                        ['id' => 'Papar', 'label' => 'bg-success'], // Green background for approved
+                                        ['id' => 'Tidak Papar', 'label' => 'bg-danger'], // Red background for failed
                                     ])
                                     @php($status_count = count($paparan_portal))
                                     @forelse($ePALM as $taman)

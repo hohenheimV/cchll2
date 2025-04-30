@@ -72,43 +72,50 @@ class ePALMController extends Controller
                 $requestData['kategori_taman'] = $requestData['nama_komponenX'];
                 $requestData['is_komponen'] = $requestData['id_tamanX'];
 
-                $gambar_taman = json_decode($requestData['gambar_taman'], true);
-                for ($i = 1; $i <= 4; $i++) {
-                    $inputField = 'gambar_input_modal_' . $i;
-                    $updateField = 'gambar_update_modal_' . $i;
-                    if ($request->hasFile($updateField)) {
-                        $file = $request->file($updateField);
+                // $gambar_taman = json_decode($requestData['gambar_taman'], true);
+                // for ($i = 1; $i <= 4; $i++) {
+                //     $inputField = 'GIM_' . $i;
+                //     $inputField2 = 'gambar_input_modal_' . $i;
+                //     $updateField = 'GUM_' . $i;
+                //     if ($request->hasFile($updateField)) {
+                //         $file = $request->file($updateField);
                         
-                        if ($file->isValid()) {
-                            $folderName = str_replace(' ', '_', $request->input('nama_taman'));
-                            $subFolderName = str_replace(' ', '_', $requestData['nama_komponenX']);
-                            $filename = time() . '_' . $i . '.' . $file->extension();
-                            $file->storeAs('public/uploads/ePALM/' . $folderName.'/'.$subFolderName, $filename);
-                            $filenames[$inputField] = $filename;
-                        }
-                        unset($requestData[$inputField]);
-                    }else{
-                        if(isset($gambar_taman[$inputField])){
-                            $filenames[$inputField] = $gambar_taman[$inputField];
-                        }
-                    }
-                }
+                //         if ($file->isValid()) {
+                //             $folderName = str_replace(' ', '_', $requestData['is_komponen'].' '.$request->input('nama_taman'));
+                //             $subFolderName = str_replace(' ', '_', $requestData['nama_komponenX']);
+                //             $filename = time() . '_' . $i . '.' . $file->extension();
+                //             $file->storeAs('public/uploads/ePALM/' . $folderName.'/'.$subFolderName, $filename);
+                //             $filenames[$inputField] = $filename;
+                //         }
+                //         unset($requestData[$inputField]);
+                //     }else{
+                //         if(isset($gambar_taman[$inputField])){
+                //             $filenames[$inputField] = $gambar_taman[$inputField];
+                //         }elseif(isset($gambar_taman[$inputField2])){
+                //             $filenames[$inputField] = $gambar_taman[$inputField2];
+                //         }
+                //     }
+                // }
             }else if($request->input('delete') == "komponen"){
-                $ePALMdelete = ePALM_draf::where('id_taman', $requestData['id_tamanD']);
-                $ePALMdelete->delete();
+                // $ePALMdelete = ePALM_draf::where('id_taman', $requestData['id_tamanD']);
+                // $ePALMdelete->delete();
+                $ePALMdelete = ePALM_draf::where('id_taman', $requestData['id_tamanD'])->get();
+                foreach ($ePALMdelete as $item) {
+                    $item->delete();
+                }
                 return response()->json(['success' => true, 'message' => 'Data deleted!']);
             }else{
                 $requestData['nama_taman'] = $requestData['nama_komponen'];
                 $requestData['keterangan_taman'] = $requestData['keterangan_taman'];
                 $requestData['kategori_taman'] = $requestData['nama_komponen'];
                 $requestData['is_komponen'] = $requestData['id_taman'];
-                for ($i = 1; $i <= 4; $i++) {
-                    $inputField = 'gambar_input_modal_' . $i;
+                for ($i = 1; $i <= 6; $i++) {
+                    $inputField = 'GIM_' . $i;
                     if ($request->hasFile($inputField)) {
                         $file = $request->file($inputField);
                         
                         if ($file->isValid()) {
-                            $folderName = str_replace(' ', '_', $request->input('nama_taman'));
+                            $folderName = str_replace(' ', '_', $requestData['is_komponen'].' '.$request->input('nama_taman'));
                             $subFolderName = str_replace(' ', '_', $requestData['nama_komponen']);
                             $filename = time() . '_' . $i . '.' . $file->extension();
                             $file->storeAs('public/uploads/ePALM/' . $folderName.'/'.$subFolderName, $filename);
@@ -117,17 +124,49 @@ class ePALMController extends Controller
                         unset($requestData[$inputField]);
                     }
                 }
+                $requestData['gambar_taman'] = json_encode($filenames);
             }
-            $requestData['gambar_taman'] = json_encode($filenames);
+            // $requestData['gambar_taman'] = json_encode($filenames);
 
             if($request->input('update') == "komponen"){  
-                ePALM_draf::where('id_taman', $requestData['is_komponen'])->update([
-                    // 'nama_taman' => $requestData['nama_taman'],
-                    // 'kategori_taman' => $requestData['kategori_taman'],
-                    'keterangan_taman' => $requestData['keterangan_taman'],
-                    'gambar_taman' => $requestData['gambar_taman'],
-                ]);                 
-
+                // // dd($requestData['gambar_taman']);
+                // ePALM_draf::where('id_taman', $requestData['is_komponen'])->update([
+                //     // 'nama_taman' => $requestData['nama_taman'],
+                //     // 'kategori_taman' => $requestData['kategori_taman'],
+                //     'keterangan_taman' => $requestData['keterangan_taman'],
+                //     'gambar_taman' => $requestData['gambar_taman'],
+                // ]);
+                $komponen = ePALM_draf::where('id_taman', $requestData['is_komponen'])->first();
+                if ($komponen) {
+                    $gambar_taman = json_decode($requestData['gambar_taman'], true);
+                    for ($i = 1; $i <= 4; $i++) {
+                        $inputField = 'GIM_' . $i;
+                        $inputField2 = 'gambar_input_modal_' . $i;
+                        $updateField = 'GUM_' . $i;
+                        if ($request->hasFile($updateField)) {
+                            $file = $request->file($updateField);
+                            
+                            if ($file->isValid()) {
+                                $folderName = str_replace(' ', '_', $komponen->is_komponen.' '.$request->input('nama_taman'));
+                                $subFolderName = str_replace(' ', '_', $requestData['nama_komponenX']);
+                                $filename = time() . '_' . $i . '.' . $file->extension();
+                                $file->storeAs('public/uploads/ePALM/' . $folderName.'/'.$subFolderName, $filename);
+                                $filenames[$inputField] = $filename;
+                            }
+                            unset($requestData[$inputField]);
+                        }else{
+                            if(isset($gambar_taman[$inputField])){
+                                $filenames[$inputField] = $gambar_taman[$inputField];
+                            }elseif(isset($gambar_taman[$inputField2])){
+                                $filenames[$inputField] = $gambar_taman[$inputField2];
+                            }
+                        }
+                    }
+                    $requestData['gambar_taman'] = json_encode($filenames);
+                    $komponen->keterangan_taman = $requestData['keterangan_taman'];
+                    $komponen->gambar_taman = $requestData['gambar_taman'];
+                    $komponen->save();
+                }                 
             }else{
                 $newRecord = ePALM::create($requestData);
                 $id_taman = $newRecord->id_taman;
@@ -150,40 +189,76 @@ class ePALMController extends Controller
                 ->toArray();
             $requestData['mediaSosial_taman'] = json_encode($mediaSosial_taman);
             
-            $filenames = [];
-            for ($i = 1; $i <= 4; $i++) {
-                $inputField = 'Xgambar_input_modal_' . $i;
-                if ($request->hasFile($inputField)) {
-                    $file = $request->file($inputField);
+            // $filenames = [];
+            // for ($i = 1; $i <= 6; $i++) {
+            //     $inputField = 'XGIM_' . $i;
+            //     if ($request->hasFile($inputField)) {
+            //         $file = $request->file($inputField);
                     
-                    if ($file->isValid()) {
-                        $folderName = str_replace(' ', '_', $request->input('nama_taman'));
-                        $filename = time() . '_' . $i . '.' . $file->extension();
-                        $file->storeAs('public/uploads/ePALM/' . $folderName, $filename);
-                        $filenames[$inputField] = $filename;
-                    }
-                    unset($requestData[$inputField]);
-                }
-            }
-            if (!empty($filenames)) {
-                $requestData['gambar_taman'] = json_encode($filenames);
-            }
+            //         if ($file->isValid()) {
+            //             $folderName = str_replace(' ', '_', $request->input('nama_taman'));
+            //             $filename = time() . '_' . $i . '.' . $file->extension();
+            //             $file->storeAs('public/uploads/ePALM/' . $folderName, $filename);
+            //             $filenames[$inputField] = $filename;
+            //         }
+            //         unset($requestData[$inputField]);
+            //     }
+            // }
+            // if (!empty($filenames)) {
+            //     $requestData['gambar_taman'] = json_encode($filenames);
+            // }
 
-            if ($request->hasFile('fail_konsep')) {
-                $file = $request->file('fail_konsep');
+            // if ($request->hasFile('fail_konsep')) {
+            //     $file = $request->file('fail_konsep');
                 
-                if ($file->isValid()) {
-                    $folderName = str_replace(' ', '_', $request->input('nama_taman'));
-                    $filename = time() . '.' . $file->extension();
-                    $file->storeAs('public/uploads/ePALM/' . $folderName, $filename);
-                }
-                $requestData['fail_konsep'] = $filename;
-            }
+            //     if ($file->isValid()) {
+            //         $folderName = str_replace(' ', '_', $request->input('nama_taman'));
+            //         $filename = time() . '.' . $file->extension();
+            //         $file->storeAs('public/uploads/ePALM/' . $folderName, $filename);
+            //     }
+            //     $requestData['fail_konsep'] = $filename;
+            // }
             $newRecord = ePALM::create($requestData);
             $id_taman = $newRecord->id_taman;
             $requestData['id_taman'] = $id_taman;
             $drafRecord = ePALM_draf::create($requestData);
             if($drafRecord && $newRecord){
+                $filenames = [];
+                for ($i = 1; $i <= 6; $i++) {
+                    $inputField = 'XGIM_' . $i;
+                    if ($request->hasFile($inputField)) {
+                        $file = $request->file($inputField);
+                        
+                        if ($file->isValid()) {
+                            $folderName = str_replace(' ', '_', $id_taman.' '.$request->input('nama_taman'));
+                            $filename = time() . '_' . $i . '.' . $file->extension();
+                            $file->storeAs('public/uploads/ePALM/' . $folderName, $filename);
+                            $filenames[$inputField] = $filename;
+                        }
+                        unset($requestData[$inputField]);
+                    }
+                }
+                if (!empty($filenames)) {
+                    $requestData['gambar_taman'] = json_encode($filenames);
+                    $gambarJson = json_encode($filenames);
+                    $newRecord->gambar_taman = $gambarJson;
+                    $drafRecord->gambar_taman = $gambarJson;
+                }
+
+                if ($request->hasFile('fail_konsep')) {
+                    $file = $request->file('fail_konsep');
+                    
+                    if ($file->isValid()) {
+                        $folderName = str_replace(' ', '_', $id_taman.' '.$request->input('nama_taman'));
+                        $filename = time() . '.' . $file->extension();
+                        $file->storeAs('public/uploads/ePALM/' . $folderName, $filename);
+                    }
+                    $requestData['fail_konsep'] = $filename;
+                    $newRecord->fail_konsep = $filename;
+                    $drafRecord->fail_konsep = $filename;
+                }
+                $newRecord->save();
+                $drafRecord->save();
                 if($requestData['kategori_taman'] == "Landskap Perbandaran"){
                     return redirect()->route('pengurusan.ePALM.edit', [$drafRecord])->with('successMessage', 'Maklumat taman telah berjaya disimpan');
                 }
@@ -195,26 +270,57 @@ class ePALMController extends Controller
 
     public function show(ePALM_draf $ePALM)
     {
-        if ($ePALM->kategori_taman == "Landskap Perbandaran") {
-            $ePALM_komponen = ePALM_draf::where('is_komponen', $ePALM->id_taman)->get();
+        if ($ePALM->kategori_taman == "Landskap Perbandaran" || 1) {
+            $ePALM_komponen = ePALM_draf::select([
+                'id_taman_draf',
+                'id_taman',
+                'nama_taman',
+                'nama_pbt',
+                'kategori_taman',
+                'keterangan_taman',
+                'gambar_taman',
+                'is_komponen',
+                'id_permohonan',
+                'status',
+            ])->where('is_komponen', $ePALM->id_taman)->get();
             $ePALM->komponen = $ePALM_komponen;
         }
-        $paparan_portal = ePALM::where('id_taman', $ePALM->id_taman)->first();
 
+        if ($ePALM->nama_pbt == "Landskap Perbandaran") {
+            $ePALM_induk = ePALM_draf::select([
+                'nama_taman',
+            ])->where('id_taman', $ePALM->is_komponen)->first();
+            // dd($ePALM_induk);
+            $ePALM->nama_pbt = $ePALM_induk->nama_taman;
+        }
+
+        $paparan_portal = ePALM::where('id_taman', $ePALM->id_taman)->first();
         if ($paparan_portal) {
             $status = $paparan_portal->status;
         }
+        $latestAudit = $ePALM->status != 'approved' ? $ePALM->audits()->latest()->take(1)->get() : null;
+        // $latestAudit = $ePALM->audits()->latest()->first();
+        // dd($latestAudit);
         return view('pengurusan.ePALM.show', [
             'ePALM' => $ePALM,
             'status' => $status,
+            'latestAudit' => $latestAudit,
         ]);
     }
 
     public function edit(ePALM_draf $ePALM)
     {
-        if ($ePALM->kategori_taman == "Landskap Perbandaran") {
+        if ($ePALM->kategori_taman == "Landskap Perbandaran" || 1) {
             $ePALM_komponen = ePALM_draf::where('is_komponen', $ePALM->id_taman)->get();
             $ePALM->komponen = $ePALM_komponen;
+        }
+        if ($ePALM->nama_pbt == "Landskap Perbandaran") {
+            $ePALM_induk = ePALM_draf::select([
+                'nama_taman',
+            ])->where('id_taman', $ePALM->is_komponen)->first();
+            // dd($ePALM_induk);
+            $ePALM->nama_pbt = $ePALM_induk->nama_taman;
+            abort(404);
         }
         return view('pengurusan.ePALM.edit', [
             'ePALM' => $ePALM,
@@ -225,6 +331,9 @@ class ePALMController extends Controller
     {
         // dd($request->all());
         $fasiliti = collect($request['fasiliti'] ?? [])
+            ->filter(function($item) {
+                return $item !== "0";
+            })
             ->map(function($item) {
                 return $item;
             })
@@ -232,21 +341,27 @@ class ePALMController extends Controller
         $request['fasiliti'] = json_encode($fasiliti);
         
         $mediaSosial_taman = collect($request['mediaSosial_taman'] ?? [])
+            ->filter(function($item) {
+                return $item !== null;
+            })
             ->map(function($item) {
                 return $item;
             })
             ->toArray();
         $request['mediaSosial_taman'] = json_encode($mediaSosial_taman);
 
+        // dd($request->all());
+
         $filenames = [];
         $gambar_taman = json_decode($ePALM->gambar_taman, true);
-        for ($i = 1; $i <= 4; $i++) {
-            $inputField = 'Xgambar_input_modal_' . $i;
+        for ($i = 1; $i <= 6; $i++) {
+            $inputField = 'XGIM_' . $i;
+            $inputField2 = 'Xgambar_input_modal_' . $i;
             if ($request->hasFile($inputField)) {
                 $file = $request->file($inputField);
                 
                 if ($file->isValid()) {
-                    $folderName = str_replace(' ', '_', $request->input('nama_taman'));
+                    $folderName = str_replace(' ', '_', $ePALM->id_taman.' '.$request->input('nama_taman'));
                     $filename = time() . '_' . $i . '.' . $file->extension();
                     $file->storeAs('public/uploads/ePALM/' . $folderName, $filename);
                     $filenames[$inputField] = $filename;
@@ -255,12 +370,27 @@ class ePALMController extends Controller
             }else{
                 if(isset($gambar_taman[$inputField])){
                     $filenames[$inputField] = $gambar_taman[$inputField];
+                }elseif(isset($gambar_taman[$inputField2])){
+                    $filenames[$inputField] = $gambar_taman[$inputField2];
                 }
             }
         }
+        foreach ($request->input('delete_images', []) as $deletedField) {
+            unset($filenames[$deletedField]);
+        }        
         $request->merge(['gambar_taman' => json_encode($filenames)]);
-
+        // dd($request->all());
         $requestData = $request->all();
+        if ($request->hasFile('fail_konsep')) {
+            $file = $request->file('fail_konsep');
+            
+            if ($file->isValid()) {
+                $folderName = str_replace(' ', '_', $ePALM->id_taman.' '.$request->input('nama_taman'));
+                $filename = time() . '.' . $file->extension();
+                $file->storeAs('public/uploads/ePALM/' . $folderName, $filename);
+            }
+            $requestData['fail_konsep'] = $filename;
+        }
 
         $paparan_portal = isset($requestData['status']) && $requestData['status'] == "on" ? "approved" : "draft";
 
@@ -317,35 +447,35 @@ class ePALMController extends Controller
                 }
                 // dd($btm_email);
                 $nama_pemohon = isset($PBTArr->pbt_name) ? $PBTArr->pbt_name : 'Jabatan Landskap Negara';
-                if (config('mail.enabled')) {
-                    try {
-                        $emailData = [
-                            "email_to" => $user_email,
-                            "email_cc" => [
-                                ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
-                                ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
-                            ],//$btm_email,
-                            "subject" => 'Modul Pengurusan Taman & Landskap (ePALM)',
-                        ];
+                // if (config('mail.enabled')) {
+                //     try {
+                //         $emailData = [
+                //             "email_to" => $user_email,
+                //             "email_cc" => [
+                //                 ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
+                //                 ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
+                //             ],//$btm_email,
+                //             "subject" => 'Modul Pengurusan Taman & Landskap (ePALM)',
+                //         ];
         
-                        Mail::send('pengurusan.ePALM.mails.perubahan', ['epalm' => $ePALM_draf], function ($message) use ($emailData) {
-                            $message->subject($emailData["subject"]);
-                            // Loop through to array and add each email
-                            foreach ($emailData['email_to'] as $to) {
-                                $message->to($to['address'], $to['name']);
-                            }
+                //         Mail::send('pengurusan.ePALM.mails.perubahan', ['epalm' => $ePALM_draf], function ($message) use ($emailData) {
+                //             $message->subject($emailData["subject"]);
+                //             // Loop through to array and add each email
+                //             foreach ($emailData['email_to'] as $to) {
+                //                 $message->to($to['address'], $to['name']);
+                //             }
         
-                            // Loop through cc array and add each email
-                            foreach ($emailData['email_cc'] as $cc) {
-                                $message->cc($cc['address'], $cc['name']);
-                            }
-                        });
-                    } catch (\Exception $exception) {
-                        \Log::error("Error sending registration email: " . $exception->getMessage());
-                       dd("Error sending registration email: " . $exception->getMessage());
-                    }
-                    // dd($emailData);
-                }
+                //             // Loop through cc array and add each email
+                //             foreach ($emailData['email_cc'] as $cc) {
+                //                 $message->cc($cc['address'], $cc['name']);
+                //             }
+                //         });
+                //     } catch (\Exception $exception) {
+                //         \Log::error("Error sending registration email: " . $exception->getMessage());
+                //        dd("Error sending registration email: " . $exception->getMessage());
+                //     }
+                //     // dd($emailData);
+                // }
                 return redirect()->route('pengurusan.ePALM.edit', [$ePALM_draf])->with('successMessage', 'Maklumat taman telah berjaya dikemaskini');
             }
         } elseif ($request->input('action') === 'approve') {
@@ -381,7 +511,8 @@ class ePALMController extends Controller
                 $dataToUpdate = $ePALM_approve_draf->getAttributes();
                 $ePALM_approve->update($dataToUpdate);
             }
-            return redirect()->route('pengurusan.ePALM.index')->with('successMessage', 'Maklumat taman telah berjaya dikemaskini');
+            // dd($ePALM_approve_draf->audits()->latest()->take(1)->get());
+            return redirect()->route('pengurusan.ePALM.index')->with('successMessage', 'Maklumat taman telah berjaya disahkan');
         }
         return redirect()->route('pengurusan.ePALM.index')->with('errorMessage', 'Maklumat taman tidak berjaya dikemaskini');
     }

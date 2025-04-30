@@ -13,6 +13,8 @@
                 {!! Form::model($ePALM, ['route' => ['pengurusan.ePALM.update', $ePALM], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
                 <div class="card-body table-hardscape form-hardscape text-sm">
                     
+                    
+
                     @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))
                         <div class="row" style="max-height: 40px; display: flex; justify-content: flex-end;">
                             <div class="row align-items-center">
@@ -34,20 +36,36 @@
                             display: none;
                         }
                         .inertShow {
-                            pointer-events: none; /* Ensure no interactions are possible */
+                            pointer-events: none;
                         }
 
                         .inertShow input,
                         .inertShow span:not(.parks span),
                         .inertShow textarea,
                         .inertShow select {
-                            background-color: rgb(215, 215, 215); /* Light grey background for input/select */
-                            color: rgb(65, 60, 60); /* Light grey text color */
-                            cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
-                            pointer-events: none; /* Ensure no interactions are possible */
+                            background-color: rgb(241, 241, 241);
+                            color: rgb(65, 60, 60);
+                            cursor: not-allowed;
+                            pointer-events: none;
                         }
                         #projek_table th:last-child, #projek_table td:last-child {
                             display: none;
+                        }
+                        @keyframes blink {
+                            0% {
+                                opacity: 1;
+                            }
+                            50% {
+                                opacity: 0;
+                            }
+                            100% {
+                                opacity: 1;
+                            }
+                        }
+
+                        .newC {
+                            animation: blink 3s infinite;
+                            background-color: rgb(255, 255, 255) !important;
                         }
                     </style>
                     <div>
@@ -115,21 +133,83 @@
                     {!! Form::button('Kembali', ['onclick' => "window.location='".route('pengurusan.ePALM.index')."'", 'class' => 'btn btn-secondary']) !!}
                     
                     {!! 
-                        Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini', ['onclick'=>"window.location='".route('pengurusan.ePALM.edit',$ePALM)."'", 'class'=>'btn bg-warning', Html::tooltip('Kemaskini Taman')]); 
+                        Form::button('<i class="fas fa-pencil-alt"></i>', ['onclick'=>"window.location='".route('pengurusan.ePALM.edit',$ePALM)."'", 'class'=>'btn bg-warning', Html::tooltip('Kemaskini Taman')]); 
                     !!}
-
                     @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))
                         {!! Form::button('<i class="fas fa-save"></i> Pengesahan', [
                             'class' => 'btn btn-primary', 
                             'type' => 'submit', 
                             'name' => 'action', 
+                            'id' => 'pengesahan', 
+                            'style' => 'display: none;', 
                             'value' => 'approve'
                         ]) !!}
                     @endif
+                    @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))
+                        <button type="button" class="btn btn-primary" id="triggerApprovalModal">
+                            <i class="fas fa-save"></i> Pengesahan
+                        </button>
+                    @endif
+
                 </div>
                 {!! Form::close() !!}
             </div>
         </div>
     </div>
 </div>
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmApprovalModal" tabindex="-1" aria-labelledby="confirmApprovalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmApprovalLabel">Pengesahan Perubahan</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">x</button>
+      </div>
+      <div class="modal-body">
+        <!-- <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="modalToggleStatus">
+          <label class="form-check-label" for="modalToggleStatus">Paparan ke portal</label>
+        </div> -->
+        <div class="row" style="max-height: 40px; display: flex; justify-content: flex-start;">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <p>Adakah anda ingin <strong>paparkan ke portal?</strong></p>
+                </div>
+                <div class="col-auto">
+                    <label class="switch">
+                        <input class="form-check-input" type="checkbox" id="modalToggleStatus">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        <button type="button" id="confirmApproveBtn" class="btn btn-primary">Sahkan</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggleInput = document.querySelector('input[name="status"]');
+        const modalToggle = document.getElementById('modalToggleStatus');
+        const approvalModal = new bootstrap.Modal(document.getElementById('confirmApprovalModal'));
+
+        document.getElementById('triggerApprovalModal').addEventListener('click', function () {
+            modalToggle.checked = toggleInput?.checked ?? false;
+            approvalModal.show();
+        });
+
+        document.getElementById('confirmApproveBtn').addEventListener('click', function () {
+            if (toggleInput) {
+                toggleInput.checked = modalToggle.checked;
+            }
+            document.getElementById('pengesahan').click();
+        });
+    });
+</script>
+
+
 @endsection

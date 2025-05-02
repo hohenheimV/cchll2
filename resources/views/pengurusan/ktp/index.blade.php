@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Kempen Tanam Pokok')
+@section('title', 'Maklumat Kempen Tanam Pokok')
 
 @section('content')
 <section class="content">
@@ -58,10 +58,10 @@
                                         <div class="btn-group">
                                             {!! Form::button('<i class="fas fa-search"></i>',
                                                 ['onclick'=>"window.location='".route('pengurusan.ktp.show',$ktp)."'",
-                                                'class'=>'btn bg-info btn-sm', Html::tooltip('Butiran Kempen Tanam Pokok')]) !!}
+                                                'class'=>'btn bg-info btn-sm', Html::tooltip('Butiran Maklumat')]) !!}
                                             {!! Form::button('<i class="fas fa-pencil-alt"></i>',
                                                 ['onclick'=>"window.location='".route('pengurusan.ktp.edit',$ktp)."'",
-                                                'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini Kempen Tanam Pokok')]) !!}
+                                                'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini Maklumat')]) !!}
                                             {!! Form::button('<i class="fas fa-trash"></i>', 
                                                 ['class'=>'btn btn-danger btn-sm',
                                                 'data-url'=>route('pengurusan.ktp.destroy',$ktp),

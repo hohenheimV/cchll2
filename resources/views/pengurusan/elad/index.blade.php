@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Pengurusan Rekabentuk Landskap (eLAD)')
+@section('title', 'Maklumat Rekabentuk Landskap')
 
 @section('content')
 <section class="content">
@@ -83,13 +83,13 @@
                                                         {!! Form::button('<i class="fas fa-search"></i>', [
                                                         'onclick' => "window.location='" . route('pengurusan.elad.show', $elad) . "'",
                                                         'class' => 'btn bg-info btn-sm',
-                                                        Html::tooltip('Butiran Rekabentuk Landskap'),
+                                                        Html::tooltip('Butiran Maklumat'),
                                                         ]) !!}
 
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
                                                         'onclick' => "window.location='" . route('pengurusan.elad.edit', $elad) . "'",
                                                         'class' => 'btn bg-warning btn-sm',
-                                                        Html::tooltip('Kemaskini Rekabentuk Landskap'),
+                                                        Html::tooltip('Kemaskini Maklumat'),
                                                         ]) !!}
 
                                                         {!! Form::button('<i class="fas fa-trash"></i>', [
@@ -162,13 +162,13 @@
                                                         {!! Form::button('<i class="fas fa-search"></i>', [
                                                         'onclick' => "window.location='" . route('pengurusan.elad.show', $elad) . "'",
                                                         'class' => 'btn bg-info btn-sm',
-                                                        Html::tooltip('Butiran Rekabentuk Landskap'),
+                                                        Html::tooltip('Butiran Maklumat'),
                                                         ]) !!}
 
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
                                                         'onclick' => "window.location='" . route('pengurusan.elad.edit', $elad) . "'",
                                                         'class' => 'btn bg-warning btn-sm',
-                                                        Html::tooltip('Kemaskini Rekabentuk Landskap'),
+                                                        Html::tooltip('Kemaskini Maklumat'),
                                                         ]) !!}
 
                                                         {!! Form::button('<i class="fas fa-trash"></i>', [

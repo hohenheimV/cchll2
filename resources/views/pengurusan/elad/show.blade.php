@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Butiran Pengurusan Rekabentuk Landskap(eLAD)')
+@section('title', 'Butiran Maklumat')
 
 @section('content')
     <div class="container-fluid">

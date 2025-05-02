@@ -94,13 +94,13 @@
                                                     {!! Form::button('<i class="fas fa-search"></i>', [
                                                         'onclick' => "window.location='" . route('pengurusan.eread.show', $eread) . "'",
                                                         'class' => 'btn bg-info btn-sm',
-                                                        Html::tooltip('Butiran R&D Landskap'),
+                                                        Html::tooltip('Butiran Maklumat'),
                                                     ]) !!}
 
                                                     {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
                                                         'onclick' => "window.location='" . route('pengurusan.eread.edit', $eread) . "'",
                                                         'class' => 'btn bg-warning btn-sm',
-                                                        Html::tooltip('Kemaskini R&D Landskap'),
+                                                        Html::tooltip('Kemaskini Maklumat'),
                                                     ]) !!}
 
                                                     {!! Form::button('<i class="fas fa-trash"></i>', [

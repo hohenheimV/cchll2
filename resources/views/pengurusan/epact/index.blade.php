@@ -2,7 +2,7 @@
 
 {{-- @section('title', 'Maklumat Polisi Landskap (ePACT)') --}}
 
-@section('title', 'Pentadbiran Kontrak dan Polisi Landskap(ePACT)')
+@section('title', 'Maklumat Pentadbiran Kontrak dan Polisi Landskap')
 
 @section('content')
 <section class="content">
@@ -95,13 +95,13 @@
                                                     {!! Form::button('<i class="fas fa-search"></i>', [
                                                         'onclick' => "window.location='" . route('pengurusan.epact.show', $epact) . "'",
                                                         'class' => 'btn bg-info btn-sm',
-                                                        Html::tooltip('Butiran Maklumat Polisi Landskap'),
+                                                        Html::tooltip('Butiran Maklumat'),
                                                     ]) !!}
 
                                                     {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
                                                         'onclick' => "window.location='" . route('pengurusan.epact.edit', $epact) . "'",
                                                         'class' => 'btn bg-warning btn-sm',
-                                                        Html::tooltip('Kemaskini Maklumat Polisi Landskap'),
+                                                        Html::tooltip('Kemaskini Maklumat'),
                                                     ]) !!}
 
                                                     {!! Form::button('<i class="fas fa-trash"></i>', [

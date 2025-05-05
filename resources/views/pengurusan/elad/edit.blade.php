@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Kemaskini Rekabentuk Landskap')
+@section('title', 'Kemaskini Maklumat')
 
 @section('content')
     <div class="container-fluid">
@@ -65,7 +65,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        {!! Form::button('Batal dan Kembali', [
+                        {!! Form::button('Kembali', [
                             'onclick' => "window.location='" . route('pengurusan.elad.index') . "'",
                             'class' => 'btn btn-secondary',
                         ]) !!}
@@ -86,7 +86,7 @@
             $('#eladForm').ajaxForm({
             complete: function(xhr) {
                 Swal.fire({
-                    title: 'Success',
+                    title: 'Berjaya',
                     text: 'Maklumat Berjaya Dikemaskini',
                     icon: 'success',
                     confirmButtonText: 'OK'

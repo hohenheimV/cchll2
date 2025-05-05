@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Daftar Kempen Tanam Pokok')
+@section('title', 'Daftar Maklumat')
 
 @section('content')
 <div class="container-fluid">
@@ -16,7 +16,7 @@
                     @include('pengurusan.ktp._form')
                 </div>
                 <div class="card-footer">
-                    {!! Form::button('Batal dan Kembali', ['onclick'=>"window.location='".route('pengurusan.ktp.index')."'",'class'=>'btn btn-secondary']) !!}
+                    {!! Form::button('Kembali', ['onclick'=>"window.location='".route('pengurusan.ktp.index')."'",'class'=>'btn btn-secondary']) !!}
                     {!! Form::button('Set Semula', ['type' => 'reset', 'class' => 'btn btn-warning']) !!}
                     {!! Form::button('<i class="fas fa-save"></i> Daftar', ['class'=>'btn btn-success','type'=>'submit']) !!}
                 </div>

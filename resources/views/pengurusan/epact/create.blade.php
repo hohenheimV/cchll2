@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Daftar Maklumat Polisi Landskap')
+@section('title', 'Daftar Maklumat')
 
 @section('content')
 <div class="container-fluid">
@@ -26,7 +26,7 @@
                         </div>
                     </div>
                 <div class="card-footer">
-                    {!! Form::button('Batal dan Kembali', ['onclick'=>"window.location='".route('pengurusan.epact.index')."'",'class'=>'btn btn-secondary']) !!}
+                    {!! Form::button('Kembali', ['onclick'=>"window.location='".route('pengurusan.epact.index')."'",'class'=>'btn btn-secondary']) !!}
                     {!! Form::button('<i class="fas fa-save"></i> Daftar', ['class'=>'btn btn-success','type'=>'submit']) !!}
                 </div>
                 {!! Form::close() !!}
@@ -43,7 +43,7 @@
             $('#epactForm').ajaxForm({
             complete: function(xhr) {
                 Swal.fire({
-                    title: 'Success',
+                    title: 'Berjaya',
                     text: 'Maklumat Berjaya Disimpan',
                     icon: 'success',
                     confirmButtonText: 'OK'

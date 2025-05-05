@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Kemaskini Maklumat Polisi Landskap')
+@section('title', 'Kemaskini Maklumat')
 
 @section('content')
     <div class="container-fluid">
@@ -48,7 +48,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        {!! Form::button('Batal dan Kembali', [
+                        {!! Form::button('Kembali', [
                             'onclick' => "window.location='" . route('pengurusan.epact.index') . "'",
                             'class' => 'btn btn-secondary',
                         ]) !!}

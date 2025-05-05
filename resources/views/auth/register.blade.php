@@ -601,8 +601,6 @@
                                     </label>
                                 </div>
                             </div>
-                        <!-- </div> -->
-                        <!-- <div class="row"> -->
                             
                         </div>
                     </div>
@@ -709,6 +707,7 @@
                 $('#state_PI').hide();
                 $('#negeri_pbt').hide();
                 $('#pengesahan').hide();
+                $('#acknowledgement').prop('disabled', true);
             } else if (accountType === 'Penggiat Industri') {
                 $pbtFields.hide();
                 $pbtFields.find('input, select').prop('disabled', true);
@@ -723,6 +722,7 @@
                 $('#state_PI').show();
                 $('#negeri_pbt').show();
                 $('#pengesahan').show();
+                $('#acknowledgement').prop('disabled', false);
                 $.ajax({
                     url: '/get-negeri',
                     type: 'GET',

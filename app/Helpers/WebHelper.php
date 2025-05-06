@@ -10,6 +10,7 @@ use App\Model\Slider;
 use App\Model\ePALM;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Crypt;
 
 if (!function_exists('human_file_size')) {
     /**
@@ -651,10 +652,10 @@ if (!function_exists('in_arrayi')) {
             }
             $html = '<div class="owl-carousel owl-theme">';
             if(!$ePALM->isEmpty()){
-                foreach ($ePALM as $article) {
-                    if(isset($article->gambar_taman)){
-                        $folderName = str_replace(' ', '_', $article->id_taman.' '.$article->nama_taman);
-                        $gambar_tamanData = json_decode($article->gambar_taman, true);
+                foreach ($ePALM as $park) {
+                    if(isset($park->gambar_taman)){
+                        $folderName = str_replace(' ', '_', $park->id_taman.' '.$park->nama_taman);
+                        $gambar_tamanData = json_decode($park->gambar_taman, true);
 
                         $Xgambar_input_modal_1 = isset($gambar_tamanData['Xgambar_input_modal_1']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_1'] : (isset($gambar_tamanData['XGIM_1']) ? $folderName.'/'.$gambar_tamanData['XGIM_1'] : null);
                         $Xgambar_input_modal_2 = isset($gambar_tamanData['Xgambar_input_modal_2']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_2'] : (isset($gambar_tamanData['XGIM_1']) ? $folderName.'/'.$gambar_tamanData['XGIM_1'] : null);
@@ -662,14 +663,14 @@ if (!function_exists('in_arrayi')) {
                         $Xgambar_input_modal_4 = isset($gambar_tamanData['Xgambar_input_modal_4']) ? $folderName.'/'.$gambar_tamanData['Xgambar_input_modal_4'] : (isset($gambar_tamanData['XGIM_1']) ? $folderName.'/'.$gambar_tamanData['XGIM_1'] : null);
                         // dd($gambar_tamanData);
                     }
-                    $nama = Str::limit($article->nama, 30);
-                    $keterangan_taman = Str::limit((($article->keterangan_taman)), 50);
-                    $nama_pbt = $article->nama_pbt;
-                    $negeri_taman = $article->negeri_taman;
+                    $nama = Str::limit($park->nama, 30);
+                    $keterangan_taman = Str::limit((($park->keterangan_taman)), 50);
+                    $nama_pbt = $park->nama_pbt;
+                    $negeri_taman = $park->negeri_taman;
 
                 
                     $html .= '<div class="item">';
-                    $html .= '<a href="/epalm-taman/'.$negeri_taman.'">';
+                    $html .= '<a href="/taman/'.Crypt::encryptString($park->id_taman).'">';
                     $html .= '<div class="card border">';
                     $html .= '<div class="embed-responsive embed-responsive-4by3">';
                     // $html .= '<img src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" class="card-img-top embed-responsive-item" alt="' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '">';

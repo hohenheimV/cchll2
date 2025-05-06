@@ -1,5 +1,5 @@
 @extends('layouts.website.secondary')
-@section('title', 'Direktori Maklumat Polisi Landskap')
+@section('title', 'Direktori Aktiviti Rakan Taman')
 
 @section('content')
 
@@ -62,13 +62,13 @@
                 <div class="col-12 col-lg-9">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title font-weight-bold my-1">{{ $MIB->taman }}</h3>
-                            <div class="d-flex justify-content-end" role="group" aria-label="First group">
+                            <h3 class="card-title font-weight-bold my-1">Direktori Aktiviti Rakan Taman</h3>
+                            {{--<div class="d-flex justify-content-end" role="group" aria-label="First group">
                                 {!! Form::button('Kembali', [
                                 'class'=>'btn btn-info btn-sm',
                                 'onclick' => "window.location='" . route('website.MIB') . "'"
                                 ]) !!}
-                            </div>
+                            </div>--}}
                         </div>
 
                         <div class="card-body">
@@ -91,7 +91,9 @@
                                                 <tr>
                                                     <th class="text-center align-middle w-5">No.</th>
                                                     <th class="text-center align-middle">Nama Aktviti</th>
-                                                    <th class="text-center align-middle w-20">Tarikh Laporan</th>
+                                                    <th class="text-center align-middle w-20">Taman Perumahan</th>
+                                                    <th class="text-center align-middle w-20">Pihak Berkuasa Tempatan</th>
+                                                    <!-- <th class="text-center align-middle w-20">Tarikh Laporan</th> -->
                                                     <th class="text-center align-middle w-5">Tindakan</th>
                                                 </tr>
                                             </thead>
@@ -101,25 +103,42 @@
                                                 @forelse($MIB_laporan as $laporan)
                                                 <tr>
                                                     <td>{{ $index++ }}</td>
-                                                    <td>{!! $laporan->name !!}</td>
-                                                    <td class="text-center">{!! $laporan->created_at->format('d-m-Y') !!}</td>
+                                                    <td>{!! ucwords(strtolower($laporan->name)) !!}</td>
+                                                    <td>{{ ucwords(strtolower($laporan->taman)) }}</td>
+                                                    <td>{{ ucwords(strtolower($laporan->mib->pbt)) }}</td>
+                                                    <!-- <td class="text-center">{!! $laporan->created_at->format('d-m-Y') !!}</td> -->
                                                     <td class="text-center">
                                                         <?php
-                                                        if(isset($laporan->fail)){
-                                                            $folderName = str_replace(' ', '_', $MIB->taman ?? ($laporan->taman ?? 'temp'));
-                                                            $gambarData = $laporan->fail;
+                                                        if(isset($laporan->gambar)){
+                                                            $folderName = str_replace(' ', '_', $laporan->id_rakan.' '.($laporan->taman ?? 'temp'));
+                                                            $gambarData = $laporan->gambar;
                                     
                                                             $gambar_input_modal_1 = isset($gambarData['gambar_input_modal_1']) ? $folderName.'/'.$gambarData['gambar_input_modal_1'] : null;
                                                             $gambar_input_modal_2 = isset($gambarData['gambar_input_modal_2']) ? $folderName.'/'.$gambarData['gambar_input_modal_2'] : null;
                                                             $gambar_input_modal_3 = isset($gambarData['gambar_input_modal_3']) ? $folderName.'/'.$gambarData['gambar_input_modal_3'] : null;
                                                             $gambar_input_modal_4 = isset($gambarData['gambar_input_modal_4']) ? $folderName.'/'.$gambarData['gambar_input_modal_4'] : null;
-                                                            // dd($gambarData);
+                                                            // dd($gambar_input_modal_1);
                                                         }else{
                                                             $gambar_input_modal_1 = null;
                                                             $gambar_input_modal_2 = null;
                                                             $gambar_input_modal_3 = null;
                                                             $gambar_input_modal_4 = null;
                                                         }
+                                                        // if(isset($laporan->fail)){
+                                                        //     $folderName = str_replace(' ', '_', ($laporan->taman ?? 'temp'));
+                                                        //     $gambarData = $laporan->fail;
+                                    
+                                                        //     $gambar_input_modal_1 = isset($gambarData['gambar_input_modal_1']) ? $folderName.'/'.$gambarData['gambar_input_modal_1'] : null;
+                                                        //     $gambar_input_modal_2 = isset($gambarData['gambar_input_modal_2']) ? $folderName.'/'.$gambarData['gambar_input_modal_2'] : null;
+                                                        //     $gambar_input_modal_3 = isset($gambarData['gambar_input_modal_3']) ? $folderName.'/'.$gambarData['gambar_input_modal_3'] : null;
+                                                        //     $gambar_input_modal_4 = isset($gambarData['gambar_input_modal_4']) ? $folderName.'/'.$gambarData['gambar_input_modal_4'] : null;
+                                                        //     // dd($gambarData);
+                                                        // }else{
+                                                        //     $gambar_input_modal_1 = null;
+                                                        //     $gambar_input_modal_2 = null;
+                                                        //     $gambar_input_modal_3 = null;
+                                                        //     $gambar_input_modal_4 = null;
+                                                        // }
                                                         ?>
                                                         <div class="btn-group">
                                                             <button 
@@ -266,10 +285,18 @@
                     <br>
                     <h5>Gambar Aktiviti</h5>
                     <div class="park-images">
-                        <img id="parkImage1" src="" alt="Park Image 1" class="park-img" style="border: 0.5px solid black;">
-                        <img id="parkImage2" src="" alt="Park Image 2" class="park-img" style="border: 0.5px solid black;">
-                        <img id="parkImage3" src="" alt="Park Image 3" class="park-img" style="border: 0.5px solid black;">
-                        <img id="parkImage4" src="" alt="Park Image 4" class="park-img" style="border: 0.5px solid black;">
+                        <a id="parkLink1" href="javascript:void(0)">
+                            <img id="parkImage1" src="" alt="Park Image 1" class="park-img" style="border: 0.5px solid black;">
+                        </a>
+                        <a id="parkLink2" href="javascript:void(0)">
+                            <img id="parkImage2" src="" alt="Park Image 2" class="park-img" style="border: 0.5px solid black;">
+                        </a>
+                        <a id="parkLink3" href="javascript:void(0)">
+                            <img id="parkImage3" src="" alt="Park Image 3" class="park-img" style="border: 0.5px solid black;">
+                        </a>
+                        <a id="parkLink4" href="javascript:void(0)">
+                            <img id="parkImage4" src="" alt="Park Image 4" class="park-img" style="border: 0.5px solid black;">
+                        </a>
                     </div>
                     <br>
 
@@ -298,40 +325,68 @@
 
                     let imagePath = `/storage/uploads`;
                     let img1 = document.getElementById('parkImage1');
+                    let link1 = document.getElementById('parkLink1');
                     if (fail1) {
                         img1.src = `${imagePath}/MIB/${fail1}`;
+                        link1.href = `${imagePath}/MIB/${fail1}`;
+                        link1.target = '_blank';
                         img1.onerror = function () {
                             img1.src = `${imagePath}/no-photos.png`;
+                            link1.href = 'javascript:void(0)';
+                            link1.target = '';
                         };
                     } else {
                         img1.src = `${imagePath}/no-photos.png`;
+                            link1.href = 'javascript:void(0)';
+                            link1.target = '';
                     }
                     let img2 = document.getElementById('parkImage2');
+                    let link2 = document.getElementById('parkLink2');
                     if (fail2) {
                         img2.src = `${imagePath}/MIB/${fail2}`;
+                        link2.href = `${imagePath}/MIB/${fail2}`;
+                        link2.target = '_blank';
                         img2.onerror = function () {
                             img2.src = `${imagePath}/no-photos.png`;
+                            link2.href = 'javascript:void(0)';
+                            link2.target = '';
                         };
                     } else {
                         img2.src = `${imagePath}/no-photos.png`;
+                            link2.href = 'javascript:void(0)';
+                            link2.target = '';
                     }
                     let img3 = document.getElementById('parkImage3');
+                    let link3 = document.getElementById('parkLink3');
                     if (fail3) {
                         img3.src = `${imagePath}/MIB/${fail3}`;
+                        link3.href = `${imagePath}/MIB/${fail3}`;
+                        link3.target = '_blank';
                         img3.onerror = function () {
                             img3.src = `${imagePath}/no-photos.png`;
+                            link3.href = 'javascript:void(0)';
+                            link3.target = '';
                         };
                     } else {
                         img3.src = `${imagePath}/no-photos.png`;
+                            link3.href = 'javascript:void(0)';
+                            link3.target = '';
                     }
                     let img4 = document.getElementById('parkImage4');
+                    let link4 = document.getElementById('parkLink4');
                     if (fail4) {
                         img4.src = `${imagePath}/MIB/${fail4}`;
+                        link4.href = `${imagePath}/MIB/${fail4}`;
+                        link4.target = '_blank';
                         img4.onerror = function () {
                             img4.src = `${imagePath}/no-photos.png`;
+                            link4.href = 'javascript:void(0)';
+                            link4.target = '';
                         };
                     } else {
                         img4.src = `${imagePath}/no-photos.png`;
+                        link4.href = 'javascript:void(0)';
+                        link4.target = '';
                     }
                     
                     // Update the modal's content
@@ -346,8 +401,18 @@
                 });
 
                 $('#readModal').on('hidden.bs.modal', function () {
-                    $(this).find('#modalNama').text('');
-                    $(this).find('.modal-content').scrollTop(0);
+                    const modal = $(this);
+                    for (let i = 1; i <= 4; i++) {
+                        const img = document.getElementById(`parkImage${i}`);
+                        const link = document.getElementById(`parkLink${i}`);
+                        
+                        if (img) img.src = '';
+                        if (link) link.href = '#';
+                    }
+
+                    modal.find('#modalNama').text('');
+                    modal.find('#laporan').text('');
+                    modal.find('.modal-content').scrollTop(0);
                 });
             });
         </script>

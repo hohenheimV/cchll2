@@ -38,4 +38,9 @@ class MIB_laporan extends Model implements Auditable
         'fail' => 'array',
         'gambar' => 'array',
     ];
+
+    public function mib()
+    {
+        return $this->belongsTo(MIB::class, 'id_rakan', 'id');
+    }
 }

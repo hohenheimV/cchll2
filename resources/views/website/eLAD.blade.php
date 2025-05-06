@@ -84,7 +84,7 @@
                                                 <th class="w-1">Bil.</th>
                                                 <th class="w-15">Tajuk </th>
                                                 <th class="text-center w-5">Kategori</th>
-                                                <th class="text-center w-5">Tahun</th>
+                                                <th class="text-center w-5">Tahun Penerbitan</th>
                                                 <th class="w-3">Saiz</th>
                                                 <th class="text-center w-1">Tindakan</th>
                                                 
@@ -103,10 +103,10 @@
                                                             {{ $rekabentuk->kategori->name ?? 'Tiada Maklumat' }}
                                                         </td>
                                                         <td class="text-center">
-                                                            {!! Html::datetime($rekabentuk->tarikh, 'd-m-Y') !!}
+                                                            {!! Html::datetime($rekabentuk->tarikh, 'Y') !!}
                                                         </td>
                                                         <td style="text-align: center;">
-                                                            <!-- <a href="{{ asset($rekabentuk->dokumen ? 'storage/images/shares/elad/dokumen/' . $rekabentuk->dokumen : 'img/no-photos.png') }}" 
+                                                            <!-- <a href="{{ asset($rekabentuk->dokumen ? 'storage/uploads/elad/dokumen/' . $rekabentuk->dokumen : 'img/no-photos.png') }}" 
                                                                 data-toggle="lightbox" 
                                                                 data-title="{{ $rekabentuk->tajuk }}" 
                                                                 data-gallery="gallery"
@@ -118,22 +118,26 @@
                                                                     <canvas id="pdf-render-{{$rekabentuk->id}}" style="width: 100%; height: 100%; object-fit: contain; display: none;"></canvas>
                                                                 </div>
                                                             </a> -->
-                                                            {{ $rekabentuk->sizeName . ' MB' }}
+                                                            {{ ($rekabentuk->dokumen && file_exists(public_path('storage/uploads/elad/dokumen/' . $rekabentuk->dokumen))) ? $rekabentuk->sizeName . ' MB' : 'Tiada dokumen' }}
                                                         </td>
                                                         <td class="text-center">
                                                             <div class="btn-group">
-                                                                @if ($rekabentuk->dokumen && file_exists(public_path('storage/images/shares/elad/dokumen/' . $rekabentuk->dokumen)))
-                                                                    <button 
+                                                                @if ($rekabentuk->dokumen && file_exists(public_path('storage/uploads/elad/dokumen/' . $rekabentuk->dokumen)))
+                                                                    <!-- <button 
                                                                         type="button" 
                                                                         class="btn btn-primary btn-sm" 
                                                                         data-title="{{ $rekabentuk->tajuk }}" 
-                                                                        data-elad="{{ asset($rekabentuk->dokumen ? 'storage/images/shares/elad/dokumen/' . $rekabentuk->dokumen : 'img/no-photos.png') }}"
+                                                                        data-elad="{{ asset($rekabentuk->dokumen ? 'storage/uploads/elad/dokumen/' . $rekabentuk->dokumen : 'img/no-photos.png') }}"
                                                                         data-toggle="modal" 
                                                                         data-target="#ladModal"
                                                                     >
                                                                         <i class="fas fa-search"></i>
-                                                                    </button>
-                                                                    <a href="{{ asset('storage/images/shares/elad/dokumen/' . $rekabentuk->dokumen) }}" target="_blank" download>
+                                                                    </button> -->
+                                                                    <a href="{{ asset('storage/uploads/elad/dokumen/' . $rekabentuk->dokumen) }}" 
+                                                                    target="_blank" type="button" class="btn btn-primary btn-sm" >
+                                                                        <i class="fas fa-search"></i>
+                                                                    </a>
+                                                                    <a href="{{ asset('storage/uploads/elad/dokumen/' . $rekabentuk->dokumen) }}" target="_blank" download>
                                                                         {!! Form::button('<i class="fas fa-download"></i>', [
                                                                             'class' => 'btn btn-success btn-sm'
                                                                         ]) !!}
@@ -251,7 +255,7 @@
 
                 function renderPDF(elads) {
                     elads.data.forEach(elad => {
-                        const url = elad.dokumen ? `{{ asset('storage/images/shares/elad/dokumen') }}/${elad.dokumen}` : `{{ asset('img/no-photos.png') }}`;
+                        const url = elad.dokumen ? `{{ asset('storage/uploads/elad/dokumen') }}/${elad.dokumen}` : `{{ asset('img/no-photos.png') }}`;
 
                         pdfjsLib.getDocument(url).promise.then(function(pdf) {
                             return pdf.getPage(1);

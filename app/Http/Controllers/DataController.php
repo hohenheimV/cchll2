@@ -49,9 +49,30 @@ class DataController extends Controller
         }
         // dd($request->all());
         // Validate the uploaded file
-        $request->validate([
-            'large_file' => 'required|file|mimes:jpeg,jpg,png,pdf,zip,mp4,kml,kmz,cad,autocad',
-        ]);
+        // $request->validate([
+        //     'large_file' => 'required|file|mimes:jpeg,jpg,png,pdf,zip,mp4,kml,kmz,cad,autocad',
+        // ]);
+        if ($request->input('chunk_index') == 0) {
+            $mime = $request->file('large_file')->getMimeType();
+            $allowedMimes = [
+                'image/jpeg',
+                'image/png',
+                'application/pdf',
+                'application/zip',
+                'video/mp4',
+                'application/vnd.google-earth.kml+xml',
+                'application/vnd.google-earth.kmz',
+                'application/acad',
+                'application/x-autocad',
+                'application/x-dwg',
+                'image/vnd.dwg',
+                'application/octet-stream',
+            ];
+        
+            if (!in_array($mime, $allowedMimes)) {
+                return response()->json(['error' => 'Invalid file type.'], 422);
+            }
+        }
         
         // Ensure the file is uploaded
         if (!$request->hasFile('large_file')) {

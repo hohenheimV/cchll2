@@ -1,5 +1,5 @@
 @extends('layouts.website.secondary')
-@section('title', 'Direktori Maklumat Polisi Landskap')
+@section('title', 'Direktori Pentadbiran Kontrak dan Polisi Landskap')
 
 @section('content')
 
@@ -61,7 +61,7 @@
                 <div class="col-12 col-lg-9">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title font-weight-bold my-1">Direktori Maklumat Polisi Landskap</h3>
+                            <h3 class="card-title font-weight-bold my-1">Direktori Pentadbiran Kontrak dan Polisi Landskap</h3>
                         </div>
 
                         <div class="card-body">
@@ -84,7 +84,7 @@
                                                 <th class="w-1">Bil.</th>
                                                 <th class="w-15">Tajuk </th>
                                                 <th class="text-center w-5">Kategori</th>
-                                                <th class="text-center w-5">Tahun</th>
+                                                <th class="text-center w-5">Tahun Penerbitan</th>
                                                 <th class="w-3">Saiz</th>
                                                 <th class="text-center w-1">Tindakan</th>
                                                 
@@ -103,10 +103,10 @@
                                                             {{ $epact->kategori->name ?? 'Tiada Maklumat' }}
                                                         </td>
                                                         <td class="text-center">
-                                                            {!! Html::datetime($epact->tarikh, 'd-m-Y') !!}
+                                                            {!! Html::datetime($epact->tarikh, 'Y') !!}
                                                         </td>
                                                         <td style="text-align: center;">
-                                                            <!-- <a href="{{ asset($epact->dokumen ? 'storage/images/shares/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}" 
+                                                            <!-- <a href="{{ asset($epact->dokumen ? 'storage/uploads/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}" 
                                                                 data-toggle="lightbox" 
                                                                 data-title="{{ $epact->tajuk }}" 
                                                                 data-gallery="gallery"
@@ -118,25 +118,37 @@
                                                                     <canvas id="pdf-render-{{$epact->id}}" style="width: 100%; height: 100%; object-fit: contain; display: none;"></canvas>
                                                                 </div>
                                                             </a> -->
-                                                            {{ $epact->sizeName . ' MB' }}
+                                                            {{ ($epact->dokumen && file_exists(public_path('storage/uploads/epact/dokumen/' . $epact->dokumen))) ? $epact->sizeName . ' MB' : 'Tiada dokumen' }}
                                                         </td>
                                                         <td class="text-center">
                                                             <div class="btn-group">
-                                                                @if ($epact->dokumen && file_exists(public_path('storage/images/shares/epact/dokumen/' . $epact->dokumen)))
-                                                                    <button 
+                                                                @if ($epact->dokumen && file_exists(public_path('storage/uploads/epact/dokumen/' . $epact->dokumen)))
+                                                                    <!-- <button 
                                                                         type="button" 
                                                                         class="btn btn-primary btn-sm" 
                                                                         data-title="{{ $epact->tajuk }}" 
-                                                                        data-epact="{{ asset($epact->dokumen ? 'storage/images/shares/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}"
+                                                                        data-epact="{{ asset($epact->dokumen ? 'storage/uploads/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}"
                                                                         data-toggle="modal" 
                                                                         data-target="#readModal"
                                                                     >
                                                                         <i class="fas fa-search"></i>
-                                                                    </button>
-                                                                    <a href="{{ asset('storage/images/shares/epact/dokumen/' . $epact->dokumen) }}" target="_blank" download>
-                                                                        {!! Form::button('<i class="fas fa-download"></i>', [
-                                                                            'class' => 'btn btn-success btn-sm'
-                                                                        ]) !!}
+                                                                    </button> -->
+                                                                    <a href="{{ asset('storage/uploads/epact/dokumen/' . $epact->dokumen) }}" 
+                                                                    target="_blank" type="button" class="btn btn-primary btn-sm" >
+                                                                        <i class="fas fa-search"></i>
+                                                                    </a>
+                                                                    @if($epact->kate == '182')
+                                                                        <a href="{{ asset('storage/uploads/epact/dokumen/' . $epact->dokumen) }}" target="_blank" download>
+                                                                            {!! Form::button('<i class="fas fa-download"></i>', [
+                                                                                'class' => 'btn btn-success btn-sm'
+                                                                            ]) !!}
+                                                                        </a>
+                                                                    @endif
+                                                                @endif
+                                                                @if (isset($epact->url))
+                                                                    <a href="{{ $epact->url ?? 'javascript:void(0)' }}" 
+                                                                    target="{{ $epact->url ? '_blank' : '' }}" type="button" class="btn btn-warning btn-sm" >
+                                                                        <i class="fas fa-link"></i>
                                                                     </a>
                                                                 @endif
                                                             </div>
@@ -250,7 +262,7 @@
                 const epacts = @json($epacts);
 
                 epacts.data.forEach(epact => {
-                    const url = epact.dokumen ? `{{ asset('storage/images/shares/epact/dokumen') }}/${epact.dokumen}` : `{{ asset('img/no-photos.png') }}`;
+                    const url = epact.dokumen ? `{{ asset('storage/uploads/epact/dokumen') }}/${epact.dokumen}` : `{{ asset('img/no-photos.png') }}`;
 
                     pdfjsLib.getDocument(url).promise.then(function(pdf) {
                         return pdf.getPage(1);

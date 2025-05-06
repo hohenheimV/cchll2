@@ -1,5 +1,5 @@
 @extends('layouts.website.secondary')
-@section('title', 'Direktori R&D Landskap')
+@section('title', 'Direktori Penyelidikan dan Penerbitan Landskap')
 
 @section('content')
 
@@ -61,7 +61,7 @@
                 <div class="col-12 col-lg-9">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title font-weight-bold my-1">Direktori R&D Landskap</h3>
+                            <h3 class="card-title font-weight-bold my-1">Direktori Penyelidikan dan Penerbitan Landskap</h3>
                         </div>
 
                         <div class="card-body">
@@ -84,7 +84,7 @@
                                                 <th class="w-1">Bil.</th>
                                                 <th class="w-15">Tajuk </th>
                                                 <th class="text-center w-5">Kategori</th>
-                                                <th class="text-center w-5">Tahun</th>
+                                                <th class="text-center w-5">Tahun Penerbitan</th>
                                                 <th class="w-3">Saiz</th>
                                                 <th class="text-center w-1">Tindakan</th>
                                                 
@@ -103,10 +103,10 @@
                                                             {{ $eread->kategori->name ?? 'Tiada Maklumat' }}
                                                         </td>
                                                         <td class="text-center">
-                                                            {!! Html::datetime($eread->tarikh, 'd-m-Y') !!}
+                                                            {!! Html::datetime($eread->tarikh, 'Y') !!}
                                                         </td>
                                                         <td style="text-align: center;">
-                                                            <!-- <a href="{{ asset($eread->dokumen ? 'storage/images/shares/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}" 
+                                                            <!-- <a href="{{ asset($eread->dokumen ? 'storage/uploads/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}" 
                                                                 data-toggle="lightbox" 
                                                                 data-title="{{ $eread->tajuk }}" 
                                                                 data-gallery="gallery"
@@ -118,22 +118,26 @@
                                                                     <canvas id="pdf-render-{{$eread->id}}" style="width: 100%; height: 100%; object-fit: contain; display: none;"></canvas>
                                                                 </div>
                                                             </a> -->
-                                                            {{ $eread->sizeName . ' MB' }}
+                                                            {{ ($eread->dokumen && file_exists(public_path('storage/uploads/eread/dokumen/' . $eread->dokumen))) ? $eread->sizeName . ' MB' : 'Tiada dokumen' }}
                                                         </td>
                                                         <td class="text-center">
                                                             <div class="btn-group">
-                                                                @if ($eread->dokumen && file_exists(public_path('storage/images/shares/eread/dokumen/' . $eread->dokumen)))
-                                                                    <button 
+                                                                @if ($eread->dokumen && file_exists(public_path('storage/uploads/eread/dokumen/' . $eread->dokumen)))
+                                                                    <!-- <button 
                                                                         type="button" 
                                                                         class="btn btn-primary btn-sm" 
                                                                         data-title="{{ $eread->tajuk }}" 
-                                                                        data-eread="{{ asset($eread->dokumen ? 'storage/images/shares/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}"
+                                                                        data-eread="{{ asset($eread->dokumen ? 'storage/uploads/eread/dokumen/' . $eread->dokumen : 'img/no-photos.png') }}"
                                                                         data-toggle="modal" 
                                                                         data-target="#readModal"
                                                                     >
                                                                         <i class="fas fa-search"></i>
-                                                                    </button>
-                                                                    <a href="{{ asset('storage/images/shares/eread/dokumen/' . $eread->dokumen) }}" target="_blank" download>
+                                                                    </button> -->
+                                                                    <a href="{{ asset('storage/uploads/eread/dokumen/' . $eread->dokumen) }}" 
+                                                                    target="_blank" type="button" class="btn btn-primary btn-sm" >
+                                                                        <i class="fas fa-search"></i>
+                                                                    </a>
+                                                                    <a href="{{ asset('storage/uploads/eread/dokumen/' . $eread->dokumen) }}" target="_blank" download>
                                                                         {!! Form::button('<i class="fas fa-download"></i>', [
                                                                             'class' => 'btn btn-success btn-sm'
                                                                         ]) !!}
@@ -250,7 +254,7 @@
                 const ereads = @json($ereads);
 
                 ereads.data.forEach(eread => {
-                    const url = eread.dokumen ? `{{ asset('storage/images/shares/eread/dokumen') }}/${eread.dokumen}` : `{{ asset('img/no-photos.png') }}`;
+                    const url = eread.dokumen ? `{{ asset('storage/uploads/eread/dokumen') }}/${eread.dokumen}` : `{{ asset('img/no-photos.png') }}`;
 
                     pdfjsLib.getDocument(url).promise.then(function(pdf) {
                         return pdf.getPage(1);

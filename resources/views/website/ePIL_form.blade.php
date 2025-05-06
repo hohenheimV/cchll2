@@ -32,7 +32,7 @@
 
                             $.each(data, function(key, value) {
                                 // Add each Negeri to the dropdown
-                                $('#negeri').append('<option value="' + value.kod_negeri + '">' + capitalizeWords(value.nama_negeri) + '</option>');
+                                $('#negeri').append('<option value="' + value.kod_negeri + '">' + (value.nama_negeri) + '</option>');
                             });
 
                             var negeriSelected = "{{ isset($keyword) ? $keyword : '' }}";
@@ -103,9 +103,9 @@
                                 @endif
                                 <tr>
                                     <td>{{ $index++ }}</td>
-                                    <td>{{ $pelan->nama_pelan}}</td>
+                                    <td>{{ ucwords(strtolower($pelan->nama_pelan)) }}</td>
                                     <td>
-                                        {{ $pelan->nama_pbt }}
+                                        {{ ucwords(strtolower($pelan->nama_pbt)) }}
                                     </td>
                                     <td style="text-align: center;">
                                         <?php 
@@ -157,7 +157,7 @@
                                                 data-toggle="modal" 
                                                 data-target="#pelanModal"
                                             > -->
-                                            <a href="{{ asset($pelan->gambar_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan : 'storage/uploads/no-photos.png' ) }}" 
+                                            <a href="{{ asset($pelan->gambar_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan : 'javascript:void(0)' ) }}" 
                                             target="_blank" type="button" class="btn btn-primary btn-sm" >
                                                 <i class="fas fa-search"></i>
                                             </a>

@@ -986,23 +986,10 @@
                                 //$fieldKey2 = "Xgambar_input_modal_$i";
                                 //$imageFields[$fieldKey] = isset($gambar_tamanData[$fieldKey]) ? $folderName . '/' . $gambar_tamanData[$fieldKey] : (isset($gambar_tamanData[$fieldKey2]) ? $folderName . '/' . $gambar_tamanData[$fieldKey2] : null);
 
-                                $fieldKeyX = "XGIM_$i";
-                                $fieldKeyAltX = "Xgambar_input_modal_$i";
-                                $fieldKeyNonX = "GIM_$i";
-                                $fieldKeyAltNonX = "gambar_input_modal_$i";
 
-                                // Decide which actual key has value
-                                if (isset($gambar_tamanData[$fieldKeyX])) {
-                                    $imageFields[$fieldKeyX] = $folderName . '/' . $gambar_tamanData[$fieldKeyX];
-                                } elseif (isset($gambar_tamanData[$fieldKeyAltX])) {
-                                    $imageFields[$fieldKeyAltX] = $folderName . '/' . $gambar_tamanData[$fieldKeyAltX];
-                                } elseif (isset($gambar_tamanData[$fieldKeyNonX])) {
-                                    $imageFields[$fieldKeyNonX] = $rootFolder . '/' . $folderName . '/' . $gambar_tamanData[$fieldKeyNonX];
-                                } elseif (isset($gambar_tamanData[$fieldKeyAltNonX])) {
-                                    $imageFields[$fieldKeyAltNonX] = $rootFolder . '/' . $folderName . '/' . $gambar_tamanData[$fieldKeyAltNonX];
-                                } else {
-                                    $imageFields["XGIM_$i"] = null;
-                                }
+                                $fieldKeyX = "XGIM_$i";
+                                $fieldKeyX2 = "Xgambar_input_modal_$i";
+                                $imageFields[$fieldKeyX] = isset($gambar_tamanData["XGIM_$i"]) ? $folderName . '/' . $gambar_tamanData["XGIM_$i"] : (isset($gambar_tamanData[$fieldKeyX2]) ? $folderName . '/' . $gambar_tamanData[$fieldKeyX2] : null);
                             }
                             //dd($gambar_tamanData);
                         }else{

@@ -66,7 +66,7 @@
 
             <div class="form-group col-md-5">
                 {{ Form::label('pbt', 'Pihak Berkuasa Tempatan') }}
-                <input value="{{ isset($pbt) ? $pbt : $entitiLandskapUnik->pbt ?? '' }}" {{ ($pbt ?? $entitiLandskapUnik->pbt ?? false) ? 'disabled' : '' }} type="text" name="pbt" id="pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" >
+                <input value="{{ isset($pbt) ? $pbt : $entitiLandskapUnik->pbt ?? '' }}" {{ ($pbt ?? $entitiLandskapUnik->pbt ?? false) ? 'inert' : '' }} type="text" name="pbt" id="pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" >
                 <datalist id="data_pbt">
                 </datalist>
             </div>

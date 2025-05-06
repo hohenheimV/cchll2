@@ -54,9 +54,9 @@
 
                             if (selectedKeyword) {
                                 // Redirect to the route with the selected keyword
-                                window.location.href = "/epalm-taman/" + selectedKeyword;
+                                window.location.href = "/epalm/" + selectedKeyword;
                             } else {
-                                window.location.href = "/epalm-taman";
+                                window.location.href = "/epalm";
                             }
                         }
                     </script>
@@ -121,7 +121,7 @@
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group">
-                                            <button 
+                                            <button style="display: none;" 
                                                 type="button" 
                                                 class="btn btn-primary btn-sm" 
                                                 data-title="{{ $taman->nama_pbt }}" 
@@ -146,6 +146,7 @@
                                             >
                                                 <i class="fas fa-search"></i>
                                             </button>
+                                            <a target="_blank" class="btn bg-success btn-sm mr-1" href="/taman/{{ $taman->slug }}"><i class="fas fa-search"></i></a>
                                         </div>
                                     </td>
                                     @php

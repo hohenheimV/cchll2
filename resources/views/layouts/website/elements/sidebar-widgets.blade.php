@@ -1,3 +1,11 @@
+<style>
+    .left-aligned-list {
+        padding-left: 1.25rem;
+        list-style-type: disc;
+        list-style-position: outside;
+    }
+</style>
+
 <!-- Sidebar Widgets Column -->
 <div class="col-lg-3">
 
@@ -5,26 +13,6 @@
     {{--<div class="card mb-4 d-none d-lg-block">
         {!! website_sidebar_search() !!}
     </div>--}}
-
-    @if(isset($eLIND))
-        <div class="card my-4">
-            <h5 class="card-header">Kategori</h5>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12">
-                        <ul>
-                            <li><a href="../penggiat-industri/kontraktor" target="_self">Kontraktor</a></li>
-                            <li><a href="../penggiat-industri/perunding" target="_self">Perunding</a></li>
-                            <li><a href="../penggiat-industri/pembekal" target="_self">Pembekal</a></li>
-                            <li><a href="../penggiat-industri/antarabangsa" target="_self">Pertubuhan Antarabangsa</a></li>
-                            <li><a href="../penggiat-industri/ngo" target="_self">NGO &amp; Badan Ikhtisas</a></li>
-                            <li><a href="../penggiat-industri/pendidikan" target="_self">Institusi Pendidikan</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
 
 
     <!-- Categories Widget -->
@@ -38,8 +26,8 @@
             </div>
         </div>
     </div> --}}
-     <!-- Categories Widget -->
-     <div class="card mobile-gone">
+    <!-- Categories Widget -->
+    <div class="card mobile-gone">
         <h5 class="card-header bg-olive">Hubungi Kami</h5>
         <div class="card-body">
             <div class="row">
@@ -49,4 +37,25 @@
             </div>
         </div>
     </div>
+
+    @if(isset($eLIND))
+        <div class="card my-4">
+            <h5 class="card-header">Penggiat Industri Landskap</h5>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                    <ul class="left-aligned-list"> <!-- This keeps bullets and indents list nicely -->
+                        <li><a href="../penggiat-industri/kontraktor" target="_self">Kontraktor</a></li>
+                        <li><a href="../penggiat-industri/perunding" target="_self">Perunding</a></li>
+                        <li><a href="../penggiat-industri/pembekal" target="_self">Pembekal</a></li>
+                        <li><a href="../penggiat-industri/antarabangsa" target="_self">Pertubuhan Antarabangsa</a></li>
+                        <li><a href="../penggiat-industri/ngo" target="_self">NGO &amp; Badan Ikhtisas</a></li>
+                        <li><a href="../penggiat-industri/pendidikan" target="_self">Institusi Pendidikan</a></li>
+                    </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>

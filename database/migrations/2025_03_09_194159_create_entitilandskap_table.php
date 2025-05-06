@@ -17,7 +17,7 @@ class CreateEntitilandskapTable extends Migration
             $table->bigIncrements('id');
             $table->string('nama_entiti')->nullable();
             $table->string('lokasi')->nullable();
-            $table->string('keterangan')->nullable();
+            $table->text('keterangan')->nullable();
             $table->string('pbt')->nullable();
             $table->string('agensi')->nullable();
             $table->string('gambar')->nullable();

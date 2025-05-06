@@ -103,7 +103,7 @@
                                                             {{ $epact->kategori->name ?? 'Tiada Maklumat' }}
                                                         </td>
                                                         <td class="text-center">
-                                                            {!! Html::datetime($epact->tarikh, 'Y') !!}
+                                                            {{ $epact->tahun ?? 'Tiada Maklumat' }}
                                                         </td>
                                                         <td style="text-align: center;">
                                                             <!-- <a href="{{ asset($epact->dokumen ? 'storage/uploads/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}" 

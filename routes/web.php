@@ -506,7 +506,7 @@ Route::name('website.')
             // 102 => "Dasar Semasa"
             // 112 => "Polisi Luar Negara"
             $totalCount = ePACT::with('kategori')/* ->where('kate', $keyword) */ ->count();
-            $epacts = ePACT::with('kategori')/* ->where('kate', $keyword) */ ->orderBy('tarikh', 'desc')->paginate($totalCount);
+            $epacts = ePACT::with('kategori')/* ->where('kate', $keyword) */ ->orderBy('tahun', 'desc')->paginate($totalCount);
             return view('website.ePACT', ['epacts' => $epacts, 'keyword' => $keyword]);
         })->name('ePACT');
 

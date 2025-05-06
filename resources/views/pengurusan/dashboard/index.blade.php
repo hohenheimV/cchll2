@@ -305,12 +305,12 @@
                 @endif
                 @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [10, 9, 7])))
                 <div class="row">
-                    {!! stats_card('Pentadbiran Kontrak dan Polisi Landskap', app_dashboard_elad(), 'javascript:void(0)', 'fas fa-book', ' #ba4a4a ') !!}
+                    {!! stats_card('Pentadbiran Kontrak dan Polisi Landskap', app_dashboard_epact(), 'javascript:void(0)', 'fas fa-book', ' #ba4a4a ') !!}
                     @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9, 7])))
-                        {!! stats_card('Kategori: Dasar Berkaitan Landskap', app_dashboard_elad(182), route('pengurusan.elad.index'), 'fas fa-book', ' #ed5f5f ') !!}
+                        {!! stats_card('Kategori: Dasar Berkaitan Landskap', app_dashboard_epact(182), route('pengurusan.epact.index'), 'fas fa-book', ' #ed5f5f ') !!}
                     @endif
                     @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [10, 7])))
-                        {!! stats_card('Kategori: Pentadbiran Kontrak', app_dashboard_elad(183), route('pengurusan.elad.index'), 'fas fa-book', ' #ff6565 ') !!}
+                        {!! stats_card('Kategori: Pentadbiran Kontrak', app_dashboard_epact(183), route('pengurusan.epact.index'), 'fas fa-book', ' #ff6565 ') !!}
                     @endif
                 </div>
                 @endif

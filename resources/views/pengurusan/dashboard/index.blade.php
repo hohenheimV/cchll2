@@ -203,7 +203,8 @@
                 {!! stats_card('Pentadbiran Kontrak dan Polisi Landskap', app_dashboard_epact(), 'javascript:void(0)', 'fas fa-seedling', '  #ed5f5f   ') !!}
                 {!! stats_card('Jumlah Entiti Landskap Unik', app_dashboard_entiti(), 'javascript:void(0)', 'fas fa-dna', '  #616a6b  ') !!}
             </div>
-        @else
+        @endif
+        @if(Auth::user()->hasRole('Pegawai'))
                 @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [1, 2, 3, 4, 5, 6, 7])))
                 <div class="row">
                     {!! stats_card('Jumlah Permohonan Projek', app_dashboard_permohonan(), 'javascript:void(0)', 'fas fa-paper-plane', '#17a2b8') !!}
@@ -266,7 +267,7 @@
                     {!! stats_card('Status: Digugurkan', app_dashboard_mib('Digugurkan'), route('pengurusan.MIB.index'), 'fas fa-users', '  #7d3c98  ') !!}
                 </div>
                 @endif
-                @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [10, 7])))
+                @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [8, 10, 7])))
                 <div class="row">
                     {!! stats_card('Jumlah Penggiat Industri Landskap', app_dashboard_industri(), 'javascript:void(0)', 'fas fa-seedling', '  #6e2c00   ') !!}
                     {!! stats_card('Kontraktor', app_dashboard_industri('Kontraktor'), route('pengurusan.eLIND.index', ['type' => 'kontraktor']), 'fas fa-user-tie', '   #873600   ') !!}
@@ -280,23 +281,37 @@
                 @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [1, 5, 7])))
                 <div class="row">
                     {!! stats_card('Penyelidikan dan Penerbitan Landskap<br>&nbsp;', app_dashboard_eread(), 'javascript:void(0)', 'fas fa-book', ' #141565 ') !!}
-                    {!! stats_card('Kategori: Penyelidikan<br>&nbsp;', app_dashboard_eread(1), route('pengurusan.eread.index'), 'fas fa-book', ' #1e2199 ') !!}
-                    {!! stats_card('Kategori: Penerbitan<br>&nbsp;', app_dashboard_eread(6), route('pengurusan.eread.index'), 'fas fa-book', ' #282dcc ') !!}
-                    {!! stats_card('Kategori: Penilaian dan Rawatan Kawasan Hijau', app_dashboard_eread(184), route('pengurusan.eread.index'), 'fas fa-book', ' #3339ff ') !!}
+                    @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [5, 7])))
+                        {!! stats_card('Kategori: Penyelidikan<br>&nbsp;', app_dashboard_eread(1), route('pengurusan.eread.index'), 'fas fa-book', ' #1e2199 ') !!}
+                    @endif
+                    @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [1, 5, 7])))
+                        {!! stats_card('Kategori: Penerbitan<br>&nbsp;', app_dashboard_eread(6), route('pengurusan.eread.index'), 'fas fa-book', ' #282dcc ') !!}
+                    @endif
+                    @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [1, 7])))
+                        {!! stats_card('Kategori: Penilaian dan Rawatan Kawasan Hijau', app_dashboard_eread(184), route('pengurusan.eread.index'), 'fas fa-book', ' #3339ff ') !!}
+                    @endif
                 </div>
                 @endif
                 @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [1, 4, 7])))
                 <div class="row">
                     {!! stats_card('Rekabentuk Landskap', app_dashboard_elad(), 'javascript:void(0)', 'fas fa-book', ' #2e764a ') !!}
-                    {!! stats_card('Kategori: Rekabentuk Landskap Lembut', app_dashboard_elad(157), route('pengurusan.elad.index'), 'fas fa-book', ' #43aa6a ') !!}
-                    {!! stats_card('Kategori: Rekabentuk Landskap Kejur', app_dashboard_elad(123), route('pengurusan.elad.index'), 'fas fa-book', ' #58dd8a ') !!}
+                    @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [1, 7])))
+                        {!! stats_card('Kategori: Rekabentuk Landskap Lembut', app_dashboard_elad(157), route('pengurusan.elad.index'), 'fas fa-book', ' #43aa6a ') !!}
+                    @endif
+                    @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [4, 7])))
+                        {!! stats_card('Kategori: Rekabentuk Landskap Kejur', app_dashboard_elad(123), route('pengurusan.elad.index'), 'fas fa-book', ' #58dd8a ') !!}
+                    @endif
                 </div>
                 @endif
                 @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [10, 9, 7])))
                 <div class="row">
                     {!! stats_card('Pentadbiran Kontrak dan Polisi Landskap', app_dashboard_elad(), 'javascript:void(0)', 'fas fa-book', ' #ba4a4a ') !!}
-                    {!! stats_card('Kategori: Dasar Berkaitan Landskap', app_dashboard_elad(182), route('pengurusan.elad.index'), 'fas fa-book', ' #ed5f5f ') !!}
-                    {!! stats_card('Kategori: Pentadbiran Kontrak', app_dashboard_elad(183), route('pengurusan.elad.index'), 'fas fa-book', ' #ff6565 ') !!}
+                    @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9, 7])))
+                        {!! stats_card('Kategori: Dasar Berkaitan Landskap', app_dashboard_elad(182), route('pengurusan.elad.index'), 'fas fa-book', ' #ed5f5f ') !!}
+                    @endif
+                    @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [10, 7])))
+                        {!! stats_card('Kategori: Pentadbiran Kontrak', app_dashboard_elad(183), route('pengurusan.elad.index'), 'fas fa-book', ' #ff6565 ') !!}
+                    @endif
                 </div>
                 @endif
 

@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Crypt;
 
 class DashboardController extends Controller
 {
@@ -104,6 +105,7 @@ class DashboardController extends Controller
                     // }
                 $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $instance->negeri_taman)->orderBy('nama_negeri', 'asc')->first();
                 $instance->negeri = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 
+                $instance->slug = Crypt::encryptString($instance->id_taman);
             }
             // dd($ePALM);
 

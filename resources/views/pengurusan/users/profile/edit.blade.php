@@ -14,6 +14,7 @@
                 <div class="card card-outline card-dark">
                     <div class="card-header border-0">
                         <h5 class="card-title">@yield('title')</h5>
+                        @if(Auth::user()->hasRole('Pihak Berkuasa Tempatan'))
                         <div class="card-tools">
                             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group" role="group" aria-label="First group">
@@ -26,6 +27,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                     </div>
                     <!-- /.card-header -->
 

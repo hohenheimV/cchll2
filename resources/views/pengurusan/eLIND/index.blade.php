@@ -151,7 +151,6 @@
                                                             'data-elind-id' => $user->id_elind,
                                                             'data-toggle' => 'modal', 
                                                             'data-target' => '#modalKomenPrestasi', 
-                                                            Html::tooltip('Simpan Prestasi')
                                                         ])  !!}
                                                     @endif
                                                 </div>

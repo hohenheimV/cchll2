@@ -41,8 +41,8 @@
                                     <th class="text-center w-5">Imej Hadapan</th>
                                     @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|TKP/B JLN'))
                                         <th class="text-center w-10">PBT</th>
-                                        <th class="text-center w-12">Paparan Portal</th>
                                     @endif
+                                        <th class="text-center w-12">Paparan Portal</th>
                                         <th class="text-center w-5">Tindakan</th>
                                     
                                 </tr>
@@ -96,6 +96,7 @@
                                             <td>
                                                 {{ strtoupper($pelan->nama_pbt) }}
                                             </td>
+                                            @endif
                                             <td>
                                                 @if(Auth::user()->hasRole('Pihak Berkuasa Tempatan'))
                                                     <span style="white-space: normal; text-align: centre;width: 100%;" class="badge {{ $paparan_portal[$pelan->status == 'approved' ? 0 : 1]['label'] }}">{{ $pelan->status == 'approved' ? 'Perubahan telah disahkan' : 'Perubahan belum disahkan' }}</span>
@@ -103,7 +104,6 @@
                                                     <span style="white-space: normal; text-align: centre;width: 100%;" class="badge {{ $paparan_portal[$pelan->status == 'approved' ? 0 : 1]['label'] }}">{{ $paparan_portal[$pelan->status == 'approved' ? 0 : 1]['id'] }}</span>
                                                 @endif
                                             </td>
-                                            @endif
                                             
                                             <td>
                                             <div class="btn-group">

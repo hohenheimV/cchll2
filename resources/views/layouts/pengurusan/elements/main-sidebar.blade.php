@@ -185,7 +185,7 @@
                     @foreach(['eREAD', 'eLAD', 'ePACT'] as $item)
                         @if(
                             (Auth::user()->hasRole('Pentadbir Sistem')) || 
-                            (!(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [5, 7])) && $item == 'eREAD') ||
+                            (!(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [1, 5, 7])) && $item == 'eREAD') ||
                             (!(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [1, 4, 7])) && $item == 'eLAD') ||
                             (!(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [9, 10, 7])) && $item == 'ePACT')
                         )

@@ -55,7 +55,17 @@ class ePIL_dokumenController extends Controller
         if(isset($request->large_file_name_new)){
             $dokumen->nama_dokumen_pelan = $request->large_file_name_new;
             $filePath = storage_path('app/public/uploads/ePIL/' . $folderName . '/' . $request->nama_dokumen_pelan_db);
-            unlink($filePath);
+            if (file_exists($filePath)) {
+                try {
+                    unlink($filePath);
+                } catch (\Exception $e) {
+                    // Log or handle unlink failure
+                    \Log::error('Failed to delete file: ' . $filePath . ' - Error: ' . $e->getMessage());
+                }
+            } else {
+                \Log::warning('File not found when trying to delete: ' . $filePath);
+                // Optional: notify user or continue silently
+            }
             
             $fileExtension = pathinfo($dokumen->nama_dokumen_pelan, PATHINFO_EXTENSION);
             $allowedExtensions = [

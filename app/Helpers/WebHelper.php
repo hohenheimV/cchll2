@@ -486,7 +486,7 @@ if (!function_exists('in_arrayi')) {
                     $html .= '<a href="">';
                     $html .= '<div class="card border">';
                     $html .= '<div class="embed-responsive embed-responsive-4by3">';
-                    $html .= '<img src="http://127.0.0.1:8000/storage/img/bg-pattern-leaves.png" class="card-img-top embed-responsive-item" >';
+                    $html .= '<img src="/storage/img/bg-pattern-leaves.png" class="card-img-top embed-responsive-item" >';
                     $html .= '</div>';
                     $html .= '<div class="card-body" style="height:200px">';
                     $html .= '<h5 class="text-capitalize">Artikel belum tersedia</h5>';

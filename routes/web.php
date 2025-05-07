@@ -1080,47 +1080,65 @@ Route::middleware(['auth'])
     });
 
 
+    // Route::get('/test-email', function () {
+    //     $details = [
+    //         'title' => 'Mail from Laravel App',
+    //         'body' => 'This is a test email sent from Laravel application.'
+    //     ];
+    //     if(config('mail.enabled')){
+    //         // Mail::raw($details['body'], function ($message) use ($details) {
+    //         // $message->to('your_test_email@example.com')  // Replace with your test email address
+    //         //         ->subject($details['title']);
+    //         // });
+    //         echo "enabled";
+    //     }else{
+    //         echo "disabled";
+    //     }
+
+    //     return 'Email sent!';
+    // });
+    // Route::get('/test-email2', function () {
+    //     $details = [
+    //         'title' => 'Mail from Laravel App',
+    //         'body' => 'This is a test email sent from Laravel application.'
+    //     ];
+
+    //     \Illuminate\Support\Facades\Mail::raw($details['body'], function ($message) use ($details) {
+    //         $message->to('cakkik@gmail.com')  // Replace with your test email address
+    //                 ->subject($details['title']);
+    //     });
+
+    //     return 'Email sent!';
+    // });
+    
     Route::get('/test-email', function () {
         $details = [
-            'title' => 'Mail from Laravel App',
-            'body' => 'This is a test email sent from Laravel application.'
-        ];
-        if(config('mail.enabled')){
-            // Mail::raw($details['body'], function ($message) use ($details) {
-            // $message->to('your_test_email@example.com')  // Replace with your test email address
-            //         ->subject($details['title']);
-            // });
-            echo "enabled";
-        }else{
-            echo "disabled";
-        }
-
-        return 'Email sent!';
-    });
-    Route::get('/test-email2', function () {
-        $details = [
-            'title' => 'Mail from Laravel App',
-            'body' => 'This is a test email sent from Laravel application.'
-        ];
-
-        \Illuminate\Support\Facades\Mail::raw($details['body'], function ($message) use ($details) {
-            $message->to('cakkik@gmail.com')  // Replace with your test email address
-                    ->subject($details['title']);
-        });
-
-        return 'Email sent!';
-    });
-    Route::get('/test-email-html', function () {
-        $details = [
             'title' => 'HTML Mail from Laravel App',
-            'body' => '<h1>This is a test email sent from Laravel application.</h1>'
+            'body' => '<h1>Ini adalah percubaan dari sistem eLANDSKAP. Mohon abaikan.</h1>'
         ];
 
         \Illuminate\Support\Facades\Mail::send([], [], function ($message) use ($details) {
-            $message->to('cakkik@gmail.com')
+            $message->to('tpbk@jln.gov.my')
                     ->subject($details['title'])
                     ->setBody($details['body'], 'text/html');
         });
 
         return 'HTML email sent!';
+    });
+
+    Route::get('/content-email', function () {
+        $details = [
+            'title' => 'HTML Mail from Laravel App',
+            'body' => '<h1>Ini adalah percubaan dari sistem eLANDSKAP. Mohon abaikan.</h1>'
+        ];
+    
+        // Instead of sending email, display the message content
+        $messageContent = [
+            'to' => 'tpbk@jln.gov.my',
+            'subject' => $details['title'],
+            'body' => $details['body']
+        ];
+    
+        // Return the message content as a response
+        return response()->json($messageContent);
     });

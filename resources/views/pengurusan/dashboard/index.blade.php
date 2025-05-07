@@ -205,7 +205,7 @@
                 </div>
             @endif
 
-            @if(Auth::user()->hasRole('Pegawai'))
+            @if(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [7]))
                 <h2>Statistik Modul</h2>
                 @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [1, 2, 3, 4, 5, 6, 7])))
                     <div class="row">

@@ -64,7 +64,7 @@
                                     </tr>
                                     <tr>
                                         <th class="col-4">Keterangan</th>
-                                        <td class="col-8">{{ $epact->keterangan }}</td>
+                                        <td class="col-8">{{ $epact->keterangan && trim($epact->keterangan) !== '' ? $epact->keterangan : 'Tiada Maklumat' }}</td>
                                     </tr>
                                     <tr>
                                         <th class="col-4">Pautan URL</th>

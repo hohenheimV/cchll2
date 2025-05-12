@@ -33,7 +33,7 @@ class EPACTController extends Controller
      */
     public function index(Request $request) 
     {
-        $epacts = ePACT::with('kategori')->orderBy('created_at', 'desc')->paginate(10);
+        $epacts = ePACT::with('kategori')->orderBy('created_at', 'desc')->get();
         return view('pengurusan.epact.index', compact('epacts'));
     }
 
@@ -170,7 +170,7 @@ class EPACTController extends Controller
             'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
             'tahun' => 'required|integer|min:1900|max:' . now()->year,
             'sumber_type' => 'required|in:jln,selain_jln',
-            'sumber' => 'required_if:sumber_type,jln|nullable|integer',
+            'sumber' => 'required_if:sumber_type,jln|integer|nullable',
             'subkat' => 'required_if:sumber_type,selain_jln|nullable|string|max:255',
         ], [
             'required' => ':attribute diperlukan.',

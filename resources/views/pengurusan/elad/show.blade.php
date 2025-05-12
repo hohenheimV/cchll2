@@ -76,7 +76,7 @@
                                     </tr>
                                     <tr>
                                         <th>Keterangan</th>
-                                        <td>{{ $elad->keterangan }}</td>
+                                        <td class="col-6">{{ $elad->keterangan && trim($elad->keterangan) !== '' ? $elad->keterangan : 'Tiada Maklumat' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Saiz Dokumen</th>

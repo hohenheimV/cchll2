@@ -21,7 +21,8 @@
                 {{ Form::text('tajuk', null, [
                     'placeholder' => 'Masukkan Nama Program',
                     'class' => 'form-control ' . ($errors->has('tajuk') ? 'is-invalid' : ''),
-                    'oninput' => "this.value = this.value.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); })"
+                    'maxlength' => 200,
+                    'oninput' => "this.value = this.value.slice(0,200).replace(/(?:^|\\s)\\S/g, function(a) { return a.toUpperCase(); })"
                 ]) }}
                 @if ($errors->has('tajuk'))
                     <div class="invalid-feedback">
@@ -48,7 +49,7 @@
         @if (!$isPBTUser)
         <div class="form-row">
             <div class="form-group col-md-6">
-                {{ Form::label('negeri', 'Negeri') }}
+                {{ Form::label('negeri', 'Negeri PBT/Agensi') }}
                 {{ Form::select('negeri', $negeri ?? [], old('negeri', $ktp->negeri ?? null), [
                     'placeholder' => 'Pilih Negeri',
                     'class' => 'form-control select2 ' . ($errors->has('negeri') ? 'is-invalid' : ''),
@@ -93,7 +94,26 @@
         <div class="form-row">
             <div class="form-group col-md-11">
                 {{ Form::label('maklumat', 'Maklumat Pokok') }}
-                
+                <div class="callout callout-info">
+                    <span style="color: red; font-weight:bold;">Panduan Mengisi Maklumat Pokok</span>
+                    <p class="light" style="margin-bottom: 0.5rem;">
+                        <strong>Pilihan A:</strong> 
+                        <ol>
+                            <li>Muat Turun Template Borang Maklumat Pokok: 
+                                <a href="{{ route('pengurusan.ktp.borang') }}" target="_blank"><u>Klik Sini</u></a>
+                            </li>
+                            <li>Muat Naik Semula Borang Yang Telah Diisi Pada Ruangan Di Bawah:</li>
+                        </ol>
+                        <div class="pl-5">
+                            <input type="file" id="excel-upload" accept=".xlsx,.xls" class="form-control-file">
+                            <small class="form-text text-muted">Hanya fail Excel (.xlsx, .xls) diterima.</small>
+                        </div>
+                        <strong>Pilihan B:</strong>
+                        <ol>
+                            <li>Isi Maklumat Secara Manual Pada Borang Di Bawah</li>
+                        </ol>
+                    </p>
+                </div>
                 <div class="table-responsive">
                     <table id="spesis-pokok-table" class="table table-bordered table-hover mt-2">
                         <thead class="thead-dark">
@@ -157,22 +177,24 @@
 </div>
 
 @section('page-js-script')
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        function updateJumlahPokok() {
-            var total = 0;
-            document.querySelectorAll('.bilangan-pokok').forEach(function(input) {
-                total += parseInt(input.value) || 0;
-            });
-            document.getElementById('jumlah_pokok').textContent = total;
-            document.getElementById('jumlah_pokok_hidden').value = total; // Update hidden input
-        }
+    // 1. Move this function OUTSIDE of DOMContentLoaded so it's global
+    function updateJumlahPokok() {
+        var total = 0;
+        document.querySelectorAll('.bilangan-pokok').forEach(function(input) {
+            total += parseInt(input.value) || 0;
+        });
+        document.getElementById('jumlah_pokok').textContent = total;
+        document.getElementById('jumlah_pokok_hidden').value = total; // Update hidden input
+    }
 
+    document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('add_spesis_pokok').addEventListener('click', function() {
             var container = document.getElementById('spesis_pokok_container');
             var newRow = document.createElement('tr');
             newRow.innerHTML = `
-                <td><input type="text" name="spesis_pokok[]" class="form-control" placeholder="Spesis Pokok" oninput="this.value = this.value.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); })"></td>
+                <td><input type="text" name="spesis_pokok[]" class="form-control" placeholder="Spesis Pokok" oninput="this.value = this.value.replace(/(?:^|\\s)\\S/g, function(a) { return a.toUpperCase(); })"></td>
                 <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok" placeholder="Bilangan" min="1"></td>
                 <td><input type="number" name="tinggi_pokok[]" class="form-control" placeholder="Tinggi" min="0"></td>
                 <td><input type="number" name="diameter_pokok[]" class="form-control" placeholder="Diameter" min="0"></td>
@@ -231,6 +253,45 @@
 
         // Initial calculation
         updateJumlahPokok();
+    });
+
+    // 2. In your excel-upload handler, just call updateJumlahPokok() after adding rows:
+    document.getElementById('excel-upload').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+            // Clear existing rows except the header
+            const container = document.getElementById('spesis_pokok_container');
+            container.innerHTML = '';
+
+            // Assume first row is header, skip it
+            for (let i = 1; i < json.length; i++) {
+                const row = json[i];
+                if (!row[0]) continue; // skip empty rows
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><input type="text" name="spesis_pokok[]" class="form-control" value="${row[0] || ''}" placeholder="Spesis Pokok" oninput="this.value = this.value.replace(/(?:^|\\s)\\S/g, function(a) { return a.toUpperCase(); })"></td>
+                    <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok" value="${row[1] || ''}" placeholder="Bilangan" min="1"></td>
+                    <td><input type="number" name="tinggi_pokok[]" class="form-control" value="${row[2] || ''}" placeholder="Tinggi" min="0"></td>
+                    <td><input type="number" name="diameter_pokok[]" class="form-control" value="${row[3] || ''}" placeholder="Diameter" min="0"></td>
+                    <td><button type="button" class="btn btn-danger btn-sm remove_field"><i class="fas fa-trash"></i></button></td>
+                `;
+                container.appendChild(tr);
+            }
+
+            // Call updateJumlahPokok directly after adding rows
+            updateJumlahPokok();
+        };
+        reader.readAsArrayBuffer(file);
     });
 
     // Function to populate Negeri dropdown on page load
@@ -349,5 +410,35 @@
         updateFields();
     });
 
+document.getElementById('reset-form-btn').addEventListener('click', function() {
+    // Reset all form fields
+    var form = this.closest('form');
+    form.reset();
+
+    // Clear dynamic rows in the table except for one blank row
+    var container = document.getElementById('spesis_pokok_container');
+    container.innerHTML = `
+        <tr>
+            <td><input type="text" name="spesis_pokok[]" class="form-control" placeholder="Spesis Pokok" oninput="this.value = this.value.replace(/(?:^|\\s)\\S/g, function(a) { return a.toUpperCase(); })"></td>
+            <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok" placeholder="Bilangan" min="1" max="10000"></td>
+            <td><input type="number" name="tinggi_pokok[]" class="form-control" placeholder="Tinggi" min="0" max="1000"></td>
+            <td><input type="number" name="diameter_pokok[]" class="form-control" placeholder="Diameter" min="0" max="1000"></td>
+            <td><button type="button" class="btn btn-danger btn-sm remove_field"><i class="fas fa-trash"></i></button></td>
+        </tr>
+    `;
+
+    // Reset jumlah pokok
+    document.getElementById('jumlah_pokok').textContent = '';
+    document.getElementById('jumlah_pokok_hidden').value = '';
+
+    // Reset file input
+    document.getElementById('excel-upload').value = '';
+
+    // If you use select2, reset selects
+    if (window.$ && $.fn.select2) {
+        $('#negeri').val('').trigger('change');
+        $('#pbt').val('').trigger('change');
+    }
+});
 </script>
 @endsection

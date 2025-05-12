@@ -27,16 +27,16 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                     <div class="table-responsive">
-                        <table id="exampleNP" class="responsive table table-bordered table-hover table-striped mb-0">
+                        <table id="ktptable" class="responsive table table-bordered table-hover table-striped mb-0">
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="w-1">Bil.</th>
                                     <!-- <th class="w-5">Gambar</th> -->
-                                    <th class="text-center w-10">Nama Program</th>
-                                    <th class="text-center w-10">PBT/ Agensi</th>
-                                    <th class="text-center w-10">Lokasi</th>
-                                    <th class="text-center w-10">Jumlah Pokok Ditanam</th>
-                                    <th class="text-center w-5">Tahun</th>
+                                    <th class="text-center w-15">Nama Program</th>
+                                    <th class="text-center w-15">PBT/ Agensi</th>
+                                    <th class="text-center w-15">Lokasi</th>
+                                    <th class="text-center w-5">Jumlah Pokok Ditanam</th>
+                                    {{-- <th class="text-center w-5">Tarikh</th> --}}
                                     <th class="text-center w-5">Tindakan</th>
                                 </tr>
                             </thead>
@@ -53,7 +53,7 @@
                                     <td class="text-center">{{ $ktp->pbt ?? 'N/A' }}</td>
                                     <td class="text-center">{{ $ktp->lokasi ?? 'N/A' }}</td>
                                     <td class="text-center">{{ $ktp->jumlah_pokok ?? 'N/A' }}</td>
-                                    <td class="text-center">{{ $ktp->created_at ? $ktp->created_at->format('Y') : 'N/A' }}</td>
+                                    {{-- <td class="text-center">{{ $ktp->created_at ? $ktp->created_at->format('Y') : 'N/A' }}</td> --}}
                                     <td>
                                         <div class="btn-group">
                                             {!! Form::button('<i class="fas fa-search"></i>',
@@ -94,55 +94,61 @@
 
 @section('page-js-script')
 
+<style>
+@media print {
+    #ktptable th:nth-child(6),
+    #ktptable td:nth-child(6) {
+        display: none !important;
+    }
+}
+</style>
+
 <script>
-    $(document).ready(function () {
-        $('#modalKempen').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var href = button.data('href'); // Extract info from data-* attributes
-            $('[data-tooltip="tooltip"]').tooltip('hide');
-            // Load URL from data-href
-            $('#modalKempen .modal-content').load(href, function (responseTxt, statusTxt, xhr) {
-
-                // Date picker
-                $('input[name="tarikh"]').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    minDate: '01-' + moment().subtract(1, 'month').subtract(1, 'year').format('MM-YYYY'),
-                    maxDate: moment().endOf('month').format('DD-MM-YYYY'),
-                    drops: "up",
-                    locale: { format: 'DD-MM-YYYY' }
-                });
-
-                validation();
-
-                if (statusTxt == "success") {
-                    $('#modalKempen').modal('show');
-                    $('#modalKempen').on('hidden.bs.modal', function () {
-                        $('[data-tooltip="tooltip"]').tooltip('hide');
-                        $(this).find('.modal-content').empty();
-                    });
-                } else {
-                    alert("Error: " + xhr.status + ": " + xhr.statusText);
+    $('#ktptable').DataTable({
+        responsive: true,
+        paging: false,
+        searching: true,
+        info: false,
+        autoWidth: false,
+        ordering: true,
+        dom: '<"top"fB>rt<"bottom"><"clear">',
+        language: {
+            search: "Carian:"
+        },
+        buttons: [
+            {
+                extend: 'copy',
+                text: 'Salin'
+            },
+            {
+                extend: 'csv',
+                text: 'CSV',
+                exportOptions: {
+                    columns: [0,1,2,3,4]
                 }
-            });
-        });
-
-        // JQuery validation
-        function validation() {
-            $('#modalFormKempen').validate({
-                submitHandler: function (form) {
-                    form.submit();
-                },
-                rules: {
-                    'kod_tag': 'required',
-                    'kategori': 'required',
-                    'jenis': 'required',
-                    'tarikh': 'required',
-                    'lat': 'required',
-                    'lng': 'required',
+            },
+            {
+                extend: 'excel',
+                text: 'Excel',
+                exportOptions: {
+                    columns: [0,1,2,3,4]
                 }
-            });
-        }
+            },
+            {
+                extend: 'pdf',
+                text: 'PDF',
+                exportOptions: {
+                    columns: [0,1,2,3,4]
+                }
+            },
+            {
+                extend: 'print',
+                text: 'Cetak',
+                exportOptions: {
+                    columns: [0,1,2,3,4]
+                }
+            }
+        ]
     });
 </script>
 @stop

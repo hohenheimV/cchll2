@@ -1,7 +1,6 @@
 <div class="form-group col-md-6">
             {{ Form::label('bahagian_jln', 'Bahagian - Jabatan Landskap Negara') }}
             {!! Form::select('bahagian_jln', [
-                'placeholder' => 'Pilih Bahagian',
                 '1' => 'Bahagian Pengurusan Landskap',
                 '2' => 'Bahagian Taman Awam',
                 '3' => 'Bahagian Pembangunan Landskap',
@@ -12,7 +11,11 @@
                 '8' => 'Bahagian Promosi & Industri Landskap',
                 '9' => 'Bahagian Dasar & Pengurusan Korporat',
                 '10' => 'Bahagian Kontrak & Ukur Bahan',
-            ], null, ['class' => 'form-control']) !!}
+            ], null, [
+                'placeholder' => 'Pilih Bahagian',
+                'required' => true,
+                'class' => 'form-control'
+            ]) !!}
             @error('bahagian_jln')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
@@ -56,7 +59,6 @@
     {{ Form::textarea('keterangan', null, ['placeholder' => 'Sila Masukkan Keterangan',
         'rows' => 5, 
         'class' => 'form-control ' . Html::isInvalid($errors, 'keterangan'),
-        'oninput' => "this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1).toLowerCase();"
     ]) }}
     {!! Html::hasError($errors, 'keterangan') !!}
 </div>

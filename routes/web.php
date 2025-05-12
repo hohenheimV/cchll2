@@ -637,8 +637,11 @@ Route::middleware(['auth'])
         /**
          * Route KTPController
          */
+        Route::get('/ktp/borang', 'KTPController@borang')->name('ktp.borang');
         Route::resource('ktp', 'KTPController');
-        Route::get('ktp/{ktp}/download', 'KTPController@download')->name('ktp.download');
+
+        // Route::get('ktp/{ktp}/download', 'KTPController@download')->name('ktp.download');
+        //Route::get('/ktp/borang', 'KTPController@borang')->name('ktp.borang');
 
         /**
          * Route EntitiLandskapUnikController

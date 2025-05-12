@@ -33,7 +33,7 @@ class EREADController extends Controller
      */
     public function index(Request $request) 
     {
-        $ereads = eREAD::with('kategori')->orderBy('created_at', 'desc')->paginate(10);
+        $ereads = eREAD::with('kategori')->orderBy('created_at', 'desc')->get();
         return view('pengurusan.eread.index', compact('ereads'));
     }
 

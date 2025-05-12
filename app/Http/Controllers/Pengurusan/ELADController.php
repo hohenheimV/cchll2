@@ -32,8 +32,8 @@ class ELADController extends Controller
      */
     public function index(Request $request) 
     {
-        $eladsLembut = eLAD::with('kategori')->where('kate', 157)->orderBy('created_at', 'desc')->paginate(10, ['*'], 'lembut');
-        $eladsKejur = eLAD::with('kategori')->where('kate', 123)->orderBy('created_at', 'desc')->paginate(10, ['*'], 'kejur');
+        $eladsLembut = eLAD::with('kategori')->where('kate', 157)->orderBy('created_at', 'desc')->get();
+        $eladsKejur = eLAD::with('kategori')->where('kate', 123)->orderBy('created_at', 'desc')->get();
         return view('pengurusan.elad.index', compact('eladsLembut', 'eladsKejur'));
     }
 

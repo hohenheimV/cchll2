@@ -40,7 +40,7 @@
                                     <table id="example-lembut" class="responsive table table-bordered table-hover table-striped mb-0">
                                         <thead class="thead-dark">
                                             <tr>
-                                                <th class="w-5">No</th>
+                                                <th class="w-5">Bil</th>
                                                 <th>Tajuk</th>
                                                 <th class="text-center w-10">Saiz</th>
                                                 <th class="text-center w-15">Kategori </th>
@@ -50,7 +50,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @php($index = $eladsLembut->firstItem())
+                                            @php($index = 1)
                                             @foreach($eladsLembut as $elad)
                                             <tr>
                                                 <td>{{ $index++ }}</td>
@@ -107,18 +107,21 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                {{-- Remove or comment out the pagination footer --}}
+                                {{-- 
                                 @if (count($eladsLembut) > 0)
                                 <div class="card-footer bg-light p-2 border-top-0 d-flex flex-column justify-content-center align-items-end">
                                     {!! Html::pagination($eladsLembut) !!}
                                 </div>
                                 @endif
+                                --}}
                             </div>
                             <div class="tab-pane fade" id="kejur" role="tabpanel" aria-labelledby="kejur-tab">
                                 <div class="table-responsive">
                                     <table id="example-kejur" class="responsive table table-bordered table-hover table-striped mb-0">
                                         <thead class="thead-dark">
                                             <tr>
-                                                <th class="w-5"></th>
+                                                <th class="w-5">Bil</th>
                                                 <th>Tajuk</th>
                                                 {{-- <th>Keterangan</th> --}}
                                                 <th class="text-center w-10">Saiz</th>
@@ -129,7 +132,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @php($index = $eladsKejur->firstItem())
+                                            @php($index = 1)
                                             @foreach($eladsKejur as $elad)
                                             <tr>
                                                 <td>{{ $index++ }}</td>
@@ -138,7 +141,7 @@
                                                 <td class="text-center">
                                                     {{ $elad->kategori->name ?? 'Tiada Maklumat' }}
                                                 </td>
-                                                <td class="text-center">{!! Html::datetime($elad->created_at, 'Y') !!}</td>
+                                                <td class="text-center">{!! Html::datetime($elad->tarikh, 'Y') !!}</td>
                                                 <td class="text-center">
                                                 <a href="{{ asset($elad->dokumen ? 'storage/uploads/elad/dokumen/' . $elad->dokumen : 'img/zip-preview.png') }}" 
                                                 data-toggle="lightbox" 
@@ -186,11 +189,14 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                {{-- Remove or comment out the pagination footer --}}
+                                {{-- 
                                 @if (count($eladsKejur) > 0)
                                 <div class="card-footer bg-light p-2 border-top-0 d-flex flex-column justify-content-center align-items-end">
                                     {!! Html::pagination($eladsKejur) !!}
                                 </div>
                                 @endif
+                                --}}
                             </div>
                         </div>
                     </div>
@@ -206,121 +212,169 @@
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
         document.addEventListener('DOMContentLoaded', function() {
-            const eladsLembut = @json($eladsLembut);
-            const eladsKejur = @json($eladsKejur);
+            const eladsLembut = @json($eladsLembut->values());
+            const eladsKejur = @json($eladsKejur->values());
 
-            // Function to persist active tab state
-            function setActiveTab(tabId) {
-                localStorage.setItem('activeTab', tabId);
-            }
+            function renderDocumentsOnPage(elads, tableId) {
+                $(`#${tableId} tbody tr`).each(function() {
+                    const row = $(this);
+                    const id = row.find('[id^="pdf-viewer-"]').attr('id');
+                    if (!id) return;
+                    const eladId = id.replace('pdf-viewer-', '');
+                    const elad = elads.find(e => e.id == eladId);
+                    const viewerElement = document.getElementById('pdf-viewer-' + eladId);
 
-            function getActiveTab() {
-                return localStorage.getItem('activeTab') || '#lembut'; // Default to #lembut tab
-            }
+                    if (!elad || !viewerElement) return;
 
-            // Activate the correct tab on page load
-            const activeTab = getActiveTab();
-            $(`a[href="${activeTab}"]`).tab('show');
-
-            // Update active tab state on tab click
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-                const target = $(e.target).attr('href'); // Get the target tab ID
-                setActiveTab(target);
-            });
-
-            function renderDocuments(elads) {
-                elads.data.forEach(elad => {
-                    const viewerElement = document.getElementById('pdf-viewer-' + elad.id);
-
-                    // Check if the file is a ZIP
+                    // ZIP preview
                     if (elad.dokumen && elad.dokumen.endsWith('.zip')) {
-                        if (viewerElement) {
-                            viewerElement.innerHTML = `<img src="{{ asset('img/zip-preview.png') }}" alt="ZIP File Preview" style="width: 100%; height: 100%; object-fit: contain;">`;
-                        }
-                        return; // Skip further processing for ZIP files
+                        viewerElement.innerHTML = `<img src="{{ asset('img/zip-preview.png') }}" alt="ZIP File Preview" style="width: 100%; height: 100%; object-fit: contain;">`;
+                        return;
                     }
 
-                    // Check if the file is a PDF
+                    // PDF preview
                     if (elad.dokumen && elad.dokumen.endsWith('.pdf')) {
                         const url = `{{ asset('storage/uploads/elad/dokumen') }}/${elad.dokumen}`;
-
                         pdfjsLib.getDocument(url).promise.then(function(pdf) {
                             return pdf.getPage(1);
                         }).then(function(page) {
-                            const canvas = document.getElementById('pdf-render-' + elad.id);
-                            const loadingElement = document.getElementById('loading-' + elad.id);
+                            const canvas = document.getElementById('pdf-render-' + eladId);
+                            const loadingElement = document.getElementById('loading-' + eladId);
                             const context = canvas.getContext('2d');
-
-                            // Get the viewport at scale 1
                             const originalViewport = page.getViewport({ scale: 0.5 });
-
-                            // Calculate scale to fit container while maintaining aspect ratio
                             const containerWidth = 150;
                             const containerHeight = 200;
                             const scale = Math.min(
                                 containerWidth / originalViewport.width,
                                 containerHeight / originalViewport.height
                             );
-
-                            // Get the viewport with calculated scale
                             const viewport = page.getViewport({ scale: scale });
-
-                            // Set canvas dimensions
                             canvas.width = viewport.width;
                             canvas.height = viewport.height;
-
-                            // Render PDF page
                             page.render({
                                 canvasContext: context,
                                 viewport: viewport
                             }).promise.then(() => {
-                                if (loadingElement) {
-                                    loadingElement.style.display = 'none';
-                                }
+                                if (loadingElement) loadingElement.style.display = 'none';
                                 canvas.style.display = 'block';
                             });
                         }).catch(function(error) {
-                            console.error('Error loading PDF for ID ' + elad.id + ':', error);
-                            // Show a placeholder or error message
-                            if (viewerElement) {
-                                viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Preview not available</div>';
-                            }
+                            viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Preview not available</div>';
                         });
                     } else {
-                        // If the file type is unsupported, show a placeholder
-                        if (viewerElement) {
-                            viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Unsupported file type</div>';
-                        }
+                        // Unsupported file type
+                        viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Unsupported file type</div>';
                     }
                 });
             }
 
-            renderDocuments(eladsLembut);
-            renderDocuments(eladsKejur);
-
-            $('#example-lembut').DataTable({
+            // DataTable for Lembut
+            const tableLembut = $('#example-lembut').DataTable({
                 responsive: true,
-                paging: false, // Disable pagination
-                searching: false, // Disable the search bar
-                info: false, // Disable the "Showing X to Y of Z entries" text
-                autoWidth: false, // Prevent automatic column width calculations
+                paging: true,
+                pageLength: 10,
+                searching: true,
+                info: false,
+                autoWidth: false,
                 ordering: false,
-                dom: 'Bfrtip', // Position of the buttons
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+                dom: '<"top"fB>rt<"bottom"p><"clear">',
+                language: { search: "Carian:" },
+                buttons: [
+                    {
+                        extend: 'copy',
+                        text: 'Salin',
+                        exportOptions: { columns: [0,1,2,3,4], modifier: { search: 'applied', order: 'applied', page: 'all' } }
+                    },
+                    {
+                        extend: 'csv',
+                        text: 'CSV',
+                        exportOptions: { columns: [0,1,2,3,4], modifier: { search: 'applied', order: 'applied', page: 'all' } }
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'Excel',
+                        exportOptions: { columns: [0,1,2,3,4], modifier: { search: 'applied', order: 'applied', page: 'all' } }
+                    },
+                    {
+                        extend: 'pdf',
+                        text: 'PDF',
+                        exportOptions: { columns: [0,1,2,3,4], modifier: { search: 'applied', order: 'applied', page: 'all' } }
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Cetak',
+                        exportOptions: { columns: [0,1,2,3,4], modifier: { search: 'applied', order: 'applied', page: 'all' } }
+                    }
+                ]
             });
 
-            $('#example-kejur').DataTable({
+            // DataTable for Kejur
+            const tableKejur = $('#example-kejur').DataTable({
                 responsive: true,
-                paging: false, // Disable pagination
-                searching: false, // Disable the search bar
-                info: false, // Disable the "Showing X to Y of Z entries" text
-                autoWidth: false, // Prevent automatic column width calculations
+                paging: true,
+                pageLength: 10,
+                searching: true,
+                info: false,
+                autoWidth: false,
                 ordering: false,
-                dom: 'Bfrtip', // Position of the buttons
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+                dom: '<"top"fB>rt<"bottom"p><"clear">',
+                language: { search: "Carian:" },
+                buttons: [
+                    {
+                        extend: 'copy',
+                        text: 'Salin',
+                        exportOptions: { columns: [0,1,2,3,4], modifier: { search: 'applied', order: 'applied', page: 'all' } }
+                    },
+                    {
+                        extend: 'csv',
+                        text: 'CSV',
+                        exportOptions: { columns: [0,1,2,3,4], modifier: { search: 'applied', order: 'applied', page: 'all' } }
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'Excel',
+                        exportOptions: { columns: [0,1,2,3,4], modifier: { search: 'applied', order: 'applied', page: 'all' } }
+                    },
+                    {
+                        extend: 'pdf',
+                        text: 'PDF',
+                        exportOptions: { columns: [0,1,2,3,4], modifier: { search: 'applied', order: 'applied', page: 'all' } }
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Cetak',
+                        exportOptions: { columns: [0,1,2,3,4], modifier: { search: 'applied', order: 'applied', page: 'all' } }
+                    }
+                ]
+            });
+
+            // Initial render for both tables
+            renderDocumentsOnPage(eladsLembut, 'example-lembut');
+            renderDocumentsOnPage(eladsKejur, 'example-kejur');
+
+            // Re-render previews on every page/change/search for both tables
+            tableLembut.on('draw', function() {
+                renderDocumentsOnPage(eladsLembut, 'example-lembut');
+            });
+            tableKejur.on('draw', function() {
+                renderDocumentsOnPage(eladsKejur, 'example-kejur');
             });
         });
     </script>
+    <style>
+    @media print {
+        #example-kejur th:nth-child(5,6),
+        #example-kejur td:nth-child(5,6) {
+            display: none !important;
+        }
+    }
+    @media print {
+        #example-lembut th:nth-child(5,6),
+        #example-lembut td:nth-child(5,6) {
+            display: none !important;
+        }
+    }
+    </style>
     @stop
 </section>
 @endsection

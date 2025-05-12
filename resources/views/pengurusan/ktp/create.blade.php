@@ -17,7 +17,9 @@
                 </div>
                 <div class="card-footer">
                     {!! Form::button('Kembali', ['onclick'=>"window.location='".route('pengurusan.ktp.index')."'",'class'=>'btn btn-secondary']) !!}
-                    {!! Form::button('Set Semula', ['type' => 'reset', 'class' => 'btn btn-warning']) !!}
+                    <button type="button" class="btn btn-warning" id="reset-form-btn">
+                        <i class="fas fa-undo"></i> Set Semula
+                    </button>
                     {!! Form::button('<i class="fas fa-save"></i> Daftar', ['class'=>'btn btn-success','type'=>'submit']) !!}
                 </div>
                 {!! Form::close() !!}

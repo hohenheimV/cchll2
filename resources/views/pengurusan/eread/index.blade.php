@@ -27,22 +27,22 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="example" class="responsive table table-bordered table-hover table-striped mb-0">
+                            <table id="ereadtable" class="responsive table table-bordered table-hover table-striped mb-0">
                                 <thead class="thead-dark">
                                     <tr>
-                                        <th class="w-5"></th>
+                                        <th class="w-5">Bil</th>
                                         <th>Tajuk</th>
                                         {{-- <th>Keterangan</th> --}}
                                         <th class="text-center w-10">Saiz</th>
                                         <th class="text-center w-15">Terbitan Jabatan</th>
                                         <th class="text-center w-15">Kategori </th>
-                                        <th class="text-center w-5">Tahun</th>
+                                        <th class="text-center w-5">Tahun Terbitan</th>
                                         <th class="text-center w-15">Imej Hadapan</th>
                                         <th class="text-center w-10">Tindakan</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php($index = $ereads->firstItem())
+                                    @php($index = 1)
                                     @foreach($ereads as $eread)
                                         <tr>
                                             <td>{{ $index++ }}</td>
@@ -69,7 +69,7 @@
                                             <td class="text-center">
                                                 {{ $eread->kategori->name ?? 'Tiada Maklumat' }}
                                             </td>
-                                            <td class="text-center">{!! Html::datetime($eread->created_at, 'Y') !!}</td>
+                                            <td class="text-center">{!! Html::datetime($eread->tarikh, 'Y') !!}</td>
                                             <td class="text-center">
                                                 <a href="{{ asset($eread->dokumen ? 'storage/uploads/eread/dokumen/' . $eread->dokumen : 'img/zip-preview.png') }}" 
                                                 data-toggle="lightbox" 
@@ -122,13 +122,13 @@
                         <!-- /.table-responsive -->
                     </div>
                     <!-- /.card-body -->
-                    @if (count($ereads) > 0)
-                        <div
-                            class="card-footer bg-light p-2 border-top-0 d-flex flex-column justify-content-center align-items-end">
-                            {!! Html::pagination($ereads) !!}
-                        </div>
-                        <!-- /.card-footer -->
-                    @endif
+                    {{-- 
+@if (count($ereads) > 0)
+    <div class="card-footer bg-light p-2 border-top-0 d-flex flex-column justify-content-center align-items-end">
+        {!! Html::pagination($ereads) !!}
+    </div>
+@endif
+--}}
                 </div><!-- /.card -->
             </div><!-- /.col-lg-12 -->
         </div><!-- /.row -->
@@ -140,65 +140,127 @@
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
     document.addEventListener('DOMContentLoaded', function() {
-        const ereads = @json($ereads);
+        const ereads = @json($ereads->values());
 
-        ereads.data.forEach(eread => {
-            // Check if the file is a PDF
-            if (eread.dokumen && eread.dokumen.endsWith('.pdf')) {
-                const url = `{{ asset('storage/uploads/eread/dokumen') }}/${eread.dokumen}`;
-                
-                pdfjsLib.getDocument(url).promise.then(function(pdf) {
-                    return pdf.getPage(1);
-                }).then(function(page) {
-                    const canvas = document.getElementById('pdf-render-' + eread.id);
-                    const loadingElement = document.getElementById('loading-' + eread.id);
-                    const context = canvas.getContext('2d');
-                    
-                    // Get the viewport at scale 1
-                    const originalViewport = page.getViewport({ scale: 0.5 });
-                    
-                    // Calculate scale to fit container while maintaining aspect ratio
-                    const containerWidth = 150;
-                    const containerHeight = 200;
-                    const scale = Math.min(
-                        containerWidth / originalViewport.width,
-                        containerHeight / originalViewport.height
-                    );
-                    
-                    // Get the viewport with calculated scale
-                    const viewport = page.getViewport({ scale: scale });
-                    
-                    // Set canvas dimensions
-                    canvas.width = viewport.width;
-                    canvas.height = viewport.height;
-                    
-                    // Render PDF page
-                    page.render({
-                        canvasContext: context,
-                        viewport: viewport
-                    }).promise.then(() => {
-                        if (loadingElement) {
-                            loadingElement.style.display = 'none';
-                        }
-                        canvas.style.display = 'block';
-                    });
-                }).catch(function(error) {
-                    console.error('Error loading PDF for ID ' + eread.id + ':', error);
-                    // Show a placeholder or error message
-                    const viewerElement = document.getElementById('pdf-viewer-' + eread.id);
-                    if (viewerElement) {
+        function renderDocumentsOnPage() {
+            $('#ereadtable tbody tr').each(function() {
+                const row = $(this);
+                const id = row.find('[id^="pdf-viewer-"]').attr('id');
+                if (!id) return;
+                const ereadId = id.replace('pdf-viewer-', '');
+                const eread = ereads.find(e => e.id == ereadId);
+                const viewerElement = document.getElementById('pdf-viewer-' + ereadId);
+
+                if (!eread || !viewerElement) return;
+
+                if (eread.dokumen && eread.dokumen.endsWith('.pdf')) {
+                    const url = `{{ asset('storage/uploads/eread/dokumen') }}/${eread.dokumen}`;
+                    pdfjsLib.getDocument(url).promise.then(function(pdf) {
+                        return pdf.getPage(1);
+                    }).then(function(page) {
+                        const canvas = document.getElementById('pdf-render-' + ereadId);
+                        const loadingElement = document.getElementById('loading-' + ereadId);
+                        const context = canvas.getContext('2d');
+                        const originalViewport = page.getViewport({ scale: 0.5 });
+                        const containerWidth = 150;
+                        const containerHeight = 200;
+                        const scale = Math.min(
+                            containerWidth / originalViewport.width,
+                            containerHeight / originalViewport.height
+                        );
+                        const viewport = page.getViewport({ scale: scale });
+                        canvas.width = viewport.width;
+                        canvas.height = viewport.height;
+                        page.render({
+                            canvasContext: context,
+                            viewport: viewport
+                        }).promise.then(() => {
+                            if (loadingElement) loadingElement.style.display = 'none';
+                            canvas.style.display = 'block';
+                        });
+                    }).catch(function(error) {
                         viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Preview not available</div>';
-                    }
-                });
-            } else {
-                // If not a PDF, ensure the ZIP preview image is displayed
-                const viewerElement = document.getElementById('pdf-viewer-' + eread.id);
-                if (viewerElement) {
+                    });
+                } else {
                     viewerElement.innerHTML = `<img src="{{ asset('img/zip-preview.png') }}" alt="ZIP File Preview" style="width: 100%; height: 100%; object-fit: contain;">`;
                 }
-            }
+            });
+        }
+
+        const table = $('#ereadtable').DataTable({
+            responsive: true,
+            paging: true,
+            pageLength: 10,
+            searching: true,
+            info: false,
+            autoWidth: false,
+            ordering: false,
+            dom: '<"top"fB>rt<"bottom"p><"clear">',
+            language: {
+                search: "Carian:"
+            },
+            buttons: [
+                {
+                    extend: 'copy',
+                    text: 'Salin',
+                    exportOptions: {
+                        columns: [0,1,2,3,4,5],
+                        modifier: { search: 'applied', order: 'applied', page: 'all' }
+                    }
+                },
+                {
+                    extend: 'csv',
+                    text: 'CSV',
+                    exportOptions: {
+                        columns: [0,1,2,3,4,5],
+                        modifier: { search: 'applied', order: 'applied', page: 'all' }
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: 'Excel',
+                    exportOptions: {
+                        columns: [0,1,2,3,4,5],
+                        modifier: { search: 'applied', order: 'applied', page: 'all' }
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    text: 'PDF',
+                    exportOptions: {
+                        columns: [0,1,2,3,4,5],
+                        modifier: { search: 'applied', order: 'applied', page: 'all' }
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: 'Cetak',
+                    exportOptions: {
+                        columns: [0,1,2,3,4,5],
+                        modifier: { search: 'applied', order: 'applied', page: 'all' }
+                    }
+                }
+            ]
+        });
+
+        // Initial render
+        renderDocumentsOnPage();
+
+        // Re-render previews on every page/change/search
+        table.on('draw', function() {
+            renderDocumentsOnPage();
         });
     });
     </script>
+    <style>
+    @media print {
+        #ereadtable th:nth-child(7),
+        #ereadtable th:nth-child(8),
+        #ereadtable td:nth-child(7),
+        #ereadtable td:nth-child(8) {
+            display: none !important;
+        }
+    }
+    </style>
     @stop
 @endsection

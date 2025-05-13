@@ -791,15 +791,17 @@ class eLAPSController extends Controller
                             $duplicateData->nama_pbt = "Jabatan Landskap Negara";
                         }
 
-                        $duplicateData->keluasan_taman = $permohonan->keluasan;
-                        $duplicateData->keluasan_unit = $permohonan->unit_keluasan;
-                        $duplicateData->panjang_taman = $permohonan->panjang;
-                        $duplicateData->panjang_unit = $permohonan->unit_panjang;
-                        $duplicateData->hakmilik_tanah_taman = $permohonan->hakmilik_tanah;
+                        $duplicateData->keluasan_taman = $permohonan->keluasan ?? null;
+                        $duplicateData->keluasan_unit = $permohonan->unit_keluasan ?? null;
+                        $duplicateData->panjang_taman = $permohonan->panjang ?? null;
+                        $duplicateData->panjang_unit = $permohonan->unit_panjang ?? null;
+                        $duplicateData->hakmilik_tanah_taman = $permohonan->hakmilik_tanah ?? null;
 
-                        $status_tanahData = json_decode($permohonan->status_tanah, true);
-                        $duplicateData->status_tanah_taman = $status_tanahData['status'];
-                        $duplicateData->tarikhWarta_tanah_taman = isset($status_tanahData['tarikh']) ? $status_tanahData['tarikh'] : null;
+                        if(isset($permohonan->status_tanah)){
+                            $status_tanahData = json_decode($permohonan->status_tanah, true);
+                            $duplicateData->status_tanah_taman = $status_tanahData['status'];
+                            $duplicateData->tarikhWarta_tanah_taman = isset($status_tanahData['tarikh']) ? $status_tanahData['tarikh'] : null;
+                        }
 
                         $duplicateData->negeri_taman = $permohonan->negeri;
                         $duplicateData->daerah_taman = $permohonan->daerah;
@@ -838,15 +840,17 @@ class eLAPSController extends Controller
                                 $duplicateData_draf->nama_pbt = "Jabatan Landskap Negara";
                             }  
 
-                            $duplicateData_draf->keluasan_taman = $permohonan->keluasan;
-                            $duplicateData_draf->keluasan_unit = $permohonan->unit_keluasan;
-                            $duplicateData_draf->panjang_taman = $permohonan->panjang;
-                            $duplicateData_draf->panjang_unit = $permohonan->unit_panjang;
-                            $duplicateData_draf->hakmilik_tanah_taman = $permohonan->hakmilik_tanah;
+                            $duplicateData_draf->keluasan_taman = $permohonan->keluasan ?? null;
+                            $duplicateData_draf->keluasan_unit = $permohonan->unit_keluasan ?? null;
+                            $duplicateData_draf->panjang_taman = $permohonan->panjang ?? null;
+                            $duplicateData_draf->panjang_unit = $permohonan->unit_panjang ?? null;
+                            $duplicateData_draf->hakmilik_tanah_taman = $permohonan->hakmilik_tanah ?? null;
 
-                            $status_tanahData = json_decode($permohonan->status_tanah, true);
-                            $duplicateData_draf->status_tanah_taman = $status_tanahData['status'];
-                            $duplicateData_draf->tarikhWarta_tanah_taman = isset($status_tanahData['tarikh']) ? $status_tanahData['tarikh'] : null;
+                            if(isset($permohonan->status_tanah)){
+                                $status_tanahData = json_decode($permohonan->status_tanah, true);
+                                $duplicateData_draf->status_tanah_taman = $status_tanahData['status'];
+                                $duplicateData_draf->tarikhWarta_tanah_taman = isset($status_tanahData['tarikh']) ? $status_tanahData['tarikh'] : null;
+                            }
 
                             $duplicateData_draf->negeri_taman = $permohonan->negeri;
                             $duplicateData_draf->daerah_taman = $permohonan->daerah;

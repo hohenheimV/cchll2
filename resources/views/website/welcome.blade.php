@@ -92,7 +92,7 @@
 
         .cta-buttons a {
             text-decoration: none;
-            background-color: #00b300;
+            background-color:  #28b463  ;
             color: white;
             padding: 10px 20px; /* Reduced padding for smaller buttons */
             font-size: 0.9rem; /* Smaller font size */
@@ -450,7 +450,7 @@
     <!-- <div id="carouselBanner3" class="carousel slide" data-ride="carousel">
         {!! website_slider('carouselBanner3') !!}
     </div> -->
-    <div id="carouselBanner3" class="carousel slide" data-ride="carousel" data-interval="3000">
+    <div id="carouselBanner3" class="carousel slide" data-ride="carousel" data-interval="5000">
         <div class="carousel-inner">
             @foreach ($sliders as $key => $slider)
                 <?php
@@ -749,7 +749,7 @@
                     <div class="row m-3">
                         <div class="col-md-3">
                             <div class="img w-100">
-                                <img src="{{ asset('img/maps-image.png') }}" class="img-fluid img-thumnail" alt="Responsive image">
+                                <img src="{{ asset('img/engagement.png') }}" class="img-fluid img-thumnail" alt="Responsive image">
                             </div>
                         </div>
                         <div class="col-md-9">
@@ -807,7 +807,7 @@
                     <div class="row m-3">
                         <div class="col-md-3">
                             <div class="img w-100">
-                                <img src="{{ asset('img/maps-image.png') }}" class="img-fluid img-thumnail" alt="Responsive image">
+                                <img src="{{ asset('img/engagement.png') }}" class="img-fluid img-thumnail" alt="Responsive image">
                             </div>
                         </div>
                         <div class="col-md-9">

@@ -616,13 +616,13 @@ class eLINDController extends Controller
                     $query->whereHas('roles', function ($query) {
                             $query->where('name', 'Pentadbir Sistem');
                         });
-                    })
+                    })->where('is_active', 1)
                     ->orWhere(function ($query) use ($bahagian_jln) {
                         $query->whereHas('roles', function ($query) {
                             $query->where('name', 'Pegawai');
                         })
                         ->where('bahagian_jln', '7');
-                    })
+                    })->where('is_active', 1)
                     ->get();
                 foreach ($emailBTM as $key => $value) {
                     $btm_email[] = ['address' => $value->email, 'name' => $value->name];

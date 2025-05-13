@@ -220,14 +220,14 @@ class RegisterController extends Controller
                 $query->whereHas('roles', function ($query) {
                     $query->where('name', 'Pentadbir Sistem');
                 });
-            })
+            })->where('is_active', 1)
             ->orWhere(function ($query) use ($bahagian_jln) {
                 $query->where(function ($q) use ($bahagian_jln) {
                     $q->whereHas('roles', function ($q) {
                         $q->where('name', 'Pegawai');
                     })->where('bahagian_jln', $bahagian_jln);
                 });
-            })
+            })->where('is_active', 1)
             ->get();
 
             foreach ($emailArr as $value) {

@@ -482,7 +482,7 @@ class eLAPSController extends Controller
                     $query->where('name', 'Pegawai');
                 })
                 ->where('bahagian_jln', 6);
-            })
+            })->where('is_active', 1)
             ->orWhere(function ($query) {
                 $query->whereHas('roles', function ($query) {
                     $query->where('name', 'KP/ TKP JLN');
@@ -517,7 +517,7 @@ class eLAPSController extends Controller
                     $query->where('name', 'Pegawai');
                 })
                 ->where('bahagian_jln', 6);
-            })
+            })->where('is_active', 1)
             ->orWhere(function ($query) {
                 $query->whereHas('roles', function ($query) {
                     $query->where('name', 'KP/ TKP JLN');

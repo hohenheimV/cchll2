@@ -531,7 +531,7 @@
 
             <script>
                 function onlyOne4(checkbox4) {
-                    console.log(checkbox4.id);
+                    // console.log(checkbox4.id);
                     var checkboxes4 = document.querySelectorAll('input[name="status_tanah[status]"]');
                     checkboxes4.forEach(function(item4) {
                         if (item4 !== checkbox4) {
@@ -1115,7 +1115,7 @@
         </td>
         <script>
             function onlyOne8(checkbox8) {
-                console.log(checkbox8);
+                // console.log(checkbox8);
                 var checkboxes8 = document.querySelectorAll('input[name="' + checkbox8.name + '"]');
                 checkboxes8.forEach(function(item8) {
                     if (item8 !== checkbox8) {
@@ -1337,12 +1337,12 @@
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.log("Error: " + error);
+                        // console.log("Error: " + error);
                         alert("Error: " + error);
                     },
                     complete: function(xhr, status) {
                         // Optionally log the completion of the request
-                        console.log("Request complete with status: " + status);
+                        // console.log("Request complete with status: " + status);
                     }
                 });
             }

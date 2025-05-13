@@ -447,35 +447,32 @@ class ePALMController extends Controller
                 }
                 // dd($btm_email);
                 $nama_pemohon = isset($PBTArr->pbt_name) ? $PBTArr->pbt_name : 'Jabatan Landskap Negara';
-                // if (config('mail.enabled')) {
-                //     try {
-                //         $emailData = [
-                //             "email_to" => $user_email,
-                //             "email_cc" => [
-                //                 ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
-                //                 ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
-                //             ],//$btm_email,
-                //             "subject" => 'Modul Pengurusan Taman & Landskap (ePALM)',
-                //         ];
+                if (config('mail.enabled')) {
+                    try {
+                        $emailData = [
+                            "email_to" => $user_email,
+                            "email_cc" => $btm_email,
+                            "subject" => 'Modul Pengurusan Taman & Landskap (ePALM)',
+                        ];
         
-                //         Mail::send('pengurusan.ePALM.mails.perubahan', ['epalm' => $ePALM_draf], function ($message) use ($emailData) {
-                //             $message->subject($emailData["subject"]);
-                //             // Loop through to array and add each email
-                //             foreach ($emailData['email_to'] as $to) {
-                //                 $message->to($to['address'], $to['name']);
-                //             }
+                        Mail::send('pengurusan.ePALM.mails.perubahan', ['epalm' => $ePALM_draf], function ($message) use ($emailData) {
+                            $message->subject($emailData["subject"]);
+                            // Loop through to array and add each email
+                            foreach ($emailData['email_to'] as $to) {
+                                $message->to($to['address'], $to['name']);
+                            }
         
-                //             // Loop through cc array and add each email
-                //             foreach ($emailData['email_cc'] as $cc) {
-                //                 $message->cc($cc['address'], $cc['name']);
-                //             }
-                //         });
-                //     } catch (\Exception $exception) {
-                //         \Log::error("Error sending registration email: " . $exception->getMessage());
-                //        dd("Error sending registration email: " . $exception->getMessage());
-                //     }
-                //     // dd($emailData);
-                // }
+                            // Loop through cc array and add each email
+                            foreach ($emailData['email_cc'] as $cc) {
+                                $message->cc($cc['address'], $cc['name']);
+                            }
+                        });
+                    } catch (\Exception $exception) {
+                        \Log::error("Error sending registration email: " . $exception->getMessage());
+                    //    dd("Error sending registration email: " . $exception->getMessage());
+                    }
+                    // dd($emailData);
+                }
                 return redirect()->route('pengurusan.ePALM.edit', [$ePALM_draf])->with('successMessage', 'Maklumat taman telah berjaya dikemaskini');
             }
         } elseif ($request->input('action') === 'approve') {

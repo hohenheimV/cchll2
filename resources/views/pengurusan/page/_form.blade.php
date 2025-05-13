@@ -97,7 +97,7 @@
                         ],
                         callbacks: {
                             onInit: function() {
-                                console.log('Summernote is initialized');
+                                // console.log('Summernote is initialized');
                             }
                         }
                     });

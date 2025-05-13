@@ -11,7 +11,7 @@
         }
     </style>
     <!-- <div class="container-fluid">
-        @if ((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai|Pihak Berkuasa Tempatan')))
+        @if ((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN|Pegawai|Pihak Berkuasa Tempatan')))
             <div class="row" id="elaps">
                 @php
                     $cards = [
@@ -190,22 +190,22 @@
         </div>
     @else
         <div class="container-fluid">
-            @if(Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN') || (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [7, 9])))
+            @if(Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN') || (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [7, 9])))
                 <div class="row">
-                    {!! stats_card('Jumlah Permohonan Projek', app_dashboard_permohonan(), 'javascript:void(0)', 'fas fa-paper-plane', '#17a2b8') !!}
-                    {!! stats_card('Jumlah Taman Setakat ' . date('Y'), app_dashboard_taman(), 'javascript:void(0)', 'fas fa-leaf', ' #145a32 ') !!}
-                    {!! stats_card('Jumlah Pelan Induk Landskap', app_dashboard_pelan(), 'javascript:void(0)', 'fas fa-drafting-compass', ' #7d6608 ') !!}
-                    {!! stats_card('Jumlah Pokok Ditanam Setakat ' . date('Y'), app_dashboard_pokok(), 'javascript:void(0)', 'fas fa-tree', ' #186a3b ') !!}
-                    {!! stats_card('Jumlah Rakan Taman', app_dashboard_mib(), 'javascript:void(0)', 'fas fa-users', ' #4a235a  ') !!}
-                    {!! stats_card('Jumlah Penggiat Industri Landskap', app_dashboard_industri(), 'javascript:void(0)', 'fas fa-seedling', '  #6e2c00   ') !!}
-                    {!! stats_card('Penyelidikan dan Penerbitan Landskap', app_dashboard_eread(), 'javascript:void(0)', 'fas fa-seedling', ' #141565 ') !!}
-                    {!! stats_card('Rekabentuk Landskap', app_dashboard_elad(), 'javascript:void(0)', 'fas fa-seedling', ' #2e764a') !!}
-                    {!! stats_card('Pentadbiran Kontrak dan Polisi Landskap', app_dashboard_epact(), 'javascript:void(0)', 'fas fa-seedling', '  #ba4a4a   ') !!}
-                    {!! stats_card('Jumlah Entiti Landskap Unik', app_dashboard_entiti(), 'javascript:void(0)', 'fas fa-dna', '  #616a6b  ') !!}
+                    {!! stats_card('Jumlah Permohonan Projek', app_dashboard_permohonan(), (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9])) ? 'javascript:void(0)' : route('pengurusan.eLAPS.index'), 'fas fa-paper-plane', '#17a2b8') !!}
+                    {!! stats_card('Jumlah Taman Setakat ' . date('Y'), app_dashboard_taman(), (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9])) ? 'javascript:void(0)' : route('pengurusan.ePALM.index'), 'fas fa-leaf', ' #145a32 ') !!}
+                    {!! stats_card('Jumlah Pelan Induk Landskap', app_dashboard_pelan(), (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9])) ? 'javascript:void(0)' : route('pengurusan.ePIL.index'), 'fas fa-drafting-compass', ' #7d6608 ') !!}
+                    {!! stats_card('Jumlah Pokok Ditanam Setakat ' . date('Y'), app_dashboard_pokok(), (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9])) ? 'javascript:void(0)' : route('pengurusan.ktp.index'), 'fas fa-tree', ' #186a3b ') !!}
+                    {!! stats_card('Jumlah Rakan Taman', app_dashboard_mib(), (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9])) ? 'javascript:void(0)' : route('pengurusan.MIB.index'), 'fas fa-users', ' #4a235a  ') !!}
+                    {!! stats_card('Jumlah Penggiat Industri Landskap', app_dashboard_industri(), (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9])) ? 'javascript:void(0)' : route('pengurusan.eLIND.index', ['type' => 'kontraktor']), 'fas fa-seedling', '  #6e2c00   ') !!}
+                    {!! stats_card('Penyelidikan dan Penerbitan Landskap', app_dashboard_eread(), (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9])) ? 'javascript:void(0)' : route('pengurusan.eread.index'), 'fas fa-seedling', ' #141565 ') !!}
+                    {!! stats_card('Rekabentuk Landskap', app_dashboard_elad(), (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9])) ? 'javascript:void(0)' : route('pengurusan.elad.index'), 'fas fa-seedling', ' #2e764a') !!}
+                    {!! stats_card('Pentadbiran Kontrak dan Polisi Landskap', app_dashboard_epact(), (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9])) ? 'javascript:void(0)' : route('pengurusan.epact.index'), 'fas fa-seedling', '  #ba4a4a   ') !!}
+                    {!! stats_card('Jumlah Entiti Landskap Unik', app_dashboard_entiti(), (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9])) ? 'javascript:void(0)' : route('pengurusan.entiti-landskap-unik.index'), 'fas fa-dna', '  #616a6b  ') !!}
                 </div>
             @endif
 
-            @if(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [7]))
+            @if(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [7]) && Auth::user()->bahagian_jln != null)
                 <h2>Statistik Modul</h2>
                 @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [1, 2, 3, 4, 5, 6, 7])))
                     <div class="row">
@@ -318,7 +318,7 @@
                 @endif
             @endif
             
-            @if(Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN') || (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [7])))
+            @if(Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN') || (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [7])))
                 <div class="row">
                     <div class="col-md-6 col-12">
                         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -347,14 +347,12 @@
                                                 return response.json();
                                             })
                                             .then(data => {
-                                                console.log('Fetched PBT Data:', data);
+                                                // console.log('Fetched PBT Data:', data);
 
                                                 // Data for the histogram
                                                 const data1 = {
                                                     labels: [
-                                                        'Johor', 'Kedah', 'Kelantan', 'Melaka', 'Negeri Sembilan',
-                                                        'Pahang', 'Penang', 'Perak', 'Perlis', 'Selangor',
-                                                        'Sabah', 'Sarawak', 'Wilayah Persekutuan'
+                                                        'Johor', 'Kedah', 'Kelantan', 'Melaka', 'Negeri Sembilan','Pahang', 'Perak', 'Perlis', 'Pulau Pinang', 'Sabah', 'Sarawak', 'Selangor', 'Terengganu', 'Wilayah Persekutuan'
                                                     ],
                                                     datasets: [{
                                                         label: 'Bilangan PBT',

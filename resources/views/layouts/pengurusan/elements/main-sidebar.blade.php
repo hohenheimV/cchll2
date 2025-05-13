@@ -71,7 +71,7 @@
                     ];
                     
                 ?>
-                @if ((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai')))
+                @if ((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN|Pegawai')))
                     <!-- <li class="nav-header text-uppercase">{{ $bahagian_jln[Auth::user()->bahagian_jln ? Auth::user()->bahagian_jln : 0] }}</li> -->
                     <li class="nav-header text-uppercase" style="white-space: normal;">Maklumat Landskap</li>
                 @elseif ((Auth::user()->hasRole('Pihak Berkuasa Tempatan')))
@@ -79,7 +79,7 @@
                 @elseif ((Auth::user()->hasRole('Penggiat Industri')))
                     <li class="nav-header text-uppercase" style="white-space: normal;">Penggiat Industri</li>
                 @endif
-                @if ((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai|Pihak Berkuasa Tempatan')))
+                @if ((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN|Pegawai|Pihak Berkuasa Tempatan')))
                     @foreach(['eLAPS', 'ePALM', 'ePIL'] as $item)
                         @if(
                             (Auth::user()->hasRole('Pentadbir Sistem')) ||
@@ -119,7 +119,7 @@
                         </button>
                     </li> -->
                 @endif
-                @if ((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai')))
+                @if ((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN|Pegawai')))
                     @php
                         $types = [
                             'kontraktor' => ['label' => 'Kontraktor', 'icon' => 'fas fa-user-tie'],
@@ -181,7 +181,7 @@
                         </ul>
                     </li>
                 @endif
-                @if ((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai')))
+                @if ((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN|Pegawai')))
                     @foreach(['eREAD', 'eLAD', 'ePACT'] as $item)
                         @if(
                             (Auth::user()->hasRole('Pentadbir Sistem')) || 
@@ -282,7 +282,7 @@
                                     'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.roles.')])
                                     !!}
                                 </li>
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     @php
                                         $inactiveUserCount = \App\User::where('is_active', 0)->where('bahagian_jln', null)->count();
                                     @endphp
@@ -297,7 +297,7 @@
                                         <p>&nbsp;Pengguna</p>
                                     </button> -->
 
-                                </li>
+                                </li> --}}
                                 <li class="nav-item has-treeview {{ Html::active(['pengurusan.users.'], 'menu-open') }}">
                                     @php
                                         //$inactiveUserCount = \App\User::whereRaw('is_active = ? ', ['0'])->count();
@@ -341,7 +341,7 @@
                                             <button onclick="window.location='{{ route('pengurusan.users.index', ['keyword' => 'Penggiat Industri']) }}'" 
                                                 class="nav-link btn btn-block btn-link text-left ">
                                             &nbsp;<span class="badge badge-danger" style="margin-left: auto;">{{ $inactiveUserCountPI }}</span>
-                                            <p>&nbsp;Penggiat Industri</p>
+                                            <p>&nbsp;Penggiat Industri Landskap</p>
                                             </button>
                                         </li>
                                     </ul>

@@ -269,7 +269,7 @@
 
 
         function slotChanges(type, exits){
-            console.log('type '+type,exits);
+            // console.log('type '+type,exits);
             if (exits) {
                 $('#slot_'+type).attr('disabled', true); // If checked disable item
                 $('#slot_'+type).next().css("text-decoration", "line-through");

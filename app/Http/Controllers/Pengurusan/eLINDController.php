@@ -629,35 +629,29 @@ class eLINDController extends Controller
                 }
                 // dd($user_email);
                 if (config('mail.enabled')) {
-                    // try {
-                    //     $emailData = [
-                    //         "email_to" => [
-                    //             ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
-                    //             ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
-                    //         ],//$user_email,
-                    //         "email_cc" => [
-                    //             ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
-                    //             ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
-                    //         ],//$btm_email,
-                    //         "subject" => 'Modul Pengurusan Maklumat Industri Landskap (eLIND)',
-                    //     ];
+                    try {
+                        $emailData = [
+                            "email_to" => $user_email,
+                            "email_cc" => $btm_email,
+                            "subject" => 'Modul Pengurusan Maklumat Industri Landskap (eLIND)',
+                        ];
         
-                    //     Mail::send('pengurusan.eLIND.mails.perubahan', ['elind' => $eLIND, 'jenis' => $requestData['jenis_industri']], function ($message) use ($emailData) {
-                    //         $message->subject($emailData["subject"]);
-                    //         // Loop through to array and add each email
-                    //         foreach ($emailData['email_to'] as $to) {
-                    //             $message->to($to['address'], $to['name']);
-                    //         }
+                        Mail::send('pengurusan.eLIND.mails.perubahan', ['elind' => $eLIND, 'jenis' => $requestData['jenis_industri']], function ($message) use ($emailData) {
+                            $message->subject($emailData["subject"]);
+                            // Loop through to array and add each email
+                            foreach ($emailData['email_to'] as $to) {
+                                $message->to($to['address'], $to['name']);
+                            }
         
-                    //         // Loop through cc array and add each email
-                    //         foreach ($emailData['email_cc'] as $cc) {
-                    //             $message->cc($cc['address'], $cc['name']);
-                    //         }
-                    //     });
-                    // } catch (\Exception $exception) {
-                    //     \Log::error("Error sending registration email: " . $exception->getMessage());
+                            // Loop through cc array and add each email
+                            foreach ($emailData['email_cc'] as $cc) {
+                                $message->cc($cc['address'], $cc['name']);
+                            }
+                        });
+                    } catch (\Exception $exception) {
+                        \Log::error("Error sending registration email: " . $exception->getMessage());
                     //    dd("Error sending registration email: " . $exception->getMessage());
-                    // }
+                    }
                     // dd($emailData);
                 }
                 return redirect()->route('pengurusan.eLIND.edit', ['type' => $type, 'id' => $eLIND->id_elind])->with('successMessage', 'Maklumat '.$eLIND->jenis_industri.' telah berjaya dikemaskini');

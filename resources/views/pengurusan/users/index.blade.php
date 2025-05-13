@@ -10,10 +10,25 @@
             <div class="col">
                 <div class="card card-outline card-dark">
                     <div class="card-header border-0">
-                        <h5 class="card-title">@yield('title')</h5>
+                        <h5 class="card-title">
+                            @yield('title')
+                            @php
+                                $keyword = request('keyword');
+                                $label = '';
+
+                                if ($keyword == 'Penggiat Industri') {
+                                    $label = 'Penggiat Industri Landskap';
+                                } elseif ($keyword == 'Pihak Berkuasa Tempatan') {
+                                    $label = 'Pihak Berkuasa Tempatan';
+                                }
+                            @endphp
+
+                            {{ $label }}
+                        </h5>
                         <div class="card-tools">
                             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                                {{ Form::open(['class'=>'form-inline','method' => 'get']) }}
+                                {{-- {{ dd(request('keyword'))}} --}}
+                                {{-- {{ Form::open(['class'=>'form-inline','method' => 'get']) }}
                                 <div class="input-group mr-2">
                                     {{ Form::search('keyword',request('keyword'),['aria-label'=>'Search','placeholder'=>'Carian Pantas','class' => 'form-control form-control-sm '.Html::isInvalid($errors,'keyword')]) }}
                                     <div class="input-group-append">
@@ -24,7 +39,7 @@
                                         'class'=>'btn btn-secondary btn-sm']) !!}
                                     </div>
                                 </div>
-                                {{ Form::close() }}
+                                {{ Form::close() }} --}}
 
                                 <div class="btn-group" role="group" aria-label="First group">
                                     {!! Form::button('<i class="fas fa-plus"></i> Daftar', [
@@ -61,14 +76,14 @@
                                         <td>
                                             @if(!empty($user->getRoleNames()))
                                                 @foreach($user->getRoleNames() as $v)
-                                                <label class="badge badge-success font-weight-normal">{{ $v }}</label>
+                                                <label class="badge badge-success font-weight-normal">{{ strtoupper($v) }}</label>
                                                 @endforeach
                                             @endif
                                             <br>
                                             @if(in_array('Penggiat Industri', $user->getRoleNames()->toArray()))
-                                                <label class="badge badge-warning font-weight-normal">{{ isset($user->jenis) ? $user->jenis : '' }}</label> - 
+                                                <label class="badge badge-warning font-weight-normal">{{ isset($user->jenis) ? strtoupper($user->jenis) : '' }}</label> - 
                                             @endif
-                                            <label class="badge badge-primary font-weight-normal">{{ isset($user->bahagian) ? $user->bahagian : '' }}</label>
+                                            <label class="badge badge-primary font-weight-normal">{{ isset($user->bahagian) ? strtoupper($user->bahagian) : '' }}</label>
                                         </td>
                                         <td class="text-center">{!! Html::datetime($user->created_at,'d-m-Y') !!}
                                         </td>

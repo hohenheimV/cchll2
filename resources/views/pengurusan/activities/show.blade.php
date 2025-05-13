@@ -190,7 +190,7 @@
                                 <div class="bg-gray my-3">
                                     <dl class="row p-3">
 
-                                        <dt class='col-sm-4'>Catatan TKP/B JLN</dt>
+                                        <dt class='col-sm-4'>Catatan KP/ TKP JLN</dt>
                                         <dd class='col-sm-6'>{!! $activity->note_officer_lvl_3 ?? $null !!}</dd>
                                     </dl>
                                 </div>

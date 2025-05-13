@@ -34,7 +34,7 @@
                                     <!-- <th class="text-center align-middle w-1">No Permohonan</th> -->
                                     <!-- <th class="text-center align-middle">Nama/E-Mel</th> -->
                                     <th class="text-center align-middle w-15">Taman Perumahan</th>
-                                    @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|TKP/B JLN'))
+                                    @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|KP/ TKP JLN'))
                                         <th class="text-center w-11">PBT</th>
                                     @endif
                                     <!-- <th class="text-center align-middle w-1">Tarikh Permohonan</th> -->
@@ -57,7 +57,7 @@
                                     </td> -->
                                     <!-- <td>{!! $rakan_taman->name.'<br />'.$rakan_taman->email !!}</td> -->
                                     <td>{{ $rakan_taman->taman }}</td>
-                                    @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem'))
+                                    @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))
                                         <td>
                                             {{ $rakan_taman->pbt }}
                                         </td>
@@ -84,7 +84,7 @@
                                             'class'=>'btn btn-warning btn-sm',
                                             'onclick'=>"window.location='".route('pengurusan.MIB.edit',$rakan_taman)."'"
                                             ]) !!}
-                                            @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem'))
+                                            @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))
                                                 {!! Form::button('<i class="fas fa-trash"></i>', ['class'=>'btn btn-danger
                                                 btn-sm',
                                                 'data-url'=>route('pengurusan.MIB.destroy',$rakan_taman->id),

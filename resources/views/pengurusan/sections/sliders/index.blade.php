@@ -187,7 +187,7 @@
 
                 // Define function to open filemanager window
                 var lfm = function (options, cb) {
-                    console.log('options',options);
+                    // console.log('options',options);
                     var route_prefix = (options && options.prefix) ? options.prefix : '/filemanager';
                     window.open(route_prefix + '?type=' + options.type || 'file', 'FileManager', 'width=900,height=600');
                     window.SetUrl = cb;

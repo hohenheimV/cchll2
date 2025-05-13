@@ -100,7 +100,7 @@ class UsersController extends Controller
 
         foreach ($users as $key => $value) {
             // dump($value->getRoleNames());
-            if (in_array('Penggiat Industri', $value->getRoleNames()->toArray()) && $value->bahagian_jln != null) {
+            if (in_array('Penggiat Industri', $value->getRoleNames()->toArray()) /* && $value->bahagian_jln != null */) {
                 $syarikat = MaklumatPenggunaPenggiatIndustri::select('name', 'jenis_industri')->where('id_elind', $value->bahagian_jln)->first();
                 // $value->bahagian = $syarikat->name;
                 // $value->jenis = $syarikat->jenis_industri;
@@ -221,7 +221,7 @@ class UsersController extends Controller
         if($user->hasRole('Penggiat Industri')){
             $syarikat = $user->bahagian_jln;
             $elind = MaklumatPenggunaPenggiatIndustri::where('id_elind', '=', $syarikat)->first();
-            $user->jenis = $elind->jenis_industri;
+            $user->jenis = $elind->jenis_industri ?? null;
         }
 
         return view('pengurusan.users.edit', ['user' => $user, 'roles' => $roles, 'userRole' => $userRole]);
@@ -276,8 +276,7 @@ class UsersController extends Controller
         } else {
             $input = Arr::except($input, ['password']);
         }
-
-
+        
         // define data field of Model
         $user->update($input);
 
@@ -313,7 +312,14 @@ class UsersController extends Controller
         }
 
         // Redirect with success message
-        return redirect()->route('pengurusan.users.index')->with('successMessage', 'Maklumat telah berjaya disimpan' . ((!$previousStatus && $user->is_active) ? ' dan e-mel telah dihantar!' : '!'));
+        $route = 'pengurusan.users.index';
+        $params = [];
+        if (in_array('Penggiat Industri', $input['roles'])) {
+            $params = ['keyword' => 'Penggiat Industri'];
+        }elseif (in_array('Pihak Berkuasa Tempatan', $input['roles'])) {
+            $params = ['keyword' => 'Pihak Berkuasa Tempatan'];
+        }
+        return redirect()->route($route, $params)->with('successMessage', 'Maklumat telah berjaya disimpan' . ((!$previousStatus && $user->is_active) ? ' dan e-mel telah dihantar!' : '!'));
     }
 
     /**

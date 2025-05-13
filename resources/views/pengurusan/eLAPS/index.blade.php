@@ -12,7 +12,7 @@
         <div class="col-lg-12">
             <div class="card card-olive card-outline">
                 <div class="card-header">
-                @if(Auth::user()->hasRole('TKP/B JLN|Pentadbir Sistem') || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6))
+                @if(Auth::user()->hasRole('KP/ TKP JLN|Pentadbir Sistem') || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6))
                     <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan KP/TKP/B. Penilaian]</h3>
                 
                 @elseif(Auth::user()->hasRole('Pegawai|Pentadbir Sistem'))
@@ -40,7 +40,7 @@
                                     <th class="w-1">Bil.</th>
                                     <th>Tajuk Permohonan</th>
                                     <th class="w-15">Jenis Permohonan</th>
-                                    @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|TKP/B JLN'))
+                                    @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|KP/ TKP JLN'))
                                         <th class="text-center w-10">PBT</th>
                                     @endif
                                     <th class="text-center w-5">Tarikh Permohonan</th>
@@ -82,9 +82,9 @@
                                 ])
                                 @php($status_count = count($status_pembangunan))
 
-                                @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|Pihak Berkuasa Tempatan|TKP/B JLN'))
+                                @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|Pihak Berkuasa Tempatan|KP/ TKP JLN'))
                                     @forelse($eLAPS as $permohonan)
-                                        @if(!($permohonan->status_permohonan == 1 && ((Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6) || Auth::user()->hasRole('TKP/B JLN'))))
+                                        @if(!($permohonan->status_permohonan == 1 && ((Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6) || Auth::user()->hasRole('KP/ TKP JLN'))))
                                         <tr>
                                             <td>{{ $index++ }}</td>
                                             <td>{{ strtoupper($permohonan->projectTitle) }}</td>
@@ -94,7 +94,7 @@
                                                 in_array($permohonan->category, $jenis_pembangunan) ? $permohonan->category : '<span class="badge bg-warning">' . $permohonan->category . '</span>'
                                             !!}
                                             </td>
-                                            @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem'))
+                                            @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))
                                             <td>
                                                 {{ $permohonan->pbt_name }}
                                             </td>
@@ -137,7 +137,7 @@
                                                                 Html::tooltip('Padam Draf Permohonan')
                                                             ]) 
                                                         !!}
-                                                    @elseif($permohonan->status_permohonan == 3 && (Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN') || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6)))
+                                                    @elseif($permohonan->status_permohonan == 3 && (Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN') || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6)))
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
                                                             'class' => 'btn btn-warning btn-sm', 
                                                             'data-toggle'=>'modal', 

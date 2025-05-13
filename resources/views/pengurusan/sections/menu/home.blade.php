@@ -456,7 +456,7 @@
             var list   = e.length ? e : $(e.target),
                 output = list.data('output');
             if (window.JSON) {
-                console.log(list.nestable('serialize'));
+                // console.log(list.nestable('serialize'));
                 //console.log(window.JSON.stringify(list.nestable('serialize')));
                 output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
             } else {

@@ -140,7 +140,7 @@
                 </div>
                 <div class="card-footer">
                     {!! Form::button('Kembali', ['onclick' => "window.location='".route('pengurusan.eLIND.index', ['type' => $lastSegment])."'", 'class' => 'btn btn-secondary']) !!}
-                    @if((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Penggiat Industri')) || (Auth::user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == 7 || Auth::user()->bahagian_jln == 8)))
+                    @if((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN|Penggiat Industri')) || (Auth::user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == 7 || Auth::user()->bahagian_jln == 8)))
                         {!! 
                             Form::button('<i class="fas fa-pencil-alt"></i>', ['onclick'=>"window.location='".route('pengurusan.eLIND.edit', ['type' => $lastSegment, 'id' => $eLIND->id_elind])."'", 'class'=>'btn bg-warning', Html::tooltip('Kemaskini PIL')]); 
                         !!}
@@ -154,7 +154,7 @@
                             'value' => 'prestasi'
                         ]) !!}
                     @endif
-                    @if((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN') || (Auth::user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == 7 || Auth::user()->bahagian_jln == 8))))
+                    @if((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN') || (Auth::user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == 7 || Auth::user()->bahagian_jln == 8))))
                         {!! Form::button('<i class="fas fa-save"></i> Pengesahan', [
                             'class' => 'btn btn-primary', 
                             'type' => 'submit', 

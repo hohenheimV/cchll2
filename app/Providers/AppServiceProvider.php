@@ -71,7 +71,7 @@ class AppServiceProvider extends ServiceProvider
             $user = Auth::user();
 
             if ($user) {
-                $user->bahagian = 'Tiada Maklumat';
+                $user->bahagian = 'eLANDSKAP, JLN';
                 $user->jenis = null;
 
                 if (in_array('Penggiat Industri', $user->getRoleNames()->toArray()) && $user->bahagian_jln) {
@@ -79,16 +79,16 @@ class AppServiceProvider extends ServiceProvider
                         ->where('id_elind', $user->bahagian_jln)
                         ->first();
 
-                    $user->bahagian = $syarikat->name ?? 'Tiada Maklumat';
-                    $user->jenis = $syarikat->jenis_industri ?? 'Tiada Maklumat';
+                    $user->bahagian = $syarikat->name ?? 'eLANDSKAP, JLN';
+                    $user->jenis = $syarikat->jenis_industri ?? 'eLANDSKAP, JLN';
 
                 } elseif (in_array('Pihak Berkuasa Tempatan', $user->getRoleNames()->toArray()) && $user->bahagian_jln) {
                     $syarikat = MaklumatPenggunaPbt::where('id', $user->bahagian_jln)->first();
-                    $user->bahagian = $syarikat->pbt_name ?? 'Tiada Maklumat';
+                    $user->bahagian = $syarikat->pbt_name ?? 'eLANDSKAP, JLN';
 
                 } elseif (in_array('Pegawai', $user->getRoleNames()->toArray())) {
                     $bahagian_jln = [
-                        '0' => 'Tiada Maklumat',
+                        '0' => 'eLANDSKAP, JLN',
                         '1' => 'Bahagian Pengurusan Landskap',
                         '2' => 'Bahagian Taman Awam',
                         '3' => 'Bahagian Pembangunan Landskap',

@@ -26,7 +26,7 @@
                     <div inert>
                         @include('pengurusan.eLAPS._form')
                     </div>
-                    @if(isset($eLAPS->file_path) && (auth()->user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pihak Berkuasa Tempatan') || (Auth::user()->hasRole('Pegawai'))))
+                    @if(isset($eLAPS->file_path) && (auth()->user()->hasRole('Pentadbir Sistem|KP/ TKP JLN|Pihak Berkuasa Tempatan') || (Auth::user()->hasRole('Pegawai'))))
                         <div class="col-md-12">
                             <div class="d-flex align-items-center">
                                 @php
@@ -110,7 +110,7 @@
                 </div>
                 <div class="card-footer">
                     {!! Form::button('Kembali', ['onclick' => "window.location='".route('pengurusan.eLAPS.index')."'", 'class' => 'btn btn-secondary']) !!}
-                    @if((auth()->user()->hasRole('Pentadbir Sistem|TKP/B JLN') || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6)) && in_array($eLAPS->status_permohonan, [2, 3]))
+                    @if((auth()->user()->hasRole('Pentadbir Sistem|KP/ TKP JLN') || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6)) && in_array($eLAPS->status_permohonan, [2, 3]))
                         {!! Form::button('<i class="fas fa-pencil-alt"></i> Serah Permohonan ke Bahagian', [
                             'class' => 'btn btn-warning', 
                             'data-toggle'=>'modal', 

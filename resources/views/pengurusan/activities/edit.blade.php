@@ -33,7 +33,7 @@
 
                         </div>
                         <div class="form-row">
-                        @if (Auth::user()->hasAnyRole(['Pentadbir Sistem','TKP/B JLN']))
+                        @if (Auth::user()->hasAnyRole(['Pentadbir Sistem','KP/ TKP JLN']))
                             <div class="col-6 col-md-2">
                                 <div class="form-group">
                                     {{ Form::label('approved_at', 'Tarikh Kelulusan') }}
@@ -65,9 +65,9 @@
                                         {{ Form::label('note_officer_lvl_2', 'Catatan Pengarah Taman') }}
                                         {{ Form::textarea('note_officer_lvl_2',null,['rows'=>5,'placeholder'=>'Sila masukkan Catatan Permohonan','class' => 'form-control '.Html::isInvalid($errors,'note_officer_lvl_2')]) }}
                                         {!! Html::hasError($errors,'note_officer_lvl_2') !!}
-                                    @elseif(Auth::user()->hasRole('TKP/B JLN'))
+                                    @elseif(Auth::user()->hasRole('KP/ TKP JLN'))
 
-                                        {{ Form::label('note_officer_lvl_3', 'Catatan TKP/B JLN') }}
+                                        {{ Form::label('note_officer_lvl_3', 'Catatan KP/ TKP JLN') }}
                                         {{ Form::textarea('note_officer_lvl_3',null,['rows'=>5,'placeholder'=>'Sila masukkan Catatan Permohonan','class' => 'form-control '.Html::isInvalid($errors,'note_officer_lvl_3')]) }}
                                         {!! Html::hasError($errors,'note_officer_lvl_3') !!}
                                     @else

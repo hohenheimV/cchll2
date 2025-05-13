@@ -573,7 +573,7 @@
             var lat = button.data('lat');
             var lng = button.data('lng');
             var gambar_360 = button.data('gambar_360');
-            console.log(gambar_360);
+            // console.log(gambar_360);
             if ((komponen && komponen === '') && (gambar_360 && gambar_360 !== '')) {
                 $('#komponen').show();
                 var iframeSrc = "{{ route('pano', ['folder' => 'FOLDER_PLACEHOLDER', 'image' => 'IMAGE_PLACEHOLDER']) }}";

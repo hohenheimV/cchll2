@@ -653,14 +653,14 @@
                 if (taraf_bumiputera && taraf_bumiputera !== '') {
                     // Map the numeric value to the corresponding name
                     const tarafBumiputeraName = tarafBumiputeraMap[taraf_bumiputera];
-                    console.log(tarafBumiputeraName);  // Console log the name
+                    // console.log(tarafBumiputeraName);  // Console log the name
                     modal.find('#taraf_bumiputera').text(tarafBumiputeraName);
                 }
 
                 if (bidang_kepakaran && bidang_kepakaran !== '') {
                     // Map the numeric value to the corresponding name
                     const bidangKepakaranName = bidangKepakaranMap[bidang_kepakaran];
-                    console.log(bidangKepakaranName);  // Console log the name
+                    // console.log(bidangKepakaranName);  // Console log the name
                     modal.find('#bidang_kepakaran').text(bidangKepakaranName);
                 }
                 if (no_cidb && no_cidb !== '') {

@@ -216,40 +216,66 @@ class RegisterController extends Controller
             $bahagian_jln = 7;  //BTM
             $user_email = [];
 
-            $emailArr = User::where(function ($query) use ($bahagian_jln) {
+            $emailArr = User::where(function ($query) {
                 $query->whereHas('roles', function ($query) {
-                        $query->where('name', 'Pentadbir Sistem');
-                    });
-                })
-                ->orWhere(function ($query) use ($bahagian_jln) {
-                    $query->whereHas('roles', function ($query) {
-                        $query->where('name', 'Pegawai');
-                    })
-                    ->where('bahagian_jln', $bahagian_jln);
-                })
-                ->get();
-            foreach ($emailArr as $key => $value) {
-                $user_email[] = ['address' => $value->email, 'name' => $value->name];
-            }
-            try {
-                $emailData = [
-                    "email_cc_address" => 'cc@example.com',
-                    "email_cc_name" => 'CC Recipient',
-                    "subject" => 'Pendaftaran Pengguna Baru',
-                ];
+                    $query->where('name', 'Pentadbir Sistem');
+                });
+            })
+            ->orWhere(function ($query) use ($bahagian_jln) {
+                $query->where(function ($q) use ($bahagian_jln) {
+                    $q->whereHas('roles', function ($q) {
+                        $q->where('name', 'Pegawai');
+                    })->where('bahagian_jln', $bahagian_jln);
+                });
+            })
+            ->get();
 
-                // Mail::send('pengurusan.users.mails.pendaftaran', ['user' => $user, 'accountType' => $accountType, 'name' => $name], function ($message) use ($emailData, $user_email) {
-                //     $message->subject($emailData["subject"])
-                //             ->cc($emailData["email_cc_address"], $emailData["email_cc_name"]);
-                //     foreach ($user_email as $recipient) {
-                //         // $message->to($recipient['address'], $recipient['name']);
-                //     }
-                // });
-            } catch (\Exception $exception) {
-                \Log::error("Error sending registration email: " . $exception->getMessage());
+            foreach ($emailArr as $value) {
+                if (filter_var($value->email, FILTER_VALIDATE_EMAIL)) {
+                    $user_email[] = ['address' => $value->email, 'name' => $value->name];
+                } else {
+                    \Log::warning("Invalid user email skipped: {$value->email}");
+                }
+            }
+
+            $bccEmail = filter_var($data['email'], FILTER_VALIDATE_EMAIL) ? $data['email'] : null;
+            $ccEmail = filter_var($data['sv_email'], FILTER_VALIDATE_EMAIL) ? $data['sv_email'] : null;
+            // dump($user_email);
+            // dump($ccEmail);
+            // dump($bccEmail);
+            // 3. Send if valid users found
+            if (!empty($user_email)) {
+                try {
+                    Mail::send('pengurusan.users.mails.pendaftaran', [
+                        'user' => $user,
+                        'accountType' => $accountType,
+                        'name' => $name,
+                    ], function ($message) use ($user_email, $bccEmail, $ccEmail, $data) {
+                        // Convert to array of "email => name"
+                        $toList = collect($user_email)
+                            ->pluck('name', 'address') // [email => name]
+                            ->toArray();
+
+                        $message->to($toList)
+                                ->subject('Pendaftaran Pengguna Baru');
+
+                        if ($ccEmail) {
+                            $message->cc($ccEmail, $data['sv_name'] ?? '');
+                        }
+
+                        if ($bccEmail) {
+                            $message->cc($bccEmail, $data['name'] ?? '');
+                        }
+                    });
+                } catch (\Exception $e) {
+                    \Log::error("Email sending failed: " . $e->getMessage());
+                    // dd($e->getMessage());
+                }
+            } else {
+                \Log::info("No valid user emails to send.");
             }
         }
-
+        // dd($user);  
         return $user;
     }
 }

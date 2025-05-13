@@ -14,7 +14,7 @@
                             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                                 <div class="btn-group" role="group" aria-label="First group">
                                     {!! Form::button('Kembali',
-                                    ['onclick'=>"window.location='".route('pengurusan.users.index')."'",'class'=>'btn
+                                    ['onclick' => 'history.back()','class'=>'btn
                                     btn-secondary']) !!}
                                     @can('role-edit')
                                     {!! Form::button('<i class="fas fa-pencil-alt"></i>', [

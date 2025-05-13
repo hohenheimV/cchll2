@@ -449,7 +449,7 @@
             var button = $(event.relatedTarget);       
             var url = button.data('url'); // Extract info from data-* attributes
             $('#modalFormDelete').attr('action', url);
-            console.log(url);
+            // console.log(url);
         });
 
         
@@ -558,7 +558,7 @@
             $('#elind_idP').val(elindId);
             let url = document.querySelector('#modalKomenPrestasi form').getAttribute('action');
             document.querySelector('#modalKomenPrestasi form').setAttribute('action', url + '/' + elindId);
-            console.log(document.querySelector('#modalKomenPrestasi form'));
+            // console.log(document.querySelector('#modalKomenPrestasi form'));
             // alert(url);
         });
 

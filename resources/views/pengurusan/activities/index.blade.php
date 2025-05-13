@@ -109,7 +109,7 @@
                                             @php($allow = true)
                                             @elseif (Auth::user()->hasRole('Pengarah Taman') && in_array($lvel,['Pengesahan Sokongan']))
                                             @php($allow = true)
-                                            @elseif (Auth::user()->hasRole('TKP/B JLN') && in_array($lvel,['Pengesahan Kelulusan']))
+                                            @elseif (Auth::user()->hasRole('KP/ TKP JLN') && in_array($lvel,['Pengesahan Kelulusan']))
                                             @php($allow = true)
                                             @elseif (in_array($lvel,['Lulus','Tidak Lulus']))
                                             @php($allow = true)

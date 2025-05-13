@@ -24,7 +24,7 @@
         $arrChanges = [];
     @endphp
 
-    @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem') && isset($latestAudit))
+    @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem') && isset($latestAudit))
         @foreach ($latestAudit as $audit)
             @foreach ($audit->new_values as $field => $newValue)
                 @php
@@ -874,11 +874,11 @@
                                         }
                                     },
                                     error: function(xhr, status, error) {
-                                        console.log("Error: " + error);
+                                        // console.log("Error: " + error);
                                         alert("Error: " + error);
                                     },
                                     complete: function(xhr, status) {
-                                        console.log("Request complete with status: " + status);
+                                        // console.log("Request complete with status: " + status);
                                     }
                                 });
                             }
@@ -958,11 +958,11 @@
                                         }
                                     },
                                     error: function(xhr, status, error) {
-                                        console.log("Error: " + error);
+                                        // console.log("Error: " + error);
                                         alert("Error: " + error);
                                     },
                                     complete: function(xhr, status) {
-                                        console.log("Request complete with status: " + status);
+                                        // console.log("Request complete with status: " + status);
                                     }
                                 });
                             }

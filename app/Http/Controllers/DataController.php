@@ -972,16 +972,40 @@ class DataController extends Controller
     {
         // Fetch count of PBTs grouped by state using LIKE for flexible matching
         $states = [
-            'Johor', 'Kedah', 'Kelantan', 'Melaka', 'Negeri Sembilan',
-            'Pahang', 'Penang', 'Perak', 'Perlis', 'Selangor',
-            'Sabah', 'Sarawak', 'Wilayah Persekutuan'
+            'Johor', 'Kedah', 'Kelantan', 'Melaka', 'Negeri Sembilan', 'Pahang', 'Perak', 'Perlis', 'Pulau Pinang', 'Sabah', 'Sarawak', 'Selangor', 'Terengganu', 'Wilayah Persekutuan'
         ];
-
+        $stateMap = [
+            'Wilayah Persekutuan' => ['WP Kuala Lumpur', 'WP Labuan', 'WP Putrajaya']
+        ];
         $pbtCounts = [];
 
         foreach ($states as $state) {
-            $count = MaklumatPenggunaPbt::where('state', 'LIKE', '%' . $state . '%')->count();
-            $pbtCounts[] = $count;
+            if ($state === 'Wilayah Persekutuan') {
+                $count = MaklumatPenggunaPbt::where(function ($query) use ($stateMap) {
+                    foreach ($stateMap['Wilayah Persekutuan'] as $wpState) {
+                        $kod_negeri = Negeri::select('kod_negeri')
+                            ->where('nama_negeri', 'ilike', "%$wpState%")
+                            ->first();
+        
+                        if ($kod_negeri) {
+                            $query->orWhere('state', 'LIKE', '%' . $kod_negeri->kod_negeri . '%');
+                        }
+                    }
+                })->count();
+        
+                $pbtCounts[] = $count;
+            } else {
+                $kod_negeri = Negeri::select('kod_negeri')
+                    ->where('nama_negeri', 'ilike', "%$state%")
+                    ->first();
+        
+                $count = 0;
+                if ($kod_negeri) {
+                    $count = MaklumatPenggunaPbt::where('state', 'LIKE', '%' . $kod_negeri->kod_negeri . '%')->count();
+                }
+        
+                $pbtCounts[] = $count;
+            }
         }
 
         return response()->json($pbtCounts);

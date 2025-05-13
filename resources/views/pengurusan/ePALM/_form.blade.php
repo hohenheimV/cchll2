@@ -31,7 +31,7 @@
 
     <!-- <h3>3 Perubahan Terkini</h3> -->
 
-    @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem') && isset($latestAudit))
+    @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem') && isset($latestAudit))
         @foreach ($latestAudit as $audit)
             <!-- <div style="margin-bottom: 20px;">
                 <p><strong>Dikemaskini oleh:</strong> {{ $audit->user->name ?? 'Sistem' }}</p>
@@ -1556,7 +1556,7 @@
                             method: 'GET',
                             success: function(response) {
                                 if (response.success) {
-                                    console.log(response.data);
+                                    // console.log(response.data);
                                     // Populate the container with the new rows
                                     const projekContainer = document.getElementById('projek_container');
                                     if(response.data.length > 0){
@@ -1887,7 +1887,7 @@
                         createRow();
                         updateBilNumbers();
                     } else {
-                        console.log('is_komponen is not set or no components found. No rows will be added.');
+                        // console.log('is_komponen is not set or no components found. No rows will be added.');
                     }
                     
                     function createRow(){
@@ -1895,7 +1895,7 @@
                         const projekContainer = document.getElementById('projek_container');
                         imageURLs.forEach((component, index) => {
                             let rowClass = component.status === 'draft' ? 'blink-border' : '';
-                            console.log((component.status));
+                            // console.log((component.status));
                             let newRow = document.createElement('tr');
                             newRow.className = rowClass;
                             newRow.innerHTML = `

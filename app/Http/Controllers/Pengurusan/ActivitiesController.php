@@ -59,7 +59,7 @@ class ActivitiesController extends Controller
             $status = 'permohonan_baru';
         } else if (Auth::user()->hasRole('Pengarah Taman')) {
             $status = 'pengesahan_sokongan';
-        } else if (Auth::user()->hasRole('TKP/B JLN')) {
+        } else if (Auth::user()->hasRole('KP/ TKP JLN')) {
             $status = 'pengesahan_kelulusan';
         } else if (Auth::user()->hasRole('Penggiat Industri')) {
             $status = 'lulus';
@@ -243,9 +243,9 @@ class ActivitiesController extends Controller
             $peranan = ['Pengarah Taman', 'Pemohon'];
             $status = ['Permohonan Baru', 'Dalam Tindakan', 'Pengesahan Sokongan', 'Tidak Lulus'];
         } else if (Auth::user()->hasRole('Pengarah Taman')) {
-            $peranan = ['TKP/B JLN', 'Pemohon'];
+            $peranan = ['KP/ TKP JLN', 'Pemohon'];
             $status = ['Pengesahan Sokongan', 'Pengesahan Kelulusan', 'Tidak Lulus'];
-        } else if (Auth::user()->hasRole('TKP/B JLN')) {
+        } else if (Auth::user()->hasRole('KP/ TKP JLN')) {
             $peranan = ['Pemohon'];
             $status = ['Pengesahan Kelulusan', 'Lulus', 'Tidak Lulus'];
         }
@@ -310,7 +310,7 @@ class ActivitiesController extends Controller
             $data['action'] = 2;
             $data['flow'] = 3;
             $data['note_officer_lvl_2'] = $request->note_officer_lvl_2;
-        } else if (Auth::user()->hasAnyRole(['Pentadbir Sistem', 'TKP/B JLN'])) { //F4,A3
+        } else if (Auth::user()->hasAnyRole(['Pentadbir Sistem', 'KP/ TKP JLN'])) { //F4,A3
 
             $data['action'] = 3;
             $data['flow'] = 4;
@@ -401,12 +401,12 @@ class ActivitiesController extends Controller
             && $request->status == 'Pengesahan Kelulusan'
         ) { //F3,A2
 
-            if ($emailto = $this->perananTaman('TKP/B JLN')) {
+            if ($emailto = $this->perananTaman('KP/ TKP JLN')) {
                 $this->sendmailtopentadbir($activity, 'Kelulusan',  $emailto);
             } else if ($request->status == 'Tidak Lulus') {
                 $this->sendmailtopemohon($activity, 'Tidak');
             }
-        } else if (Auth::user()->hasAnyRole(['Pentadbir Sistem', 'TKP/B JLN'])) { //F4,A3
+        } else if (Auth::user()->hasAnyRole(['Pentadbir Sistem', 'KP/ TKP JLN'])) { //F4,A3
 
             if ($request->status == 'Lulus') {
                 $this->sendmailtopemohon($activity, 'Lulus');
@@ -529,7 +529,7 @@ class ActivitiesController extends Controller
             //$data["email_to_address"] = $activity->email;//komen utk test
             //$data["email_to_name"] = $activity->name;
 
-            $data["email_cc_address"] = 'cakkik@gmail.com';//'norazlinatumiran@gmail.com';//unkomen utk test
+            $data["email_cc_address"] = 'norazlinatumiran@gmail.com';//unkomen utk test
             //$data["email_cc_address"] = config('mail.cc.address');//komen utk test
             $data["email_cc_name"] = 'TPBK'; //'TPBK';
 
@@ -622,7 +622,7 @@ class ActivitiesController extends Controller
      * Jenis Peranan
      * 1. Pengurus Taman
      * 2. Pengarah Taman
-     * 3. TKP/B JLN
+     * 3. KP/ TKP JLN
      * 
      */
     private function perananTaman($role)
@@ -641,7 +641,7 @@ class ActivitiesController extends Controller
     /**
      * Hantar email kepada
      * Sokongan     : Pengarah Taman
-     * Kelulusan    : TKP/B JLN
+     * Kelulusan    : KP/ TKP JLN
      * Lulus/Gagal  : Pemohon & KP JLN & Admin TPBK
      */
     private function sendmailtopentadbir($activity, $status = null, $emailto)
@@ -657,7 +657,7 @@ class ActivitiesController extends Controller
 
                 case 'Kelulusan':
                     // code...
-                    $subject = 'Tindakan E-mel kepada Pengesahan Kelulusan (TKP/B JLN)';
+                    $subject = 'Tindakan E-mel kepada Pengesahan Kelulusan (KP/ TKP JLN)';
                     break;
 
                 case 'Lulus':

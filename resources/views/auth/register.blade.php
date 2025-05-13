@@ -447,7 +447,7 @@
                                             }
 
                                             $.get(`/XyZ83hQ2d8A9/${no_ssm}`, function(response) {
-                                                console.log(response);
+                                                // console.log(response);
                                                 if (Array.isArray(response) && response.length > 0) {
                                                     const company = response[0];
                                                     // alert('No. Pendaftaran SSM telah wujud dalam sistem.');
@@ -814,7 +814,7 @@
 
                 $.getJSON('/data/postcode/' + postcode, function(data) {
                     if(data != null && data != ''){
-                        console.log(data);
+                        // console.log(data);
                         locality.val(data.locality);
                         // Check if the dropdown contains a matching value
                         var stateValue = data.state;
@@ -837,7 +837,7 @@
                         });
                         country.val(data.country);
                     }else{
-                        console.log("data");
+                        // console.log("data");
                         locality.val('');
                         state.val('');
                         country.val('');
@@ -944,17 +944,17 @@
                 // $pbt.prop('disabled', true);
                 $('#loading-spinner').show(); // Show the spinner
 
-                $.getJSON('/data/pbt/' + negeriId + '/' + pbtId, function(data) {console.log(data);
+                $.getJSON('/data/pbt/' + negeriId + '/' + pbtId, function(data) {//console.log(data);
                     if(data != null && data != '' && (typeof data === "object" && !Array.isArray(data))){
-                        console.log(data);
+                        // console.log(data);
                         // address1.val(data.alamat1.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
                         // postcode.val(data.poskod);
                         // locality.val(data.kawasan.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
                         // // Check if the dropdown contains a matching value
                         // var stateValue = data.negeri;
                         // state.val(stateValue.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
-                        console.log(data.address1);
-                        console.log(data.address2);
+                        // console.log(data.address1);
+                        // console.log(data.address2);
                         address1.val(data.address1);
                         address2.val(data.address2);
                         postcode.val(data.postcode);
@@ -965,7 +965,7 @@
                         // country.val(data.country);
                         $('#loading-spinner').hide();
                     }else{
-                        console.log("data");
+                        // console.log("data");
                         locality.val('');
                         state.val('');
                         country.val('');

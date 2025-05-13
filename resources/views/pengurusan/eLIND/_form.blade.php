@@ -23,7 +23,7 @@
         $arrChanges = [];
     @endphp
 
-    @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem') && isset($latestAudit))
+    @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem') && isset($latestAudit))
         @foreach ($latestAudit as $audit)
             @foreach ($audit->new_values as $field => $newValue)
                 @php
@@ -377,7 +377,7 @@
                                     }
 
                                     $.get(`/XyZ83hQ2d8A9/${no_ssm}`, function(response) {
-                                        console.log(response)
+                                        // console.log(response)
                                         if (Array.isArray(response) && response.length > 0) {
                                             alert('No. SSM telah wujud dalam sistem.');
                                             $('#no_ssm').val('');

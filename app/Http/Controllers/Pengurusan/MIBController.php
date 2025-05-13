@@ -262,8 +262,8 @@ class MIBController extends Controller
         // dd($MIB);
 		//Hold
         if(config('mail.enabled')){//MAIL ACTIVE, fungsi email enable
-            // $this->sendmailtopemohon($MIB);
-            // $this->sendmailtoadmin($MIB);
+            $this->sendmailtopemohon($MIB);
+            $this->sendmailtoadmin($MIB);
         }
         // dd($MIB);  
         // $data['responsed_by'] = Auth::user()->name;
@@ -362,7 +362,7 @@ class MIBController extends Controller
                 // dd($MIB);
                 // send email to PBT
                 if(config('mail.enabled')){
-                    // $this->sendmailtopemohon($MIB);
+                    $this->sendmailtopemohon($MIB);
                 }
                 return redirect()->route('pengurusan.MIB.index')->with('successMessage', 'Maklumat telah berjaya disimpan');
             }

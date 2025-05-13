@@ -26,7 +26,7 @@
 
                     <div class="card-footer">
                         {!! Form::button('Kembali',
-                        ['onclick'=>"window.location='".route('pengurusan.users.index')."'",'class'=>'btn btn-secondary']) !!}
+                        ['onclick' => 'history.back()','class'=>'btn btn-secondary']) !!}
                         {!! Form::button('<i class="fas fa-save"></i> Kemaskini', ['class'=>'btn btn-success','type'=>'submit']) !!}
                     </div>
                     <!-- /.card-footer -->

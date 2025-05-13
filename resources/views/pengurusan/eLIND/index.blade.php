@@ -37,7 +37,7 @@
                                     </div>
                                 </div>
                                 {{ Form::close() --}}
-                                @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|TKP/B JLN'))
+                                @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|KP/ TKP JLN'))
                                 <div class="btn-group" role="group" aria-label="First group">
                                     {!! Form::button('<i class="fas fa-plus"></i> Daftar', [
                                     'class'=>'btn btn-success btn-sm',
@@ -58,7 +58,7 @@
                                         <th class="text-center w-1">No</th>
                                         <th class="text-center w-15">Nama</th>
                                         <th class="text-center w-10">Emel</th>
-                                        @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem'))
+                                        @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))
                                         <th class="text-center w-5" style="display: none;">Tarikh Daftar</th>
                                         <th class="text-center w-5">Prestasi</th>
                                         @endif
@@ -67,7 +67,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|Penggiat Industri|TKP/B JLN'))
+                                    @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|Penggiat Industri|KP/ TKP JLN'))
                                         @php
                                             //dd($eLIND[0]->getRoleNames());
                                         @endphp
@@ -92,7 +92,7 @@
                                             <td class="text-center">{{ $index++ }}</td>
                                             <td>{{ strtoupper($user->name) }}</td>
                                             <td>{{ $user->email }}</td>
-                                            @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem'))
+                                            @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))
                                                 <td style="display: none;" class="text-center">{!! Html::datetime($user->created_at,'d-m-Y') !!}
                                                 </td>
                                                 <td class="text-center">
@@ -132,20 +132,20 @@
                                                     'onclick'=>"window.location='".route('pengurusan.eLIND.show', ['type' => $lastSegment, 'id' => $user])."'"
                                                     ]) !!}
 
-                                                    @if((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Penggiat Industri')))
+                                                    @if((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN|Penggiat Industri')))
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
                                                         'class'=>'btn btn-warning btn-sm',
                                                         'onclick'=>"window.location='".route('pengurusan.eLIND.edit', ['type' => $lastSegment, 'id' => $user])."'"
                                                         ]) !!}
                                                     @endif
 
-                                                    @if((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN')))
+                                                    @if((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN')))
                                                         {!! Form::button('<i class="fas fa-trash"></i>', ['class'=>'btn btn-danger btn-sm',
                                                         'data-url'=>route('pengurusan.eLIND.destroy', ['type' => $lastSegment, 'id' => $user]),
                                                         'data-toggle'=>'modal','data-target'=>'#modalDelete']) !!}
                                                     @endif
 
-                                                    @if((Auth::user()->hasRole('Pentadbir Sistem|TKP/B JLN|Pegawai')))
+                                                    @if((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN|Pegawai')))
                                                         {!! Form::button('<i class="fas fa-sticky-note"></i>', 
                                                             ['class' => 'btn btn-success btn-sm', 
                                                             'data-elind-id' => $user->id_elind,

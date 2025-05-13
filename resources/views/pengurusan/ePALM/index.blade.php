@@ -14,7 +14,7 @@
                 <div class="card-header">
                     @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem'))
                         <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan Pegawai JLN]</h3>
-                    @elseif(Auth::user()->hasRole('TKP/B JLN|Pentadbir Sistem'))
+                    @elseif(Auth::user()->hasRole('KP/ TKP JLN|Pentadbir Sistem'))
                         <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan KP/TKP/B. Penilaian]</h3>
                     @elseif(Auth::user()->hasRole('Pihak Berkuasa Tempatan'))
                         <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan PBT]</h3>
@@ -39,7 +39,7 @@
                                     <th class="w-1">Bil.</th>
                                     <th>Nama Taman</th>
                                     <th class="text-center w-5">Kategori Taman</th>
-                                    @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|TKP/B JLN'))
+                                    @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|KP/ TKP JLN'))
                                         <th class="text-center w-10">PBT</th>
                                     @endif
                                         <th class="text-center w-12">Paparan Portal</th>
@@ -49,7 +49,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|Pihak Berkuasa Tempatan|TKP/B JLN'))
+                                @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|Pihak Berkuasa Tempatan|KP/ TKP JLN'))
                                     @php($index = $ePALM->firstItem())
                                     @php($jenis_pembangunan = [
                                         'Taman Awam',
@@ -71,7 +71,7 @@
                                             <td>{{ strtoupper($taman->nama_taman) }}</td>
                                             <td>{!! ((!in_array($taman->kategori_taman, $jenis_pembangunan))) ? '<span class="badge bg-warning">'.$taman->kategori_taman.'</span>' : $taman->kategori_taman !!}</td>
                                             
-                                            @if(Auth::user()->hasRole('TKP/B JLN|Pegawai|Pentadbir Sistem'))
+                                            @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))
                                             <td>
                                                 {{ $taman->nama_pbt }}
                                             </td>

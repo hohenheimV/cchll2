@@ -34,7 +34,7 @@ class eLAPSController extends Controller
         if($user->hasRole('Pihak Berkuasa Tempatan')){
             $totalCount = eLAPS::where('id_pemohon', $user->bahagian_jln)->count();
             $eLAPS = eLAPS::where('id_pemohon', $user->bahagian_jln)->orderBy('id', 'desc')->paginate($totalCount);
-        }elseif($user->hasRole('TKP/B JLN|Pentadbir Sistem') || ($user->hasRole('Pegawai') && $user->bahagian_jln == 6)){
+        }elseif($user->hasRole('KP/ TKP JLN|Pentadbir Sistem') || ($user->hasRole('Pegawai') && $user->bahagian_jln == 6)){
             $totalCount = eLAPS::count();
             $eLAPS = eLAPS::orderByRaw('CAST(status_permohonan AS INT) ASC')->orderBy('id', 'desc')->paginate($totalCount);
         }else{
@@ -408,7 +408,7 @@ class eLAPSController extends Controller
 
         $user = $this->getUser();
         // dd($eLAPS->status_permohonan);
-        if($user->hasRole('Pentadbir Sistem|Pegawai|TKP/B JLN')){
+        if($user->hasRole('Pentadbir Sistem|Pegawai|KP/ TKP JLN')){
             if($eLAPS->status_permohonan == 2){
                 $newStat = 3;
             }else if($eLAPS->status_permohonan == 5){
@@ -485,7 +485,7 @@ class eLAPSController extends Controller
             })
             ->orWhere(function ($query) {
                 $query->whereHas('roles', function ($query) {
-                    $query->where('name', 'TKP/B JLN');
+                    $query->where('name', 'KP/ TKP JLN');
                 });
             })//->where('is_active', 1)
             ->get();
@@ -520,7 +520,7 @@ class eLAPSController extends Controller
             })
             ->orWhere(function ($query) {
                 $query->whereHas('roles', function ($query) {
-                    $query->where('name', 'TKP/B JLN');
+                    $query->where('name', 'KP/ TKP JLN');
                 });
             })//->where('is_active', 1)
             ->get();
@@ -584,31 +584,31 @@ class eLAPSController extends Controller
             // dd($status);
             if($hantarPermohonan){
                 //email
-                // if (config('mail.enabled')) {
-                //     try {
-                //         $emailData = [
-                //             "email_to" => $user_email,
-                //             "email_cc" => $PBTemail,
-                //             "subject" => 'Permohonan Pembangunan Projek',
-                //         ];
+                if (config('mail.enabled')) {
+                    try {
+                        $emailData = [
+                            "email_to" => $user_email,
+                            "email_cc" => $PBTemail,
+                            "subject" => 'Permohonan Pembangunan Projek',
+                        ];
         
-                //         Mail::send('pengurusan.eLAPS.mails.pendaftaran', ['elaps' => $permohonan, 'name' => $nama_pemohon], function ($message) use ($emailData) {
-                //             $message->subject($emailData["subject"]);
-                //             // Loop through to array and add each email
-                //             foreach ($emailData['email_to'] as $to) {
-                //                 $message->to($to['address'], $to['name']);
-                //             }
+                        Mail::send('pengurusan.eLAPS.mails.pendaftaran', ['elaps' => $permohonan, 'name' => $nama_pemohon], function ($message) use ($emailData) {
+                            $message->subject($emailData["subject"]);
+                            // Loop through to array and add each email
+                            foreach ($emailData['email_to'] as $to) {
+                                $message->to($to['address'], $to['name']);
+                            }
         
-                //             // Loop through cc array and add each email
-                //             foreach ($emailData['email_cc'] as $cc) {
-                //                 $message->cc($cc['address'], $cc['name']);
-                //             }
-                //         });
-                //     } catch (\Exception $exception) {
-                //         \Log::error("Error sending registration email: " . $exception->getMessage());
-                //        dd("Error sending registration email: " . $exception->getMessage());
-                //     }
-                // }
+                            // Loop through cc array and add each email
+                            foreach ($emailData['email_cc'] as $cc) {
+                                $message->cc($cc['address'], $cc['name']);
+                            }
+                        });
+                    } catch (\Exception $exception) {
+                        \Log::error("Error sending registration email: " . $exception->getMessage());
+                    //    dd("Error sending registration email: " . $exception->getMessage());
+                    }
+                }
                 return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat permohonan telah berjaya dihantar');
             }else{
                 return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat permohonan tidak berjaya dihantar');
@@ -622,31 +622,31 @@ class eLAPSController extends Controller
             
             if($serahPermohonan){
                 //email
-                // if (config('mail.enabled')) {
-                //     try {
-                //         $emailData = [
-                //             "email_to" => $user_email,
-                //             "email_cc" => $PBTemail,
-                //             "subject" => 'Permohonan Pembangunan Projek',
-                //         ];
+                if (config('mail.enabled')) {
+                    try {
+                        $emailData = [
+                            "email_to" => $user_email,
+                            "email_cc" => $PBTemail,
+                            "subject" => 'Permohonan Pembangunan Projek',
+                        ];
         
-                //         Mail::send('pengurusan.eLAPS.mails.pendaftaran', ['elaps' => $permohonan, 'name' => $nama_pemohon], function ($message) use ($emailData) {
-                //             $message->subject($emailData["subject"]);
-                //             // Loop through to array and add each email
-                //             foreach ($emailData['email_to'] as $to) {
-                //                 $message->to($to['address'], $to['name']);
-                //             }
+                        Mail::send('pengurusan.eLAPS.mails.pendaftaran', ['elaps' => $permohonan, 'name' => $nama_pemohon], function ($message) use ($emailData) {
+                            $message->subject($emailData["subject"]);
+                            // Loop through to array and add each email
+                            foreach ($emailData['email_to'] as $to) {
+                                $message->to($to['address'], $to['name']);
+                            }
         
-                //             // Loop through cc array and add each email
-                //             foreach ($emailData['email_cc'] as $cc) {
-                //                 $message->cc($cc['address'], $cc['name']);
-                //             }
-                //         });
-                //     } catch (\Exception $exception) {
-                //         \Log::error("Error sending registration email: " . $exception->getMessage());
-                //        dd("Error sending registration email: " . $exception->getMessage());
-                //     }
-                // }
+                            // Loop through cc array and add each email
+                            foreach ($emailData['email_cc'] as $cc) {
+                                $message->cc($cc['address'], $cc['name']);
+                            }
+                        });
+                    } catch (\Exception $exception) {
+                        \Log::error("Error sending registration email: " . $exception->getMessage());
+                    //    dd("Error sending registration email: " . $exception->getMessage());
+                    }
+                }
                 return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat permohonan telah berjaya diserah kepada bahagian');
             }else{
                 return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat permohonan tidak berjaya diserah kepada bahagian');
@@ -665,31 +665,31 @@ class eLAPSController extends Controller
             
             if($hantarUlasan){
                 //email to ?
-                // if (config('mail.enabled')) {
-                //     try {
-                //         $emailData = [
-                //             "email_to" => $user_email,
-                //             "email_cc" => $user_emailBhg,
-                //             "subject" => 'Permohonan Pembangunan Projek',
-                //         ];
-                //         $permohonan->status_permohonan = $permohonan->status_permohonan + 1;
-                //         Mail::send('pengurusan.eLAPS.mails.pendaftaran', ['elaps' => $permohonan, 'name' => $nama_pemohon], function ($message) use ($emailData) {
-                //             $message->subject($emailData["subject"]);
-                //             // Loop through to array and add each email
-                //             foreach ($emailData['email_to'] as $to) {
-                //                 $message->to($to['address'], $to['name']);
-                //             }
+                if (config('mail.enabled')) {
+                    try {
+                        $emailData = [
+                            "email_to" => $user_email,
+                            "email_cc" => $user_emailBhg,
+                            "subject" => 'Permohonan Pembangunan Projek',
+                        ];
+                        $permohonan->status_permohonan = $permohonan->status_permohonan + 1;
+                        Mail::send('pengurusan.eLAPS.mails.pendaftaran', ['elaps' => $permohonan, 'name' => $nama_pemohon], function ($message) use ($emailData) {
+                            $message->subject($emailData["subject"]);
+                            // Loop through to array and add each email
+                            foreach ($emailData['email_to'] as $to) {
+                                $message->to($to['address'], $to['name']);
+                            }
         
-                //             // Loop through cc array and add each email
-                //             foreach ($emailData['email_cc'] as $cc) {
-                //                 $message->cc($cc['address'], $cc['name']);
-                //             }
-                //         });
-                //     } catch (\Exception $exception) {
-                //         \Log::error("Error sending registration email: " . $exception->getMessage());
-                //        dd("Error sending registration email: " . $exception->getMessage());
-                //     }
-                // }
+                            // Loop through cc array and add each email
+                            foreach ($emailData['email_cc'] as $cc) {
+                                $message->cc($cc['address'], $cc['name']);
+                            }
+                        });
+                    } catch (\Exception $exception) {
+                        \Log::error("Error sending registration email: " . $exception->getMessage());
+                    //    dd("Error sending registration email: " . $exception->getMessage());
+                    }
+                }
                 return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat ulasan telah berjaya dihantar');
             }else{
                 return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat ulasan tidak berjaya dihantar');
@@ -701,31 +701,31 @@ class eLAPSController extends Controller
             
             if($keputusanPermohonan){
                 //email
-                // if (config('mail.enabled')) {
-                //     try {
-                //         $emailData = [
-                //             "email_to" => $PBTemail,
-                //             "email_cc" => $user_email,
-                //             "subject" => 'Permohonan Pembangunan Projek',
-                //         ];
+                if (config('mail.enabled')) {
+                    try {
+                        $emailData = [
+                            "email_to" => $PBTemail,
+                            "email_cc" => $user_email,
+                            "subject" => 'Permohonan Pembangunan Projek',
+                        ];
         
-                //         Mail::send('pengurusan.eLAPS.mails.pendaftaran', ['elaps' => $permohonan, 'name' => $nama_pemohon], function ($message) use ($emailData) {
-                //             $message->subject($emailData["subject"]);
-                //             // Loop through to array and add each email
-                //             foreach ($emailData['email_to'] as $to) {
-                //                 $message->to($to['address'], $to['name']);
-                //             }
+                        Mail::send('pengurusan.eLAPS.mails.pendaftaran', ['elaps' => $permohonan, 'name' => $nama_pemohon], function ($message) use ($emailData) {
+                            $message->subject($emailData["subject"]);
+                            // Loop through to array and add each email
+                            foreach ($emailData['email_to'] as $to) {
+                                $message->to($to['address'], $to['name']);
+                            }
         
-                //             // Loop through cc array and add each email
-                //             foreach ($emailData['email_cc'] as $cc) {
-                //                 $message->cc($cc['address'], $cc['name']);
-                //             }
-                //         });
-                //     } catch (\Exception $exception) {
-                //         \Log::error("Error sending registration email: " . $exception->getMessage());
-                //        dd("Error sending registration email: " . $exception->getMessage());
-                //     }
-                // }
+                            // Loop through cc array and add each email
+                            foreach ($emailData['email_cc'] as $cc) {
+                                $message->cc($cc['address'], $cc['name']);
+                            }
+                        });
+                    } catch (\Exception $exception) {
+                        \Log::error("Error sending registration email: " . $exception->getMessage());
+                    //    dd("Error sending registration email: " . $exception->getMessage());
+                    }
+                }
                 return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat keputusan telah berjaya dikemaskini');
             }else{
                 return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat keputusan tidak berjaya dikemaskini');
@@ -738,31 +738,31 @@ class eLAPSController extends Controller
             
             if($statusProjek){
                 //email to JLN for portal display
-                // if (config('mail.enabled')) {
-                //     try {
-                //         $emailData = [
-                //             "email_to" => $user_email,
-                //             "email_cc" => $PBTemail,
-                //             "subject" => 'Permohonan Pembangunan Projek',
-                //         ];
+                if (config('mail.enabled')) {
+                    try {
+                        $emailData = [
+                            "email_to" => $user_email,
+                            "email_cc" => $PBTemail,
+                            "subject" => 'Permohonan Pembangunan Projek',
+                        ];
         
-                //         Mail::send('pengurusan.eLAPS.mails.pendaftaran', ['elaps' => $permohonan, 'name' => $nama_pemohon], function ($message) use ($emailData) {
-                //             $message->subject($emailData["subject"]);
-                //             // Loop through to array and add each email
-                //             foreach ($emailData['email_to'] as $to) {
-                //                 $message->to($to['address'], $to['name']);
-                //             }
+                        Mail::send('pengurusan.eLAPS.mails.pendaftaran', ['elaps' => $permohonan, 'name' => $nama_pemohon], function ($message) use ($emailData) {
+                            $message->subject($emailData["subject"]);
+                            // Loop through to array and add each email
+                            foreach ($emailData['email_to'] as $to) {
+                                $message->to($to['address'], $to['name']);
+                            }
         
-                //             // Loop through cc array and add each email
-                //             foreach ($emailData['email_cc'] as $cc) {
-                //                 $message->cc($cc['address'], $cc['name']);
-                //             }
-                //         });
-                //     } catch (\Exception $exception) {
-                //         \Log::error("Error sending registration email: " . $exception->getMessage());
-                //        dd("Error sending registration email: " . $exception->getMessage());
-                //     }
-                // }
+                            // Loop through cc array and add each email
+                            foreach ($emailData['email_cc'] as $cc) {
+                                $message->cc($cc['address'], $cc['name']);
+                            }
+                        });
+                    } catch (\Exception $exception) {
+                        \Log::error("Error sending registration email: " . $exception->getMessage());
+                    //    dd("Error sending registration email: " . $exception->getMessage());
+                    }
+                }
                 if($projekSiap == 14){
                     if (in_array($permohonan->category, ['Taman Awam', 'Taman Botani', 'Landskap Perbandaran', 'Persekitaran Kehidupan', 'Taman Persekutuan'])) {
                         $duplicateData = new ePALM();

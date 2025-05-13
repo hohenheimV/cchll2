@@ -2,7 +2,7 @@
     <div class="col-12 col-md-6">
         <div class="form-group">
             {{ Form::label('name', 'Nama') }}
-            {{ Form::text('name', null, ['placeholder' => 'Sila Masukkan Nama', 'class' => 'form-control']) }}
+            {{ Form::text('name', null, ['placeholder' => 'Sila Masukkan Nama', 'class' => 'form-control', 'required' => 'required']) }}
             @error('name')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
@@ -12,7 +12,7 @@
     <div class="col-12 col-md-6">
         <div class="form-group">
             {{ Form::label('email', 'Emel') }}
-            {{ Form::email('email', null, ['placeholder' => 'Sila Masukkan Emel', 'class' => 'form-control']) }}
+            {{ Form::email('email', null, ['placeholder' => 'Sila Masukkan Emel', 'class' => 'form-control', 'required' => 'required']) }}
             @error('email')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
@@ -80,7 +80,7 @@
     <div class="col-12 col-md-6">
         <div class="form-group">
             {{ Form::label('is_active', 'Status Aktif') }}
-            {{ Form::select('is_active', [1 => 'Aktif', 0 => 'Tidak Aktif'], null, ['class' => 'form-control']) }}
+            {{ Form::select('is_active', [1 => 'Aktif', 0 => 'Tidak Aktif'], null, ['class' => 'form-control', 'required' => 'required']) }}
             @error('is_active')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
@@ -89,95 +89,118 @@
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @if(isset($userRole["Penggiat Industri"]))
-    <div class="col-12 col-md-6">
-        <div class="form-group">
-            {{ Form::label('bahagian_jln', 'Syarikat - Penggiat Industri') }}
-            {!! Form::select('bahagian_jln', [], null, ['class' => 'form-control']) !!}
-            @error('bahagian_jln')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-            <script>
-                $(document).ready(function() {
-                    let jenis = '{{ $user->jenis }}';
-                    $.ajax({
-                        url: '/XyZ83hQ2d8A9/' + jenis,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(data) {
-                            $('#bahagian_jln').empty();
-                            $('#bahagian_jln').append('<option value="">Pilih Syarikat</option>');
-
-                            $.each(data, function(key, value) {
-                                $('#bahagian_jln').append('<option value="' + value.id_elind + '">' + value.name.toUpperCase() + '</option>');
-                            });
-                            var bahagianSelected = "{{ isset($user->bahagian_jln) ? $user->bahagian_jln : '' }}";
-                            if (bahagianSelected) {
-                                $('#bahagian_jln').val(bahagianSelected);
+        @if($user->jenis == null)
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                {{ Form::label('jenis_industri', 'Jenis - Penggiat Industri') }}
+                {!! Form::select('jenis_industri', ['' => 'Pilih Jenis Industri', 'Kontraktor' => 'Kontraktor', 'Perunding' => 'Perunding', 'Pembekal' => 'Pembekal'], null, ['class' => 'form-control', 'required' => 'required', 'id' => 'jenis_industri']) !!}
+                @error('jenis_industri')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+        @endif
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                {{ Form::label('bahagian_jln', 'Syarikat - Penggiat Industri') }}
+                {!! Form::select('bahagian_jln', [], null, ['class' => 'form-control', 'required' => 'required']) !!}
+                @error('bahagian_jln')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+                <script>
+                    $(document).ready(function() {
+                        $('#jenis_industri option[value=""]').attr('disabled', 'disabled');
+                        let jenis = '{{ $user->jenis }}';
+                        if(jenis){getSyarikat(jenis);}
+                        $('#jenis_industri').on('change', function() {
+                            const selectedJenis = $(this).val();
+                            if (selectedJenis) {
+                                getSyarikat(selectedJenis);
+                            } else {
+                                $('#bahagian_jln').empty().append('<option value="">Pilih Syarikat</option>');
                             }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("Error fetching Bahagian data: ", error);
+                        });
+                        function getSyarikat(jenis){
+                            $.ajax({
+                                url: '/XyZ83hQ2d8A9/' + jenis,
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function(data) {
+                                    $('#bahagian_jln').empty();
+                                    $('#bahagian_jln').append('<option value="">Pilih Syarikat</option>');
+
+                                    $.each(data, function(key, value) {
+                                        $('#bahagian_jln').append('<option value="' + value.id_elind + '">' + value.name.toUpperCase() + '</option>');
+                                    });
+                                    var bahagianSelected = "{{ isset($user->bahagian_jln) ? $user->bahagian_jln : '' }}";
+                                    if (bahagianSelected) {
+                                        $('#bahagian_jln').val(bahagianSelected);
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error("Error fetching Bahagian data: ", error);
+                                }
+                            });
                         }
                     });
-                });
-            </script>
+                </script>
+            </div>
         </div>
-    </div>
     @elseif(isset($userRole["Pihak Berkuasa Tempatan"]))
-    <div class="col-12 col-md-6">
-        <div class="form-group">
-            {{ Form::label('bahagian_jln', 'Pihak Berkuasa Tempatan - berdaftar dengan eLANDSKAP') }}
-            {!! Form::select('bahagian_jln', [], null, ['class' => 'form-control']) !!}
-            @error('bahagian_jln')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-            <script>
-                $(document).ready(function() {
-                    $.ajax({
-                        url: '/get-pbt',
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(data) {
-                            $('#bahagian_jln').empty();
-                            $('#bahagian_jln').append('<option value="">Pilih Pihak Berkuasa Tempatan</option>');
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                {{ Form::label('bahagian_jln', 'Pihak Berkuasa Tempatan - berdaftar dengan eLANDSKAP') }}
+                {!! Form::select('bahagian_jln', [], null, ['class' => 'form-control', 'required' => 'required']) !!}
+                @error('bahagian_jln')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+                <script>
+                    $(document).ready(function() {
+                        $.ajax({
+                            url: '/get-pbt',
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(data) {
+                                $('#bahagian_jln').empty();
+                                $('#bahagian_jln').append('<option value="">Pilih Pihak Berkuasa Tempatan</option>');
 
-                            $.each(data, function(key, value) {
-                                $('#bahagian_jln').append('<option value="' + value.id + '">' + value.pbt_name.toUpperCase() + '</option>');
-                            });
-                            var bahagianSelected = "{{ isset($user->bahagian_jln) ? $user->bahagian_jln : '' }}";
-                            if (bahagianSelected) {
-                                $('#bahagian_jln').val(bahagianSelected);
+                                $.each(data, function(key, value) {
+                                    $('#bahagian_jln').append('<option value="' + value.id + '">' + value.pbt_name.toUpperCase() + '</option>');
+                                });
+                                var bahagianSelected = "{{ isset($user->bahagian_jln) ? $user->bahagian_jln : '' }}";
+                                if (bahagianSelected) {
+                                    $('#bahagian_jln').val(bahagianSelected);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("Error fetching Bahagian data: ", error);
                             }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("Error fetching Bahagian data: ", error);
-                        }
+                        });
                     });
-                });
-            </script>
+                </script>
+            </div>
         </div>
-    </div>
     @else
-    <div class="col-12 col-md-6">
-        <div class="form-group">
-            {{ Form::label('bahagian_jln', 'Bahagian - Jabatan Landskap Negara') }}
-            {!! Form::select('bahagian_jln', [
-                '0' => 'Tiada Maklumat',
-                '1' => 'Bahagian Pengurusan Landskap',
-                '2' => 'Bahagian Taman Awam',
-                '3' => 'Bahagian Pembangunan Landskap',
-                '4' => 'Bahagian Khidmat Teknikal',
-                '5' => 'Bahagian Penyelidikan & Pemulihan',
-                '6' => 'Bahagian Penilaian & Penyelenggaraan',
-                '7' => 'Bahagian Teknologi Maklumat',
-                '8' => 'Bahagian Promosi & Industri Landskap',
-                '9' => 'Bahagian Dasar & Pengurusan Korporat',
-                '10' => 'Bahagian Kontrak & Ukur Bahan',
-            ], null, ['class' => 'form-control']) !!}
-            @error('bahagian_jln')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                {{ Form::label('bahagian_jln', 'Bahagian - Jabatan Landskap Negara') }}
+                {!! Form::select('bahagian_jln', [
+                    '0' => 'Tiada Maklumat',
+                    '1' => 'Bahagian Pengurusan Landskap',
+                    '2' => 'Bahagian Taman Awam',
+                    '3' => 'Bahagian Pembangunan Landskap',
+                    '4' => 'Bahagian Khidmat Teknikal',
+                    '5' => 'Bahagian Penyelidikan & Pemulihan',
+                    '6' => 'Bahagian Penilaian & Penyelenggaraan',
+                    '7' => 'Bahagian Teknologi Maklumat',
+                    '8' => 'Bahagian Promosi & Industri Landskap',
+                    '9' => 'Bahagian Dasar & Pengurusan Korporat',
+                    '10' => 'Bahagian Kontrak & Ukur Bahan',
+                ], null, ['class' => 'form-control', 'required' => 'required']) !!}
+                @error('bahagian_jln')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
         </div>
-    </div>
     @endif
 </div>

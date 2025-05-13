@@ -283,14 +283,8 @@ class ePILController extends Controller
                 if (config('mail.enabled')) {
                     try {
                         $emailData = [
-                            "email_to" => [
-                                ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
-                                ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
-                            ],//$user_email,
-                            "email_cc" => [
-                                ['address' => 'cc@pbt.com', 'name' => 'PBT Recipient'],
-                                ['address' => 'anothercc@pbt.com', 'name' => 'Another CC']
-                            ],//$btm_email,
+                            "email_to" => $user_email,
+                            "email_cc" => $btm_email,
                             "subject" => 'Modul Pelan Induk Landskap (ePIL)',
                         ];
         
@@ -308,7 +302,7 @@ class ePILController extends Controller
                         });
                     } catch (\Exception $exception) {
                         \Log::error("Error sending registration email: " . $exception->getMessage());
-                       dd("Error sending registration email: " . $exception->getMessage());
+                    //    dd("Error sending registration email: " . $exception->getMessage());
                     }
                     // dd($emailData);
                 }

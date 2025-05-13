@@ -238,12 +238,12 @@
                                         }
                                     },
                                     error: function(xhr, status, error) {
-                                        console.log("Error: " + error);
+                                        // console.log("Error: " + error);
                                         alert("Error: " + error);
                                     },
                                     complete: function(xhr, status) {
                                         // Optionally log the completion of the request
-                                        console.log("Request complete with status: " + status);
+                                        // console.log("Request complete with status: " + status);
                                     }
                                 });
                             }

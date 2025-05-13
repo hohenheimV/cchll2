@@ -715,8 +715,8 @@
                 <p>
                     Wakil PBT boleh mendaftar dan membuat permohonan projek melalui Borang ISO digital.
                 </p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sit amet sem sed augue pretium gravida.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sit amet sem sed augue pretium gravida.</p>
+                {{-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sit amet sem sed augue pretium gravida.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sit amet sem sed augue pretium gravida.</p> --}}
                 <div class="mobile-gone">
                     <br>
                     <br>
@@ -865,7 +865,7 @@
         <p class="text-center">Kami sentiasa berusaha untuk meningkatkan mutu perkhidmatan dari semasa ke semasa. Utarakan sebarang cadangan, aduan, atau pertanyaan anda kepada kami. Kami menghargai setiap maklumbalas yang kami terima.</p>
         <hr class="mb-4">
         <div class="row">
-            <div class="col-12 col-lg-5 text-center text-lg-left" style="color: white;">
+            <div class="col-12 col-lg-5 text-center text-lg-left" style="color: #ffffff !important;">
                 {!! website_contact() !!}
             </div>
             <!--start contact form-->

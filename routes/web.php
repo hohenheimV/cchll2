@@ -1121,7 +1121,7 @@ Route::middleware(['auth'])
         ];
 
         \Illuminate\Support\Facades\Mail::send([], [], function ($message) use ($details) {
-            $message->to('tpbk@jln.gov.my')
+            $message->to('cakkik@gmail.com')
                     ->subject($details['title'])
                     ->setBody($details['body'], 'text/html');
         });
@@ -1137,7 +1137,7 @@ Route::middleware(['auth'])
     
         // Instead of sending email, display the message content
         $messageContent = [
-            'to' => 'tpbk@jln.gov.my',
+            'to' => 'cakkik@gmail.com',
             'subject' => $details['title'],
             'body' => $details['body']
         ];

@@ -239,6 +239,8 @@ class MIBController extends Controller
         $ref = Carbon::now()->timestamp;
         $data = $requestData;
         $data['ref_num'] = "RT$ref";
+        $data['name'] = $requestData['penyelaras_nama'];
+        $data['email'] = $requestData['penyelaras_email'];
         // $data['registered_at'] = Carbon::now()->format('Y-m-d H:i:s');
         // dd($data);
         $data['status'] = 'Diperakui';
@@ -607,8 +609,8 @@ class MIBController extends Controller
         }
         // dd($user_email);
 
-        $data["email"] = config('mail.from.address'); //'kpjln@jln.gov.my';
-        $data["client_name"] = config('mail.from.name'); //'KP JLN';
+        $data["email"] = 'frenemies.888@gmail.com';//config('mail.from.address'); //'kpjln@jln.gov.my';
+        $data["client_name"] = 'SSC';//config('mail.from.name'); //'KP JLN';
         $data["subject"] = "Permohonan Pendaftaran Rakan Taman (No Ruj: $MIB->ref_num)";
 
         try {

@@ -264,7 +264,7 @@ class RegisterController extends Controller
                         }
 
                         if ($bccEmail) {
-                            $message->cc($bccEmail, $data['name'] ?? '');
+                            $message->bcc($bccEmail, $data['name'] ?? '');
                         }
                     });
                 } catch (\Exception $e) {

@@ -69,8 +69,8 @@
 
     <script>
     $(document).ready(function() {
-        console.log(typeof jQuery); // Should return "function"
-        console.log(typeof $.fn.select2); // Should return "function"
+        // console.log(typeof jQuery); // Should return "function"
+        // console.log(typeof $.fn.select2); // Should return "function"
 
         // $('#negeri').select2({
         //     placeholder: 'Pilih Negeri',

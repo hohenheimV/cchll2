@@ -297,7 +297,7 @@ class eLAPSController extends Controller
                     $eLAPS->update($validatedData);
                 }
             }
-            return redirect()->back()->with('errorMessage', $formattedErrorMessage)
+            return redirect()->back()/* ->with('errorMessage', $formattedErrorMessage) */
             ->with('errorFields', $errorFields);
         }
         // dd($request['rancangan_pembangunan']);
@@ -487,7 +487,7 @@ class eLAPSController extends Controller
                 $query->whereHas('roles', function ($query) {
                     $query->where('name', 'KP/ TKP JLN');
                 });
-            })//->where('is_active', 1)
+            })->where('is_active', 1)
             ->get();
         }elseif ($request->input('action') === 'serahan' || $request->input('action') === 'status') {
             $bahagian_jln = $request->input('bahagian_jln') ?? $permohonan->bahagian_jln;
@@ -496,7 +496,7 @@ class eLAPSController extends Controller
                     $query->where('name', 'Pegawai');
                 })
                 ->where('bahagian_jln', $bahagian_jln);
-            })//->where('is_active', 1)
+            })->where('is_active', 1)
             ->get();
         }elseif ($request->input('ulasan') === 'hantar') {
             $bahagian_jln = $permohonan->bahagian_jln;
@@ -505,7 +505,7 @@ class eLAPSController extends Controller
                     $query->where('name', 'Pegawai');
                 })
                 ->where('bahagian_jln', $bahagian_jln);
-            })//->where('is_active', 1)
+            })->where('is_active', 1)
             ->get();
             $user_emailBhg = [];
             foreach ($userArr as $key => $value) {
@@ -522,7 +522,7 @@ class eLAPSController extends Controller
                 $query->whereHas('roles', function ($query) {
                     $query->where('name', 'KP/ TKP JLN');
                 });
-            })//->where('is_active', 1)
+            })->where('is_active', 1)
             ->get();
         }
 

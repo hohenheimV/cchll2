@@ -23,7 +23,7 @@
         '8' => 'Bahagian Promosi & Industri Landskap',
         '9' => 'Bahagian Dasar & Pengurusan Korporat',
         '10' => 'Bahagian Kontrak & Ukur Bahan',
-    ], $epact->sumber != '11' ? $epact->sumber : null, ['class' => 'form-control', 'id' => 'sumber']) !!}
+    ], $epact->sumber != '11' ? $epact->sumber : null, ['class' => 'form-control', 'id' => 'sumber','placeholder' => 'Pilih Sumber Terbitan']) !!}
     @error('sumber')
         <div class="text-danger">{{ $message }}</div>
     @enderror

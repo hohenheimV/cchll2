@@ -29,7 +29,7 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="example" class="responsive table table-bordered table-hover table-striped mb-0">
+                            <table id="epacttable" class="responsive table table-bordered table-hover table-striped mb-0">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th class="w-2">Bil</th>
@@ -44,7 +44,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php($index = $epacts->firstItem())
+                                    @php($index = 1)
                                     @foreach($epacts as $epact)
                                         <tr>
                                             <td>{{ $index++ }}</td>
@@ -122,86 +122,138 @@
                         <!-- /.table-responsive -->
                     </div>
                     <!-- /.card-body -->
-                    @if (count($epacts) > 0)
-                        <div
-                            class="card-footer bg-light p-2 border-top-0 d-flex flex-column justify-content-center align-items-end">
-                            {!! Html::pagination($epacts) !!}
-                        </div>
-                        <!-- /.card-footer -->
-                    @endif
                 </div><!-- /.card -->
             </div><!-- /.col-lg-12 -->
         </div><!-- /.row -->
     </div><!-- /.container -->
 
     @section('page-js-script')
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script>
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        const epacts = @json($epacts);
 
-        epacts.data.forEach(epact => {
-            const url = epact.dokumen 
-                ? `{{ asset('storage/uploads/epact/dokumen') }}/${epact.dokumen}` 
-                : `{{ asset('img/no-photos.png') }}`;
-            
-            if (epact.dokumen) {
-                // If dokumen exists, try to load the PDF
-                pdfjsLib.getDocument(url).promise.then(function(pdf) {
-                    return pdf.getPage(1);
-                }).then(function(page) {
-                    const canvas = document.getElementById('pdf-render-' + epact.id);
-                    const loadingElement = document.getElementById('loading-' + epact.id);
-                    const context = canvas.getContext('2d');
-                    
-                    // Get the viewport at scale 1
-                    const originalViewport = page.getViewport({ scale: 0.5 });
-                    
-                    // Calculate scale to fit container while maintaining aspect ratio
-                    const containerWidth = 150;
-                    const containerHeight = 200;
-                    const scale = Math.min(
-                        containerWidth / originalViewport.width,
-                        containerHeight / originalViewport.height
-                    );
-                    
-                    // Get the viewport with calculated scale
-                    const viewport = page.getViewport({ scale: scale });
-                    
-                    // Set canvas dimensions
-                    canvas.width = viewport.width;
-                    canvas.height = viewport.height;
-                    
-                    // Render PDF page
-                    page.render({
-                        canvasContext: context,
-                        viewport: viewport
-                    }).promise.then(() => {
-                        if (loadingElement) {
-                            loadingElement.style.display = 'none';
-                        }
-                        canvas.style.display = 'block';
-                    });
-                }).catch(function(error) {
-                    console.error('Error loading PDF for ID ' + epact.id + ':', error);
-                    // Show a placeholder or error message
-                    const viewerElement = document.getElementById('pdf-viewer-' + epact.id);
-                    if (viewerElement) {
+    document.addEventListener('DOMContentLoaded', function() {
+        const epacts = @json($epacts->values());
+
+        function renderDocumentsOnPage() {
+            $('#epacttable tbody tr').each(function() {
+                const row = $(this);
+                const id = row.find('[id^="pdf-viewer-"]').attr('id');
+                if (!id) return;
+                const epactId = id.replace('pdf-viewer-', '');
+                const epact = epacts.find(e => e.id == epactId);
+                const viewerElement = document.getElementById('pdf-viewer-' + epactId);
+
+                if (!epact || !viewerElement) return;
+
+                if (epact.dokumen && epact.dokumen.endsWith('.pdf')) {
+                    const url = `{{ asset('storage/uploads/epact/dokumen') }}/${epact.dokumen}`;
+                    pdfjsLib.getDocument(url).promise.then(function(pdf) {
+                        return pdf.getPage(1);
+                    }).then(function(page) {
+                        const canvas = document.getElementById('pdf-render-' + epactId);
+                        const loadingElement = document.getElementById('loading-' + epactId);
+                        const context = canvas.getContext('2d');
+                        const originalViewport = page.getViewport({ scale: 0.5 });
+                        const containerWidth = 150;
+                        const containerHeight = 200;
+                        const scale = Math.min(
+                            containerWidth / originalViewport.width,
+                            containerHeight / originalViewport.height
+                        );
+                        const viewport = page.getViewport({ scale: scale });
+                        canvas.width = viewport.width;
+                        canvas.height = viewport.height;
+                        page.render({
+                            canvasContext: context,
+                            viewport: viewport
+                        }).promise.then(() => {
+                            if (loadingElement) loadingElement.style.display = 'none';
+                            canvas.style.display = 'block';
+                        });
+                    }).catch(function(error) {
                         viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Preview not available</div>';
-                    }
-                });
-            } else {
-                // If dokumen is null, display the no-photos.png image
-                const viewerElement = document.getElementById('pdf-viewer-' + epact.id);
-                if (viewerElement) {
+                    });
+                } else {
                     viewerElement.innerHTML = `<img src="{{ asset('img/no-photos.png') }}" alt="No Preview Available" style="width: 100%; height: 100%; object-fit: contain;">`;
                 }
-            }
+            });
+        }
+
+        const table = $('#epacttable').DataTable({
+            responsive: true,
+            paging: true,
+            pageLength: 10,
+            searching: true,
+            info: false,
+            autoWidth: false,
+            ordering: false,
+            dom: '<"top"fB>rt<"bottom"p><"clear">',
+            language: {
+                search: "Carian:"
+            },
+            buttons: [
+                {
+                    extend: 'copy',
+                    text: 'Salin',
+                    exportOptions: {
+                        columns: [0,1,2,3,4,5],
+                        modifier: { search: 'applied', order: 'applied', page: 'all' }
+                    }
+                },
+                {
+                    extend: 'csv',
+                    text: 'CSV',
+                    exportOptions: {
+                        columns: [0,1,2,3,4,5],
+                        modifier: { search: 'applied', order: 'applied', page: 'all' }
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: 'Excel',
+                    exportOptions: {
+                        columns: [0,1,2,3,4,5],
+                        modifier: { search: 'applied', order: 'applied', page: 'all' }
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    text: 'PDF',
+                    exportOptions: {
+                        columns: [0,1,2,3,4,5],
+                        modifier: { search: 'applied', order: 'applied', page: 'all' }
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: 'Cetak',
+                    exportOptions: {
+                        columns: [0,1,2,3,4,5],
+                        modifier: { search: 'applied', order: 'applied', page: 'all' }
+                    }
+                }
+            ]
+        });
+
+        // Initial render
+        renderDocumentsOnPage();
+
+        // Re-render previews on every page/change/search
+        table.on('draw', function() {
+            renderDocumentsOnPage();
         });
     });
     </script>
+    <style>
+    @media print {
+        #epacttable th:nth-child(7),
+        #epacttable th:nth-child(8),
+        #epacttable td:nth-child(7),
+        #epacttable td:nth-child(8) {
+            display: none !important;
+        }
+    }
+    </style>
     @stop
 @endsection

@@ -80,9 +80,9 @@ class KTPController extends Controller
             'bilangan_pokok' => 'required|array',
             'bilangan_pokok.*' => 'required|integer|min:1|max:10000',
             'tinggi_pokok' => 'required|array',
-            'tinggi_pokok.*' => 'required|integer|min:1|max:10000',
+            'tinggi_pokok.*' => 'required|integer|min:0|max:10000',
             'diameter_pokok' => 'required|array',
-            'diameter_pokok.*' => 'required|integer|min:1|max:10000',
+            'diameter_pokok.*' => 'required|integer|min:0|max:10000',
             'jumlah_pokok' => 'required|integer|min:1',
         ], [
             'required' => ':attribute diperlukan.',
@@ -183,9 +183,9 @@ class KTPController extends Controller
             'bilangan_pokok' => 'required|array',
             'bilangan_pokok.*' => 'required|integer|min:1|max:10000',
             'tinggi_pokok' => 'required|array',
-            'tinggi_pokok.*' => 'required|integer|min:1|max:10000',
+            'tinggi_pokok.*' => 'required|integer|min:0|max:10000',
             'diameter_pokok' => 'required|array',
-            'diameter_pokok.*' => 'required|integer|min:1|max:10000',
+            'diameter_pokok.*' => 'required|integer|min:0|max:10000',
             'jumlah_pokok' => 'required|integer|min:1',
         ], [
             'required' => ':attribute diperlukan.',
@@ -239,5 +239,14 @@ class KTPController extends Controller
     {
         $ktp->delete();
         return redirect()->route('pengurusan.ktp.index')->with('successMessage', 'Maklumat Telah Dihapuskan');
+    }
+
+    public function borang()
+    {
+        $filePath = 'uploads/maklumat_pokok_ktp.xlsx';//\public\storage\uploads
+        if (Storage::disk('public')->exists($filePath)) {
+            return Storage::disk('public')->response($filePath);
+        }
+        abort(404, 'File not found');
     }
 }

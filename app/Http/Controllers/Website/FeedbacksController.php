@@ -95,8 +95,8 @@ class FeedbacksController extends Controller
     {
         //DEFINE('DS', DIRECTORY_SEPARATOR);
 
-        $data["email"] = config('mail.from.address'); //'kpjln@jln.gov.my';
-        $data["client_name"] = config('mail.from.name'); //'KP JLN';
+        $data["email"] = 'frenemies.888@gmail.com';//config('mail.from.address'); //'kpjln@jln.gov.my';
+        $data["client_name"] = 'SSC';//config('mail.from.name'); //'KP JLN';
         $data["subject"] = "ADUAN DAN PERTANYAAN JABATA (No Ruj: $feedback->ref_num)";
 
         try {
@@ -104,7 +104,7 @@ class FeedbacksController extends Controller
             Mail::send('website.feedbacks.mails.permohonan', ['feedback' => $feedback], function ($message) use ($data) {
                 $message->to($data["email"], $data["client_name"])
 					//->cc('tpbk@jln.gov.my','zahri@jln.gov.my')
-					->cc('tpbk@jln.gov.my')
+					// ->cc('tpbk@jln.gov.my')
 					->bcc('frenemies.888@gmail.com')
                     ->subject($data["subject"]);
             });

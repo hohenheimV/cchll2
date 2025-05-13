@@ -1110,10 +1110,10 @@ Route::middleware(['auth'])
 
     //     return 'Email sent!';
     // });
-    
+
     Route::get('/test-email', function () {
         $details = [
-            'title' => 'HTML Mail from Laravel App',
+            'title' => 'HTML Mail from sistem eLANDSKAP',
             'body' => '<h1>Ini adalah percubaan dari sistem eLANDSKAP. Mohon abaikan.</h1>'
         ];
 
@@ -1128,7 +1128,7 @@ Route::middleware(['auth'])
 
     Route::get('/content-email', function () {
         $details = [
-            'title' => 'HTML Mail from Laravel App',
+            'title' => 'HTML Mail from sistem eLANDSKAP',
             'body' => '<h1>Ini adalah percubaan dari sistem eLANDSKAP. Mohon abaikan.</h1>'
         ];
     

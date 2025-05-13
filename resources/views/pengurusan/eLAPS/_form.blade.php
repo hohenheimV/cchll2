@@ -1131,7 +1131,7 @@
         <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('projectCategory', '6.&nbsp;&nbsp;&nbsp;&nbsp;MAKLUMAT SOKONGAN:', ['class' => 'col-form-label']) }}</td>
     </tr>
     
-    @if((Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || ( Auth::user()->id == $eLAPS->id_pemohon)) && (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 2))
+    @if(((Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || ( Auth::user()->id == $eLAPS->id_pemohon)) && (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 2)) || (Auth::user()->hasRole('Pihak Berkuasa Tempatan') && !isset($eLAPS->status_permohonan)))
         <tr>
             <td style="border: none; padding: 8px; text-align: left;"  colspan="6" style="height: 20px; padding-top: 5px; padding-bottom: 5px;">
                 {{ Form::label('note1', '&nbsp;&nbsp;&nbsp;&nbsp;Maklumat lain yang perlu disertakan', ['class' => 'col-form-label']) }}
@@ -1174,7 +1174,7 @@
     <!-- File Upload Section -->
     <tr>
         <td style="border: none; padding: 8px; text-align: left;"  colspan="6" style="padding-top: 15px; padding-bottom: 15px;">
-            @if((Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || ( Auth::user()->id == $eLAPS->id_pemohon)) && (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 2))
+            @if(((Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || ( Auth::user()->id == $eLAPS->id_pemohon)) && (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 2)) || (Auth::user()->hasRole('Pihak Berkuasa Tempatan') && !isset($eLAPS->status_permohonan)))
                 <div class="form-group row">
                     <div class="col-md-12">
                         {{ Form::label('file_upload', '&nbsp;&nbsp;&nbsp;&nbsp;Sila muat naik dokumen sokongan:', ['class' => 'col-form-label', 'style' => 'font-weight: normal;']) }}
@@ -1233,7 +1233,7 @@
             
             @endif
 
-            @if((Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || ( Auth::user()->id == $eLAPS->id_pemohon)) && (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 2))
+            @if(((Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || ( Auth::user()->id == $eLAPS->id_pemohon)) && (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 2)) || (Auth::user()->hasRole('Pihak Berkuasa Tempatan') && !isset($eLAPS->status_permohonan)))
                 <br>
                 <div class="row">
                     <div class="form-group mb-6 col-md-12" style="background-color:#fef7f8; border-left: 5px solid #f0868e; padding: 15px;">

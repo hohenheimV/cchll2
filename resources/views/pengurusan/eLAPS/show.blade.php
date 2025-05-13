@@ -131,7 +131,7 @@
                         --}}
                     @endif
 
-                    @if(($eLAPS->status_permohonan == 6 || $eLAPS->status_permohonan == 7) && (auth()->user()->hasRole('Pentadbir Sistem|Pegawai') && Auth::user()->bahagian_jln == $eLAPS->bahagian_jln))
+                    @if(($eLAPS->status_permohonan == 6 || $eLAPS->status_permohonan == 7) && ((auth()->user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == $eLAPS->bahagian_jln) || auth()->user()->hasRole('Pentadbir Sistem')))
                         {!! Form::button('<i class="fas fa-pencil-alt"></i> Simpan Draf Ulasan', [
                             'class' => 'btn btn-primary', 
                             'type' => 'submit', 
@@ -148,7 +148,7 @@
                         ]) !!}
                     @endif
 
-                    @if(($eLAPS->status_permohonan == 8 || $eLAPS->status_permohonan == 9) && (auth()->user()->hasRole('Pentadbir Sistem|Pegawai') && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln || Auth::user()->bahagian_jln == 6)))
+                    @if(($eLAPS->status_permohonan == 8 || $eLAPS->status_permohonan == 9) && ((auth()->user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln || Auth::user()->bahagian_jln == 6)) || auth()->user()->hasRole('Pentadbir Sistem|KP/ TKP JLN')))
                         {!! Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini Status Permohonan', [
                             'class' => 'btn btn-warning', 
                             'data-toggle'=>'modal', 
@@ -157,7 +157,7 @@
                         ]) !!}
                     @endif
 
-                    @if(($eLAPS->status_permohonan == 10 || $eLAPS->status_permohonan == 12) && (auth()->user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem') || Auth::user()->id == $eLAPS->id_pemohon || (auth()->user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln || Auth::user()->bahagian_jln == 6))))
+                    @if(($eLAPS->status_permohonan == 10 || $eLAPS->status_permohonan == 12) && (auth()->user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem|KP/ TKP JLN') || Auth::user()->id == $eLAPS->id_pemohon || (auth()->user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln || Auth::user()->bahagian_jln == 6))))
                         {!! Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini Status Projek', [
                             'class' => 'btn btn-warning', 
                             'data-toggle'=>'modal', 

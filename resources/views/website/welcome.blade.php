@@ -471,10 +471,10 @@
         <h1>Sistem Pengurusan Maklumat Landskap (eLANDSKAP)</h1>
         <p>Komprehensif dan mudah dicapai untuk panduan serta rujukan.</p>
         <div class="cta-buttons">
-            <a href="/epalm-taman" class="primary">Direktori Taman</a>
+            <a href="/epalm" class="primary">Direktori Taman</a>
             <a href="#penggiat_industri" class="primary">Penggiat Industri Landskap</a>
             <a href="/epil-pelan" class="primary">Pelan Induk Landskap</a>
-            <!-- <a href="/epalm-taman" class="primary">Entiti Landksap Unik</a>
+            <!-- <a href="/epalm" class="primary">Entiti Landksap Unik</a>
             <a href="#penggiat_industri" class="primary">Kempen Tanam Pokok</a> -->
         </div>
     </div>

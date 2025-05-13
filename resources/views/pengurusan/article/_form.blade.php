@@ -11,7 +11,7 @@
 
             <div class="form-group mb-1">
                 {{ Form::label('meta_description', 'Keterangan Ringkasan') }}
-                {{ Form::textarea('meta_description',null,['placeholder'=>'Ringkasan','rows'=>5,'class' => 'form-control '.Html::isInvalid($errors,'meta_description')]) }}
+                {{ Form::text('meta_description',null,['placeholder'=>'Ringkasan','rows'=>5,'class' => 'form-control '.Html::isInvalid($errors,'meta_description')]) }}
                 {!! Html::hasError($errors,'meta_description') !!}
             </div>
 

@@ -648,7 +648,7 @@
 
             </div>
             <div class="form-group col-md-3 showButton">
-                <button type="button" onclick="addMedia()" class="btn btn-primary">Add Media Sosial</button>
+                <button type="button" onclick="addMedia()" class="btn btn-primary">Tambah Media Sosial</button>
             </div>
 
             <script>

@@ -812,8 +812,8 @@
                         </div>
                         <div class="col-md-9">
                             <div class="card-body p-0">
-                                <h5>Anda Penggiat Industri?</h5>
-                                <p class="mobile-gone"> Penggunaan Taman Persekutuan Bukit Kiara perlu mendapatkan kelulusan daripada Jabatan Landskap Negara sebelum sesuatu program/aktiviti  dijalankan dan perlu mematuhi syarat-syarat yang telah ditetapkan.</p>
+                                <h5>Anda Penggiat Industri Landskap?</h5>
+                                <p class="mobile-gone"> Daftarkan Syarikat anda untuk promosi dari Jabatan Landskap Negara.</p>
                                 <a class="btn bg-olive mb-3" href="{{ route('register') }}">Maklumat Lanjut</a>
                             </div>
                         </div>

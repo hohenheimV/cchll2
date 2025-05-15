@@ -67,7 +67,7 @@
                                 </div>
                             </div>
                         </div>                
-                        <div class="col-md-5 text-sm">                                  
+                        <div class="col-md-6 text-sm">                                  
                             <div class="card-body">
                             <table class="table table-bordered">
                                 <tbody>
@@ -77,7 +77,7 @@
                                     </tr>
                                     <tr>
                                         <th class="col-6">Keterangan</th>
-                                        <td class="col-6">{{ $eread->keterangan && trim($eread->keterangan) !== '' ? $eread->keterangan : 'Tiada Maklumat' }}</td>
+                                        <td class="col-6" style="word-break: break-all;">{{ $eread->keterangan && trim($eread->keterangan) !== '' ? $eread->keterangan : 'Tiada Maklumat' }}</td>
                                     </tr>
                                     <tr>
                                         <th class="col-6">Saiz Dokumen</th>

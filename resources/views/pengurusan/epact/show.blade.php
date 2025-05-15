@@ -59,18 +59,18 @@
                             <table class="table table-bordered">
                                 <tbody>
                                     <tr>
-                                        <th class="col-4">Tajuk Dokumen</th>
-                                        <td class="col-8">{{ $epact->tajuk }}</td>
+                                        <th class="col-6">Tajuk Dokumen</th>
+                                        <td class="col-6">{{ $epact->tajuk }}</td>
                                     </tr>
                                     <tr>
-                                        <th class="col-4">Keterangan</th>
-                                        <td class="col-8">{{ $epact->keterangan && trim($epact->keterangan) !== '' ? $epact->keterangan : 'Tiada Maklumat' }}</td>
+                                        <th class="col-6">Keterangan</th>
+                                        <td class="col-6" style="word-break: break-all;">{{ $epact->keterangan && trim($epact->keterangan) !== '' ? $epact->keterangan : 'Tiada Maklumat' }}</td>
                                     </tr>
                                     <tr>
-                                        <th class="col-4">Pautan URL</th>
-                                        <td class="col-8">
+                                        <th class="col-6">Pautan URL</th>
+                                        <td class="col-6" style="word-break: break-all;">
                                             @if($epact->url)
-                                                <a href="{{ strpos($epact->url, 'http://') === 0 || strpos($epact->url, 'https://') === 0 ? $epact->url : 'http://' . $epact->url }}" target="_blank">
+                                                <a href="{{ strpos($epact->url, 'http://') === 0 || strpos($epact->url, 'https://') === 0 ? $epact->url : 'http://' . $epact->url }}" target="_blank" style="word-break: break-all;">
                                                     {{ $epact->url }}
                                                 </a>
                                             @else
@@ -79,16 +79,16 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class="col-4">Saiz/Jenis Dokumen</th>
-                                        <td class="col-8">{{ $epact->sizeName.' MB' }} / {{ $epact->mimes ?? 'Tiada Maklumat' }}</td>
+                                        <th class="col-6">Saiz/Jenis Dokumen</th>
+                                        <td class="col-6">{{ $epact->sizeName.' MB' }} / {{ $epact->mimes ?? 'Tiada Maklumat' }}</td>
                                     </tr>
                                     <tr>
-                                        <th class="col-4">Kategori</th>
-                                        <td class="col-8">{{ $epact->kategori->name ?? 'Tiada Maklumat' }}</td>
+                                        <th class="col-6">Kategori</th>
+                                        <td class="col-6">{{ $epact->kategori->name ?? 'Tiada Maklumat' }}</td>
                                     </tr>
                                     <tr>
-                                        <th class="col-4">Sumber Terbitan</th>
-                                        <td class="col-8">
+                                        <th class="col-6">Sumber Terbitan</th>
+                                        <td class="col-6">
                                             {{ $epact->sumber == 0 ? 'Tiada Maklumat' : '' }}
                                             {{ $epact->sumber == 1 ? 'Bahagian Pengurusan Landskap' : '' }}
                                             {{ $epact->sumber == 2 ? 'Bahagian Taman Awam' : '' }}
@@ -104,21 +104,21 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class="col-4">Tahun Terbitan</th>
-                                        <td class="col-8">{{ $epact->tahun }}</td>
+                                        <th class="col-6">Tahun Terbitan</th>
+                                        <td class="col-6">{{ $epact->tahun }}</td>
                                     </tr>
                                     
                                     <tr>
-                                        <th class="col-4">Nama Dokumen</th>
-                                        <td class="col-8">{{ $epact->dokumen ?? 'Tiada Maklumat' }}</td>
+                                        <th class="col-6">Nama Dokumen</th>
+                                        <td class="col-6">{{ $epact->dokumen ?? 'Tiada Maklumat' }}</td>
                                     </tr>
                                     <tr>
-                                        <th class="col-4">Tarikh Muatnaik</th>
-                                        <td class="col-8">{{ $epact->created_at->format('d-m-Y') }}</td>
+                                        <th class="col-6">Tarikh Muatnaik</th>
+                                        <td class="col-6">{{ $epact->created_at->format('d-m-Y') }}</td>
                                     </tr>
                                     <tr>
-                                        <th class="col-4">Tarikh Kemaskini</th>
-                                        <td class="col-8">{{ $epact->updated_at->format('d-m-Y') }}</td>
+                                        <th class="col-6">Tarikh Kemaskini</th>
+                                        <td class="col-6">{{ $epact->updated_at->format('d-m-Y') }}</td>
                                     </tr>
                                 </tbody>
                             </table>

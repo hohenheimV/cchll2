@@ -67,45 +67,47 @@
                                 </div>
                             </div>
                         </div>                 
-                        <div class="col-md-5 text-sm">                                  
+                        <div class="col-md-6 text-sm">                                  
                             <div class="card-body">
                                 <table class="table table-bordered">
-                                    <tr>
-                                        <th>Tajuk</th>
-                                        <td>{{ $elad->tajuk }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Keterangan</th>
-                                        <td class="col-6">{{ $elad->keterangan && trim($elad->keterangan) !== '' ? $elad->keterangan : 'Tiada Maklumat' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Saiz Dokumen</th>
-                                        <td>{{ $elad->sizeName.' MB' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Kategori</th>
-                                        <td>{{ $elad->kategori->name ?? 'Tiada Maklumat' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Tahun</th>
-                                        <td>{{ date('Y', strtotime($elad->tarikh)) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Jenis Dokumen</th>
-                                        <td>{{ $elad->mimes }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Nama Dokumen</th>
-                                        <td>{{ $elad->dokumen }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Tarikh Daftar</th>
-                                        <td>{{ $elad->created_at->format('d-m-Y') }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Tarikh Kemaskini</th>
-                                        <td>{{ $elad->updated_at->format('d-m-Y') }}</td>
-                                    </tr>
+                                    <tbody>
+                                        <tr>
+                                            <th class="col-6">Tajuk</th>
+                                            <td class="col-6">{{ $elad->tajuk }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-6">Keterangan</th>
+                                            <td class="col-6" style="word-break: break-all;">{{ $elad->keterangan && trim($elad->keterangan) !== '' ? $elad->keterangan : 'Tiada Maklumat' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-6">Saiz Dokumen</th>
+                                            <td class="col-6">{{ $elad->sizeName.' MB' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-6">Kategori</th>
+                                            <td class="col-6">{{ $elad->kategori->name ?? 'Tiada Maklumat' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-6">Tahun</th>
+                                            <td class="col-6">{{ date('Y', strtotime($elad->tarikh)) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-6">Jenis Dokumen</th>
+                                            <td class="col-6">{{ $elad->mimes }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-6">Nama Dokumen</th>
+                                            <td class="col-6">{{ $elad->dokumen }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-6">Tarikh Daftar</th>
+                                            <td class="col-6">{{ $elad->created_at->format('d-m-Y') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-6">Tarikh Kemaskini</th>
+                                            <td class="col-6">{{ $elad->updated_at->format('d-m-Y') }}</td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

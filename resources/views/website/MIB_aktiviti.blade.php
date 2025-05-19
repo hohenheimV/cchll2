@@ -105,7 +105,7 @@
                                                     <td>{{ $index++ }}</td>
                                                     <td>{!! ucwords(strtolower($laporan->name)) !!}</td>
                                                     <td>{{ ucwords(strtolower($laporan->taman)) }}</td>
-                                                    <td>{{  'Tiada Maklumat ' }}</td>
+                                                    <td>{{ ucwords(strtolower($laporan->mib->pbt ?? 'Tiada Maklumat'))  }}</td>
                                                     <!-- <td class="text-center">{!! $laporan->created_at->format('d-m-Y') !!}</td> -->
                                                     <td class="text-center">
                                                         <?php

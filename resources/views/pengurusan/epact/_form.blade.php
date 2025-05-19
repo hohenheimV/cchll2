@@ -75,8 +75,7 @@
     {{ Form::textarea('keterangan', $epact->keterangan, [
         'placeholder' => 'Sila Masukkan Keterangan', 
         'rows' => 3, 
-        'class' => 'form-control ' . Html::isInvalid($errors, 'keterangan'),
-        'oninput' => "this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1).toLowerCase();"
+        'class' => 'form-control ' . Html::isInvalid($errors, 'keterangan')
     ]) }}
     {!! Html::hasError($errors, 'keterangan') !!}
 </div>

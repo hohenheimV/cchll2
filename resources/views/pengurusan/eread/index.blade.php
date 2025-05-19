@@ -34,7 +34,7 @@
                                         <th>Tajuk</th>
                                         {{-- <th>Keterangan</th> --}}
                                         <th class="text-center w-10">Saiz</th>
-                                        <th class="text-center w-15">Terbitan Jabatan</th>
+                                        <th class="text-center w-15">Terbitan Bahagian</th>
                                         <th class="text-center w-15">Kategori </th>
                                         <th class="text-center w-5">Tahun Terbitan</th>
                                         <th class="text-center w-15">Imej Hadapan</th>

@@ -417,5 +417,15 @@
     </script>
     @yield('page-js-script')
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.querySelector('.main-sidebar');
 
+        if (sidebar) {
+            sidebar.addEventListener('mouseenter', function () {
+                document.body.classList.remove('sidebar-collapse');
+            });
+        }
+    });
+</script>
 </html>

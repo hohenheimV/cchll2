@@ -125,7 +125,7 @@
                                         <div class="form-group">
                                             {{ Form::label('status_keahlian', '&nbsp;') }}
                                             {!! Form::button('<i class="fas fa-save"></i> Simpan', [
-                                                'class' => 'form-control btn btn-primary', 
+                                                'class' => 'form-control btn btn-success', 
                                                 'type' => 'submit', 
                                                 'name' => 'action', 
                                                 'value' => 'peruntukan'

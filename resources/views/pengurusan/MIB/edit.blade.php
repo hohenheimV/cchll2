@@ -39,7 +39,7 @@
                     {!! Form::button('Kembali',
                     ['onclick'=>"window.location='".route('pengurusan.MIB.index')."'",
                     'class'=>'btn btn-secondary']) !!}
-                    {!! Form::button('<i class="fas fa-save"></i> Kemaskini', ['class'=>'btn btn-success','type'=>'submit']) !!}
+                    {!! Form::button('<i class="fas fa-save"></i> Simpan', ['class'=>'btn btn-success','type'=>'submit']) !!}
                 </div>
                 {{ Form::close() }}
             </div>

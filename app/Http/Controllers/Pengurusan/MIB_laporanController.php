@@ -64,7 +64,7 @@ class MIB_laporanController extends Controller
         }
         // dd($requestData);
         $report = MIB_laporan::create($requestData);  // Save the new record to the database
-        dd($report);
+        // dd($report);
         $rakanTaman = MIB::findOrFail($report->id_rakan);
 
         return redirect()->route('pengurusan.MIB.show', [$rakanTaman])->with('successMessage', 'Maklumat telah berjaya disimpan.');

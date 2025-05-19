@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Entiti Landskap Unik')
+@section('title', 'Entiti Landskap dan Pokok Berkarakter Unik ')
 
 @section('content')
 <div class="container-fluid">
@@ -16,7 +16,7 @@
 
                                 {!! Form::button('<i class="fas fa-plus"></i> Daftar', 
                                     ['onclick'=>"window.location='".route('pengurusan.entiti-landskap-unik.create')."'",
-                                    'class'=>'btn bg-success btn-sm', Html::tooltip('Daftar Entiti Landskap Unik')]) !!}
+                                    'class'=>'btn bg-success btn-sm', Html::tooltip('Daftar Entiti')]) !!}
                             </div>
                         </div>
                     </div>
@@ -28,7 +28,7 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="w-1">Bil.</th>
-                                    <th>Nama Entiti Landskap</th>
+                                    <th class="w-10">Nama Entiti</th>
                                     <th>Keterangan</th>
                                     <th class="text-center w-10">PBT</th>
                                     <th class="text-center w-10">Lokasi</th>
@@ -42,8 +42,11 @@
                                 @forelse($entitiLandskapUnik as $entiti)
                                 <tr>
                                     <td>{{ $index++ }}</td>
-                                    <td>{{ $entiti->nama_entiti }}</td>
-                                    <td>{{ $entiti->keterangan }} </td>
+                                    <td>{{ strtoupper($entiti->nama_entiti) }}</td>
+                                    <td>
+                                        {!! Str::limit($entiti->keterangan, 250) !!}
+                                        {{-- $entiti->keterangan --}} 
+                                    </td>
                                     <?php
                                         if(isset($entiti->pbt)){
                                             $dataPbt = json_decode($entiti->pbt, true);
@@ -60,7 +63,7 @@
                                             $dataPbt = [];
                                         }
                                     ?>
-                                    <td class="text-center">{{ isset($pbt) ? $pbt : strtoupper($entiti->pbt) }}</td>
+                                    <td class="text-center">{{ isset($pbt) ? strtoupper($pbt) : strtoupper($entiti->pbt) }}</td>
                                     <td class="text-center">{{ strtoupper($entiti->lokasi) }}</td>
                                     <td class="p-0">
                                         <?php
@@ -77,26 +80,26 @@
                                                 $gambar_input_modal = null;
                                             }
                                         ?>
-                                        <img class="image-thumb p-1 w-75 mx-auto d-block embed-responsive-item" alt="Gambar Entiti Landskap Unik" src="{{ isset($gambar_input_modal) ? asset('storage/uploads/entiti_landskap/' . $gambar_input_modal) : asset('storage/uploads/no-photos.png') }}">
+                                        <img class="image-thumb p-1 w-75 mx-auto d-block embed-responsive-item" alt="Gambar Entiti" src="{{ isset($gambar_input_modal) ? asset('storage/uploads/entiti_landskap/' . $gambar_input_modal) : asset('storage/uploads/no-photos.png') }}">
                                     </td>
                                     <td class="text-center">{{ $entiti->agensi }}</td>
                                     <td>
                                         <div class="btn-group">
                                             {!! Form::button('<i class="fas fa-search"></i>',
                                                 ['onclick'=>"window.location='".route('pengurusan.entiti-landskap-unik.show',$entiti)."'",
-                                                'class'=>'btn bg-info btn-sm', Html::tooltip('Butiran Entiti Landskap Unik')]) !!}
+                                                'class'=>'btn bg-info btn-sm', Html::tooltip('Butiran Entiti')]) !!}
                                             {!! Form::button('<i class="fas fa-pencil-alt"></i>',
                                                 ['onclick'=>"window.location='".route('pengurusan.entiti-landskap-unik.edit',$entiti)."'",
-                                                'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini Entiti Landskap Unik')]) !!}
+                                                'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini Entiti')]) !!}
                                             {!! Form::button('<i class="fas fa-trash"></i>', 
-                                                ['class'=>'btn btn-danger btn-sm',
+                                                ['class'=>'btn btn-danger btn-sm', Html::tooltip('Padam Entiti'),
                                                 'data-url'=>route('pengurusan.entiti-landskap-unik.destroy',$entiti),
                                                 'data-toggle'=>'modal', 'data-target'=>'#modalDelete']) !!}
                                         </div>
                                     </td>
                                 </tr>
                                 @empty
-                                {!! Html::forelse_alert(request('keyword'),'Entiti Landskap Unik') !!}
+                                {!! Html::forelse_alert(request('keyword'),'Entiti Landskap dan Pokok Berkarakter Unik ') !!}
                                 @endforelse
                             </tbody>
                         </table>

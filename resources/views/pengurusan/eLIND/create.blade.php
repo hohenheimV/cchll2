@@ -12,7 +12,7 @@
     }
 @endphp
 
-@section('title', 'Daftar ' . $capitalizedSegment)
+@section('title', 'Daftar Maklumat' . $capitalizedSegment)
 
 
 @section('content')

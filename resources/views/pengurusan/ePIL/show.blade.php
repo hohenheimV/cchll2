@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Lihat ePIL')
+@section('title', 'Lihat Maklumat Pelan Induk Landskap')
 
 @section('content')
 <div class="container-fluid">
@@ -71,7 +71,7 @@
                 <div class="card-footer">
                     {!! Form::button('Kembali', ['onclick' => "window.location='".route('pengurusan.ePIL.index')."'", 'class' => 'btn btn-secondary']) !!}
                     {!! 
-                        Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini', ['onclick'=>"window.location='".route('pengurusan.ePIL.edit',$ePIL->id_pelan)."'", 'class'=>'btn bg-warning', Html::tooltip('Kemaskini PIL')]); 
+                        Form::button('<i class="fas fa-pencil-alt"></i>', ['onclick'=>"window.location='".route('pengurusan.ePIL.edit',$ePIL->id_pelan)."'", 'class'=>'btn bg-warning', Html::tooltip('Kemaskini PIL')]); 
                     !!}
 
                     @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))

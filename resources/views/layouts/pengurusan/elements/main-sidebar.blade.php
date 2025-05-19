@@ -41,7 +41,7 @@
                 <li class="nav-item">
                     {!! Html::buttonSidebarNavLink('Dashboard','fas fa-tachometer-alt',
                     ['onclick'=>"window.location='".route('pengurusan.dashboard')."'",
-                    'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.dashboard')]) !!}
+                    'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.dashboard'), Html::tooltip('Dashboard')]) !!}
                 </li>
                 <?php
                     $bahagian_jln = [
@@ -69,11 +69,23 @@
                         'eNTITI' => 'fas fa-dna',
                         'eMAP' => 'fas fa-map'
                     ];
+                    $hoverText = [
+                        'eLAPS' => 'Modul Pengurusan Projek Landskap',
+                        'ePALM' => 'Modul Pengurusan Taman & Landskap ',
+                        'ePIL' => 'Modul Pelan Induk Landskap ',
+                        'ktp' => 'Modul Pelaporan Kempen Tanam Pokok',
+                        'MIB' => 'Modul Rakan Taman',
+                        'eREAD' => 'Modul Penyelidikan dan Penerbitan Landskap',
+                        'ePACT' => 'Modul Pentadbiran Kontrak dan Polisi Landskap',
+                        'eLAD' => 'Modul Rekabentuk Landskap',
+                        'eNTITI' => 'Modul Entiti Landskap dan Pokok Berkarakter Unik',
+                        'eMAP' => 'Taburan Pembangunan Projek Landskap di Malaysia'
+                    ];
                     
                 ?>
                 @if ((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN|Pegawai')))
                     <!-- <li class="nav-header text-uppercase">{{ $bahagian_jln[Auth::user()->bahagian_jln ? Auth::user()->bahagian_jln : 0] }}</li> -->
-                    <li class="nav-header text-uppercase" style="white-space: normal;">Maklumat Landskap</li>
+                    <li class="nav-header text-uppercase" style="white-space: normal;">Modul (Info Landskap)</li>
                 @elseif ((Auth::user()->hasRole('Pihak Berkuasa Tempatan')))
                     <li class="nav-header text-uppercase" style="white-space: normal;">Pihak Berkuasa Tempatan</li>
                 @elseif ((Auth::user()->hasRole('Penggiat Industri')))
@@ -90,7 +102,7 @@
                         <li class="nav-item">
                             {!! Html::buttonSidebarNavLink($item, $icon[$item], [
                                 'onclick' => "window.location='" . route('pengurusan.' . ($item) . '.index') . "'",
-                                'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.' . ($item))
+                                'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.' . ($item)), Html::tooltip($hoverText[$item])
                             ]) !!}
                         </li>
                         @endif
@@ -99,7 +111,7 @@
                     <li class="nav-item">
                         {!! Html::buttonSidebarNavLink('Kempen Tanam Pokok', $icon['ktp'], [
                             'onclick' => "window.location='" . route('pengurusan.ktp.index') . "'",
-                            'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.ktp.')
+                            'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.ktp.'), Html::tooltip($hoverText['ktp'])
                         ]) !!}
                     </li>
                     @endif
@@ -107,7 +119,7 @@
                     <li class="nav-item">
                         {!! Html::buttonSidebarNavLink('Rakan Taman', $icon['MIB'], [
                             'onclick' => "window.location='" . route('pengurusan.MIB.index') . "'",
-                            'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.MIB.')
+                            'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.MIB.'), Html::tooltip($hoverText['MIB'])
                         ]) !!}
                     </li>
                     @endif
@@ -138,7 +150,7 @@
                                 <li class="nav-item">
                                     {!! Html::buttonSidebarNavLink($data['label'], $data['icon'], [
                                         'onclick' => "window.location='".route('pengurusan.eLIND.index', ['type' => $type])."'",
-                                        'class' => 'nav-link btn btn-block btn-link text-left ' . (isset($lastSegment) && $lastSegment === $type ? 'active' : '')
+                                        'class' => 'nav-link btn btn-block btn-link text-left ' . (isset($lastSegment) && $lastSegment === $type ? 'active' : ''), Html::tooltip('Modul Pengurusan Maklumat Industri Landskap ')
                                     ]) !!}
                                 </li>
                             @endforeach
@@ -173,7 +185,7 @@
                                 <li class="nav-item">
                                     {!! Html::buttonSidebarNavLink($data['label'], $data['icon'], [
                                         'onclick' => "window.location='".route('pengurusan.eLIND.index', ['type' => $type])."'",
-                                        'class' => 'nav-link btn btn-block btn-link text-left ' . (isset($lastSegment) && $lastSegment === $type ? 'active' : '')
+                                        'class' => 'nav-link btn btn-block btn-link text-left ' . (isset($lastSegment) && $lastSegment === $type ? 'active' : ''), Html::tooltip('Modul Pengurusan Maklumat Industri Landskap ')
                                     ]) !!}
                                 </li>
                             <?php } ?>
@@ -192,7 +204,7 @@
                         <li class="nav-item">
                             {!! Html::buttonSidebarNavLink($item, $icon[$item], [
                                 'onclick' => "window.location='" . route('pengurusan.' . strtolower($item) . '.index') . "'",
-                                'class' => 'nav-link btn btn-block btn-link text-left ' .  Html::active('pengurusan.' . strtolower($item)) 
+                                'class' => 'nav-link btn btn-block btn-link text-left ' .  Html::active('pengurusan.' . strtolower($item)), Html::tooltip($hoverText[$item]) 
                             ]) !!}
                         </li>
                         @endif
@@ -201,14 +213,14 @@
                     <li class="nav-item">
                         {!! Html::buttonSidebarNavLink('eNTITI', $icon['eNTITI'], [
                             'onclick' => "window.location='" . route('pengurusan.entiti-landskap-unik.index') . "'",
-                            'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.entiti-landskap-unik.')
+                            'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.entiti-landskap-unik.'), Html::tooltip($hoverText['eNTITI']) 
                         ]) !!}
                     </li>
                     @endif
                     <li class="nav-item">
                         {!! Html::buttonSidebarNavLink('eMAP JLN',$icon['eMAP'],
                         ['onclick'=>"window.location='#'",
-                        'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.peta')]) !!}
+                        'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.peta'), Html::tooltip($hoverText['eMAP'])])  !!}
                     </li>
                     @if ((Auth::user()->hasRole('Pentadbir Sistem|Pegawai')))
                         <li class="nav-header text-uppercase">Laman Web</li>

@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'ePALM')
+@section('title', 'Maklumat Taman & Landskap')
 
 @section('content')
 
@@ -13,11 +13,11 @@
             <div class="card card-olive card-outline">
                 <div class="card-header">
                     @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem'))
-                        <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan Pegawai JLN]</h3>
+                        <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') {{-- [Paparan Pegawai JLN] --}}</h3>
                     @elseif(Auth::user()->hasRole('KP/ TKP JLN|Pentadbir Sistem'))
-                        <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan KP/TKP/B. Penilaian]</h3>
+                        <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') {{-- [Paparan KP/TKP/B. Penilaian] --}}</h3>
                     @elseif(Auth::user()->hasRole('Pihak Berkuasa Tempatan'))
-                        <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan PBT]</h3>
+                        <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') {{-- [Paparan PBT] --}}</h3>
                     @endif
                     <div class="card-tools">
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -25,7 +25,7 @@
 
                                 {!! Form::button('<i class="fas fa-plus"></i> Daftar', 
                                     ['onclick'=>"window.location='".route('pengurusan.ePALM.create')."'",
-                                    'class'=>'btn bg-success btn-sm', Html::tooltip('Daftar ePALM')]) !!}
+                                    'class'=>'btn bg-success btn-sm', Html::tooltip('Daftar Taman')]) !!}
                             </div>
                         </div>
                     </div>
@@ -69,11 +69,11 @@
                                         <tr>
                                             <td>{{ $index++ }}</td>
                                             <td>{{ strtoupper($taman->nama_taman) }}</td>
-                                            <td>{!! ((!in_array($taman->kategori_taman, $jenis_pembangunan))) ? '<span class="badge bg-warning">'.$taman->kategori_taman.'</span>' : $taman->kategori_taman !!}</td>
+                                            <td>{!! ((!in_array($taman->kategori_taman, $jenis_pembangunan))) ? '<span class="badge bg-warning">'.strtoupper($taman->kategori_taman).'</span>' : strtoupper($taman->kategori_taman) !!}</td>
                                             
                                             @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))
                                             <td>
-                                                {{ $taman->nama_pbt }}
+                                                {{ strtoupper($taman->nama_pbt) }}
                                             </td>
                                             @endif
                                             <td>
@@ -87,7 +87,7 @@
                                             <td>
                                                 <div class="btn-group">
                                                     {!! 
-                                                        Form::button('<i class="fas fa-search"></i>', ['onclick'=>"window.location='".route('pengurusan.ePALM.show',$taman)."'", 'class'=>'btn bg-info btn-sm', Html::tooltip('Lihat Taman')]); 
+                                                        Form::button('<i class="fas fa-search"></i>', ['onclick'=>"window.location='".route('pengurusan.ePALM.show',$taman)."'", 'class'=>'btn bg-info btn-sm', Html::tooltip('Butiran Taman')]); 
                                                     !!}
                                                     {!! 
                                                         Form::button('<i class="fas fa-pencil-alt"></i>', ['onclick'=>"window.location='".route('pengurusan.ePALM.edit',$taman)."'", 'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini Taman')]); 

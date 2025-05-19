@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Kemaskini ePIL')
+@section('title', 'Kemaskini Pelan Induk Landskap')
 
 @section('content')
 <div class="container-fluid">
@@ -168,8 +168,8 @@
                     {!! Form::button('Kembali', ['onclick'=>"window.location='".route('pengurusan.ePIL.edit',$dokumen->id_pelan)."'", 'class'=>'btn btn-secondary']) !!}
 
                     <!-- Update Button (Kemaskini) -->
-                    {!! Form::button('<i class="fas fa-save"></i> Kemaskini', [
-                        'class' => 'btn btn-primary', 
+                    {!! Form::button('<i class="fas fa-save"></i> Simpan', [
+                        'class' => 'btn btn-success', 
                         'type' => 'submit', 
                         'name' => 'action', 
                         'value' => 'update'

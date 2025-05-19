@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Kemaskini eLAPS')
+@section('title', 'Kemaskini Permohonan Projek Landskap')
 
 @section('content')
 <div class="container-fluid">
@@ -33,7 +33,7 @@
                     {!! Form::button('Kembali', ['onclick' => "window.location='".route('pengurusan.eLAPS.index')."'", 'class' => 'btn btn-secondary']) !!}
 
                     <!-- Update Button (Kemaskini) -->
-                    {!! Form::button('<i class="fas fa-save"></i> Kemaskini', [
+                    {!! Form::button('<i class="fas fa-save"></i> Simpan', [
                         'class' => 'btn btn-primary', 
                         'type' => 'submit', 
                         'name' => 'action', 
@@ -42,7 +42,7 @@
                     ]) !!}
 
                     <!-- Submit Button (Hantar Permohonan) -->
-                    {!! Form::button('<i class="fas fa-save"></i> Hantar Permohonan', [
+                    {!! Form::button('<i class="fas fa-paper-plane"></i> Hantar Permohonan', [
                         'class' => 'btn btn-success', 
                         'type' => 'submit', 
                         'name' => 'action', 

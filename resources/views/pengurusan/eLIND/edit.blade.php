@@ -46,8 +46,8 @@
                     <div class="card-footer">
                         {!! Form::button('Kembali',
                         ['onclick'=>"window.location='".route('pengurusan.eLIND.index', ['type' => $lastSegment])."'",'class'=>'btn btn-secondary']) !!}
-                        {!! Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini', [
-                            'class' => 'btn btn-warning', 
+                        {!! Form::button('<i class="fas fa-save"></i> Simpan', [
+                            'class' => 'btn btn-success', 
                             'type' => 'submit', 
                             'name' => 'action', 
                             'value' => 'update'

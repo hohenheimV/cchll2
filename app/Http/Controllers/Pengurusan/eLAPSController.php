@@ -34,7 +34,7 @@ class eLAPSController extends Controller
         if($user->hasRole('Pihak Berkuasa Tempatan')){
             $totalCount = eLAPS::where('id_pemohon', $user->bahagian_jln)->count();
             $eLAPS = eLAPS::where('id_pemohon', $user->bahagian_jln)->orderBy('id', 'desc')->paginate($totalCount);
-        }elseif($user->hasRole('KP/ TKP JLN|Pentadbir Sistem') || ($user->hasRole('Pegawai') && $user->bahagian_jln == 6)){
+        }elseif($user->hasRole('KP/ TKP JLN|Pentadbir Sistem') || ($user->hasRole('Pegawai') && $user->bahagian_jln == 6) || ($user->hasRole('Pegawai') && $user->bahagian_jln == 7)){
             $totalCount = eLAPS::count();
             $eLAPS = eLAPS::orderByRaw('CAST(status_permohonan AS INT) ASC')->orderBy('id', 'desc')->paginate($totalCount);
         }else{
@@ -615,8 +615,14 @@ class eLAPSController extends Controller
             }
         } elseif ($request->input('action') === 'serahan') {
             // dd($request->all());
+            // dd($permohonan);
+            if($permohonan->status_permohonan > 5){
+                $status_permohonan = $permohonan->status_permohonan;
+            }else{
+                $status_permohonan = 5;
+            }
             $serahPermohonan = $permohonan->update([
-                'status_permohonan' => 5,
+                'status_permohonan' => $status_permohonan,
                 'bahagian_jln' => $request->input('bahagian_jln'),
             ]);
             

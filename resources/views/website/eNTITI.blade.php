@@ -1,5 +1,5 @@
 @extends('layouts.website.secondary')
-@section('title', 'Direktori Entiti Landskap Unik')
+@section('title', 'Direktori Entiti Landskap dan Pokok Berkarakter Unik ')
 
 @section('content')
 
@@ -61,7 +61,7 @@
                 <div class="col-12 col-lg-9">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title font-weight-bold my-1">Direktori Entiti Landskap Unik</h3>
+                            <h3 class="card-title font-weight-bold my-1">Direktori Entiti Landskap dan Pokok Berkarakter Unik </h3>
                         </div>
 
                         <div class="card-body">

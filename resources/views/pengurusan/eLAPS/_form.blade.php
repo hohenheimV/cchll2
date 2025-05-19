@@ -1126,10 +1126,18 @@
         </script>
     </tr>
 
-
-    <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
-        <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('projectCategory', '6.&nbsp;&nbsp;&nbsp;&nbsp;MAKLUMAT SOKONGAN:', ['class' => 'col-form-label']) }}</td>
-    </tr>
+    @if(isset($eLAPS->status_permohonan))
+        <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
+            <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('projectCategory', '6.&nbsp;&nbsp;&nbsp;&nbsp;MAKLUMAT SOKONGAN:', ['class' => 'col-form-label']) }}</td>
+        </tr>
+    @else
+        <tr style="border: none;">
+            <td colspan="6" style="border: none;"></td>
+        </tr>
+        <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
+            <td colspan="6" style="text-align: center; border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('projectCategory', 'Daftar Permohonan Projek Landskap dahulu untuk muat naik dokumen sokongan.', ['class' => 'col-form-label']) }}</td>
+        </tr>
+    @endif
     
     @if(((Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || ( Auth::user()->id == $eLAPS->id_pemohon)) && (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 2)) || (Auth::user()->hasRole('Pihak Berkuasa Tempatan') && !isset($eLAPS->status_permohonan)))
         <tr>

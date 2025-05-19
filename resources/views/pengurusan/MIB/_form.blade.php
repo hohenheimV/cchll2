@@ -298,7 +298,7 @@
                 <thead>
                     <tr style="background-color: #e5e5e5;height: 5px;">
                         <th colspan="4" class="text-center bold" style="padding: 4px 8px; line-height: 1.2;">
-                            SENARAI JAWATANKUASA MiB
+                            SENARAI JAWATANKUASA RAKAN TAMAN
                         </th>
                     </tr>
                     <tr style="background-color: #e5e5e5;height: 5px;">

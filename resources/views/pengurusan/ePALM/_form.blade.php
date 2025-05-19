@@ -774,7 +774,7 @@
 
                 <script>
                     function addFacility() {
-                        const name = prompt("Enter facility name (e.g. Parking)");
+                        const name = prompt("Masukkan nama kemudahan (cth. Tempat Parkir)");
                         if (!name) return;
 
                         const key = name.toLowerCase().replace(/\s+/g, '_'); // make safe input name
@@ -1096,8 +1096,8 @@
                                         <img src="{{ isset($imagePath) ? asset('storage/uploads/ePALM/' . $imagePath) : asset('storage/uploads/no-photos.png') }}" class="img-fluid" alt="Responsive image">
                                     </div>
                                     <div class="showButton">
-                                        <button type="button" class="btn btn-sm btn-primary trigger-upload" data-target="{{ $fieldKey }}">Upload</button>
-                                        <button type="button" class="btn btn-sm btn-danger delete-image" data-target="{{ $fieldKey }}">Delete</button>
+                                        <button type="button" class="btn btn-sm btn-primary trigger-upload" data-target="{{ $fieldKey }}">Pilih</button>
+                                        <button type="button" class="btn btn-sm btn-danger delete-image" data-target="{{ $fieldKey }}">Padam</button>
                                     </div>
                                     <input type="hidden" name="delete_images[]" value="" id="{{ 'delete_'.$fieldKey }}">
                                     <script>
@@ -1282,8 +1282,8 @@
                                     </div>
 
                                     <div class="showButton">
-                                        <button type="button" class="btn btn-sm btn-primary trigger-upload" data-target="{{ $fieldKey }}">Upload</button>
-                                        <button type="button" class="btn btn-sm btn-danger delete-image" data-target="{{ $fieldKey }}">Delete</button>
+                                        <button type="button" class="btn btn-sm btn-primary trigger-upload" data-target="{{ $fieldKey }}">Pilih</button>
+                                        <button type="button" class="btn btn-sm btn-danger delete-image" data-target="{{ $fieldKey }}">Padam</button>
                                     </div>
 
                                     <input type="hidden" name="delete_images[]" value="" id="delete_{{ $fieldKey }}">

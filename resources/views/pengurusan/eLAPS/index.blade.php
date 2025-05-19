@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'eLAPS')
+@section('title', 'Maklumat Permohonan Projek Landskap')
 
 @section('content')
 
@@ -13,12 +13,12 @@
             <div class="card card-olive card-outline">
                 <div class="card-header">
                 @if(Auth::user()->hasRole('KP/ TKP JLN|Pentadbir Sistem') || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6))
-                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan KP/TKP/B. Penilaian]</h3>
+                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') {{-- [Paparan KP/TKP/B. Penilaian] --}}</h3>
                 
                 @elseif(Auth::user()->hasRole('Pegawai|Pentadbir Sistem'))
-                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan Pegawai JLN]</h3>
+                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') {{-- [Paparan Pegawai JLN] --}}</h3>
                 @elseif(Auth::user()->hasRole('Pihak Berkuasa Tempatan'))
-                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan PBT]</h3>
+                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') {{-- [Paparan PBT] --}}</h3>
                 @endif
                     <div class="card-tools">
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -26,7 +26,7 @@
 
                                 {!! Form::button('<i class="fas fa-plus"></i> Daftar', 
                                     ['onclick'=>"window.location='".route('pengurusan.eLAPS.create')."'",
-                                    'class'=>'btn bg-success btn-sm', Html::tooltip('Daftar eLAPS')]) !!}
+                                    'class'=>'btn bg-success btn-sm', Html::tooltip('Daftar Permohonan Projek Landskap')]) !!}
                             </div>
                         </div>
                     </div>
@@ -71,8 +71,8 @@
                                     ['id' => 'Permohonan ditolak', 'label' => 'bg-danger'], //4
                                     ['id' => 'Serahan Permohonan ke Bahagian', 'label' => 'bg-secondary'], //5
                                     ['id' => 'Lawatan Kawasan Tapak', 'label' => 'bg-success'], //6
-                                    ['id' => 'Draf Ulasan Lawatan Kawasan Tapak', 'label' => 'bg-warning'], //7
-                                    ['id' => 'Ulasan Lawatan Kawasan Tapak diterima', 'label' => 'bg-info'], //8
+                                    ['id' => 'Draf Ulasan', 'label' => 'bg-warning'], //7
+                                    ['id' => 'Ulasan diterima', 'label' => 'bg-info'], //8
                                     ['id' => 'Permohonan dalam pertimbangan', 'label' => 'bg-primary'], //9
                                     ['id' => 'Permohonan Lengkap', 'label' => 'bg-success'], //10
                                     ['id' => 'Permohonan Tidak Lengkap', 'label' => 'bg-danger'], //11
@@ -91,12 +91,12 @@
                                             
                                             <td>
                                             {!! 
-                                                in_array($permohonan->category, $jenis_pembangunan) ? $permohonan->category : '<span class="badge bg-warning">' . $permohonan->category . '</span>'
+                                                in_array($permohonan->category, $jenis_pembangunan) ? strtoupper($permohonan->category) : '<span class="badge bg-warning">' . strtoupper($permohonan->category) . '</span>'
                                             !!}
                                             </td>
                                             @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))
                                             <td>
-                                                {{ $permohonan->pbt_name }}
+                                                {{ strtoupper($permohonan->pbt_name) }}
                                             </td>
                                             @endif
                                             <td class="text-center">
@@ -116,7 +116,7 @@
                                                     @if($permohonan->status_permohonan >= 2)
                                                         {!! Form::button('<i class="fas fa-search"></i>',
                                                             ['onclick'=>"window.location='".route('pengurusan.eLAPS.show',$permohonan)."'",
-                                                            'class'=>'btn bg-info btn-sm', Html::tooltip('Lihat permohonan')
+                                                            'class'=>'btn bg-info btn-sm', Html::tooltip('Butiran permohonan')
                                                         ]) !!}
                                                     @endif
 
@@ -137,14 +137,14 @@
                                                                 Html::tooltip('Padam Draf Permohonan')
                                                             ]) 
                                                         !!}
-                                                    @elseif($permohonan->status_permohonan == 3 && (Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN') || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6)))
+                                                    {{-- @elseif(($permohonan->status_permohonan == 3 && (Auth::user()->hasRole('KP/ TKP JLN') || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6))) || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 7 && $permohonan->status_permohonan >= 3))
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
                                                             'class' => 'btn btn-warning btn-sm', 
                                                             'data-toggle'=>'modal', 
                                                             'data-target'=>'#modalSerahan', 
                                                             'data-elaps-id' => $permohonan->id, 
                                                             Html::tooltip('Serahan kepada bahagian')
-                                                        ]) !!}
+                                                        ]) !!} --}}
                                                     @elseif(($permohonan->status_permohonan == 8 || $permohonan->status_permohonan == 9) && (Auth::user()->hasRole('Pentadbir Sistem|Pegawai')))
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
                                                             ['class'=>'btn btn-warning btn-sm', Html::tooltip('Kemaskini Status Permohonan'),
@@ -177,6 +177,15 @@
                                                                 'data-toggle'=>'modal', 'data-target'=>'#modalKeputusan']) !!}
                                                         @endif
                                                     --}}
+                                                    @endif
+                                                    @if(($permohonan->status_permohonan == 3 && (Auth::user()->hasRole('KP/ TKP JLN') || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6))) || ((Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 7 || Auth::user()->hasRole('Pentadbir Sistem')) && $permohonan->status_permohonan >= 3))
+                                                        {!! Form::button('<i class="fas fa-tasks"></i>', [
+                                                            'class' => 'btn btn-success btn-sm', 
+                                                            'data-toggle'=>'modal', 
+                                                            'data-target'=>'#modalSerahan', 
+                                                            'data-elaps-id' => $permohonan->id, 
+                                                            Html::tooltip('Serahan kepada bahagian')
+                                                        ]) !!}
                                                     @endif
                                                 </div>
                                             </td>

@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Kemaskini Entiti Landskap Unik')
+@section('title', 'Kemaskini Entiti Landskap dan Pokok Berkarakter Unik ')
 
 @section('content')
 <div class="container-fluid">
@@ -18,7 +18,7 @@
                 </div>
                 <div class="card-footer">
                     {!! Form::button('Kembali', ['onclick' => "window.location='".route('pengurusan.entiti-landskap-unik.index')."'", 'class' => 'btn btn-secondary']) !!}
-                    {!! Form::button('<i class="fas fa-save"></i> Kemaskini', ['class' => 'btn btn-success', 'type' => 'submit']) !!}
+                    {!! Form::button('<i class="fas fa-save"></i> Simpan', ['class' => 'btn btn-success', 'type' => 'submit']) !!}
                 </div>
                 {!! Form::close() !!}
             </div>

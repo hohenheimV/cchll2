@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'ePIL')
+@section('title', 'Maklumat Pelan Induk Landskap')
 
 @section('content')
 
@@ -13,11 +13,11 @@
             <div class="card card-olive card-outline">
                 <div class="card-header">
                 @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem'))
-                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan Pegawai JLN]</h3>
+                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') {{-- [Paparan Pegawai JLN] --}}</h3>
                 @elseif(Auth::user()->hasRole('KP/ TKP JLN|Pentadbir Sistem'))
-                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan KP/TKP/B. Penilaian]</h3>
+                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') {{-- [Paparan KP/TKP/B. Penilaian] --}}</h3>
                 @elseif(Auth::user()->hasRole('Pihak Berkuasa Tempatan'))
-                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') [Paparan PBT]</h3>
+                    <h3 class="card-title font-weight-bold my-1">Senarai @yield('title') {{-- [Paparan PBT] --}}</h3>
                 @endif
                     <div class="card-tools">
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -25,7 +25,7 @@
 
                                 {!! Form::button('<i class="fas fa-plus"></i> Daftar', 
                                     ['onclick'=>"window.location='".route('pengurusan.ePIL.create')."'",
-                                    'class'=>'btn bg-success btn-sm', Html::tooltip('Daftar ePIL')]) !!}
+                                    'class'=>'btn bg-success btn-sm', Html::tooltip('Daftar PIL')]) !!}
                             </div>
                         </div>
                     </div>
@@ -108,7 +108,7 @@
                                             <td>
                                             <div class="btn-group">
                                                     {!! 
-                                                        Form::button('<i class="fas fa-search"></i>', ['onclick'=>"window.location='".route('pengurusan.ePIL.show',$pelan)."'", 'class'=>'btn bg-info btn-sm', Html::tooltip('Lihat PIL')]); 
+                                                        Form::button('<i class="fas fa-search"></i>', ['onclick'=>"window.location='".route('pengurusan.ePIL.show',$pelan)."'", 'class'=>'btn bg-info btn-sm', Html::tooltip('Butiran PIL')]); 
                                                     !!}
                                                     {!! 
                                                         Form::button('<i class="fas fa-pencil-alt"></i>', ['onclick'=>"window.location='".route('pengurusan.ePIL.edit',$pelan)."'", 'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini PIL')]); 

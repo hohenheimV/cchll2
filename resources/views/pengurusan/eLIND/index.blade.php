@@ -22,7 +22,7 @@
             <div class="col">
                 <div class="card card-outline card-dark">
                     <div class="card-header border-0">
-                        <h5 class="card-title">@yield('title')</h5>
+                        <h5 class="card-title">Senarai Maklumat Penggiat Industri Landskap: @yield('title')</h5>
                         <div class="card-tools">
                             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                                 {{-- Form::open(['class'=>'form-inline','method' => 'get']) }}
@@ -42,7 +42,7 @@
                                     {!! Form::button('<i class="fas fa-plus"></i> Daftar', [
                                     'class'=>'btn btn-success btn-sm',
                                     'onclick'=>"window.location='".route('pengurusan.eLIND.create', ['type' => strtolower($lastSegment)])."'",
-                                    Html::tooltip('Daftar')
+                                    Html::tooltip('Daftar Maklumat '.$capitalizedSegment)
                                     ]) !!}
                                 </div>
                                 @endif
@@ -128,26 +128,26 @@
                                                 {{-- $eLIND[0] --}}
 
                                                     {!! Form::button('<i class="fas fa-search"></i>', [
-                                                    'class'=>'btn btn-info btn-sm',
+                                                    'class'=>'btn btn-info btn-sm', Html::tooltip('Butiran Maklumat '.$capitalizedSegment),
                                                     'onclick'=>"window.location='".route('pengurusan.eLIND.show', ['type' => $lastSegment, 'id' => $user])."'"
                                                     ]) !!}
 
                                                     @if((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN|Penggiat Industri')))
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
-                                                        'class'=>'btn btn-warning btn-sm',
+                                                        'class'=>'btn btn-warning btn-sm', Html::tooltip('Kemaskini Maklumat '.$capitalizedSegment),
                                                         'onclick'=>"window.location='".route('pengurusan.eLIND.edit', ['type' => $lastSegment, 'id' => $user])."'"
                                                         ]) !!}
                                                     @endif
 
                                                     @if((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN')))
-                                                        {!! Form::button('<i class="fas fa-trash"></i>', ['class'=>'btn btn-danger btn-sm',
+                                                        {!! Form::button('<i class="fas fa-trash"></i>', ['class'=>'btn btn-danger btn-sm', Html::tooltip('Padam Maklumat '.$capitalizedSegment),
                                                         'data-url'=>route('pengurusan.eLIND.destroy', ['type' => $lastSegment, 'id' => $user]),
                                                         'data-toggle'=>'modal','data-target'=>'#modalDelete']) !!}
                                                     @endif
 
                                                     @if((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN|Pegawai')))
                                                         {!! Form::button('<i class="fas fa-sticky-note"></i>', 
-                                                            ['class' => 'btn btn-success btn-sm', 
+                                                            ['class' => 'btn btn-success btn-sm', Html::tooltip('Tambah Prestasi '.$capitalizedSegment), 
                                                             'data-elind-id' => $user->id_elind,
                                                             'data-toggle' => 'modal', 
                                                             'data-target' => '#modalKomenPrestasi', 

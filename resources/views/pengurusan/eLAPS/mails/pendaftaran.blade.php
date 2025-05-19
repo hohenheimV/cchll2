@@ -28,8 +28,8 @@
         ['id' => 'Permohonan ditolak', 'label' => 'bg-danger'], //4
         ['id' => 'Serahan Permohonan ke Bahagian', 'label' => 'bg-secondary'], //5
         ['id' => 'Lawatan Kawasan Tapak', 'label' => 'bg-success'], //6
-        ['id' => 'Draf Ulasan Lawatan Kawasan Tapak', 'label' => 'bg-warning'], //7
-        ['id' => 'Ulasan Lawatan Kawasan Tapak diterima', 'label' => 'bg-info'], //8
+        ['id' => 'Draf Ulasan', 'label' => 'bg-warning'], //7
+        ['id' => 'Ulasan diterima', 'label' => 'bg-info'], //8
         ['id' => 'Permohonan dalam pertimbangan', 'label' => 'bg-primary'], //9
         ['id' => 'Permohonan Lengkap', 'label' => 'bg-success'], //10
         ['id' => 'Permohonan Tidak Lengkap', 'label' => 'bg-danger'], //11

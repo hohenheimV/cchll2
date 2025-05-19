@@ -18,7 +18,7 @@
                                 {!! Form::button('<i class="fas fa-plus"></i> Daftar', [
                                 'class'=>'btn btn-success btn-sm',
                                 'onclick'=>"window.location='".route('pengurusan.MIB.create')."'",
-                                Html::tooltip('Daftar')
+                                Html::tooltip('Daftar Rakan Taman')
                                 ]) !!}
                             </div>
                         </div>
@@ -56,10 +56,10 @@
                                         </span>
                                     </td> -->
                                     <!-- <td>{!! $rakan_taman->name.'<br />'.$rakan_taman->email !!}</td> -->
-                                    <td>{{ $rakan_taman->taman }}</td>
+                                    <td>{{ strtoupper($rakan_taman->taman) }}</td>
                                     @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))
                                         <td>
-                                            {{ $rakan_taman->pbt }}
+                                            {{ strtoupper($rakan_taman->pbt) }}
                                         </td>
                                     @endif
                                     <!-- <td class="text-center">{!! $rakan_taman->created_at->format('d-m-Y') !!}</td> -->
@@ -71,22 +71,22 @@
                                     <td>
                                         <div class="btn-group">
                                             {!! Form::button('<i class="fas fa-search"></i>', [
-                                            'class'=>'btn btn-info btn-sm',
+                                            'class'=>'btn btn-info btn-sm', Html::tooltip('Butiran dan Kemaskini Maklumat Rakan Taman'),
                                             'onclick'=>"window.location='".route('pengurusan.MIB.show',$rakan_taman)."'"
                                             ]) !!}
                                             @if($rakan_taman->status_keahlian == 'Aktif' && $rakan_taman->status == 'Diluluskan')
                                                 {!! Form::button('<i class="fas fa-file-alt"></i>', [
-                                                    'class' => 'btn btn-success btn-sm',
+                                                    'class' => 'btn btn-success btn-sm', Html::tooltip('Sijil Rakan Taman'),
                                                     'onclick' => "window.open('".route('pengurusan.MIB.generateCertificate', $rakan_taman->ref_num)."', '_blank')"
                                                 ]) !!}
                                             @endif
                                             {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
-                                            'class'=>'btn btn-warning btn-sm',
+                                            'class'=>'btn btn-warning btn-sm', Html::tooltip('Kemaskini Permohonan Rakan Taman'),
                                             'onclick'=>"window.location='".route('pengurusan.MIB.edit',$rakan_taman)."'"
                                             ]) !!}
                                             @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))
                                                 {!! Form::button('<i class="fas fa-trash"></i>', ['class'=>'btn btn-danger
-                                                btn-sm',
+                                                btn-sm', Html::tooltip('Padam Rakan Taman'),
                                                 'data-url'=>route('pengurusan.MIB.destroy',$rakan_taman->id),
                                                 'data-toggle'=>'modal','data-target'=>'#modalDelete']) !!}
                                             @endif

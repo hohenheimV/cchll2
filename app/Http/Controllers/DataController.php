@@ -1013,7 +1013,7 @@ class DataController extends Controller
 
     public function getVisitorStatistics()
     {
-        $currentYear = now()->year - 1;
+        $currentYear = now()->year;
         // Fetch visitor counts by month from the web_visitor table
         $visitorCounts = DB::table('web_visitor')
             ->select(DB::raw("TO_CHAR(viewed_at, 'YYYY-MM') as month"), DB::raw('count(*) as count'))

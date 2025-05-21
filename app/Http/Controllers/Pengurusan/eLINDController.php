@@ -823,14 +823,20 @@ class eLINDController extends Controller
 
     public function import(Request $request)
     {
-        dump($request->all());
+        // dd($request->all());
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls,csv|max:2048',
         ]);
 
         $file = $request->file('file');
         // $spreadsheet = IOFactory::load($file->getPathname());
-
+        try {
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file->getPathname());
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($file->getPathname());
+        } catch (\Exception $e) {
+            dd('Error reading file:', $e->getMessage());
+        }
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file->getPathname());
         $reader->setReadDataOnly(true);
         $spreadsheet = $reader->load($file->getPathname());
@@ -840,7 +846,7 @@ class eLINDController extends Controller
         $result = [];
         $sheetNames = $spreadsheet->getSheetNames();
 
-        dd($sheets);
+        // dd($sheets);
         $negeriMap = Negeri::all()->keyBy(function($item) {
             return strtolower($item->nama_negeri);
         });

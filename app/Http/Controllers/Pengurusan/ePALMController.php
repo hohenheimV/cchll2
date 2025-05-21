@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Model\MaklumatPenggunaPbt;
 use App\User;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ePALMExport;
 
 class ePALMController extends Controller
 {
@@ -51,7 +53,7 @@ class ePALMController extends Controller
                     ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
                 });
             })
-            ->where('is_komponen', null)->orderBy('id_taman', 'DESC')->paginate($totalCount);
+            ->where('is_komponen', null)->orderBy('negeri_taman', 'ASC')->orderBy('nama_pbt', 'ASC')/* ->orderBy('nama_taman', 'ASC') */->paginate($totalCount);
             foreach ($ePALM as $key => $value) {
                 $ePALM_draf = ePALM_draf::where('id_taman', $value->id_taman)->first();
                 $value->status = $ePALM_draf->status;
@@ -67,7 +69,7 @@ class ePALMController extends Controller
                 });
             })
             ->whereNull('is_komponen')
-            ->orderBy('id_taman', 'DESC')
+            ->orderBy('negeri_taman', 'ASC')->orderBy('nama_pbt', 'ASC')/* ->orderBy('nama_taman', 'ASC') */
             ->paginate($totalCount);
         }
         return view('pengurusan.ePALM.index', ['ePALM' => $ePALM]);
@@ -572,5 +574,31 @@ class ePALMController extends Controller
         }
 
         return redirect()->route('pengurusan.ePALM.index')->with('successMessage', 'Maklumat taman telah dihapuskan');
+    }
+
+    public function export($format)
+    {
+        // Get the data from the database (you can adjust the query as needed)
+        $ePALM = ePALM::where('is_komponen', null)->get();  // You can add search filters if needed
+
+        if ($format === 'csv') {
+            // Return the data as a CSV
+            return response()->stream(function () use ($ePALM) {
+                $handle = fopen('php://output', 'w');
+                fputcsv($handle, ['Nama Taman', 'Nama PBT', 'Kategori Taman', 'Status']);  // Add your column headers
+                foreach ($ePALM as $item) {
+                    fputcsv($handle, [$item->nama_taman, $item->nama_pbt, $item->kategori_taman, $item->status]);  // Add your data fields
+                }
+                fclose($handle);
+            }, 200, [
+                'Content-Type' => 'text/csv',
+                'Content-Disposition' => 'attachment; filename="epalm_data.csv"',
+            ]);
+        } elseif ($format === 'excel') {
+            // Use Laravel Excel to export as Excel
+            return Excel::download(new ePALMExport($ePALM), 'epalm_data.xlsx');
+        }
+
+        return redirect()->route('pengurusan.ePALM.index');  // Fallback if no valid format
     }
 }

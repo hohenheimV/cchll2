@@ -970,14 +970,14 @@ class eLINDController extends Controller
                 // }
             }
         }
-        // foreach (array_chunk($result, 500) as $chunk) {
-        //     foreach ($chunk as $requestData) {
-        //         $newRecord = ePALM::create($requestData);
-        //         $requestData['id_taman'] = $newRecord->id_taman;
-        //         ePALM_draf::create($requestData);
-        //     }
-        //     // dd($chunk);
-        // }
+        foreach (array_chunk($result, 500) as $chunk) {
+            foreach ($chunk as $requestData) {
+                $newRecord = ePALM::create($requestData);
+                $requestData['id_taman'] = $newRecord->id_taman;
+                ePALM_draf::create($requestData);
+            }
+            // dd($chunk);
+        }
         dd('Excel processed. Total rows: ' . count($result));
         // Optionally return or log $result
         return back()->with('successMessage', 'Excel processed. Total rows: ' . count($result));

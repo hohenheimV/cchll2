@@ -834,9 +834,13 @@ class eLINDController extends Controller
             $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file->getPathname());
             $reader->setReadDataOnly(true);
             $spreadsheet = $reader->load($file->getPathname());
+            dd('File loaded successfully');
+        } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
+            dd('Spreadsheet read error: ' . $e->getMessage());
         } catch (\Exception $e) {
-            dd('Error reading file:', $e->getMessage());
+            dd('General error: ' . $e->getMessage());
         }
+        dd($request->all());
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file->getPathname());
         $reader->setReadDataOnly(true);
         $spreadsheet = $reader->load($file->getPathname());

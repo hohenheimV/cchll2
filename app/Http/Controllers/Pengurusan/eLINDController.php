@@ -935,7 +935,6 @@ class eLINDController extends Controller
                             "keluasan_unit" => "ekar",                              
                         ];
                         $result[] = $requestData;
-                        $result[] = $requestData;
                     }
                 }
                 // foreach ($result as $key => $value) {

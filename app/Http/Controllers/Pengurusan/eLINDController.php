@@ -970,6 +970,7 @@ class eLINDController extends Controller
                 // }
             }
         }
+        dd($result);
         foreach (array_chunk($result, 500) as $chunk) {
             foreach ($chunk as $requestData) {
                 $newRecord = ePALM::create($requestData);

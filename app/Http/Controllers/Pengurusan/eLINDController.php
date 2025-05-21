@@ -920,7 +920,7 @@ class eLINDController extends Controller
                         $kod_parlimen = $matchedParlimen ? $matchedParlimen->kod_parlimen : "P.000";
 
                         $requestData = [
-                            "name" => strtoupper($this->sanitize_text($row['B'])),                         
+                            "nama_taman" => strtoupper($this->sanitize_text($row['B'])),                         
                             "kategori_taman" => "Taman Awam",                  
                             "negeri_taman" => $kod_negeri, 
                             "daerah_taman" => $kod_daerah, 
@@ -970,7 +970,7 @@ class eLINDController extends Controller
                 // }
             }
         }
-        dd($result);
+        // dd($result);
         foreach (array_chunk($result, 500) as $chunk) {
             foreach ($chunk as $requestData) {
                 $newRecord = ePALM::create($requestData);

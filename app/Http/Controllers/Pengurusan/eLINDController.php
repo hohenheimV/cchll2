@@ -823,7 +823,7 @@ class eLINDController extends Controller
 
     public function import(Request $request)
     {
-        dd($request->all());
+        dump($request->all());
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls,csv|max:2048',
         ]);
@@ -840,7 +840,7 @@ class eLINDController extends Controller
         $result = [];
         $sheetNames = $spreadsheet->getSheetNames();
 
-        // dd($sheets);
+        dd($sheets);
         $negeriMap = Negeri::all()->keyBy(function($item) {
             return strtolower($item->nama_negeri);
         });

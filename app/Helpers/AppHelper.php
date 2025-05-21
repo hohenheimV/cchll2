@@ -19,7 +19,8 @@ if (!function_exists('app_dashboard_pokok')) {
         if(Auth::user()->hasRole('Pihak Berkuasa Tempatan')){
             $id_pbt = Auth::user()->bahagian_jln;
             $data = MaklumatPenggunaPbt::where('id', $id_pbt)->latest()->first();
-            $count = KTP::where('pbt', $data->pbt_name)->whereNotNull('jumlah_pokok')->sum(DB::raw('CAST(jumlah_pokok AS INTEGER)'));
+            // $count = KTP::where('pbt', $data->pbt_name)->whereNotNull('jumlah_pokok')->sum(DB::raw('CAST(jumlah_pokok AS INTEGER)'));
+            $count = KTP::whereRaw('LOWER(pbt) = ?', [strtolower($data->pbt_name)])->whereNotNull('jumlah_pokok')->sum(DB::raw('CAST(jumlah_pokok AS INTEGER)'));
             return $count;
         }
         return KTP::whereNotNull('jumlah_pokok')->sum(DB::raw('CAST(jumlah_pokok AS INTEGER)'));
@@ -89,7 +90,8 @@ if (!function_exists('app_dashboard_taman')) {
         if(Auth::user()->hasRole('Pihak Berkuasa Tempatan')){
             $id_pbt = Auth::user()->bahagian_jln;
             $data = MaklumatPenggunaPbt::where('id', $id_pbt)->latest()->first();
-            $count = ePALM::where('nama_pbt', $data->pbt_name)
+            // $count = ePALM::where('nama_pbt', $data->pbt_name)
+            $count = ePALM::whereRaw('LOWER(nama_pbt) = ?', [strtolower($data->pbt_name)])
             ->where('is_komponen', null)
             ->when($keyword, function ($q) use ($keyword, $kategoriList) {
                 if ($keyword === 6) {
@@ -117,7 +119,8 @@ if (!function_exists('app_dashboard_pelan')) {
         if(Auth::user()->hasRole('Pihak Berkuasa Tempatan')){
             $id_pbt = Auth::user()->bahagian_jln;
             $data = MaklumatPenggunaPbt::where('id', $id_pbt)->latest()->first();
-            $count = ePIL::where('nama_pbt', $data->pbt_name)->count();
+            // $count = ePIL::where('nama_pbt', $data->pbt_name)->count();
+            $count = ePIL::whereRaw('LOWER(nama_pbt) = ?', [strtolower($data->pbt_name)])->count();
             return $count;
         }
         return ePIL::count();
@@ -129,7 +132,8 @@ if (!function_exists('app_dashboard_mib')) {
         if(Auth::user()->hasRole('Pihak Berkuasa Tempatan')){
             $id_pbt = Auth::user()->bahagian_jln;
             $data = MaklumatPenggunaPbt::where('id', $id_pbt)->latest()->first();
-            $count = MIB::where('pbt', $data->pbt_name)->count();
+            // $count = MIB::where('pbt', $data->pbt_name)->count();
+            $count = MIB::whereRaw('LOWER(pbt) = ?', [strtolower($data->pbt_name)])->count();
             return $count;
         }
         return MIB::when($keyword, function ($q) use ($keyword) {

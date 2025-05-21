@@ -476,7 +476,7 @@
                 <div class="form-group required col-md-6">
                     <label for="alamat1_taman" class="col-md-4 control-label">Alamat 1 {!! in_array('alamat1_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
                     <div class="col-md-12">
-                        <input value="{{isset($ePALM->alamat1_taman) ? $ePALM->alamat1_taman : ''}}" name="alamat1_taman" class="form-control" maxlength="50" type="text" id="alamat1_taman" required="required">
+                        <input value="{{isset($ePALM->alamat1_taman) ? $ePALM->alamat1_taman : ''}}" name="alamat1_taman" class="form-control" maxlength="50" type="text" id="alamat1_taman" >
                     </div>
                 </div>
 
@@ -498,7 +498,7 @@
                 <div class="form-group required col-md-4">
                     <label for="poskod_taman" class="col-md-4 control-label">Poskod {!! in_array('poskod_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
                     <div class="col-md-12">
-                        <input value="{{isset($ePALM->poskod_taman) ? $ePALM->poskod_taman : ''}}" name="poskod_taman" class="form-control" type="char" id="poskod_taman" required="required">
+                        <input value="{{isset($ePALM->poskod_taman) ? $ePALM->poskod_taman : ''}}" name="poskod_taman" class="form-control" type="char" id="poskod_taman" >
                     </div>
                 </div>
             </div>
@@ -900,7 +900,7 @@
             <div class="form-group required inertShow">
                 <label for="keterangan_taman" class="col-md-12 control-label">Keterangan Taman {!! in_array('keterangan_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
                 <div class="col-md-12">
-                    <textarea name="keterangan_taman" class="form-control" maxlength="250" rows="5" id="keterangan_taman" required="required">{{ isset($ePALM->keterangan_taman) ? $ePALM->keterangan_taman : '' }}</textarea>
+                    <textarea name="keterangan_taman" class="form-control" maxlength="250" rows="5" id="keterangan_taman" >{{ isset($ePALM->keterangan_taman) ? $ePALM->keterangan_taman : '' }}</textarea>
                 </div>
             </div>
 

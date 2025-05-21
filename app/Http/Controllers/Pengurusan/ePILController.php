@@ -36,8 +36,8 @@ class ePILController extends Controller
         if($user->hasRole('Pihak Berkuasa Tempatan')){
             $email = $user->bahagian_jln;
             $pbt = MaklumatPenggunaPbt::where('id', '=', $email)->first();
-            $totalCount = ePIL::where('nama_pbt', $pbt->pbt_name)->count();
-            $ePIL = ePIL::where('nama_pbt', $pbt->pbt_name)->orderBy('id_pelan', 'desc')->paginate($totalCount);
+            $totalCount = ePIL::whereRaw('LOWER(nama_pbt) = ?', [strtolower($pbt->pbt_name)])->count();
+            $ePIL = ePIL::whereRaw('LOWER(nama_pbt) = ?', [strtolower($pbt->pbt_name)])->orderBy('id_pelan', 'desc')->paginate($totalCount);
             foreach ($ePIL as $key => $value) {
                 $ePIL_draf = ePIL_draf::where('id_pelan', $value->id_pelan)->first();
                 $value->status = $ePIL_draf->status;

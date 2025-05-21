@@ -334,7 +334,7 @@
                 <div class="form-group required col-md-6">
                     <label for="alamat1_pelan" class="col-md-4 control-label">Alamat 1 {!! in_array('alamat1_pelan', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                     <div class="col-md-12">
-                        <input value="{{isset($ePIL->alamat1_pelan) ? $ePIL->alamat1_pelan : ''}}" name="alamat1_pelan" class="form-control" maxlength="50" type="text" id="alamat1_pelan" required="required">
+                        <input value="{{isset($ePIL->alamat1_pelan) ? $ePIL->alamat1_pelan : ''}}" name="alamat1_pelan" class="form-control" maxlength="50" type="text" id="alamat1_pelan" >
                     </div>
                 </div>
 
@@ -356,7 +356,7 @@
                 <div class="form-group required col-md-4">
                     <label for="poskod_pelan" class="col-md-4 control-label">Poskod {!! in_array('poskod_pelan', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                     <div class="col-md-12">
-                        <input value="{{isset($ePIL->poskod_pelan) ? $ePIL->poskod_pelan : ''}}" name="poskod_pelan" class="form-control" type="char" id="poskod_pelan" required="required">
+                        <input value="{{isset($ePIL->poskod_pelan) ? $ePIL->poskod_pelan : ''}}" name="poskod_pelan" class="form-control" type="char" id="poskod_pelan" >
                     </div>
                 </div>
             </div>

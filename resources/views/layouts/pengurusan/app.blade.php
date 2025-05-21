@@ -426,6 +426,22 @@
                 document.body.classList.remove('sidebar-collapse');
             });
         }
+
+        const contentWrapper = document.querySelector('.content-wrapper');
+        if (contentWrapper) {
+            // Add 'click' and 'focus' event listeners to contentWrapper
+            contentWrapper.addEventListener('click', function () {
+                document.body.classList.add('sidebar-collapse');
+            });
+
+            contentWrapper.addEventListener('focus', function () {
+                document.body.classList.add('sidebar-collapse');
+            }, true); // useCapture true to catch focus on any child elements
+
+            contentWrapper.addEventListener('mouseleave', function () {
+                document.body.classList.add('sidebar-collapse');
+            }, true); // useCapture true to catch focus on any child elements
+        }
     });
 </script>
 </html>

@@ -408,8 +408,8 @@
                 </div>
                 @if($capitalizedSegment == 'Kontraktor')
                     <div class="row">
-                        <div class="form-group required col-md-8">
-                            <label for="kelas_kontraktor" class="col-md-4 control-label">Kelas Kontraktor {!! in_array('kelas_kontraktor', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                        <div class="form-group required col-md-6">
+                            <label for="kelas_kontraktor" class="col-md-12 control-label">Kelas Kontraktor {!! in_array('kelas_kontraktor', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 {!! Form::select('kelas_kontraktor', [
                                     1 => 'A',
@@ -423,9 +423,23 @@
                                     0 => 'TIADA MAKLUMAT'
                                 ], isset($eLIND->kelas_kontraktor) ? $eLIND->kelas_kontraktor : '0', ['class' => 'form-control', 'id' => 'kelas_kontraktor']) !!}
                             </div>
+                            <script>
+                                $(document).ready(function() {
+                                    var selectedValue = @json($eLIND->kelas_kontraktor ?? '0');
+
+                                    // Check if the value already exists in the select options
+                                    if ($("#kelas_kontraktor option[value='" + selectedValue + "']").length === 0) {
+                                        // Add the value as a new option if it doesn't exist
+                                        $('#kelas_kontraktor').append(new Option(selectedValue, selectedValue, true, true));
+                                    } else {
+                                        // Just set the selected value
+                                        $('#kelas_kontraktor').val(selectedValue);
+                                    }
+                                });
+                            </script>
                         </div>
 
-                        <div class="form-group required">
+                        <div class="form-group required col-md-6">
                             <label for="no_cidb" class="col-md-12 control-label">No. Pendaftaran PKK/ CIDB {!! in_array('no_cidb', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 <input value="{{isset($eLIND->no_cidb) ? $eLIND->no_cidb : ''}}" name="no_cidb" class="form-control" maxlength="50" type="text" id="no_cidb" >

@@ -105,7 +105,7 @@
         </div>
         <div class="row">
             <div class="form-group required col-md-12">
-                <label for="gambar" class="col-md-12 control-label">Gambar Entiti Landskap</label>
+                <label for="gambar" class="col-md-12 control-label">Gambar Entiti</label>
                 @php
                     if(isset($entitiLandskapUnik->gambar)){
                         $folderName = str_replace(' ', '_', $entitiLandskapUnik->id.' '.$entitiLandskapUnik->nama_entiti);

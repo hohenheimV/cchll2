@@ -269,7 +269,7 @@
                                 </li>
                             </ul>
                         </li>
-                        @if ((Auth::user()->hasRole('Pentadbir Sistem')))
+                        @if ((Auth::user()->hasRole('Pentadbir Sistem')) || !(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [7])))
                         <li class="nav-item">
                             {!! Html::buttonSidebarNavLink('Seksyen','fas fa-boxes',
                             ['onclick'=>"window.location='".route('pengurusan.sections')."'",
@@ -282,7 +282,7 @@
                             ['onclick'=>"window.location='".route('pengurusan.feedbacks.index')."'",
                             'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.feedbacks.')]) !!}
                         </li>
-                        @if ((Auth::user()->hasRole('Pentadbir Sistem')))
+                        @if ((Auth::user()->hasRole('Pentadbir Sistem')) || !(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [7])))
                         <li class="nav-header text-uppercase">Pentadbiran</li>
                         <li class="nav-item has-treeview {{Html::active(['pengurusan.users.','pengurusan.roles.','pengurusan.permissions.'],'menu-open')}}">
                             {!! Html::buttonSidebarNavLinkTreeview('Akses Sistem','fas fa-user-shield', ['class'=>'nav-link btn

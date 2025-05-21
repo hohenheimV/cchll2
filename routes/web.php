@@ -949,6 +949,9 @@ Route::middleware(['auth'])
         Route::get('eLIND/{type}/{id}/edit', 'eLINDController@edit')->name('eLIND.edit');
         Route::put('eLIND/{type}/{id}', 'eLINDController@update')->name('eLIND.update');
         Route::delete('eLIND/{type}/{id}', 'eLINDController@destroy')->name('eLIND.destroy');
+        Route::get('import-users-form', 'eLINDController@importForm')->name('eLIND.importForm');
+        Route::post('import-users', 'eLINDController@import')->name('eLIND.import');
+
         // Route::get('eLIND', 'eLINDController@kontraktor')->name('eLIND.kontraktor');
         // Route::get('pengurusan/eLINDz', [eLINDController::class, 'indexz'])->name('pengurusan.eLIND.indexz');
 

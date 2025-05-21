@@ -75,7 +75,7 @@
                         <div inert class="form-group required">
                             <label for="keterangan_taman" class="col-md-12 control-label">Keterangan Taman</label>
                             <div class="col-md-12">
-                                <textarea name="keterangan_taman" class="form-control" maxlength="50" rows="5" id="keterangan_taman" required="required">{{ isset($ePALM->keterangan_taman) ? $ePALM->keterangan_taman : '' }}</textarea>
+                                <textarea name="keterangan_taman" class="form-control" maxlength="50" rows="5" id="keterangan_taman" >{{ isset($ePALM->keterangan_taman) ? $ePALM->keterangan_taman : '' }}</textarea>
                             </div>
                         </div>
                         <div class="row">

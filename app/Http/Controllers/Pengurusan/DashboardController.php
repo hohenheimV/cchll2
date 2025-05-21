@@ -80,7 +80,7 @@ class DashboardController extends Controller
             // dd(Auth::user()->bahagian_jln);
             $id_pbt = Auth::user()->bahagian_jln;
             $data = MaklumatPenggunaPbt::where('id', $id_pbt)->latest()->first();
-            $ePALM = ePALM::where('nama_pbt', $data->pbt_name)->where('status', 'approved')->paginate(ePALM::where('nama_pbt', $data->pbt_name)->where('status', 'approved')->count());
+            $ePALM = ePALM::whereRaw('LOWER(nama_pbt) = ?', [strtolower($data->pbt_name)])->where('status', 'approved')->paginate(ePALM::whereRaw('LOWER(nama_pbt) = ?', [strtolower($data->pbt_name)])->where('status', 'approved')->count());
             foreach ($ePALM as $instance) {
                     // $ePALM_komponen = ePALM::where('is_komponen', $instance->id_taman)->get();
                     // if($ePALM_komponen){
@@ -109,7 +109,7 @@ class DashboardController extends Controller
             }
             // dd($ePALM);
 
-            $ePIL = ePIL::where('nama_pbt', $data->pbt_name)->where('status', 'approved')->paginate(ePIL::where('nama_pbt', $data->pbt_name)->where('status', 'approved')->count());
+            $ePIL = ePIL::whereRaw('LOWER(nama_pbt) = ?', [strtolower($data->pbt_name)])->where('status', 'approved')->paginate(ePIL::whereRaw('LOWER(nama_pbt) = ?', [strtolower($data->pbt_name)])->where('status', 'approved')->count());
             foreach ($ePIL as $item) {
                 $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->negeri_pelan)->orderBy('nama_negeri', 'asc')->first();
                 $item->negeri = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 

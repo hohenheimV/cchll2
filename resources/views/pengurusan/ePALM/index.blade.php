@@ -21,8 +21,19 @@
                     @endif
                     <div class="card-tools">
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                            {{ Form::open(['class'=>'form-inline','method' => 'get']) }}
+                                <div class="input-group mr-2">
+                                    {{ Form::search('keyword',request('keyword'),['aria-label'=>'Search','placeholder'=>'Carian Pantas','class' => 'form-control form-control-sm '.Html::isInvalid($errors,'keyword')]) }}
+                                    <div class="input-group-append">
+                                        {!! Form::button('<i class="fas fa-search"></i>', [
+                                        'class'=>'btn btn-default btn-sm','type'=>'submit']) !!}
+                                        {!! Form::button('Reset',
+                                        ['onclick'=>"window.location='".route('pengurusan.ePALM.index')."'",
+                                        'class'=>'btn btn-secondary btn-sm']) !!}
+                                    </div>
+                                </div>
+                            {{ Form::close() }}
                             <div class="btn-group" role="group" aria-label="First group">
-
                                 {!! Form::button('<i class="fas fa-plus"></i> Daftar', 
                                     ['onclick'=>"window.location='".route('pengurusan.ePALM.create')."'",
                                     'class'=>'btn bg-success btn-sm', Html::tooltip('Daftar Taman')]) !!}
@@ -31,9 +42,18 @@
                     </div>
                 </div>
                 <!-- /.card-header -->
-                <div class="card-body p-0">
+                <div class="card-body">
                     <div class="table-responsive">
-                        <table id="exampleNP" class="responsive table table-bordered table-hover table-striped mb-0">
+                        {{-- <div class="dt-buttons">
+                            <a class="dt-button buttons-csv buttons-html5" href="{{ route('pengurusan.ePALM.export', ['format' => 'csv']) }}">
+                                <span>CSV</span>
+                            </a>
+                            
+                            <a class="dt-button buttons-excel buttons-html5" href="{{ route('pengurusan.ePALM.export', ['format' => 'excel']) }}">
+                                <span>Excel</span>
+                            </a>
+                        </div> --}}
+                        <table id="example" class="responsive table table-bordered table-hover table-striped mb-0">
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="w-1">Bil.</th>
@@ -122,11 +142,26 @@
                     <!-- /.table-responsive -->
                 </div>
                 <!-- /.card-body -->
-                @if(count($ePALM) > 0)
+                {{-- @if(count($ePALM) > 0)
                 <div class="card-footer bg-light p-2 border-top-0 d-flex flex-column justify-content-center align-items-end">
                     {!! Html::pagination($ePALM) !!}
                 </div>
                 <!-- /.card-footer -->
+                @endif --}}
+                @if ($ePALM->total() > 0)
+                    <div class="card-footer bg-light p-2 border-top-0 d-flex flex-column justify-content-center align-items-end">
+                        <div class="text-muted mx-2">
+                            <small>
+                                Laman {{ $ePALM->currentPage() }} daripada {{ $ePALM->lastPage() }},
+                                menunjukkan {{ $ePALM->count() }} data daripada {{ $ePALM->total() }} jumlah data,
+                                bermula pada baris {{ $ePALM->firstItem() }},
+                                berakhir pada baris {{ $ePALM->lastItem() }}
+                            </small>
+                        </div>
+                        <div>
+                            {!! $ePALM->appends(request()->query())->links() !!}
+                        </div>
+                    </div>
                 @endif
             </div><!-- /.card -->
         </div><!-- /.col-lg-12 -->

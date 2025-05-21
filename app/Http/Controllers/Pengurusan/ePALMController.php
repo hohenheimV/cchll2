@@ -25,23 +25,50 @@ class ePALMController extends Controller
         $this->middleware(['role_or_permission:Pentadbir Sistem|epalm-delete'], ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $keyword = null;
+        if ($request->filled('keyword')) {
+            $request->validate([
+                'keyword' => 'required|min:3|max:255|regex:/(^[A-Za-z0-9\/\- ]+$)+/',
+            ]);
+            $keyword = strtolower(trim($request->keyword));
+        }
+
         $ePALM = ePALM::where('is_komponen', null)->latest()->paginate(10);
         $userId = auth()->id();
         $user = User::find($userId);
         if($user->hasRole('Pihak Berkuasa Tempatan')){
             $email = $user->bahagian_jln;
             $pbt = MaklumatPenggunaPbt::where('id', '=', $email)->first();
-            $totalCount = ePALM::where('nama_pbt', $pbt->pbt_name)->count();
-            $ePALM = ePALM::where('nama_pbt', $pbt->pbt_name)->where('is_komponen', null)->orderBy('id_taman', 'desc')->paginate($totalCount);
+            $totalCount = 15;//ePALM::whereRaw('LOWER(nama_pbt) = ?', [strtolower($pbt->pbt_name)])->count();
+            $ePALM = ePALM::whereRaw('LOWER(nama_pbt) = ?', [strtolower($pbt->pbt_name)])
+            ->when($request->filled('keyword'), function ($query) use ($keyword) {
+                $query->where(function ($q) use ($keyword) {
+                    $q->whereRaw('LOWER(nama_taman) LIKE ?', ["%{$keyword}%"])
+                    ->orWhereRaw('LOWER(nama_pbt) LIKE ?', ["%{$keyword}%"])
+                    ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
+                    ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
+                });
+            })
+            ->where('is_komponen', null)->orderBy('id_taman', 'DESC')->paginate($totalCount);
             foreach ($ePALM as $key => $value) {
                 $ePALM_draf = ePALM_draf::where('id_taman', $value->id_taman)->first();
                 $value->status = $ePALM_draf->status;
             }
         }else{
-            $totalCount = ePALM::count();
-            $ePALM = ePALM::where('is_komponen', null)->latest()->paginate($totalCount);
+            $totalCount = 15;//ePALM::count();
+            $ePALM = ePALM::when($request->filled('keyword'), function ($query) use ($keyword) {
+                $query->where(function ($q) use ($keyword) {
+                    $q->whereRaw('LOWER(nama_taman) LIKE ?', ["%{$keyword}%"])
+                    ->orWhereRaw('LOWER(nama_pbt) LIKE ?', ["%{$keyword}%"])
+                    ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
+                    ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
+                });
+            })
+            ->whereNull('is_komponen')
+            ->orderBy('id_taman', 'DESC')
+            ->paginate($totalCount);
         }
         return view('pengurusan.ePALM.index', ['ePALM' => $ePALM]);
     }

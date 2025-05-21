@@ -1090,7 +1090,7 @@ class eLINDController extends Controller
     // }
 
     // eLIND
-    public function import(Request $request)
+    /* public function import(Request $request)
     {
         ini_set('memory_limit', '2048M');
         ini_set('max_execution_time', 3000);
@@ -1171,7 +1171,7 @@ class eLINDController extends Controller
         }
 
         return back()->with('successMessage', "Excel processed. Inserted: {$inserted} rows.");
-    }
+    } */
 
     protected function expMukim($text)
     {

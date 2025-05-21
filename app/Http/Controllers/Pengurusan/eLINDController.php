@@ -823,6 +823,7 @@ class eLINDController extends Controller
 
     public function import(Request $request)
     {
+        dd($request->all());
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls,csv|max:2048',
         ]);

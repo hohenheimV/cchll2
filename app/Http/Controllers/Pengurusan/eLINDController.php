@@ -928,12 +928,13 @@ class eLINDController extends Controller
                             "parlimen_taman" => $kod_parlimen,                      
                             "dun_taman" => null,
                             "keterangan_taman" => trim(str_replace("JLN-", "",$sheetName))." - ".$row["J"],
-                            "no_ssm" => $row["F"],                       
+                            "nama_pbt" => $row["F"],                       
                             "lat" => $row["G"],                             
                             "lng" => $row["H"],                                    
                             "keluasan_taman" => $row["I"],                      
                             "keluasan_unit" => "ekar",                              
                         ];
+                        $result[] = $requestData;
                         $result[] = $requestData;
                     }
                 }

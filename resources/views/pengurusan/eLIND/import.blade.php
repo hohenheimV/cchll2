@@ -23,8 +23,8 @@
                     @csrf
                     <div class="form-group">
                         <label>Upload Excel File</label>
-                        <input type="file" name="file" class="form-control" required accept=".xlsx,.xls,.csv">
-                        {{-- <input type="file" name="file[]" class="form-control" required accept=".xlsx,.xls,.csv" multiple> --}}
+                        {{-- <input type="file" name="file" class="form-control" required accept=".xlsx,.xls,.csv"> --}}
+                        <input type="file" name="file[]" class="form-control" required accept=".xlsx,.xls,.csv" multiple>
                     </div>
                     <button type="submit" class="btn btn-primary mt-3">Import</button>
                 </form>

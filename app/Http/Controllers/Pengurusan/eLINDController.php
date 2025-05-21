@@ -821,7 +821,8 @@ class eLINDController extends Controller
         return redirect()->route('pengurusan.eLIND.index', ['type' => $type])->with('successMessage', 'Maklumat Penggiat Industri Landskap telah dihapuskan');
     }
 
-    public function import(Request $request)
+    //ePALM
+    /* public function import(Request $request)
     {
         ini_set('memory_limit', '2048M');
         ini_set('max_execution_time', 3000);
@@ -982,7 +983,7 @@ class eLINDController extends Controller
         dd('Excel processed. Total rows: ' . count($result));
         // Optionally return or log $result
         return back()->with('successMessage', 'Excel processed. Total rows: ' . count($result));
-    }
+    } */
 
     // public function import(Request $request)
     // {
@@ -1088,88 +1089,89 @@ class eLINDController extends Controller
     //     return back()->with('successMessage', 'Excel processed. Total rows: ' . count($result));
     // }
 
-    // public function import(Request $request)
-    // {
-    //     ini_set('memory_limit', '2048M');
-    //     ini_set('max_execution_time', 3000);
-    //     $request->validate([
-    //         'file' => 'required',
-    //         'file.*' => 'file|mimes:xlsx,xls,csv|max:12048',
-    //     ]);
+    // eLIND
+    public function import(Request $request)
+    {
+        ini_set('memory_limit', '2048M');
+        ini_set('max_execution_time', 3000);
+        $request->validate([
+            'file' => 'required',
+            'file.*' => 'file|mimes:xlsx,xls,csv|max:12048',
+        ]);
 
-    //     $files = $request->file('file'); // This will now be an array of files
-    //     $result = [];
+        $files = $request->file('file'); // This will now be an array of files
+        $result = [];
 
-    //     $negeriMap = Negeri::all()->keyBy(function($item) {
-    //         return strtolower($item->nama_negeri);
-    //     });
+        $negeriMap = Negeri::all()->keyBy(function($item) {
+            return strtolower($item->nama_negeri);
+        });
 
-    //     foreach ($files as $file) {
-    //         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file->getPathname());
-    //         $reader->setReadDataOnly(true);
-    //         $spreadsheet = $reader->load($file->getPathname());
-    //         $sheets = $spreadsheet->getAllSheets();
+        foreach ($files as $file) {
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file->getPathname());
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($file->getPathname());
+            $sheets = $spreadsheet->getAllSheets();
 
-    //         foreach ($sheets as $sheetIndex => $sheet) {
-    //             if ($sheetIndex <= 20) {
-    //                 $startRow = 2;
-    //                 $startCol = 'B';
-    //                 $endCol = 'E';
-    //                 $lastRow = min($sheet->getHighestRow(), 1500);
-    //                 $range = $startCol . $startRow . ':' . $endCol . $lastRow;
-    //                 $sheetData = $sheet->rangeToArray($range, null, false, false, true);
+            foreach ($sheets as $sheetIndex => $sheet) {
+                if ($sheetIndex <= 20) {
+                    $startRow = 2;
+                    $startCol = 'B';
+                    $endCol = 'E';
+                    $lastRow = min($sheet->getHighestRow(), 1500);
+                    $range = $startCol . $startRow . ':' . $endCol . $lastRow;
+                    $sheetData = $sheet->rangeToArray($range, null, false, false, true);
 
-    //                 foreach ($sheetData as $row) {
-    //                     if (!empty($row["B"])) {
-    //                         $string = preg_replace("/\r\n|\r/", "\n", $row["B"]);
-    //                         $parts = explode("\n", trim($string));
-    //                         $name = strtoupper($this->sanitize_text(trim($parts[0] ?? '')));
-    //                         if (isset($parts[1])) {
-    //                             $row["E"] = $parts[1];
-    //                         }
+                    foreach ($sheetData as $row) {
+                        if (!empty($row["B"])) {
+                            $string = preg_replace("/\r\n|\r/", "\n", $row["B"]);
+                            $parts = explode("\n", trim($string));
+                            $name = strtoupper($this->sanitize_text(trim($parts[0] ?? '')));
+                            if (isset($parts[1])) {
+                                $row["E"] = $parts[1];
+                            }
 
-    //                         // $string = str_replace(" ", "", $row["E"]);
-    //                         $string = preg_replace('/\xC2\xA0|\s+/u', '', $row["E"]);
-    //                         $parts = explode('(', $string);
-    //                         $serial = $parts[0];
+                            // $string = str_replace(" ", "", $row["E"]);
+                            $string = preg_replace('/\xC2\xA0|\s+/u', '', $row["E"]);
+                            $parts = explode('(', $string);
+                            $serial = $parts[0];
 
-    //                         if ($serial != '') {
-    //                             $kod_negeri = str_replace("wilayah persekutuan", "wp", strtolower($row["D"]));
-    //                             $kod_negeri = $negeriMap[$kod_negeri]->kod_negeri ?? "00";
+                            if ($serial != '') {
+                                $kod_negeri = str_replace("wilayah persekutuan", "wp", strtolower($row["D"]));
+                                $kod_negeri = $negeriMap[$kod_negeri]->kod_negeri ?? "00";
 
-    //                             $requestData = [
-    //                                 'name' => trim($name),
-    //                                 'kelas_kontraktor' => trim($row['C']),
-    //                                 'jenis_industri' => "Kontraktor",
-    //                                 'state' => trim($kod_negeri),
-    //                                 'no_ssm' => trim($serial),
-    //                             ];
-    //                             $result[] = $requestData;
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
+                                $requestData = [
+                                    'name' => trim($name),
+                                    'kelas_kontraktor' => trim($row['C']),
+                                    'jenis_industri' => "Kontraktor",
+                                    'state' => trim($kod_negeri),
+                                    'no_ssm' => trim($serial),
+                                ];
+                                $result[] = $requestData;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-    //     // Insert to DB (avoiding duplicates)
-    //     $inserted = 0;
-    //     foreach (array_chunk($result, 500) as $chunk) {
-    //         foreach ($chunk as $requestData) {
-    //             if (MaklumatPenggunaPenggiatIndustri::where('no_ssm', $requestData['no_ssm'])->exists()) {
-    //                 // $inserted--;
-    //                 continue;
-    //             }else{
-    //                 $maklumat = MaklumatPenggunaPenggiatIndustri::create($requestData);
-    //                 $requestData['id_elind'] = $maklumat->id_elind;
-    //                 MaklumatPenggunaPenggiatIndustri_draf::create($requestData);
-    //                 $inserted++;
-    //             }
-    //         }
-    //     }
+        // Insert to DB (avoiding duplicates)
+        $inserted = 0;
+        foreach (array_chunk($result, 500) as $chunk) {
+            foreach ($chunk as $requestData) {
+                if (MaklumatPenggunaPenggiatIndustri::where('no_ssm', $requestData['no_ssm'])->exists()) {
+                    // $inserted--;
+                    continue;
+                }else{
+                    $maklumat = MaklumatPenggunaPenggiatIndustri::create($requestData);
+                    $requestData['id_elind'] = $maklumat->id_elind;
+                    MaklumatPenggunaPenggiatIndustri_draf::create($requestData);
+                    $inserted++;
+                }
+            }
+        }
 
-    //     return back()->with('successMessage', "Excel processed. Inserted: {$inserted} rows.");
-    // }
+        return back()->with('successMessage', "Excel processed. Inserted: {$inserted} rows.");
+    }
 
     protected function expMukim($text)
     {

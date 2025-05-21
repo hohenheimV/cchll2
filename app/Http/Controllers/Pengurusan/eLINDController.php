@@ -825,24 +825,13 @@ class eLINDController extends Controller
     {
         ini_set('memory_limit', '2048M');
         ini_set('max_execution_time', 3000);
-        // dd($request->all());
-        // $request->validate([
-        //     'file' => 'required|file|mimes:xlsx,xls,csv|max:2048',
-        // ]);
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv|max:2048',
+        ]);
 
         $file = $request->file('file');
         // $spreadsheet = IOFactory::load($file->getPathname());
-        try {
-            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file->getPathname());
-            $reader->setReadDataOnly(true);
-            $spreadsheet = $reader->load($file->getPathname());
-            dd('File loaded successfully');
-        } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
-            dd('Spreadsheet read error: ' . $e->getMessage());
-        } catch (\Exception $e) {
-            dd('General error: ' . $e->getMessage());
-        }
-        dd($request->all());
+
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file->getPathname());
         $reader->setReadDataOnly(true);
         $spreadsheet = $reader->load($file->getPathname());

@@ -69,7 +69,7 @@
                         @endif
                     @endif
 
-                    @if(Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 3) || ( Auth::user()->id == $eLAPS->id_pemohon))
+                    {{-- @if(Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 3) || ( Auth::user()->id == $eLAPS->id_pemohon))
                         <div class="row">
                             <div class="form-group mb-6 col-md-12" style="background-color:#fef7f8; border-left: 5px solid #f0868e; padding: 15px;">
                                 <label for="acknowledgement"><h4>Pengesahan dan pengakuan pemohon:</h4></label>
@@ -84,17 +84,29 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    @endif --}}
 
-                    <!-- @include('pengurusan.eLAPS._upload') -->
-                     {{ ($eLAPS->status_permohonan == 5) }}
-                    @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai') && $eLAPS->status_permohonan >= 6 && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln || Auth::user()->bahagian_jln == 6))
-                        @if($eLAPS->status_permohonan > 7) <div inert> @endif
+                    {{-- <!-- @include('pengurusan.eLAPS._upload') --> --}}
+                     {{-- {{ ($eLAPS->status_permohonan == 5) }} --}}
+                    @if(/* auth()->user()->hasRole('Pentadbir Sistem|Pegawai') &&  *//* $eLAPS->status_permohonan >= 6 &&  */
+                        (
+                            (Auth::user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == 6) && $eLAPS->status_permohonan > 7) 
+                            || (
+                                (auth()->user()->hasRole('Pentadbir Sistem|KP/ TKP JLN') 
+                                || (Auth::user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln))) 
+                                && $eLAPS->status_permohonan >= 6
+                            )
+                        )
+                    )
+                        @if(($eLAPS->status_permohonan > 7) || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6)) <div inert> @endif
+                            @php
+                                $ulasan_lawatan = ($eLAPS->status_permohonan > 7 ||  (auth()->user()->hasRole('Pentadbir Sistem|KP/ TKP JLN') || (Auth::user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln)))) ? $eLAPS->ulasan_lawatan : '';
+                            @endphp
                             {{ Form::label('ulasan_lawatan', 'KEGUNAAN JABATAN :', ['class' => 'col-form-label']) }}<br>
                             {{ Form::label('ulasan_lawatan', 'Ulasan :', ['class' => 'col-form-label ulasan']) }}
                         
-                            {{ Form::textarea('ulasan_lawatan', $eLAPS->ulasan_lawatan, ['class' => 'form-control summernote', 'rows' => 3, 'cols' => 20, 'placeholder' => 'Masukkan butiran jika ada', 'required' => true]) }}
-                        @if($eLAPS->status_permohonan > 7) </div> @endif
+                            {{ Form::textarea('ulasan_lawatan', $ulasan_lawatan, ['class' => 'form-control summernote', 'rows' => 3, 'cols' => 20, 'placeholder' => 'Masukkan butiran jika ada', 'required' => true]) }}
+                        @if(($eLAPS->status_permohonan > 7) || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6)) </div> @endif
                     @endif
                     <script>
                         @if($eLAPS->status_permohonan >= 5)

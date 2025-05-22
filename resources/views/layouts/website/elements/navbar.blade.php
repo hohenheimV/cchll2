@@ -67,18 +67,34 @@
 </style>
 <div id="main-navbar" class="row align-items-center scroll-button fixeded-top">
     <div class="col-12 order-lg-1 order-2 d-lg-none d-flex justify-content-center mt-2">
-        {!! website_btn_social() !!}
+        {{-- {!! website_btn_social() !!} --}}
     </div>
     <div class="col-12 order-lg-2 order-3">
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg   p-lg-0">
             <a class="navbar-brand" href="{{ route('welcome') }}">
-                <img src="{{ asset('images/logo2.png') }}" height="70" alt="">
+                <img src="https://wikipil.jln.gov.my/portal/img/logo-e.png{{-- {{ asset('images/logo2.png') }} --}}" height="50" alt="">
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"  style="background-color: #36458e;">
+            {{-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"  style="background-color: #36458e;">
                 <span class="navbar-toggler-icon"  style="color: white;"><i class="fas fa-bars"></i></span>
+            </button> --}}
+            <button id="customNavbarToggler" class="navbar-toggler" type="button" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation" style="background-color: #36458e;">
+                <span class="navbar-toggler-icon" style="color: white;"><i class="fas fa-bars"></i></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <style>
+                @media (max-width: 1275px) {
+                    .mobile-login {
+                        display: inline-block !important;
+                    }
+                }
+                @media (min-width: 1275px) {
+                    .mobile-login {
+                        display: none !important;
+                    }
+                }
+                </style>
                 {!! website_navbar() !!}
                 {!! website_nav_social() !!}
             </div>
@@ -97,4 +113,17 @@
             button.classList.remove('scrolled');
         }
     });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const toggler = document.getElementById('customNavbarToggler');
+    const navbarCollapse = document.getElementById('navbarNavDropdown');
+
+    toggler.addEventListener('click', function () {
+      navbarCollapse.classList.toggle('show');
+      // Optionally update the aria-expanded attribute
+      const isExpanded = toggler.getAttribute('aria-expanded') === 'true';
+      toggler.setAttribute('aria-expanded', !isExpanded);
+    });
+  });
 </script>

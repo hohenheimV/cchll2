@@ -113,9 +113,9 @@
         }
 
         /* Responsive Design */
-        @media (max-width: 768px) {
+        @media (max-width: 1275px) {
             .hero-section {
-                background-image: url('https://wikipil.jln.gov.my/elandskap/media/transfer/img/65810b7a4a19a.jpeg');
+                background-image: url('https://elandskap.jln.gov.my/storage/images/shares/sliderBen/elandskap_mobile_bg.jpeg');
             }
             .hero-content {
                 top: 40%;
@@ -471,9 +471,10 @@
         <h1>Sistem Pengurusan Maklumat Landskap (eLANDSKAP)</h1>
         <p>Komprehensif dan mudah dicapai untuk panduan serta rujukan.</p>
         <div class="cta-buttons">
-            <a href="/epalm" class="primary">Direktori Taman</a>
+            <a href="/epalm" class="primary">Direktori Taman dan Landskap</a>
             <a href="#penggiat_industri" class="primary">Penggiat Industri Landskap</a>
             <a href="/epil-pelan" class="primary">Pelan Induk Landskap</a>
+            <a href="/epil-pelan" class="primary">Entiti Landskap dan Pokok Berkarakter Unik</a>
             <!-- <a href="/epalm" class="primary">Entiti Landksap Unik</a>
             <a href="#penggiat_industri" class="primary">Kempen Tanam Pokok</a> -->
         </div>

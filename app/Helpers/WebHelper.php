@@ -225,6 +225,7 @@ if (!function_exists('in_arrayi')) {
             $html .= '</ul>';
 
             $html .= '</li>';
+            $html .= '<li class="nav-item"><a class="nav-link text-uppercase text-nowrap mobile-login" href="/login">Log Masuk&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-lock"></i></a></li>';
             $html .= '</ul>';
             $html .= website_search_form('d-lg-none');
             return $html;
@@ -415,7 +416,7 @@ if (!function_exists('in_arrayi')) {
             //         $html .= '<li class="nav-item"><a target="_blank" class="btn bg-olive btn-sm mr-1" href="' . $social['link'] . '"><i class="' . $social['icon'] . '"></i></a>';
             //     }
             // }
-            $html .= '<li class="nav-item"><a target="_blank" class="btn bg-olive btn-sm mr-1" href="/login">Log Masuk <i class="fas fa-lock"></i></a>';
+            $html .= '<li class="nav-item"><a target="_blank" class="btn bg-olive btn-sm mr-1" href="/login">Log Masuk&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-lock"></i></a>&nbsp;';
             
             $html .= '</ul></div>';
             return $html;

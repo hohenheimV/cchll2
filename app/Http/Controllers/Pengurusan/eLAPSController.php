@@ -33,15 +33,15 @@ class eLAPSController extends Controller
         $user = $this->getUser();//User::whereRaw('id = ?', [$userId])->first();
         if($user->hasRole('Pihak Berkuasa Tempatan')){
             $totalCount = eLAPS::where('id_pemohon', $user->bahagian_jln)->count();
-            $eLAPS = eLAPS::where('id_pemohon', $user->bahagian_jln)->orderBy('id', 'desc')->paginate($totalCount);
+            $eLAPS = eLAPS::where('id_pemohon', $user->bahagian_jln)->orderBy('updated_at', 'desc')->paginate($totalCount);
         }elseif($user->hasRole('KP/ TKP JLN|Pentadbir Sistem') || ($user->hasRole('Pegawai') && $user->bahagian_jln == 6) || ($user->hasRole('Pegawai') && $user->bahagian_jln == 7)){
             $totalCount = eLAPS::count();
-            $eLAPS = eLAPS::orderByRaw('CAST(status_permohonan AS INT) ASC')->orderBy('id', 'desc')->paginate($totalCount);
+            $eLAPS = eLAPS::/* orderByRaw('CAST(status_permohonan AS INT) ASC')-> */orderBy('updated_at', 'desc')->paginate($totalCount);
         }else{
             // $totalCount = eLAPS::where('status_permohonan', '!=', $userId)->count();
-            // $eLAPS = eLAPS::where('status_permohonan', '!=', $userId)->orderBy('id', 'desc')->paginate($totalCount);
+            // $eLAPS = eLAPS::where('status_permohonan', '!=', $userId)->orderBy('updated_at', 'desc')->paginate($totalCount);
             $totalCount = eLAPS::where('bahagian_jln', $user->bahagian_jln)->orWhere('id_pemohon', $user->id)->count();
-            $eLAPS = eLAPS::where('bahagian_jln', $user->bahagian_jln)->orWhere('id_pemohon', $user->id)->orderByRaw('CAST(status_permohonan AS INT) ASC')->orderBy('id', 'desc')->paginate($totalCount);
+            $eLAPS = eLAPS::where('bahagian_jln', $user->bahagian_jln)->orWhere('id_pemohon', $user->id)->/* orderByRaw('CAST(status_permohonan AS INT) ASC')-> */orderBy('updated_at', 'desc')->paginate($totalCount);
         }
 
         $eLAPS->getCollection()->transform(function ($eLAP) {
@@ -471,7 +471,12 @@ class eLAPSController extends Controller
         $userArr = [];
         $PBTArr = ($this->getPBT($permohonan->id_pemohon)) !== null ? $this->getPBT($permohonan->id_pemohon) : [];
         $PBTid = $PBTArr->id ?? '';
-        $PBTuser = User::where('bahagian_jln', '=', $PBTid)->where('is_active', 1)->get();
+        $PBTuser = User::where(function ($query) use ($PBTid) {
+                $query->whereHas('roles', function ($query) {
+                    $query->where('name', 'Pihak Berkuasa Tempatan');
+                })
+                ->where('bahagian_jln', $PBTid);
+            })->where('is_active', 1)->get();
         $PBTemail = [];
         foreach ($PBTuser as $key => $value) {
             $PBTemail[] = ['address' => $value->email, 'name' => $value->name];
@@ -485,7 +490,7 @@ class eLAPSController extends Controller
             })->where('is_active', 1)
             ->orWhere(function ($query) {
                 $query->whereHas('roles', function ($query) {
-                    $query->where('name', 'KP/ TKP JLN');
+                    $query->where('name', 'KP/ TKP JLN')->orWhere('name', 'Pentadbir Sistem');
                 });
             })->where('is_active', 1)
             ->get();
@@ -520,7 +525,7 @@ class eLAPSController extends Controller
             })->where('is_active', 1)
             ->orWhere(function ($query) {
                 $query->whereHas('roles', function ($query) {
-                    $query->where('name', 'KP/ TKP JLN');
+                    $query->where('name', 'KP/ TKP JLN')->orWhere('name', 'Pentadbir Sistem');
                 });
             })->where('is_active', 1)
             ->get();
@@ -532,7 +537,8 @@ class eLAPSController extends Controller
         }
         $nama_pemohon = isset($PBTArr->pbt_name) ? $PBTArr->pbt_name : 'Jabatan Landskap Negara';
 
-        // dd($user_email);
+        // dump($user_emailBhg);
+        // dd($PBTemail);
         $request->merge(['anggaranKos' => str_replace(',', '', $request->input('anggaranKos')) ]);
         if ($fileExist) {
             rename($oldPath, $newPath);

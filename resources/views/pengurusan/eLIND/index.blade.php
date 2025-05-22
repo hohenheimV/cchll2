@@ -132,14 +132,14 @@
                                                     'onclick'=>"window.location='".route('pengurusan.eLIND.show', ['type' => $lastSegment, 'id' => $user])."'"
                                                     ]) !!}
 
-                                                    @if((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN|Penggiat Industri')))
+                                                    @if((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN|Penggiat Industri')) || (Auth::user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == 7 || Auth::user()->bahagian_jln == 8)))
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', [
                                                         'class'=>'btn btn-warning btn-sm', Html::tooltip('Kemaskini Maklumat '.$capitalizedSegment),
                                                         'onclick'=>"window.location='".route('pengurusan.eLIND.edit', ['type' => $lastSegment, 'id' => $user])."'"
                                                         ]) !!}
                                                     @endif
 
-                                                    @if((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN')))
+                                                    @if((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN')) || (Auth::user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == 7 || Auth::user()->bahagian_jln == 8)))
                                                         {!! Form::button('<i class="fas fa-trash"></i>', ['class'=>'btn btn-danger btn-sm', Html::tooltip('Padam Maklumat '.$capitalizedSegment),
                                                         'data-url'=>route('pengurusan.eLIND.destroy', ['type' => $lastSegment, 'id' => $user]),
                                                         'data-toggle'=>'modal','data-target'=>'#modalDelete']) !!}

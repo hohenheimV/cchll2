@@ -552,7 +552,13 @@ class MIBController extends Controller
         $PBT = MaklumatPenggunaPbt::where('pbt_name', '=', $MIB->pbt)->first();
         $PBTArr = ($PBT) !== null ? $PBT : [];
         $PBTid = $PBTArr->id ?? '';
-        $PBTuser = User::where('bahagian_jln', '=', $PBTid)->where('is_active', 1)->get();
+        // $PBTuser = User::where('bahagian_jln', '=', $PBTid)->where('is_active', 1)->get();
+        $PBTuser = User::where(function ($query) use ($PBTid) {
+                $query->whereHas('roles', function ($query) {
+                    $query->where('name', 'Pihak Berkuasa Tempatan');
+                })
+                ->where('bahagian_jln', $PBTid);
+            })->where('is_active', 1)->get();
         $PBTemail = [];
         foreach ($PBTuser as $key => $value) {
             $PBTemail[] = ['address' => $value->email, 'name' => $value->name];

@@ -777,6 +777,7 @@
 @if($capitalizedSegment == 'Kontraktor' || $capitalizedSegment == 'Perunding' || $capitalizedSegment == 'Pembekal')
     <div class="col-lg">
         <div class="row col-md-12">
+            @if(isset($eLIND->pekerja) || (strpos(request()->url(), 'edit') !== false) || (strpos(request()->url(), 'create') !== false))
             <div class="col-lg col-separator inertShow">
                 <div class="form-group">
                     <label class="col-xs-4 control-label"></label>
@@ -946,9 +947,11 @@
                     });
                 </script>
             </div>
+            @endif
         </div>
         @if($capitalizedSegment == 'Kontraktor' || $capitalizedSegment == 'Perunding' || $capitalizedSegment == 'Pembekal')
         <div class="row col-md-12">
+            @if(isset($eLIND->pengalaman) || (strpos(request()->url(), 'edit') !== false) || (strpos(request()->url(), 'create') !== false))
             <div class="col-lg col-separator inertShow">
                 <div class="form-group">
                     <label class="col-xs-4 control-label"></label>
@@ -1123,10 +1126,12 @@
                     });
                 </script>
             </div>
+            @endif
         </div>
         @endif
         @if($capitalizedSegment == 'Pembekal')
             <div class="row col-md-12">
+                @if(isset($eLIND->produk) || (strpos(request()->url(), 'edit') !== false) || (strpos(request()->url(), 'create') !== false))
                 <div class="col-lg col-separator">
                     <div class="form-group">
                         <label class="col-xs-4 control-label"></label>
@@ -1412,6 +1417,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
 
             <script>

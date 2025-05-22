@@ -19,7 +19,7 @@
     <a href="{{ route('pengurusan.dashboard') }}" class="brand-link navbar">
         <img src="{{ asset('img/logo-jln-sm.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
             style="opacity: .8">
-        <span class="brand-text font-weight-bold">eLANDSKAP, JLN</span>
+        <span class="brand-text font-weight-bold" style="color: black !important">eLANDSKAP, JLN</span>
     </a>
 
     <!-- Sidebar -->

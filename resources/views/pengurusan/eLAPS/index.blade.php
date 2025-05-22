@@ -84,7 +84,16 @@
 
                                 @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|Pihak Berkuasa Tempatan|KP/ TKP JLN'))
                                     @forelse($eLAPS as $permohonan)
-                                        @if(!($permohonan->status_permohonan == 1 && ((Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6) || Auth::user()->hasRole('Pegawai|Pentadbir Sistem|KP/ TKP JLN'))))
+                                        @if(
+                                            !(
+                                                $permohonan->status_permohonan == 1 
+                                                && (
+                                                    (
+                                                        Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6
+                                                    ) || Auth::user()->hasRole('Pegawai|Pentadbir Sistem|KP/ TKP JLN')
+                                                )
+                                            ) || Auth::user()->id == $permohonan->id_pemohon
+                                        )
                                         <tr>
                                             <td>{{ $index++ }}</td>
                                             <td>{{ strtoupper($permohonan->projectTitle) }}</td>

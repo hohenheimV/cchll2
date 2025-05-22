@@ -249,7 +249,7 @@ class ePILController extends Controller
             $ePIL_update = $ePIL->update($requestData);
             // dd($ePIL);
             if ($ePIL_update) {
-                $bahagian_jln = 4;
+                $bahagian_jln = 3;
                 $userArr = []; $user_email = []; $btm_email = [];
                 if ($bahagian_jln) {
                     $userArr = User::where(function ($query) use ($bahagian_jln) {

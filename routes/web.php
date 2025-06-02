@@ -222,9 +222,9 @@ Route::get('/pano', function () {
     return view('website.pano');
 })->name('pano');
 
-Route::get('/qr', function () {
-    return view('website.qr');
-})->name('qr');
+Route::get('/emap', function () {
+    return view('website.emap');
+})->name('emap');
 
 Route::get('/pano/{folder}/{image}', function ($folder, $image) {
     // dd($folder);

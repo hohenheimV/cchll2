@@ -195,7 +195,8 @@ if (!function_exists('in_arrayi')) {
 
                 if (count($menu->children)) : //SubMenu
                     $html .= '<li class="nav-item dropdown">';
-                    $html .= '<a class="nav-link dropdown-toggle text-uppercase text-nowrap" href="#" id="navbarDropdownMenu' . $menu->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $menu->title . '</a>';
+                    // $html .= '<a class="nav-link dropdown-toggle text-uppercase text-nowrap" href="#" id="navbarDropdownMenu' . $menu->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $menu->title . '</a>';
+                    $html .= '<a class="nav-link dropdown-toggle text-nowrap" href="#" id="navbarDropdownMenu' . $menu->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $menu->title . '</a>';
                     $html .= '<ul class="dropdown-menu rounded-0 mt-lg-0" aria-labelledby="navbarDropdownMenu' . $menu->id . '">';
                     foreach ($menu->children as $children) :
                         if (count($children->grandchildren)) : //SubMenu

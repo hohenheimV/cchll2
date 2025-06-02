@@ -218,9 +218,11 @@
                     </li>
                     @endif
                     <li class="nav-item">
-                        {!! Html::buttonSidebarNavLink('eMAP JLN',$icon['eMAP'],
-                        ['onclick'=>"window.location='#'",
-                        'class'=>'nav-link btn btn-block btn-link text-left '.Html::active('pengurusan.peta'), Html::tooltip($hoverText['eMAP'])])  !!}
+                        {!! Html::buttonSidebarNavLink('eMAP JLN', $icon['eMAP'], [
+                            'onclick' => "window.open('../emap', '_blank')",
+                            'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.peta'),
+                            Html::tooltip($hoverText['eMAP'])
+                        ]) !!}
                     </li>
                     @if ((Auth::user()->hasRole('Pentadbir Sistem|Pegawai')))
                         <li class="nav-header text-uppercase">Laman Web</li>

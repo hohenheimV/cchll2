@@ -921,7 +921,7 @@ class eLINDController extends Controller
     }
 
     //ePALM
-    /* public function import(Request $request)
+    public function import(Request $request)
     {
         ini_set('memory_limit', '2048M');
         ini_set('max_execution_time', 3000);
@@ -1021,7 +1021,7 @@ class eLINDController extends Controller
 
                         $requestData = [
                             "nama_taman" => strtoupper($this->sanitize_text($row['B'])),                         
-                            "kategori_taman" => strtoupper(trim(str_replace("JLN-", "",$sheetName))),                  
+                            "kategori_taman" => (trim(str_replace("JLN-", "",$sheetName))),                  
                             "negeri_taman" => $kod_negeri, 
                             "daerah_taman" => $kod_daerah, 
                             "mukim_taman" => null,                             
@@ -1082,9 +1082,10 @@ class eLINDController extends Controller
         dd('Excel processed. Total rows: ' . count($result));
         // Optionally return or log $result
         return back()->with('successMessage', 'Excel processed. Total rows: ' . count($result));
-    } */
+    }
 
-    public function import(Request $request)
+    // MIB
+    /* public function import(Request $request)
     {
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls,csv|max:2048',
@@ -1133,17 +1134,7 @@ class eLINDController extends Controller
                             $kod_negeri = $negeriMap[$kod_negeri]->kod_negeri ?? "00";
 
                             // $requestData = [
-                            //     /* 
-                            //         $ref = Carbon::now()->timestamp;
-                            //         $ref_num = "RT$ref";
-                            //     */
                             //     'ref_num' => $ref_num,
-                            //     /* 
-                            //         $currentYear = $row["E"];
-                            //         $recordCount = MIB::whereYear('created_at', $currentYear)->count();
-                            //         $no_siri = $recordCount + 1;
-                            //         $no_siri = "JLN-RT/{$currentYear}/{$no_siri}";
-                            //     */
                             //     'no_siri' => $no_siri,
                             //     'taman' => strtoupper($row["D"]),
                             //     'pbt' => $pbtName,
@@ -1190,7 +1181,7 @@ class eLINDController extends Controller
             }
         }
         return back()->with('successMessage', 'Excel processed. Total rows: ' . count($result));
-    }
+    } */
 
     // eLIND
     /* public function import(Request $request)

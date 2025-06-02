@@ -133,10 +133,13 @@
                                                                     >
                                                                         <i class="fas fa-search"></i>
                                                                     </button> -->
+                                                                    @if(strtolower(pathinfo(public_path('storage/uploads/elad/dokumen/' . $rekabentuk->dokumen), PATHINFO_EXTENSION)) === 'pdf')
                                                                     <a href="{{ asset('storage/uploads/elad/dokumen/' . $rekabentuk->dokumen) }}" 
                                                                     target="_blank" type="button" class="btn btn-primary btn-sm" >
                                                                         <i class="fas fa-search"></i>
                                                                     </a>
+                                                                    @endif
+
                                                                     <a href="{{ asset('storage/uploads/elad/dokumen/' . $rekabentuk->dokumen) }}" target="_blank" download>
                                                                         {!! Form::button('<i class="fas fa-download"></i>', [
                                                                             'class' => 'btn btn-success btn-sm'

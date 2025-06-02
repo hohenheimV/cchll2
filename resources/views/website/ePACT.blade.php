@@ -133,10 +133,13 @@
                                                                     >
                                                                         <i class="fas fa-search"></i>
                                                                     </button> -->
+                                                                    @if(strtolower(pathinfo(public_path('storage/uploads/epact/dokumen/' . $epact->dokumen), PATHINFO_EXTENSION)) === 'pdf')
                                                                     <a href="{{ asset('storage/uploads/epact/dokumen/' . $epact->dokumen) }}" 
                                                                     target="_blank" type="button" class="btn btn-primary btn-sm" >
                                                                         <i class="fas fa-search"></i>
                                                                     </a>
+                                                                    @endif
+                                                                    
                                                                     @if($epact->kate == '182')
                                                                         <a href="{{ asset('storage/uploads/epact/dokumen/' . $epact->dokumen) }}" target="_blank" download>
                                                                             {!! Form::button('<i class="fas fa-download"></i>', [

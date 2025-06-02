@@ -214,7 +214,8 @@ if (!function_exists('in_arrayi')) {
                     $html .= '</ul>';
                     $html .= '</li>';
                 else :
-                    $html .= '<li class="nav-item"><a class="nav-link text-uppercase text-nowrap" blank="' . $menu->target . '" href="' . $menu->link . '">' . $menu->title . '</a></li>';
+                    // $html .= '<li class="nav-item"><a class="nav-link text-uppercase text-nowrap" blank="' . $menu->target . '" href="' . $menu->link . '">' . $menu->title . '</a></li>';
+                    $html .= '<li class="nav-item"><a class="nav-link text-nowrap" blank="' . $menu->target . '" href="' . $menu->link . '">' . $menu->title . '</a></li>';
                 endif;
             endforeach;
             $html .= '<li class="nav-item dropdown d-none d-lg-block">';

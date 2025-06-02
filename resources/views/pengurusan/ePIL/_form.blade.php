@@ -782,7 +782,7 @@
                                 </td>
                             -->
                             <td>
-                                <input type="file" class="form-control" name="pelan[${bilCount}][fail]" id="fail_${bilCount}" accept=".pdf,.jpg,.jpeg,.png,.zip,.mp4,.kml,.kmz,.dwg,.dxf">
+                                <input type="file" class="form-control" name="pelan[${bilCount}][fail]" id="fail_${bilCount}" accept=".pdf,.jpg,.jpeg,.png,.zip,.mp4,.kml,.kmz,.dwg,.dxf,.rar">
                                 <input name="pelan[${bilCount}][large_file_name_new]" required type="hidden" id="large_file_name_new_${bilCount}">
                                 <input name="pelan[${bilCount}][large_file_name_old]" type="hidden" id="large_file_name_old_${bilCount}">
                                 <input name="pelan[${bilCount}][file_type]" type="hidden" id="file_type_${bilCount}">

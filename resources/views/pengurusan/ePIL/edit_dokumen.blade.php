@@ -42,7 +42,7 @@
 
                             <div class="form-group required">
                                 <label for="nama_dokumen_pelan" class="control-label">Fail:</label>
-                                <input type="file" name="nama_dokumen_pelan" id="nama_dokumen_pelan" class="form-control" accept=".pdf">
+                                <input type="file" name="nama_dokumen_pelan" id="nama_dokumen_pelan" class="form-control" accept=".pdf,.jpg,.jpeg,.png,.zip,.mp4,.kml,.kmz,.dwg,.dxf,.rar">
                                 {{ Form::label('', '***Muatnaik semula akan menggantikan fail sedia ada.', ['class' => 'col-form-label required-field-create', 'style' => 'font-weight: bold;']) }}
                                 <br>
 

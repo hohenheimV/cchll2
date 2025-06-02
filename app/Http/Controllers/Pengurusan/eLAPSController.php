@@ -55,7 +55,19 @@ class eLAPSController extends Controller
             }
             $id_pemohon = $createdByUserId ?? $eLAP->id_pemohon;
             dump($id_pemohon);
+            $email = User::find($id_pemohon);
+            
+            // if($email->hasRole('Pihak Berkuasa Tempatan')){
+            //     $pbt = MaklumatPenggunaPbt::where('id', '=', $email->bahagian_jln)->first();
+            //     $eLAP->pbt_name = $pbt ? $pbt->pbt_name : null;
+            // }else{
                 $eLAP->pbt_name = "Jabatan Landskap Negara";
+            // }
+            // $eLAPSTemp = eLAPS::findOrFail($eLAP->id);
+            // $currentYear = Carbon::now()->year;
+            // $recordCount = $eLAP->id - 32;
+            // $referenceNumber = "JLN/{$currentYear}/{$recordCount}";
+            // $eLAPSTemp->update(['referenceNumber' => $referenceNumber]);
     
             return $eLAP;
         });

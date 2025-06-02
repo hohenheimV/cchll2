@@ -84,15 +84,15 @@ class DataController extends Controller
                 'application/octet-stream',
             ];
 
-            $allowedExtensions = [
-                'pdf', 'jpg', 'jpeg', 'png', 'zip', 'rar', 'mp4', 'kml', 'kmz', 'dwg', 'dxf'
-            ];
+            // $allowedExtensions = [
+            //     'pdf', 'jpg', 'jpeg', 'png', 'zip', 'rar', 'mp4', 'kml', 'kmz', 'dwg', 'dxf'
+            // ];
 
             $file = $request->file('large_file');
-            $extension = strtolower($file->getClientOriginalExtension());
+            // $extension = strtolower($file->getClientOriginalExtension());
             $mime = $file->getMimeType();
 
-            if (!in_array($extension, $allowedExtensions) || !in_array($mime, $allowedMimes)) {
+            if (/* !in_array($extension, $allowedExtensions) ||  */!in_array($mime, $allowedMimes)) {
                 return response()->json(['error' => 'Invalid file type or extension.'], 422);
             }
         }

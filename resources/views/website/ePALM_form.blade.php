@@ -107,17 +107,17 @@
                         @if($ePALM_all->isNotEmpty())
                             @foreach($ePALM_all as $taman)
                                 @if($previousNegeri !== null && $previousNegeri !== $taman->negeri)
-                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ $taman->negeri}}</td></tr>
+                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ strtoupper($taman->negeri)}}</td></tr>
                                 @elseif($previousNegeri === $taman->negeri)
                                 @else
-                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ $taman->negeri}}</td></tr>
+                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ strtoupper($taman->negeri)}}</td></tr>
                                 @endif
                                 <tr>
                                     <td>{{ $index++ }}</td>
-                                    <td>{{ $taman->nama_taman}}</td>
-                                    <td>{!! ((!in_array($taman->kategori_taman, $jenis_pembangunan))) ? '<span class="badge bg-warning">'.$taman->kategori_taman.'</span>' : $taman->kategori_taman !!}</td>
+                                    <td>{{ strtoupper($taman->nama_taman)}}</td>
+                                    <td>{!! ((!in_array($taman->kategori_taman, $jenis_pembangunan))) ? '<span class="badge bg-warning">'.strtoupper($taman->kategori_taman).'</span>' : strtoupper($taman->kategori_taman) !!}</td>
                                     <td>
-                                        {{ $taman->nama_pbt }}
+                                        {{ strtoupper($taman->nama_pbt) }}
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group">

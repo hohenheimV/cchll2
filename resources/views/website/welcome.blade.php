@@ -92,7 +92,7 @@
 
         .cta-buttons a {
             text-decoration: none;
-            background-color:  #28b463  ;
+            background-color:  #218838  ;
             color: white;
             padding: 10px 20px; /* Reduced padding for smaller buttons */
             font-size: 0.9rem; /* Smaller font size */
@@ -474,7 +474,9 @@
             <a href="/epalm" class="primary">Direktori Taman dan Landskap</a>
             <a href="#penggiat_industri" class="primary">Penggiat Industri Landskap</a>
             <a href="/epil-pelan" class="primary">Pelan Induk Landskap</a>
-            <a href="/epil-pelan" class="primary">Entiti Landskap dan Pokok Berkarakter Unik</a>
+            <a href="/entiti-landskap" class="primary">Entiti Landskap dan Pokok Berkarakter Unik</a>
+            <a href="#activities" class="primary">Permohonan Projek</a>
+            <a href="/emap" class="primary">eMAP JLN</a>
             <!-- <a href="/epalm" class="primary">Entiti Landksap Unik</a>
             <a href="#penggiat_industri" class="primary">Kempen Tanam Pokok</a> -->
         </div>

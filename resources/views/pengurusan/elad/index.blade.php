@@ -280,11 +280,11 @@
                 dom: '<"top"fB>rt<"bottom"p><"clear">',
                 language: { search: "Carian:" },
                 buttons: [
-                    {
-                        extend: 'copy',
-                        text: 'Salin',
-                        exportOptions: { columns: [0,1,2,3,4], modifier: { search: 'applied', order: 'applied', page: 'all' } }
-                    },
+                    // {
+                    //     extend: 'copy',
+                    //     text: 'Salin',
+                    //     exportOptions: { columns: [0,1,2,3,4], modifier: { search: 'applied', order: 'applied', page: 'all' } }
+                    // },
                     {
                         extend: 'csv',
                         text: 'CSV',
@@ -295,16 +295,16 @@
                         text: 'Excel',
                         exportOptions: { columns: [0,1,2,3,4], modifier: { search: 'applied', order: 'applied', page: 'all' } }
                     },
-                    {
-                        extend: 'pdf',
-                        text: 'PDF',
-                        exportOptions: { columns: [0,1,2,3,4], modifier: { search: 'applied', order: 'applied', page: 'all' } }
-                    },
-                    {
-                        extend: 'print',
-                        text: 'Cetak',
-                        exportOptions: { columns: [0,1,2,3,4], modifier: { search: 'applied', order: 'applied', page: 'all' } }
-                    }
+                    // {
+                    //     extend: 'pdf',
+                    //     text: 'PDF',
+                    //     exportOptions: { columns: [0,1,2,3,4], modifier: { search: 'applied', order: 'applied', page: 'all' } }
+                    // },
+                    // {
+                    //     extend: 'print',
+                    //     text: 'Cetak',
+                    //     exportOptions: { columns: [0,1,2,3,4], modifier: { search: 'applied', order: 'applied', page: 'all' } }
+                    // }
                 ]
             });
 

@@ -279,36 +279,36 @@
                     ],
                     dom: 'Bfrtip',
                     buttons: [
-                        {
-                            extend: 'copy',
-                            exportOptions: {
-                                columns: ':not(:eq(5), :eq(-1))'  // Only include the first, second, and second last columns in the "Copy" export
-                            }
-                        },
+                        // {
+                        //     extend: 'copy',
+                        //     exportOptions: {
+                        //         columns: ':not(:eq(5), :eq(-1))'  // Only include the first, second, and second last columns in the "Copy" export
+                        //     }
+                        // },
                         {
                             extend: 'csv',
                             exportOptions: {
-                                columns: ':not(:eq(5), :eq(-1))'  // Only include the first, second, and second last columns in the "CSV" export
+                                columns: ':not(:eq(-1))'  // Only include the first, second, and second last columns in the "CSV" export
                             }
                         },
                         {
                             extend: 'excel',
                             exportOptions: {
-                                columns: ':not(:eq(5), :eq(-1))'  // Only include the first, second, and second last columns in the "Excel" export
+                                columns: ':not(:eq(-1))'  // Only include the first, second, and second last columns in the "Excel" export
                             }
                         },
-                        {
-                            extend: 'pdf',
-                            exportOptions: {
-                                columns: ':not(:eq(5), :eq(-1))'  // Only include the first, second, and second last columns in the "PDF" export
-                            }
-                        },
-                        {
-                            extend: 'print',
-                            exportOptions: {
-                                columns: ':not(:eq(5), :eq(-1))'  // Only include the first, second, and second last columns in the "Print" export
-                            }
-                        }
+                        // {
+                        //     extend: 'pdf',
+                        //     exportOptions: {
+                        //         columns: ':not(:eq(5), :eq(-1))'  // Only include the first, second, and second last columns in the "PDF" export
+                        //     }
+                        // },
+                        // {
+                        //     extend: 'print',
+                        //     exportOptions: {
+                        //         columns: ':not(:eq(-1))'  // Only include the first, second, and second last columns in the "Print" export
+                        //     }
+                        // }
                     ],
                     language: {
                         search: "Carian:",  // Custom text for the search input

@@ -113,9 +113,9 @@
                                                     @endphp
                                                     <tr>
                                                         <td>{{ $index++ }}</td>
-                                                        <td>{{ ucwords(strtolower($entiti->nama_entiti)) }}</td>
-                                                        <td>{{ ucwords(strtolower($entiti->lokasi)) }}</td>
-                                                        <td>{{ isset($pbt) ? ucwords(strtolower($pbt)) : 'Tiada Maklumat' }}</td>
+                                                        <td>{{ (strtoupper($entiti->nama_entiti ?? 'Tiada Maklumat')) }}</td>
+                                                        <td>{{ (strtoupper($entiti->lokasi ?? 'Tiada Maklumat')) }}</td>
+                                                        <td>{{ isset($pbt) ? (strtoupper($pbt)) : 'Tiada Maklumat' }}</td>
                                                         <td class="text-center">
                                                             <div class="btn-group">
                                                                 <a target="_blank" class="btn bg-success btn-sm mr-1" href="/entiti-landskap/{{ $entiti->slug }}"><i class="fas fa-search"></i></a>

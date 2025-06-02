@@ -98,9 +98,9 @@
                                                 @foreach($eLAD as $rekabentuk)
                                                     <tr>
                                                         <td>{{ $index++ }}</td>
-                                                        <td>{{ $rekabentuk->tajuk }}</td>
+                                                        <td>{{ strtoupper($rekabentuk->tajuk) }}</td>
                                                         <td>
-                                                            {{ $rekabentuk->kategori->name ?? 'Tiada Maklumat' }}
+                                                            {{ strtoupper($rekabentuk->kategori->name ?? 'Tiada Maklumat') }}
                                                         </td>
                                                         <td class="text-center">
                                                             {!! Html::datetime($rekabentuk->tarikh, 'Y') !!}
@@ -118,7 +118,7 @@
                                                                     <canvas id="pdf-render-{{$rekabentuk->id}}" style="width: 100%; height: 100%; object-fit: contain; display: none;"></canvas>
                                                                 </div>
                                                             </a> -->
-                                                            {{ ($rekabentuk->dokumen && file_exists(public_path('storage/uploads/elad/dokumen/' . $rekabentuk->dokumen))) ? $rekabentuk->sizeName . ' MB' : 'Tiada dokumen' }}
+                                                            {{ ($rekabentuk->dokumen && file_exists(public_path('storage/uploads/elad/dokumen/' . $rekabentuk->dokumen))) ? $rekabentuk->sizeName . ' MB' : strtoupper('Tiada dokumen') }}
                                                         </td>
                                                         <td class="text-center">
                                                             <div class="btn-group">

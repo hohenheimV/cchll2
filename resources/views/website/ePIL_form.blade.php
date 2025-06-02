@@ -96,16 +96,16 @@
                         @if($ePIL->isNotEmpty())
                             @foreach($ePIL as $pelan)
                                 @if($previousNegeri !== null && $previousNegeri !== $pelan->negeri)
-                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ $pelan->negeri}}</td></tr>
+                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ strtoupper($pelan->negeri)}}</td></tr>
                                 @elseif($previousNegeri === $pelan->negeri)
                                 @else
-                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ $pelan->negeri}}</td></tr>
+                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ strtoupper($pelan->negeri)}}</td></tr>
                                 @endif
                                 <tr>
                                     <td>{{ $index++ }}</td>
-                                    <td>{{ ucwords(strtolower($pelan->nama_pelan)) }}</td>
+                                    <td>{{ (strtoupper($pelan->nama_pelan)) }}</td>
                                     <td>
-                                        {{ ucwords(strtolower($pelan->nama_pbt)) }}
+                                        {{ (strtoupper($pelan->nama_pbt)) }}
                                     </td>
                                     <td style="text-align: center;">
                                         <?php 

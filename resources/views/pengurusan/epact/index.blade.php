@@ -193,14 +193,14 @@
                 search: "Carian:"
             },
             buttons: [
-                {
-                    extend: 'copy',
-                    text: 'Salin',
-                    exportOptions: {
-                        columns: [0,1,2,3,4,5],
-                        modifier: { search: 'applied', order: 'applied', page: 'all' }
-                    }
-                },
+                // {
+                //     extend: 'copy',
+                //     text: 'Salin',
+                //     exportOptions: {
+                //         columns: [0,1,2,3,4,5],
+                //         modifier: { search: 'applied', order: 'applied', page: 'all' }
+                //     }
+                // },
                 {
                     extend: 'csv',
                     text: 'CSV',
@@ -217,22 +217,22 @@
                         modifier: { search: 'applied', order: 'applied', page: 'all' }
                     }
                 },
-                {
-                    extend: 'pdf',
-                    text: 'PDF',
-                    exportOptions: {
-                        columns: [0,1,2,3,4,5],
-                        modifier: { search: 'applied', order: 'applied', page: 'all' }
-                    }
-                },
-                {
-                    extend: 'print',
-                    text: 'Cetak',
-                    exportOptions: {
-                        columns: [0,1,2,3,4,5],
-                        modifier: { search: 'applied', order: 'applied', page: 'all' }
-                    }
-                }
+                // {
+                //     extend: 'pdf',
+                //     text: 'PDF',
+                //     exportOptions: {
+                //         columns: [0,1,2,3,4,5],
+                //         modifier: { search: 'applied', order: 'applied', page: 'all' }
+                //     }
+                // },
+                // {
+                //     extend: 'print',
+                //     text: 'Cetak',
+                //     exportOptions: {
+                //         columns: [0,1,2,3,4,5],
+                //         modifier: { search: 'applied', order: 'applied', page: 'all' }
+                //     }
+                // }
             ]
         });
 

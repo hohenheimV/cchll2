@@ -116,10 +116,10 @@
             search: "Carian:"
         },
         buttons: [
-            {
-                extend: 'copy',
-                text: 'Salin'
-            },
+            // {
+            //     extend: 'copy',
+            //     text: 'Salin'
+            // },
             {
                 extend: 'csv',
                 text: 'CSV',
@@ -134,20 +134,20 @@
                     columns: [0,1,2,3,4]
                 }
             },
-            {
-                extend: 'pdf',
-                text: 'PDF',
-                exportOptions: {
-                    columns: [0,1,2,3,4]
-                }
-            },
-            {
-                extend: 'print',
-                text: 'Cetak',
-                exportOptions: {
-                    columns: [0,1,2,3,4]
-                }
-            }
+            // {
+            //     extend: 'pdf',
+            //     text: 'PDF',
+            //     exportOptions: {
+            //         columns: [0,1,2,3,4]
+            //     }
+            // },
+            // {
+            //     extend: 'print',
+            //     text: 'Cetak',
+            //     exportOptions: {
+            //         columns: [0,1,2,3,4]
+            //     }
+            // }
         ]
     });
 </script>

@@ -57,11 +57,11 @@
                         {!! website_sidebar_search() !!}
                     </div>
                 </div>
-                @include('layouts.website.elements.sidebar-widgets')
                 <!-- Post Content Column -->
                 <div class="col-12 col-lg-9">
                     @include('website.ePIL_form')
                 </div>
+                @include('layouts.website.elements.sidebar-widgets')
             </div>
         </div>
 

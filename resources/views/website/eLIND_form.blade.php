@@ -32,7 +32,7 @@
 
                                     $.each(data, function(key, value) {
                                         // Add each Negeri to the dropdown
-                                        $('#negeri').append('<option value="' + value.kod_negeri + '">' + capitalizeWords(value.nama_negeri) + '</option>');
+                                        $('#negeri').append('<option value="' + value.kod_negeri + '">' + (value.nama_negeri) + '</option>');
                                     });
 
                                     var negeriSelected = "{{ request()->query('negeri', '') }}";
@@ -125,11 +125,11 @@
                                     <td>{{ strtoupper($user->name) }}</td>
                                     <td>
                                         {{--@if(isset($user->email)) {{ $user->email }}<br>@endif--}}
-                                        @if(isset($user->address1)) {{ $user->address1.',' }}<br>@endif
-                                        @if(isset($user->address2)) {{ $user->address2.',' }}<br>@endif
-                                        @if(isset($user->postcode)) {{ $user->postcode }}@endif
-                                        @if(isset($user->locality)) {{ $user->locality.', ' }}@endif
-                                        @if(isset($user->state)) {{ $user->state.'.' }}<br>@endif
+                                        @if(isset($user->address1)) {{ strtoupper($user->address1.',') }}<br>@endif
+                                        @if(isset($user->address2)) {{ strtoupper($user->address2.',') }}<br>@endif
+                                        @if(isset($user->postcode)) {{ strtoupper($user->postcode) }}@endif
+                                        @if(isset($user->locality)) {{ strtoupper($user->locality.', ') }}@endif
+                                        @if(isset($user->state)) {{ strtoupper($user->state.'.') }}<br>@endif
                                     </td>
                                     <!-- <td class="text-center">
                                         <?php

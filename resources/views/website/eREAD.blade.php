@@ -98,9 +98,9 @@
                                                 @foreach($ereads as $eread)
                                                     <tr>
                                                         <td>{{ $index++ }}</td>
-                                                        <td>{{ $eread->tajuk }}</td>
+                                                        <td>{{ strtoupper($eread->tajuk )}}</td>
                                                         <td>
-                                                            {{ $eread->kategori->name ?? 'Tiada Maklumat' }}
+                                                            {{ strtoupper($eread->kategori->name ?? 'Tiada Maklumat') }}
                                                         </td>
                                                         <td class="text-center">
                                                             {!! Html::datetime($eread->tarikh, 'Y') !!}

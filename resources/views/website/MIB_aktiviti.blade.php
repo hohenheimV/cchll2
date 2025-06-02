@@ -57,7 +57,6 @@
                         {!! website_sidebar_search() !!}
                     </div>
                 </div>
-                @include('layouts.website.elements.sidebar-widgets')
                 <!-- Post Content Column -->
                 <div class="col-12 col-lg-9">
                     <div class="card">
@@ -103,9 +102,9 @@
                                                 @forelse($MIB_laporan as $laporan)
                                                 <tr>
                                                     <td>{{ $index++ }}</td>
-                                                    <td>{!! ucwords(strtolower($laporan->name)) !!}</td>
-                                                    <td>{{ ucwords(strtolower($laporan->taman)) }}</td>
-                                                    <td>{{ ucwords(strtolower($laporan->mib->pbt ?? 'Tiada Maklumat'))  }}</td>
+                                                    <td>{!! (strtoupper($laporan->name)) !!}</td>
+                                                    <td>{{ (strtoupper($laporan->taman)) }}</td>
+                                                    <td>{{ (strtoupper($laporan->mib->pbt ?? 'Tiada Maklumat'))  }}</td>
                                                     <!-- <td class="text-center">{!! $laporan->created_at->format('d-m-Y') !!}</td> -->
                                                     <td class="text-center">
                                                         <?php
@@ -187,6 +186,7 @@
 
                     </div>
                 </div>
+                @include('layouts.website.elements.sidebar-widgets')
             </div>
         </div>
 

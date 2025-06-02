@@ -53,9 +53,9 @@ class eLAPSController extends Controller
                     break;
                 }
             }
-            $id_pemohon = 1;//$createdByUserId ?? $eLAP->id_pemohon;
+            $id_pemohon = $createdByUserId ?? $eLAP->id_pemohon ?? 1;
             $email = User::find($id_pemohon);
-            dump($email);
+            
             if($email->hasRole('Pihak Berkuasa Tempatan')){
                 $pbt = MaklumatPenggunaPbt::where('id', '=', $email->bahagian_jln)->first();
                 $eLAP->pbt_name = $pbt ? $pbt->pbt_name : null;

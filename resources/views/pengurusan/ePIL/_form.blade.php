@@ -593,16 +593,23 @@
 
                                             <td style="text-align: center; vertical-align: middle;">
                                                 <?php
-                                                    $fileSizeInMB = '';
+                                                    $fileSizeInMB = null;
+                                                    $isPdf = false;
+
                                                     if (isset($value['nama_dokumen_pelan'])) {
-                                                        $filePath = storage_path('app/public/uploads/ePIL/'.$folder.'/'.$value['nama_dokumen_pelan']);
+                                                        $filePath = storage_path('app/public/uploads/ePIL/' . $folder . '/' . $value['nama_dokumen_pelan']);
+
                                                         if (file_exists($filePath)) {
                                                             $fileSizeInBytes = filesize($filePath);
-                                                            $fileSizeInMB = ($fileSizeInBytes / 1048576);
+                                                            $fileSizeInMB = $fileSizeInBytes / 1048576;
+
+                                                            // Check if file ends with .pdf (case-insensitive)
+                                                            $isPdf = strtolower(pathinfo($filePath, PATHINFO_EXTENSION)) === 'pdf';
                                                         }
                                                     }
                                                 ?>
-                                                @if($value['nama_dokumen_pelan'] && $fileSizeInMB < 1000)
+                                                
+                                                @if($value['nama_dokumen_pelan'] && $fileSizeInMB < 1000 && $isPdf)
                                                     <div style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                                                         <canvas id="pdf-render-{{ $value['id_dokumen_pelan'] }}" width="200" height="250"></canvas>
                                                     </div>
@@ -615,7 +622,7 @@
 
                                             <td style="text-align: center;">
                                                 <div>
-                                                    @if($value['nama_dokumen_pelan'] && $fileSizeInMB < 1000)
+                                                    @if($value['nama_dokumen_pelan'] && $fileSizeInMB < 1000 && $isPdf)
                                                         {!! 
                                                             Form::button('<i class="fas fa-eye"></i>', 
                                                             [
@@ -699,44 +706,95 @@
                                             //     });
                                             // }
 
+                                            // if (url_{{ $value['id_dokumen_pelan'] }}) {
+                                            //     fetch(url_{{ $value['id_dokumen_pelan'] }}, { method: 'HEAD' }).then(response => {
+                                            //         const sizeInBytes = response.headers.get('Content-Length');
+                                            //         const sizeInMB = sizeInBytes / (1024 * 1024);
+
+                                            //         if (sizeInMB >= 1000) {
+                                            //             // Too big, show message instead of rendering
+                                            //             const canvas = document.getElementById('pdf-render-{{ $value['id_dokumen_pelan'] }}');
+                                            //             if (canvas) {
+                                            //                 canvas.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Dokumen melebihi 1000MB — tidak dapat dipaparkan</div>';
+                                            //             }
+                                            //             return; // Stop here, do not render
+                                            //         }
+
+                                            //         const canvas_{{ $value['id_dokumen_pelan'] }} = document.getElementById('pdf-render-{{ $value['id_dokumen_pelan'] }}');
+                                            //         const context_{{ $value['id_dokumen_pelan'] }} = canvas_{{ $value['id_dokumen_pelan'] }}.getContext('2d');
+
+                                            //         // File size okay, proceed to load and render PDF
+                                            //         pdfjsLib.getDocument(url_{{ $value['id_dokumen_pelan'] }}).promise.then(function(pdf) {
+                                            //         // Fetch the first page
+                                            //         pdf.getPage(1).then(function(page) {
+                                            //             const scale = 0.25;  // Adjust scale as needed
+                                            //             const viewport = page.getViewport({ scale: scale });
+
+                                            //             // Set canvas dimensions
+                                            //             canvas_{{ $value['id_dokumen_pelan'] }}.width = viewport.width;
+                                            //             canvas_{{ $value['id_dokumen_pelan'] }}.height = viewport.height;
+
+                                            //             // Render the page
+                                            //             page.render({
+                                            //                 canvasContext: context_{{ $value['id_dokumen_pelan'] }},
+                                            //                 viewport: viewport
+                                            //             });
+                                            //         });
+                                            //         }).catch(function(error) {
+                                            //             console.error('Error loading PDF:', error);
+                                            //             // If there's an error, we can display a placeholder
+                                            //             const canvas_{{ $value['id_dokumen_pelan'] }} = document.getElementById('pdf-render-{{ $value['id_dokumen_pelan'] }}');
+                                            //             canvas_{{ $value['id_dokumen_pelan'] }}.innerHTML = '<div class="text-center text-muted">Dokumen tidak dapat dipaparkan</div>';
+                                            //         });
+                                            //     }).catch(err => {
+                                            //         console.error('Error fetching file size:', err);
+                                            //     });
+                                            // }
+
                                             if (url_{{ $value['id_dokumen_pelan'] }}) {
-                                                fetch(url_{{ $value['id_dokumen_pelan'] }}, { method: 'HEAD' }).then(response => {
+                                                const fileUrl = url_{{ $value['id_dokumen_pelan'] }};
+                                                
+                                                // Check if it's a PDF by extension (quick check)
+                                                if (!fileUrl.toLowerCase().endsWith('.pdf')) {
+                                                    const canvas = document.getElementById('pdf-render-{{ $value['id_dokumen_pelan'] }}');
+                                                    if (canvas) {
+                                                        canvas.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Fail bukan PDF — tidak dapat dipaparkan</div>';
+                                                    }
+                                                    return;
+                                                }
+
+                                                // Continue with HEAD request to get size
+                                                fetch(fileUrl, { method: 'HEAD' }).then(response => {
                                                     const sizeInBytes = response.headers.get('Content-Length');
                                                     const sizeInMB = sizeInBytes / (1024 * 1024);
 
                                                     if (sizeInMB >= 1000) {
-                                                        // Too big, show message instead of rendering
                                                         const canvas = document.getElementById('pdf-render-{{ $value['id_dokumen_pelan'] }}');
                                                         if (canvas) {
                                                             canvas.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Dokumen melebihi 1000MB — tidak dapat dipaparkan</div>';
                                                         }
-                                                        return; // Stop here, do not render
+                                                        return;
                                                     }
 
+                                                    // Proceed to render PDF
                                                     const canvas_{{ $value['id_dokumen_pelan'] }} = document.getElementById('pdf-render-{{ $value['id_dokumen_pelan'] }}');
                                                     const context_{{ $value['id_dokumen_pelan'] }} = canvas_{{ $value['id_dokumen_pelan'] }}.getContext('2d');
 
-                                                    // File size okay, proceed to load and render PDF
-                                                    pdfjsLib.getDocument(url_{{ $value['id_dokumen_pelan'] }}).promise.then(function(pdf) {
-                                                    // Fetch the first page
-                                                    pdf.getPage(1).then(function(page) {
-                                                        const scale = 0.25;  // Adjust scale as needed
-                                                        const viewport = page.getViewport({ scale: scale });
+                                                    pdfjsLib.getDocument(fileUrl).promise.then(function(pdf) {
+                                                        pdf.getPage(1).then(function(page) {
+                                                            const scale = 0.25;
+                                                            const viewport = page.getViewport({ scale: scale });
 
-                                                        // Set canvas dimensions
-                                                        canvas_{{ $value['id_dokumen_pelan'] }}.width = viewport.width;
-                                                        canvas_{{ $value['id_dokumen_pelan'] }}.height = viewport.height;
+                                                            canvas_{{ $value['id_dokumen_pelan'] }}.width = viewport.width;
+                                                            canvas_{{ $value['id_dokumen_pelan'] }}.height = viewport.height;
 
-                                                        // Render the page
-                                                        page.render({
-                                                            canvasContext: context_{{ $value['id_dokumen_pelan'] }},
-                                                            viewport: viewport
+                                                            page.render({
+                                                                canvasContext: context_{{ $value['id_dokumen_pelan'] }},
+                                                                viewport: viewport
+                                                            });
                                                         });
-                                                    });
                                                     }).catch(function(error) {
                                                         console.error('Error loading PDF:', error);
-                                                        // If there's an error, we can display a placeholder
-                                                        const canvas_{{ $value['id_dokumen_pelan'] }} = document.getElementById('pdf-render-{{ $value['id_dokumen_pelan'] }}');
                                                         canvas_{{ $value['id_dokumen_pelan'] }}.innerHTML = '<div class="text-center text-muted">Dokumen tidak dapat dipaparkan</div>';
                                                     });
                                                 }).catch(err => {
@@ -858,6 +916,7 @@
                     // Chunk file upload for each file input field in the rows
                     document.getElementById('projek_container').addEventListener('change', function (event) {
                         if (event.target.type === 'file' && event.target.id.startsWith('fail_')) {
+                            document.querySelector('button[type="submit"]').disabled = true;
                             const fileInput = event.target;
                             const rowId = fileInput.id.split('_')[1];
                             const file = fileInput.files[0];
@@ -910,6 +969,7 @@
 
                                         // Continue uploading next chunk
                                         if (currentChunk < totalChunks) {
+                                            document.querySelector('button[type="submit"]').disabled = true;
                                             uploadNextChunk();
                                         } else {
                                             setTimeout(function() {
@@ -930,6 +990,7 @@
                                     },
                                     complete: function(xhr, status) {
                                         // console.log("Request complete with status: " + status);
+                                        document.querySelector('button[type="submit"]').disabled = false;
                                     }
                                 });
                             }
@@ -942,6 +1003,7 @@
                     @if(isset($ePIL->dokumen))
                     document.getElementById('projek_container2').addEventListener('change', function (event) {
                         if (event.target.type === 'file' && event.target.id.startsWith('fail_')) {
+                            document.querySelector('button[type="submit"]').disabled = true;
                             const fileInput = event.target;
                             const rowId = fileInput.id.split('_')[1];
                             const file = fileInput.files[0];
@@ -994,6 +1056,7 @@
 
                                         // Continue uploading next chunk
                                         if (currentChunk < totalChunks) {
+                                            document.querySelector('button[type="submit"]').disabled = true;
                                             uploadNextChunk();
                                         } else {
                                             setTimeout(function() {
@@ -1014,6 +1077,7 @@
                                     },
                                     complete: function(xhr, status) {
                                         // console.log("Request complete with status: " + status);
+                                        document.querySelector('button[type="submit"]').disabled = false;
                                     }
                                 });
                             }

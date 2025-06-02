@@ -66,17 +66,23 @@
 
                         <div class="col-lg-6" style="text-align: center;">
                             @php
-                                $fileSizeInMB = '';
+                                $fileSizeInMB = null;
+                                $isPdf = false;
+
                                 if (isset($dokumen->nama_dokumen_pelan)) {
                                     $filePath = storage_path('app/public/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan);
+
                                     if (file_exists($filePath)) {
                                         $fileSizeInBytes = filesize($filePath);
-                                        $fileSizeInMB = ($fileSizeInBytes / 1048576);
+                                        $fileSizeInMB = $fileSizeInBytes / 1048576;
+
+                                        // Check if file ends with .pdf (case-insensitive)
+                                        $isPdf = strtolower(pathinfo($filePath, PATHINFO_EXTENSION)) === 'pdf';
                                     }
                                 }
-                            // dd($fileSizeInMB);
+                                // dd($fileSizeInMB);
                             @endphp
-                            @if($dokumen->nama_dokumen_pelan && $fileSizeInMB < 1000)
+                            @if($dokumen->nama_dokumen_pelan && $fileSizeInMB < 1000 && $isPdf)
                                 <object data="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}" type="application/pdf" width="100%" height="600px">
                                     <p>Tiada paparan dokumen.
                                         <a href="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}">Muat turun dokumen</a>.
@@ -215,6 +221,7 @@
                     $(document).ready(function() {
                         const timestamp = new Date().getTime();
                         $('#nama_dokumen_pelan').change(function() {
+                            document.querySelector('button[type="submit"]').disabled = true;
                             let destinationFolder = `ePIL/`+`{{$dokumen->folder}}`+`/`;
                             let deleteThis = $('#large_file_name_old').val();
                             // alert(destinationFolder);
@@ -261,6 +268,7 @@
 
                                         // Continue uploading next chunk
                                         if (currentChunk < totalChunks) {
+                                            document.querySelector('button[type="submit"]').disabled = true;
                                             uploadNextChunk();
                                         } else {
                                             setTimeout(function() {
@@ -278,6 +286,7 @@
                                     complete: function(xhr, status) {
                                         // Optionally log the completion of the request
                                         // console.log("Request complete with status: " + status);
+                                        document.querySelector('button[type="submit"]').disabled = false;
                                     }
                                 });
                             }

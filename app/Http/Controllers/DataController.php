@@ -53,24 +53,47 @@ class DataController extends Controller
         //     'large_file' => 'required|file|mimes:jpeg,jpg,png,pdf,zip,mp4,kml,kmz,cad,autocad',
         // ]);
         if ($request->input('chunk') == 0) {
-            $mime = $request->file('large_file')->getMimeType();
+            // $mime = $request->file('large_file')->getMimeType();
+            // $allowedMimes = [
+            //     'image/jpeg',
+            //     'image/png',
+            //     'application/pdf',
+            //     'application/zip',
+            //     'application/vnd.rar',
+            //     'video/mp4',
+            //     'application/vnd.google-earth.kml+xml',
+            //     'application/vnd.google-earth.kmz',
+            //     'application/acad',
+            //     'application/x-autocad',
+            //     'application/x-dwg',
+            //     'image/vnd.dwg',
+            //     'application/octet-stream',
+            // ];
+        
+            // if (!in_array($mime, $allowedMimes)) {
+            //     return response()->json(['error' => 'Invalid file type.'], 422);
+            // }
+
             $allowedMimes = [
-                'image/jpeg',
-                'image/png',
-                'application/pdf',
-                'application/zip',
+                'image/jpeg', 'image/png', 'application/pdf',
+                'application/zip', 'application/x-zip-compressed', 'multipart/x-zip',
+                'application/vnd.rar', 'application/x-rar-compressed', 'application/x-rar',
                 'video/mp4',
-                'application/vnd.google-earth.kml+xml',
-                'application/vnd.google-earth.kmz',
-                'application/acad',
-                'application/x-autocad',
-                'application/x-dwg',
-                'image/vnd.dwg',
+                'application/vnd.google-earth.kml+xml', 'application/vnd.google-earth.kmz',
+                'application/acad', 'application/x-autocad', 'application/x-dwg', 'image/vnd.dwg',
                 'application/octet-stream',
             ];
-        
-            if (!in_array($mime, $allowedMimes)) {
-                return response()->json(['error' => $request->input('chunk')], 422);
+
+            $allowedExtensions = [
+                'pdf', 'jpg', 'jpeg', 'png', 'zip', 'rar', 'mp4', 'kml', 'kmz', 'dwg', 'dxf'
+            ];
+
+            $file = $request->file('large_file');
+            $extension = strtolower($file->getClientOriginalExtension());
+            $mime = $file->getMimeType();
+
+            if (!in_array($extension, $allowedExtensions) || !in_array($mime, $allowedMimes)) {
+                return response()->json(['error' => 'Invalid file type or extension.'], 422);
             }
         }
         

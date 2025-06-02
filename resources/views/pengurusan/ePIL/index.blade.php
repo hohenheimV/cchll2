@@ -62,17 +62,22 @@
                                             <td style="text-align: center;">
                                                 <?php 
                                                     $folder = str_replace(' ', '_', $pelan->id_pelan.' '.$pelan->nama_pelan); 
-                                                    $fileSizeInMB = '';
-                                                    if(isset($pelan->nama_dokumen_pelan)){
+                                                    $fileSizeInMB = null;
+                                                    $isPdf = false;
+
+                                                    if (isset($pelan->nama_dokumen_pelan)) {
                                                         $filePath = storage_path('app/public/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan);
+
                                                         if (file_exists($filePath)) {
                                                             $fileSizeInBytes = filesize($filePath);
-                                                            // $fileSizeInMB = number_format($fileSizeInBytes / 1048576, 2);
-                                                            $fileSizeInMB = ($fileSizeInBytes / 1048576);
+                                                            $fileSizeInMB = $fileSizeInBytes / 1048576;
+
+                                                            // Check if file ends with .pdf (case-insensitive)
+                                                            $isPdf = strtolower(pathinfo($filePath, PATHINFO_EXTENSION)) === 'pdf';
                                                         }
                                                     }
                                                 ?>
-                                                @if ($pelan->nama_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan)) && $fileSizeInMB < 1000)
+                                                @if ($pelan->nama_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan)) && $fileSizeInMB < 1000 && $isPdf)
                                                     <a href="{{ asset($pelan->nama_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan : 'storage/uploads/no-photos.png' ) }}" 
                                                         target="_blank">
                                                         <div id="pdf-viewer-{{$pelan->id_dokumen_pelan ?? $pelan->id_pelan}}" 
@@ -224,6 +229,17 @@
             const url = pelan.nama_dokumen_pelan ?
                 `/storage/uploads/ePIL/${folder}/${pelan.nama_dokumen_pelan}` :
                 '/img/no-photos.png';
+
+            if (!url.toLowerCase().endsWith('.pdf')) {
+                const viewerElement = document.getElementById('pdf-viewer-' + pelan.id_pelan);
+                if (viewerElement) {
+                    viewerElement.innerHTML = `<div class="text-center text-muted" style="padding-top: 80px;">
+                        Fail bukan PDF — tidak dapat dipaparkan
+                    </div>`;
+                }
+                return;
+            }
+
             // Check file size first
             fetch(url, { method: 'HEAD' }).then(response => {
                 const sizeInBytes = response.headers.get('Content-Length');

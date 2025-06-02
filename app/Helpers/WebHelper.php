@@ -681,7 +681,7 @@ if (!function_exists('in_arrayi')) {
                         if (isset($$Xgambar_input_modal) || isset($$XGIM)) {
                             $url = $$Xgambar_input_modal ? asset('storage/uploads/ePALM/' . $$Xgambar_input_modal) : asset('storage/uploads/no-photos.png');
                         }else{
-                            // $url = asset('storage/uploads/no-photos.png');
+                            $url = asset('storage/img/bg-pattern-leaves.png');
                         }
                         // $html .= '<img src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" class="card-img-top embed-responsive-item" alt="' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '">';
                     }

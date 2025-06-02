@@ -10,6 +10,21 @@
                 <div class="card-header p-0 m-0">
                     <h5 class="card-title p-1 m-1 font-weight-bold">@yield('title')</h5>
                 </div>
+                <style>
+                    .inertClass {
+                        pointer-events: none;
+                    }
+
+                    .inertClass input,
+                    .inertClass span,
+                    .inertClass textarea,
+                    .inertClass select {
+                        background-color: rgb(215, 215, 215);
+                        color: rgb(65, 60, 60);
+                        cursor: not-allowed;
+                        pointer-events: none;
+                    }
+                </style>
 
                 {!! Form::model($entitiLandskapUnik, ['route' => ['pengurusan.entiti-landskap-unik.update', $entitiLandskapUnik], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
                 <div class="card-body table-hardscape form-hardscape text-sm">

@@ -21,7 +21,26 @@
                     @endif
                     <div class="card-tools">
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                            {{ Form::open(['class'=>'form-inline','method' => 'get']) }}
+                            {{-- {{ Form::open(['class'=>'form-inline','method' => 'get']) }}
+                            <div class="input-group mr-2">
+                                <select id="negeri" name="negeri" style="
+                                    height: calc(1.8125rem + 2px) !important;
+                                    padding: 0.25rem 0.5rem !important;
+                                    font-size: 0.875rem !important;
+                                    line-height: 1.5 !important;
+                                    border-radius: 0.2rem !important;
+                                    border: 1px solid #ced4da !important;
+                                ">
+                                    <option value="">Papar Semua Negeri</option>
+                                    @foreach(App\Model\Negeri::orderBy('nama_negeri')->get() as $n)
+                                        <option value="{{ $n->kod_negeri }}" {{ request('negeri') == $n->kod_negeri ? 'selected' : '' }}>
+                                            {{ ucwords(strtolower($n->nama_negeri)) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <select name="negeriX" style="display: none;">
+                                </select>
+                            </div>
                                 <div class="input-group mr-2">
                                     {{ Form::search('keyword',request('keyword'),['aria-label'=>'Search','placeholder'=>'Carian Pantas','class' => 'form-control form-control-sm '.Html::isInvalid($errors,'keyword')]) }}
                                     <div class="input-group-append">
@@ -32,7 +51,82 @@
                                         'class'=>'btn btn-secondary btn-sm']) !!}
                                     </div>
                                 </div>
-                            {{ Form::close() }}
+                            {{ Form::close() }} --}}
+                             <div class="btn-group" role="group" aria-label="First group">
+                                {{ Form::open(['class'=>'form-inline', 'method' => 'get']) }}
+
+                                <style>
+                                    .gyrodrop{
+                                        height: calc(1.8125rem + 2px) !important;
+                                        padding: 0.25rem 0.5rem !important;
+                                        font-size: 0.875rem !important;
+                                        line-height: 1.5 !important;
+                                        border-radius: 0.2rem !important;
+                                        border: 1px solid #ced4da !important;
+                                    }
+                                </style>
+                                    {{-- Negeri Dropdown --}}
+                                    <div class="input-group mr-2">
+                                        <select id="negeri" name="negeri" class="gyrodrop">
+                                            <option value="">Papar Semua Negeri</option>
+                                            @foreach(App\Model\Negeri::orderBy('nama_negeri')->get() as $negeri)
+                                                <option value="{{ $negeri->kod_negeri }}" {{ request('negeri') == $negeri->kod_negeri ? 'selected' : '' }}>
+                                                    {{ ucwords(strtolower($negeri->nama_negeri)) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="input-group" style="display: none;">
+                                        <select id="negeri" name="negeriX">
+                                        </select>
+                                    </div>
+
+                                    @php
+                                        $options = [
+                                            '' => 'Papar Semua Kategori',
+                                            'Taman Awam' => 'Taman Awam',
+                                            'Taman Botani' => 'Taman Botani',
+                                            'Landskap Perbandaran' => 'Landskap Perbandaran',
+                                            'Persekitaran Kehidupan' => 'Persekitaran Kehidupan',
+                                            'Taman Persekutuan' => 'Taman Persekutuan',
+                                            'Taman Wilayah' => 'Taman Wilayah',
+                                            'Taman Bandaran' => 'Taman Bandaran',
+                                            'Taman Tempatan' => 'Taman Tempatan',
+                                            'Padang Kejiranan' => 'Padang Kejiranan',
+                                            'Padang Permainan' => 'Padang Permainan',
+                                            'Lot Permainan' => 'Lot Permainan',
+                                        ];
+                                    @endphp
+
+                                    <div class="input-group mr-2">
+                                        {!! Form::select('kategori', $options, request('kategori'), ['class' => 'gyrodrop', 'id' => 'kategori']) !!}
+                                    </div>
+
+                                    <div class="input-group" style="display: none;">
+                                        <select id="kategori" name="kategoriX">
+                                        </select>
+                                    </div>
+
+                                    {{-- Keyword Search --}}
+                                    <div class="input-group mr-2">
+                                        {{ Form::search('keyword', request('keyword'), [
+                                            'aria-label' => 'Search',
+                                            'placeholder' => 'Carian Pantas',
+                                            'class' => 'form-control form-control-sm ' . Html::isInvalid($errors, 'keyword')
+                                        ]) }}
+                                        <div class="input-group-append">
+                                            {!! Form::button('<i class="fas fa-search"></i>', [
+                                                'class' => 'btn btn-default btn-sm',
+                                                'type' => 'submit'
+                                            ]) !!}
+                                            {!! Form::button('Reset', [
+                                                'onclick'=>"window.location='".route('pengurusan.ePALM.index')."'", 'class'=>'btn btn-secondary btn-sm'
+                                            ]) !!}
+                                        </div>
+                                    </div>
+                                {{ Form::close() }}
+                            </div>
                             <div class="btn-group" role="group" aria-label="First group">
                                 {!! Form::button('<i class="fas fa-plus"></i> Daftar', 
                                     ['onclick'=>"window.location='".route('pengurusan.ePALM.create')."'",
@@ -44,15 +138,25 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                     <div class="table-responsive">
-                        {{-- <div class="dt-buttons">
-                            <a class="dt-button buttons-csv buttons-html5" href="{{ route('pengurusan.ePALM.export', ['format' => 'csv']) }}">
+                        <div class="dt-buttons">
+                            <a class="dt-button buttons-csv buttons-html5" href="{{ route('pengurusan.ePALM.export', [
+                                'format' => 'csv',
+                                'negeri' => request('negeri'),
+                                'keyword' => request('keyword'),
+                                'kategori' => request('kategori')
+                            ]) }}">
                                 <span>CSV</span>
                             </a>
-                            
-                            <a class="dt-button buttons-excel buttons-html5" href="{{ route('pengurusan.ePALM.export', ['format' => 'excel']) }}">
+
+                            <a class="dt-button buttons-excel buttons-html5" href="{{ route('pengurusan.ePALM.export', [
+                                'format' => 'excel',
+                                'negeri' => request('negeri'),
+                                'keyword' => request('keyword'),
+                                'kategori' => request('kategori')
+                            ]) }}">
                                 <span>Excel</span>
                             </a>
-                        </div> --}}
+                        </div>
                         <table id="example" class="responsive table table-bordered table-hover table-striped mb-0">
                             <thead class="thead-dark">
                                 <tr>
@@ -112,7 +216,7 @@
                                                     {!! 
                                                         Form::button('<i class="fas fa-pencil-alt"></i>', ['onclick'=>"window.location='".route('pengurusan.ePALM.edit',$taman)."'", 'class'=>'btn bg-warning btn-sm', Html::tooltip('Kemaskini Taman')]); 
                                                     !!}
-                                                    @if($taman->id_permohonan == null && ($taman->status == 'draft'))
+                                                    @if($taman->id_permohonan == null || (Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem') && $taman->status == 'draft'))
                                                     {!! 
                                                         Form::button('<i class="fas fa-trash"></i>', 
                                                         [

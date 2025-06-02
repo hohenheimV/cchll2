@@ -114,7 +114,7 @@ class RegisterController extends Controller
                 $existingPbt->update([
                     // 'name' => $data['namaYDP'],
                     // 'email' => $data['emailYDP'],
-                    'pbt_name' => $data['pbt'],
+                    // 'pbt_name' => $data['pbt'],
                     'address1' => $data['address1'],
                     'address2' => $data['address2'],
                     'postcode' => $data['postcode'],

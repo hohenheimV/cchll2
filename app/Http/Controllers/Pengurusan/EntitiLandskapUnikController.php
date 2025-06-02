@@ -45,13 +45,13 @@ class EntitiLandskapUnikController extends Controller
         $newRecord = EntitiLandskapUnik::create($requestData);
 
         $filenames = [];
-        for ($i = 1; $i <= 4; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             $inputField = 'gambar_input_modal_' . $i;
             if ($request->hasFile($inputField)) {
                 $file = $request->file($inputField);
                 
                 if ($file->isValid()) {
-                    $folderName = str_replace(' ', '_', $request->input('nama_entiti'));
+                    $folderName = str_replace(' ', '_', $newRecord->id." ".$request->input('nama_entiti'));
                     $filename = time() . '_' . $i . '.' . $file->extension();
                     $file->storeAs('public/uploads/entiti_landskap/' . $folderName, $filename);
                     $filenames[$inputField] = $filename;
@@ -87,15 +87,16 @@ class EntitiLandskapUnikController extends Controller
 
     public function update(Request $request, EntitiLandskapUnik $entitiLandskapUnik)
     {
+        // dd($request->all());
         $filenames = [];
         $gambar = json_decode($entitiLandskapUnik->gambar, true) ?? '';
-        for ($i = 1; $i <= 4; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             $inputField = 'gambar_input_modal_' . $i;
             if ($request->hasFile($inputField)) {
                 $file = $request->file($inputField);
                 
                 if ($file->isValid()) {
-                    $folderName = str_replace(' ', '_', $entitiLandskapUnik->id.' '.$request->input('nama_entiti'));
+                    $folderName = str_replace(' ', '_', $entitiLandskapUnik->id.' '.$entitiLandskapUnik->nama_entiti);
                     $filename = time() . '_' . $i . '.' . $file->extension();
                     $file->storeAs('public/uploads/entiti_landskap/' . $folderName, $filename);
                     $filenames[$inputField] = $filename;
@@ -110,7 +111,7 @@ class EntitiLandskapUnikController extends Controller
         foreach ($request->input('delete_images', []) as $deletedField) {
             unset($filenames[$deletedField]);
         }
-
+        // dd($filenames);
         $request->merge(['gambar' => json_encode($filenames)]);
         $requestData = $request->all();
         $pbt = [
@@ -118,8 +119,24 @@ class EntitiLandskapUnikController extends Controller
             'pbt' => $requestData['pbt'],
         ];
         $requestData['pbt'] = json_encode($pbt);
+
+        $oldNamaEntiti = str_replace(' ', '_', $entitiLandskapUnik->id.' '.$entitiLandskapUnik->nama_entiti);
+        $newNamaEntiti = str_replace(' ', '_', $entitiLandskapUnik->id.' '.$requestData['nama_entiti']);
+
+        if ($newNamaEntiti && $oldNamaEntiti !== $newNamaEntiti) {
+            $oldFolder = storage_path("app/public/uploads/entiti_landskap/{$oldNamaEntiti}");
+            $newFolder = storage_path("app/public/uploads/entiti_landskap/{$newNamaEntiti}");
+
+            if (file_exists($oldFolder)) {
+                // Rename folder
+                rename($oldFolder, $newFolder);
+            }else{
+                unset($requestData['nama_entiti']);
+            }
+        }
         // dd($requestData);
         $updateEntiti = $entitiLandskapUnik->update($requestData);
+        // dd($entitiLandskapUnik);
         if($updateEntiti){
             return redirect()->route('pengurusan.entiti-landskap-unik.edit', [$entitiLandskapUnik])->with('successMessage', 'Maklumat Entiti Landskap telah berjaya disimpan');
         }else{

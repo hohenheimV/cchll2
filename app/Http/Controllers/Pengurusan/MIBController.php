@@ -91,11 +91,18 @@ class MIBController extends Controller
         if($user->hasRole('Pihak Berkuasa Tempatan')){
             $email = $user->bahagian_jln;
             $pbt = MaklumatPenggunaPbt::where('id', '=', $email)->first();
-            $totalCount = MIB::where('pbt', $pbt->pbt_name)->count();
-            $MIB = MIB::where('pbt', $pbt->pbt_name)->latest()->paginate($totalCount);
+            $totalCount = MIB::where('pbt', 'ILIKE', $pbt->pbt_name)->orderBy('id', 'DESC')/* where('pbt', $pbt->pbt_name) */->count();
+            $MIB = MIB::where('pbt', 'ILIKE', $pbt->pbt_name)
+                    // ->orderBy('id', 'DESC')
+                    ->orderByRaw("CAST(SPLIT_PART(no_siri, '/', 2) AS INTEGER) ASC")
+                    ->orderByRaw("CAST(SPLIT_PART(no_siri, '/', 3) AS INTEGER) ASC")
+                    /* where('pbt', $pbt->pbt_name)->latest() */->paginate($totalCount);
         }else{
             $totalCount = MIB::count();
-            $MIB = MIB::latest()->paginate($totalCount);
+            $MIB = MIB::orderByRaw("CAST(SPLIT_PART(no_siri, '/', 2) AS INTEGER) ASC")
+                    ->orderByRaw("CAST(SPLIT_PART(no_siri, '/', 3) AS INTEGER) ASC")
+                    /* ->latest() */
+                    ->paginate($totalCount);
         }
         // dd($MIB);
         return view('pengurusan.MIB.index', ['MIB' => $MIB]);
@@ -469,6 +476,23 @@ class MIBController extends Controller
         // }
         // $data['notes'] = null;
 
+        $oldNamaMIB = str_replace(' ', '_', $MIB->id.' '.$MIB->taman);
+        $newNamaMIB = str_replace(' ', '_', $MIB->id.' '.$data['taman']);
+
+        if ($newNamaMIB && $oldNamaMIB !== $newNamaMIB) {
+            $oldFolder = storage_path("app/public/uploads/MIB/{$oldNamaMIB}");
+            $newFolder = storage_path("app/public/uploads/MIB/{$newNamaMIB}");
+
+            if (file_exists($oldFolder)) {
+                rename($oldFolder, $newFolder);
+                MIB_laporan::where('id_rakan', $MIB->id)->update([
+                    'taman' => $data['taman']
+                ]);
+            }else{
+                unset($data['taman']);
+            }
+        }
+        // dd($data);
         $MIB->update($data);
         // dd($MIB);
         if (strtolower($request->status) == 'diperakui') {

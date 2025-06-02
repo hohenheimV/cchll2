@@ -180,8 +180,10 @@ Route::get('/api/pbt/{negeriId}', [RegisterController::class, 'getPBT']);
 Route::get('/data', [DataController::class, 'processData']);
 Route::get('/data/negeri', [DataController::class, 'getNegeri']);
 Route::get('/data/negeri/{shortName}', [DataController::class, 'getNegeri']);
+Route::get('/data/pbt', [DataController::class, 'getAllPbtNames']);
 Route::get('/data/pbt/{negeriId}', [DataController::class, 'getPBT']);
 Route::get('/data/pbt/{negeriId}/{pbtId}', [DataController::class, 'getPBT']);
+Route::get('/data/pbt_search/{term}', [DataController::class, 'findFullPbtName']);
 Route::get('/data/postcode/{postcode}', [DataController::class, 'getPostcode']);
 // Route::post('/upload-chunk', [DataController::class, 'uploadChunk'])->name('upload.chunk');
 Route::post('/upload-chunk', [DataController::class, 'uploadChunk']);
@@ -219,6 +221,11 @@ Route::get('/read', function () {
 Route::get('/pano', function () {
     return view('website.pano');
 })->name('pano');
+
+Route::get('/qr', function () {
+    return view('website.qr');
+})->name('qr');
+
 Route::get('/pano/{folder}/{image}', function ($folder, $image) {
     // dd($folder);
     $imageExist = storage_path("app/public/uploads/ePALM/{$folder}/{$image}"); 
@@ -545,50 +552,100 @@ Route::name('website.')
             return view('website.eLAD', ['eLAD' => $eLAD, 'keyword' => ucwords($keyword)]);
         })->name('eLAD');
 
-        Route::get('/penggiat-industri/{keyword}', function ($keyword) {
-            switch ($keyword) {
-                case 'kontraktor':
-                    $type = 'Kontraktor';
-                    $data = MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->count());
-                    break;
+        // Route::get('/penggiat-industri/{keyword}', function ($keyword) {
+        //     switch ($keyword) {
+        //         case 'kontraktor':
+        //             $type = 'Kontraktor';
+        //             $data = MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->latest()->paginate(15);
+        //             break;
     
-                case 'perunding':
-                    $type = 'Perunding';
-                    $data = MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->count());
-                    break;
+        //         case 'perunding':
+        //             $type = 'Perunding';
+        //             $data = MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->latest()->paginate(15);
+        //             break;
     
-                case 'pembekal':
-                    $type = 'Pembekal';
-                    $data = MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->count());
-                    break;
-                case 'antarabangsa':
-                    $type = 'Pertubuhan Antarabangsa';
-                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
-                    break;
+        //         case 'pembekal':
+        //             $type = 'Pembekal';
+        //             $data = MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->latest()->paginate(15);
+        //             break;
+        //         case 'antarabangsa':
+        //             $type = 'Pertubuhan Antarabangsa';
+        //             $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+        //             break;
     
-                case 'ngo':
-                    $type = 'NGO / Badan Ikhtisas';
-                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
-                    break;
+        //         case 'ngo':
+        //             $type = 'NGO / Badan Ikhtisas';
+        //             $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+        //             break;
     
-                case 'pendidikan':
-                    $type = 'Institusi Pendidikan';
-                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
-                    break;
+        //         case 'pendidikan':
+        //             $type = 'Institusi Pendidikan';
+        //             $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
+        //             break;
     
-                default:
-                    return abort(404, 'Not Found');
+        //         default:
+        //             return abort(404, 'Not Found');
+        //     }
+        //     foreach ($data as $item) {
+        //         $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->state)->orderBy('nama_negeri', 'asc')->first();
+        //         if($negeris){
+        //             $item->state = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 
+        //         }else{
+        //             $item->state = 'Tiada Maklumat';
+        //         }
+        //     }
+        //     return view('website.eLIND', ['eLIND' => $data, 'keyword' => ($type)]);
+        // })->name('website.eLIND');
+
+        Route::get('/penggiat-industri/{keyword}', function (Request $request, $keyword) {
+            $types = [
+                'kontraktor'    => 'Kontraktor',
+                'perunding'     => 'Perunding',
+                'pembekal'      => 'Pembekal',
+                'antarabangsa'  => 'Pertubuhan Antarabangsa',
+                'ngo'           => 'NGO / Badan Ikhtisas',
+                'pendidikan'    => 'Institusi Pendidikan',
+            ];
+
+            if (!array_key_exists($keyword, $types)) {
+                abort(404, 'Not Found');
             }
+
+            $type = $types[$keyword];
+            $query = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest();
+
+            // Optional negeri filter
+            $negeriKod = $request->query('negeri');
+            if ($negeriKod) {
+                $query->where('state', $negeriKod);
+            }
+
+            // Only approved for some types
+            if (in_array($keyword, ['kontraktor', 'perunding', 'pembekal'])) {
+                $query->where('status', 'approved');
+            }
+            $data = $query->paginate(15)->appends(request()->query());
+
+            if ($data->currentPage() > $data->lastPage()) {
+                return redirect()->route('website.eLIND', [
+                    'keyword' => $keyword,
+                    'page' => $data->lastPage(),
+                    'negeri' => $negeriKod
+                ]);
+            }
+
+            // Replace `state` code with actual name
             foreach ($data as $item) {
-                $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->state)->orderBy('nama_negeri', 'asc')->first();
-                if($negeris){
-                    $item->state = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 
-                }else{
-                    $item->state = 'Tiada Maklumat';
-                }
+                $negeri = Negeri::select('nama_negeri')->where('kod_negeri', $item->state)->first();
+                $item->state = $negeri ? ucwords(strtolower($negeri->nama_negeri)) : 'Tiada Maklumat';
             }
-            return view('website.eLIND', ['eLIND' => $data, 'keyword' => ($type)]);
-        })->name('website.eLIND');
+
+            return view('website.eLIND', [
+                'eLIND' => $data,
+                'keyword' => $type
+            ]);
+        })->name('eLIND');
+
 
         Route::get('/entiti-landskap/{keyword?}', function ($keyword = null) {
             if($keyword){
@@ -892,6 +949,7 @@ Route::middleware(['auth'])
         /**
          * Route ePALMController
          */
+        Route::get('/ePALM/export', [ePALMController::class, 'export'])->name('ePALM.export');
         Route::resource('ePALM', 'ePALMController');
         // Route::get('/ePALM/fetchComponents', [ePALMController::class, 'fetchComponents'])->name('pengurusan.ePALM.fetchComponentsManual');
 
@@ -949,6 +1007,7 @@ Route::middleware(['auth'])
         Route::get('eLIND/{type}/{id}/edit', 'eLINDController@edit')->name('eLIND.edit');
         Route::put('eLIND/{type}/{id}', 'eLINDController@update')->name('eLIND.update');
         Route::delete('eLIND/{type}/{id}', 'eLINDController@destroy')->name('eLIND.destroy');
+        Route::get('/eLIND/{type}/export', [eLINDController::class, 'export'])->name('eLIND.export');
         Route::get('import-users-form', 'eLINDController@importForm')->name('eLIND.importForm');
         Route::post('import-users', 'eLINDController@import')->name('eLIND.import');
 

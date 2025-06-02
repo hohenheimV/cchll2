@@ -52,7 +52,7 @@
                     <h4>Butiran Maklumat {{ $capitalizedSegment ?? '' }}</h4>
                 </div>
             </div>
-            <div class="form-group required inertClass">
+            <div class="form-group required ">
                 <label for="name" class="col-md-4 control-label">Nama {{ $capitalizedSegment ?? '' }}</label>
                 <div class="col-md-12">
                     <input name="name" class="form-control" maxlength="50" type="text" id="name" value="{{ isset($eLIND->name) ? $eLIND->name : '' }}">
@@ -420,6 +420,13 @@
                                     6 => 'E',
                                     7 => 'EX',
                                     8 => 'F',
+                                    9 => 'G1',
+                                    10 => 'G2',
+                                    11 => 'G3',
+                                    12 => 'G4',
+                                    13 => 'G5',
+                                    14 => 'G6',
+                                    15 => 'G7',
                                     0 => 'TIADA MAKLUMAT'
                                 ], isset($eLIND->kelas_kontraktor) ? $eLIND->kelas_kontraktor : '0', ['class' => 'form-control', 'id' => 'kelas_kontraktor']) !!}
                             </div>

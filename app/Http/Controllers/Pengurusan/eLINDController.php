@@ -18,9 +18,12 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use App\Model\ePALM;
 use App\Model\ePALM_draf;
 use App\Model\Negeri;
+use App\Model\MIB;
 use App\Model\Daerah;
 use App\Model\Parlimen;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\eLINDExport;
 
 class eLINDController extends Controller
 {
@@ -44,159 +47,234 @@ class eLINDController extends Controller
      */
     
 
+    // public function index($type, Request $request)
+    // {
+    //     $keyword = null;
+    //     if ($request->filled('keyword')) {
+    //         $request->validate([
+    //             'keyword' => 'required|min:3|max:255|regex:/(^[A-Za-z0-9\/\- ]+$)+/',
+    //         ]);
+    //         $keyword = strtolower(trim($request->keyword));
+    //     }
+    //     // dd($keyword);
+    //     if(auth()->user()->hasRole('Penggiat Industri')){
+    //         $user = User::find(auth()->id());
+    //         $id_elind = $user->bahagian_jln;
+    //         // $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Kontraktor')->first();
+    //         // dd($data->jenis_industri);
+    //         switch ($type) {
+    //             case 'kontraktor':
+    //                 $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Kontraktor')->latest()->paginate(15);
+    //                 $view = 'pengurusan.eLIND.index';
+    //                 // dd($data);
+    //                 break;
+
+    //             case 'perunding':
+    //                 $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Perunding')->latest()->paginate(15);
+    //                 $view = 'pengurusan.eLIND.index';
+    //                 break;
+
+    //             case 'pembekal':
+    //                 $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Pembekal')->latest()->paginate(15);
+    //                 $view = 'pengurusan.eLIND.index';
+    //                 break;
+    //             case 'antarabangsa':
+    //                 $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Pertubuhan Antarabangsa')->latest()->paginate(15);
+    //                 $view = 'pengurusan.eLIND.index';
+    //                 break;
+
+    //             case 'ngo':
+    //                 $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'NGO / Badan Ikhtisas')->latest()->paginate(15);
+    //                 $view = 'pengurusan.eLIND.index';
+    //                 break;
+
+    //             case 'pendidikan':
+    //                 $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Institusi Pendidikan')->latest()->paginate(15);
+    //                 $view = 'pengurusan.eLIND.index';
+    //                 break;
+
+    //             default:
+    //                 dd($type);
+    //                 abort(404); 
+    //         }
+    //         if($data->isEmpty()){
+    //             dump("Akaun Industri anda tidak wujud. Sila hubungi Pentadbir eLANDSKAP");
+    //             Auth::logout();
+    //             return redirect()->route('register');
+    //         }else{
+    //             $dataDraf = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id_elind)->first();
+    //             $data[0]->status = $dataDraf->status;
+    //         }
+    //         // dd($data[0]);
+    //         // dd($dataDraf);
+    //         // dd($data[0]->status);
+    //     }else{
+    //         switch ($type) {
+    //             case 'kontraktor':
+    //                 $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Kontraktor')
+    //                         ->when($request->filled('keyword'), function ($query) use ($keyword) {
+    //                             $query->where(function ($q) use ($keyword) {
+    //                                 $q->whereRaw('LOWER(name) LIKE ?', ["%{$keyword}%"])
+    //                                 ->orWhereRaw('LOWER(no_ssm) LIKE ?', ["%{$keyword}%"])
+    //                                 // ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
+    //                                 ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
+    //                             });
+    //                         })
+    //                         ->orderBy('state', 'ASC')->orderBy('name', 'ASC')->paginate(15);
+    //                 $view = 'pengurusan.eLIND.index';
+    //                 break;
+
+    //             case 'perunding':
+    //                 $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Perunding')
+    //                         ->when($request->filled('keyword'), function ($query) use ($keyword) {
+    //                             $query->where(function ($q) use ($keyword) {
+    //                                 $q->whereRaw('LOWER(name) LIKE ?', ["%{$keyword}%"])
+    //                                 ->orWhereRaw('LOWER(no_ssm) LIKE ?', ["%{$keyword}%"])
+    //                                 // ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
+    //                                 ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
+    //                             });
+    //                         })
+    //                         ->orderBy('state', 'ASC')->orderBy('name', 'ASC')->paginate(15);
+    //                 $view = 'pengurusan.eLIND.index';
+    //                 break;
+
+    //             case 'pembekal':
+    //                 $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Pembekal')
+    //                         ->when($request->filled('keyword'), function ($query) use ($keyword) {
+    //                             $query->where(function ($q) use ($keyword) {
+    //                                 $q->whereRaw('LOWER(name) LIKE ?', ["%{$keyword}%"])
+    //                                 ->orWhereRaw('LOWER(no_ssm) LIKE ?', ["%{$keyword}%"])
+    //                                 // ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
+    //                                 ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
+    //                             });
+    //                         })
+    //                         ->orderBy('state', 'ASC')->orderBy('name', 'ASC')->paginate(15);
+    //                 $view = 'pengurusan.eLIND.index';
+    //                 break;
+    //             case 'antarabangsa':
+    //                 $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Pertubuhan Antarabangsa')
+    //                         ->when($request->filled('keyword'), function ($query) use ($keyword) {
+    //                             $query->where(function ($q) use ($keyword) {
+    //                                 $q->whereRaw('LOWER(name) LIKE ?', ["%{$keyword}%"])
+    //                                 ->orWhereRaw('LOWER(no_ssm) LIKE ?', ["%{$keyword}%"])
+    //                                 // ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
+    //                                 ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
+    //                             });
+    //                         })
+    //                         ->orderBy('state', 'ASC')->orderBy('name', 'ASC')->paginate(15);
+    //                 $view = 'pengurusan.eLIND.index';
+    //                 break;
+
+    //             case 'ngo':
+    //                 $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'NGO / Badan Ikhtisas')
+    //                         ->when($request->filled('keyword'), function ($query) use ($keyword) {
+    //                             $query->where(function ($q) use ($keyword) {
+    //                                 $q->whereRaw('LOWER(name) LIKE ?', ["%{$keyword}%"])
+    //                                 ->orWhereRaw('LOWER(no_ssm) LIKE ?', ["%{$keyword}%"])
+    //                                 // ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
+    //                                 ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
+    //                             });
+    //                         })
+    //                         ->orderBy('state', 'ASC')->orderBy('name', 'ASC')->paginate(15);
+    //                 $view = 'pengurusan.eLIND.index';
+    //                 break;
+
+    //             case 'pendidikan':
+    //                 $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Institusi Pendidikan')
+    //                         ->when($request->filled('keyword'), function ($query) use ($keyword) {
+    //                             $query->where(function ($q) use ($keyword) {
+    //                                 $q->whereRaw('LOWER(name) LIKE ?', ["%{$keyword}%"])
+    //                                 ->orWhereRaw('LOWER(no_ssm) LIKE ?', ["%{$keyword}%"])
+    //                                 // ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
+    //                                 ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
+    //                             });
+    //                         })
+    //                         ->orderBy('state', 'ASC')->orderBy('name', 'ASC')->paginate(15);
+    //                 $view = 'pengurusan.eLIND.index';
+    //                 break;
+
+    //             default:
+    //                 dd($type);
+    //                 abort(404); 
+    //         }
+    //     }
+    //     // dd($data);
+    //     return view($view, ['eLIND' => $data]);
+    // }
+
     public function index($type, Request $request)
     {
-        $keyword = null;
-        if ($request->filled('keyword')) {
-            $request->validate([
-                'keyword' => 'required|min:3|max:255|regex:/(^[A-Za-z0-9\/\- ]+$)+/',
-            ]);
-            $keyword = strtolower(trim($request->keyword));
+        // dd($request->query());
+        $types = [
+            'kontraktor'    => 'Kontraktor',
+            'perunding'     => 'Perunding',
+            'pembekal'      => 'Pembekal',
+            'antarabangsa'  => 'Pertubuhan Antarabangsa',
+            'ngo'           => 'NGO / Badan Ikhtisas',
+            'pendidikan'    => 'Institusi Pendidikan',
+        ];
+
+        if (!array_key_exists($type, $types)) {
+            abort(404, 'Jenis industri tidak sah.');
         }
-        // dd($keyword);
-        if(auth()->user()->hasRole('Penggiat Industri')){
+
+        $query = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $types[$type]);
+
+        // Role-based filter
+        if (auth()->user()->hasRole('Penggiat Industri')) {
             $user = User::find(auth()->id());
             $id_elind = $user->bahagian_jln;
-            // $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Kontraktor')->first();
-            // dd($data->jenis_industri);
-            switch ($type) {
-                case 'kontraktor':
-                    $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Kontraktor')->latest()->paginate(15);
-                    $view = 'pengurusan.eLIND.index';
-                    // dd($data);
-                    break;
+            $query->where('id_elind', $id_elind);
 
-                case 'perunding':
-                    $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Perunding')->latest()->paginate(15);
-                    $view = 'pengurusan.eLIND.index';
-                    break;
+            $data = $query->latest()->paginate(15);
 
-                case 'pembekal':
-                    $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Pembekal')->latest()->paginate(15);
-                    $view = 'pengurusan.eLIND.index';
-                    break;
-                case 'antarabangsa':
-                    $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Pertubuhan Antarabangsa')->latest()->paginate(15);
-                    $view = 'pengurusan.eLIND.index';
-                    break;
-
-                case 'ngo':
-                    $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'NGO / Badan Ikhtisas')->latest()->paginate(15);
-                    $view = 'pengurusan.eLIND.index';
-                    break;
-
-                case 'pendidikan':
-                    $data = MaklumatPenggunaPenggiatIndustri::where('id_elind', $id_elind)->where('jenis_industri', 'Institusi Pendidikan')->latest()->paginate(15);
-                    $view = 'pengurusan.eLIND.index';
-                    break;
-
-                default:
-                    dd($type);
-                    abort(404); 
-            }
-            if($data->isEmpty()){
+            if ($data->isEmpty()) {
                 dump("Akaun Industri anda tidak wujud. Sila hubungi Pentadbir eLANDSKAP");
                 Auth::logout();
                 return redirect()->route('register');
-            }else{
-                $dataDraf = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id_elind)->first();
+            }
+
+            // Load status from draft
+            $dataDraf = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind', $id_elind)->first();
+            if ($dataDraf && isset($data[0])) {
                 $data[0]->status = $dataDraf->status;
             }
-            // dd($data[0]);
-            // dd($dataDraf);
-            // dd($data[0]->status);
-        }else{
-            switch ($type) {
-                case 'kontraktor':
-                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Kontraktor')
-                            ->when($request->filled('keyword'), function ($query) use ($keyword) {
-                                $query->where(function ($q) use ($keyword) {
-                                    $q->whereRaw('LOWER(name) LIKE ?', ["%{$keyword}%"])
-                                    ->orWhereRaw('LOWER(no_ssm) LIKE ?', ["%{$keyword}%"])
-                                    // ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
-                                    ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
-                                });
-                            })
-                            ->orderBy('name', 'ASC')->paginate(15);
-                    $view = 'pengurusan.eLIND.index';
-                    break;
+        } else {
+            // Optional filters
+            $keyword = strtolower(trim($request->query('keyword')));
+            $negeriKod = $request->query('negeri');
 
-                case 'perunding':
-                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Perunding')
-                            ->when($request->filled('keyword'), function ($query) use ($keyword) {
-                                $query->where(function ($q) use ($keyword) {
-                                    $q->whereRaw('LOWER(name) LIKE ?', ["%{$keyword}%"])
-                                    ->orWhereRaw('LOWER(no_ssm) LIKE ?', ["%{$keyword}%"])
-                                    // ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
-                                    ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
-                                });
-                            })
-                            ->orderBy('name', 'ASC')->paginate(15);
-                    $view = 'pengurusan.eLIND.index';
-                    break;
+            if ($keyword) {
+                $request->validate([
+                    'keyword' => 'required|min:3|max:255|regex:/(^[A-Za-z0-9\/\- ]+$)+/',
+                ]);
 
-                case 'pembekal':
-                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Pembekal')
-                            ->when($request->filled('keyword'), function ($query) use ($keyword) {
-                                $query->where(function ($q) use ($keyword) {
-                                    $q->whereRaw('LOWER(name) LIKE ?', ["%{$keyword}%"])
-                                    ->orWhereRaw('LOWER(no_ssm) LIKE ?', ["%{$keyword}%"])
-                                    // ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
-                                    ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
-                                });
-                            })
-                            ->orderBy('name', 'ASC')->paginate(15);
-                    $view = 'pengurusan.eLIND.index';
-                    break;
-                case 'antarabangsa':
-                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Pertubuhan Antarabangsa')
-                            ->when($request->filled('keyword'), function ($query) use ($keyword) {
-                                $query->where(function ($q) use ($keyword) {
-                                    $q->whereRaw('LOWER(name) LIKE ?', ["%{$keyword}%"])
-                                    ->orWhereRaw('LOWER(no_ssm) LIKE ?', ["%{$keyword}%"])
-                                    // ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
-                                    ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
-                                });
-                            })
-                            ->orderBy('name', 'ASC')->paginate(15);
-                    $view = 'pengurusan.eLIND.index';
-                    break;
+                $query->where(function ($q) use ($keyword) {
+                    $q->whereRaw('LOWER(name) LIKE ?', ["%{$keyword}%"])
+                        ->orWhereRaw('LOWER(no_ssm) LIKE ?', ["%{$keyword}%"])
+                        ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
+                });
+            }
 
-                case 'ngo':
-                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'NGO / Badan Ikhtisas')
-                            ->when($request->filled('keyword'), function ($query) use ($keyword) {
-                                $query->where(function ($q) use ($keyword) {
-                                    $q->whereRaw('LOWER(name) LIKE ?', ["%{$keyword}%"])
-                                    ->orWhereRaw('LOWER(no_ssm) LIKE ?', ["%{$keyword}%"])
-                                    // ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
-                                    ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
-                                });
-                            })
-                            ->orderBy('name', 'ASC')->paginate(15);
-                    $view = 'pengurusan.eLIND.index';
-                    break;
+            if ($negeriKod) {
+                $query->where('state', $negeriKod);
+            }
 
-                case 'pendidikan':
-                    $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', 'Institusi Pendidikan')
-                            ->when($request->filled('keyword'), function ($query) use ($keyword) {
-                                $query->where(function ($q) use ($keyword) {
-                                    $q->whereRaw('LOWER(name) LIKE ?', ["%{$keyword}%"])
-                                    ->orWhereRaw('LOWER(no_ssm) LIKE ?', ["%{$keyword}%"])
-                                    // ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
-                                    ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
-                                });
-                            })
-                            ->orderBy('name', 'ASC')->paginate(15);
-                    $view = 'pengurusan.eLIND.index';
-                    break;
+            $data = $query->orderBy('state', 'ASC')->orderBy('name', 'ASC')
+                ->paginate(15)
+                ->appends($request->query());
 
-                default:
-                    dd($type);
-                    abort(404); 
+            // Replace state code with name
+            foreach ($data as $item) {
+                $negeri = Negeri::select('nama_negeri')->where('kod_negeri', $item->state)->first();
+                $item->state = $negeri ? ucwords(strtolower($negeri->nama_negeri)) : 'Tiada Maklumat';
             }
         }
-        // dd($data);
-        return view($view, ['eLIND' => $data]);
+
+        return view('pengurusan.eLIND.index', [
+            'eLIND' => $data,
+            'type' => $types[$type],
+        ]);
     }
 
     /**
@@ -576,7 +654,7 @@ class eLINDController extends Controller
     public function update(Request $request, $type, $id)
     {
         $eLIND = MaklumatPenggunaPenggiatIndustri_draf::where('id_elind_draf', $id)->first();
-        $request->request->remove('name');
+        // $request->request->remove('name');
         $request->request->remove('no_ssm');
         $request->request->remove('jenis_industri');
         $requestData = ($request->all());
@@ -660,6 +738,27 @@ class eLINDController extends Controller
                     }
                 }
                 $requestData['produk'] = json_encode($mergedproduk);
+
+                $oldNamaPembekal = str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name);
+                $newNamaPembekal = str_replace(' ', '_', $eLIND->id_elind.' '.$requestData['name']);
+
+                if ($newNamaPembekal && $oldNamaPembekal !== $newNamaPembekal) {
+                    $oldFolder = storage_path("app/public/uploads/eLIND/{$oldNamaPembekal}");
+                    $newFolder = storage_path("app/public/uploads/eLIND/{$newNamaPembekal}");
+
+                    if (file_exists($oldFolder)) {
+                        // Rename folder
+                        rename($oldFolder, $newFolder);
+                        $rename_eLIND = MaklumatPenggunaPenggiatIndustri::where('id_elind', $eLIND->id_elind)->first();
+                        if ($rename_eLIND) {
+                            $rename_eLIND->update([
+                                'name' => $requestData['name']
+                            ]);
+                        }
+                    }else{
+                        unset($requestData['name']);
+                    }
+                }
             }
             $requestData['status'] = "draft";
             // dd($requestData);
@@ -922,7 +1021,7 @@ class eLINDController extends Controller
 
                         $requestData = [
                             "nama_taman" => strtoupper($this->sanitize_text($row['B'])),                         
-                            "kategori_taman" => "Taman Awam",                  
+                            "kategori_taman" => strtoupper(trim(str_replace("JLN-", "",$sheetName))),                  
                             "negeri_taman" => $kod_negeri, 
                             "daerah_taman" => $kod_daerah, 
                             "mukim_taman" => null,                             
@@ -985,109 +1084,113 @@ class eLINDController extends Controller
         return back()->with('successMessage', 'Excel processed. Total rows: ' . count($result));
     } */
 
-    // public function import(Request $request)
-    // {
-    //     $request->validate([
-    //         'file' => 'required|file|mimes:xlsx,xls,csv|max:2048',
-    //     ]);
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv|max:2048',
+        ]);
 
-    //     $file = $request->file('file');
-    //     // $spreadsheet = IOFactory::load($file->getPathname());
+        $file = $request->file('file');
+        // $spreadsheet = IOFactory::load($file->getPathname());
 
-    //     $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file->getPathname());
-    //     $reader->setReadDataOnly(true);
-    //     $spreadsheet = $reader->load($file->getPathname());
+        $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file->getPathname());
+        $reader->setReadDataOnly(true);
+        $spreadsheet = $reader->load($file->getPathname());
 
-    //     $sheets = $spreadsheet->getAllSheets(); // Get all sheets
-    //     $sheetCount = count($sheets);
-    //     $result = [];
-    //     $sheetNames = $spreadsheet->getSheetNames();
+        $sheets = $spreadsheet->getAllSheets(); // Get all sheets
+        $sheetCount = count($sheets);
+        $result = [];
+        $sheetNames = $spreadsheet->getSheetNames();
 
-    //     // dd($sheets);
-    //     $negeriMap = Negeri::all()->keyBy(function($item) {
-    //         return strtolower($item->nama_negeri);
-    //     });
-    //     // dd($negeriMap);
-    //     foreach ($sheets as $sheetIndex => $sheet) {
-    //         // dd($sheetIndex);
-    //         if($sheetIndex <= 20){
-    //             $sheetName = $sheet->getTitle();
-    //             $startRow = 2;
-    //             $startCol = 'B';
-    //             $endCol = 'E';
-    //             // $lastRow = $sheet->getHighestRow();
-    //             $lastRow = min($sheet->getHighestRow(), 1500);
-    //             $range = $startCol . $startRow . ':' . $endCol . $lastRow;
-    //             $sheetData = $sheet->rangeToArray($range, null, false, false, true);
-    //             $startIndex = 0;
+        // dd($sheets);
+        $negeriMap = Negeri::all()->keyBy(function($item) {
+            return strtolower($item->nama_negeri);
+        });
+        // dd($negeriMap);
+        foreach ($sheets as $sheetIndex => $sheet) {
+            // dd($sheetIndex);
+            if($sheetIndex <= 20){
+                $sheetName = $sheet->getTitle();
+                $startRow = 2;
+                $startCol = 'A';
+                $endCol = 'F';
+                // $lastRow = $sheet->getHighestRow();
+                $lastRow = min($sheet->getHighestRow(), 1500);
+                $range = $startCol . $startRow . ':' . $endCol . $lastRow;
+                $sheetData = $sheet->rangeToArray($range, null, false, false, true);
+                $startIndex = 0;
+                $inserted = 0;
 
-    //             foreach ($sheetData as $index => $row) {
-                    
-    //                 // dump($index);
-    //                 if($row["B"] != ""){
-    //                     // dump($row);
-    //                     $string = $row["B"];
-    //                     $string = preg_replace("/\r\n|\r/", "\n", $string);
-    //                     $parts = explode("\n", trim($string));
-    //                     $name = strtoupper($this->sanitize_text(trim($parts[0] ?? '')));
-    //                     if(isset($parts[1])){
-    //                         $row["E"] = $parts[1];
-    //                     }
+                foreach ($sheetData as $index => $row) {
+                    $dataController = new \App\Http\Controllers\DataController();
+                    $pbtName = $dataController->findFullPbtName($row["B"]);
+                    // dd($row);
+                    if($row["B"] != ""){
+                        if($row["D"] != ''){
+                            $kod_negeri = str_replace("wilayah persekutuan", "wp", strtolower($row["A"]));
+                            $kod_negeri = str_replace("p.", "pulau", strtolower($kod_negeri));
+                            $kod_negeri = str_replace("n.", "negeri ", strtolower($kod_negeri));
+                            $kod_negeri = $negeriMap[$kod_negeri]->kod_negeri ?? "00";
 
-    //                     // dd($serial);
+                            // $requestData = [
+                            //     /* 
+                            //         $ref = Carbon::now()->timestamp;
+                            //         $ref_num = "RT$ref";
+                            //     */
+                            //     'ref_num' => $ref_num,
+                            //     /* 
+                            //         $currentYear = $row["E"];
+                            //         $recordCount = MIB::whereYear('created_at', $currentYear)->count();
+                            //         $no_siri = $recordCount + 1;
+                            //         $no_siri = "JLN-RT/{$currentYear}/{$no_siri}";
+                            //     */
+                            //     'no_siri' => $no_siri,
+                            //     'taman' => strtoupper($row["D"]),
+                            //     'pbt' => $pbtName,
+                            //     'negeri' => $kod_negeri,
+                            //     'status' => "Diluluskan",
+                            //     'status_keahlian' => $row["F"],
+                            //     'approved_by' => "eLANDSKAP",
+                            //     'approved_at' => timestamp of year $row["E"], //maybe 1-1-$row["E"] 00:00:00
+                            // ];
 
-    //                     $string = str_replace(" ", "", $row["E"]);
-    //                     $parts = explode('(', $string);
-    //                     $serial = $front = $parts[0];
-    //                     if($serial != ''){
-    //                         $kod_negeri = str_replace("wilayah persekutuan", "wp", strtolower($row["D"]));
-    //                         $kod_negeri = $negeriMap[$kod_negeri]->kod_negeri ?? "00";
+                            // Generate unique reference number using timestamp
+                            $ref = Carbon::now()->timestamp . rand(100, 999);
+                            $ref_num = "RT$ref";
 
-    //                         $requestData = [
-    //                             'name' => $name,
-    //                             'kelas_kontraktor' => $row['C'],
-    //                             'jenis_industri' => "Kontraktor",
-    //                             'state' => $kod_negeri,
-    //                             'state' => $kod_negeri,
-    //                             'no_ssm' => $serial,
-    //                         ];
-    //                         // dump($requestData);
-    //                         $result[] = $requestData;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     // foreach (array_chunk($result, 500) as $chunk) {
-    //     //     foreach ($chunk as $requestData) {
-    //     //         $maklumat = MaklumatPenggunaPenggiatIndustri::create($requestData);
-    //     //         $requestData['id_elind'] = $maklumat->id_elind;
-    //     //         $maklumat = MaklumatPenggunaPenggiatIndustri_draf::create($requestData);
-    //     //     }
-    //     //     // dd($chunk);
-    //     // }
-    //     $inserted = 0;
-    //     foreach (array_chunk($result, 500) as $chunk) {
-    //         foreach ($chunk as $requestData) {
-    //             // Check if the no_ssm already exists
-    //             $existingMof = MaklumatPenggunaPenggiatIndustri::where('no_ssm', $requestData['no_ssm'])->first();
+                            // Get the year from the spreadsheet row (e.g., 2023)
+                            $currentYear = $row["E"];
 
-    //             if ($existingMof) {
-    //                 continue; // Skip duplicate
-    //             }
+                            // Count existing records created in that year (assuming MIB is your model)
+                            $recordCount = MIB::whereYear('approved_at', $currentYear)->count();
+                            $no_siri = "JLN-RT/{$currentYear}/" . ($recordCount + 1);
+                            $status_keahlian = $row["F"] == "1" ? "Aktif" : "Tidak Aktif";
 
-    //             // If not existing, insert new records
-    //             $maklumat = MaklumatPenggunaPenggiatIndustri::create($requestData);
-    //             $requestData['id_elind'] = $maklumat->id_elind;
-    //             $maklumat = MaklumatPenggunaPenggiatIndustri_draf::create($requestData);
-    //             $inserted++;
-    //         }
-    //     }
-    //     echo "Inserted: ".$inserted;
-    //     // dd('Excel processed. Total rows: ' . count($result));
-    //     // Optionally return or log $result
-    //     return back()->with('successMessage', 'Excel processed. Total rows: ' . count($result));
-    // }
+                            // Build the data array
+                            $requestData = [
+                                'ref_num' => $ref_num,
+                                'no_siri' => $no_siri,
+                                'taman' => strtoupper($row["D"]),
+                                'pbt' => $pbtName,
+                                'negeri' => $kod_negeri,
+                                'status' => "Diluluskan",
+                                'status_keahlian' => $status_keahlian,
+                                'approved_by' => "eLANDSKAP",
+                                'approved_at' => Carbon::createFromDate($currentYear, 1, 1)->startOfDay(), // 1 Jan $row["E"] 00:00:00
+                            ];
+                            $maklumat = MIB::create($requestData);
+                            if($maklumat){
+                                $inserted++;
+                            }
+                            // dump($requestData);
+                            // $result[] = $requestData;
+                        }
+                    }
+                }
+            }
+        }
+        return back()->with('successMessage', 'Excel processed. Total rows: ' . count($result));
+    }
 
     // eLIND
     /* public function import(Request $request)
@@ -1095,11 +1198,11 @@ class eLINDController extends Controller
         ini_set('memory_limit', '2048M');
         ini_set('max_execution_time', 3000);
         $request->validate([
-            'file' => 'required',
-            'file.*' => 'file|mimes:xlsx,xls,csv|max:12048',
+            'fileMultiple' => 'required',
+            'fileMultiple.*' => 'file|mimes:xlsx,xls,csv|max:12048',
         ]);
 
-        $files = $request->file('file'); // This will now be an array of files
+        $files = $request->file('fileMultiple'); // This will now be an array of files
         $result = [];
 
         $negeriMap = Negeri::all()->keyBy(function($item) {
@@ -1198,5 +1301,92 @@ class eLINDController extends Controller
     public function importForm()
     {
         return view('pengurusan.eLIND.import');
+    }
+
+    public function export($type, Request $request)
+    {
+        // dd($request->all());
+        $format = $request->query('format', 'csv');
+        $negeri = $request->query('negeri');
+
+        $types = [
+            'kontraktor'    => 'Kontraktor',
+            'perunding'     => 'Perunding',
+            'pembekal'      => 'Pembekal',
+            'antarabangsa'  => 'Pertubuhan Antarabangsa',
+            'ngo'           => 'NGO / Badan Ikhtisas',
+            'pendidikan'    => 'Institusi Pendidikan',
+        ];
+
+        if (!array_key_exists($type, $types)) {
+            abort(404, 'Invalid industry type');
+        }
+
+        $filename = "Senarai_" . $types[$type];
+
+        $query = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $types[$type])/* ->limit(10) */;
+
+        $keyword = strtolower(trim($request->query('keyword')));
+
+        if ($negeri) {
+            $query->where('state', $negeri);
+            $negeriName = Negeri::where('kod_negeri', $negeri)->value('nama_negeri') ?? 'Tiada Maklumat';
+            $negeri = str_replace(" ", "_", $negeriName);
+            $filename .= "_{$negeri}";
+        }
+
+        if ($keyword) {
+            $query->where(function ($q) use ($keyword) {
+                $q->whereRaw('LOWER(name) LIKE ?', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(no_ssm) LIKE ?', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
+            });
+            $filename .= "_[carian={$keyword}]";
+        }
+
+        $data = $query->get();
+
+        if ($format === 'csv') {
+            return response()->stream(function () use ($data) {
+                $handle = fopen('php://output', 'w');
+                fputcsv($handle, ['Bil.', 'Nama', 'Negeri', 'No. Pendaftaran SSM', 'Prestasi']);
+                $bil = 1;
+                foreach ($data as $item) {
+                    $negeriName = Negeri::where('kod_negeri', $item->state)->value('nama_negeri') ?? 'Tiada Maklumat';
+                    
+                    $prestasiDB = 5;
+                    if($item->prestasi != null){
+                        $dataprestasi = json_decode($item->prestasi, true);
+                        $prestasiDB = end($dataprestasi)['prestasi'] ?? 0;
+                    }
+                    $prestasi = [
+                        '1' => 'Sangat Baik',
+                        '2' => 'Baik',
+                        '3' => 'Sederhana',
+                        '4' => 'Lemah',
+                        '5' => 'Tiada Maklumat'
+                    ];
+                    fputcsv($handle, [
+                        $bil++,
+                        strtoupper($item->name ?? 'TIADA MAKLUMAT'),
+                        strtoupper($negeriName ?? 'TIADA MAKLUMAT'),
+                        '="' . ($item->no_ssm ?? 'TIADA MAKLUMAT') . '"',
+                        strtoupper($prestasi[$prestasiDB] ?? 'TIADA MAKLUMAT'),
+                    ]);
+                }
+
+                fclose($handle);
+            }, 200, [
+                'Content-Type' => 'text/csv',
+                'Content-Disposition' => 'attachment; filename="' . strtoupper($filename) . '.csv"',
+            ]);
+        }
+
+        if ($format === 'excel') {
+            // Optional: create eLINDExport if you want to use Laravel Excel
+            return Excel::download(new eLINDExport($data), strtoupper($filename) . '.xlsx');
+        }
+
+        return redirect()->route('website.eLIND', ['keyword' => $type]);
     }
 }

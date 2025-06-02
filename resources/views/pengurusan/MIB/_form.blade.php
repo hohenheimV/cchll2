@@ -59,13 +59,13 @@
     </div> -->
 
     <!-- Fields for PBT Account Type -->
-    <div id="pbt_fields" style="display: block;" class="inertClass">
-        <div class="form-group mb-3">
+    <div id="pbt_fields" style="display: block;" class="">
+        <div class="form-group mb-3 inertClass">
             {{ Form::label('negeri', 'Negeri') }}
             <br>
             {{ Form::select('negeri', [], null, ['class' => 'form-control', 'id' => 'negeri']) }}
         </div>
-        <div class="form-group mb-3">
+        <div class="form-group mb-3 inertClass">
             {{ Form::label('pbt', 'Pihak Berkuasa Tempatan') }}
             <input value="{{ isset($MIB->pbt) ? $MIB->pbt : '' }}" type="text" name="pbt" id="pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" >
             <datalist id="data_pbt">
@@ -162,53 +162,164 @@
             </div>
         </div>
 
-        @if(strpos(request()->url(), 'edit') !== false || strpos(request()->url(), 'create') !== false)
+    @if(strpos(request()->url(), 'edit') !== false || strpos(request()->url(), 'create') !== false)
+        <style>
+            .grid-container {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 10px;
+                width: 100%;         /* Fixed width */
+                height: 450px;        /* Fixed height */
+                margin: 0 auto;
+                box-sizing: border-box;
+            }
+
+
+            /* Grid item styling */
+            .grid-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
+                text-align: center;
+                /* border: 1px solid #ddd; */
+                /* border: 1.5px solid rgb(64, 16, 255, 1) !important; */
+                background-color: lightgray;
+                padding: 10px;
+                box-sizing: border-box;
+                overflow: hidden; /* Prevent overflowing content */
+            }
+
+            /* Image preview container */
+            .image-preview-container {
+                display: grid;
+                place-items: center; /* Center both horizontally and vertically */
+                width: 100%;
+                height: 100%;
+                overflow-y: auto;
+            }
+
+            .image-preview-container img {
+                width: 100%;
+                max-height: 200px;
+                /* max-height: 100%; */
+                height: auto;
+                object-fit: cover;
+                border-radius: 5px;
+                border: 0px solid #ddd;
+                padding: 2px;
+            }
+            @media only screen and (max-width: 768px) {
+                .grid-container {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr ; /* 2 equal-width columns */
+                    gap: 10px; /* Space between grid items */
+                    width: 300px;
+                    max-width: 600px;  /* Limit max width for the grid */
+                    margin: 0 auto; /* Centers the grid container horizontally */
+                    height: auto; /* Allow the height to adjust based on content */
+                }
+                .image-preview-container img {
+                    width: 200px; /* Adjust the width as needed */
+                    height: 100px; /* Adjust the height as needed */
+                    object-fit: cover;
+                    border-radius: 10px;
+                    border: 0px solid #ddd;
+                    padding: 2px;
+                }
+            }
+        </style>
         <div class="row">
             <div class="form-group mb-3 col-md-4">
                 <label for="pelan_lokasi_1">Pelan Lokasi 1 <span class="font-red"> * </span></label>
                 @if(isset($MIB->fail['pelan_lokasi_1']) && $MIB->fail['pelan_lokasi_1'] != null)
                     <input type="file" name="fail[pelan_lokasi_1]" class="form-control showButton"><br>
                     <div class="center-content">
-                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_1']) }}" alt="Pelan Lokasi 1" class="img-thumbnail" width="100">
+                        <div class="grid-item">
+                            <div id="preview_pelan_lokasi_1" class="image-preview-container">
+                                <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_1']) }}" alt="Pelan Lokasi 1" class="img-thumbnail" width="100">
+                            </div>
+                            <div class="showButton">
+                                <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_1']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                            </div>
+                        </div>
                         <br>
                         <input type="hidden" name="fail[pelan_lokasi_1]" value="{{ $MIB->fail['pelan_lokasi_1'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_1']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                        {{-- <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_1']) }}" target="_blank" class="showButton">Lihat Gambar</a> --}}
                     </div>
                 @else
                     <input type="file" name="fail[pelan_lokasi_1]" class="form-control showButton"><br>
-                    <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="Gambar Kawasan Lapang 2" class="img-thumbnail" width="100">
+                    
+                    <div class="grid-item">
+                        <div id="preview_pelan_lokasi_1" class="image-preview-container">
+                            <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="Gambar Kawasan Lapang 2" class="img-thumbnail" width="100">
+                        </div>
+                        <div class="showButton">
+                            <a href="#" class="showButton">&nbsp;</a>
+                        </div>
+                    </div>
                 @endif
             </div>
 
             <div class="form-group mb-3 col-md-4">
                 <label for="pelan_lokasi_2">Pelan Lokasi 2</label>
                 @if(isset($MIB->fail['pelan_lokasi_2']) && $MIB->fail['pelan_lokasi_2'] != null)
-                    <input type="file" name="fail[pelan_lokasi_1]" class="form-control showButton"><br>
+                    <input type="file" name="fail[pelan_lokasi_2]" class="form-control showButton"><br>
                     <div class="center-content">
-                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_2']) }}" alt="Pelan Lokasi 2" class="img-thumbnail" width="100">
+                        <div class="grid-item">
+                            <div id="preview_pelan_lokasi_2" class="image-preview-container">
+                                <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_2']) }}" alt="Pelan Lokasi 2" class="img-thumbnail" width="100">
+                            </div>
+                            <div class="showButton">
+                                <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_2']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                            </div>
+                        </div>
                         <br>
                         <input type="hidden" name="fail[pelan_lokasi_2]" value="{{ $MIB->fail['pelan_lokasi_2'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_2']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                        {{-- <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_2']) }}" target="_blank" class="showButton">Lihat Gambar</a> --}}
                     </div>
                 @else
                     <input type="file" name="fail[pelan_lokasi_2]" class="form-control showButton"><br>
-                    <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="Gambar Kawasan Lapang 2" class="img-thumbnail" width="100">
+                    
+                    <div class="grid-item">
+                        <div id="preview_pelan_lokasi_2" class="image-preview-container">
+                            <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="Gambar Kawasan Lapang 2" class="img-thumbnail" width="100">
+                        </div>
+                        <div class="showButton">
+                            <a href="#" class="showButton">&nbsp;</a>
+                        </div>
+                    </div>
                 @endif
             </div>
 
             <div class="form-group mb-3 col-md-4">
                 <label for="pelan_lokasi_3">Pelan Lokasi 3</label>
                 @if(isset($MIB->fail['pelan_lokasi_3']) && $MIB->fail['pelan_lokasi_3'] != null)
-                    <input type="file" name="fail[pelan_lokasi_1]" class="form-control showButton"><br>
+                    <input type="file" name="fail[pelan_lokasi_3]" class="form-control showButton"><br>
                     <div class="center-content">
-                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_3']) }}" alt="Pelan Lokasi 3" class="img-thumbnail" width="100">
+                        <div class="grid-item">
+                            <div id="preview_pelan_lokasi_3" class="image-preview-container">
+                                <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_3']) }}" alt="Pelan Lokasi 3" class="img-thumbnail" width="100">
+                            </div>
+                            <div class="showButton">
+                                <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_3']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                            </div>
+                        </div>
                         <br>
                         <input type="hidden" name="fail[pelan_lokasi_3]" value="{{ $MIB->fail['pelan_lokasi_3'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_3']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                        {{-- <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['pelan_lokasi_3']) }}" target="_blank" class="showButton">Lihat Gambar</a> --}}
                     </div>
                 @else
                     <input type="file" name="fail[pelan_lokasi_3]" class="form-control showButton"><br>
-                    <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="Gambar Kawasan Lapang 2" class="img-thumbnail" width="100">
+                    
+                    <div class="grid-item">
+                        <div id="preview_pelan_lokasi_3" class="image-preview-container">
+                            <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="Gambar Kawasan Lapang 2" class="img-thumbnail" width="100">
+                        </div>
+                        <div class="showButton">
+                            <a href="#" class="showButton">&nbsp;</a>
+                        </div>
+                    </div>
                 @endif
             </div>
         </div>
@@ -217,48 +328,93 @@
             <div class="form-group mb-3 col-md-4">
                 <label for="gambar_kawasan_lapang_1">Gambar Kawasan Lapang 1 <span class="font-red"> * </span></label>
                 @if(isset($MIB->fail['gambar_kawasan_lapang_1']) && $MIB->fail['gambar_kawasan_lapang_1'] != null)
-                    <input type="file" name="fail[pelan_lokasi_1]" class="form-control showButton"><br>
+                    <input type="file" name="fail[gambar_kawasan_lapang_1]" class="form-control showButton"><br>
                     <div class="center-content">
-                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_1']) }}" alt="Gambar Kawasan Lapang 1" class="img-thumbnail" width="100">
+                        <div class="grid-item">
+                            <div id="preview_gambar_kawasan_lapang_1" class="image-preview-container">
+                                <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_1']) }}" alt="Gambar Kawasan Lapang 1" class="img-thumbnail" width="100">
+                            </div>
+                            <div class="showButton">
+                                <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_1']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                            </div>
+                        </div>
                         <br>
                         <input type="hidden" name="fail[gambar_kawasan_lapang_1]" value="{{ $MIB->fail['gambar_kawasan_lapang_1'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_1']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                        {{-- <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_1']) }}" target="_blank" class="showButton">Lihat Gambar</a> --}}
                     </div>
                 @else
                     <input type="file" name="fail[gambar_kawasan_lapang_1]" class="form-control showButton"><br>
-                    <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="Gambar Kawasan Lapang 2" class="img-thumbnail" width="100">
+                    
+                    <div class="grid-item">
+                        <div id="preview_gambar_kawasan_lapang_1" class="image-preview-container">
+                            <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="Gambar Kawasan Lapang 2" class="img-thumbnail" width="100">
+                        </div>
+                        <div class="showButton">
+                            <a href="#" class="showButton">&nbsp;</a>
+                        </div>
+                    </div>
                 @endif
             </div>
 
             <div class="form-group mb-3 col-md-4">
                 <label for="gambar_kawasan_lapang_2">Gambar Kawasan Lapang 2</label>
                 @if(isset($MIB->fail['gambar_kawasan_lapang_2']) && $MIB->fail['gambar_kawasan_lapang_2'] != null)
-                    <input type="file" name="fail[pelan_lokasi_1]" class="form-control showButton"><br>
+                    <input type="file" name="fail[gambar_kawasan_lapang_2]" class="form-control showButton"><br>
                     <div class="center-content">
-                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_2']) }}" alt="Gambar Kawasan Lapang 2" class="img-thumbnail" width="100">
+                        <div class="grid-item">
+                            <div id="preview_gambar_kawasan_lapang_2" class="image-preview-container">
+                                <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_2']) }}" alt="Gambar Kawasan Lapang 2" class="img-thumbnail" width="100">
+                            </div>
+                            <div class="showButton">
+                                <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_2']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                            </div>
+                        </div>
                         <br>
                         <input type="hidden" name="fail[gambar_kawasan_lapang_2]" value="{{ $MIB->fail['gambar_kawasan_lapang_2'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_2']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                        {{-- <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_2']) }}" target="_blank" class="showButton">Lihat Gambar</a> --}}
                     </div>
                 @else
                     <input type="file" name="fail[gambar_kawasan_lapang_2]" class="form-control showButton"><br>
-                    <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="Gambar Kawasan Lapang 2" class="img-thumbnail" width="100">
+                    
+                    <div class="grid-item">
+                        <div id="preview_gambar_kawasan_lapang_2" class="image-preview-container">
+                            <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="Gambar Kawasan Lapang 2" class="img-thumbnail" width="100">
+                        </div>
+                        <div class="showButton">
+                            <a href="#" class="showButton">&nbsp;</a>
+                        </div>
+                    </div>
                 @endif
             </div>
 
             <div class="form-group mb-3 col-md-4">
                 <label for="gambar_kawasan_lapang_3">Gambar Kawasan Lapang 3</label>
                 @if(isset($MIB->fail['gambar_kawasan_lapang_3']) && $MIB->fail['gambar_kawasan_lapang_3'] != null)
-                    <input type="file" name="fail[pelan_lokasi_1]" class="form-control showButton"><br>
+                    <input type="file" name="fail[gambar_kawasan_lapang_3]" class="form-control showButton"><br>
                     <div class="center-content">
-                        <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_3']) }}" alt="Gambar Kawasan Lapang 3" class="img-thumbnail" width="100">
+                        <div class="grid-item">
+                            <div id="preview_gambar_kawasan_lapang_3" class="image-preview-container">
+                                <img src="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_3']) }}" alt="Gambar Kawasan Lapang 3" class="img-thumbnail" width="100">
+                            </div>
+                            <div class="showButton">
+                                <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_3']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                            </div>
+                        </div>
                         <br>
                         <input type="hidden" name="fail[gambar_kawasan_lapang_3]" value="{{ $MIB->fail['gambar_kawasan_lapang_3'] }}">
-                        <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_3']) }}" target="_blank" class="showButton">Lihat Gambar</a>
+                        {{-- <a href="{{ asset('storage/uploads/MIB/' . str_replace(' ', '_', $MIB->id.' '.$MIB->taman) . '/' . $MIB->fail['gambar_kawasan_lapang_3']) }}" target="_blank" class="showButton">Lihat Gambar</a> --}}
                     </div>
                 @else
                     <input type="file" name="fail[gambar_kawasan_lapang_3]" class="form-control showButton"><br>
-                    <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="Gambar Kawasan Lapang 2" class="img-thumbnail" width="100">
+                    
+                    <div class="grid-item">
+                        <div id="preview_gambar_kawasan_lapang_3" class="image-preview-container">
+                            <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="Gambar Kawasan Lapang 2" class="img-thumbnail" width="100">
+                        </div>
+                        <div class="showButton">
+                            <a href="#" class="showButton">&nbsp;</a>
+                        </div>
+                    </div>
                 @endif
             </div>
         </div>

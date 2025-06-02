@@ -31,7 +31,7 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="w-1">Bil.</th>
-                                    <!-- <th class="text-center align-middle w-1">No Permohonan</th> -->
+                                    <th class="text-center align-middle w-1">No Siri</th>
                                     <!-- <th class="text-center align-middle">Nama/E-Mel</th> -->
                                     <th class="text-center align-middle w-15">Taman Perumahan</th>
                                     @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|KP/ TKP JLN'))
@@ -50,11 +50,11 @@
                                 @forelse($MIB as $rakan_taman)
                                 <tr>
                                     <td>{{ $index++ }}</td>
-                                    <!-- <td>
+                                    <td>
                                         <span class="badge badge-dark">
-                                            {!! $rakan_taman->ref_num ?? $null !!}
+                                            {!! $rakan_taman->no_siri ?? $null !!}
                                         </span>
-                                    </td> -->
+                                    </td>
                                     <!-- <td>{!! $rakan_taman->name.'<br />'.$rakan_taman->email !!}</td> -->
                                     <td>{{ strtoupper($rakan_taman->taman) }}</td>
                                     @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))
@@ -74,7 +74,7 @@
                                             'class'=>'btn btn-info btn-sm', Html::tooltip('Butiran dan Kemaskini Maklumat Rakan Taman'),
                                             'onclick'=>"window.location='".route('pengurusan.MIB.show',$rakan_taman)."'"
                                             ]) !!}
-                                            @if($rakan_taman->status_keahlian == 'Aktif' && $rakan_taman->status == 'Diluluskan')
+                                            @if(/* $rakan_taman->status_keahlian == 'Aktif' &&  */$rakan_taman->status == 'Diluluskan')
                                                 {!! Form::button('<i class="fas fa-file-alt"></i>', [
                                                     'class' => 'btn btn-success btn-sm', Html::tooltip('Sijil Rakan Taman'),
                                                     'onclick' => "window.open('".route('pengurusan.MIB.generateCertificate', $rakan_taman->ref_num)."', '_blank')"

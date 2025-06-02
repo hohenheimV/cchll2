@@ -8,9 +8,11 @@ use App\Model\ePALM_draf;
 use Illuminate\Http\Request;
 use App\Model\MaklumatPenggunaPbt;
 use App\User;
+use App\Model\Negeri;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ePALMExport;
+use Illuminate\Support\Facades\Storage;
 
 class ePALMController extends Controller
 {
@@ -27,6 +29,78 @@ class ePALMController extends Controller
         $this->middleware(['role_or_permission:Pentadbir Sistem|epalm-delete'], ['only' => ['destroy']]);
     }
 
+    // public function index(Request $request)
+    // {
+    //     $keyword = null;
+    //     if ($request->filled('keyword')) {
+    //         $request->validate([
+    //             'keyword' => 'required|min:3|max:255|regex:/(^[A-Za-z0-9\/\- ]+$)+/',
+    //         ]);
+    //         $keyword = strtolower(trim($request->keyword));
+    //     }
+
+    //     $sort = null;
+    //     if ($request->filled('sort')) {
+    //         $request->validate([
+    //             'sort' => 'required|min:3|max:255|regex:/(^[A-Za-z0-9\/\- ]+$)+/',
+    //         ]);
+    //         $sort = strtolower(trim($request->sort));
+    //     }
+    //     // dd($sort);
+
+    //     $negeri = $request->query('negeri') ?? null;
+
+    //     $ePALM = ePALM::where('is_komponen', null)->latest()->paginate(10);
+    //     $userId = auth()->id();
+    //     $user = User::find($userId);
+    //     if($user->hasRole('Pihak Berkuasa Tempatan')){
+    //         $email = $user->bahagian_jln;
+    //         $pbt = MaklumatPenggunaPbt::where('id', '=', $email)->first();
+    //         $totalCount = 15;//ePALM::whereRaw('LOWER(nama_pbt) = ?', [strtolower($pbt->pbt_name)])->count();
+    //         $ePALM = ePALM::whereRaw('LOWER(nama_pbt) = ?', [strtolower($pbt->pbt_name)])
+    //         ->when($request->filled('keyword'), function ($query) use ($keyword) {
+    //             $query->where(function ($q) use ($keyword) {
+    //                 $q->whereRaw('LOWER(nama_taman) LIKE ?', ["%{$keyword}%"])
+    //                 ->orWhereRaw('LOWER(nama_pbt) LIKE ?', ["%{$keyword}%"])
+    //                 ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
+    //                 ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
+    //             });
+    //         })
+    //         ->when($request->filled('sort'), function ($query) use ($sort) {
+    //             $query->where(function ($q) use ($sort) {
+    //                 $q->where('kategori_taman', $sort);
+    //             });
+    //         })
+    //         ->where('is_komponen', null)->orderBy('negeri_taman', 'ASC')->orderBy('nama_pbt', 'ASC')/* ->orderBy('nama_taman', 'ASC') */->paginate($totalCount);
+    //         foreach ($ePALM as $key => $value) {
+    //             $ePALM_draf = ePALM_draf::where('id_taman', $value->id_taman)->first();
+    //             $value->status = $ePALM_draf->status;
+    //         }
+    //     }else{
+    //         $totalCount = 15;//ePALM::count();
+    //         $ePALM = ePALM::when($request->filled('keyword'), function ($query) use ($keyword) {
+    //             $query->where(function ($q) use ($keyword) {
+    //                 $q->whereRaw('LOWER(nama_taman) LIKE ?', ["%{$keyword}%"])
+    //                 ->orWhereRaw('LOWER(nama_pbt) LIKE ?', ["%{$keyword}%"])
+    //                 ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
+    //                 ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
+    //             });
+    //         })
+    //         ->when($request->filled('sort'), function ($query) use ($sort) {
+    //             $query->where(function ($q) use ($sort) {
+    //                 $q->whereRaw('LOWER(kategori_taman) LIKE ?', ["%{$sort}%"]);
+    //             });
+    //         })
+    //         ->when($negeri, function ($query) use ($negeri) {
+    //             $query->where('negeri_taman', $negeri);
+    //         })
+    //         ->whereNull('is_komponen')
+    //         ->orderBy('negeri_taman', 'ASC')->orderBy('nama_pbt', 'ASC')/* ->orderBy('nama_taman', 'ASC') */
+    //         ->paginate($totalCount);
+    //     }
+    //     return view('pengurusan.ePALM.index', ['ePALM' => $ePALM]);
+    // }
+
     public function index(Request $request)
     {
         $keyword = null;
@@ -37,42 +111,78 @@ class ePALMController extends Controller
             $keyword = strtolower(trim($request->keyword));
         }
 
-        $ePALM = ePALM::where('is_komponen', null)->latest()->paginate(10);
+        $negeri = $request->query('negeri') ?? null;
+        $kategori = $request->query('kategori') ?? null;
+
         $userId = auth()->id();
         $user = User::find($userId);
-        if($user->hasRole('Pihak Berkuasa Tempatan')){
+
+        $totalCount = 15; // default pagination count
+
+        if ($user->hasRole('Pihak Berkuasa Tempatan')) {
             $email = $user->bahagian_jln;
             $pbt = MaklumatPenggunaPbt::where('id', '=', $email)->first();
-            $totalCount = 15;//ePALM::whereRaw('LOWER(nama_pbt) = ?', [strtolower($pbt->pbt_name)])->count();
-            $ePALM = ePALM::whereRaw('LOWER(nama_pbt) = ?', [strtolower($pbt->pbt_name)])
-            ->when($request->filled('keyword'), function ($query) use ($keyword) {
+
+            $query = ePALM::whereRaw('LOWER(nama_pbt) = ?', [strtolower($pbt->pbt_name)])
+                ->where('is_komponen', null);
+
+            if ($keyword) {
                 $query->where(function ($q) use ($keyword) {
                     $q->whereRaw('LOWER(nama_taman) LIKE ?', ["%{$keyword}%"])
                     ->orWhereRaw('LOWER(nama_pbt) LIKE ?', ["%{$keyword}%"])
                     ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
                     ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
                 });
-            })
-            ->where('is_komponen', null)->orderBy('negeri_taman', 'ASC')->orderBy('nama_pbt', 'ASC')/* ->orderBy('nama_taman', 'ASC') */->paginate($totalCount);
-            foreach ($ePALM as $key => $value) {
-                $ePALM_draf = ePALM_draf::where('id_taman', $value->id_taman)->first();
-                $value->status = $ePALM_draf->status;
             }
-        }else{
-            $totalCount = 15;//ePALM::count();
-            $ePALM = ePALM::when($request->filled('keyword'), function ($query) use ($keyword) {
+
+            if ($kategori) {
+                $query->where('kategori_taman', $kategori);
+            }
+
+            if ($negeri) {
+                $query->where('negeri_taman', $negeri);
+            }
+
+            $ePALM = $query->orderBy('status', 'ASC')->orderBy('negeri_taman', 'ASC')
+                ->orderBy('nama_pbt', 'ASC')
+                ->paginate($totalCount);
+
+            // Add draft status to each item
+            foreach ($ePALM as $value) {
+                $ePALM_draf = ePALM_draf::where('id_taman', $value->id_taman)->first();
+                $value->status = $ePALM_draf->status ?? $value->status;
+            }
+        } else {
+            $query = ePALM::whereNull('is_komponen');
+
+            if ($keyword) {
                 $query->where(function ($q) use ($keyword) {
                     $q->whereRaw('LOWER(nama_taman) LIKE ?', ["%{$keyword}%"])
                     ->orWhereRaw('LOWER(nama_pbt) LIKE ?', ["%{$keyword}%"])
                     ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
                     ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
                 });
-            })
-            ->whereNull('is_komponen')
-            ->orderBy('negeri_taman', 'ASC')->orderBy('nama_pbt', 'ASC')/* ->orderBy('nama_taman', 'ASC') */
-            ->paginate($totalCount);
+            }
+
+            if ($kategori) {
+                $query->whereRaw('LOWER(kategori_taman) LIKE ?', [strtolower($kategori)]);
+            }
+
+            if ($negeri) {
+                $query->where('negeri_taman', $negeri);
+            }
+
+            $ePALM = $query->orderBy('status', 'ASC')->orderBy('negeri_taman', 'ASC')
+                ->orderBy('nama_pbt', 'ASC')
+                ->paginate($totalCount);
         }
-        return view('pengurusan.ePALM.index', ['ePALM' => $ePALM]);
+
+        return view('pengurusan.ePALM.index', [
+            'ePALM' => $ePALM,
+            'selectedKeyword' => $keyword,
+            'selectedNegeri' => $negeri,
+            'selectedKategori' => $kategori,
+        ]);
     }
 
     public function create()
@@ -138,7 +248,7 @@ class ePALMController extends Controller
                 $requestData['keterangan_taman'] = $requestData['keterangan_taman'];
                 $requestData['kategori_taman'] = $requestData['nama_komponen'];
                 $requestData['is_komponen'] = $requestData['id_taman'];
-                for ($i = 1; $i <= 6; $i++) {
+                for ($i = 1; $i <= 4; $i++) {
                     $inputField = 'GIM_' . $i;
                     if ($request->hasFile($inputField)) {
                         $file = $request->file($inputField);
@@ -253,7 +363,7 @@ class ePALMController extends Controller
             $drafRecord = ePALM_draf::create($requestData);
             if($drafRecord && $newRecord){
                 $filenames = [];
-                for ($i = 1; $i <= 6; $i++) {
+                for ($i = 1; $i <= 10; $i++) {
                     $inputField = 'XGIM_' . $i;
                     if ($request->hasFile($inputField)) {
                         $file = $request->file($inputField);
@@ -383,14 +493,14 @@ class ePALMController extends Controller
 
         $filenames = [];
         $gambar_taman = json_decode($ePALM->gambar_taman, true);
-        for ($i = 1; $i <= 6; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             $inputField = 'XGIM_' . $i;
             $inputField2 = 'Xgambar_input_modal_' . $i;
             if ($request->hasFile($inputField)) {
                 $file = $request->file($inputField);
                 
                 if ($file->isValid()) {
-                    $folderName = str_replace(' ', '_', $ePALM->id_taman.' '.$request->input('nama_taman'));
+                    $folderName = str_replace(' ', '_', $ePALM->id_taman.' '.$ePALM->nama_taman);
                     $filename = time() . '_' . $i . '.' . $file->extension();
                     $file->storeAs('public/uploads/ePALM/' . $folderName, $filename);
                     $filenames[$inputField] = $filename;
@@ -414,7 +524,7 @@ class ePALMController extends Controller
             $file = $request->file('fail_konsep');
             
             if ($file->isValid()) {
-                $folderName = str_replace(' ', '_', $ePALM->id_taman.' '.$request->input('nama_taman'));
+                $folderName = str_replace(' ', '_', $ePALM->id_taman.' '.$ePALM->nama_taman);
                 $filename = time() . '.' . $file->extension();
                 $file->storeAs('public/uploads/ePALM/' . $folderName, $filename);
             }
@@ -426,9 +536,31 @@ class ePALMController extends Controller
         if ($request->input('action') === 'update') {
             $requestData['status'] = "draft";
             $ePALM_draf = ePALM_draf::where('id_taman', $ePALM->id_taman)->first();
+
+            $oldNamaTaman = str_replace(' ', '_', $ePALM->id_taman.' '.$ePALM->nama_taman);
+            $newNamaTaman = str_replace(' ', '_', $ePALM->id_taman.' '.$requestData['nama_taman']);
+
+            if ($newNamaTaman && $oldNamaTaman !== $newNamaTaman) {
+                $oldFolder = storage_path("app/public/uploads/ePALM/{$oldNamaTaman}");
+                $newFolder = storage_path("app/public/uploads/ePALM/{$newNamaTaman}");
+
+                if (file_exists($oldFolder)) {
+                    // Rename folder
+                    rename($oldFolder, $newFolder);
+                    $rename_ePALM = ePALM::where('id_taman', $ePALM->id_taman)->first();
+                    if ($rename_ePALM) {
+                        $rename_ePALM->update([
+                            'nama_taman' => $requestData['nama_taman']
+                        ]);
+                    }
+                }else{
+                    unset($requestData['nama_taman']);
+                }
+            }
             if ($ePALM_draf) {
                 $updateDraf = $ePALM_draf->update($requestData);
             }
+            
             // dd($ePALM_draf);
             if ($updateDraf) {
                 $kategori = ($ePALM_draf->kategori_taman);
@@ -440,7 +572,7 @@ class ePALMController extends Controller
                     'Taman Botani' => 5,
                     'Pemuliharaan Dan Penyelidikan Landskap' => 5,
                 ];
-                $bahagian_jln = $kategoriToBahagian[$kategori] ?? null;
+                $bahagian_jln = $kategoriToBahagian[$kategori] ?? 2;
                 if ($bahagian_jln) {
                     $userArr = User::where(function ($query) use ($bahagian_jln) {
                         $query->whereHas('roles', function ($query) {
@@ -576,29 +708,68 @@ class ePALMController extends Controller
         return redirect()->route('pengurusan.ePALM.index')->with('successMessage', 'Maklumat taman telah dihapuskan');
     }
 
-    public function export($format)
+    public function export(Request $request)
     {
-        // Get the data from the database (you can adjust the query as needed)
-        $ePALM = ePALM::where('is_komponen', null)->get();  // You can add search filters if needed
+        $format = $request->query('format');
+        $keyword = $request->query('keyword');
+        $negeri = $request->query('negeri');
+        $kategori = $request->query('kategori');
+        // dd($request->query());
+
+        $filename = "Senarai_ePALM";
+        $query = ePALM::whereNull('is_komponen');
+
+        if ($kategori) {
+            $query->whereRaw('LOWER(kategori_taman) LIKE ?', [strtolower($kategori)]);
+            $kategori = str_replace(" ", "_", $kategori);
+            $filename .= "_{$kategori}";
+        }
+
+        if ($negeri) {
+            $query->where('negeri_taman', $negeri);
+            $negeriName = Negeri::where('kod_negeri', $negeri)->value('nama_negeri') ?? 'Tiada Maklumat';
+            $negeri = str_replace(" ", "_", $negeriName);
+            $filename .= "_{$negeri}";
+        }
+
+        if ($keyword) {
+            $keyword = strtolower($keyword);
+            $query->where(function ($q) use ($keyword) {
+                $q->whereRaw('LOWER(nama_taman) LIKE ?', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(nama_pbt) LIKE ?', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(kategori_taman) LIKE ?', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(status) LIKE ?', ["%{$keyword}%"]);
+            });
+            $filename .= "_[carian={$keyword}]";
+        }
+
+        $ePALM = $query->get();
 
         if ($format === 'csv') {
             // Return the data as a CSV
             return response()->stream(function () use ($ePALM) {
                 $handle = fopen('php://output', 'w');
-                fputcsv($handle, ['Nama Taman', 'Nama PBT', 'Kategori Taman', 'Status']);  // Add your column headers
+                fputcsv($handle, ['Bil.', 'Nama Taman', 'Nama PBT', 'Kategori Taman', 'Negeri']);
+                $bil = 1;
                 foreach ($ePALM as $item) {
-                    fputcsv($handle, [$item->nama_taman, $item->nama_pbt, $item->kategori_taman, $item->status]);  // Add your data fields
+                    $negeriName = Negeri::where('kod_negeri', $item->negeri_taman)->value('nama_negeri') ?? 'Tiada Maklumat';
+                    fputcsv($handle, [
+                            $bil++,
+                            strtoupper($item->nama_taman ?? 'TIADA MAKLUMAT'),
+                            strtoupper($item->nama_pbt ?? 'TIADA MAKLUMAT'),
+                            strtoupper($item->kategori_taman ?? 'TIADA MAKLUMAT'),
+                            strtoupper($negeriName ?? 'TIADA MAKLUMAT')
+                        ]);
                 }
                 fclose($handle);
             }, 200, [
                 'Content-Type' => 'text/csv',
-                'Content-Disposition' => 'attachment; filename="epalm_data.csv"',
+                'Content-Disposition' => 'attachment; filename="' . strtoupper($filename) . '.csv"',
             ]);
         } elseif ($format === 'excel') {
-            // Use Laravel Excel to export as Excel
-            return Excel::download(new ePALMExport($ePALM), 'epalm_data.xlsx');
+            return Excel::download(new ePALMExport($ePALM), strtoupper($filename) . '.xlsx');
         }
 
-        return redirect()->route('pengurusan.ePALM.index');  // Fallback if no valid format
+        return redirect()->route('pengurusan.ePALM.index');
     }
 }

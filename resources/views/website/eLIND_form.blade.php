@@ -4,9 +4,9 @@
         <div class="card-tools">
             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group" role="group" aria-label="First group">
-                    <!-- <select id="negeri" name="negeri" onchange="handleSelectChange()">
+                    <select id="negeri" name="negeri" onchange="handleSelectChange()">
                         <option value="">Papar Semua</option>
-                    </select> -->
+                    </select>
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                     <script>
                         // Fetch and populate the Negeri dropdown with data
@@ -35,7 +35,7 @@
                                         $('#negeri').append('<option value="' + value.kod_negeri + '">' + capitalizeWords(value.nama_negeri) + '</option>');
                                     });
 
-                                    var negeriSelected = "{{ isset($keyword) ? $keyword : '' }}";
+                                    var negeriSelected = "{{ request()->query('negeri', '') }}";
                                     if (negeriSelected) {
                                         $('#negeri').val(negeriSelected);
                                     }
@@ -47,15 +47,26 @@
                         });
 
                         // Function to handle the dropdown change event
-                        function handleSelectChange() {
-                            // var selectedKeyword = $('#negeri').val(); // Get the selected negeri value
+                        // function handleSelectChange() {
+                        //     var selectedKeyword = $('#negeri').val(); // Get the selected negeri value
 
-                            // if (selectedKeyword) {
-                            //     // Redirect to the route with the selected keyword
-                            //     window.location.href = "/epalm-taman/" + selectedKeyword;
-                            // } else {
-                            //     window.location.href = "/epalm-taman";
-                            // }
+                        //     if (selectedKeyword) {
+                        //         // Redirect to the route with the selected keyword
+                        //         window.location.href = "/epalm-taman/" + selectedKeyword;
+                        //     } else {
+                        //         window.location.href = "/epalm-taman";
+                        //     }
+                        // }
+                        function handleSelectChange() {
+                            var selectedNegeri = $('#negeri').val(); // Get the selected negeri
+                            var currentKeyword = "{{ request()->route('keyword') }}"; // From URL param
+
+                            let url = "/penggiat-industri/" + currentKeyword;
+                            if (selectedNegeri) {
+                                url += "?negeri=" + selectedNegeri;
+                            }
+
+                            window.location.href = url;
                         }
                     </script>
                 </div>
@@ -77,7 +88,7 @@
                     }
                     
                 </style>
-                <table id="exampleNP" class="responsive table table-bordered table-hover table-striped mb-0">
+                <table id="example" class="responsive table table-bordered table-hover table-striped mb-0">
                     <thead style="background-color:rgb(0, 0, 0) !important;color: white;">
                         <tr>
                             <th class="w-1">Bil.</th>

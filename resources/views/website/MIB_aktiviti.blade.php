@@ -117,12 +117,15 @@
                                                             $gambar_input_modal_2 = isset($gambarData['gambar_input_modal_2']) ? $folderName.'/'.$gambarData['gambar_input_modal_2'] : null;
                                                             $gambar_input_modal_3 = isset($gambarData['gambar_input_modal_3']) ? $folderName.'/'.$gambarData['gambar_input_modal_3'] : null;
                                                             $gambar_input_modal_4 = isset($gambarData['gambar_input_modal_4']) ? $folderName.'/'.$gambarData['gambar_input_modal_4'] : null;
+                                                            $gambar_input_modal_5 = isset($gambarData['gambar_input_modal_5']) ? $folderName.'/'.$gambarData['gambar_input_modal_5'] : null;
+                                                            $gambar_input_modal_6 = isset($gambarData['gambar_input_modal_6']) ? $folderName.'/'.$gambarData['gambar_input_modal_6'] : null;
+                                                            $gambar_input_modal_7 = isset($gambarData['gambar_input_modal_7']) ? $folderName.'/'.$gambarData['gambar_input_modal_7'] : null;
+                                                            $gambar_input_modal_8 = isset($gambarData['gambar_input_modal_8']) ? $folderName.'/'.$gambarData['gambar_input_modal_8'] : null;
+                                                            $gambar_input_modal_9 = isset($gambarData['gambar_input_modal_9']) ? $folderName.'/'.$gambarData['gambar_input_modal_9'] : null;
+                                                            $gambar_input_modal_10 = isset($gambarData['gambar_input_modal_10']) ? $folderName.'/'.$gambarData['gambar_input_modal_10'] : null;
                                                             // dd($gambar_input_modal_1);
                                                         }else{
-                                                            $gambar_input_modal_1 = null;
-                                                            $gambar_input_modal_2 = null;
-                                                            $gambar_input_modal_3 = null;
-                                                            $gambar_input_modal_4 = null;
+                                                            $gambar_input_modal_1 = $gambar_input_modal_2 = $gambar_input_modal_3 = $gambar_input_modal_4 = $gambar_input_modal_5 = $gambar_input_modal_6 = $gambar_input_modal_7 = $gambar_input_modal_8 = $gambar_input_modal_9 = $gambar_input_modal_10 = null;
                                                         }
                                                         // if(isset($laporan->fail)){
                                                         //     $folderName = str_replace(' ', '_', ($laporan->taman ?? 'temp'));
@@ -151,6 +154,12 @@
                                                                 data-fail2="{{ $gambar_input_modal_2 }}" 
                                                                 data-fail3="{{ $gambar_input_modal_3 }}" 
                                                                 data-fail4="{{ $gambar_input_modal_4 }}" 
+                                                                data-fail5="{{ $gambar_input_modal_5 }}" 
+                                                                data-fail6="{{ $gambar_input_modal_6 }}" 
+                                                                data-fail7="{{ $gambar_input_modal_7 }}" 
+                                                                data-fail8="{{ $gambar_input_modal_8 }}" 
+                                                                data-fail9="{{ $gambar_input_modal_9 }}" 
+                                                                data-fail10="{{ $gambar_input_modal_10 }}" 
                                                                 data-toggle="modal" 
                                                                 data-target="#readModal"
                                                             >
@@ -284,7 +293,7 @@
                     <p id="laporan">Tiada Maklumat</p>
                     <br>
                     <h5>Gambar Aktiviti</h5>
-                    <div class="park-images">
+                    {{-- <div class="park-images">
                         <a id="parkLink1" href="javascript:void(0)">
                             <img id="parkImage1" src="" alt="Park Image 1" class="park-img" style="border: 0.5px solid black;">
                         </a>
@@ -297,6 +306,60 @@
                         <a id="parkLink4" href="javascript:void(0)">
                             <img id="parkImage4" src="" alt="Park Image 4" class="park-img" style="border: 0.5px solid black;">
                         </a>
+                    </div> --}}
+                    {{-- <div id="carouselImages" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner" id="carouselInner">
+                            <!-- Slides will be added dynamically -->
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselImages" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselImages" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        </a>
+                    </div> --}}
+                    <style>
+                        .carousel-inner img {
+                            height: 400px;
+                            object-fit: contain;
+                            background-color: #f8f8f8;
+                            border-radius: 6px;
+                            /* border: 1px solid #ccc; */
+                            border: 1px solid rgb(49, 213, 200) !important;
+                        }
+
+                        .thumbnail-nav img {
+                            width: 50px;
+                            height: 50px;
+                            object-fit: cover;
+                            /* border: 2px solid transparent; */
+                            border: 0.25px solid black;
+                            margin: 5px;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            transition: border 0.3s;
+                        }
+                        .thumbnail-nav img.active-thumb {
+                            /* border-color: #007bff; */
+                            border: 2px solid rgb(49, 213, 200) !important;
+                        }
+                    </style>
+                    <!-- Main Carousel -->
+                    <div id="carouselImages" class="carousel slide mb-3" data-ride="carousel">
+                        <div class="carousel-inner" id="carouselInner">
+                            <!-- JS will inject slides -->
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselImages" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselImages" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        </a>
+                    </div>
+
+                    <!-- Thumbnails -->
+                    <div class="thumbnail-nav d-flex flex-wrap justify-content-center" id="carouselThumbs">
+                        <!-- JS will inject thumbs -->
                     </div>
                     <br>
 
@@ -322,72 +385,155 @@
                     var fail2 = button.data('fail2');
                     var fail3 = button.data('fail3');
                     var fail4 = button.data('fail4');
+                    var fail5 = button.data('fail5');
+                    var fail6 = button.data('fail6');
+                    var fail7 = button.data('fail7');
+                    var fail8 = button.data('fail8');
+                    var fail9 = button.data('fail9');
+                    var fail10 = button.data('fail10');
 
-                    let imagePath = `/storage/uploads`;
-                    let img1 = document.getElementById('parkImage1');
-                    let link1 = document.getElementById('parkLink1');
-                    if (fail1) {
-                        img1.src = `${imagePath}/MIB/${fail1}`;
-                        link1.href = `${imagePath}/MIB/${fail1}`;
-                        link1.target = '_blank';
-                        img1.onerror = function () {
-                            img1.src = `${imagePath}/no-photos.png`;
-                            link1.href = 'javascript:void(0)';
-                            link1.target = '';
-                        };
-                    } else {
-                        img1.src = `${imagePath}/no-photos.png`;
-                            link1.href = 'javascript:void(0)';
-                            link1.target = '';
+                    // let imagePath = `/storage/uploads`;
+                    // let img1 = document.getElementById('parkImage1');
+                    // let link1 = document.getElementById('parkLink1');
+                    // if (fail1) {
+                    //     img1.src = `${imagePath}/MIB/${fail1}`;
+                    //     link1.href = `${imagePath}/MIB/${fail1}`;
+                    //     link1.target = '_blank';
+                    //     img1.onerror = function () {
+                    //         img1.src = `${imagePath}/no-photos.png`;
+                    //         link1.href = 'javascript:void(0)';
+                    //         link1.target = '';
+                    //     };
+                    // } else {
+                    //     img1.src = `${imagePath}/no-photos.png`;
+                    //         link1.href = 'javascript:void(0)';
+                    //         link1.target = '';
+                    // }
+                    // let img2 = document.getElementById('parkImage2');
+                    // let link2 = document.getElementById('parkLink2');
+                    // if (fail2) {
+                    //     img2.src = `${imagePath}/MIB/${fail2}`;
+                    //     link2.href = `${imagePath}/MIB/${fail2}`;
+                    //     link2.target = '_blank';
+                    //     img2.onerror = function () {
+                    //         img2.src = `${imagePath}/no-photos.png`;
+                    //         link2.href = 'javascript:void(0)';
+                    //         link2.target = '';
+                    //     };
+                    // } else {
+                    //     img2.src = `${imagePath}/no-photos.png`;
+                    //         link2.href = 'javascript:void(0)';
+                    //         link2.target = '';
+                    // }
+                    // let img3 = document.getElementById('parkImage3');
+                    // let link3 = document.getElementById('parkLink3');
+                    // if (fail3) {
+                    //     img3.src = `${imagePath}/MIB/${fail3}`;
+                    //     link3.href = `${imagePath}/MIB/${fail3}`;
+                    //     link3.target = '_blank';
+                    //     img3.onerror = function () {
+                    //         img3.src = `${imagePath}/no-photos.png`;
+                    //         link3.href = 'javascript:void(0)';
+                    //         link3.target = '';
+                    //     };
+                    // } else {
+                    //     img3.src = `${imagePath}/no-photos.png`;
+                    //         link3.href = 'javascript:void(0)';
+                    //         link3.target = '';
+                    // }
+                    // let img4 = document.getElementById('parkImage4');
+                    // let link4 = document.getElementById('parkLink4');
+                    // if (fail4) {
+                    //     img4.src = `${imagePath}/MIB/${fail4}`;
+                    //     link4.href = `${imagePath}/MIB/${fail4}`;
+                    //     link4.target = '_blank';
+                    //     img4.onerror = function () {
+                    //         img4.src = `${imagePath}/no-photos.png`;
+                    //         link4.href = 'javascript:void(0)';
+                    //         link4.target = '';
+                    //     };
+                    // } else {
+                    //     img4.src = `${imagePath}/no-photos.png`;
+                    //     link4.href = 'javascript:void(0)';
+                    //     link4.target = '';
+                    // }
+
+                    // let imagePath = `/storage/uploads/MIB`;
+                    // let carouselInner = document.getElementById('carouselInner');
+                    // carouselInner.innerHTML = ''; // Clear previous slides
+
+                    // for (let i = 1; i <= 10; i++) {
+                    //     let imgName = button.data(`fail${i}`);
+                    //     if (imgName) {
+                    //         let imgFullPath = `${imagePath}/${imgName}`;
+                    //         let isActive = carouselInner.children.length === 0 ? 'active' : '';
+
+                    //         let slide = document.createElement('div');
+                    //         slide.className = `carousel-item ${isActive}`;
+                    //         slide.innerHTML = `
+                    //             <img src="${imgFullPath}" class="d-block w-100" style="max-height:450px; object-fit:contain;" alt="Image ${i}">
+                    //         `;
+                    //         carouselInner.appendChild(slide);
+                    //     }
+                    // }
+
+                    // // If no images, show a fallback slide
+                    // if (carouselInner.children.length === 0) {
+                    //     let fallback = document.createElement('div');
+                    //     fallback.className = 'carousel-item active';
+                    //     fallback.innerHTML = `<img src="/storage/uploads/no-photos.png" class="d-block w-100" alt="No photo available">`;
+                    //     carouselInner.appendChild(fallback);
+                    // }
+
+                    let imagePath = `/storage/uploads/MIB`;
+                    let carouselInner = document.getElementById('carouselInner');
+                    let carouselThumbs = document.getElementById('carouselThumbs');
+
+                    carouselInner.innerHTML = '';
+                    carouselThumbs.innerHTML = '';
+
+                    let validImages = [];
+
+                    for (let i = 1; i <= 10; i++) {
+                        let imgName = button.data(`fail${i}`);
+                        if (imgName) {
+                            validImages.push(`${imagePath}/${imgName}`);
+                        }
                     }
-                    let img2 = document.getElementById('parkImage2');
-                    let link2 = document.getElementById('parkLink2');
-                    if (fail2) {
-                        img2.src = `${imagePath}/MIB/${fail2}`;
-                        link2.href = `${imagePath}/MIB/${fail2}`;
-                        link2.target = '_blank';
-                        img2.onerror = function () {
-                            img2.src = `${imagePath}/no-photos.png`;
-                            link2.href = 'javascript:void(0)';
-                            link2.target = '';
-                        };
-                    } else {
-                        img2.src = `${imagePath}/no-photos.png`;
-                            link2.href = 'javascript:void(0)';
-                            link2.target = '';
+
+                    if (validImages.length === 0) {
+                        validImages.push(`/storage/uploads/no-photos.png`);
                     }
-                    let img3 = document.getElementById('parkImage3');
-                    let link3 = document.getElementById('parkLink3');
-                    if (fail3) {
-                        img3.src = `${imagePath}/MIB/${fail3}`;
-                        link3.href = `${imagePath}/MIB/${fail3}`;
-                        link3.target = '_blank';
-                        img3.onerror = function () {
-                            img3.src = `${imagePath}/no-photos.png`;
-                            link3.href = 'javascript:void(0)';
-                            link3.target = '';
-                        };
-                    } else {
-                        img3.src = `${imagePath}/no-photos.png`;
-                            link3.href = 'javascript:void(0)';
-                            link3.target = '';
-                    }
-                    let img4 = document.getElementById('parkImage4');
-                    let link4 = document.getElementById('parkLink4');
-                    if (fail4) {
-                        img4.src = `${imagePath}/MIB/${fail4}`;
-                        link4.href = `${imagePath}/MIB/${fail4}`;
-                        link4.target = '_blank';
-                        img4.onerror = function () {
-                            img4.src = `${imagePath}/no-photos.png`;
-                            link4.href = 'javascript:void(0)';
-                            link4.target = '';
-                        };
-                    } else {
-                        img4.src = `${imagePath}/no-photos.png`;
-                        link4.href = 'javascript:void(0)';
-                        link4.target = '';
-                    }
+
+                    // Inject slides and thumbs
+                    validImages.forEach((src, index) => {
+                        // Main Slide
+                        const activeClass = index === 0 ? 'active' : '';
+                        let slide = document.createElement('div');
+                        slide.className = `carousel-item ${activeClass}`;
+                        slide.innerHTML = `<img src="${src}" class="d-block w-100" alt="Image ${index + 1}">`;
+                        carouselInner.appendChild(slide);
+
+                        // Thumbnail
+                        let thumb = document.createElement('img');
+                        thumb.src = src;
+                        thumb.dataset.target = '#carouselImages';
+                        thumb.dataset.slideTo = index;
+                        thumb.className = `thumb-img ${index === 0 ? 'active-thumb' : ''}`;
+                        carouselThumbs.appendChild(thumb);
+
+                        thumb.addEventListener('click', () => {
+                            $('.thumb-img').removeClass('active-thumb');
+                            thumb.classList.add('active-thumb');
+                            $('#carouselImages').carousel(index);
+                        });
+                    });
+
+                    // Sync thumbnail on slide change
+                    $('#carouselImages').on('slide.bs.carousel', function (e) {
+                        $('.thumb-img').removeClass('active-thumb');
+                        $(`.thumb-img:eq(${e.to})`).addClass('active-thumb');
+                    });
                     
                     // Update the modal's content
                     var modal = $(this);
@@ -402,13 +548,15 @@
 
                 $('#readModal').on('hidden.bs.modal', function () {
                     const modal = $(this);
-                    for (let i = 1; i <= 4; i++) {
-                        const img = document.getElementById(`parkImage${i}`);
-                        const link = document.getElementById(`parkLink${i}`);
+                    // for (let i = 1; i <= 4; i++) {
+                    //     const img = document.getElementById(`parkImage${i}`);
+                    //     const link = document.getElementById(`parkLink${i}`);
                         
-                        if (img) img.src = '';
-                        if (link) link.href = '#';
-                    }
+                    //     if (img) img.src = '';
+                    //     if (link) link.href = '#';
+                    // }
+                    let carouselInner = document.getElementById('carouselInner');
+                    carouselInner.innerHTML = '';
 
                     modal.find('#modalNama').text('');
                     modal.find('#laporan').text('');

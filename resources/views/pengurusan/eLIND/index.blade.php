@@ -3,12 +3,16 @@
 @php
     $lastSegment = Request::segment(3);
     $capitalizedSegment = ucfirst($lastSegment);
+    $no_ssm = true;
     if ($capitalizedSegment == 'Pendidikan') {
         $capitalizedSegment = 'Institusi Pendidikan';
+        $no_ssm = false;
     }else if ($capitalizedSegment == 'Ngo') {
         $capitalizedSegment = 'NGO / Badan Ikhtisas';
+        $no_ssm = false;
     }else if ($capitalizedSegment == 'Antarabangsa') {
         $capitalizedSegment = 'Pertubuhan Antarabangsa';
+        $no_ssm = false;
     }
 @endphp
 
@@ -25,7 +29,7 @@
                         <h5 class="card-title">Senarai Maklumat Penggiat Industri Landskap: @yield('title')</h5>
                         <div class="card-tools">
                             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                                {{ Form::open(['class'=>'form-inline','method' => 'get']) }}
+                                {{-- {{ Form::open(['class'=>'form-inline','method' => 'get']) }}
                                 <div class="input-group mr-2">
                                     {{ Form::search('keyword',request('keyword'),['aria-label'=>'Search','placeholder'=>'Carian Pantas','class' => 'form-control form-control-sm '.Html::isInvalid($errors,'keyword')]) }}
                                     <div class="input-group-append">
@@ -36,7 +40,54 @@
                                         'class'=>'btn btn-secondary btn-sm']) !!}
                                     </div>
                                 </div>
-                                {{ Form::close() }}
+                                {{ Form::close() }} --}}
+                                <div class="btn-group" role="group" aria-label="First group">
+                                    {{ Form::open(['class'=>'form-inline', 'method' => 'get']) }}
+                                        {{-- Negeri Dropdown --}}
+                                        <div class="input-group mr-2">
+                                            <select id="negeri" name="negeri" style="
+                                                height: calc(1.8125rem + 2px) !important;
+                                                padding: 0.25rem 0.5rem !important;
+                                                font-size: 0.875rem !important;
+                                                line-height: 1.5 !important;
+                                                border-radius: 0.2rem !important;
+                                                border: 1px solid #ced4da !important;
+                                            ">
+                                                <option value="">Papar Semua Negeri</option>
+                                                @foreach(App\Model\Negeri::orderBy('nama_negeri')->get() as $negeri)
+                                                    <option value="{{ $negeri->kod_negeri }}" {{ request('negeri') == $negeri->kod_negeri ? 'selected' : '' }}>
+                                                        {{ ucwords(strtolower($negeri->nama_negeri)) }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="input-group" style="display: none;">
+                                            <select id="negeri" name="negeriX">
+                                            </select>
+                                        </div>
+
+                                        {{-- Keyword Search --}}
+                                        <div class="input-group mr-2">
+                                            {{ Form::search('keyword', request('keyword'), [
+                                                'aria-label' => 'Search',
+                                                'placeholder' => 'Carian Pantas',
+                                                'class' => 'form-control form-control-sm ' . Html::isInvalid($errors, 'keyword')
+                                            ]) }}
+                                            <div class="input-group-append">
+                                                {!! Form::button('<i class="fas fa-search"></i>', [
+                                                    'class' => 'btn btn-default btn-sm',
+                                                    'type' => 'submit'
+                                                ]) !!}
+                                                {!! Form::button('Reset', [
+                                                    'onclick' => "window.location='".route('pengurusan.eLIND.index', ['type' => strtolower($lastSegment)])."';",
+                                                    'class' => 'btn btn-secondary btn-sm'
+                                                ]) !!}
+                                            </div>
+                                        </div>
+                                    {{ Form::close() }}
+                                </div>
+
                                 @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|KP/ TKP JLN'))
                                 <div class="btn-group" role="group" aria-label="First group">
                                     {!! Form::button('<i class="fas fa-plus"></i> Daftar', [
@@ -52,15 +103,29 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="table-responsive">
+                            <div class="dt-buttons">
+                                <a class="dt-button buttons-csv buttons-html5" 
+                                href="{{ route('pengurusan.eLIND.export', array_merge(['type' => $lastSegment, 'format' => 'csv'], request()->only(['keyword', 'negeri']))) }}">
+                                    <span>CSV</span>
+                                </a>
+                                
+                                <a class="dt-button buttons-excel buttons-html5" 
+                                href="{{ route('pengurusan.eLIND.export', array_merge(['type' => $lastSegment, 'format' => 'excel'], request()->only(['keyword', 'negeri']))) }}">
+                                    <span>Excel</span>
+                                </a>
+                            </div>
                             <table id="example" class="responsive table table-bordered table-hover table-striped table-sm mb-0">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th class="text-center w-1">No</th>
                                         <th class="text-center w-15">Nama</th>
+                                        @if($no_ssm)
                                         <th class="text-center w-10">No. Pendaftaran SSM</th>
+                                        @endif
                                         @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))
-                                        <th class="text-center w-5" style="display: none;">Tarikh Daftar</th>
+                                        {{-- <th class="text-center w-5" style="display: none;">Tarikh Daftar</th> --}}
                                         <th class="text-center w-5">Prestasi</th>
+                                        <th class="text-center w-5">Negeri</th>
                                         @endif
                                         <th class="text-center w-5">Paparan Portal</th>
                                         <th class="text-center w-5">Tindakan</th>
@@ -91,10 +156,12 @@
                                         <tr>
                                             <td class="text-center">{{ $index++ }}</td>
                                             <td>{{ strtoupper($user->name) }}</td>
+                                            @if($no_ssm)
                                             <td class="text-center w-10">{{ $user->no_ssm }}</td>
+                                            @endif
                                             @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))
-                                                <td style="display: none;" class="text-center">{!! Html::datetime($user->created_at,'d-m-Y') !!}
-                                                </td>
+                                                {{-- <td style="display: none;" class="text-center">{!! Html::datetime($user->created_at,'d-m-Y') !!}
+                                                </td> --}}
                                                 <td class="text-center">
                                                     <?php
                                                         if($user->prestasi != null){
@@ -115,6 +182,7 @@
                                                         {{ $prestasi[$prestasiDB-1 ?? '4']['id'] }}
                                                     </span>
                                                 </td>
+                                                <td class="text-center">{{ strtoupper($user->state) }}</td>
                                             @endif
                                                 <td>
                                                     @if(Auth::user()->hasRole('Penggiat Industri'))

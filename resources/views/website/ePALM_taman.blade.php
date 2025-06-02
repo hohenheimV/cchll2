@@ -88,7 +88,7 @@
                                             </div>
                                         </div>
                                         <div class="bg-white">
-                                            @php
+                                            {{-- @php
                                                 $imageFields = [];
                                                 if(isset($ePALM->gambar_taman)){
                                                     $folderName = str_replace(' ', '_', $ePALM->id_taman.' '.$ePALM->nama_taman);
@@ -308,8 +308,157 @@
                                                 });
 
 
-                                            </script>
+                                            </script> --}}
 
+                                            @php
+                                                $imageFields = [];
+                                                if(isset($ePALM->gambar_taman)){
+                                                    $folderName = str_replace(' ', '_', $ePALM->id_taman.' '.$ePALM->nama_taman);
+                                                    $gambar_tamanData = json_decode($ePALM->gambar_taman, true);
+                                                    for ($i = 1; $i <= 10; $i++) {
+                                                        $key1 = "XGIM_$i";
+                                                        $key2 = "Xgambar_input_modal_$i";
+                                                        // $imageFields[$i] = isset($gambar_tamanData[$key1])
+                                                        //     ? $folderName . '/' . $gambar_tamanData[$key1]
+                                                        //     : (isset($gambar_tamanData[$key2]) ? $folderName . '/' . $gambar_tamanData[$key2] : null);
+                                                        $img = $gambar_tamanData[$key1] ?? $gambar_tamanData[$key2] ?? null;
+                                                        if ($img) {
+                                                            $imageFields[] = $folderName . '/' . $img;//asset('storage/uploads/ePALM/' . $folderName . '/' . $img);
+                                                        }
+                                                    }
+                                                } else {
+                                                    for ($i = 1; $i <= 10; $i++) {
+                                                        $imageFields[$i] = null;
+                                                    }
+                                                }
+                                                // dd($imageFields);
+                                            @endphp
+
+                                            <style>
+                                                .thumbnail-nav {
+                                                    display: flex;
+                                                    justify-content: center;
+                                                    flex-wrap: wrap;
+                                                    margin-top: 15px;
+                                                    gap: 10px;
+                                                }
+
+                                                .thumbnail-nav img {
+                                                    width: 50px;
+                                                    height: 50px;
+                                                    object-fit: cover;
+                                                    border: 0.25px solid black;
+                                                    cursor: pointer;
+                                                    border-radius: 4px;
+                                                    transition: border 0.2s ease;
+                                                }
+
+                                                .thumbnail-nav img.active-thumb {
+                                                    /* border-color: rgb(49, 213, 200); */
+                                                    border: 2px solid rgb(49, 213, 200) !important;
+                                                }
+
+                                                .carousel-item img {
+                                                    height: 450px;
+                                                    object-fit: cover;
+                                                    cursor: zoom-in;
+                                                    border: 1px solid rgb(49, 213, 200) !important;
+                                                }
+                                            </style>
+
+                                            @if (collect($imageFields)->filter()->isEmpty())
+                                                <p class="text-center">Tiada gambar taman dimuat naik.</p>
+                                            @else
+                                            <div id="parkCarousel" class="carousel slide" data-ride="carousel" data-interval="3000">
+                                                <div class="carousel-inner">
+                                                    @foreach ($imageFields as $i => $img)
+                                                            @php
+                                                                // $imagePath = asset('storage/uploads/ePALM/' . $img);
+                                                                $imagePath = $img ? asset('storage/uploads/ePALM/' . $img) : null;
+                                                            @endphp
+                                                        @if ($imagePath)
+                                                            <div class="carousel-item {{ $loop->first ? 'active' : '' }}" {{ $imagePath ? '' : 'style=display:none;' }}>
+                                                                <img src="{{ $imagePath }}" class="d-block w-100 park-img-slide" alt="Image {{ $i }}" data-full="{{ $imagePath }}">
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                                <a class="carousel-control-prev" href="#parkCarousel" role="button" data-slide="prev">
+                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                </a>
+                                                <a class="carousel-control-next" href="#parkCarousel" role="button" data-slide="next">
+                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                </a>
+                                            </div>
+
+                                            <div class="thumbnail-nav">
+                                                @foreach ($imageFields as $i => $img)
+                                                        @php
+                                                            // $imagePath = asset('storage/uploads/ePALM/' . $img);
+                                                            $imagePath = $img ? asset('storage/uploads/ePALM/' . $img) : null;
+                                                        @endphp
+                                                    @if ($imagePath)
+                                                        <img src="{{ $imagePath }}" {{ $imagePath ? '' : 'style=display:none;' }} alt="Thumbnail {{ $i }}" class="thumb-img" data-target="#parkCarousel" data-slide-to="{{ $loop->index }}">
+                                                    @endif
+                                                @endforeach
+                                            </div>
+
+                                            <!-- Modal for full image view -->
+                                            <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-body text-center p-0">
+                                                            <img id="modalImage" src="" class="img-fluid w-100" alt="Full Size Image">
+                                                        </div>
+                                                        <div class="modal-footer py-2">
+                                                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <script>
+                                                document.addEventListener("DOMContentLoaded", function () {
+                                                    // Full image modal
+                                                    document.querySelectorAll(".park-img-slide").forEach(img => {
+                                                        img.addEventListener("click", function () {
+                                                            const fullImg = this.getAttribute("data-full");
+                                                            document.getElementById("modalImage").src = fullImg;
+
+                                                            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                                                                const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+                                                                modal.show();
+                                                            } else {
+                                                                $('#imageModal').modal('show');
+                                                            }
+                                                        });
+                                                    });
+
+                                                    // Thumbnail click active styling
+                                                    const thumbs = document.querySelectorAll(".thumb-img");
+                                                    thumbs.forEach((thumb, idx) => {
+                                                        thumb.addEventListener("click", () => {
+                                                            thumbs.forEach(t => t.classList.remove("active-thumb"));
+                                                            thumb.classList.add("active-thumb");
+                                                        });
+                                                    });
+
+                                                    // Optional: Mark the first thumb as active on load
+                                                    if (thumbs.length > 0) {
+                                                        thumbs[0].classList.add("active-thumb");
+                                                    }
+
+                                                    // Optional: Sync active thumb on slide change
+                                                    $('#parkCarousel').on('slide.bs.carousel', function (e) {
+                                                        thumbs.forEach(t => t.classList.remove("active-thumb"));
+                                                        thumbs[e.to].classList.add("active-thumb");
+                                                    });
+                                                });
+                                            </script>
+                                            @endif
+                                            
+
+                                            
 
                                             <br><br>
                                             <h5>Pihak Berkuasa Tempatan :</h5>

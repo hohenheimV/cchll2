@@ -110,7 +110,7 @@
                     <h4>&nbsp;</h4>
                 </div>
             </div>
-            <div class="inertClass">
+            <div class="">
                 <div class="row">
                     <div class="form-group required col-md-8">
                         <label for="nama_taman" class="col-md-12 control-label">Nama Taman</label>
@@ -144,6 +144,12 @@
                                     'Landskap Perbandaran' => 'Landskap Perbandaran',
                                     'Persekitaran Kehidupan' => 'Persekitaran Kehidupan',
                                     'Taman Persekutuan' => 'Taman Persekutuan',
+                                    'Taman Wilayah' => 'Taman Wilayah',
+                                    'Taman Bandaran' => 'Taman Bandaran',
+                                    'Taman Tempatan' => 'Taman Tempatan',
+                                    'Padang Kejiranan' => 'Padang Kejiranan',
+                                    'Padang Permainan' => 'Padang Permainan',
+                                    'Lot Permainan' => 'Lot Permainan',
                                     //'6' => 'Lain-lain (sila nyatakan)'
                                 ];
 
@@ -183,7 +189,7 @@
                             {{ Form::select('negeri_taman', [], null, ['class' => 'form-control', 'id' => 'negeri']) }}
                         </div>
                     </div>
-                    <div class="form-group required col-md-8">
+                    <div class="form-group required col-md-8 inertClass">
                         <label for="nama_pbt" class="col-md-12 control-label">Pihak Berkuasa Tempatan</label>
                         <div class="col-md-12">
                             <input type="text" name="nama_pbt" id="nama_pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" required value="{{ $pbt->pbt_name ?? $ePALM->nama_pbt ?? '' }}">
@@ -857,7 +863,7 @@
                 @endif
 
             </div>
-            <div class="form-group col-md-3 showButton">
+            <div class="form-group col-md-12 showButton">
                 <button type="button" onclick="addMedia()" class="btn btn-primary">Tambah Media Sosial</button>
             </div>
 
@@ -886,11 +892,72 @@
                     container.appendChild(div);
                 }
             </script>
+
+
+            <div class="form-group required inertShow">
+                <label for="keterangan_taman" class="col-md-12 control-label">Keterangan Taman {!! in_array('keterangan_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                <div class="col-md-12">
+                    <textarea name="keterangan_taman" class="form-control" maxlength="250" rows="5" id="keterangan_taman" >{{ isset($ePALM->keterangan_taman) ? $ePALM->keterangan_taman : '' }}</textarea>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="form-group required col-md-8">
+                    <label for="fail_konsep" class="col-md-12 control-label">Konsep Rekabentuk {!! in_array('fail_konsep', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <div class="col-md-12 showButton">
+                        {{ Form::file('fail_konsep', ['class' => 'form-control d-inline-block ms-2', 'multiple' => false, 'accept' => '.pdf,.docx,.pptx']) }}
+                        
+                    </div>
+                    @if(isset($ePALM->fail_konsep))
+                        {{ Form::label('', '***Muatnaik semula akan menggantikan fail sedia ada.', ['class' => 'col-form-label required-field-create showButton', 'style' => 'font-weight: strong;']) }}
+                        <br>
+                        <div class="col-md-12">
+                            <div class="d-flex align-items-center">
+                                @php
+                                    $folderName = isset($ePALM->fail_konsep) ? 'ePALM/'.str_replace(' ', '_', $ePALM->id_taman.' '.$ePALM->nama_taman).'/'.$ePALM->fail_konsep : null;
+
+                                    $fileExtension = isset($ePALM->fail_konsep) ? pathinfo($ePALM->fail_konsep, PATHINFO_EXTENSION) : '';
+                                    $extensionIcon = null;
+                                    if ($fileExtension === 'pdf') {
+                                        $extensionIcon = "https://img.icons8.com/plasticine/100/pdf-2.png";
+                                    } elseif ($fileExtension === 'docx') {
+                                        $extensionIcon = "https://img.icons8.com/plasticine/100/google-docs--v2.png";
+                                    } elseif ($fileExtension === 'pptx') {
+                                        $extensionIcon = "https://img.icons8.com/plasticine/100/google-slides.png";
+                                    }
+                                @endphp
+                                
+                                @if($folderName != null)
+                                    <a href="{{ asset('storage/uploads/' . $folderName) }}" target="_blank" class="" style="border: 0px solid #ddd; border-radius: 10px; padding: 10px; display: inline-block; text-align: center; background-color: #fff;" download>
+                                        <div class="product-image">
+                                            <img src="{{ $extensionIcon }}" class="br-5" alt="" style="width: 100px; height: 100px; border-radius: 5px; margin-bottom: 10px;">
+                                        </div>
+                                        <div class="product-image">
+                                            <span class="file-name-1" style="background-color: #008000; padding: 5px 10px; border-radius: 5px; color: #fff; font-weight: 600; display: inline-block; font-size: 14px;">Konsep Rekabentuk <i class="fas fa-download"></i></span>
+                                        </div>
+                                        <div class="product-image">
+                                            <span class="file-name-1">{{ $ePALM->fail_konsep ?? '' }}</span>
+                                        </div>
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+                </div>
+                <div class="form-group required col-md-4 ">
+                    <div class="">
+                        <label for="tarikh_siapBina_taman" class="col-md-12 control-label">Tarikh Siap Bina {!! in_array('tarikh_siapBina_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                        <div class="col-md-12">
+                            {{ Form::date('tarikh_siapBina_taman', isset($ePALM->tarikh_siapBina_taman) ? $ePALM->tarikh_siapBina_taman : '', ['class' => 'form-control d-inline-block ms-2', 'id' => 'tarikh_siapBina_taman']) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-lg col-separator">
+        {{-- <div class="col-lg col-separator">
             <div class="form-group">
                 <label class="col-xs-4 control-label"></label>
                 <div class="col-xs-12">
@@ -958,7 +1025,7 @@
                 </div>
             </div>
             
-        </div>
+        </div> --}}
         <div class="col-lg col-separator ">
             <div class="form-group">
                 <label class="col-xs-4 control-label"></label>
@@ -981,7 +1048,7 @@
                             $rootFolder = str_replace(' ', '_', $ePALM->nama_pbt);
                             $gambar_tamanData = json_decode($ePALM->gambar_taman, true);
 
-                            for ($i = 1; $i <= 6; $i++) {
+                            for ($i = 1; $i <= 10; $i++) {
                                 //$fieldKey = "XGIM_$i";
                                 //$fieldKey2 = "Xgambar_input_modal_$i";
                                 //$imageFields[$fieldKey] = isset($gambar_tamanData[$fieldKey]) ? $folderName . '/' . $gambar_tamanData[$fieldKey] : (isset($gambar_tamanData[$fieldKey2]) ? $folderName . '/' . $gambar_tamanData[$fieldKey2] : null);
@@ -993,7 +1060,7 @@
                             }
                             //dd($gambar_tamanData);
                         }else{
-                            for ($i = 1; $i <= 6; $i++) {
+                            for ($i = 1; $i <= 10; $i++) {
                                 $fieldKey = "XGIM_$i";
                                 $imageFields[$fieldKey] = null;
                             }
@@ -1003,12 +1070,13 @@
                         <style>
                             .grid-container {
                                 display: grid;
-                                grid-template-columns: repeat(3, 1fr);
+                                grid-template-columns: repeat(5, 1fr);
                                 gap: 10px;
-                                width: 500px;         /* Fixed width */
+                                width: 100%;         /* Fixed width */
                                 height: 450px;        /* Fixed height */
                                 margin: 0 auto;
                                 box-sizing: border-box;
+                                /* border: 1.5px solid rgb(255, 16, 16) !important; */
                                 /* overflow: hidden; */
                             }
 
@@ -1020,7 +1088,8 @@
                                 align-items: center;
                                 justify-content: space-between;
                                 text-align: center;
-                                border: 1px solid #ddd;
+                                /* border: 1px solid #ddd; */
+                                /* border: 1.5px solid rgb(64, 16, 255, 1) !important; */
                                 background-color: lightgray;
                                 padding: 10px;
                                 box-sizing: border-box;
@@ -1328,7 +1397,7 @@
                                     });
                                 });
 
-                                const totalImages = 6;
+                                const totalImages = 10;
 
                                 for (let i = 1; i <= totalImages; i++) {
                                     const input = document.getElementById(`XGIM_${i}`);
@@ -1835,7 +1904,7 @@
                                 $GIM_2 = isset($gambar_tamanData['GIM_2']) ? 'ePALM/'.$folderName.'/'.$subfolderName.'/'.$gambar_tamanData['GIM_2'] : 'no-photos.png';
                                 $GIM_3 = isset($gambar_tamanData['GIM_3']) ? 'ePALM/'.$folderName.'/'.$subfolderName.'/'.$gambar_tamanData['GIM_3'] : 'no-photos.png';
                                 $GIM_4 = isset($gambar_tamanData['GIM_4']) ? 'ePALM/'.$folderName.'/'.$subfolderName.'/'.$gambar_tamanData['GIM_4'] : 'no-photos.png';
-                                for ($i = 1; $i <= 6; $i++) {
+                                for ($i = 1; $i <= 4; $i++) {
                                     $fieldKey = "GIM_$i";
                                     $fieldKey2 = "gambar_input_modal_$i";
                                     $$fieldKey = isset($gambar_tamanData[$fieldKey]) ? 'ePALM/' . $folderName . '/' . $subfolderName.'/' . $gambar_tamanData[$fieldKey] : (isset($gambar_tamanData[$fieldKey2]) ? 'ePALM/' . $folderName . '/' . $subfolderName.'/' . $gambar_tamanData[$fieldKey2] : 'no-photos.png');

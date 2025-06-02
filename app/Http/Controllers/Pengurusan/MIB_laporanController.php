@@ -34,7 +34,7 @@ class MIB_laporanController extends Controller
         $requestData = $request->all();
         $folder = $requestData['id_rakan'].' '.$requestData['taman'];
         $filenames = [];
-        for ($i = 1; $i <= 4; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             $inputField = 'gambar_input_modal_' . $i;
             if ($request->hasFile($inputField)) {
                 $file = $request->file($inputField);
@@ -88,11 +88,12 @@ class MIB_laporanController extends Controller
     public function update(Request $request, $id)
     {
         $requestData = $request->all();
+        // dd($requestData);
         $folder = $requestData['id_rakan'].' '.$requestData['taman'];
         $report = MIB_laporan::findOrFail($id);
         $filenames = [];
         $gambar = ($report->gambar) ?? '';
-        for ($i = 1; $i <= 4; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             $inputField = 'gambar_input_modal_' . $i;
             if ($request->hasFile($inputField)) {
                 $file = $request->file($inputField);
@@ -110,9 +111,12 @@ class MIB_laporanController extends Controller
                 }
             }
         }
+        foreach ($request->input('delete_images', []) as $deletedField) {
+            unset($filenames[$deletedField]);
+        }
         // $request->merge(['fail' => ($filenames)]);
         $requestData['gambar'] = ($filenames);
-        
+        // dd($requestData);
         if ($request->hasFile('fail')) {
             $file = $request->file('fail');
             
@@ -125,6 +129,7 @@ class MIB_laporanController extends Controller
         }
 
         $report->update($requestData);
+        // dd($requestData);
         $rakanTaman = MIB::findOrFail($report->id_rakan);
 
         return redirect()->route('pengurusan.MIB.show', [$rakanTaman])->with('successMessage', 'Maklumat telah berjaya disimpan.');

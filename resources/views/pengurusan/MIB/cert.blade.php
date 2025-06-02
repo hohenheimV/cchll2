@@ -54,7 +54,7 @@
             Nombor Siri: {{ $serial_number }}
         </div>
         <div class="footer">
-            Tarikh Kelulusan: {{ $approved_at->format('Y-m-d') }}
+            Tarikh Kelulusan: {{ $approved_at->format('d-m-Y') }}
         </div>
     </div>
 </body>

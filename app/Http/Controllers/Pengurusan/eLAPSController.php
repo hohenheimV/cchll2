@@ -48,19 +48,24 @@ class eLAPSController extends Controller
             $audits = ($eLAP->audits);
             foreach ($audits as $audit) {
                 if ($audit->event === 'created') {  // Check if it's the 'created' event
-                    $createdByUserId = $audit->user_id ?? 1;  // Get the ID of the user who created the record
+                    $createdByUserId = $audit->user_id ?? null;  // Get the ID of the user who created the record
                     // dump( "Record was created by user with ID: " . $createdByUserId);
                     break;
                 }
             }
-            $id_pemohon = $eLAP->id_pemohon ?? $createdByUserId;
+            $id_pemohon = $createdByUserId ?? $eLAP->id_pemohon;
             $email = User::find($id_pemohon);
             
-            if($email->hasRole('Pihak Berkuasa Tempatan')){
+            if($email && $email->hasRole('Pihak Berkuasa Tempatan')){
                 $pbt = MaklumatPenggunaPbt::where('id', '=', $email->bahagian_jln)->first();
                 $eLAP->pbt_name = $pbt ? $pbt->pbt_name : null;
             }else{
-                $eLAP->pbt_name = "Jabatan Landskap Negara";
+                $pbt = MaklumatPenggunaPbt::where('id', '=', $id_pemohon)->first();
+                if($pbt){
+                    $eLAP->pbt_name = $pbt ? $pbt->pbt_name : null;
+                }else{
+                    $eLAP->pbt_name = "Jabatan Landskap Negara";
+                }
             }
             // $eLAPSTemp = eLAPS::findOrFail($eLAP->id);
             // $currentYear = Carbon::now()->year;

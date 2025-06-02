@@ -68,7 +68,7 @@
 
             <div class="form-group col-md-5 {{ isset($pbt) ? 'inertClass' : '' }}">
                 {{ Form::label('pbt', 'Pihak Berkuasa Tempatan') }}
-                <input value="{{ isset($pbt) ? $pbt : '' }}" {{ isset($pbt) ? 'inert' : '' }} type="text" name="pbt" id="pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" required>
+                <input value="{{ isset($pbt) ? strtoupper($pbt) : '' }}" {{ isset($pbt) ? 'inert' : '' }} type="text" name="pbt" id="pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" required>
                 <datalist id="data_pbt">
                 </datalist>
             </div>

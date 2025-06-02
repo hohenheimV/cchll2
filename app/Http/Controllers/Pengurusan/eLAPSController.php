@@ -48,12 +48,12 @@ class eLAPSController extends Controller
             $audits = ($eLAP->audits);
             foreach ($audits as $audit) {
                 if ($audit->event === 'created') {  // Check if it's the 'created' event
-                    $createdByUserId = $audit->user_id ?? '';  // Get the ID of the user who created the record
+                    $createdByUserId = $audit->user_id ?? 1;  // Get the ID of the user who created the record
                     // dump( "Record was created by user with ID: " . $createdByUserId);
                     break;
                 }
             }
-            $id_pemohon = $createdByUserId ?? $eLAP->id_pemohon ?? 1;
+            $id_pemohon = $createdByUserId ?? $eLAP->id_pemohon;
             $email = User::find($id_pemohon);
             
             if($email->hasRole('Pihak Berkuasa Tempatan')){

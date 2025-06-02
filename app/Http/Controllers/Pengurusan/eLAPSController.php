@@ -53,7 +53,7 @@ class eLAPSController extends Controller
                     break;
                 }
             }
-            $id_pemohon = $createdByUserId ?? $eLAP->id_pemohon;
+            $id_pemohon = 1;//$createdByUserId ?? $eLAP->id_pemohon;
             $email = User::find($id_pemohon);
             dump($email);
             if($email->hasRole('Pihak Berkuasa Tempatan')){

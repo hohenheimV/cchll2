@@ -77,7 +77,7 @@
                     }
                     
                 </style>
-                <table id="exampleNP" class="responsive table table-bordered table-hover table-striped mb-0">
+                <table id="example" class="responsive table table-bordered table-hover table-striped mb-0">
                     <thead style="background-color:rgb(0, 0, 0) !important;color: white;">
                         <tr>
                             <th class="w-1">Bil.</th>
@@ -115,53 +115,57 @@
                                                 $filePath = storage_path('app/public/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan);
                                                 if (file_exists($filePath)) {
                                                     $fileSizeInBytes = filesize($filePath);
-                                                    $fileSizeInMB = number_format($fileSizeInBytes / 1048576, 2);
+                                                    // $fileSizeInMB = number_format($fileSizeInBytes / 1048576, 2);
+                                                    $fileSizeInMB = ($fileSizeInBytes / 1048576);
                                                 }
                                             }
                                         ?>
-                                        @if ($pelan->gambar_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan)))
-                                        <!-- <a href="{{ asset($pelan->gambar_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan : 'storage/uploads/no-photos.png' ) }}" 
-                                            target="_blank" download> -->
-                                        <button 
-                                            data-title="{{ $pelan->nama_pelan }}" 
-                                            data-pelan="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan) }}"
-                                            data-toggle="modal" 
-                                            data-target="#pelanModal"
-                                        >
-                                            <div id="pdf-viewer-{{$pelan->id_dokumen_pelan ?? $pelan->id_pelan}}" 
-                                                style="width: 100px; height: 150px; border: 1px solid #ddd; margin: auto; cursor: pointer;">
-                                                <div id="loading-{{$pelan->id_dokumen_pelan}}" 
-                                                    class="text-center" 
-                                                    style="padding-top: 80px;">
-                                                    <i class="fas fa-spinner fa-spin"></i>
-                                                </div>
-                                                <canvas id="pdf-render-{{$pelan->id_dokumen_pelan}}" 
-                                                        style="width: 100%; height: 100%; object-fit: contain; display: none;">
-                                                </canvas>
-                                            </div>
-                                        </button>
-                                        <!-- </a> -->
-                                        <p>{{ $fileSizeInMB ? $fileSizeInMB . " MB" : '' }}</p>
-                                        @else
-                                            Tiada dokumen
-                                        @endif
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="btn-group">
-                                            @if ($pelan->gambar_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan)))
-                                            <!-- <button 
-                                                type="button" 
-                                                class="btn btn-primary btn-sm" 
+                                        @if ($pelan->gambar_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan)) && $fileSizeInMB < 1000)
+                                            <!-- <a href="{{ asset($pelan->gambar_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan : 'storage/uploads/no-photos.png' ) }}" 
+                                                target="_blank" download> -->
+                                            <button 
                                                 data-title="{{ $pelan->nama_pelan }}" 
                                                 data-pelan="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan) }}"
                                                 data-toggle="modal" 
                                                 data-target="#pelanModal"
-                                            > -->
-                                            <a href="{{ asset($pelan->gambar_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan : 'javascript:void(0)' ) }}" 
-                                            target="_blank" type="button" class="btn btn-primary btn-sm" >
-                                                <i class="fas fa-search"></i>
-                                            </a>
-                                            <!-- </button> -->
+                                            >
+                                                <div id="pdf-viewer-{{$pelan->id_dokumen_pelan ?? $pelan->id_pelan}}" 
+                                                    style="width: 100px; height: 150px; border: 1px solid #ddd; margin: auto; cursor: pointer;">
+                                                    <div id="loading-{{$pelan->id_dokumen_pelan}}" 
+                                                        class="text-center" 
+                                                        style="padding-top: 80px;">
+                                                        <i class="fas fa-spinner fa-spin"></i>
+                                                    </div>
+                                                    <canvas id="pdf-render-{{$pelan->id_dokumen_pelan}}" 
+                                                            style="width: 100%; height: 100%; object-fit: contain; display: none;">
+                                                    </canvas>
+                                                </div>
+                                            </button>
+                                            <!-- </a> -->
+                                        @else
+                                            Tiada paparan dokumen
+                                            <br>&nbsp;
+                                        @endif
+                                        <p>{{ $fileSizeInMB ? number_format($fileSizeInMB, 2) . " MB" : '' }}</p>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group">
+                                            @if ($pelan->gambar_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan)))
+                                                <!-- <button 
+                                                    type="button" 
+                                                    class="btn btn-primary btn-sm" 
+                                                    data-title="{{ $pelan->nama_pelan }}" 
+                                                    data-pelan="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan) }}"
+                                                    data-toggle="modal" 
+                                                    data-target="#pelanModal"
+                                                > -->
+                                                @if($fileSizeInMB < 1000)
+                                                    <a href="{{ asset($pelan->gambar_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan : 'javascript:void(0)' ) }}" 
+                                                    target="_blank" type="button" class="btn btn-primary btn-sm" >
+                                                        <i class="fas fa-search"></i>
+                                                    </a>
+                                                @endif
+                                                <!-- </button> -->
                                                 <a href="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan) }}" target="_blank" download>
                                                     {!! Form::button('<i class="fas fa-download"></i>', [
                                                         'class' => 'btn btn-success btn-sm'
@@ -284,42 +288,97 @@
                 '/img/no-photos.png';
 
             // Load and render the first page of the PDF document
-            pdfjsLib.getDocument(url).promise.then(function(pdf) {
-                return pdf.getPage(1); // Get the first page of the document
-            }).then(function(page) {
-                const canvas = document.getElementById('pdf-render-' + pelan.id_dokumen_pelan);
-                const loadingElement = document.getElementById('loading-' + pelan.id_dokumen_pelan);
-                const context = canvas.getContext('2d');
+            // pdfjsLib.getDocument(url).promise.then(function(pdf) {
+            //     return pdf.getPage(1); // Get the first page of the document
+            // }).then(function(page) {
+            //     const canvas = document.getElementById('pdf-render-' + pelan.id_dokumen_pelan);
+            //     const loadingElement = document.getElementById('loading-' + pelan.id_dokumen_pelan);
+            //     const context = canvas.getContext('2d');
 
-                const originalViewport = page.getViewport({ scale: 0.5 });
+            //     const originalViewport = page.getViewport({ scale: 0.5 });
 
-                const containerWidth = 150;
-                const containerHeight = 200;
-                const scale = Math.min(
-                    containerWidth / originalViewport.width,
-                    containerHeight / originalViewport.height
-                );
+            //     const containerWidth = 150;
+            //     const containerHeight = 200;
+            //     const scale = Math.min(
+            //         containerWidth / originalViewport.width,
+            //         containerHeight / originalViewport.height
+            //     );
 
-                const viewport = page.getViewport({ scale: scale });
+            //     const viewport = page.getViewport({ scale: scale });
 
-                canvas.width = viewport.width;
-                canvas.height = viewport.height;
+            //     canvas.width = viewport.width;
+            //     canvas.height = viewport.height;
 
-                page.render({
-                    canvasContext: context,
-                    viewport: viewport
-                }).promise.then(() => {
-                    if (loadingElement) {
-                        loadingElement.style.display = 'none';
+            //     page.render({
+            //         canvasContext: context,
+            //         viewport: viewport
+            //     }).promise.then(() => {
+            //         if (loadingElement) {
+            //             loadingElement.style.display = 'none';
+            //         }
+            //         canvas.style.display = 'block';
+            //     });
+            // }).catch(function(error) {
+            //     // console.error('Error loading PDF for ID ' + pelan.id_dokumen_pelan + ':', error);
+            //     const viewerElement = document.getElementById('pdf-viewer-' + pelan.id_pelan);
+            //     if (viewerElement) {
+            //         viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Dokumen tidak dapat dipaparkan</div>';
+            //     }
+            // });
+            fetch(url, { method: 'HEAD' }).then(response => {
+                const sizeInBytes = response.headers.get('Content-Length');
+                const sizeInMB = sizeInBytes / (1024 * 1024);
+                if (sizeInMB > 1000) {
+                    // Too large, skip rendering
+                    const viewerElement = document.getElementById('pdf-viewer-' + pelan.id_pelan);
+                    if (viewerElement) {
+                        viewerElement.innerHTML = `<div class="text-center text-muted" style="padding-top: 80px;">
+                            Dokumen melebihi 1000MB — tidak dapat dipaparkan
+                        </div>`;
                     }
-                    canvas.style.display = 'block';
-                });
-            }).catch(function(error) {
-                // console.error('Error loading PDF for ID ' + pelan.id_dokumen_pelan + ':', error);
-                const viewerElement = document.getElementById('pdf-viewer-' + pelan.id_pelan);
-                if (viewerElement) {
-                    viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Dokumen tidak dapat dipaparkan</div>';
+                    return;
                 }
+                if(sizeInMB <= 1000){
+                    // Load and render first page
+                    pdfjsLib.getDocument(url).promise.then(function (pdf) {
+                        return pdf.getPage(1);
+                    }).then(function (page) {
+                        const canvas = document.getElementById('pdf-render-' + pelan.id_dokumen_pelan);
+                        const loadingElement = document.getElementById('loading-' + pelan.id_dokumen_pelan);
+                        const context = canvas.getContext('2d');
+
+                        const originalViewport = page.getViewport({ scale: 0.5 });
+
+                        const containerWidth = 150;
+                        const containerHeight = 200;
+                        const scale = Math.min(
+                            containerWidth / originalViewport.width,
+                            containerHeight / originalViewport.height
+                        );
+
+                        const viewport = page.getViewport({ scale: scale });
+
+                        canvas.width = viewport.width;
+                        canvas.height = viewport.height;
+
+                        page.render({
+                            canvasContext: context,
+                            viewport: viewport
+                        }).promise.then(() => {
+                            if (loadingElement) {
+                                loadingElement.style.display = 'none';
+                            }
+                            canvas.style.display = 'block';
+                        });
+                    }).catch(function (error) {
+                        const viewerElement = document.getElementById('pdf-viewer-' + pelan.id_pelan);
+                        if (viewerElement) {
+                            viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Dokumen tidak dapat dipaparkan</div>';
+                        }
+                    });
+                }
+            }).catch(err => {
+                console.error('Error fetching file size:', err);
             });
         });
     });

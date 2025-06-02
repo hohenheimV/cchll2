@@ -52,7 +52,7 @@ class DataController extends Controller
         // $request->validate([
         //     'large_file' => 'required|file|mimes:jpeg,jpg,png,pdf,zip,mp4,kml,kmz,cad,autocad',
         // ]);
-        if ($request->input('chunk_index') == 0) {
+        if ($request->input('chunk') == 0) {
             $mime = $request->file('large_file')->getMimeType();
             $allowedMimes = [
                 'image/jpeg',
@@ -70,7 +70,7 @@ class DataController extends Controller
             ];
         
             if (!in_array($mime, $allowedMimes)) {
-                return response()->json(['error' => 'Invalid file type.'], 422);
+                return response()->json(['error' => $request->input('chunk')], 422);
             }
         }
         
@@ -776,15 +776,89 @@ class DataController extends Controller
                 $simplifiedApiData = $simplifiedData;
             }
         }
-    
+
         if($pbtId != null){
             return response()->json($simplifiedApiData[$pbtId] ?? []);
         }
         return response()->json($simplifiedApiData ?? []);
     }
-    
 
-    
+    public function getAllPbtNames() {
+        $htmlContent = $this->fetchHtmlContent();
+        $pbtNames = [];
+
+        // Loop through each negeri in 'senarai_pbts'
+        if (isset($htmlContent['senarai_pbts'])) {
+            foreach ($htmlContent['senarai_pbts'] as $negeri => $details) {
+                // dump($negeri);
+                if (isset($details['pbts']) && is_array($details['pbts'])) {
+                    foreach ($details['pbts'] as $entry) {
+                        if (!empty($entry['name'])) {
+                            // $pbtNames[$negeri][] = strtoupper($entry['name']);
+                            $pbtNames[] = strtoupper($entry['name']);
+                        }
+                    }
+                }
+            }
+        }
+
+        // dd($htmlContent['senarai_agensi']);
+        // Also include names from 'senarai_agensi'
+        if (isset($htmlContent['senarai_agensi'])) {
+            foreach ($htmlContent['senarai_agensi'] as $entry) {
+                $negeri = (str_replace("Wilayah Persekutuan", "Wp", (explode(" Darul", ($entry['pbt_name']))[0])));
+                if (!empty($entry['pbt_profil_name'])) {
+                    // $pbtNames[$negeri][] = strtoupper($entry['pbt_profil_name']);
+                    $pbtNames[] = strtoupper($entry['pbt_profil_name']);
+                }
+            }
+        }
+        
+        // $pbtNames['Wp Kuala Lumpur'][] = strtoupper('Dewan Bandaraya Kuala Lumpur');
+        $pbtNames[] = strtoupper('Dewan Bandaraya Kuala Lumpur');
+        // Remove duplicates and sort alphabetically
+        // $pbtNames = array_unique($pbtNames);
+        // sort($pbtNames);
+
+        return $pbtNames;
+    }
+
+    public function findFullPbtName($searchTerm)
+    {
+        $searchTermNorm = $this->normalizePbtName($searchTerm);
+        $allPbtNames = $this->getAllPbtNames();
+        $bestMatch = null;
+        $highestSimilarity = 0;
+
+        foreach ($allPbtNames as $fullName) {
+            $normalized = $this->normalizePbtName($fullName);
+
+            similar_text($searchTermNorm, $normalized, $percent);
+
+            if ($percent > $highestSimilarity) {
+                $highestSimilarity = $percent;
+                $bestMatch = $fullName;
+            }
+        }
+
+        // Set threshold (you can adjust 70 based on accuracy vs leniency)
+        return $highestSimilarity >= 70 ? $bestMatch : null;
+    }
+
+    private function normalizePbtName($name)
+    {
+        $name = strtoupper(trim($name));
+
+        // Remove common prefixes
+        // $name = preg_replace('/^(MAJLIS\s+BANDARAYA|MAJLIS\s+PERBANDARAN|MAJLIS\s+DAERAH|MAJLIS|MP|MD|MB)\s+/i', '', $name);
+        $name = preg_replace(
+                '/^(DEWAN\s+BANDARAYA|MAJLIS\s+BANDARAYA|MAJLIS\s+PERBANDARAN|MAJLIS\s+DAERAH|MAJLIS|MP|MD|MB|DB)\s+/i',
+                '',
+                $name
+            );
+        return trim($name);
+    }
+
 
     public function getPostcode($postcode){
         // $postcode = htmlspecialchars($_GET['postcode']);

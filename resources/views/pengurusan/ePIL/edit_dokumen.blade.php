@@ -65,25 +65,59 @@
                         </div>
 
                         <div class="col-lg-6" style="text-align: center;">
-                            @if($dokumen->nama_dokumen_pelan)
+                            @php
+                                $fileSizeInMB = '';
+                                if (isset($dokumen->nama_dokumen_pelan)) {
+                                    $filePath = storage_path('app/public/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan);
+                                    if (file_exists($filePath)) {
+                                        $fileSizeInBytes = filesize($filePath);
+                                        $fileSizeInMB = ($fileSizeInBytes / 1048576);
+                                    }
+                                }
+                            // dd($fileSizeInMB);
+                            @endphp
+                            @if($dokumen->nama_dokumen_pelan && $fileSizeInMB < 1000)
                                 <object data="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}" type="application/pdf" width="100%" height="600px">
-                                    <p>Your browser does not support PDFs.
-                                        <a href="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}">Download the PDF</a>.
+                                    <p>Tiada paparan dokumen.
+                                        <a href="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}">Muat turun dokumen</a>.
                                     </p>
                                 </object>
 
-                                @php
-                                    $fileSizeInMB = '';
-                                    if (isset($dokumen->nama_dokumen_pelan)) {
-                                        $filePath = storage_path('app/public/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan);
-                                        if (file_exists($filePath)) {
-                                            $fileSizeInBytes = filesize($filePath);
-                                            $fileSizeInMB = number_format($fileSizeInBytes / 1048576, 2);
-                                        }
-                                    }
-                                @endphp
-                                <p>{{ $fileSizeInMB ? $fileSizeInMB . " MB" : '' }}</p>
+                                <p>{{ $fileSizeInMB ? number_format($fileSizeInMB, 2) . " MB" : '' }}</p>
+                            @else
+                                Tiada paparan dokumen
+                                <br>&nbsp;
                             @endif
+                            <div class="col-md-12">
+                                <div class="d-flex justify-content-center">
+                                    @php
+                                        $folderName = isset($dokumen->nama_dokumen_pelan) ? 'ePIL/'.str_replace(' ', '_', $dokumen->folder).'/'.$dokumen->nama_dokumen_pelan : null;
+
+                                        $fileExtension = isset($dokumen->nama_dokumen_pelan) ? pathinfo($dokumen->nama_dokumen_pelan, PATHINFO_EXTENSION) : '';
+                                        $extensionIcon = null;
+                                        if ($fileExtension === 'pdf') {
+                                            $extensionIcon = "https://img.icons8.com/plasticine/100/pdf-2.png";
+                                        } else {
+                                            $extensionIcon = "https://img.icons8.com/fluency/48/winrar.png";
+                                        }
+                                    @endphp
+                                    
+                                    @if($folderName != null)
+                                        <a href="{{ asset('storage/uploads/' . $folderName) }}" target="_blank" class="" style="border: 0px solid #ddd; border-radius: 10px; padding: 10px; display: inline-block; text-align: center; background-color: #fff;" download>
+                                            <div class="product-image">
+                                                <img src="{{ $extensionIcon }}" class="br-5" alt="" style="width: 100px; height: 100px; border-radius: 5px; margin-bottom: 10px;">
+                                            </div>
+                                            <div class="product-image">
+                                                <span class="file-name-1" style="background-color: #008000; padding: 5px 10px; border-radius: 5px; color: #fff; font-weight: 600; display: inline-block; font-size: 14px;">Muat Turun&nbsp;&nbsp;<i class="fas fa-download"></i></span>
+                                            </div>
+                                            <div class="product-image">
+                                                <span class="file-name-1">{{ $dokumen->nama_dokumen_pelan ?? '' }}</span>
+                                                <p>{{ $fileSizeInMB ? number_format($fileSizeInMB, 2) . " MB" : '' }}</p>
+                                            </div>
+                                        </a>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -143,7 +177,7 @@
                     <!-- <div class="form-group" style="text-align: center;">
                         @if($dokumen->nama_dokumen_pelan)
                             <object data="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}" type="application/pdf" width="100%" height="400">
-                                <p>Your browser does not support PDFs. <a href="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}">Download the PDF</a>.</p>
+                                <p>Tiada paparan dokumen. <a href="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}">Download the PDF</a>.</p>
                             </object>
                             <?php
                                 $fileSizeInMB = '';

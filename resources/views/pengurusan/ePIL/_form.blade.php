@@ -592,45 +592,50 @@
                                             </td> -->
 
                                             <td style="text-align: center; vertical-align: middle;">
-                                                @if($value['nama_dokumen_pelan'])
+                                                <?php
+                                                    $fileSizeInMB = '';
+                                                    if (isset($value['nama_dokumen_pelan'])) {
+                                                        $filePath = storage_path('app/public/uploads/ePIL/'.$folder.'/'.$value['nama_dokumen_pelan']);
+                                                        if (file_exists($filePath)) {
+                                                            $fileSizeInBytes = filesize($filePath);
+                                                            $fileSizeInMB = ($fileSizeInBytes / 1048576);
+                                                        }
+                                                    }
+                                                ?>
+                                                @if($value['nama_dokumen_pelan'] && $fileSizeInMB < 1000)
                                                     <div style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                                                         <canvas id="pdf-render-{{ $value['id_dokumen_pelan'] }}" width="200" height="250"></canvas>
-                                                        <?php
-                                                            $fileSizeInMB = '';
-                                                            if (isset($value['nama_dokumen_pelan'])) {
-                                                                $filePath = storage_path('app/public/uploads/ePIL/'.$folder.'/'.$value['nama_dokumen_pelan']);
-                                                                if (file_exists($filePath)) {
-                                                                    $fileSizeInBytes = filesize($filePath);
-                                                                    $fileSizeInMB = number_format($fileSizeInBytes / 1048576, 2);
-                                                                }
-                                                            }
-                                                        ?>
-                                                        <p>{{ $fileSizeInMB ? $fileSizeInMB . " MB" : '' }}</p>
                                                     </div>
                                                 @else
-                                                    No PDF available
+                                                    Tiada paparan dokumen
+                                                    <br>&nbsp;
                                                 @endif
+                                                <p>{{ $fileSizeInMB ? number_format($fileSizeInMB, 2) . " MB" : '' }}</p>
                                             </td>
 
                                             <td style="text-align: center;">
                                                 <div>
-                                                    {!! 
-                                                        Form::button('<i class="fas fa-eye"></i>', 
-                                                        [
-                                                            'onclick' => "window.open('".asset('storage/uploads/ePIL/'.$folder.'/'.$value['nama_dokumen_pelan'])."', '_blank');",
-                                                            'class' => 'btn btn-primary btn-sm',
-                                                            Html::tooltip('Papar PIL')
-                                                        ]) 
-                                                    !!}
-                                                    <a href="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$value['nama_dokumen_pelan']) }}" download="{{ $value['nama_dokumen_pelan'] }}">
+                                                    @if($value['nama_dokumen_pelan'] && $fileSizeInMB < 1000)
                                                         {!! 
-                                                            Form::button('<i class="fas fa-download"></i>', 
+                                                            Form::button('<i class="fas fa-eye"></i>', 
                                                             [
-                                                                'class' => 'btn btn-success btn-sm',
-                                                                Html::tooltip('Muat turun PIL')
+                                                                'onclick' => "window.open('".asset('storage/uploads/ePIL/'.$folder.'/'.$value['nama_dokumen_pelan'])."', '_blank');",
+                                                                'class' => 'btn btn-primary btn-sm',
+                                                                Html::tooltip('Papar PIL')
                                                             ]) 
                                                         !!}
-                                                    </a>
+                                                    @endif
+                                                    @if($value['nama_dokumen_pelan'])
+                                                        <a href="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$value['nama_dokumen_pelan']) }}" download="{{ $value['nama_dokumen_pelan'] }}">
+                                                            {!! 
+                                                                Form::button('<i class="fas fa-download"></i>', 
+                                                                [
+                                                                    'class' => 'btn btn-success btn-sm',
+                                                                    Html::tooltip('Muat turun PIL')
+                                                                ]) 
+                                                            !!}
+                                                        </a>
+                                                    @endif
                                                     {!! 
                                                         Form::button('<i class="fas fa-pencil-alt"></i>', ['onclick'=>"window.location='".route('pengurusan.ePIL_dokumen.edit',$value)."'", 'class'=>'btn bg-warning btn-sm showButton', Html::tooltip('Kemaskini PIL')]); 
                                                     !!}
@@ -665,12 +670,54 @@
                                         // Loop through each document and render the first page of the PDF
                                         @foreach($ePIL->dokumen as $value)
                                             const url_{{ $value['id_dokumen_pelan'] }} = '{{ asset('storage/uploads/ePIL/'.$folder.'/'.$value['nama_dokumen_pelan']) }}';
-                                            const canvas_{{ $value['id_dokumen_pelan'] }} = document.getElementById('pdf-render-{{ $value['id_dokumen_pelan'] }}');
-                                            const context_{{ $value['id_dokumen_pelan'] }} = canvas_{{ $value['id_dokumen_pelan'] }}.getContext('2d');
+                                            // const canvas_{{ $value['id_dokumen_pelan'] }} = document.getElementById('pdf-render-{{ $value['id_dokumen_pelan'] }}');
+                                            // const context_{{ $value['id_dokumen_pelan'] }} = canvas_{{ $value['id_dokumen_pelan'] }}.getContext('2d');
 
                                             // Check if the URL is valid (the document exists)
+                                            // if (url_{{ $value['id_dokumen_pelan'] }}) {
+                                            //     pdfjsLib.getDocument(url_{{ $value['id_dokumen_pelan'] }}).promise.then(function(pdf) {
+                                            //         // Fetch the first page
+                                            //         pdf.getPage(1).then(function(page) {
+                                            //             const scale = 0.25;  // Adjust scale as needed
+                                            //             const viewport = page.getViewport({ scale: scale });
+
+                                            //             // Set canvas dimensions
+                                            //             canvas_{{ $value['id_dokumen_pelan'] }}.width = viewport.width;
+                                            //             canvas_{{ $value['id_dokumen_pelan'] }}.height = viewport.height;
+
+                                            //             // Render the page
+                                            //             page.render({
+                                            //                 canvasContext: context_{{ $value['id_dokumen_pelan'] }},
+                                            //                 viewport: viewport
+                                            //             });
+                                            //         });
+                                            //     }).catch(function(error) {
+                                            //         console.error('Error loading PDF:', error);
+                                            //         // If there's an error, we can display a placeholder
+                                            //         const canvas_{{ $value['id_dokumen_pelan'] }} = document.getElementById('pdf-render-{{ $value['id_dokumen_pelan'] }}');
+                                            //         canvas_{{ $value['id_dokumen_pelan'] }}.innerHTML = '<div class="text-center text-muted">Dokumen tidak dapat dipaparkan</div>';
+                                            //     });
+                                            // }
+
                                             if (url_{{ $value['id_dokumen_pelan'] }}) {
-                                                pdfjsLib.getDocument(url_{{ $value['id_dokumen_pelan'] }}).promise.then(function(pdf) {
+                                                fetch(url_{{ $value['id_dokumen_pelan'] }}, { method: 'HEAD' }).then(response => {
+                                                    const sizeInBytes = response.headers.get('Content-Length');
+                                                    const sizeInMB = sizeInBytes / (1024 * 1024);
+
+                                                    if (sizeInMB >= 1000) {
+                                                        // Too big, show message instead of rendering
+                                                        const canvas = document.getElementById('pdf-render-{{ $value['id_dokumen_pelan'] }}');
+                                                        if (canvas) {
+                                                            canvas.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Dokumen melebihi 1000MB — tidak dapat dipaparkan</div>';
+                                                        }
+                                                        return; // Stop here, do not render
+                                                    }
+
+                                                    const canvas_{{ $value['id_dokumen_pelan'] }} = document.getElementById('pdf-render-{{ $value['id_dokumen_pelan'] }}');
+                                                    const context_{{ $value['id_dokumen_pelan'] }} = canvas_{{ $value['id_dokumen_pelan'] }}.getContext('2d');
+
+                                                    // File size okay, proceed to load and render PDF
+                                                    pdfjsLib.getDocument(url_{{ $value['id_dokumen_pelan'] }}).promise.then(function(pdf) {
                                                     // Fetch the first page
                                                     pdf.getPage(1).then(function(page) {
                                                         const scale = 0.25;  // Adjust scale as needed
@@ -686,13 +733,17 @@
                                                             viewport: viewport
                                                         });
                                                     });
-                                                }).catch(function(error) {
-                                                    console.error('Error loading PDF:', error);
-                                                    // If there's an error, we can display a placeholder
-                                                    const canvas_{{ $value['id_dokumen_pelan'] }} = document.getElementById('pdf-render-{{ $value['id_dokumen_pelan'] }}');
-                                                    canvas_{{ $value['id_dokumen_pelan'] }}.innerHTML = '<div class="text-center text-muted">Dokumen tidak dapat dipaparkan</div>';
+                                                    }).catch(function(error) {
+                                                        console.error('Error loading PDF:', error);
+                                                        // If there's an error, we can display a placeholder
+                                                        const canvas_{{ $value['id_dokumen_pelan'] }} = document.getElementById('pdf-render-{{ $value['id_dokumen_pelan'] }}');
+                                                        canvas_{{ $value['id_dokumen_pelan'] }}.innerHTML = '<div class="text-center text-muted">Dokumen tidak dapat dipaparkan</div>';
+                                                    });
+                                                }).catch(err => {
+                                                    console.error('Error fetching file size:', err);
                                                 });
                                             }
+
                                         @endforeach
                                     });
                                 </script>
@@ -731,7 +782,7 @@
                                 </td>
                             -->
                             <td>
-                                <input type="file" class="form-control" name="pelan[${bilCount}][fail]" id="fail_${bilCount}" accept="application/pdf">
+                                <input type="file" class="form-control" name="pelan[${bilCount}][fail]" id="fail_${bilCount}" accept=".pdf,.jpg,.jpeg,.png,.zip,.mp4,.kml,.kmz,.dwg,.dxf">
                                 <input name="pelan[${bilCount}][large_file_name_new]" required type="hidden" id="large_file_name_new_${bilCount}">
                                 <input name="pelan[${bilCount}][large_file_name_old]" type="hidden" id="large_file_name_old_${bilCount}">
                                 <input name="pelan[${bilCount}][file_type]" type="hidden" id="file_type_${bilCount}">
@@ -748,9 +799,9 @@
                             </td>
                         `;
                         @if(isset($ePIL->dokumen))
-                        document.getElementById('projek_container2').appendChild(newRow);
+                            document.getElementById('projek_container2').appendChild(newRow);
                         @else
-                        document.getElementById('projek_container').appendChild(newRow);
+                            document.getElementById('projek_container').appendChild(newRow);
                         @endif
                         bilCount++;
 
@@ -820,7 +871,7 @@
                             }
 
                             const timestamp = new Date().getTime();
-                            const chunkSize = 15 * 1024 * 1024; // 10MB per chunk
+                            const chunkSize = 25 * 1024 * 1024; // 10MB per chunk
                             const totalChunks = Math.ceil(file.size / chunkSize);
                             let currentChunk = 0;
                             const destinationFolder = `ePIL/`+`{{$folder}}`+`/`;
@@ -902,7 +953,7 @@
                                 alert("No file selected!");
                                 return;
                             }
-
+                            
                             const timestamp = new Date().getTime();
                             const chunkSize = 15 * 1024 * 1024; // 10MB per chunk
                             const totalChunks = Math.ceil(file.size / chunkSize);

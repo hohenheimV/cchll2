@@ -64,10 +64,10 @@ return [
         'address' => env('MAIL_FROM_ADDRESS'),
         'name' => env('MAIL_FROM_NAME'),
     ],
-    // 'cc' => [
-    //     'address' => env('MAIL_CC_ADDRESS', 'tpbk@jln.gov.my'),
-    //     'name' => env('MAIL_CC_NAME', 'Taman Persekutuan Bukit Kiara'),
-    // ],
+    'cc' => [
+        'address' => env('MAIL_CC_ADDRESS'),
+        'name' => env('MAIL_CC_NAME'),
+    ],
     'bcc' => [
         'address' => env('MAIL_BCC_ADDRESS'),  // Add the BCC email here
         'name' => env('MAIL_BCC_NAME'),

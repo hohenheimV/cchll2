@@ -557,8 +557,8 @@ Route::name('website.')
             $epacts = ePACT::with('kategori')
                 ->orderByRaw("LOWER(tajuk) LIKE '%dasar%' DESC") // Rows with 'dasar' come first
                 ->orderByRaw("CASE WHEN LOWER(tajuk) LIKE '%dasar%' THEN LOWER(tajuk) ELSE NULL END ASC")
-                // ->orderBy('tahun', 'asc')
-                ->orderBy('tarikh', 'asc')
+                ->orderBy('tahun', 'asc')
+                // ->orderBy('tarikh', 'asc')
                 ->orderBy('tajuk', 'asc')
                 ->paginate($totalCount);
             // dd($epacts);

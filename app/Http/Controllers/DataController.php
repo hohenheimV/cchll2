@@ -1506,14 +1506,14 @@ class DataController extends Controller
 
                                 // Save the updated JSON
                                 $record->$columnName = json_encode($data);
-                                $record->save(); // uncomment to apply changes
+                                // $record->save(); // uncomment to apply changes
                                 $total++;
                                 echo "{$modelClass} JSON update: {$old} → {$new} <br>";
                             }
                         }
                     } else {
                         // Normal column update
-                        $affected = $modelClass::where($columnName, $old)->update([$columnName => $new])/* ->count() */; // use ->update([...]) to apply
+                        $affected = $modelClass::where($columnName, $old)/* ->update([$columnName => $new]) */->count(); // use ->update([...]) to apply
                         $total += $affected;
                         echo "{$modelClass} updated {$affected} rows: {$old} → {$new} - Total: {$total} <br>";
                     }

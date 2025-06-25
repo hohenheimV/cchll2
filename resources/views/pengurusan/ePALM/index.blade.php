@@ -63,6 +63,8 @@
                                         line-height: 1.5 !important;
                                         border-radius: 0.2rem !important;
                                         border: 1px solid #ced4da !important;
+                                        /* min-width: 220px; */
+                                        max-width: 200px;
                                     }
                                 </style>
                                     {{-- Negeri Dropdown --}}
@@ -81,6 +83,38 @@
                                         <select id="negeri" name="negeriX">
                                         </select>
                                     </div>
+
+                                    <div class="input-group mr-2">
+                                        {{-- {!! Form::select('nama_pbt', $namaPbtArray, request('nama_pbt'), ['class' => 'gyrodrop', 'id' => 'nama_pbt']) !!} --}}
+                                        <select id="nama_pbt" name="nama_pbt" class="gyrodrop">
+                                            <option value="">Papar Semua PBT</option>
+                                            @foreach ($namaPbtArray as $pbt)
+                                                <option value="{{ $pbt }}" {{ request('nama_pbt') === $pbt ? 'selected' : '' }}>
+                                                    {{ ucwords(strtolower($pbt)) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="input-group" style="display: none;">
+                                        <select id="nama_pbt" name="nama_pbtX">
+                                        </select>
+                                    </div>
+
+                                    <script>
+    const negeriSelect = document.getElementById('negeri');
+    const pbtSelect = document.getElementById('nama_pbt');
+
+    negeriSelect.addEventListener('change', function () {
+        // If negeri changed, reset nama_pbt
+        pbtSelect.selectedIndex = 0; // selects the default option
+    });
+
+    pbtSelect.addEventListener('change', function () {
+        // If nama_pbt changed, reset negeri
+        negeriSelect.selectedIndex = 0;
+    });
+</script>
 
                                     @php
                                         $options = [

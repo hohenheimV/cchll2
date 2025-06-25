@@ -15,6 +15,8 @@ use App\Model\MaklumatPenggunaPenggiatIndustri;
 use App\Model\Negeri;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Schema;
 
 class DataController extends Controller
 {
@@ -1252,5 +1254,276 @@ class DataController extends Controller
             return response()->json($pbt);
         }
         return response()->json(['success' => false, 'message' => 'No data found']);
+    }
+
+    public function updatePbtNames()
+    {
+        // Step 1: Fetch latest names from the API
+        // $response = Http::get('http://127.0.0.1:8000/data/pbt');
+        // $response = $this->getAllPbtNames();
+        if (1) {
+            $latestPbtNames = $this->getAllPbtNames();
+            
+            // $uniquePbtNames = ePALM::select('nama_pbt', 'negeri_taman')->distinct()->orderBy('negeri_taman')->orderBy('nama_pbt')->pluck('nama_pbt');
+
+            // foreach ($uniquePbtNames as $pbtName) {
+            //     echo $pbtName . "<br>";
+            // }
+
+            // $uniquePbtNames = ePALM::select('nama_pbt', 'negeri_taman')
+            //     ->distinct()
+            //     ->orderBy('negeri_taman')
+            //     ->orderBy('nama_pbt')
+            //     ->pluck('nama_pbt');
+
+            // $missing = $uniquePbtNames->filter(function ($pbtName) use ($latestPbtNames) {
+            //     return !in_array($pbtName, $latestPbtNames);
+            // });
+
+            // // Output missing ones
+            // foreach ($missing as $pbtName) {
+            //     echo "❌ Missing in API: {$pbtName}<br>";
+            // }
+
+            // echo "<br>Total missing: " . $missing->count() . "<br>";
+
+            // $uniquePbtNames = ePALM::select('nama_pbt')
+            //     ->distinct()
+            //     ->pluck('nama_pbt')
+            //     ->toArray();
+
+            // // Filter API names to find those NOT in DB
+            // $missingInDb = collect($latestPbtNames)->filter(function ($apiName) use ($uniquePbtNames) {
+            //     return !in_array($apiName, $uniquePbtNames);
+            // });
+
+            // foreach ($missingInDb as $pbtName) {
+            //     echo "❌ Missing in DB: {$pbtName}<br>";
+            // }
+
+            // echo "<br>Total missing in DB: " . $missingInDb->count() . "<br>";
+
+            // dd("<br>");
+
+            $exceptionMap = [
+                'MAJLIS PERBANDARAN LANGKAWI' => 'MAJLIS PERBANDARAN LANGKAWI BANDARAYA PELANCONGAN',
+                'MAJLIS DAERAH BACHOK' => 'MAJLIS DAERAH BACHOK BANDAR PELANCONGAN ISLAM',
+                'MAJLIS DAERAH KETEREH' => 'MAJLIS DAERAH KETEREH - PERBANDARAN ISLAM',
+                'MAJLIS DAERAH PASIR PUTIH' => 'MAJLIS DAERAH PASIR PUTEH',
+                'MAJLIS PERBANDARAN KOTA BAHRU' => 'MAJLIS PERBANDARAN KOTA BHARU - BANDAR RAYA ISLAM',
+                'MAJLIS MELAKA BANDARAYA BERSEJARAH' => 'MAJLIS BANDARAYA MELAKA BERSEJARAH',
+                'MAJLIS DAERAH PEKAN' => 'MAJLIS PERBANDARAN PEKAN BANDAR DIRAJA',
+                'MAJLIS PERBANDARAN KLANG' => 'MAJLIS BANDARAYA DIRAJA KLANG',
+                'MAJLIS DAERAH DALAT DAN MUKAH' => 'MAJLIS DAERAH DALAT & MUKAH',
+                'MAJLIS DAERAH MATU DAN DARO' => 'MAJLIS DAERAH MATU & DARO',
+                'MAJLIS DAERAH SAMARAHAN' => 'MAJLIS PERBANDARAN KOTA SAMARAHAN',
+                'MAJLIS DAERAH CAMERON HIGHLAND' => 'MAJLIS DAERAH CAMERON HIGHLANDS',
+            ];
+            $updatedArray = [
+                "MAJLIS DAERAH PONTIAN" => "MAJLIS PERBANDARAN PONTIAN",
+                "MAJLIS DAERAH SEGAMAT" => "MAJLIS PERBANDARAN SEGAMAT",
+                "MAJLIS PERBANDARAN PASIR GUDANG" => "MAJLIS BANDARAYA PASIR GUDANG",
+                "MAJLIS DAERAH KUBANG PASU" => "MAJLIS PERBANDARAN KUBANG PASU",
+                "MAJLIS PERBANDARAN LANGKAWI" => "MAJLIS PERBANDARAN LANGKAWI BANDARAYA PELANCONGAN",
+                "MAJLIS DAERAH BACHOK" => "MAJLIS DAERAH BACHOK BANDAR PELANCONGAN ISLAM",
+                "MAJLIS DAERAH KETEREH" => "MAJLIS DAERAH KETEREH - PERBANDARAN ISLAM",
+                "MAJLIS DAERAH PASIR PUTIH" => "MAJLIS DAERAH PASIR PUTEH",
+                "MAJLIS PERBANDARAN KOTA BAHRU" => "MAJLIS PERBANDARAN KOTA BHARU - BANDAR RAYA ISLAM",
+                "MAJLIS MELAKA BANDARAYA BERSEJARAH" => "MAJLIS BANDARAYA MELAKA BERSEJARAH",
+                "MAJLIS PERBANDARAN SEREMBAN" => "MAJLIS BANDARAYA SEREMBAN",
+                "MAJLIS DAERAH CAMERON HIGHLAND" => "MAJLIS DAERAH CAMERON HIGHLANDS",
+                "MAJLIS DAERAH PEKAN" => "MAJLIS PERBANDARAN PEKAN BANDAR DIRAJA",
+                "MAJLIS PERBANDARAN KUANTAN" => "MAJLIS BANDARAYA KUANTAN",
+                "MAJLIS DAERAH HULU SELANGOR" => "MAJLIS PERBANDARAN HULU SELANGOR",
+                "MAJLIS DAERAH KUALA LANGAT" => "MAJLIS PERBANDARAN KUALA LANGAT",
+                "MAJLIS PERBANDARAN KLANG" => "MAJLIS BANDARAYA DIRAJA KLANG",
+                "MAJLIS PERBANDARAN SUBANG JAYA" => "MAJLIS BANDARAYA SUBANG JAYA",
+                "MAJLIS DAERAH PENAMPANG" => "MAJLIS PERBANDARAN PENAMPANG",
+                "MAJLIS DAERAH DALAT DAN MUKAH" => "MAJLIS DAERAH DALAT & MUKAH",
+                "MAJLIS DAERAH MATU DAN DARO" => "MAJLIS DAERAH MATU & DARO",
+                "MAJLIS DAERAH SAMARAHAN" => "MAJLIS PERBANDARAN KOTA SAMARAHAN",
+            ];
+
+            // Step 0: Loop through ePALM entries
+            $count = 0;
+            // ePALM::orderBy('negeri_taman')->orderBy('nama_pbt')->chunk(100, function ($records) use ($latestPbtNames, $exceptionMap, &$count, &$updatedArray) {
+            //     foreach ($records as $record) {
+            //         $originalName = $record->nama_pbt;
+
+            //         // ✅ Step 1: Check against exception map first
+            //         if (isset($exceptionMap[$originalName])) {
+            //             $newName = $exceptionMap[$originalName];
+
+            //             // Optional: double-check it really exists in the API
+            //             if (in_array($newName, $latestPbtNames)) {
+            //                 echo "✅ Exception Update: {$originalName} -> {$newName}<br>\n";
+            //                 $updatedArray[$originalName] = $newName;
+            //                 // $record->nama_pbt = $newName;
+            //                 // $record->save();
+            //                 $count++;
+            //                 continue;
+            //             }
+            //         }
+                    
+            //         if (in_array($originalName, $latestPbtNames)) {
+            //             continue;
+            //         }
+            //         $parts = explode(' ', $originalName);
+
+            //         if (count($parts) >= 3) {
+            //             $keyword = implode(' ', array_slice($parts, 2)); // third word onwards
+
+            //             // Step 3: Find best match
+            //             $match = collect($latestPbtNames)->first(function ($pbtName) use ($keyword) {
+            //                 return substr($pbtName, -strlen($keyword)) === $keyword;
+            //             });
+
+            //             // Step 4: Update if needed
+            //             if ($match && $match !== $originalName) {
+            //                 // $record->nama_pbt = $match;
+            //                 // $record->save();
+            //                 $count++;
+
+            //                 echo "Updated: {$originalName} -> {$match}<br>\n";
+            //                 $updatedArray[$originalName] = $match;
+            //             }
+            //         }
+            //     }
+            // });
+            
+            // $count = 0;
+
+            // // Step 2: Build a location => full name map
+            // $latestMap = collect($latestPbtNames)->mapWithKeys(function ($name) {
+            //     $parts = explode(' ', $name);
+            //     $location = strtoupper(implode(' ', array_slice($parts, 2))); // third word onwards
+            //     return [$location => $name];
+            // });
+
+            // // Step 3: Process ePALM rows
+            // ePALM::orderBy('negeri_taman')->orderBy('nama_pbt')->chunk(100, function ($records) use (&$count, $latestMap) {
+            //     foreach ($records as $record) {
+            //         $originalName = $record->nama_pbt;
+
+            //         // If it's already correct, skip it
+            //         if (in_array($originalName, $latestMap->values()->toArray())) {
+            //             continue;
+            //         }
+
+            //         $parts = explode(' ', $originalName);
+
+            //         if (count($parts) >= 3) {
+            //             $location = strtoupper(implode(' ', array_slice($parts, 2))); // e.g., "KLANG"
+
+            //             if (isset($latestMap[$location])) {
+            //                 $newName = $latestMap[$location];
+
+            //                 if ($newName !== $originalName) {
+            //                     echo "Updating: {$originalName} → {$newName}<br>";
+            //                     // $record->nama_pbt = $newName;
+            //                     // $record->save();
+            //                     $count++;
+            //                 }
+            //             }
+            //         }
+            //     }
+            // });
+
+            // echo $count . " PBT name update completed.\n";
+            // echo $count . " PBT name update completed.\n";
+            // echo $count . " PBT name update completed.\n";
+
+            $models = [
+                \App\Model\ePALM::class => 'nama_pbt',
+                \App\Model\ePALM_draf::class => 'nama_pbt',
+                \App\Model\ePIL::class => 'nama_pbt',
+                \App\Model\ePIL_draf::class => 'nama_pbt',
+                \App\Model\MIB::class => 'pbt',
+                \App\Model\EntitiLandskapUnik::class => 'pbt->pbt',
+                \App\Model\KTP::class => 'pbt',
+                \App\Model\MaklumatPenggunaPbt::class => 'pbt_name',
+                // add more models here
+            ];
+            
+            // foreach ($models as $modelClass => $columnName) {
+            //     $isJson = str_contains($columnName, '->'); // detect JSON path
+            //     [$columnName, $jsonKey] = $isJson ? explode('->', $columnName) : [$columnName, null];
+
+            //     if (!Schema::hasColumn((new $modelClass)->getTable(), $columnName)) {
+            //         echo "⚠️ Skipped {$modelClass}: column {$columnName} does not exist.<br>";
+            //         continue;
+            //     }
+
+            //     if ($isJson) {
+            //         // For JSON-based column like location->pbt
+            //         $records = $modelClass::select($columnName)->distinct()->get();
+            //         echo "<br>{$modelClass} uniquePbtNames <br>";
+            //         foreach ($records as $record) {
+            //             $data = json_decode($record->$columnName, true);
+            //             if (!isset($data[$jsonKey])) continue;
+            //             echo $data[$jsonKey] . "<br>";
+            //         }
+            //     }
+            //     $uniquePbtNames = $modelClass::select($columnName)->distinct()->pluck($columnName);
+            //     echo "<br>{$modelClass} uniquePbtNames <br>";
+            //     foreach ($uniquePbtNames as $pbtName) {
+            //         echo $pbtName . "<br>";
+            //     }
+            // }
+
+            // $total = 0;
+            // foreach ($models as $modelClass => $columnName) {
+            //     foreach ($updatedArray as $old => $new) {
+            //         $affected = $modelClass::select($columnName)->distinct()->where($columnName, $old)->count();//pluck('nama_pbt');//->update(['nama_pbt' => $new]);
+            //         $total += $affected;
+            //         echo "{$modelClass} updated {$affected} rows: {$old} → {$new} - Total: {$total} <br>";
+            //     }
+            // }
+
+            $total = 0;
+
+            foreach ($models as $modelClass => $columnKey) {
+                $isJson = str_contains($columnKey, '->'); // detect JSON path
+                [$columnName, $jsonKey] = $isJson ? explode('->', $columnKey) : [$columnKey, null];
+
+                if (!Schema::hasColumn((new $modelClass)->getTable(), $columnName)) {
+                    echo "⚠️ Skipped {$modelClass}: column {$columnName} does not exist.<br>";
+                    continue;
+                }
+
+                foreach ($updatedArray as $old => $new) {
+                    if ($isJson) {
+                        // For JSON-based column like location->pbt
+                        $records = $modelClass::select($columnName)->get();
+
+                        foreach ($records as $record) {
+                            $data = json_decode($record->$columnName, true);
+
+                            if (!isset($data[$jsonKey])) continue;
+
+                            if ($data[$jsonKey] === $old) {
+                                $data[$jsonKey] = $new;
+
+                                // Save the updated JSON
+                                $record->$columnName = json_encode($data);
+                                $record->save(); // uncomment to apply changes
+                                $total++;
+                                echo "{$modelClass} JSON update: {$old} → {$new} <br>";
+                            }
+                        }
+                    } else {
+                        // Normal column update
+                        $affected = $modelClass::where($columnName, $old)->update([$columnName => $new])/* ->count() */; // use ->update([...]) to apply
+                        $total += $affected;
+                        echo "{$modelClass} updated {$affected} rows: {$old} → {$new} - Total: {$total} <br>";
+                    }
+                }
+            }
+
+            echo "<br><strong>Total updated: {$total}</strong>";
+            dd($updatedArray);
+        } else {
+            echo "Failed to fetch latest PBT names from API.\n";
+        }
     }
 }

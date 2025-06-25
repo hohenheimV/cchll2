@@ -53,7 +53,7 @@
 
             <div class="row">
                 <!-- Post Content Column -->
-                <div class="col-12 col-lg-9">
+                <div class="col-12 col-lg-12">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card card-olive card-outline">
@@ -68,7 +68,7 @@
                                     </div>
                                 </div> -->
                                 <div class="card-header">
-                                    <h3 class="card-title font-weight-bold my-1">Direktori Taman</h3>
+                                    <h3 class="card-title font-weight-bold my-1">Direktori Taman & Landskap</h3>
                                     <div class="card-tools">
                                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                                             <div class="btn-group" role="group" aria-label="First group">
@@ -481,16 +481,44 @@
                                                 <div class="col-12 col-md-3"><p id="modalKeluasan">{{ is_numeric($ePALM->keluasan_taman) ? number_format($ePALM->keluasan_taman, 2).' '.$ePALM->keluasan_unit : 'Tiada Maklumat' }}</p></div>
 
                                                 <div class="col-12 col-md-3"><h5>Koordinat Taman :</h5></div>
-                                                <div class="col-12 col-md-3"><p id="modalCoordinate">{{ is_numeric($ePALM->lng) && is_numeric($ePALM->lat) ? '( '.$ePALM->lng.', '.$ePALM->lat.' )' : 'Tiada Maklumat' }}</p></div>
+                                                <div class="col-12 col-md-3">
+                                                    <p id="modalCoordinate">
+                                                        {{ is_numeric($ePALM->lng) && is_numeric($ePALM->lat) ? '( '.$ePALM->lat.', '.$ePALM->lng.' )' : 'Tiada Maklumat' }}
+                                                        @if(is_numeric($ePALM->lng) && is_numeric($ePALM->lat))
+                                                        &nbsp;<br>
+                                                        <a href="{{ 'https://maps.google.com/?q='.$ePALM->lat.','.$ePALM->lng }}" target="_blank">
+                                                            Pautan Google Map <i class="fas fa-globe"></i>
+                                                        </a>
+                                                        @endif
+                                                    </p>
+                                                </div>
                                             </div>
                                             <br><br>
+                                            @php
+                                                $fasilitiData = isset($ePALM->fasiliti) && $ePALM->fasiliti != null
+                                                    ? (array) json_decode($ePALM->fasiliti, true)
+                                                    : [];
+
+                                                $facilityOptions = [
+                                                    'cctv'    => ['label' => 'CCTV', 'icon' => 'fas fa-video'],
+                                                    'wifi'    => ['label' => 'WiFi', 'icon' => 'fas fa-wifi'],
+                                                    'cycling' => ['label' => 'Kemudahan Berbasikal', 'icon' => 'fas fa-bicycle'],
+                                                    'food'    => ['label' => 'Gerai Makan', 'icon' => 'fas fa-utensils'],
+                                                    'oku'     => ['label' => 'Kemudahan OKU', 'icon' => 'fas fa-wheelchair'],
+                                                    'toilet'  => ['label' => 'Tandas Awam', 'icon' => 'fas fa-toilet'],
+                                                ];
+
+                                                $facilityKeys = array_keys($facilityOptions);
+                                                //dump($fasilitiData);
+                                            @endphp
+
+                                            @if($fasilitiData)
                                             <h5 class="row justify-content-center">Kemudahan Taman</h5>
                                             <br>
                                             <div class="col-md-12">
-                                                <!-- Your existing facility styles here -->
-                                                <div class="row justify-content-center">
+                                                {{-- <div class="row justify-content-center"> --}}
                                                     <style>
-                                                        .facility-wrapper {
+                                                        /* .facility-wrapper {
                                                             margin-bottom: 15px;
                                                             text-align: center;
                                                         }
@@ -502,13 +530,13 @@
                                                             cursor: pointer;
                                                             text-align: center;
                                                             transition: transform 0.3s ease;
-                                                        }
+                                                        } */
 
                                                         .facility:hover {
                                                             transform: scale(1.05);
                                                         }
 
-                                                        .facility .bg {
+                                                        /* .facility .bg {
                                                             display: flex;
                                                             align-items: center;
                                                             justify-content: center;
@@ -517,7 +545,7 @@
                                                             border-radius: 8px;
                                                             margin-bottom: 8px;
                                                             transition: background-color 0.3s ease;
-                                                        }
+                                                        } */
 
                                                         .facility input[type="checkbox"]:checked + .bg {
                                                             background-color: #28a745;
@@ -537,35 +565,96 @@
                                                             color: #333;
                                                         }
 
-                                                        .icon-container i {
+                                                        /* .icon-container i {
                                                             font-size: 28px;
                                                             color: #000;
-                                                        }
+                                                        } */
 
                                                         .facility input[type="checkbox"]:hover + .bg i {
                                                             transform: scale(1.1);
                                                         }
+
+                                                        .facility-wrapper {
+                                                            /* margin-bottom: 15px; */
+                                                            text-align: center;
+                                                            display: flex;
+                                                            justify-content: center;
+                                                        }
+
+                                                        .facility {
+                                                            display: flex;
+                                                            flex-direction: column;
+                                                            align-items: center;
+                                                            cursor: pointer;
+                                                            text-align: center;
+                                                            transition: transform 0.3s ease;
+                                                            width: 100%; /* Fill column width */
+                                                            max-width: 140px;
+                                                            /* min-height: 160px; */
+                                                            padding: 10px;
+                                                            box-sizing: border-box;
+                                                            /* background-color: #f9f9f9; */
+                                                            border-radius: 8px;
+                                                        }
+
+                                                        .facility .bg {
+                                                            width: 60px;
+                                                            height: 60px;
+                                                            background-color: #ccc;
+                                                            border-radius: 8px;
+                                                            margin-bottom: 8px;
+                                                            display: flex;
+                                                            align-items: center;
+                                                            justify-content: center;
+                                                            transition: background-color 0.3s ease;
+                                                        }
+
+                                                        .icon-container i {
+                                                            font-size: 28px;
+                                                            color: #000;
+                                                        }
                                                     </style>
 
-                                                    @php
-                                                        $fasilitiData = isset($ePALM->fasiliti) && $ePALM->fasiliti != null
-                                                            ? (array) json_decode($ePALM->fasiliti, true)
-                                                            : [];
-
-                                                        $facilityOptions = [
-                                                            'cctv'    => ['label' => 'CCTV', 'icon' => 'fas fa-video'],
-                                                            'wifi'    => ['label' => 'WiFi', 'icon' => 'fas fa-wifi'],
-                                                            'cycling' => ['label' => 'Kemudahan Berbasikal', 'icon' => 'fas fa-bicycle'],
-                                                            'food'    => ['label' => 'Gerai Makan', 'icon' => 'fas fa-utensils'],
-                                                            'oku'     => ['label' => 'Kemudahan OKU', 'icon' => 'fas fa-wheelchair'],
-                                                            'toilet'  => ['label' => 'Tandas Awam', 'icon' => 'fas fa-toilet'],
-                                                        ];
-
-                                                        $facilityKeys = array_keys($facilityOptions);
-                                                        //dump($fasilitiData);
-                                                    @endphp
-
                                                     <div class="row justify-content-center">
+                                                        {{-- Predefined Facilities - Show only checked --}}
+                                                        @foreach($facilityOptions as $key => $option)
+                                                            @php $isChecked = isset($fasilitiData[$key]) && $fasilitiData[$key] == '1'; @endphp
+                                                            @if($isChecked)
+                                                                <div class="col-4 col-md-2 facility-wrapper">
+                                                                    <label class="facility" aria-label="{{ $option['label'] }}">
+                                                                        <input disabled type="hidden" name="fasiliti[{{ $key }}]" value="0">
+                                                                        <input disabled type="checkbox" name="fasiliti[{{ $key }}]" value="1" checked>
+                                                                        <span class="bg">
+                                                                            <div class="icon-container">
+                                                                                <i class="{{ $option['icon'] }}" title="{{ $option['label'] }}"></i>
+                                                                            </div>
+                                                                        </span>
+                                                                        <span class="facility-label">{{ $option['label'] }}</span>
+                                                                    </label>
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+
+                                                        {{-- Dynamic Facilities - Show if checked --}}
+                                                        @foreach($fasilitiData as $key => $val)
+                                                            @if (!in_array($key, $facilityKeys) && $val == '1')
+                                                                <div class="col-4 col-md-2 facility-wrapper">
+                                                                    <label class="facility" aria-label="{{ ucfirst($key) }}">
+                                                                        <input disabled type="hidden" name="fasiliti[{{ $key }}]" value="0">
+                                                                        <input disabled type="checkbox" name="fasiliti[{{ $key }}]" value="1" checked>
+                                                                        <span class="bg">
+                                                                            <div class="icon-container">
+                                                                                <i class="fas fa-chart-pie" title="{{ ucfirst($key) }}"></i>
+                                                                            </div>
+                                                                        </span>
+                                                                        <span class="facility-label">{{ ucfirst(str_replace('_', ' ', $key)) }}</span>
+                                                                    </label>
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
+
+                                                    {{-- <div class="row justify-content-center">
                                                         @foreach($facilityOptions as $key => $option)
                                                             @php $isChecked = isset($fasilitiData[$key]) && $fasilitiData[$key] == '1'; @endphp
                                                             <div class="col-6 col-md-2 facility-wrapper">
@@ -582,7 +671,6 @@
                                                             </div>
                                                         @endforeach
 
-                                                        {{-- Dynamic facilities not in the predefined list --}}
                                                         @foreach($fasilitiData as $key => $val)
                                                             @if (!in_array($key, $facilityKeys))
                                                                 @php $isChecked = $val == '1'; @endphp
@@ -600,9 +688,10 @@
                                                                 </div>
                                                             @endif
                                                         @endforeach
-                                                    </div>
-                                                </div>
+                                                    </div> --}}
+                                                {{-- </div> --}}
                                             </div>
+                                            @endif
 
                                             <br>
                                             <h5 class="row justify-content-center">Media Sosial</h5>
@@ -652,7 +741,7 @@
                         </div>
                     </div>
                 </div>
-                @include('layouts.website.elements.sidebar-widgets')
+                {{-- @include('layouts.website.elements.sidebar-widgets') --}}
             </div>
         </div>
 

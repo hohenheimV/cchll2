@@ -36,103 +36,135 @@
         .hero-section {
             position: relative;
             height: 100vh;
-            background-size: cover;
-            background-position: center;
             color: white;
             text-align: center;
-            padding: 0; /* Remove padding to ensure full-height */
-            overflow: hidden; /* Prevent content from overflowing */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0 1rem;
+            background: black; /* fallback */
         }
 
         #carouselBanner3 {
             position: absolute;
-            top: 0;
-            left: 0;
+            inset: 0;
             width: 100%;
-            height: 100%; /* Ensure the carousel fills the section */
-            z-index: 0; /* Place carousel below the hero content */
+            height: 100%;
+            z-index: 0;
+        }
+
+        #carouselBanner3 .carousel-item img {
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            filter: brightness(0.75);
+            transition: filter 0.5s ease;
+        }
+
+        #carouselBanner3 .carousel-item.active img {
+            filter: brightness(0.75);
         }
 
         #particles-js {
             position: absolute;
-            top: 0;
-            left: 0;
+            inset: 0;
             width: 100%;
             height: 100%;
-            z-index: 1; /* Place particles behind both carousel and content */
-            background-color: rgba(0, 0, 0, 0.14);
+            z-index: 1;
+            background-color: rgba(0, 0, 0, 0.15);
+            pointer-events: none;
         }
 
         .hero-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-            z-index: 2; /* Ensure content is on top of carousel and particles */
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            width: 100%;
+            padding: 1rem 2rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
         }
 
-        .hero-content h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
+        h1 {
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
         }
 
-        .hero-content p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.97);
+        .p {
+            font-size: clamp(0.85rem, 2vw, 1.25rem);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.9);
         }
 
         .cta-buttons {
             display: flex;
-            justify-content: center;
-            gap: 10px;
             flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .cta-buttons .primary,
+        a.btn {
+            border-radius: 15px !important;
         }
 
         .cta-buttons a {
+            display: inline-block;
+            padding: 0.65rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 6px;
+            font-weight: 600;
             text-decoration: none;
-            background-color:  #218838  ;
             color: white;
-            padding: 10px 20px; /* Reduced padding for smaller buttons */
-            font-size: 0.9rem; /* Smaller font size */
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            background-color: #31d5c8;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+            user-select: none;
+            flex: 1 1 250px; 
+            padding: 0.65rem 1rem;
         }
 
-        .cta-buttons a:hover {
+        .cta-buttons a:hover,
+        .cta-buttons a:focus {
             background-color:rgb(20, 92, 199);
+            outline: none;
         }
 
         .cta-buttons a.secondary {
             background-color: #005cbf;
         }
 
-        .cta-buttons a.secondary:hover {
+        .cta-buttons a.secondary:hover,
+        .cta-buttons a.secondary:focus {
             background-color: #00408a;
         }
 
         /* Responsive Design */
-        @media (max-width: 1275px) {
+        @media (max-width: 768px) {
             .hero-section {
+                height: auto;
+                padding: 2rem 1rem;
                 background-image: url('https://elandskap.jln.gov.my/storage/images/shares/sliderBen/elandskap_mobile_bg.jpeg');
+                background-position: center;
+                background-size: cover;
+                color: white;
+                text-shadow: 2px 2px 5px var(--text-shadow-dark);
             }
-            .hero-content {
-                top: 40%;
-                left: 50%;
+            .cta-buttons a {
+                display: inline-block;
+                font-size: 0.85rem;
+                font-weight: 600;
+                flex: 1 1 100px; 
+                padding: 0.65rem 1rem;
             }
-            .hero-content h1 {
-                font-size: 2.2rem;
-            }
-
-            .hero-content p {
-                font-size: 1rem;
-            }
-            #particles-js {
-                display: none;
-            }
-            #carouselBanner3 {
-                display: none;
+            .cta-buttons .primary {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
             }
         }
     </style>
@@ -446,40 +478,30 @@
 @endsection
 
 @section('content')
-<section class="hero-section">
-    <!-- <div id="carouselBanner3" class="carousel slide" data-ride="carousel">
-        {!! website_slider('carouselBanner3') !!}
-    </div> -->
-    <div id="carouselBanner3" class="carousel slide" data-ride="carousel" data-interval="5000">
+<section class="hero-section" role="banner" aria-label="Sistem Pengurusan Maklumat Landskap hero section">
+    <div id="carouselBanner3" class="carousel slide" data-ride="carousel" data-interval="5000" aria-hidden="true" tabindex="-1">
         <div class="carousel-inner">
             @foreach ($sliders as $key => $slider)
-                <?php
-                    $active = ($key == 0 ? 'active' : '');
-                ?>
-                <div class="carousel-item {{ $active }}">
-                    <div class="embed-responsive embed-responsive-16by9">
-                        <img src="{{ $slider->url }}" class="card-img-top embed-responsive-item" alt="Slider {{ $slider->title }}">
-                        <div class="carousel-caption d-none d-md-block" style="top: 50%;">
-                        </div>
-                    </div>
+                <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                    <img src="{{ $slider->url }}" alt="{{ $slider->title ?? 'Slider Image' }}" />
                 </div>
             @endforeach
         </div>
     </div>
-    <div id="particles-js" class="particles-js"></div>
+    <div id="particles-js" aria-hidden="true"></div>
     <div class="hero-content">
         <h1>Sistem Pengurusan Maklumat Landskap (eLANDSKAP)</h1>
         <p>Komprehensif dan mudah dicapai untuk panduan serta rujukan.</p>
-        <div class="cta-buttons">
-            <a href="/epalm" class="primary">Direktori Taman dan Landskap</a>
-            <a href="#penggiat_industri" class="primary">Penggiat Industri Landskap</a>
-            <a href="/epil-pelan" class="primary">Pelan Induk Landskap</a>
-            <a href="/entiti-landskap" class="primary">Entiti Landskap dan Pokok Berkarakter Unik</a>
-            <a href="#activities" class="primary">Permohonan Projek</a>
-            <a href="/emap" class="primary">eMAP JLN</a>
+        <nav class="cta-buttons" aria-label="Call to action buttons">
+            <a href="/epalm" class="primary" role="button">Direktori Taman dan Landskap</a>
+            <a href="#penggiat_industri" class="primary" role="button">Penggiat Industri Landskap</a>
+            <a href="/epil-pelan" class="primary" role="button">Pelan Induk Landskap</a>
+            <a href="/entiti-landskap" class="primary" role="button">Entiti Landskap Unik</a>
+            <a href="#activities" class="primary" role="button">Permohonan Projek</a>
+            <a href="/emap" class="primary" role="button">eMAP JLN</a>
             <!-- <a href="/epalm" class="primary">Entiti Landksap Unik</a>
             <a href="#penggiat_industri" class="primary">Kempen Tanam Pokok</a> -->
-        </div>
+        </nav>
     </div>
 </section>
 

@@ -1,5 +1,5 @@
 @extends('layouts.website.secondary')
-@section('title', 'Direktori Entiti Landskap dan Pokok Berkarakter Unik ')
+@section('title', 'Direktori Entiti Landskap Unik ')
 
 @section('content')
 
@@ -61,7 +61,7 @@
                 <div class="col-12 col-lg-9">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title font-weight-bold my-1">Direktori Entiti Landskap dan Pokok Berkarakter Unik </h3>
+                            <h3 class="card-title font-weight-bold my-1">Direktori Entiti Landskap Unik </h3>
                         </div>
 
                         <div class="card-body">
@@ -82,7 +82,7 @@
                                         <thead style="background-color:rgb(0, 0, 0) !important;color: white;">
                                             <tr>
                                                 <th class="w-1">Bil.</th>
-                                                <th class="w-15">Nama Entiti Landskap </th>
+                                                <th class="w-15">Nama Entiti Landskap Unik </th>
                                                 <th class="w-3">Lokasi</th>
                                                 <th class="text-center w-5">Pihak Berkuasa Tempatan</th>
                                                 <th class="text-center w-1">Tindakan</th>
@@ -118,7 +118,7 @@
                                                         <td>{{ isset($pbt) ? (strtoupper($pbt)) : 'Tiada Maklumat' }}</td>
                                                         <td class="text-center">
                                                             <div class="btn-group">
-                                                                <a target="_blank" class="btn bg-success btn-sm mr-1" href="/entiti-landskap/{{ $entiti->slug }}"><i class="fas fa-search"></i></a>
+                                                                <a target="_self" class="btn bg-success btn-sm mr-1" href="/entiti-landskap/{{ $entiti->slug }}"><i class="fas fa-search"></i></a>
                                                             </div>
                                                         </td>
                                                     </tr>

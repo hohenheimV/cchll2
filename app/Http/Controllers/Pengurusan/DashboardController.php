@@ -57,23 +57,12 @@ class DashboardController extends Controller
 
     public function index()
     {
-
         if(Auth::user()->hasRole(['Pentadbir Sistem', 'Pegawai'])){
-                // Get a collection of all the routes
-                $routeCollection = Route::getRoutes();
+            $negeriList = Negeri::all();
 
-               $popularPages = $this->popular_page();
-                $popularArticles = $this->popular_articles();
-                $latestArticles = $this->latest_articles();
-                $latestAduan = $this->latest_aduan();
-                $latestAktiviti = $this->latest_aktiviti();
-
-                return view('pengurusan.dashboard.index', [
-                    'popularPages' => $popularPages, 'popularArticles' => $popularArticles,
-                    'latestArticles' => $latestArticles,
-                    'latestAduan' => $latestAduan,
-                    'latestAktiviti' => $latestAktiviti,
-                ]);
+            return view('pengurusan.dashboard.index', [
+                'negeriList' => $negeriList,
+            ]);
 
         }
         if(Auth::user()->hasRole(['Pihak Berkuasa Tempatan'])){

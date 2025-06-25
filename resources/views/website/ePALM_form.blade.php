@@ -1,71 +1,104 @@
-
 <div class="card">
     <div class="card-header">
-            <h3 class="card-title font-weight-bold my-1">Direktori Taman</h3>
-        <div class="card-tools">
-            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                <div class="btn-group" role="group" aria-label="First group">
-                    <select id="negeri" name="negeri" onchange="handleSelectChange()">
-                        <option value="">Papar Semua</option>
-                    </select>
-                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                    <script>
-                        // Fetch and populate the Negeri dropdown with data
-                        $(document).ready(function() {
-                            function capitalizeWords(str) {
-                                return str
-                                    .toLowerCase() // Convert the entire string to lowercase
-                                    .split(' ')    // Split the string into an array of words by spaces
-                                    .map(function(word) {
-                                        return word.charAt(0).toUpperCase() + word.slice(1); // Capitalize the first letter of each word
-                                    })
-                                    .join(' ');    // Join the array back into a string
-                            }
-
-                            $.ajax({
-                                url: '/get-negeri-salt', // API endpoint to get negeri data
-                                type: 'GET',
-                                dataType: 'json',
-                                success: function(data) {
-                                    // Populate the Negeri dropdown with the data
-                                    $('#negeri').empty(); // Clear current options
-                                    $('#negeri').append('<option value="">Papar Semua</option>');
-
-                                    $.each(data, function(key, value) {
-                                        // Add each Negeri to the dropdown
-                                        $('#negeri').append('<option value="' + value.kod_negeri  + '">' + (value.nama_negeri) + '</option>');
-                                    });
-
-                                    var negeriSelected = "{{ isset($keyword) ? $keyword : '' }}";
-                                    // alert(negeriSelected);
-                                    if (negeriSelected) {
-                                        $('#negeri').val(negeriSelected);
-                                    }
-                                },
-                                error: function(xhr, status, error) {
-                                    console.error("Error fetching Negeri data: ", error);
-                                }
-                            });
-                        });
-
-                        // Function to handle the dropdown change event
-                        function handleSelectChange() {
-                            var selectedKeyword = $('#negeri').val(); // Get the selected negeri value
-
-                            if (selectedKeyword) {
-                                // Redirect to the route with the selected keyword
-                                window.location.href = "/epalm/" + selectedKeyword;
-                            } else {
-                                window.location.href = "/epalm";
-                            }
-                        }
-                    </script>
-                </div>
-            </div>
-        </div>
+            <h3 class="card-title font-weight-bold my-1">Direktori Taman & Landskap</h3>
     </div>
 
     <div class="card-body">
+        <div class="card-tools">
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="filter-container" role="group" aria-label="Filter Dropdowns">
+                    {{-- Negeri Dropdown --}}
+                    <select id="negeri" name="negeri" onchange="handleNegeriChange()" class="filter-select">
+                        <option value="">PAPAR SEMUA NEGERI</option>
+                    </select>
+
+                    {{-- PBT Dropdown --}}
+                    @if(isset($namaPbtArray))
+                    <form method="GET" action="{{ url('/epalm') }}">
+                        <select id="pbt" name="pbt" onchange="handlePbtChange()" class="filter-select">
+                            <option value="">PAPAR SEMUA PBT</option>
+                            @foreach ($namaPbtArray as $pbt)
+                                <option value="{{ $pbt }}" {{ request('keyword') === $pbt ? 'selected' : '' }}>
+                                    {{ $pbt }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
+                    @endif
+                    {{-- Kategori Dropdown --}}
+                    @if(isset($namaKategoriArray))
+                    <form method="GET" action="{{ url('/epalm') }}">
+                        <select id="kategori" name="kategori" onchange="handleKategoriChange()" class="filter-select">
+                            <option value="">PAPAR SEMUA KATEGORI</option>
+                            @foreach ($namaKategoriArray as $kategori)
+                                <option value="{{ $kategori }}" {{ request('keyword') === $kategori ? 'selected' : '' }}>
+                                    {{ strtoupper($kategori) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
+                    @endif
+                </div>
+
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function() {
+                        $.ajax({
+                            url: '/get-negeri-salt',
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(data) {
+                                $('#negeri').empty().append('<option value="-1">PAPAR SEMUA NEGERI</option>');
+                                $.each(data, function(index, value) {
+                                    $('#negeri').append('<option value="' + value.kod_negeri + '">' + value.nama_negeri + '</option>');
+                                });
+
+                                var keyword = "{{ request('keyword') }}";
+
+                                // Set selected if it's a negeri match (based on kod_negeri in your API)
+                                let negeriMatch = data.find(item => item.kod_negeri === keyword);
+
+                                if (negeriMatch) {
+                                    $('#negeri').val(keyword);
+                                    $('#pbt').val(''); // Clear PBT selection
+                                } else {
+                                    $('#negeri').val('-1');
+                                }
+                            },
+                            error: function(err) {
+                                console.error("Failed to load negeri list:", err);
+                            }
+                        });
+                    });
+
+                    function handleNegeriChange() {
+                        var selected = $('#negeri').val();
+                        if (selected && selected != '-1') {
+                            window.location.href = "/epalm/" + encodeURIComponent(selected);
+                        } else {
+                            window.location.href = "/epalm";
+                        }
+                    }
+                    function handlePbtChange() {
+                        var selected = $('#pbt').val();
+                        if (selected) {
+                            window.location.href = "/epalm/" + encodeURIComponent(selected);
+                        } else {
+                            window.location.href = "/epalm";
+                        }
+                    }
+                    function handleKategoriChange() {
+                        var selected = $('#kategori').val();
+                        if (selected) {
+                            window.location.href = "/epalm/" + encodeURIComponent(selected);
+                        } else {
+                            window.location.href = "/epalm";
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+        <br>
         <div class="body-content">
             <div class="table-responsive">
                 <style>
@@ -146,7 +179,7 @@
                                             >
                                                 <i class="fas fa-search"></i>
                                             </button>
-                                            <a target="_blank" class="btn bg-success btn-sm mr-1" href="/taman/{{ $taman->slug }}"><i class="fas fa-search"></i></a>
+                                            <a id="open_taman" target="_self" class="btn bg-success btn-sm mr-1" href="/taman/{{ $taman->slug }}"><i class="fas fa-search"></i></a>
                                         </div>
                                     </td>
                                     @php

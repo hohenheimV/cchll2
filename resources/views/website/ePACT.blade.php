@@ -103,7 +103,8 @@
                                                             {{ strtoupper($epact->kategori->name ?? 'Tiada Maklumat') }}
                                                         </td>
                                                         <td class="text-center">
-                                                            {{ $epact->tahun ?? strtoupper('Tiada Maklumat') }}
+                                                            {{-- {{ $epact->tahun ?? strtoupper('Tiada Maklumat') }} --}}
+                                                            {{ $epact->tarikh ?? strtoupper('Tiada Maklumat') }}
                                                         </td>
                                                         <td style="text-align: center;">
                                                             <!-- <a href="{{ asset($epact->dokumen ? 'storage/uploads/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}" 

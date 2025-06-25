@@ -31,11 +31,11 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="w-1">Bil.</th>
-                                    <th class="text-center align-middle w-1">No Siri</th>
                                     <!-- <th class="text-center align-middle">Nama/E-Mel</th> -->
-                                    <th class="text-center align-middle w-15">Taman Perumahan</th>
+                                    <th class="text-center align-middle w-15">Nama Rakan Taman</th>
+                                    <th class="text-center align-middle w-5">Maklumat Wakil</th>
                                     @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|KP/ TKP JLN'))
-                                        <th class="text-center w-11">PBT</th>
+                                        <th class="text-center w-10">PBT</th>
                                     @endif
                                     <!-- <th class="text-center align-middle w-1">Tarikh Permohonan</th> -->
                                     <th class="text-center align-middle w-1">Penyaluran Peruntukan Promosi</th>
@@ -50,13 +50,26 @@
                                 @forelse($MIB as $rakan_taman)
                                 <tr>
                                     <td>{{ $index++ }}</td>
-                                    <td>
-                                        <span class="badge badge-dark">
-                                            {!! $rakan_taman->no_siri ?? $null !!}
-                                        </span>
-                                    </td>
                                     <!-- <td>{!! $rakan_taman->name.'<br />'.$rakan_taman->email !!}</td> -->
                                     <td>{{ strtoupper($rakan_taman->taman) }}</td>
+                                    <?php
+                                        $rakanTaman = $nama = $telefon = $emel = null;
+                                        $maklumat = "Tiada Maklumat";
+                                        if(isset($rakan_taman->jawatankuasa)){
+                                            $rakanTaman = ($rakan_taman->jawatankuasa);
+                                            if(isset($rakanTaman[4])){
+                                                $nama = isset($rakanTaman) ? $rakanTaman[4]['penyelaras_nama'] : 'Tiada Maklumat';
+                                                $telefon = isset($rakanTaman) ? $rakanTaman[4]['penyelaras_tel_bimbit'] : 'Tiada Maklumat';
+                                                $emel = isset($rakanTaman) ? $rakanTaman[4]['penyelaras_email'] : 'Tiada Maklumat';
+                                                $maklumat = strtoupper($nama ?? '') . '<br>' .
+                                                    ($telefon ?? '') . '<br>' .
+                                                    ($emel ?? '');
+                                            }
+                                        }
+                                    ?>
+                                    <td>
+                                        {!! $maklumat !!}
+                                    </td>
                                     @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))
                                         <td>
                                             {{ strtoupper($rakan_taman->pbt) }}

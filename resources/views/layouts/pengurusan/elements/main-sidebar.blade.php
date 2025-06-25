@@ -78,7 +78,7 @@
                         'eREAD' => 'Modul Penyelidikan dan Penerbitan Landskap',
                         'ePACT' => 'Modul Pentadbiran Kontrak dan Polisi Landskap',
                         'eLAD' => 'Modul Rekabentuk Landskap',
-                        'eNTITI' => 'Modul Entiti Landskap dan Pokok Berkarakter Unik',
+                        'eNTITI' => 'Modul Entiti Landskap Unik',
                         'eMAP' => 'Taburan Pembangunan Projek Landskap di Malaysia'
                     ];
                     

@@ -113,6 +113,7 @@ class ePALMController extends Controller
 
         $negeri = $request->query('negeri') ?? null;
         $kategori = $request->query('kategori') ?? null;
+        $nama_pbt = $request->query('nama_pbt') ?? null;
 
         $userId = auth()->id();
         $user = User::find($userId);
@@ -136,11 +137,15 @@ class ePALMController extends Controller
             }
 
             if ($kategori) {
-                $query->where('kategori_taman', $kategori);
+                $query->whereRaw('LOWER(kategori_taman) = ?', [strtolower($kategori)]);
             }
 
-            if ($negeri) {
+            if ($negeri && !$nama_pbt) {
                 $query->where('negeri_taman', $negeri);
+            }
+
+            if ($nama_pbt) {
+                $query->whereRaw('LOWER(nama_pbt) = ?', [strtolower($nama_pbt)]);
             }
 
             $ePALM = $query->orderBy('status', 'ASC')->orderBy('negeri_taman', 'ASC')
@@ -165,23 +170,38 @@ class ePALMController extends Controller
             }
 
             if ($kategori) {
-                $query->whereRaw('LOWER(kategori_taman) LIKE ?', [strtolower($kategori)]);
+                $query->whereRaw('LOWER(kategori_taman) = ?', [strtolower($kategori)]);
             }
 
-            if ($negeri) {
+            if ($negeri && !$nama_pbt) {
                 $query->where('negeri_taman', $negeri);
+            }
+
+            if ($nama_pbt) {
+                $query->whereRaw('LOWER(nama_pbt) = ?', [strtolower($nama_pbt)]);
             }
 
             $ePALM = $query->orderBy('status', 'ASC')->orderBy('negeri_taman', 'ASC')
                 ->orderBy('nama_pbt', 'ASC')
                 ->paginate($totalCount);
         }
+        $namaPbtArray = ePALM::whereNull('is_komponen')
+            ->orderBy('negeri_taman')
+            ->orderBy('nama_pbt')
+            ->pluck('nama_pbt')
+            ->unique()
+            ->values()
+            ->mapWithKeys(function ($item) {
+                return [$item => $item];
+            })
+            ->toArray();
 
         return view('pengurusan.ePALM.index', [
             'ePALM' => $ePALM,
             'selectedKeyword' => $keyword,
             'selectedNegeri' => $negeri,
             'selectedKategori' => $kategori,
+            'namaPbtArray' => $namaPbtArray,
         ]);
     }
 
@@ -714,6 +734,7 @@ class ePALMController extends Controller
         $keyword = $request->query('keyword');
         $negeri = $request->query('negeri');
         $kategori = $request->query('kategori');
+        $nama_pbt = $request->query('nama_pbt');
         // dd($request->query());
 
         $filename = "Senarai_ePALM";
@@ -725,11 +746,17 @@ class ePALMController extends Controller
             $filename .= "_{$kategori}";
         }
 
-        if ($negeri) {
+        if ($negeri && !$nama_pbt) {
             $query->where('negeri_taman', $negeri);
             $negeriName = Negeri::where('kod_negeri', $negeri)->value('nama_negeri') ?? 'Tiada Maklumat';
             $negeri = str_replace(" ", "_", $negeriName);
             $filename .= "_{$negeri}";
+        }
+
+        if ($nama_pbt) {
+            $query->whereRaw('LOWER(nama_pbt) LIKE ?', [strtolower($nama_pbt)]);
+            $nama_pbt = str_replace(" ", "_", $nama_pbt);
+            $filename .= "_{$nama_pbt}";
         }
 
         if ($keyword) {
@@ -771,5 +798,32 @@ class ePALMController extends Controller
         }
 
         return redirect()->route('pengurusan.ePALM.index');
+    }
+
+    public function sync(){
+        $pbtJson = ["MAJLIS BANDARAYA JOHOR BAHRU","MAJLIS BANDARAYA ISKANDAR PUTERI","MAJLIS PERBANDARAN KULAI","MAJLIS PERBANDARAN MUAR","MAJLIS DAERAH TANGKAK","MAJLIS PERBANDARAN BATU PAHAT","MAJLIS DAERAH YONG PENG","MAJLIS PERBANDARAN SEGAMAT","MAJLIS DAERAH LABIS","MAJLIS PERBANDARAN KLUANG","MAJLIS DAERAH SIMPANG RENGGAM","MAJLIS PERBANDARAN PONTIAN","MAJLIS DAERAH KOTA TINGGI","MAJLIS DAERAH MERSING","MAJLIS BANDARAYA PASIR GUDANG","MAJLIS PERBANDARAN PENGERANG","MAJLIS BANDARAYA ALOR SETAR","MAJLIS PERBANDARAN SUNGAI PETANI","MAJLIS PERBANDARAN KULIM","MAJLIS DAERAH BALING","MAJLIS PERBANDARAN KUBANG PASU","MAJLIS DAERAH YAN","MAJLIS DAERAH SIK","MAJLIS DAERAH PENDANG","MAJLIS DAERAH PADANG TERAP","MAJLIS DAERAH BANDAR BAHARU","MAJLIS PERBANDARAN LANGKAWI BANDARAYA PELANCONGAN","MAJLIS PERBANDARAN KOTA BHARU - BANDAR RAYA ISLAM","MAJLIS DAERAH BACHOK BANDAR PELANCONGAN ISLAM","MAJLIS DAERAH GUA MUSANG","MAJLIS DAERAH JELI","MAJLIS DAERAH KETEREH - PERBANDARAN ISLAM","MAJLIS DAERAH DABONG","MAJLIS DAERAH KUALA KRAI","MAJLIS DAERAH MACHANG","MAJLIS DAERAH PASIR MAS","MAJLIS DAERAH PASIR PUTEH","MAJLIS DAERAH TANAH MERAH","MAJLIS DAERAH TUMPAT","MAJLIS BANDARAYA MELAKA BERSEJARAH","MAJLIS PERBANDARAN ALOR GAJAH","MAJLIS PERBANDARAN JASIN","MAJLIS PERBANDARAN HANG TUAH JAYA","MAJLIS BANDARAYA SEREMBAN","MAJLIS DAERAH KUALA PILAH","MAJLIS DAERAH TAMPIN","MAJLIS PERBANDARAN PORT DICKSON","MAJLIS DAERAH JELEBU","MAJLIS DAERAH REMBAU","MAJLIS PERBANDARAN JEMPOL","MAJLIS BANDARAYA KUANTAN","MAJLIS PERBANDARAN TEMERLOH","MAJLIS PERBANDARAN BENTONG","MAJLIS PERBANDARAN PEKAN BANDAR DIRAJA","MAJLIS DAERAH LIPIS","MAJLIS DAERAH CAMERON HIGHLANDS","MAJLIS DAERAH RAUB","MAJLIS DAERAH BERA","MAJLIS DAERAH MARAN","MAJLIS DAERAH ROMPIN","MAJLIS DAERAH JERANTUT","MAJLIS BANDARAYA PULAU PINANG","MAJLIS BANDARAYA SEBERANG PERAI","MAJLIS BANDARAYA IPOH","MAJLIS PERBANDARAN TAIPING","MAJLIS PERBANDARAN MANJUNG","MAJLIS DAERAH PERAK TENGAH","MAJLIS PERBANDARAN KUALA KANGSAR","MAJLIS DAERAH SELAMA","MAJLIS DAERAH BATU GAJAH","MAJLIS DAERAH KAMPAR","MAJLIS DAERAH GERIK","MAJLIS DAERAH LENGGONG","MAJLIS DAERAH PENGKALAN HULU","MAJLIS DAERAH TAPAH","MAJLIS DAERAH TANJONG MALIM","MAJLIS PERBANDARAN TELUK INTAN","MAJLIS DAERAH KERIAN","MAJLIS PERBANDARAN KANGAR","MAJLIS BANDARAYA SHAH ALAM","MAJLIS BANDARAYA PETALING JAYA","MAJLIS BANDARAYA DIRAJA KLANG","MAJLIS PERBANDARAN AMPANG JAYA","MAJLIS BANDARAYA SUBANG JAYA","MAJLIS PERBANDARAN SELAYANG","MAJLIS PERBANDARAN KAJANG","MAJLIS PERBANDARAN KUALA SELANGOR","MAJLIS PERBANDARAN KUALA LANGAT","MAJLIS PERBANDARAN HULU SELANGOR","MAJLIS DAERAH SABAK BERNAM","MAJLIS PERBANDARAN SEPANG","MAJLIS BANDARAYA KUALA TERENGGANU","MAJLIS DAERAH BESUT","MAJLIS DAERAH SETIU","MAJLIS PERBANDARAN DUNGUN","MAJLIS DAERAH HULU TERENGGANU","MAJLIS PERBANDARAN KEMAMAN","MAJLIS DAERAH MARANG","DEWAN BANDARAYA KOTA KINABALU","MAJLIS PERBANDARAN SANDAKAN","MAJLIS PERBANDARAN TAWAU","LEMBAGA BANDARAN KUDAT","MAJLIS DAERAH BEAUFORT","MAJLIS DAERAH BELURAN","MAJLIS DAERAH KENINGAU","MAJLIS DAERAH KINABATANGAN","MAJLIS DAERAH KOTA BELUD","MAJLIS DAERAH KOTA MARUDU","MAJLIS DAERAH KUALA PENYU","MAJLIS DAERAH KUNAK","MAJLIS DAERAH LAHAD DATU","MAJLIS DAERAH NABAWAN","MAJLIS DAERAH PAPAR","MAJLIS PERBANDARAN PENAMPANG","MAJLIS DAERAH RANAU","MAJLIS DAERAH SEMPORNA","MAJLIS DAERAH SIPITANG","MAJLIS DAERAH TAMBUNAN","MAJLIS DAERAH TENOM","MAJLIS DAERAH TUARAN","MAJLIS DAERAH PUTATAN","MAJLIS DAERAH PITAS","MAJLIS DAERAH TONGOD","MAJLIS DAERAH TELUPID","LEMBAGA KEMAJUAN BINTULU","DEWAN BANDARAYA KUCHING UTARA","MAJLIS BANDARAYA KUCHING SELATAN","MAJLIS PERBANDARAN PADAWAN","MAJLIS PERBANDARAN SIBU","MAJLIS BANDARAYA MIRI","MAJLIS DAERAH BAU","MAJLIS DAERAH BETONG","MAJLIS DAERAH DALAT & MUKAH","MAJLIS DAERAH KANOWIT","MAJLIS DAERAH KAPIT","MAJLIS DAERAH LAWAS","MAJLIS DAERAH LIMBANG","MAJLIS DAERAH LUBOK ANTU","MAJLIS DAERAH LUNDU","MAJLIS DAERAH MARADONG & JULAU","MAJLIS DAERAH MARUDI","MAJLIS DAERAH MATU & DARO","MAJLIS DAERAH SARATOK","MAJLIS PERBANDARAN KOTA SAMARAHAN","MAJLIS DAERAH SERIAN","MAJLIS DAERAH SARIKEI","MAJLIS DAERAH SIMUNJAN","MAJLIS DAERAH SRI AMAN","MAJLIS DAERAH SUBIS","MAJLIS DAERAH LUAR BANDAR SIBU","MAJLIS DAERAH GEDONG","PBT TAMAN PERINDUSTRIAN HI-TECH KULIM","LEMBAGA PEMBANGUNAN TIOMAN","PERBADANAN LABUAN","PERBADANAN PUTRAJAYA","DEWAN BANDARAYA KUALA LUMPUR"];
+        $latestPbtList = "d";//json_decode($pbtJson, true);
+        
+        $query = ePALM::whereNull('is_komponen')
+            ->select('nama_pbt', 'negeri_taman')
+            // ->orderBy('negeri_taman', 'ASC')
+            ->orderBy('nama_pbt', 'ASC')
+            ->distinct()
+            ->get();
+        $namaPbtList = $query->pluck('nama_pbt')->toArray();
+        // $collection = collect($staticPbtList);
+        foreach ($pbtJson as $record) {
+            $parts = explode(' ', strtoupper($record));
+
+            if (count($parts) < 3){
+                $result[] = $record;
+            }else{
+                $district = implode(' ', array_slice($parts, 2));
+                $result[] = $district;
+            }
+        }
+        sort($result);
+        dd($result);
+
     }
 }

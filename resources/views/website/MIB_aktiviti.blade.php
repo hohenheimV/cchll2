@@ -89,8 +89,8 @@
                                             <thead class="thead-dark">
                                                 <tr>
                                                     <th class="text-center align-middle w-5">No.</th>
-                                                    <th class="text-center align-middle">Nama Aktviti</th>
-                                                    <th class="text-center align-middle w-20">Taman Perumahan</th>
+                                                    <th class="text-center align-middle w-20">Nama Rakan Taman</th>
+                                                    <th class="text-center align-middle">Tajuk Laporan</th>
                                                     <th class="text-center align-middle w-20">Pihak Berkuasa Tempatan</th>
                                                     <!-- <th class="text-center align-middle w-20">Tarikh Laporan</th> -->
                                                     <th class="text-center align-middle w-5">Tindakan</th>
@@ -102,8 +102,8 @@
                                                 @forelse($MIB_laporan as $laporan)
                                                 <tr>
                                                     <td>{{ $index++ }}</td>
-                                                    <td>{!! (strtoupper($laporan->name)) !!}</td>
                                                     <td>{{ (strtoupper($laporan->taman)) }}</td>
+                                                    <td>{!! (strtoupper($laporan->name)) !!}</td>
                                                     <td>{{ (strtoupper($laporan->mib->pbt ?? 'Tiada Maklumat'))  }}</td>
                                                     <!-- <td class="text-center">{!! $laporan->created_at->format('d-m-Y') !!}</td> -->
                                                     <td class="text-center">
@@ -160,7 +160,7 @@
                                                                 data-fail9="{{ $gambar_input_modal_9 }}" 
                                                                 data-fail10="{{ $gambar_input_modal_10 }}" 
                                                                 data-toggle="modal" 
-                                                                data-target="#readModal"
+                                                                data-target="#mibModal"
                                                             >
                                                                 <i class="fas fa-search"></i>
                                                             </button>
@@ -210,9 +210,9 @@
                 position: relative;
                 background-color: white;
                 margin: 5% auto;
-                padding: 30px;
-                width: 80%;
-                max-width: 900px;
+                padding: 15px;
+                width: 90%;
+                max-width: none;
                 max-height: 80%;
                 overflow-y: auto; /* Makes the modal content scrollable */
                 background-image: url("{{ asset('storage/img/bg-pattern-leaves.png') }}");
@@ -282,10 +282,10 @@
             }
         </style>
 
-        <div id="readModal" class="modal">
+        <div id="mibModal" class="modal">
             <div class="modal-content" id="customModalContent" style="background-color:rgb(25, 98, 92) !important;">
                 <div class="modal-header justify-content-center bg-white">
-                    <h2 class="modal-title" id="modalNama" style="text-align: center;"></h2>
+                    <h2 class="modal-title text-uppercase" id="modalNama" style="text-align: center;"></h2>
                 </div>
 
                 <div class="modal-body bg-white">
@@ -376,7 +376,7 @@
         <!-- Modal JavaScript (Show and Hide Logic) -->
         <script>
             $(document).ready(function() {
-                $('#readModal').on('show.bs.modal', function (event) {
+                $('#mibModal').on('show.bs.modal', function (event) {
                     var button = $(event.relatedTarget);
                     var title = button.data('title');
                     var laporan = button.data('laporan');
@@ -541,12 +541,48 @@
                     if (title && title !== '') {
                         modal.find('#modalNama').text(title);
                     }
+                    // if (laporan && laporan !== '') {
+                    //     modal.find('#laporan').text(laporan);
+                    // }
                     if (laporan && laporan !== '') {
-                        modal.find('#laporan').text(laporan);
+                        const maxLength = 250;
+
+                        if (laporan.length > maxLength) {
+                            const shortText = laporan.substring(0, maxLength);
+                            const fullText = laporan;
+
+                            const seeMoreHTML = `
+                                <span class="short-text">${shortText}...</span>
+                                <span class="full-text d-none">${fullText}</span>
+                                <a href="#" class="toggle-laporan text-primary" style="display: block; margin-top: 5px;">See more</a>
+                            `;
+
+                            $('#laporan').html(seeMoreHTML);
+                        } else {
+                            $('#laporan').text(laporan);
+                        }
+
+                        // Toggle logic
+                        $('#laporan').on('click', '.toggle-laporan', function (e) {
+                            e.preventDefault();
+                            const $short = $('#laporan .short-text');
+                            const $full = $('#laporan .full-text');
+                            const $link = $(this);
+
+                            if ($short.is(':visible')) {
+                                $short.addClass('d-none');
+                                $full.removeClass('d-none');
+                                $link.text('See less');
+                            } else {
+                                $short.removeClass('d-none');
+                                $full.addClass('d-none');
+                                $link.text('See more');
+                            }
+                        });
                     }
                 });
 
-                $('#readModal').on('hidden.bs.modal', function () {
+                $('#mibModal').on('hidden.bs.modal', function () {
                     const modal = $(this);
                     // for (let i = 1; i <= 4; i++) {
                     //     const img = document.getElementById(`parkImage${i}`);

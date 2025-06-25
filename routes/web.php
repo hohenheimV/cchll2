@@ -181,6 +181,7 @@ Route::get('/data', [DataController::class, 'processData']);
 Route::get('/data/negeri', [DataController::class, 'getNegeri']);
 Route::get('/data/negeri/{shortName}', [DataController::class, 'getNegeri']);
 Route::get('/data/pbt', [DataController::class, 'getAllPbtNames']);
+Route::get('/data/update/pbt', [DataController::class, 'updatePbtNames']);
 Route::get('/data/pbt/{negeriId}', [DataController::class, 'getPBT']);
 Route::get('/data/pbt/{negeriId}/{pbtId}', [DataController::class, 'getPBT']);
 Route::get('/data/pbt_search/{term}', [DataController::class, 'findFullPbtName']);
@@ -370,13 +371,22 @@ Route::name('website.')
             $ePALM = ePALM::where('status', 'approved')
                 ->where('is_komponen', null)
                 // ->where('nama_pbt', '!=', 'Landskap Perbandaran')
-                ->when($keywordSalt, function($query) use ($keywordSalt) {
-                    return $query->where('negeri_taman', 'like', "%$keywordSalt%");
+                // ->when($keywordSalt, function($query) use ($keywordSalt) {
+                //     return $query->where('negeri_taman', 'like', "%$keywordSalt%");
+                // })
+                ->when($keywordSalt, function ($query) use ($keywordSalt) {
+                    return $query->where(function ($q) use ($keywordSalt) {
+                        $q->where('negeri_taman', 'like', "%$keywordSalt%")
+                        ->orWhere('nama_pbt', 'like', "%$keywordSalt%")
+                        ->orWhere('kategori_taman', 'like', "%$keywordSalt%");
+                    });
                 })
                 ->orderBy('negeri_taman')
-                ->orderBy('created_at', 'asc')
+                // ->orderBy('created_at', 'asc')
                 ->orderBy('nama_pbt')
                 ->paginate(10);
+
+            // $namaPbtArray = [];
             foreach ($ePALM as $item) {
                 // if ($item->nama_pbt == "Landskap Perbandaran") {
                 //     $ePALM_komponen = ePALM::where('id_taman', $item->is_komponen)->first();
@@ -402,8 +412,26 @@ Route::name('website.')
                 $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->negeri_taman)->orderBy('nama_negeri', 'asc')->first();
                 $item->negeri = isset($negeris->nama_negeri) ? ucwords(strtolower($negeris->nama_negeri)) : ''; 
                 $item->slug = Crypt::encryptString($item->id_taman);
+
+                // $namaPbtArray[] = $item->nama_pbt;
             }
-            return view('website.ePALM', ['ePALM_all' => $ePALM, 'keyword' => $keyword]);
+            $namaPbtArray = ePALM::/* where('status', 'approved')
+                -> */where('is_komponen', null)
+                ->orderBy('negeri_taman')
+                ->orderBy('nama_pbt')
+                ->pluck('nama_pbt')
+                ->unique()
+                ->values();
+            $namaKategoriArray = ePALM::/* where('status', 'approved')
+                -> */where('is_komponen', null)
+                ->orderBy('kategori_taman')
+                ->pluck('kategori_taman')
+                ->unique()
+                ->values();
+
+            // $namaPbtArray = array_unique($namaPbtArray);
+            // dd($namaPbtArray);
+            return view('website.ePALM', ['ePALM_all' => $ePALM, 'keyword' => $keyword, 'namaPbtArray' => $namaPbtArray, 'namaKategoriArray' => $namaKategoriArray]);
         })->name('epalm');
 
         Route::get('/taman/{keyword}', function ($keyword) {
@@ -475,8 +503,14 @@ Route::name('website.')
 
         Route::get('/epil-pelan/{keyword?}', function ($keyword = null) {
             $ePIL = ePIL::where('status', 'approved')
-                ->when($keyword, function($query) use ($keyword) {
-                    return $query->where('negeri_pelan', 'like', "%$keyword%");
+                // ->when($keyword, function($query) use ($keyword) {
+                //     return $query->where('negeri_pelan', 'like', "%$keyword%");
+                // })
+                ->when($keyword, function ($query) use ($keyword) {
+                    return $query->where(function ($q) use ($keyword) {
+                        $q->where('negeri_pelan', 'like', "%$keyword%")
+                        ->orWhere('nama_pbt', 'like', "%$keyword%");
+                    });
                 })
                 ->orderBy('negeri_pelan')
                 ->orderBy('created_at', 'asc')
@@ -494,8 +528,14 @@ Route::name('website.')
         
                 return $PIL;
             });
+            $namaPbtArray = ePIL::where('status', 'approved')
+                ->orderBy('negeri_pelan')
+                ->orderBy('nama_pbt')
+                ->pluck('nama_pbt')
+                ->unique()
+                ->values();
             // dd($ePIL[0]);
-            return view('website.ePIL', ['ePIL' => $ePIL, 'keyword' => $keyword]);
+            return view('website.ePIL', ['ePIL' => $ePIL, 'keyword' => $keyword, 'namaPbtArray' => $namaPbtArray]);
         })->name('ePIL');
 
         Route::get('/eread-dokumen/{keyword?}', function ($keyword = null) {
@@ -513,7 +553,15 @@ Route::name('website.')
             // 102 => "Dasar Semasa"
             // 112 => "Polisi Luar Negara"
             $totalCount = ePACT::with('kategori')/* ->where('kate', $keyword) */ ->count();
-            $epacts = ePACT::with('kategori')/* ->where('kate', $keyword) */ ->orderBy('tahun', 'desc')->paginate($totalCount);
+            // $epacts = ePACT::with('kategori')/* ->where('kate', $keyword) */ ->orderBy('tahun', 'desc')->paginate($totalCount);
+            $epacts = ePACT::with('kategori')
+                ->orderByRaw("LOWER(tajuk) LIKE '%dasar%' DESC") // Rows with 'dasar' come first
+                ->orderByRaw("CASE WHEN LOWER(tajuk) LIKE '%dasar%' THEN LOWER(tajuk) ELSE NULL END ASC")
+                // ->orderBy('tahun', 'asc')
+                ->orderBy('tarikh', 'asc')
+                ->orderBy('tajuk', 'asc')
+                ->paginate($totalCount);
+            // dd($epacts);
             return view('website.ePACT', ['epacts' => $epacts, 'keyword' => $keyword]);
         })->name('ePACT');
 
@@ -950,6 +998,7 @@ Route::middleware(['auth'])
          * Route ePALMController
          */
         Route::get('/ePALM/export', [ePALMController::class, 'export'])->name('ePALM.export');
+        Route::get('/ePALM/sync', [ePALMController::class, 'sync'])->name('ePALM.sync');
         Route::resource('ePALM', 'ePALMController');
         // Route::get('/ePALM/fetchComponents', [ePALMController::class, 'fetchComponents'])->name('pengurusan.ePALM.fetchComponentsManual');
 

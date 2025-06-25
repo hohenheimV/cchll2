@@ -41,6 +41,9 @@
     <!-- CSS:percentage -->
     <link rel="stylesheet" href="{{ asset('css/percentage.css') }}">
     <style>
+        #posts {
+            flex: 1;
+        }
         .mobile-done {
             display: none;
         }
@@ -61,6 +64,38 @@
                 display: block;
             }
         }
+    </style>
+    <style>
+        .filter-select {
+            min-width: 200px;
+            max-width: 200px;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #fff;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath fill='%23333' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px;
+            margin: 0 8px 8px 0;
+        }
+
+        /* Layout for many dropdowns */
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        /* Optional: scrollbar for very long select */
+        select.filter-select option {
+            white-space: nowrap;
+        }
+
+        /* For large option lists (scrolling inside dropdown handled by browser) */
     </style>
     <!-- Yield:insert_style -->
     @yield('insert_style')
@@ -124,7 +159,7 @@
     <script>
         $(document).ready(function() {
             $('#exampleNP').DataTable({
-                responsive: true,
+                responsive: false,
                 paging: true,
                 pageLength: 5,
                 searching: true,

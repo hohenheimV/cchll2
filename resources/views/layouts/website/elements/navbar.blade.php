@@ -44,7 +44,7 @@
     /* Media query for mobile screens */
     @media (max-width: 768px) {
         .scroll-button {
-            background-color: rgba(82, 105, 218, 1);
+            background-color: rgb(13, 50, 47);
         }
     }
 
@@ -78,7 +78,7 @@
             {{-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"  style="background-color: #36458e;">
                 <span class="navbar-toggler-icon"  style="color: white;"><i class="fas fa-bars"></i></span>
             </button> --}}
-            <button id="customNavbarToggler" class="navbar-toggler" type="button" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation" style="background-color: #36458e;">
+            <button id="customNavbarToggler" class="navbar-toggler" type="button" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation" style="background-color: #31d5c8;">
                 <span class="navbar-toggler-icon" style="color: white;"><i class="fas fa-bars"></i></span>
             </button>
 

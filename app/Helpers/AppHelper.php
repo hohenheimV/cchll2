@@ -21,39 +21,39 @@ if (!function_exists('app_dashboard_pokok')) {
             $data = MaklumatPenggunaPbt::where('id', $id_pbt)->latest()->first();
             // $count = KTP::where('pbt', $data->pbt_name)->whereNotNull('jumlah_pokok')->sum(DB::raw('CAST(jumlah_pokok AS INTEGER)'));
             $count = KTP::whereRaw('LOWER(pbt) = ?', [strtolower($data->pbt_name)])->whereNotNull('jumlah_pokok')->sum(DB::raw('CAST(jumlah_pokok AS INTEGER)'));
-            return $count;
+            return number_format($count);
         }
-        return KTP::whereNotNull('jumlah_pokok')->sum(DB::raw('CAST(jumlah_pokok AS INTEGER)'));
+        return number_format(KTP::whereNotNull('jumlah_pokok')->sum(DB::raw('CAST(jumlah_pokok AS INTEGER)')));
     }
 }
 
 if (!function_exists('app_dashboard_eread')) {
     function app_dashboard_eread($keyword = null){
-        return eREAD::with('kategori')->when($keyword, function ($q) use ($keyword) {
+        return number_format(eREAD::with('kategori')->when($keyword, function ($q) use ($keyword) {
             $q->where(function ($query) use ($keyword) {
 				$query->where('kate', $keyword);    
             });
-        })->count();
+        })->count());
     }
 }
 
 if (!function_exists('app_dashboard_epact')) {
     function app_dashboard_epact($keyword = null){
-        return ePACT::with('kategori')->when($keyword, function ($q) use ($keyword) {
+        return number_format(ePACT::with('kategori')->when($keyword, function ($q) use ($keyword) {
             $q->where(function ($query) use ($keyword) {
 				$query->where('kate', $keyword);    
             });
-        })->count();
+        })->count());
     }
 }
 
 if (!function_exists('app_dashboard_elad')) {
     function app_dashboard_elad($keyword = null){
-        return eLAD::with('kategori')->when($keyword, function ($q) use ($keyword) {
+        return number_format(eLAD::with('kategori')->when($keyword, function ($q) use ($keyword) {
             $q->where(function ($query) use ($keyword) {
 				$query->where('kate', $keyword);    
             });
-        })->count();
+        })->count());
     }
 }
 
@@ -67,13 +67,13 @@ if (!function_exists('app_dashboard_permohonan')) {
                     $query->where('bahagian_jln', $keyword);    
                 });
             })->count();
-            return $count;
+            return number_format($count);
         }
-        return eLAPS::where('status_permohonan', '!=', '1')->when($keyword, function ($q) use ($keyword) {
+        return number_format(eLAPS::where('status_permohonan', '!=', '1')->when($keyword, function ($q) use ($keyword) {
             $q->where(function ($query) use ($keyword) {
 				$query->where('bahagian_jln', $keyword);    
             });
-        })->count();
+        })->count());
     }
 }
 
@@ -101,16 +101,16 @@ if (!function_exists('app_dashboard_taman')) {
                 }
             })->count();
             // $ePALM = ePALM::where('nama_pbt', $data->pbt_name)->paginate($count);
-            return $count;
+            return number_format($count);
         }
-        return ePALM::where('is_komponen', null)
+        return number_format(ePALM::where('is_komponen', null)
         ->when($keyword, function ($q) use ($keyword, $kategoriList) {
             if ($keyword === 6) {
                 $q->whereNotIn('kategori_taman', $kategoriList);
             } else {
                 $q->where('kategori_taman', $kategoriList[$keyword-1]);
             }
-        })->count();
+        })->count());
     }
 }
 
@@ -121,9 +121,9 @@ if (!function_exists('app_dashboard_pelan')) {
             $data = MaklumatPenggunaPbt::where('id', $id_pbt)->latest()->first();
             // $count = ePIL::where('nama_pbt', $data->pbt_name)->count();
             $count = ePIL::whereRaw('LOWER(nama_pbt) = ?', [strtolower($data->pbt_name)])->count();
-            return $count;
+            return number_format($count);
         }
-        return ePIL::count();
+        return number_format(ePIL::count());
     }
 }
 
@@ -134,30 +134,65 @@ if (!function_exists('app_dashboard_mib')) {
             $data = MaklumatPenggunaPbt::where('id', $id_pbt)->latest()->first();
             // $count = MIB::where('pbt', $data->pbt_name)->count();
             $count = MIB::whereRaw('LOWER(pbt) = ?', [strtolower($data->pbt_name)])->count();
-            return $count;
+            return number_format($count);
         }
-        return MIB::when($keyword, function ($q) use ($keyword) {
+        return number_format(MIB::when($keyword, function ($q) use ($keyword) {
             $q->where('status_keahlian', $keyword);
-        })->count();
+        })->count());
     }
 }
 
 if (!function_exists('app_dashboard_industri')) {
     function app_dashboard_industri($keyword = null){
-        return MaklumatPenggunaPenggiatIndustri::when($keyword, function ($q) use ($keyword) {
+        return number_format(MaklumatPenggunaPenggiatIndustri::when($keyword, function ($q) use ($keyword) {
             $q->where(function ($query) use ($keyword) {
 				$query->where('jenis_industri', $keyword);    
             });
-        })->count();
+        })->count());
     }
 }
 
 if (!function_exists('app_dashboard_entiti')) {
     function app_dashboard_entiti($keyword = null){
-        return EntitiLandskapUnik::when($keyword, function ($q) use ($keyword) {
+        return number_format(EntitiLandskapUnik::when($keyword, function ($q) use ($keyword) {
             $q->where(function ($query) use ($keyword) {
 				$query->where('jenis_entiti', $keyword);    
             });
-        })->count();
+        })->count());
+    }
+}
+
+if (!function_exists('app_dashboard_taman_negeri')) {
+    function app_dashboard_taman_negeri($kod_negeri = null)
+    {
+        $query = ePALM::query()
+            ->whereNull('is_komponen');
+
+        if ($kod_negeri) {
+            $query->where('negeri_taman', $kod_negeri);
+        }
+
+        if (Auth::user()->hasRole('Pihak Berkuasa Tempatan')) {
+            $id_pbt = Auth::user()->bahagian_jln;
+            $data = MaklumatPenggunaPbt::where('id', $id_pbt)->latest()->first();
+
+            if ($data && $data->pbt_name) {
+                $query->whereRaw('LOWER(nama_pbt) = ?', [strtolower($data->pbt_name)]);
+            } else {
+                return 0;
+            }
+        }
+
+        $total = $query->selectRaw("
+            SUM(
+                CASE
+                    WHEN keluasan_taman ~ '^[0-9]+(\\.[0-9]+)?$' THEN CAST(keluasan_taman AS NUMERIC)
+                    ELSE 0
+                END
+            ) as total_kel
+        ")->value('total_kel');
+
+        return number_format($total ?? 0, 4) . " Ekar";
+        // return $total ?? 0;
     }
 }

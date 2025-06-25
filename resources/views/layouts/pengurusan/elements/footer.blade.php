@@ -6,7 +6,7 @@
             bottom: 20px;
             right: 20px; /* Default position for larger screens */
             display: none; /* Hidden by default */
-            background-color: #007bff;
+            background-color: #31d5c8;
             color: white;
             border: none;
             width: 50px; /* Fixed width */

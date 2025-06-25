@@ -94,9 +94,9 @@
                     ['id' => 'category_naik_taraf', 'label' => 'Naik Taraf Taman Awam'],
                     ['id' => 'category_pelan_induk', 'label' => 'Pelan Induk Landskap']
                 ],
-                [
-                    ['id' => 'category_lain', 'label' => 'Lain-lain (sila nyatakan)', 'onclick' => 'toggleLainLainText();onlyOne1(this);']
-                ]
+                // [
+                //     ['id' => 'category_lain', 'label' => 'Lain-lain (sila nyatakan)', 'onclick' => 'toggleLainLainText();onlyOne1(this);']
+                // ]
             ] as $categoryGroup)
                 @php
                     $allLabels = array_merge($allLabels, array_column($categoryGroup, 'label'));

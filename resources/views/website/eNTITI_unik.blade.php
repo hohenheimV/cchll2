@@ -53,7 +53,7 @@
 
             <div class="row">
                 <!-- Post Content Column -->
-                <div class="col-12 col-lg-9">
+                <div class="col-12 col-lg-12">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card card-olive card-outline">
@@ -69,43 +69,17 @@
                                 </div>
                                 {!! Form::model($unik) !!}
                                 <div class="card-body table-hardscape form-hardscape text-sm">
-                                    <h5>Nama Entiti :</h5>
-                                    <p id="">{{ $unik->nama_entiti ?? 'Tiada Maklumat' }}</p>
-                                    <br>
-                                    <h5>Keterangan :</h5>
-                                    <p id="modalKeterangan">{{ $unik->keterangan ?? 'Tiada Maklumat' }}</p>
-                                    <br>
-                                    @php
-                                        if(isset($unik->pbt)){
-                                            $dataPbt = json_decode($unik->pbt, true);
-                                            if ($dataPbt === null) {
-                                                $dataPbt = [];
-                                            } elseif (!is_array($dataPbt)) {
-                                                $dataPbt = (string) $dataPbt;
-                                            }else{
-                                                $negeri = $dataPbt['negeri'];
-                                                $pbt = $dataPbt['pbt'];
-                                            }
-                                        } else {
-                                            $dataPbt = [];
-                                        }
-                                        //dd($dataPbt);
-                                    @endphp
-                                    <h5>Pihak Berkuasa Tempatan :</h5>
-                                    <p id="modalKeterangan">{{ isset($pbt) ? $pbt : $unik->pbt ?? 'Tiada Maklumat' }}</p>
-                                    <br>
                                     <div class="row">
-                                        <div class="col-12 col-md-3"><h5>Negeri :</h5></div>
-                                        <div class="col-12 col-md-3"><p id="">{{ isset($negeri) ? $negeri : 'Tiada Maklumat' }}</p></div>
-
-                                        <div class="col-12 col-md-3"><h5>Lokasi :</h5></div>
-                                        <div class="col-12 col-md-3"><p id="">{{ $unik->lokasi ?? 'Tiada Maklumat' }}</p>
+                                        <div class="form-group required col-md-12">
+                                            <h2 class="row justify-content-center">
+                                                {{ strtoupper($unik->nama_entiti) ?? 'Tiada Maklumat' }}
+                                            </h2>
                                         </div>
                                     </div>
                                     <br>
                                     <div class="row">
                                         <div class="form-group required col-md-12">
-                                            <h5 class="row justify-content-center">Gambar Entiti</h5>
+                                            {{-- <h5 class="row justify-content-center">Gambar Entiti</h5> --}}
                                             {{-- @php
                                                 if(isset($unik->gambar)){
                                                     $folderName = str_replace(' ', '_', $unik->id.' '.$unik->nama_entiti);
@@ -399,6 +373,73 @@
                                             @endif
                                         </div>
                                     </div>
+                                    <h5>Nama Entiti :</h5>
+                                    <p id="">{{ $unik->nama_entiti ?? 'Tiada Maklumat' }}</p>
+                                    <br>
+                                    <h5>Keterangan :</h5>
+                                    <p id="modalKeterangan">{{ $unik->keterangan ?? 'Tiada Maklumat' }}</p>
+                                    <br>
+                                    @php
+                                        if(isset($unik->pbt)){
+                                            $dataPbt = json_decode($unik->pbt, true);
+                                            if ($dataPbt === null) {
+                                                $dataPbt = [];
+                                            } elseif (!is_array($dataPbt)) {
+                                                $dataPbt = (string) $dataPbt;
+                                            }else{
+                                                $negeri = $dataPbt['negeri'];
+                                                $pbt = $dataPbt['pbt'];
+                                            }
+                                        } else {
+                                            $dataPbt = [];
+                                        }
+                                        //dd($dataPbt);
+                                    @endphp
+                                    {{-- <h5>Pihak Berkuasa Tempatan :</h5>
+                                    <p id="modalKeterangan">{{ isset($pbt) ? $pbt : $unik->pbt ?? 'Tiada Maklumat' }}</p>
+                                    <br> --}}
+                                    <div class="row">
+                                        <div class="col-12 col-md-3"><h5>Negeri :</h5></div>
+                                        <div class="col-12 col-md-3"><p id="">{{ isset($negeri) ? $negeri : 'Tiada Maklumat' }}</p></div>
+
+                                        <div class="col-12 col-md-3"><h5>Pihak Berkuasa Tempatan :</h5></div>
+                                        <div class="col-12 col-md-3"><p id="modalKeterangan">{{ isset($pbt) ? strtoupper($pbt) : strtoupper($unik->pbt) ?? 'Tiada Maklumat' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 col-md-3"><h5>Lokasi :</h5></div>
+                                        <div class="col-12 col-md-3"><p id="">{{ strtoupper($unik->lokasi) ?? 'Tiada Maklumat' }}</p></div>
+
+                                        <div class="col-12 col-md-3"><h5>Koordinat Taman :</h5></div>
+                                        <div class="col-12 col-md-3">
+                                            <p id="modalCoordinate">
+                                                {{ is_numeric($unik->lng) && is_numeric($unik->lat) ? '( '.$unik->lat.', '.$unik->lng.' )' : 'Tiada Maklumat' }}
+                                                @if(is_numeric($unik->lng) && is_numeric($unik->lat))
+                                                &nbsp;<br>
+                                                <a href="{{ 'https://maps.google.com/?q='.$unik->lat.','.$unik->lng }}" target="_blank">
+                                                    Pautan Google Map <i class="fas fa-globe"></i>
+                                                </a>
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {{-- <div class="row">
+                                        <div class="col-12 col-md-3"><h5>Lokasi :</h5></div>
+                                        <div class="col-12 col-md-3"><p id="">{{ $unik->lokasi ?? 'Tiada Maklumat' }}</p></div>
+
+                                        <div class="col-12 col-md-3"><h5>Koordinat Taman :</h5></div>
+                                        <div class="col-12 col-md-3">
+                                            <p id="modalCoordinate">
+                                                {{ is_numeric($unik->lng) && is_numeric($unik->lat) ? '( '.$unik->lat.', '.$unik->lng.' )' : 'Tiada Maklumat' }}
+                                                @if(is_numeric($unik->lng) && is_numeric($unik->lat))
+                                                &nbsp;<br>
+                                                <a href="{{ 'https://maps.google.com/?q='.$unik->lat.','.$unik->lng }}" target="_blank">
+                                                    Pautan Google Map <i class="fas fa-globe"></i>
+                                                </a>
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div> --}}
                                 </div>
                                 <div class="card-footer">
                                 <a href="{{ route('website.eNTITI') }}" class="btn btn-secondary py-1 px-3" style="font-size: 0.9rem;">Kembali</a>
@@ -408,7 +449,7 @@
                         </div>
                     </div>
                 </div>
-                @include('layouts.website.elements.sidebar-widgets')
+                {{-- @include('layouts.website.elements.sidebar-widgets') --}}
             </div>
         </div>
 

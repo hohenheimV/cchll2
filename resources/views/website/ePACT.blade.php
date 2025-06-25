@@ -103,8 +103,8 @@
                                                             {{ strtoupper($epact->kategori->name ?? 'Tiada Maklumat') }}
                                                         </td>
                                                         <td class="text-center">
-                                                            {{-- {{ $epact->tahun ?? strtoupper('Tiada Maklumat') }} --}}
-                                                            {{ $epact->tarikh ?? strtoupper('Tiada Maklumat') }}
+                                                            {{ $epact->tahun ?? strtoupper('Tiada Maklumat') }}
+                                                            {{-- {{ $epact->tarikh ?? strtoupper('Tiada Maklumat') }} --}}
                                                         </td>
                                                         <td style="text-align: center;">
                                                             <!-- <a href="{{ asset($epact->dokumen ? 'storage/uploads/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}" 
@@ -119,7 +119,7 @@
                                                                     <canvas id="pdf-render-{{$epact->id}}" style="width: 100%; height: 100%; object-fit: contain; display: none;"></canvas>
                                                                 </div>
                                                             </a> -->
-                                                            {{ ($epact->dokumen && file_exists(public_path('storage/uploads/epact/dokumen/' . $epact->dokumen))) ? $epact->sizeName . ' MB' : strtoupper('Tiada dokumen') }}
+                                                            {{ ($epact->dokumen && file_exists(public_path('storage/uploads/epact/dokumen/' . $epact->dokumen))) ? $epact->sizeName . ' MB' : strtoupper('-') }}
                                                         </td>
                                                         <td class="text-center">
                                                             <div class="btn-group">

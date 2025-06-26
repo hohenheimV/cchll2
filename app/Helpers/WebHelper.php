@@ -760,7 +760,6 @@ if (!function_exists('in_arrayi')) {
                         </button>
                     </h2>
                 </div>
-
                 <div id="collapse{$id}" class="collapse {$collapseClass}" aria-labelledby="heading{$id}" data-parent="#{$parent}">
                     <div class="card-body">
             HTML;

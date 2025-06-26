@@ -47,6 +47,7 @@ class MaklumatPenggunaPenggiatIndustri extends Model implements Auditable
         'prestasi',
         'komen',
         'pentaksir',
+        'profil_syarikat',
         'status'
     ];
 }

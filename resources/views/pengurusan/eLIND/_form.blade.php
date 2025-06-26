@@ -346,6 +346,54 @@
                 </script>
             </div> -->
 
+            {{-- @if($capitalizedSegment == 'Kontraktor' || $capitalizedSegment == 'Perunding' || $capitalizedSegment == 'Pembekal')
+            <div class="form-group required ">
+                <label for="profil_syarikat" class="col-md-12 control-label">Profil Syarikat {!! in_array('profil_syarikat', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                <div class="col-md-12 showButton">
+                    {{ Form::file('profil_syarikat', ['class' => 'form-control d-inline-block ms-2', 'multiple' => false, 'accept' => '.pdf,.docx,.pptx']) }}
+                    
+                </div>
+                @if(isset($eLIND->profil_syarikat))
+                    {{ Form::label('', '***Muatnaik semula akan menggantikan fail sedia ada.', ['class' => 'col-form-label required-field-create showButton', 'style' => 'font-weight: strong;']) }}
+                    <br>
+                    <div class="col-md-12">
+                        <div class="d-flex align-items-center">
+                            @php
+                                $folderName = isset($eLIND->profil_syarikat) ? 'eLIND/'.str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name).'/'.$eLIND->profil_syarikat : null;
+
+                                // dd($folderName);
+                                $fileExtension = isset($eLIND->profil_syarikat) ? pathinfo($eLIND->profil_syarikat, PATHINFO_EXTENSION) : '';
+                                $extensionIcon = null;
+                                if ($fileExtension === 'pdf') {
+                                    $extensionIcon = "https://img.icons8.com/plasticine/100/pdf-2.png";
+                                } elseif ($fileExtension === 'docx') {
+                                    $extensionIcon = "https://img.icons8.com/plasticine/100/google-docs--v2.png";
+                                } elseif ($fileExtension === 'pptx') {
+                                    $extensionIcon = "https://img.icons8.com/plasticine/100/google-slides.png";
+                                }
+                                // $basePath = 'storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->id_elind . ' ' . $eLIND->name) . '/' . str_replace(' ', '_', $product['nama']) . '/';
+                                // $noImage = asset('storage/uploads/no-photos.png');
+                            @endphp
+                            
+                            @if($folderName != null)
+                                <a href="{{ asset('storage/uploads/' . $folderName) }}" target="_blank" class="" style="border: 0px solid #ddd; border-radius: 10px; padding: 10px; display: inline-block; text-align: center; background-color: #fff;" download>
+                                    <div class="product-image">
+                                        <img src="{{ $extensionIcon }}" class="br-5" alt="" style="width: 100px; height: 100px; border-radius: 5px; margin-bottom: 10px;">
+                                    </div>
+                                    <div class="product-image">
+                                        <span class="file-name-1" style="background-color: #008000; padding: 5px 10px; border-radius: 5px; color: #fff; font-weight: 600; display: inline-block; font-size: 14px;">Profil Syarikat <i class="fas fa-download"></i></span>
+                                    </div>
+                                    <div class="product-image">
+                                        <span class="file-name-1">{{ $eLIND->profil_syarikat ?? '' }}</span>
+                                    </div>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+            </div>
+            @endif --}}
+
         </div>
 
         <div class="col-lg col-separator inertShow">
@@ -624,7 +672,7 @@
                 </div>
             @endif
 
-            <div class="row" id="dynamic-media-fields">
+            {{-- <div class="row" id="dynamic-media-fields">
                 @php
                     if(isset($eLIND->mediaSosial_penggiat)){
                         $mediaSosial_penggiatData = json_decode($eLIND->mediaSosial_penggiat, true);
@@ -696,7 +744,8 @@
                     `;
                     container.appendChild(div);
                 }
-            </script>
+            </script> --}}
+
             <!-- <div class="row">
                 @php
                     if(isset($eLIND->mediaSosial_penggiat)){
@@ -781,375 +830,140 @@
         </div>
         
     </div>
-@if($capitalizedSegment == 'Kontraktor' || $capitalizedSegment == 'Perunding' || $capitalizedSegment == 'Pembekal')
-    <div class="col-lg">
-        <!-- <div class="row col-md-12">
-            {{-- @if(false && (isset($eLIND->pekerja) || (strpos(request()->url(), 'edit') !== false) || (strpos(request()->url(), 'create') !== false)))
-            <div class="col-lg col-separator inertShow">
-                <div class="form-group">
-                    <label class="col-xs-4 control-label"></label>
-                    <div class="col-xs-12">
-                        <h4 class="d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center">
-                                Senarai Pekerja
-                                {!! in_array('pekerja', $arrChanges) ? '<span class="text-danger newC ms-1">&nbsp;!</span>' : '' !!}
-                            </div>
-                            <button type="button" class="btn btn-primary btn-sm showButton" id="addPekerja">
-                                Tambah Pekerja
-                            </button>
-                        </h4>
-                    </div>
+    <div class="row">
+        <div class="col-lg col-separator">
+            @if($capitalizedSegment == 'Kontraktor' || $capitalizedSegment == 'Perunding' || $capitalizedSegment == 'Pembekal')
+            <div class="form-group required ">
+                <label for="profil_syarikat" class="col-md-12 control-label">Profil Syarikat {!! in_array('profil_syarikat', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                <div class="col-md-12 showButton">
+                    {{ Form::file('profil_syarikat', ['class' => 'form-control d-inline-block ms-2', 'multiple' => false, 'accept' => '.pdf,.docx,.pptx']) }}
+                    
                 </div>
+                @if(isset($eLIND->profil_syarikat))
+                    {{ Form::label('', '***Muatnaik semula akan menggantikan fail sedia ada.', ['class' => 'col-form-label required-field-create showButton', 'style' => 'font-weight: strong;']) }}
+                    <br>
+                    <div class="col-md-12">
+                        <div class="d-flex align-items-center">
+                            @php
+                                $folderName = isset($eLIND->profil_syarikat) ? 'eLIND/'.str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name).'/'.$eLIND->profil_syarikat : null;
 
-                <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <div class="table-responsive">
-                            <table id="pekerja_table" class="table table-bordered table-hover">
-                                <thead class="thead-dark">
-                                    <style>
-                                        #pekerja_table th, #pekerja_table td {
-                                            padding: 2px 5px; /* Minimal padding for smaller cells */
-                                            text-align: center; /* Center text horizontally */
-                                            height: auto; /* Let the height adjust based on content */
-                                        }
-
-                                        #pekerja_table td input {
-                                            padding: 3px 5px; /* Small padding inside input fields */
-                                            height: 25px; /* Small height for input fields */
-                                            font-size: 12px; /* Smaller font size for compact input fields */
-                                        }
-
-                                        #pekerja_table th {
-                                            padding: 3px 5px; /* Slightly more padding for headers */
-                                            font-size: 12px; /* Smaller font size for headers */
-                                        }
-                                    </style>
-                                    <tr>
-                                        <th class="w-1">Bil</th>
-                                        <th class="w-30">Nama Pekerja</th>
-                                        <th class="w-5">Jawatan</th>
-                                        <th class="w-1">Tindakan</th>
-                                    </tr>
-                                </thead>
-                                @if(isset($eLIND->pekerja))
-                                <?php $dataPekerja = json_decode($eLIND->pekerja, true); //dd($dataPekerja); ?>
-                                <tbody id="pekerja_container">
-                                    @forelse($dataPekerja as $index => $value)
-                                        <tr id="pekerja_row-{{ $index + 1 }}">
-                                            <td>{{ $index + 1 }}</td>
-                                            <td><input type="text" name="pekerja[{{ $index + 1 }}][nama]" class="form-control" value="{{ $value['nama'] }}"></td>
-                                            <td><input type="text" name="pekerja[{{ $index + 1 }}][jawatan]" class="form-control" value="{{ $value['jawatan'] }}"></td>
-                                            <td style="text-align: center;">
-                                                <button type="button" class="btn btn-danger btn-sm" data-row="pekerja_row-{{ $index + 1 }}"  onclick="confirmDelete_pekerja(this)" style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
-                                                    <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr id="pekerja_rowD">
-                                            <td colspan="4" class="text-center">Tiada Maklumat</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                                @else
-                                <tbody id="pekerja_container">
-                                    <tr id="pekerja_rowD">
-                                        <td colspan="4" class="text-center">Tiada Maklumat</td>
-                                    </tr>
-                                </tbody>
-                                @endif
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <script>
-                    $(document).ready(function() {
-                        let rowCount = {{ isset($dataPekerja) ? count($dataPekerja) : 0 }};
-                        // alert(rowCount);
-                        // Add a new row
-                        function addNewRowPekerja() {
-                            rowCount++;
-                            let newRow = `
-                                <tr id="pekerja_row-${rowCount}">
-                                    <td>${rowCount}</td>
-                                    <td><input type="text" name="pekerja[${rowCount}][nama]" class="form-control" placeholder="Nama"></td>
-                                    <td><input type="text" name="pekerja[${rowCount}][jawatan]" class="form-control" placeholder="Jawatan"></td>
-                                    <td style="text-align: center;">
-                                        <button type="button" class="btn btn-danger btn-sm delete-rowPekerja" data-row="pekerja_row-${rowCount}" style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
-                                            <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            `;
+                                // dd($folderName);
+                                $fileExtension = isset($eLIND->profil_syarikat) ? pathinfo($eLIND->profil_syarikat, PATHINFO_EXTENSION) : '';
+                                $extensionIcon = null;
+                                if ($fileExtension === 'pdf') {
+                                    $extensionIcon = "https://img.icons8.com/plasticine/100/pdf-2.png";
+                                } elseif ($fileExtension === 'docx') {
+                                    $extensionIcon = "https://img.icons8.com/plasticine/100/google-docs--v2.png";
+                                } elseif ($fileExtension === 'pptx') {
+                                    $extensionIcon = "https://img.icons8.com/plasticine/100/google-slides.png";
+                                }
+                                // $basePath = 'storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->id_elind . ' ' . $eLIND->name) . '/' . str_replace(' ', '_', $product['nama']) . '/';
+                                // $noImage = asset('storage/uploads/no-photos.png');
+                            @endphp
                             
-                            // Append new row to the table
-                            $('#pekerja_container').append(newRow);
-                            $('#pekerja_rowD').hide();  // Hide the "Tiada Maklumat" row if it exists
-                            updateBilPekerja();
-                            // const rows = document.querySelectorAll('#pekerja_container tr');
-                            // if(rows.length == 1){
-                            //     $('#pekerja_rowD').show();
-                            // }
-                            // rows.forEach((row, index) => {
-                            //     if (row.id !== 'pekerja_rowD') {  // Skip the "Tiada Maklumat" row (id="pekerja_row")
-                            //         const bilCell = row.querySelector('td:first-child');
-                            //         bilCell.textContent = index + {{ isset($dataPekerja) ? 1 : 0 }};  // Update the "Bil" (row number)
-                            //     }
-                            // });
-                        }
-
-                        window.confirmDelete_pekerja = function(button) {
-                            // Show a confirmation dialog
-                            if (confirm("Are you sure you want to delete this row?")) {
-                                // If the user confirms, delete the row
-                                let rowId = $(button).data('row');
-                                $(`#${rowId}`).remove();
-                                updateBilPekerja();
-                                // const rows = document.querySelectorAll('#pekerja_container tr');
-                                // rows.forEach((row, index) => {
-                                //     if (row.id !== 'pekerja_rowD') {  // Skip the "Tiada Maklumat" row (id="pekerja_row")
-                                //         const bilCell = row.querySelector('td:first-child');
-                                //         bilCell.textContent = index + {{ isset($dataPekerja) ? 1 : 0 }};  // Update the "Bil" (row number)
-                                //     }
-                                // });
-                            }
-                        };
-
-                        // Add a new row when the "Tambah Pekerja" button is clicked
-                        $('#addPekerja').on('click', function() {
-                            addNewRowPekerja();  // Add new empty row
-                        });
-
-                        // Handle row deletion
-                        $(document).on('click', '.delete-rowPekerja', function() {
-                            let rowId = $(this).data('row');
-                            $(`#${rowId}`).remove();
-                            // const rows = document.querySelectorAll('#pekerja_container tr');
-                            // rows.forEach((row, index) => {
-                            //     if (row.id !== 'pekerja_rowD') {  // Skip the "Tiada Maklumat" row (id="pekerja_row")
-                            //         const bilCell = row.querySelector('td:first-child');
-                            //         bilCell.textContent = index + {{ isset($dataPekerja) ? 1 : 0 }};  // Update the "Bil" (row number)
-                            //     }
-                            // });
-                            updateBilPekerja();
-                            // if ($('#pekerja_container tr').length === 0) {
-                            //     $('#pekerja_rowD').show();
-                            // }
-                        });
-
-                        // Update the Bil numbers
-                        function updateBilPekerja() {
-                            const rows = document.querySelectorAll('#pekerja_container tr');
-                            rows.forEach((row, index) => {
-                                if (row.id !== 'pekerja_rowD') {  // Skip the "Tiada Maklumat" row (id="pekerja_row")
-                                    const bilCell = row.querySelector('td:first-child');
-                                    bilCell.textContent = index + {{ isset($dataPekerja) ? 1 : 0 }};  // Update the "Bil" (row number)
-                                }
-                            });
-                            if(rows.length == 1){
-                                $('#pekerja_rowD').show();
-                            }
-                        }
-                    });
-                </script>
-            </div>
-            @endif --}}
-        </div> -->
-        @if($capitalizedSegment == 'Kontraktor' || $capitalizedSegment == 'Perunding' || $capitalizedSegment == 'Pembekal')
-        <div class="row col-md-12">
-            @if(isset($eLIND->pengalaman) || (strpos(request()->url(), 'edit') !== false) || (strpos(request()->url(), 'create') !== false))
-            <div class="col-lg col-separator inertShow">
-                <div class="form-group">
-                    <label class="col-xs-4 control-label"></label>
-                    <div class="col-xs-12">
-                        <h4 class="d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center">
-                                Senarai Pengalaman
-                                {!! in_array('pengalaman', $arrChanges) ? '<span class="text-danger newC ms-1">&nbsp;!</span>' : '' !!}
-                            </div>
-                            <button type="button" class="btn btn-primary btn-sm showButton" id="addPengalaman">
-                                Tambah Pengalaman
-                            </button>
-                        </h4>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <div class="table-responsive">
-                            <table id="pengalaman_table" class="table table-bordered table-hover">
-                                <thead class="thead-dark">
-                                    <style>
-                                        #pengalaman_table th, #pengalaman_table td {
-                                            padding: 2px 5px; /* Minimal padding for smaller cells */
-                                            text-align: center; /* Center text horizontally */
-                                            height: auto; /* Let the height adjust based on content */
-                                        }
-
-                                        #pengalaman_table td input {
-                                            padding: 3px 5px; /* Small padding inside input fields */
-                                            height: 25px; /* Small height for input fields */
-                                            font-size: 12px; /* Smaller font size for compact input fields */
-                                        }
-
-                                        #pengalaman_table th {
-                                            padding: 3px 5px; /* Slightly more padding for headers */
-                                            font-size: 12px; /* Smaller font size for headers */
-                                        }
-                                    </style>
-                                    <tr>
-                                        <th class="w-1">Bil</th>
-                                        <th class="w-30">Tajuk Projek</th>
-                                        <th class="w-5">Kos</th>
-                                        <th class="w-5">Tahun</th>
-                                        <th class="w-5">Status</th>
-                                        <th class="w-1">Tindakan</th>
-                                    </tr>
-                                </thead>
-                                @if(isset($eLIND->pengalaman))
-                                <?php $dataPengalaman = json_decode($eLIND->pengalaman, true); //dd($dataPengalaman); ?>
-                                <tbody id="pengalaman_container">
-                                    @forelse($dataPengalaman as $index => $value)
-                                        <tr id="pengalaman_row-{{ $index + 1 }}">
-                                            <td>{{ $index + 1 }}</td>
-                                            <td><input type="text" name="pengalaman[{{ $index + 1 }}][tajuk]" class="form-control" value="{{ $value['tajuk'] }}"></td>
-                                            <td><input type="text" name="pengalaman[{{ $index + 1 }}][kos]" class="form-control" value="{{ $value['kos'] }}"></td>
-                                            
-                                            <td><input type="text" name="pengalaman[{{ $index + 1 }}][tahun]" class="form-control" value="{{ $value['tahun'] }}"></td>
-
-                                            <td><input type="text" name="pengalaman[{{ $index + 1 }}][status]" class="form-control" value="{{ $value['status'] }}"></td>
-                                            <td style="text-align: center;">
-                                                <button type="button" class="btn btn-danger btn-sm" data-row="pengalaman_row-{{ $index + 1 }}"  onclick="confirmDelete_pengalaman(this)" style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
-                                                    <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr id="pengalaman_rowD">
-                                            <td colspan="6" class="text-center">Tiada Maklumat</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                                @else
-                                <tbody id="pengalaman_container">
-                                    <tr id="pengalaman_rowD">
-                                        <td colspan="6" class="text-center">Tiada Maklumat</td>
-                                    </tr>
-                                </tbody>
-                                @endif
-                            </table>
+                            @if($folderName != null)
+                                <a href="{{ asset('storage/uploads/' . $folderName) }}" target="_blank" class="" style="border: 0px solid #ddd; border-radius: 10px; padding: 10px; display: inline-block; text-align: center; background-color: #fff;" download>
+                                    <div class="product-image">
+                                        <img src="{{ $extensionIcon }}" class="br-5" alt="" style="width: 100px; height: 100px; border-radius: 5px; margin-bottom: 10px;">
+                                    </div>
+                                    <div class="product-image">
+                                        <span class="file-name-1" style="background-color: #008000; padding: 5px 10px; border-radius: 5px; color: #fff; font-weight: 600; display: inline-block; font-size: 14px;">Profil Syarikat <i class="fas fa-download"></i></span>
+                                    </div>
+                                    <div class="product-image">
+                                        <span class="file-name-1">{{ $eLIND->profil_syarikat ?? '' }}</span>
+                                    </div>
+                                </a>
+                            @endif
                         </div>
                     </div>
-                </div>
-
-                <script>
-                    $(document).ready(function() {
-                        let rowCount = {{ isset($dataPengalaman) ? count($dataPengalaman) : 0 }};
-
-                        // Function to add a new row
-                        function addNewRowPengalaman() {
-                            // Increase row count
-                            rowCount++;
-
-                            // Insert new row
-                            let newRow = `
-                                <tr id="pengalaman_row-${rowCount}">
-                                    <td>${rowCount}</td>
-                                    <td><input type="text" name="pengalaman[${rowCount}][tajuk]" placeholder="Tajuk" class="form-control"></td>
-                                    <td><input type="text" name="pengalaman[${rowCount}][kos]" placeholder="Kos" class="form-control"></td>
-                                    <td><input type="text" name="pengalaman[${rowCount}][tahun]" placeholder="Tahun" class="form-control"></td>
-                                    <td><input type="text" name="pengalaman[${rowCount}][status]" placeholder="Status" class="form-control"></td>
-                                    <td style="padding: 0; vertical-align: middle; text-align: center;">
-                                        <button type="button" class="btn btn-danger btn-sm delete-rowPengalaman" data-row="pengalaman_row-${rowCount}" 
-                                                style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
-                                            <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            `;
-
-                            // Append the new row to the table
-                            $('#pengalaman_container').append(newRow);
-                            $('#pengalaman_rowD').hide();  // Hide the "Tiada Maklumat" row if it exists
-                            updateBilPengalaman();
-                            // const rows = document.querySelectorAll('#pengalaman_container tr');
-                            // rows.forEach((row, index) => {
-                            //     if (row.id !== 'pengalaman_rowD') {
-                            //         const bilCell = row.querySelector('td:first-child');
-                            //         bilCell.textContent = index + {{ isset($dataPengalaman) ? 1 : 0 }};
-                            //     }
-                            // });
-                        }
-
-                        window.confirmDelete_pengalaman = function(button) {
-                            // Show a confirmation dialog
-                            if (confirm("Are you sure you want to delete this row?")) {
-                                // If the user confirms, delete the row
-                                let rowId = $(button).data('row');
-                                $(`#${rowId}`).remove();
-                                updateBilPengalaman();
-                                // const rows = document.querySelectorAll('#pengalaman_container tr');
-                                // rows.forEach((row, index) => {
-                                //     if (row.id !== 'pengalaman_rowD') {
-                                //         const bilCell = row.querySelector('td:first-child');
-                                //         bilCell.textContent = index + {{ isset($dataPengalaman) ? 1 : 0 }};
-                                //     }
-                                // });  // Recalculate the row numbers after deletion
-                            }
-                        };
-
-                        // Function to update the Bil numbers
-                        function updateBilPengalaman() {
-                            const rows = document.querySelectorAll('#pengalaman_container tr');
-                            rows.forEach((row, index) => {
-                                if (row.id !== 'pengalaman_rowD') {
-                                    const bilCell = row.querySelector('td:first-child');
-                                    bilCell.textContent = index + {{ isset($dataPengalaman) ? 1 : 0 }};
-                                }
-                            });
-                            if(rows.length == 1){
-                                $('#pengalaman_rowD').show();
-                            }
-                        }
-                        $('#addPengalaman').on('click', function() {
-                            addNewRowPengalaman();
-                        });
-                        $(document).on('click', '.delete-rowPengalaman', function() {
-                            let rowId = $(this).data('row');
-                            $(`#${rowId}`).remove();
-                            updateBilPengalaman();
-                            // const rows = document.querySelectorAll('#pengalaman_container tr');
-                            // rows.forEach((row, index) => {
-                            //     if (row.id !== 'pengalaman_rowD') {
-                            //         const bilCell = row.querySelector('td:first-child');
-                            //         bilCell.textContent = index + {{ isset($dataPengalaman) ? 1 : 0 }};
-                            //     }
-                            // });
-                            // if ($('#pengalaman_container tr').length === 0) {
-                            //     $('#pengalaman_rowD').show();
-                            // }
-                        });
-                    });
-                </script>
+                @endif
             </div>
             @endif
         </div>
-        @endif
-        @if($capitalizedSegment == 'Pembekal')
-            <div class="row col-md-12">
-                @if(isset($eLIND->produk) || (strpos(request()->url(), 'edit') !== false) || (strpos(request()->url(), 'create') !== false))
-                <div class="col-lg col-separator">
+        <div class="col-lg col-separator inertShow">
+            <div class="row" id="dynamic-media-fields">
+                @php
+                    if(isset($eLIND->mediaSosial_penggiat)){
+                        $mediaSosial_penggiatData = json_decode($eLIND->mediaSosial_penggiat, true);
+                        $mediaData = json_decode($eLIND->mediaSosial_penggiat, true);
+                    }else{
+                        $media1 = $media2 = $media3 = $media4 = $media5 = $media6 = $media7 = $media8 = null;
+                        $mediaData = null;
+                    }
+                    $fixedFields = ['Emel', 'Web', 'Telefon', 'Facebook'];
+                    //dd($arrChanges);
+                @endphp
+
+                @foreach ($fixedFields as $index => $field)
+                    @php $value = $mediaData[$field] ?? ''; @endphp
+                    <div class="form-group required {{ $field == 'Emel' || $field == 'Web' ? 'col-md-6' : 'col-md-3' }}">
+                        <label for="mediaSosial" class="col-md-12 control-label">{{ $field == 'Web' ? 'Laman Web' : $field }} {!! in_array('mediaSosial_penggiat.'.$field, $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                        <div class="col-md-12">
+                            <input value="{{ $value }}" name="mediaSosial_penggiat[{{ $field }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]">
+                        </div>
+                    </div>
+                @endforeach
+                @if (isset($mediaData))
+                    @foreach ($mediaData as $key => $value)
+                        @if (!in_array($key, $fixedFields))
+                            <div class="form-group required col-md-3">
+                                <label for="mediaSosial" class="col-md-12 control-label">{{ $key }} {!! in_array('mediaSosial_penggiat.'.$key, $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                                <div class="col-md-12">
+                                    <input value="{{ $value }}" name="mediaSosial_penggiat[{{ $key }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]">
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                @endif
+
+            </div>
+            <div class="form-group col-md-3 showButton">
+                <button type="button" onclick="addMedia()" class="btn btn-primary">Tambah Media Sosial</button>
+            </div>
+
+            <script>
+                function addMedia() {
+                    const name = prompt("Masukkan nama media sosial (contoh: TikTok)");
+                    if (!name) return;
+
+                    const key = name.trim().replace(/\s+/g, ''); // safer key
+                    const container = document.getElementById('dynamic-media-fields');
+
+                    // Avoid duplicates
+                    if (document.querySelector(`[name="mediaSosial_penggiat[${key}]"]`)) {
+                        alert("Media sosial ini telah ditambah.");
+                        return;
+                    }
+
+                    const div = document.createElement('div');
+                    div.classList.add('form-group', 'required', 'col-md-3');
+                    div.innerHTML = `
+                        <label class="col-md-12 control-label">${name}</label>
+                        <div class="col-md-12">
+                            <input name="mediaSosial_penggiat[${key}]" class="form-control" maxlength="50" type="text">
+                        </div>
+                    `;
+                    container.appendChild(div);
+                }
+            </script>
+        </div>
+    </div>
+    
+    @if($capitalizedSegment == 'Kontraktor' || $capitalizedSegment == 'Perunding' || $capitalizedSegment == 'Pembekal')
+        <div class="col-lg">
+            <!-- <div class="row col-md-12">
+                {{-- @if(false && (isset($eLIND->pekerja) || (strpos(request()->url(), 'edit') !== false) || (strpos(request()->url(), 'create') !== false)))
+                <div class="col-lg col-separator inertShow">
                     <div class="form-group">
                         <label class="col-xs-4 control-label"></label>
                         <div class="col-xs-12">
                             <h4 class="d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center">
-                                    Senarai Produk
-                                    {!! in_array('produk', $arrChanges) ? '<span class="text-danger newC ms-1">&nbsp;!</span>' : '' !!}
+                                    Senarai Pekerja
+                                    {!! in_array('pekerja', $arrChanges) ? '<span class="text-danger newC ms-1">&nbsp;!</span>' : '' !!}
                                 </div>
-                                <button type="button" class="btn btn-primary btn-sm showButton" id="addProductBtn">
-                                    Tambah Produk
+                                <button type="button" class="btn btn-primary btn-sm showButton" id="addPekerja">
+                                    Tambah Pekerja
                                 </button>
                             </h4>
                         </div>
@@ -1158,264 +972,619 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <div class="table-responsive">
-                                <table id="projek_table" class="table table-bordered table-hover">
+                                <table id="pekerja_table" class="table table-bordered table-hover">
                                     <thead class="thead-dark">
                                         <style>
-                                            #projek_table th, #projek_table td {
+                                            #pekerja_table th, #pekerja_table td {
                                                 padding: 2px 5px; /* Minimal padding for smaller cells */
                                                 text-align: center; /* Center text horizontally */
                                                 height: auto; /* Let the height adjust based on content */
                                             }
 
-                                            #projek_table td input {
+                                            #pekerja_table td input {
                                                 padding: 3px 5px; /* Small padding inside input fields */
                                                 height: 25px; /* Small height for input fields */
                                                 font-size: 12px; /* Smaller font size for compact input fields */
                                             }
 
-                                            #projek_table th {
+                                            #pekerja_table th {
                                                 padding: 3px 5px; /* Slightly more padding for headers */
                                                 font-size: 12px; /* Smaller font size for headers */
                                             }
                                         </style>
-                                        
-                                        <style>
-                                            /* Container for the grid with files and previews */
-                                            .grid-container {
-                                                display: grid;
-                                                grid-template-columns: 1fr 1fr; /* 2 equal-width columns */
-                                                gap: 10px; /* Space between grid items */
-                                                width: 100%;  /* Ensure the grid fills available width */
-                                                max-width: 600px;  /* Limit max width for grid */
-                                                height: auto; /* Allow the height to adjust based on content */
-                                            }
-
-                                            /* Grid item styling */
-                                            .grid-item {
-                                                display: flex;
-                                                flex-direction: column;
-                                                align-items: center;
-                                                justify-content: space-between;
-                                                text-align: center;
-                                                border: 1px solid #ddd;
-                                                background-color: lightgray;
-                                                padding: 10px;
-                                                box-sizing: border-box;
-                                                overflow: hidden; /* Prevent overflowing content */
-                                            }
-
-                                            /* Image preview container */
-                                            .image-preview-container {
-                                                display: grid;
-                                                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-                                                gap: 10px;
-                                                margin-top: 10px;
-                                                width: 100%;
-                                                overflow-y: auto; /* Allow scrolling if the preview exceeds height */
-                                            }
-
-                                            .image-preview-container img {
-                                                width: 100%;
-                                                height: 100px;
-                                                object-fit: cover;
-                                                border-radius: 5px;
-                                                border: 1px solid #ddd;
-                                                padding: 2px;
-                                            }
-
-                                            /* File input button styling */
-                                            .form-control-file {
-                                                padding: 5px;
-                                                font-size: 12px;
-                                                width: 100%;
-                                                height: 30px;
-                                                border-radius: 4px;
-                                                background-color: #f7f7f7;
-                                                border: 1px solid #ccc;
-                                                cursor: pointer;
-                                            }
-                                        </style>
-
-                                        <script>
-                                            // Function to handle image preview
-                                            function previewImage(input, previewContainer) {
-                                                const files = input.files;
-
-                                                // Clear the current preview
-                                                previewContainer.innerHTML = '';
-
-                                                // Loop through the selected files
-                                                for (let i = 0; i < files.length; i++) {
-                                                    const file = files[i];
-                                                    const imgElement = document.createElement('img');
-
-                                                    // Create a URL for the file and set it as the source for the image element
-                                                    imgElement.src = URL.createObjectURL(file);
-
-                                                    previewContainer.appendChild(imgElement);
-                                                }
-                                            }
-                                        </script>
-
                                         <tr>
                                             <th class="w-1">Bil</th>
-                                            <th class="w-10">Nama Produk</th>
-                                            <th class="w-10">Keterangan</th>
-                                            <th class="w-5">Harga</th>
-                                            <th class="w-15">Gambar</th>
+                                            <th class="w-30">Nama Pekerja</th>
+                                            <th class="w-5">Jawatan</th>
                                             <th class="w-1">Tindakan</th>
                                         </tr>
                                     </thead>
-                                    @if(isset($eLIND->produk))
-                                        <tbody id="projek_container">
-                                            <?php $dataProduk = json_decode($eLIND->produk, true); //dd($dataProduk); ?>
-                                            @forelse ($dataProduk as $index => $product)
-                                                <tr id="produk_row-{{ $index + 1 }}">
-                                                    <td>{{ ($index + 1) }}</td>
-                                                    <td><input required type="text" class="form-control inertShow inertClass" name="produk[{{ $index + 1 }}][nama]" value="{{ $product['nama'] }}" placeholder="Masukkan Nama Produk" style="background-color: rgb(215, 215, 215);"></td>
-                                                    <td><input required type="text" class="form-control inertShow" name="produk[{{ $index + 1 }}][keterangan]" value="{{ $product['keterangan'] }}" placeholder="Masukkan Keterangan Produk"></td>
-                                                    <td><input required type="number" class="form-control inertShow" name="produk[{{ $index + 1 }}][harga]" value="{{ $product['harga'] }}" placeholder="Masukkan Harga" min="1"></td>
-                                                    <td>
-                                                        <!-- <div class="grid-container">
-                                                            <div class="grid-item">
-                                                                <input required type="file" class="form-control-file showButton" id="gambar_produk_1_{{ $index + 1 }}" name="produk[{{ $index + 1 }}][gambar_produk_1]" accept="image/*">
-                                                                <div id="imagePreviewContainer_1_{{ $index + 1 }}" class="image-preview-container" data-image="{{ isset($product['gambar_produk_1']) ? asset('storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name) . '/' . str_replace(' ', '_', $product['nama']). '/' . $product['gambar_produk_1']) : asset('storage/uploads/no-photos.png') }}">
-                                                                    @if(isset($product['gambar_produk_1']))
-                                                                        <input required type="hidden" class="form-control" name="produk[{{ $index + 1 }}][existing_image1]" value="{{ $product['gambar_produk_1'] }}" placeholder="Masukkan Harga" min="1">
-                                                                        <img src="{{ asset('storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name) . '/' . str_replace(' ', '_', $product['nama']). '/' . $product['gambar_produk_1']) }}" alt="Image Preview">
-                                                                    @else
-                                                                        <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="No Image">
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                            <div class="grid-item">
-                                                                <input required type="file" class="form-control-file showButton" id="gambar_produk_2_{{ $index + 1 }}" name="produk[{{ $index + 1 }}][gambar_produk_2]" accept="image/*">
-                                                                <div id="imagePreviewContainer_2_{{ $index + 1 }}" class="image-preview-container" data-image="{{ isset($product['gambar_produk_2']) ? asset('storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name) . '/' . str_replace(' ', '_', $product['nama']). '/' . $product['gambar_produk_2']) : asset('storage/uploads/no-photos.png') }}">
-                                                                    @if(isset($product['gambar_produk_2']))
-                                                                        <input required type="hidden" class="form-control" name="produk[{{ $index + 1 }}][existing_image2]" value="{{ $product['gambar_produk_2'] }}" placeholder="Masukkan Harga" min="1">
-                                                                        <img src="{{ asset('storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name) . '/' . str_replace(' ', '_', $product['nama']). '/' . $product['gambar_produk_2']) }}" alt="Image Preview">
-                                                                    @else
-                                                                        <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="No Image">
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        </div> -->
-                                                        <div class="grid-container">
-                                                            @php
-                                                                $basePath = 'storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->id_elind . ' ' . $eLIND->name) . '/' . str_replace(' ', '_', $product['nama']) . '/';
-                                                                $noImage = asset('storage/uploads/no-photos.png');
-                                                            @endphp
-
-                                                            @for ($i = 1; $i <= 2; $i++)
-                                                                @php
-                                                                    $imageKey = 'gambar_produk_' . $i;
-                                                                    $imageVal = $product[$imageKey] ?? null;
-                                                                    $imagePath = $imageVal ? asset($basePath . $imageVal) : $noImage;
-                                                                    $previewId = "imagePreviewContainer_{$i}_".($index + 1);
-                                                                    $inputId = "{$imageKey}_".($index + 1);
-                                                                @endphp
-
-                                                                <div class="grid-item">
-                                                                    <input type="file"
-                                                                        class="form-control-file showButton"
-                                                                        id="{{ $inputId }}"
-                                                                        name="produk[{{ $index + 1 }}][{{ $imageKey }}]"
-                                                                        accept="image/*">
-
-                                                                    <div id="{{ $previewId }}"
-                                                                        class="image-preview-container"
-                                                                        data-image="{{ $imagePath }}"
-                                                                        style="cursor: zoom-in"
-                                                                        title="Klik untuk lihat gambar lebih besar">
-
-                                                                        @if($imageVal)
-                                                                            <input type="hidden"
-                                                                                name="produk[{{ $index + 1 }}][existing_image{{ $i }}]"
-                                                                                value="{{ $imageVal }}">
-                                                                        @endif
-
-                                                                        <img src="{{ $imagePath }}" alt="Image Preview">
-                                                                    </div>
-                                                                </div>
-                                                            @endfor
-                                                        </div>
-
-                                                        <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
-                                                            <div class="modal-dialog modal-dialog-centered modal-lg">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-body text-center p-0">
-                                                                        <img id="modalImage" src="" class="img-fluid w-100" alt="Full Size Image">
-                                                                    </div>
-                                                                    <div class="modal-footer py-2">
-                                                                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <script>
-                                                            document.addEventListener("DOMContentLoaded", function () {
-                                                                const fallbackImage = "{{ asset('storage/uploads/no-photos.png') }}";
-
-                                                                // Preview file on selection
-                                                                document.querySelectorAll('.form-control-file.showButton').forEach(input => {
-                                                                    input.addEventListener('change', function () {
-                                                                        const file = this.files[0];
-                                                                        if (!file) return;
-
-                                                                        const reader = new FileReader();
-                                                                        reader.onload = function (e) {
-                                                                            const previewId = this.inputId.replace('gambar_produk_', 'imagePreviewContainer_');
-                                                                            const previewContainer = document.getElementById(previewId);
-                                                                            const img = previewContainer.querySelector('img');
-                                                                            img.src = e.target.result;
-                                                                            previewContainer.dataset.image = e.target.result;
-                                                                        }.bind({ inputId: this.id });
-
-                                                                        reader.readAsDataURL(file);
-                                                                    });
-                                                                });
-
-                                                                // Show modal on preview click
-                                                                document.querySelectorAll('.image-preview-container').forEach(container => {
-                                                                    container.addEventListener('click', function () {
-                                                                        const imageUrl = this.dataset.image || fallbackImage;
-                                                                        document.getElementById('modalImage').src = imageUrl;
-                                                                        $('#imageModal').modal('show');
-                                                                    });
-                                                                });
-                                                            });
-                                                        </script>
-                                                        {{ Form::label('', '***Muatnaik semula akan menggantikan gambar sedia ada.', ['class' => 'col-form-label required-field-create showButton', 'style' => 'font-size: 12px;']) }}
-                                                    </td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-danger btn-sm" data-row="produk_row-{{ $index + 1 }}"  onclick="confirmDelete_produk(this)" style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
-                                                            <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="6" class="text-center">Tiada Maklumat</td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
+                                    @if(isset($eLIND->pekerja))
+                                    <?php $dataPekerja = json_decode($eLIND->pekerja, true); //dd($dataPekerja); ?>
+                                    <tbody id="pekerja_container">
+                                        @forelse($dataPekerja as $index => $value)
+                                            <tr id="pekerja_row-{{ $index + 1 }}">
+                                                <td>{{ $index + 1 }}</td>
+                                                <td><input type="text" name="pekerja[{{ $index + 1 }}][nama]" class="form-control" value="{{ $value['nama'] }}"></td>
+                                                <td><input type="text" name="pekerja[{{ $index + 1 }}][jawatan]" class="form-control" value="{{ $value['jawatan'] }}"></td>
+                                                <td style="text-align: center;">
+                                                    <button type="button" class="btn btn-danger btn-sm" data-row="pekerja_row-{{ $index + 1 }}"  onclick="confirmDelete_pekerja(this)" style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
+                                                        <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr id="pekerja_rowD">
+                                                <td colspan="4" class="text-center">Tiada Maklumat</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
                                     @else
-                                    <tbody id="projek_container">
-                                        <tr id="produk_rowD">
+                                    <tbody id="pekerja_container">
+                                        <tr id="pekerja_rowD">
+                                            <td colspan="4" class="text-center">Tiada Maklumat</td>
+                                        </tr>
+                                    </tbody>
+                                    @endif
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        $(document).ready(function() {
+                            let rowCount = {{ isset($dataPekerja) ? count($dataPekerja) : 0 }};
+                            // alert(rowCount);
+                            // Add a new row
+                            function addNewRowPekerja() {
+                                rowCount++;
+                                let newRow = `
+                                    <tr id="pekerja_row-${rowCount}">
+                                        <td>${rowCount}</td>
+                                        <td><input type="text" name="pekerja[${rowCount}][nama]" class="form-control" placeholder="Nama"></td>
+                                        <td><input type="text" name="pekerja[${rowCount}][jawatan]" class="form-control" placeholder="Jawatan"></td>
+                                        <td style="text-align: center;">
+                                            <button type="button" class="btn btn-danger btn-sm delete-rowPekerja" data-row="pekerja_row-${rowCount}" style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
+                                                <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `;
+                                
+                                // Append new row to the table
+                                $('#pekerja_container').append(newRow);
+                                $('#pekerja_rowD').hide();  // Hide the "Tiada Maklumat" row if it exists
+                                updateBilPekerja();
+                                // const rows = document.querySelectorAll('#pekerja_container tr');
+                                // if(rows.length == 1){
+                                //     $('#pekerja_rowD').show();
+                                // }
+                                // rows.forEach((row, index) => {
+                                //     if (row.id !== 'pekerja_rowD') {  // Skip the "Tiada Maklumat" row (id="pekerja_row")
+                                //         const bilCell = row.querySelector('td:first-child');
+                                //         bilCell.textContent = index + {{ isset($dataPekerja) ? 1 : 0 }};  // Update the "Bil" (row number)
+                                //     }
+                                // });
+                            }
+
+                            window.confirmDelete_pekerja = function(button) {
+                                // Show a confirmation dialog
+                                if (confirm("Are you sure you want to delete this row?")) {
+                                    // If the user confirms, delete the row
+                                    let rowId = $(button).data('row');
+                                    $(`#${rowId}`).remove();
+                                    updateBilPekerja();
+                                    // const rows = document.querySelectorAll('#pekerja_container tr');
+                                    // rows.forEach((row, index) => {
+                                    //     if (row.id !== 'pekerja_rowD') {  // Skip the "Tiada Maklumat" row (id="pekerja_row")
+                                    //         const bilCell = row.querySelector('td:first-child');
+                                    //         bilCell.textContent = index + {{ isset($dataPekerja) ? 1 : 0 }};  // Update the "Bil" (row number)
+                                    //     }
+                                    // });
+                                }
+                            };
+
+                            // Add a new row when the "Tambah Pekerja" button is clicked
+                            $('#addPekerja').on('click', function() {
+                                addNewRowPekerja();  // Add new empty row
+                            });
+
+                            // Handle row deletion
+                            $(document).on('click', '.delete-rowPekerja', function() {
+                                let rowId = $(this).data('row');
+                                $(`#${rowId}`).remove();
+                                // const rows = document.querySelectorAll('#pekerja_container tr');
+                                // rows.forEach((row, index) => {
+                                //     if (row.id !== 'pekerja_rowD') {  // Skip the "Tiada Maklumat" row (id="pekerja_row")
+                                //         const bilCell = row.querySelector('td:first-child');
+                                //         bilCell.textContent = index + {{ isset($dataPekerja) ? 1 : 0 }};  // Update the "Bil" (row number)
+                                //     }
+                                // });
+                                updateBilPekerja();
+                                // if ($('#pekerja_container tr').length === 0) {
+                                //     $('#pekerja_rowD').show();
+                                // }
+                            });
+
+                            // Update the Bil numbers
+                            function updateBilPekerja() {
+                                const rows = document.querySelectorAll('#pekerja_container tr');
+                                rows.forEach((row, index) => {
+                                    if (row.id !== 'pekerja_rowD') {  // Skip the "Tiada Maklumat" row (id="pekerja_row")
+                                        const bilCell = row.querySelector('td:first-child');
+                                        bilCell.textContent = index + {{ isset($dataPekerja) ? 1 : 0 }};  // Update the "Bil" (row number)
+                                    }
+                                });
+                                if(rows.length == 1){
+                                    $('#pekerja_rowD').show();
+                                }
+                            }
+                        });
+                    </script>
+                </div>
+                @endif --}}
+            </div> -->
+            @if($capitalizedSegment == 'Kontraktor' || $capitalizedSegment == 'Perunding' || $capitalizedSegment == 'Pembekal')
+            <div class="row col-md-12">
+                @if(isset($eLIND->pengalaman) || (strpos(request()->url(), 'edit') !== false) || (strpos(request()->url(), 'create') !== false))
+                <div class="col-lg col-separator inertShow">
+                    <div class="form-group">
+                        <label class="col-xs-4 control-label"></label>
+                        <div class="col-xs-12">
+                            <h4 class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    Senarai Pengalaman
+                                    {!! in_array('pengalaman', $arrChanges) ? '<span class="text-danger newC ms-1">&nbsp;!</span>' : '' !!}
+                                </div>
+                                <button type="button" class="btn btn-primary btn-sm showButton" id="addPengalaman">
+                                    Tambah Pengalaman
+                                </button>
+                            </h4>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="table-responsive">
+                                <table id="pengalaman_table" class="table table-bordered table-hover">
+                                    <thead class="thead-dark">
+                                        <style>
+                                            #pengalaman_table th, #pengalaman_table td {
+                                                padding: 2px 5px; /* Minimal padding for smaller cells */
+                                                text-align: center; /* Center text horizontally */
+                                                height: auto; /* Let the height adjust based on content */
+                                            }
+
+                                            #pengalaman_table td input {
+                                                padding: 3px 5px; /* Small padding inside input fields */
+                                                height: 25px; /* Small height for input fields */
+                                                font-size: 12px; /* Smaller font size for compact input fields */
+                                            }
+
+                                            #pengalaman_table th {
+                                                padding: 3px 5px; /* Slightly more padding for headers */
+                                                font-size: 12px; /* Smaller font size for headers */
+                                            }
+                                        </style>
+                                        <tr>
+                                            <th class="w-1">Bil</th>
+                                            <th class="w-30">Tajuk Projek</th>
+                                            <th class="w-5">Kos</th>
+                                            <th class="w-5">Tahun</th>
+                                            <th class="w-5">Status</th>
+                                            <th class="w-1">Tindakan</th>
+                                        </tr>
+                                    </thead>
+                                    @if(isset($eLIND->pengalaman))
+                                    <?php $dataPengalaman = json_decode($eLIND->pengalaman, true); //dd($dataPengalaman); ?>
+                                    <tbody id="pengalaman_container">
+                                        @forelse($dataPengalaman as $index => $value)
+                                            <tr id="pengalaman_row-{{ $index + 1 }}">
+                                                <td>{{ $index + 1 }}</td>
+                                                <td><input type="text" name="pengalaman[{{ $index + 1 }}][tajuk]" class="form-control" value="{{ $value['tajuk'] }}"></td>
+                                                <td><input type="text" name="pengalaman[{{ $index + 1 }}][kos]" class="form-control" value="{{ $value['kos'] }}"></td>
+                                                
+                                                <td><input type="text" name="pengalaman[{{ $index + 1 }}][tahun]" class="form-control" value="{{ $value['tahun'] }}"></td>
+
+                                                <td><input type="text" name="pengalaman[{{ $index + 1 }}][status]" class="form-control" value="{{ $value['status'] }}"></td>
+                                                <td style="text-align: center;">
+                                                    <button type="button" class="btn btn-danger btn-sm" data-row="pengalaman_row-{{ $index + 1 }}"  onclick="confirmDelete_pengalaman(this)" style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
+                                                        <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr id="pengalaman_rowD">
+                                                <td colspan="6" class="text-center">Tiada Maklumat</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                    @else
+                                    <tbody id="pengalaman_container">
+                                        <tr id="pengalaman_rowD">
                                             <td colspan="6" class="text-center">Tiada Maklumat</td>
                                         </tr>
                                     </tbody>
                                     @endif
                                 </table>
-                                <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-body text-center p-0">
-                                                <img id="modalImage" src="" class="img-fluid w-100" alt="Full Size Image">
-                                            </div>
-                                            <div class="modal-footer py-2">
-                                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        $(document).ready(function() {
+                            let rowCount = {{ isset($dataPengalaman) ? count($dataPengalaman) : 0 }};
+
+                            // Function to add a new row
+                            function addNewRowPengalaman() {
+                                // Increase row count
+                                rowCount++;
+
+                                // Insert new row
+                                let newRow = `
+                                    <tr id="pengalaman_row-${rowCount}">
+                                        <td>${rowCount}</td>
+                                        <td><input type="text" name="pengalaman[${rowCount}][tajuk]" placeholder="Tajuk" class="form-control"></td>
+                                        <td><input type="text" name="pengalaman[${rowCount}][kos]" placeholder="Kos" class="form-control"></td>
+                                        <td><input type="text" name="pengalaman[${rowCount}][tahun]" placeholder="Tahun" class="form-control"></td>
+                                        <td><input type="text" name="pengalaman[${rowCount}][status]" placeholder="Status" class="form-control"></td>
+                                        <td style="padding: 0; vertical-align: middle; text-align: center;">
+                                            <button type="button" class="btn btn-danger btn-sm delete-rowPengalaman" data-row="pengalaman_row-${rowCount}" 
+                                                    style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
+                                                <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `;
+
+                                // Append the new row to the table
+                                $('#pengalaman_container').append(newRow);
+                                $('#pengalaman_rowD').hide();  // Hide the "Tiada Maklumat" row if it exists
+                                updateBilPengalaman();
+                                // const rows = document.querySelectorAll('#pengalaman_container tr');
+                                // rows.forEach((row, index) => {
+                                //     if (row.id !== 'pengalaman_rowD') {
+                                //         const bilCell = row.querySelector('td:first-child');
+                                //         bilCell.textContent = index + {{ isset($dataPengalaman) ? 1 : 0 }};
+                                //     }
+                                // });
+                            }
+
+                            window.confirmDelete_pengalaman = function(button) {
+                                // Show a confirmation dialog
+                                if (confirm("Are you sure you want to delete this row?")) {
+                                    // If the user confirms, delete the row
+                                    let rowId = $(button).data('row');
+                                    $(`#${rowId}`).remove();
+                                    updateBilPengalaman();
+                                    // const rows = document.querySelectorAll('#pengalaman_container tr');
+                                    // rows.forEach((row, index) => {
+                                    //     if (row.id !== 'pengalaman_rowD') {
+                                    //         const bilCell = row.querySelector('td:first-child');
+                                    //         bilCell.textContent = index + {{ isset($dataPengalaman) ? 1 : 0 }};
+                                    //     }
+                                    // });  // Recalculate the row numbers after deletion
+                                }
+                            };
+
+                            // Function to update the Bil numbers
+                            function updateBilPengalaman() {
+                                const rows = document.querySelectorAll('#pengalaman_container tr');
+                                rows.forEach((row, index) => {
+                                    if (row.id !== 'pengalaman_rowD') {
+                                        const bilCell = row.querySelector('td:first-child');
+                                        bilCell.textContent = index + {{ isset($dataPengalaman) ? 1 : 0 }};
+                                    }
+                                });
+                                if(rows.length == 1){
+                                    $('#pengalaman_rowD').show();
+                                }
+                            }
+                            $('#addPengalaman').on('click', function() {
+                                addNewRowPengalaman();
+                            });
+                            $(document).on('click', '.delete-rowPengalaman', function() {
+                                let rowId = $(this).data('row');
+                                $(`#${rowId}`).remove();
+                                updateBilPengalaman();
+                                // const rows = document.querySelectorAll('#pengalaman_container tr');
+                                // rows.forEach((row, index) => {
+                                //     if (row.id !== 'pengalaman_rowD') {
+                                //         const bilCell = row.querySelector('td:first-child');
+                                //         bilCell.textContent = index + {{ isset($dataPengalaman) ? 1 : 0 }};
+                                //     }
+                                // });
+                                // if ($('#pengalaman_container tr').length === 0) {
+                                //     $('#pengalaman_rowD').show();
+                                // }
+                            });
+                        });
+                    </script>
+                </div>
+                @endif
+            </div>
+            @endif
+            @if($capitalizedSegment == 'Pembekal')
+                <div class="row col-md-12">
+                    @if(isset($eLIND->produk) || (strpos(request()->url(), 'edit') !== false) || (strpos(request()->url(), 'create') !== false))
+                    <div class="col-lg col-separator">
+                        <div class="form-group">
+                            <label class="col-xs-4 control-label"></label>
+                            <div class="col-xs-12">
+                                <h4 class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        Senarai Produk
+                                        {!! in_array('produk', $arrChanges) ? '<span class="text-danger newC ms-1">&nbsp;!</span>' : '' !!}
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-sm showButton" id="addProductBtn">
+                                        Tambah Produk
+                                    </button>
+                                </h4>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <div class="table-responsive">
+                                    <table id="projek_table" class="table table-bordered table-hover">
+                                        <thead class="thead-dark">
+                                            <style>
+                                                #projek_table th, #projek_table td {
+                                                    padding: 2px 5px; /* Minimal padding for smaller cells */
+                                                    text-align: center; /* Center text horizontally */
+                                                    height: auto; /* Let the height adjust based on content */
+                                                }
+
+                                                #projek_table td input {
+                                                    padding: 3px 5px; /* Small padding inside input fields */
+                                                    height: 25px; /* Small height for input fields */
+                                                    font-size: 12px; /* Smaller font size for compact input fields */
+                                                }
+
+                                                #projek_table th {
+                                                    padding: 3px 5px; /* Slightly more padding for headers */
+                                                    font-size: 12px; /* Smaller font size for headers */
+                                                }
+                                            </style>
+                                            
+                                            <style>
+                                                /* Container for the grid with files and previews */
+                                                .grid-container {
+                                                    display: grid;
+                                                    grid-template-columns: 1fr 1fr; /* 2 equal-width columns */
+                                                    gap: 10px; /* Space between grid items */
+                                                    width: 100%;  /* Ensure the grid fills available width */
+                                                    max-width: 600px;  /* Limit max width for grid */
+                                                    height: auto; /* Allow the height to adjust based on content */
+                                                }
+
+                                                /* Grid item styling */
+                                                .grid-item {
+                                                    display: flex;
+                                                    flex-direction: column;
+                                                    align-items: center;
+                                                    justify-content: space-between;
+                                                    text-align: center;
+                                                    border: 1px solid #ddd;
+                                                    background-color: lightgray;
+                                                    padding: 10px;
+                                                    box-sizing: border-box;
+                                                    overflow: hidden; /* Prevent overflowing content */
+                                                }
+
+                                                /* Image preview container */
+                                                .image-preview-container {
+                                                    display: grid;
+                                                    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                                                    gap: 10px;
+                                                    margin-top: 10px;
+                                                    width: 100%;
+                                                    overflow-y: auto; /* Allow scrolling if the preview exceeds height */
+                                                }
+
+                                                .image-preview-container img {
+                                                    width: 100%;
+                                                    height: 100px;
+                                                    object-fit: cover;
+                                                    border-radius: 5px;
+                                                    border: 1px solid #ddd;
+                                                    padding: 2px;
+                                                }
+
+                                                /* File input button styling */
+                                                .form-control-file {
+                                                    padding: 5px;
+                                                    font-size: 12px;
+                                                    width: 100%;
+                                                    height: 30px;
+                                                    border-radius: 4px;
+                                                    background-color: #f7f7f7;
+                                                    border: 1px solid #ccc;
+                                                    cursor: pointer;
+                                                }
+                                            </style>
+
+                                            <script>
+                                                // Function to handle image preview
+                                                function previewImage(input, previewContainer) {
+                                                    const files = input.files;
+
+                                                    // Clear the current preview
+                                                    previewContainer.innerHTML = '';
+
+                                                    // Loop through the selected files
+                                                    for (let i = 0; i < files.length; i++) {
+                                                        const file = files[i];
+                                                        const imgElement = document.createElement('img');
+
+                                                        // Create a URL for the file and set it as the source for the image element
+                                                        imgElement.src = URL.createObjectURL(file);
+
+                                                        previewContainer.appendChild(imgElement);
+                                                    }
+                                                }
+                                            </script>
+
+                                            <tr>
+                                                <th class="w-1">Bil</th>
+                                                <th class="w-10">Nama Produk</th>
+                                                <th class="w-10">Keterangan</th>
+                                                <th class="w-5">Harga</th>
+                                                <th class="w-15">Gambar</th>
+                                                <th class="w-1">Tindakan</th>
+                                            </tr>
+                                        </thead>
+                                        @if(isset($eLIND->produk))
+                                            <tbody id="projek_container">
+                                                <?php $dataProduk = json_decode($eLIND->produk, true); //dd($dataProduk); ?>
+                                                @forelse ($dataProduk as $index => $product)
+                                                    <tr id="produk_row-{{ $index + 1 }}">
+                                                        <td>{{ ($index + 1) }}</td>
+                                                        <td><input required type="text" class="form-control inertShow inertClass" name="produk[{{ $index + 1 }}][nama]" value="{{ $product['nama'] }}" placeholder="Masukkan Nama Produk" style="background-color: rgb(215, 215, 215);"></td>
+                                                        <td><input required type="text" class="form-control inertShow" name="produk[{{ $index + 1 }}][keterangan]" value="{{ $product['keterangan'] }}" placeholder="Masukkan Keterangan Produk"></td>
+                                                        <td><input required type="number" class="form-control inertShow" name="produk[{{ $index + 1 }}][harga]" value="{{ $product['harga'] }}" placeholder="Masukkan Harga" min="1"></td>
+                                                        <td>
+                                                            <!-- <div class="grid-container">
+                                                                <div class="grid-item">
+                                                                    <input required type="file" class="form-control-file showButton" id="gambar_produk_1_{{ $index + 1 }}" name="produk[{{ $index + 1 }}][gambar_produk_1]" accept="image/*">
+                                                                    <div id="imagePreviewContainer_1_{{ $index + 1 }}" class="image-preview-container" data-image="{{ isset($product['gambar_produk_1']) ? asset('storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name) . '/' . str_replace(' ', '_', $product['nama']). '/' . $product['gambar_produk_1']) : asset('storage/uploads/no-photos.png') }}">
+                                                                        @if(isset($product['gambar_produk_1']))
+                                                                            <input required type="hidden" class="form-control" name="produk[{{ $index + 1 }}][existing_image1]" value="{{ $product['gambar_produk_1'] }}" placeholder="Masukkan Harga" min="1">
+                                                                            <img src="{{ asset('storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name) . '/' . str_replace(' ', '_', $product['nama']). '/' . $product['gambar_produk_1']) }}" alt="Image Preview">
+                                                                        @else
+                                                                            <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="No Image">
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                                <div class="grid-item">
+                                                                    <input required type="file" class="form-control-file showButton" id="gambar_produk_2_{{ $index + 1 }}" name="produk[{{ $index + 1 }}][gambar_produk_2]" accept="image/*">
+                                                                    <div id="imagePreviewContainer_2_{{ $index + 1 }}" class="image-preview-container" data-image="{{ isset($product['gambar_produk_2']) ? asset('storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name) . '/' . str_replace(' ', '_', $product['nama']). '/' . $product['gambar_produk_2']) : asset('storage/uploads/no-photos.png') }}">
+                                                                        @if(isset($product['gambar_produk_2']))
+                                                                            <input required type="hidden" class="form-control" name="produk[{{ $index + 1 }}][existing_image2]" value="{{ $product['gambar_produk_2'] }}" placeholder="Masukkan Harga" min="1">
+                                                                            <img src="{{ asset('storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name) . '/' . str_replace(' ', '_', $product['nama']). '/' . $product['gambar_produk_2']) }}" alt="Image Preview">
+                                                                        @else
+                                                                            <img src="{{ asset('storage/uploads/no-photos.png') }}" alt="No Image">
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div> -->
+                                                            <div class="grid-container">
+                                                                @php
+                                                                    $basePath = 'storage/uploads/eLIND/' . str_replace(' ', '_', $eLIND->id_elind . ' ' . $eLIND->name) . '/' . str_replace(' ', '_', $product['nama']) . '/';
+                                                                    $noImage = asset('storage/uploads/no-photos.png');
+                                                                @endphp
+
+                                                                @for ($i = 1; $i <= 2; $i++)
+                                                                    @php
+                                                                        $imageKey = 'gambar_produk_' . $i;
+                                                                        $imageVal = $product[$imageKey] ?? null;
+                                                                        $imagePath = $imageVal ? asset($basePath . $imageVal) : $noImage;
+                                                                        $previewId = "imagePreviewContainer_{$i}_".($index + 1);
+                                                                        $inputId = "{$imageKey}_".($index + 1);
+                                                                    @endphp
+
+                                                                    <div class="grid-item">
+                                                                        <input type="file"
+                                                                            class="form-control-file showButton"
+                                                                            id="{{ $inputId }}"
+                                                                            name="produk[{{ $index + 1 }}][{{ $imageKey }}]"
+                                                                            accept="image/*">
+
+                                                                        <div id="{{ $previewId }}"
+                                                                            class="image-preview-container"
+                                                                            data-image="{{ $imagePath }}"
+                                                                            style="cursor: zoom-in"
+                                                                            title="Klik untuk lihat gambar lebih besar">
+
+                                                                            @if($imageVal)
+                                                                                <input type="hidden"
+                                                                                    name="produk[{{ $index + 1 }}][existing_image{{ $i }}]"
+                                                                                    value="{{ $imageVal }}">
+                                                                            @endif
+
+                                                                            <img src="{{ $imagePath }}" alt="Image Preview">
+                                                                        </div>
+                                                                    </div>
+                                                                @endfor
+                                                            </div>
+
+                                                            <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-body text-center p-0">
+                                                                            <img id="modalImage" src="" class="img-fluid w-100" alt="Full Size Image">
+                                                                        </div>
+                                                                        <div class="modal-footer py-2">
+                                                                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <script>
+                                                                document.addEventListener("DOMContentLoaded", function () {
+                                                                    const fallbackImage = "{{ asset('storage/uploads/no-photos.png') }}";
+
+                                                                    // Preview file on selection
+                                                                    document.querySelectorAll('.form-control-file.showButton').forEach(input => {
+                                                                        input.addEventListener('change', function () {
+                                                                            const file = this.files[0];
+                                                                            if (!file) return;
+
+                                                                            const reader = new FileReader();
+                                                                            reader.onload = function (e) {
+                                                                                const previewId = this.inputId.replace('gambar_produk_', 'imagePreviewContainer_');
+                                                                                const previewContainer = document.getElementById(previewId);
+                                                                                const img = previewContainer.querySelector('img');
+                                                                                img.src = e.target.result;
+                                                                                previewContainer.dataset.image = e.target.result;
+                                                                            }.bind({ inputId: this.id });
+
+                                                                            reader.readAsDataURL(file);
+                                                                        });
+                                                                    });
+
+                                                                    // Show modal on preview click
+                                                                    document.querySelectorAll('.image-preview-container').forEach(container => {
+                                                                        container.addEventListener('click', function () {
+                                                                            const imageUrl = this.dataset.image || fallbackImage;
+                                                                            document.getElementById('modalImage').src = imageUrl;
+                                                                            $('#imageModal').modal('show');
+                                                                        });
+                                                                    });
+                                                                });
+                                                            </script>
+                                                            {{ Form::label('', '***Muatnaik semula akan menggantikan gambar sedia ada.', ['class' => 'col-form-label required-field-create showButton', 'style' => 'font-size: 12px;']) }}
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-danger btn-sm" data-row="produk_row-{{ $index + 1 }}"  onclick="confirmDelete_produk(this)" style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
+                                                                <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="6" class="text-center">Tiada Maklumat</td>
+                                                    </tr>
+                                                @endforelse
+                                            </tbody>
+                                        @else
+                                        <tbody id="projek_container">
+                                            <tr id="produk_rowD">
+                                                <td colspan="6" class="text-center">Tiada Maklumat</td>
+                                            </tr>
+                                        </tbody>
+                                        @endif
+                                    </table>
+                                    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-body text-center p-0">
+                                                    <img id="modalImage" src="" class="img-fluid w-100" alt="Full Size Image">
+                                                </div>
+                                                <div class="modal-footer py-2">
+                                                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1423,116 +1592,115 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
-                @endif
-            </div>
 
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    let bilCount = {{ isset($dataProduk) ? count($dataProduk) : 0 }};
-                    let currentRow = null; // To store the current row when selecting images
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        let bilCount = {{ isset($dataProduk) ? count($dataProduk) : 0 }};
+                        let currentRow = null; // To store the current row when selecting images
 
-                    document.getElementById('projek_container').addEventListener('change', function(event) {
-                        if (event.target.type === 'file') {
-                            const previewContainerId_1 = event.target.id.replace('gambar_produk_1', 'imagePreviewContainer_1');
-                            previewImage(event.target, document.getElementById(previewContainerId_1));
-                            const previewContainerId_2 = event.target.id.replace('gambar_produk_2', 'imagePreviewContainer_2');
-                            previewImage(event.target, document.getElementById(previewContainerId_2));
-                        }
-                    });
-
-                    // Add new product row when "Tambah Produk" is clicked
-                    document.getElementById('addProductBtn').addEventListener('click', function() {
-                        bilCount++;
-                        var newRow = document.createElement('tr');
-                        newRow.innerHTML = `
-                            <td>${bilCount}</td>
-                            <td><input type="text" class="form-control" name="produk[${bilCount}][nama]" placeholder="Masukkan Nama Produk"></td>
-                            <td><input type="text" class="form-control" name="produk[${bilCount}][keterangan]" placeholder="Masukkan Keterangan Produk"></td>
-                            <td><input type="number" class="form-control" name="produk[${bilCount}][harga]" placeholder="Masukkan Harga" min="1"></td>
-                            <td>
-                                <div class="grid-container">
-                                    <!-- Dynamic Image Inputs and Preview Containers -->
-                                    <div class="grid-item">
-                                        <input type="file" class="form-control-file" id="gambar_produk_1_${bilCount}" name="produk[${bilCount}][gambar_produk_1]" accept="image/*">
-                                        <div id="imagePreviewContainer_1_${bilCount}" class="image-preview-container"></div>
-                                    </div>
-                                    <div class="grid-item">
-                                        <input type="file" class="form-control-file" id="gambar_produk_2_${bilCount}" name="produk[${bilCount}][gambar_produk_2]" accept="image/*">
-                                        <div id="imagePreviewContainer_2_${bilCount}" class="image-preview-container"></div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-danger btn-sm remove_field" style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
-                                </button>
-                            </td>
-                        `;
-                        document.getElementById('projek_container').appendChild(newRow);
-
-                        // Hide the dummy row if it's there
-                        $('#produk_rowD').hide();
-                        // var dummyRow = document.getElementById('produk_rowD');
-                        // if (dummyRow) {
-                        //     dummyRow.remove();
-                        // }
-
-                        updateBilNumbers();
-                    });
-
-                    // Function to open the image modal
-                    function openImageModal(button) {
-                        currentRow = button.closest('tr'); // Store the row where the images will be inserted
-                        $('#gambarModal').modal('show');
-                    }
-
-                    // Remove a row when "Hapus" button is clicked
-                    document.addEventListener('click', function(event) {
-                        const removeButton = event.target.closest('.remove_field');
-                        if (removeButton) {
-                            removeButton.closest('tr').remove();
-                            updateBilNumbers();
-                        } else if (event.target.classList.contains('image-button')) {
-                            openImageModal(event.target); // Open the image modal for the specific row
-                        }
-                        
-                        // if ($('#produk_container tr').length === 0) {
-                        //     $('#produk_rowD').show();
-                        //     var newRow = document.createElement('tr');
-                        //     newRow.innerHTML = `
-                        //         <td colspan="6" class="text-center">Tiada Maklumat</td>
-                        //     `;
-                        //     document.getElementById('projek_container').appendChild(newRow);
-                        // }
-                    });
-
-                    // Update Bil numbers after deletion
-                    function updateBilNumbers() {
-                        const rows = document.querySelectorAll('#projek_container tr');
-                        rows.forEach((row, index) => {
-                            if(row.id != 'produk_rowD'){
-                                const bilCell = row.querySelector('td:first-child');
-                                bilCell.textContent = index + {{ isset($dataProduk) ? 1 : 0 }};
+                        document.getElementById('projek_container').addEventListener('change', function(event) {
+                            if (event.target.type === 'file') {
+                                const previewContainerId_1 = event.target.id.replace('gambar_produk_1', 'imagePreviewContainer_1');
+                                previewImage(event.target, document.getElementById(previewContainerId_1));
+                                const previewContainerId_2 = event.target.id.replace('gambar_produk_2', 'imagePreviewContainer_2');
+                                previewImage(event.target, document.getElementById(previewContainerId_2));
                             }
                         });
-                        if(rows.length == 1){
-                            $('#produk_rowD').show();
-                        }
-                    }
 
-                    window.confirmDelete_produk = function(button) {
-                        // Show a confirmation dialog
-                        if (confirm("Are you sure you want to delete this row?")) {
-                            // If the user confirms, delete the row
-                            let rowId = $(button).data('row');
-                            $(`#${rowId}`).remove();
+                        // Add new product row when "Tambah Produk" is clicked
+                        document.getElementById('addProductBtn').addEventListener('click', function() {
+                            bilCount++;
+                            var newRow = document.createElement('tr');
+                            newRow.innerHTML = `
+                                <td>${bilCount}</td>
+                                <td><input type="text" class="form-control" name="produk[${bilCount}][nama]" placeholder="Masukkan Nama Produk"></td>
+                                <td><input type="text" class="form-control" name="produk[${bilCount}][keterangan]" placeholder="Masukkan Keterangan Produk"></td>
+                                <td><input type="number" class="form-control" name="produk[${bilCount}][harga]" placeholder="Masukkan Harga" min="1"></td>
+                                <td>
+                                    <div class="grid-container">
+                                        <!-- Dynamic Image Inputs and Preview Containers -->
+                                        <div class="grid-item">
+                                            <input type="file" class="form-control-file" id="gambar_produk_1_${bilCount}" name="produk[${bilCount}][gambar_produk_1]" accept="image/*">
+                                            <div id="imagePreviewContainer_1_${bilCount}" class="image-preview-container"></div>
+                                        </div>
+                                        <div class="grid-item">
+                                            <input type="file" class="form-control-file" id="gambar_produk_2_${bilCount}" name="produk[${bilCount}][gambar_produk_2]" accept="image/*">
+                                            <div id="imagePreviewContainer_2_${bilCount}" class="image-preview-container"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm remove_field" style="font-size: 0.4rem; padding: 0.1rem 0.2rem; height: 20px; width: 20px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-trash" style="font-size: 0.6rem;"></i>
+                                    </button>
+                                </td>
+                            `;
+                            document.getElementById('projek_container').appendChild(newRow);
+
+                            // Hide the dummy row if it's there
+                            $('#produk_rowD').hide();
+                            // var dummyRow = document.getElementById('produk_rowD');
+                            // if (dummyRow) {
+                            //     dummyRow.remove();
+                            // }
+
                             updateBilNumbers();
-                        }
-                    };
-                });
-            </script>
-        @endif
-    </div>
+                        });
 
-@endif
+                        // Function to open the image modal
+                        function openImageModal(button) {
+                            currentRow = button.closest('tr'); // Store the row where the images will be inserted
+                            $('#gambarModal').modal('show');
+                        }
+
+                        // Remove a row when "Hapus" button is clicked
+                        document.addEventListener('click', function(event) {
+                            const removeButton = event.target.closest('.remove_field');
+                            if (removeButton) {
+                                removeButton.closest('tr').remove();
+                                updateBilNumbers();
+                            } else if (event.target.classList.contains('image-button')) {
+                                openImageModal(event.target); // Open the image modal for the specific row
+                            }
+                            
+                            // if ($('#produk_container tr').length === 0) {
+                            //     $('#produk_rowD').show();
+                            //     var newRow = document.createElement('tr');
+                            //     newRow.innerHTML = `
+                            //         <td colspan="6" class="text-center">Tiada Maklumat</td>
+                            //     `;
+                            //     document.getElementById('projek_container').appendChild(newRow);
+                            // }
+                        });
+
+                        // Update Bil numbers after deletion
+                        function updateBilNumbers() {
+                            const rows = document.querySelectorAll('#projek_container tr');
+                            rows.forEach((row, index) => {
+                                if(row.id != 'produk_rowD'){
+                                    const bilCell = row.querySelector('td:first-child');
+                                    bilCell.textContent = index + {{ isset($dataProduk) ? 1 : 0 }};
+                                }
+                            });
+                            if(rows.length == 1){
+                                $('#produk_rowD').show();
+                            }
+                        }
+
+                        window.confirmDelete_produk = function(button) {
+                            // Show a confirmation dialog
+                            if (confirm("Are you sure you want to delete this row?")) {
+                                // If the user confirms, delete the row
+                                let rowId = $(button).data('row');
+                                $(`#${rowId}`).remove();
+                                updateBilNumbers();
+                            }
+                        };
+                    });
+                </script>
+            @endif
+        </div>
+
+    @endif

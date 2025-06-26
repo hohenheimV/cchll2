@@ -727,7 +727,7 @@ if (!function_exists('in_arrayi')) {
         {
             $html = '<div class="col-md-3 col-6">';
             $html .= '<a href="' . $route . '" style="text-decoration: none; color: inherit;">';
-            $html .= '<div class="small-box" style="background-color: '. $color. '; color: white;">';
+            $html .= '<div class="small-box" style="background-color: '. $color. '; color: white; border-radius: 25px;">';
             $html .= '<div class="inner">';
             $html .= '<h3>' . $amount . '</h3>';
             $html .= '<p>' . $title . '</p>';
@@ -741,4 +741,77 @@ if (!function_exists('in_arrayi')) {
             return $html;
         }
     }
+
+    if (!function_exists('accordion_start')) {
+        function accordion_start($id, $title, $show = false, $parent = "dashboardModules")
+        {
+            $collapseClass = $show ? 'show' : '';
+            $expanded = $show ? 'true' : 'false';
+
+            return <<<HTML
+            <div class="card card-outline card-dark" style="border-radius: 25px; background-color:#f4f6f9;">
+                <div class="card-header" id="heading{$id}">
+                    <h2 class="mb-0">
+                        <button class="btn btn-block d-flex justify-content-between align-items-center text-left" type="button"
+                                data-toggle="collapse" data-target="#collapse{$id}"
+                                aria-expanded="{$expanded}" aria-controls="collapse{$id}">
+                            {$title}
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </h2>
+                </div>
+
+                <div id="collapse{$id}" class="collapse {$collapseClass}" aria-labelledby="heading{$id}" data-parent="#{$parent}">
+                    <div class="card-body">
+            HTML;
+        }
+    }
+    if (!function_exists('accordion_end')) {
+        function accordion_end()
+        {
+            return <<<HTML
+                    </div>
+                </div>
+            </div>
+            HTML;
+        }
+    }
+
+    if (!function_exists('tab_start')) {
+        function tab_start()
+        {
+            return <<<HTML
+                <div class="tab-content">
+            HTML;
+        }
+    }
+    if (!function_exists('tab_end')) {
+        function tab_end()
+        {
+            return <<<HTML
+                </div>
+            HTML;
+        }
+    }
+
+    if (!function_exists('tab_content_start')) {
+        function tab_content_start($id, $title, $show = false)
+        {
+            $collapseClass = $show ? 'active' : '';
+            $expanded = $show ? 'true' : 'false';
+
+            return <<<HTML
+                <div class="tab-pane {$collapseClass}" id="{$id}">
+            HTML;
+        }
+    }
+    if (!function_exists('tab_content_end')) {
+        function tab_content_end()
+        {
+            return <<<HTML
+                </div>
+            HTML;
+        }
+    }
+
 }

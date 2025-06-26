@@ -83,7 +83,7 @@
                         </div>
 
                         @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))
-                            {{ Form::label('ulasan_lawatan', 'KEGUNAAN JABATAN :', ['class' => 'col-form-label']) }}
+                            {{ Form::label('prestasi', 'KEGUNAAN JABATAN :', ['class' => 'col-form-label']) }}
                             <br>
                             <div class="form-group mb-6 col-md-12" style="background-color:#fef7f8; border-left: 5px solid #f0868e; padding: 15px;">
                                 @php

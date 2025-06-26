@@ -192,7 +192,12 @@ if (!function_exists('app_dashboard_taman_negeri')) {
             ) as total_kel
         ")->value('total_kel');
 
-        return number_format($total ?? 0, 4) . " Ekar";
+        return number_format($total ?? 0, 4)/*  . " Ekar" */;
         // return $total ?? 0;
+    }
+
+    function user_in_bahagian(...$allowed) {
+        $user = Auth::user();
+        return $user->hasRole('Pegawai') && $user->bahagian_jln !== null && in_array($user->bahagian_jln, $allowed);
     }
 }

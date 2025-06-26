@@ -402,8 +402,8 @@ class eLINDController extends Controller
             
             if ($requestData['jenis_industri'] === 'Perunding' || $requestData['jenis_industri'] === 'Kontraktor' || $requestData['jenis_industri'] === 'Pembekal') {
                 $maklumatData = array_merge($maklumatData, [
-                    'pekerja' => $requestData['pekerja'],
-                    'pengalaman' => $requestData['pengalaman'],
+                    'pekerja' => $requestData['pekerja'] ?? null,
+                    'pengalaman' => $requestData['pengalaman'] ?? null,
                 ]);
             }
             if ($requestData['jenis_industri'] === 'Perunding' || $requestData['jenis_industri'] === 'Kontraktor') {
@@ -466,6 +466,20 @@ class eLINDController extends Controller
                 $maklumatData['produk'] = json_encode($mergedproduk);
                 $maklumat->update([
                     'produk' => $maklumatData['produk'],
+                ]);
+            }
+
+            if ($request->hasFile('profil_syarikat')) {
+                $file = $request->file('profil_syarikat');
+                
+                if ($file->isValid()) {
+                    $folderName = str_replace(' ', '_', $maklumat->id_elind.' '.$maklumatData['name']);
+                    $filename = time() . '_' .$file->getClientOriginalName();
+                    $path = $file->storeAs('public/uploads/eLIND/' . $folderName, $filename);
+                }
+                $maklumatData['profil_syarikat'] = $filename;
+                $maklumat->update([
+                    'profil_syarikat' => $maklumatData['profil_syarikat'],
                 ]);
             }
 
@@ -760,6 +774,18 @@ class eLINDController extends Controller
                     }
                 }
             }
+
+            if ($request->hasFile('profil_syarikat')) {
+                $file = $request->file('profil_syarikat');
+                
+                if ($file->isValid()) {
+                    $folderName = str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name); 
+                    $filename = time() . '_' .$file->getClientOriginalName();
+                    $path = $file->storeAs('public/uploads/eLIND/' . $folderName, $filename);
+                }
+                $requestData['profil_syarikat'] = $filename;
+            }
+
             $requestData['status'] = "draft";
             // dd($requestData);
             $eLIND_update = $eLIND->update($requestData);
@@ -1021,7 +1047,7 @@ class eLINDController extends Controller
 
                         $requestData = [
                             "nama_taman" => strtoupper($this->sanitize_text($row['B'])),                         
-                            "kategori_taman" => (trim(str_replace("JLN-", "",$sheetName))),                  
+                            "kategori_taman" => strtoupper(trim(str_replace("JLN-", "",$sheetName))),                  
                             "negeri_taman" => $kod_negeri, 
                             "daerah_taman" => $kod_daerah, 
                             "mukim_taman" => null,                             

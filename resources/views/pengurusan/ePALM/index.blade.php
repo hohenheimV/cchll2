@@ -102,19 +102,19 @@
                                     </div>
 
                                     <script>
-    const negeriSelect = document.getElementById('negeri');
-    const pbtSelect = document.getElementById('nama_pbt');
+                                        const negeriSelect = document.getElementById('negeri');
+                                        const pbtSelect = document.getElementById('nama_pbt');
 
-    negeriSelect.addEventListener('change', function () {
-        // If negeri changed, reset nama_pbt
-        pbtSelect.selectedIndex = 0; // selects the default option
-    });
+                                        negeriSelect.addEventListener('change', function () {
+                                            // If negeri changed, reset nama_pbt
+                                            pbtSelect.selectedIndex = 0; // selects the default option
+                                        });
 
-    pbtSelect.addEventListener('change', function () {
-        // If nama_pbt changed, reset negeri
-        negeriSelect.selectedIndex = 0;
-    });
-</script>
+                                        pbtSelect.addEventListener('change', function () {
+                                            // If nama_pbt changed, reset negeri
+                                            negeriSelect.selectedIndex = 0;
+                                        });
+                                    </script>
 
                                     @php
                                         $options = [

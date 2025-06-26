@@ -259,6 +259,7 @@ class RegisterController extends Controller
                             ->toArray();
 
                         $message->to($toList)
+                                ->cc($data['email'], $data['name'] ?? '')
                                 ->subject('Pendaftaran Pengguna Baru');
 
                         if ($ccEmail) {

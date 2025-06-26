@@ -188,7 +188,7 @@
                                         <p>{{ $fileSizeInMB ? number_format($fileSizeInMB, 2) . " MB" : '' }}</p>
                                     </td>
                                     <td class="text-center">
-                                        <div class="btn-group">
+                                        {{-- <div class="btn-group">
                                             @if ($pelan->gambar_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan)))
                                                 <!-- <button 
                                                     type="button" 
@@ -211,6 +211,39 @@
                                                     ]) !!}
                                                 </a>
                                             @endif
+                                        </div> --}}
+                                        <div class="btn-group">
+                                            @php
+                                                $hasPelanFile = $pelan->gambar_dokumen_pelan && file_exists(public_path("storage/uploads/ePIL/{$folder}/{$pelan->gambar_dokumen_pelan}"));
+                                                $pelanFilePath = "storage/uploads/ePIL/{$folder}/{$pelan->gambar_dokumen_pelan}";
+                                                $isPdf = strtolower(pathinfo($pelan->gambar_dokumen_pelan, PATHINFO_EXTENSION)) === 'pdf';
+                                                $fileSizeInMB = $hasPelanFile ? filesize(public_path($pelanFilePath)) / 1024 / 1024 : 0;
+                                                $canView = $hasPelanFile && $isPdf && $fileSizeInMB < 1000;
+                                                $canDownload = $hasPelanFile;
+                                            @endphp
+
+                                            {{-- View Button --}}
+                                            <button 
+                                                type="button"
+                                                class="btn btn-sm {{ $canView ? 'btn-primary' : 'btn-secondary' }}"
+                                                title="{{ $canView ? 'Lihat Dokumen' : 'Tidak tersedia untuk dilihat (PDF sahaja < 1GB)' }}"
+                                                {{ $canView ? '' : 'disabled' }}
+                                                onclick="{{ $canView ? "window.open('" . asset($pelanFilePath) . "', '_blank')" : '' }}"
+                                            >
+                                                <i class="fas fa-search"></i>
+                                            </button>
+
+                                            {{-- Download Button --}}
+                                            <a 
+                                                href="{{ $canDownload ? asset($pelanFilePath) : 'javascript:void(0)' }}"
+                                                target="_blank"
+                                                class="btn btn-sm {{ $canDownload ? 'btn-success' : 'btn-secondary disabled' }}"
+                                                style="{{ $canDownload ? '' : 'opacity: 0.6; cursor: not-allowed;' }}"
+                                                {{ $canDownload ? 'download' : 'aria-disabled=true' }}
+                                                title="{{ $canDownload ? 'Muat Turun Dokumen' : 'Dokumen tidak tersedia untuk dimuat turun' }}"
+                                            >
+                                                <i class="fas fa-download"></i>
+                                            </a>
                                         </div>
                                     </td>
                                     @php
@@ -368,7 +401,7 @@
             if (!url.toLowerCase().endsWith('.pdf')) {
                 const viewerElement = document.getElementById('pdf-viewer-' + pelan.id_pelan);
                 if (viewerElement) {
-                    viewerElement.innerHTML = `<div class="text-center text-muted" style="padding-top: 80px;">
+                    viewerElement.innerHTML = `<div class="text-center text-muted" style="padding-top: 20px;">
                         Fail bukan PDF — tidak dapat dipaparkan
                     </div>`;
                 }

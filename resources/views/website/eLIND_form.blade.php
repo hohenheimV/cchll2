@@ -193,7 +193,7 @@
                                             >
                                                 <i class="fas fa-search"></i>
                                             </button>
-                                            @if($user->no_cidb && $keyword == "Kontraktor")
+                                            {{-- @if($user->no_cidb && $keyword == "Kontraktor")
                                                 &nbsp;
                                                 <button 
                                                     type="button" 
@@ -212,7 +212,22 @@
                                                         window.open(url, '_blank');
                                                     });
                                                 </script>
-                                            @endif
+                                            @endif --}}
+                                            @php
+                                                $hasCIDB = $user->no_cidb && $keyword === 'Kontraktor';
+                                            @endphp
+
+                                            {{-- CIDB Button --}}
+                                            <button 
+                                                type="button"
+                                                class="btn btn-sm {{ $hasCIDB ? 'btn-success' : 'btn-secondary disabled' }}"
+                                                style="{{ $hasCIDB ? '' : 'opacity: 0.6; cursor: not-allowed;' }}"
+                                                title="{{ $hasCIDB ? 'Lihat Profil CIDB' : 'Tiada No. CIDB' }}"
+                                                onclick="{{ $hasCIDB ? "window.open('https://mcp.cidb.gov.my/MCP/ContractorSearch?CidbRegNo={$user->no_cidb}', '_blank')" : 'return false' }}"
+                                                {{ $hasCIDB ? '' : 'disabled' }}
+                                            >
+                                                CIDB
+                                            </button>
                                         </div>
                                     </td>
                                     @php

@@ -118,10 +118,10 @@
                                                                     <canvas id="pdf-render-{{$eread->id}}" style="width: 100%; height: 100%; object-fit: contain; display: none;"></canvas>
                                                                 </div>
                                                             </a> -->
-                                                            {{ ($eread->dokumen && file_exists(public_path('storage/uploads/eread/dokumen/' . $eread->dokumen))) ? $eread->sizeName . ' MB' : 'Tiada dokumen' }}
+                                                            {{ ($eread->dokumen && file_exists(public_path('storage/uploads/eread/dokumen/' . $eread->dokumen))) ? $eread->sizeName . ' MB' : '-' }}
                                                         </td>
                                                         <td class="text-center">
-                                                            <div class="btn-group">
+                                                            {{-- <div class="btn-group">
                                                                 @if ($eread->dokumen && file_exists(public_path('storage/uploads/eread/dokumen/' . $eread->dokumen)))
                                                                     <!-- <button 
                                                                         type="button" 
@@ -145,6 +145,37 @@
                                                                         ]) !!}
                                                                     </a>
                                                                 @endif
+                                                            </div> --}}
+                                                            <div class="btn-group">
+                                                                @php
+                                                                    $ereadPath = 'storage/uploads/eread/dokumen/' . $eread->dokumen;
+                                                                    $hasFile = $eread->dokumen && file_exists(public_path($ereadPath));
+                                                                    $isPDF = $hasFile && strtolower(pathinfo($eread->dokumen, PATHINFO_EXTENSION)) === 'pdf';
+                                                                    $fileUrl = asset($ereadPath);
+                                                                @endphp
+
+                                                                {{-- View PDF --}}
+                                                                <button 
+                                                                    type="button"
+                                                                    class="btn btn-sm {{ $isPDF ? 'btn-primary' : 'btn-secondary' }}"
+                                                                    title="{{ $isPDF ? 'Lihat Dokumen' : 'Tiada dokumen PDF' }}"
+                                                                    {{ $isPDF ? '' : 'disabled' }}
+                                                                    onclick="{{ $isPDF ? "window.open('{$fileUrl}', '_blank')" : '' }}"
+                                                                    style="{{ $isPDF ? '' : 'opacity: 0.6; cursor: not-allowed;' }}"
+                                                                >
+                                                                    <i class="fas fa-search"></i>
+                                                                </button>
+
+                                                                {{-- Download --}}
+                                                                <a 
+                                                                    href="{{ $hasFile ? $fileUrl : 'javascript:void(0)' }}"
+                                                                    class="btn btn-sm {{ $hasFile ? 'btn-success' : 'btn-secondary disabled' }}"
+                                                                    style="{{ $hasFile ? '' : 'opacity: 0.6; cursor: not-allowed;' }}"
+                                                                    {{ $hasFile ? 'download' : 'aria-disabled=true' }}
+                                                                    title="{{ $hasFile ? 'Muat Turun Dokumen' : 'Dokumen tidak tersedia untuk dimuat turun' }}"
+                                                                >
+                                                                    <i class="fas fa-download"></i>
+                                                                </a>
                                                             </div>
                                                         </td>
                                                     </tr>

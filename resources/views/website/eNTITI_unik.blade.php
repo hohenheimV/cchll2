@@ -410,7 +410,7 @@
                                         <div class="col-12 col-md-3"><h5>Lokasi :</h5></div>
                                         <div class="col-12 col-md-3"><p id="">{{ strtoupper($unik->lokasi) ?? 'Tiada Maklumat' }}</p></div>
 
-                                        <div class="col-12 col-md-3"><h5>Koordinat Taman :</h5></div>
+                                        <div class="col-12 col-md-3"><h5>Koordinat Entiti :</h5></div>
                                         <div class="col-12 col-md-3">
                                             <p id="modalCoordinate">
                                                 {{ is_numeric($unik->lng) && is_numeric($unik->lat) ? '( '.$unik->lat.', '.$unik->lng.' )' : 'Tiada Maklumat' }}

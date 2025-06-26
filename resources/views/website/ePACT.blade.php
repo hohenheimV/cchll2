@@ -163,31 +163,42 @@
                                                                 @php
                                                                     $hasFile = $epact->dokumen && file_exists(public_path('storage/uploads/epact/dokumen/' . $epact->dokumen));
                                                                     $isPDF = $hasFile && strtolower(pathinfo($epact->dokumen, PATHINFO_EXTENSION)) === 'pdf';
+                                                                    $canDownload = $hasFile && $epact->kate == '182';
+                                                                    $hasUrl = isset($epact->url) && $epact->url;
+                                                                    $pdfPath = asset('storage/uploads/epact/dokumen/' . $epact->dokumen);
                                                                 @endphp
 
-                                                                <a href="{{ $isPDF ? asset('storage/uploads/epact/dokumen/' . $epact->dokumen) : 'javascript:void(0)' }}" 
-                                                                target="{{ $isPDF ? '_blank' : '' }}"
-                                                                class="btn btn-primary btn-sm {{ $isPDF ? '' : 'disabled' }}"
-                                                                title="{{ $isPDF ? 'Lihat Dokumen' : 'Tiada dokumen PDF' }}">
+                                                                {{-- View Button --}}
+                                                                <button 
+                                                                    type="button"
+                                                                    class="btn btn-sm {{ $isPDF ? 'btn-primary' : 'btn-secondary' }}"
+                                                                    title="{{ $isPDF ? 'Lihat Dokumen' : 'Tiada dokumen PDF' }}"
+                                                                    {{ $isPDF ? '' : 'disabled' }}
+                                                                    onclick="{{ $isPDF ? "window.open('{$pdfPath}', '_blank')" : '' }}"
+                                                                    style="{{ $isPDF ? '' : 'opacity: 0.6; cursor: not-allowed;' }}"
+                                                                >
                                                                     <i class="fas fa-search"></i>
-                                                                </a>
+                                                                </button>
 
-                                                                {{-- Download --}}
-                                                                @php $canDownload = $hasFile && $epact->kate == '182'; @endphp
-                                                                <a href="{{ $canDownload ? asset('storage/uploads/epact/dokumen/' . $epact->dokumen) : 'javascript:void(0)' }}"
-                                                                target="{{ $canDownload ? '_blank' : '' }}"
-                                                                class="btn btn-success btn-sm {{ $canDownload ? '' : 'disabled' }}"
-                                                                download
-                                                                title="{{ $canDownload ? 'Muat Turun' : 'Tidak tersedia untuk muat turun' }}">
+                                                                {{-- Download Button --}}
+                                                                <a 
+                                                                    href="{{ $canDownload ? $pdfPath : 'javascript:void(0)' }}"
+                                                                    class="btn btn-sm {{ $canDownload ? 'btn-success' : 'btn-secondary disabled' }}"
+                                                                    style="{{ $canDownload ? '' : 'opacity: 0.6; cursor: not-allowed;' }}"
+                                                                    {{ $canDownload ? 'download' : 'aria-disabled=true' }}
+                                                                    title="{{ $canDownload ? 'Muat Turun' : 'Tidak tersedia untuk muat turun' }}"
+                                                                >
                                                                     <i class="fas fa-download"></i>
                                                                 </a>
 
                                                                 {{-- External URL --}}
-                                                                @php $hasUrl = isset($epact->url) && $epact->url; @endphp
-                                                                <a href="{{ $hasUrl ? $epact->url : 'javascript:void(0)' }}"
-                                                                target="{{ $hasUrl ? '_blank' : '' }}"
-                                                                class="btn btn-warning btn-sm {{ $hasUrl ? '' : 'disabled' }}"
-                                                                title="{{ $hasUrl ? 'Pautan Luar' : 'Tiada pautan' }}">
+                                                                <a 
+                                                                    href="{{ $hasUrl ? $epact->url : 'javascript:void(0)' }}"
+                                                                    target="{{ $hasUrl ? '_blank' : '' }}"
+                                                                    class="btn btn-sm {{ $hasUrl ? 'btn-warning' : 'btn-secondary disabled' }}"
+                                                                    style="{{ $hasUrl ? '' : 'opacity: 0.6; cursor: not-allowed;' }}"
+                                                                    title="{{ $hasUrl ? 'Pautan Luar' : 'Tiada pautan' }}"
+                                                                >
                                                                     <i class="fas fa-link"></i>
                                                                 </a>
                                                             </div>

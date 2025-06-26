@@ -150,15 +150,15 @@ class RegisterController extends Controller
                 //     'locality' => $data['locality'],
                 //     'state' => $data['state'],
                 // ]);
-                $existingMof_draf = MaklumatPenggunaPenggiatIndustri_draf::where('no_ssm', $data['no_ssm'])->first();
-                $existingMof_draf->update([
-                    'name' => $data['nama_syarikat'],
-                    'address1' => $data['address1'],
-                    'address2' => $data['address2'],
-                    'postcode' => $data['postcode'],
-                    'locality' => $data['locality'],
-                    'state' => $data['state'],
-                ]);
+                // $existingMof_draf = MaklumatPenggunaPenggiatIndustri_draf::where('no_ssm', $data['no_ssm'])->first();
+                // $existingMof_draf->update([
+                //     'name' => $data['nama_syarikat'],
+                //     'address1' => $data['address1'],
+                //     'address2' => $data['address2'],
+                //     'postcode' => $data['postcode'],
+                //     'locality' => $data['locality'],
+                //     'state' => $data['state'],
+                // ]);
                 //proceed without creating new row
             }else{
                 $maklumat = MaklumatPenggunaPenggiatIndustri::create([

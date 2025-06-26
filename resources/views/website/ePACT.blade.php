@@ -121,7 +121,7 @@
                                                             </a> -->
                                                             {{ ($epact->dokumen && file_exists(public_path('storage/uploads/epact/dokumen/' . $epact->dokumen))) ? $epact->sizeName . ' MB' : strtoupper('-') }}
                                                         </td>
-                                                        <td class="text-center">
+                                                        {{-- <td class="text-center">
                                                             <div class="btn-group">
                                                                 @if ($epact->dokumen && file_exists(public_path('storage/uploads/epact/dokumen/' . $epact->dokumen)))
                                                                     <!-- <button 
@@ -155,6 +155,41 @@
                                                                         <i class="fas fa-link"></i>
                                                                     </a>
                                                                 @endif
+                                                            </div>
+                                                        </td> --}}
+                                                        <td class="text-center">
+                                                            <div class="btn-group">
+                                                                {{-- View PDF --}}
+                                                                @php
+                                                                    $hasFile = $epact->dokumen && file_exists(public_path('storage/uploads/epact/dokumen/' . $epact->dokumen));
+                                                                    $isPDF = $hasFile && strtolower(pathinfo($epact->dokumen, PATHINFO_EXTENSION)) === 'pdf';
+                                                                @endphp
+
+                                                                <a href="{{ $isPDF ? asset('storage/uploads/epact/dokumen/' . $epact->dokumen) : 'javascript:void(0)' }}" 
+                                                                target="{{ $isPDF ? '_blank' : '' }}"
+                                                                class="btn btn-primary btn-sm {{ $isPDF ? '' : 'disabled' }}"
+                                                                title="{{ $isPDF ? 'Lihat Dokumen' : 'Tiada dokumen PDF' }}">
+                                                                    <i class="fas fa-search"></i>
+                                                                </a>
+
+                                                                {{-- Download --}}
+                                                                @php $canDownload = $hasFile && $epact->kate == '182'; @endphp
+                                                                <a href="{{ $canDownload ? asset('storage/uploads/epact/dokumen/' . $epact->dokumen) : 'javascript:void(0)' }}"
+                                                                target="{{ $canDownload ? '_blank' : '' }}"
+                                                                class="btn btn-success btn-sm {{ $canDownload ? '' : 'disabled' }}"
+                                                                download
+                                                                title="{{ $canDownload ? 'Muat Turun' : 'Tidak tersedia untuk muat turun' }}">
+                                                                    <i class="fas fa-download"></i>
+                                                                </a>
+
+                                                                {{-- External URL --}}
+                                                                @php $hasUrl = isset($epact->url) && $epact->url; @endphp
+                                                                <a href="{{ $hasUrl ? $epact->url : 'javascript:void(0)' }}"
+                                                                target="{{ $hasUrl ? '_blank' : '' }}"
+                                                                class="btn btn-warning btn-sm {{ $hasUrl ? '' : 'disabled' }}"
+                                                                title="{{ $hasUrl ? 'Pautan Luar' : 'Tiada pautan' }}">
+                                                                    <i class="fas fa-link"></i>
+                                                                </a>
                                                             </div>
                                                         </td>
                                                     </tr>

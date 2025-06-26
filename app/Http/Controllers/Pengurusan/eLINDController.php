@@ -243,6 +243,7 @@ class eLINDController extends Controller
             // Optional filters
             $keyword = strtolower(trim($request->query('keyword')));
             $negeriKod = $request->query('negeri');
+            $kelas_kontraktor = $request->query('kelas_kontraktor');
 
             if ($keyword) {
                 $request->validate([
@@ -258,6 +259,10 @@ class eLINDController extends Controller
 
             if ($negeriKod) {
                 $query->where('state', $negeriKod);
+            }
+
+            if ($kelas_kontraktor) {
+                $query->where('kelas_kontraktor', $kelas_kontraktor);
             }
 
             $data = $query->orderBy('state', 'ASC')->orderBy('name', 'ASC')

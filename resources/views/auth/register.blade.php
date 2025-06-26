@@ -817,32 +817,32 @@
                         // console.log(data);
                         locality.val(data.locality);
                         // Check if the dropdown contains a matching value
-                        var stateValue = data.state;
-                        
-                        var $negeri = $('#state_PI');
+                        var stateValue = data.kod_negeri;
+                        $('#state_PI').val(stateValue)
+                        // var $negeri = $('#state_PI');
                         // Disable the PBT dropdown and show the spinner
                         // $negeri.prop('disabled', true);
                         // $('#loading-spinner').show(); // Show the spinner
                         // Load Negeri options
-                        $.getJSON('/data/negeri/'+stateValue, function(data) {
-                            state.val(data.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
-                            // Re-enable the negeri dropdown and hide the spinner
-                            // $negeri.prop('disabled', false);
+                        // $.getJSON('/data/negeri/'+stateValue, function(data) {
+                        //     state.val(data.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
+                        //     // Re-enable the negeri dropdown and hide the spinner
+                        //     // $negeri.prop('disabled', false);
                             $('#loading-spinner').hide(); // Hide the spinner
-                        }).fail(function() {
-                            // Handle errors if needed
-                            $negeri.prop('disabled', false);
-                            $('#loading-spinner').hide(); // Hide the spinner in case of error
-                            alert('Failed to load data');
-                        });
+                        // }).fail(function() {
+                        //     // Handle errors if needed
+                        //     $negeri.prop('disabled', false);
+                        //     $('#loading-spinner').hide(); // Hide the spinner in case of error
+                        //     // alert('Failed to load data');
+                        // });
                         country.val(data.country);
                     }else{
                         // console.log("data");
-                        locality.val('');
-                        state.val('');
-                        country.val('');
+                        // locality.val('');
+                        // state.val('');
+                        // country.val('');
                         $('#loading-spinner').hide(); // Hide the spinner in case of error
-                        alert('Failed to load data');
+                        // alert('Failed to load data');
                     }
                     // Re-enable the PBT dropdown and hide the spinner
                     // $pbt.prop('disabled', false);
@@ -851,7 +851,7 @@
                     // Handle errors if needed
                     // $pbt.prop('disabled', false);
                     $('#loading-spinner').hide(); // Hide the spinner in case of error
-                    alert('Failed to load data');
+                    // alert('Failed to load data');
                 });
             }
         }
@@ -970,7 +970,7 @@
                         state.val('');
                         country.val('');
                         $('#loading-spinner').hide(); // Hide the spinner in case of error
-                        alert('Failed to load data');
+                        // alert('Failed to load data');
                     }
                     // Re-enable the PBT dropdown and hide the spinner
                     // $pbt.prop('disabled', false);

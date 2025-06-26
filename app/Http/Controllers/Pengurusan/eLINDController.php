@@ -753,26 +753,26 @@ class eLINDController extends Controller
                 }
                 $requestData['produk'] = json_encode($mergedproduk);
 
-                $oldNamaPembekal = str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name);
-                $newNamaPembekal = str_replace(' ', '_', $eLIND->id_elind.' '.$requestData['name']);
+                // $oldNamaPembekal = str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name);
+                // $newNamaPembekal = str_replace(' ', '_', $eLIND->id_elind.' '.$requestData['name']);
 
-                if ($newNamaPembekal && $oldNamaPembekal !== $newNamaPembekal) {
-                    $oldFolder = storage_path("app/public/uploads/eLIND/{$oldNamaPembekal}");
-                    $newFolder = storage_path("app/public/uploads/eLIND/{$newNamaPembekal}");
+                // if ($newNamaPembekal && $oldNamaPembekal !== $newNamaPembekal) {
+                //     $oldFolder = storage_path("app/public/uploads/eLIND/{$oldNamaPembekal}");
+                //     $newFolder = storage_path("app/public/uploads/eLIND/{$newNamaPembekal}");
 
-                    if (file_exists($oldFolder)) {
-                        // Rename folder
-                        rename($oldFolder, $newFolder);
-                        $rename_eLIND = MaklumatPenggunaPenggiatIndustri::where('id_elind', $eLIND->id_elind)->first();
-                        if ($rename_eLIND) {
-                            $rename_eLIND->update([
-                                'name' => $requestData['name']
-                            ]);
-                        }
-                    }else{
-                        unset($requestData['name']);
-                    }
-                }
+                //     if (file_exists($oldFolder)) {
+                //         // Rename folder
+                //         rename($oldFolder, $newFolder);
+                //         $rename_eLIND = MaklumatPenggunaPenggiatIndustri::where('id_elind', $eLIND->id_elind)->first();
+                //         if ($rename_eLIND) {
+                //             $rename_eLIND->update([
+                //                 'name' => $requestData['name']
+                //             ]);
+                //         }
+                //     }else{
+                //         unset($requestData['name']);
+                //     }
+                // }
             }
 
             if ($request->hasFile('profil_syarikat')) {
@@ -784,6 +784,27 @@ class eLINDController extends Controller
                     $path = $file->storeAs('public/uploads/eLIND/' . $folderName, $filename);
                 }
                 $requestData['profil_syarikat'] = $filename;
+            }
+
+            $oldNamaPembekal = str_replace(' ', '_', $eLIND->id_elind.' '.$eLIND->name);
+            $newNamaPembekal = str_replace(' ', '_', $eLIND->id_elind.' '.$requestData['name']);
+
+            if ($newNamaPembekal && $oldNamaPembekal !== $newNamaPembekal) {
+                $oldFolder = storage_path("app/public/uploads/eLIND/{$oldNamaPembekal}");
+                $newFolder = storage_path("app/public/uploads/eLIND/{$newNamaPembekal}");
+
+                if (file_exists($oldFolder)) {
+                    // Rename folder
+                    rename($oldFolder, $newFolder);
+                    $rename_eLIND = MaklumatPenggunaPenggiatIndustri::where('id_elind', $eLIND->id_elind)->first();
+                    if ($rename_eLIND) {
+                        $rename_eLIND->update([
+                            'name' => $requestData['name']
+                        ]);
+                    }
+                }else{
+                    unset($requestData['name']);
+                }
             }
 
             $requestData['status'] = "draft";

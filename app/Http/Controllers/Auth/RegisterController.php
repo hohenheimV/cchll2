@@ -239,7 +239,9 @@ class RegisterController extends Controller
             }
 
             $bccEmail = filter_var($data['email'], FILTER_VALIDATE_EMAIL) ? $data['email'] : null;
-            $ccEmail = filter_var($data['sv_email'], FILTER_VALIDATE_EMAIL) ? $data['sv_email'] : null;
+            if($accountType == "Pihak Berkuasa Tempatan"){
+                $ccEmail = filter_var($data['sv_email'], FILTER_VALIDATE_EMAIL) ? $data['sv_email'] : null;
+            }
             // dump($user_email);
             // dump($ccEmail);
             // dump($bccEmail);

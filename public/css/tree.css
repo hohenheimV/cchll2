@@ -21,6 +21,9 @@
     .card-olive:not(.card-outline)>.card-header{background-color:var(--themeColor)}
     .card-olive.card-outline{border-top:3px solid var(--themeColor)}
     .card-olive.card-outline-tabs>.card-header a.active{border-top:3px solid var(--themeColor)}
+    .card-dark:not(.card-outline)>.card-header{background-color:var(--themeColor)}
+    .card-dark.card-outline{border-top:3px solid var(--themeColor)}
+    .card-dark.card-outline-tabs>.card-header a.active{border-top:3px solid var(--themeColor)}
     .todo-list .olive{border-left-color:var(--themeColor)}
     .direct-chat-olive .right>.direct-chat-text{background:var(--themeColor);border-color:var(--themeColor);color:#fff}
     .direct-chat-olive .right>.direct-chat-text::after,.direct-chat-olive .right>.direct-chat-text::before{border-left-color:var(--themeColor)}

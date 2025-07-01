@@ -929,8 +929,8 @@
             var selectedOption = $('#data_pbt option[value="' + selectedValue + '"]');
             const pbtId = selectedOption.data('id');
 
-            var address1	 = $('#address1');
-            var address2	 = $('#address2');
+            var address1     = $('#address1');
+            var address2     = $('#address2');
             var postcode = $('#postcode');
             var locality = $('#locality');
             var state = $('#state_PBT');
@@ -995,4 +995,3 @@
         });
     </script>
 @endsection
-

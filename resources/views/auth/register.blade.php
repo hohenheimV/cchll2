@@ -251,7 +251,7 @@
                     <div id="user_details" style="display: none;">
                         <div class="row">
                             <div class="form-group mb-3 col-md-6">
-                                {{ Form::label('name', 'Nama Pemohon') }}
+                                {{ Form::label('name', 'Nama Pemohon') }}<span style="color: red">*</span>
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" placeholder="Nama" required autofocus>
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
@@ -260,21 +260,36 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3 col-md-6">
-                                {{ Form::label('email', 'Emel Pemohon') }}
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" placeholder="Emel" required>
+                                {{ Form::label('email', 'Emel Pemohon') }}<span style="color: red">*</span>
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" placeholder="contoh@email.com" required>
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
+                            <script>
+                            $(document).ready(function() {
+                                $('#email').on('blur', function() {
+                                    let email = $(this).val().trim();
+                                    let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                                    if (email.length === 0) return;
+                                    if (!emailPattern.test(email)) {
+                                        alert('Sila Gunakan Emel Yang Sah.');
+                                        $(this).val('');
+                                        return;
+                                    }
+                                });
+                            });
+                            </script>
                         </div>
-                        <div class="row">
-                            <div class="form-group mb-3 col-md-6">
-                                {{ Form::label('password', 'Katalaluan') }}
-                                <!-- <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Katalaluan" required> -->
+                        <div class="row">    
+                        <!--changes 29/6 -->
+                        <div class="form-group mb-3 col-md-6" id="password-field">
+                                {{ Form::label('password', 'Katalaluan') }}<span style="color: red">*</span>
                                 <div class="input-group">
-                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Katalaluan" required>
+                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Katalaluan" min="8" required>
                                     <div class="input-group-append">
                                         <span class="input-group-text" style="cursor: pointer; background-color: transparent;">
                                             <i id="toggle-password-visibility" class="fas fa-eye"></i>
@@ -286,12 +301,12 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
+                                <span id="password-match-message" class="text-danger" style="display:none;">Katalaluan dan pengesahan tidak sama.</span>
                             </div>
-                            <div class="form-group mb-3 col-md-6">
-                                {{ Form::label('password_confirmation', 'Pengesahan Katalaluan') }}
-                                <!-- <input id="password_confirmation" type="password" class="form-control" name="password_confirmation" placeholder="Sahkan Katalaluan" required> -->
+                            <div class="form-group mb-3 col-md-6" id="password-confirm-field">
+                                {{ Form::label('password_confirmation', 'Pengesahan Katalaluan') }}<span style="color: red">*</span>
                                 <div class="input-group">
-                                    <input id="password_confirmation" type="password" class="form-control @error('password') is-invalid @enderror" name="password_confirmation" placeholder="Sahkan Katalaluan" required>
+                                    <input id="password_confirmation" type="password" class="form-control @error('password') is-invalid @enderror" name="password_confirmation" placeholder="Sahkan Katalaluan" min="8" required>
                                     <div class="input-group-append">
                                         <span class="input-group-text" style="cursor: pointer; background-color: transparent;">
                                             <i id="toggle-passwordC-visibility" class="fas fa-eye"></i>
@@ -332,21 +347,58 @@
                                     icon.classList.add('fa-eye');
                                 }
                             });
+
+                            $(document).ready(function() {
+                                $('#password').on('blur', function() {
+                                    let password = $(this).val().trim();
+
+                                    if (password.length === 0) return;
+                                    if (password.length < 8) {
+                                        alert('Katalaluan mesti sekurang-kurangnya 8 aksara.');
+                                        $(this).val('');
+                                        return;
+                                    }
+                                });
+                            });
+
+                            // password validation
+                            function validatePasswordMatch() {
+                                var password = document.getElementById('password').value;
+                                var confirm = document.getElementById('password_confirmation').value;
+                                var message = document.getElementById('password-match-message');
+                                if (password && confirm && password !== confirm) {
+                                    message.style.display = 'block';
+                                } else {
+                                    message.style.display = 'none';
+                                }
+                            }
+                            document.getElementById('password').addEventListener('input', validatePasswordMatch);
+                            document.getElementById('password_confirmation').addEventListener('input', validatePasswordMatch);
+
+                            // Prevent form submit if passwords do not match
+                            document.getElementById('myForm').addEventListener('submit', function(e) {
+                                var password = document.getElementById('password').value;
+                                var confirm = document.getElementById('password_confirmation').value;
+                                if (password !== confirm) {
+                                    document.getElementById('password-match-message').style.display = 'block';
+                                    e.preventDefault();
+                                }
+                            });
                         </script>
-                    </div>
+                    </div> 
 
                     <!-- Fields for PBT Account Type -->
                     <div id="pbt_fields" style="display: none;">
                         <div class="form-group mb-3">
-                            {{ Form::label('negeri', 'Negeri') }}
+                            {{ Form::label('negeri', 'Negeri') }}<span style="color: red">*</span>
                             <br>
                             <select id="negeri" class="form-control select2" name="negeri" onchange="updatePBT()" required>
                                 <option value="">Pilih Negeri</option>
                             </select>
                         </div>
                         <div class="form-group mb-3">
-                            {{ Form::label('pbt', 'Pihak Berkuasa Tempatan') }}
-                            <input type="text" name="pbt" id="pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" onchange="updatePBTaddress()" class="form-control" required>
+                            {{ Form::label('pbt', 'Pihak Berkuasa Tempatan') }}<span style="color: red">*</span>
+                            <input type="text" name="pbt" id="pbt" list="data_pbt" autocomplete="off" placeholder="Taip Atau Pilih" onchange="updatePBTaddress()" class="form-control" required>
                             <datalist id="data_pbt">
                             </datalist>
                         </div>
@@ -358,7 +410,7 @@
 
                         <div class="row">
                             <div class="form-group mb-3 col-md-12">
-                                {{ Form::label('department', 'Unit / Jabatan / Bahagian') }}
+                                {{ Form::label('department', 'Unit / Jabatan / Bahagian') }}<span style="color: red">*</span>
                                 <input id="department" type="text" class="form-control @error('department') is-invalid @enderror" name="department" placeholder="Contoh: Jabatan Kejuruteraan" value="{{ old('department') }}" required>
                                 @error('department')
                                     <span class="invalid-feedback" role="alert">
@@ -370,8 +422,8 @@
 
                         <div class="row">
                             <div class="form-group mb-3 col-md-6">
-                                {{ Form::label('phone', 'No. Telefon Pemohon') }}
-                                <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" placeholder="Contoh: 012-3456789" value="{{ old('phone') }}" required>
+                                {{ Form::label('phone', 'No. Telefon Pemohon') }}<span style="color: red">*</span>
+                                <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" placeholder="Contoh: 012-3456789" value="{{ old('phone') }}" required pattern="[\d\-]*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9\-]/g, '')">
                                 @error('phone')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -379,7 +431,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3 col-md-6">
-                                {{ Form::label('position', 'Jawatan Pemohon') }}
+                                {{ Form::label('position', 'Jawatan Pemohon') }}<span style="color: red">*</span>
                                 <input id="" type="text" class="form-control @error('position') is-invalid @enderror" name="position" placeholder="Contoh: Penolong Jurutera" value="{{ old('position') }}" required>
                                 @error('position')
                                     <span class="invalid-feedback" role="alert">
@@ -391,7 +443,7 @@
 
                         <div class="row">
                             <div class="form-group mb-3 col-md-6">
-                                {{ Form::label('sv_name', 'Nama Penyelia') }}
+                                {{ Form::label('sv_name', 'Nama Penyelia') }}<span style="color: red">*</span>
                                 <input id="sv_name" type="text" class="form-control @error('sv_name') is-invalid @enderror" name="sv_name" placeholder="Nama Penyelia" value="{{ old('sv_name') }}" required>
                                 @error('sv_name')
                                     <span class="invalid-feedback" role="alert">
@@ -401,7 +453,7 @@
                             </div>
 
                             <div class="form-group mb-3 col-md-6">
-                                {{ Form::label('sv_email', 'Email Penyelia') }}
+                                {{ Form::label('sv_email', 'Emel Penyelia') }}<span style="color: red">*</span>
                                 <input id="sv_email" type="email" class="form-control @error('sv_email') is-invalid @enderror" name="sv_email" placeholder="contoh@email.com" value="{{ old('sv_email') }}" required>
                                 @error('sv_email')
                                     <span class="invalid-feedback" role="alert">
@@ -409,6 +461,22 @@
                                     </span>
                                 @enderror
                             </div>
+                            
+                            <script>
+                            $(document).ready(function() {
+                                $('#sv_email').on('blur', function() {
+                                    let sv_email = $(this).val().trim();
+                                    let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                                    if (sv_email.length === 0) return;
+                                    if (!emailPattern.test(sv_email)) {
+                                        alert('Sila Gunakan Emel Yang Sah.');
+                                        $(this).val('');
+                                        return;
+                                    }
+                                });
+                            });
+                            </script>
                         </div>
                     </div>
 
@@ -417,7 +485,7 @@
                         <!-- Jenis Penggiat Dropdown -->
                         <div class="row">
                             <div class="form-group mb-3 col-md-6">
-                                {{ Form::label('jenis_penggiat', 'Jenis Industri') }}
+                                {{ Form::label('jenis_penggiat', 'Jenis Industri') }}<span style="color: red">*</span>
                                 <select id="jenis_penggiat" class="form-control select2" name="jenis_penggiat" onchange="updateJenisIndustri()" required>
                                     <option value="">Pilih Jenis Industri</option>
                                     <option value="Pembekal">Pembekal Landskap</option>
@@ -431,7 +499,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3 col-md-6">
-                                {{ Form::label('no_ssm', 'No. Pendaftaran SSM') }}
+                                {{ Form::label('no_ssm', 'No. Pendaftaran SSM') }}<span style="color: red">*</span>
                                 <input id="no_ssm" type="text" class="form-control" name="no_ssm" placeholder="No. Pendaftaran SSM" required>
                                 
                                 <script>
@@ -476,7 +544,7 @@
                         </div>
                         <div class="row">
                             <div class="form-group mb-3 col-md-12">
-                                {{ Form::label('nama_syarikat', 'Nama Syarikat') }}
+                                {{ Form::label('nama_syarikat', 'Nama Syarikat') }}<span style="color: red">*</span>
                                 <input id="nama_syarikat" type="text" class="form-control" name="nama_syarikat" placeholder="Nama Syarikat" required>
                                 @error('nama_syarikat')
                                     <span class="invalid-feedback" role="alert">
@@ -536,8 +604,8 @@
                     <div id="user_address" style="display: none;">
                         <div class="row">
                             <div class="form-group mb-3 col-md-6">
-                                {{ Form::label('address1', 'Alamat 1') }}
-                                <input id="address1" type="text" class="form-control" name="address1" placeholder="Address 1 (House No./Lot No./Floor and Building Name)" required>
+                                {{ Form::label('address1', 'Alamat 1') }} <span style="color: red">*</span>
+                                <input id="address1" type="text" class="form-control" name="address1" placeholder="Alamat 1 (No. Rumah/Lot No./Aras and Nama Bangunan)" required>
                                 @error('address1')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -546,7 +614,7 @@
                             </div>
                             <div class="form-group mb-3 col-md-6">
                                 {{ Form::label('address2', 'Alamat 2') }}
-                                <input id="address2" type="text" class="form-control" name="address2" placeholder="Address 2 (Number, Street Name/District)">
+                                <input id="address2" type="text" class="form-control" name="address2" placeholder="Alamat 2 (Nombor, Nama Jalan/Daerah)">
                                 @error('address2')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -555,18 +623,18 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group mb-3 col-md-2">
-                                {{ Form::label('postcode', 'Poskod') }}
-                                <input id="postcode" type="text" maxlength="5" class="form-control" name="postcode" placeholder="Postcode" required oninput="updatePostcode()">
+                            <div class="form-group mb-3 col-md-3">
+                                {{ Form::label('postcode', 'Poskod') }}<span style="color: red">*</span>
+                                <input id="postcode" type="text" maxlength="5" class="form-control" name="postcode" placeholder="Poskod" required oninput="updatePostcode()">
                                 @error('postcode')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
-                            <div class="form-group mb-3 col-md-4">
+                            <div class="form-group mb-3 col-md-3">
                                 {{ Form::label('locality', 'Bandar') }}
-                                <input id="locality" type="text" class="form-control" name="locality" placeholder="Locality Name" required>
+                                <input id="locality" type="text" class="form-control" name="locality" placeholder="Bandar" required>
                                 @error('locality')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

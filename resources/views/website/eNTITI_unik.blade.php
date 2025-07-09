@@ -72,7 +72,7 @@
                                     <div class="row">
                                         <div class="form-group required col-md-12">
                                             <h2 class="row justify-content-center">
-                                                {{ strtoupper($unik->nama_entiti) ?? 'Tiada Maklumat' }}
+                                                {{ strtoupper($unik->nama_entiti) ?? 'TIADA MAKLUMAT' }}
                                             </h2>
                                         </div>
                                     </div>
@@ -374,10 +374,10 @@
                                         </div>
                                     </div>
                                     <h5>Nama Entiti :</h5>
-                                    <p id="">{{ $unik->nama_entiti ?? 'Tiada Maklumat' }}</p>
+                                    <p id="">{{ $unik->nama_entiti ?? 'TIADA MAKLUMAT' }}</p>
                                     <br>
                                     <h5>Keterangan :</h5>
-                                    <p id="modalKeterangan">{{ $unik->keterangan ?? 'Tiada Maklumat' }}</p>
+                                    <p id="modalKeterangan">{{ $unik->keterangan ?? 'TIADA MAKLUMAT' }}</p>
                                     <br>
                                     @php
                                         if(isset($unik->pbt)){
@@ -396,24 +396,24 @@
                                         //dd($dataPbt);
                                     @endphp
                                     {{-- <h5>Pihak Berkuasa Tempatan :</h5>
-                                    <p id="modalKeterangan">{{ isset($pbt) ? $pbt : $unik->pbt ?? 'Tiada Maklumat' }}</p>
+                                    <p id="modalKeterangan">{{ isset($pbt) ? $pbt : $unik->pbt ?? 'TIADA MAKLUMAT' }}</p>
                                     <br> --}}
                                     <div class="row">
                                         <div class="col-12 col-md-3"><h5>Negeri :</h5></div>
-                                        <div class="col-12 col-md-3"><p id="">{{ isset($negeri) ? $negeri : 'Tiada Maklumat' }}</p></div>
+                                        <div class="col-12 col-md-3"><p id="">{{ isset($negeri) ? $negeri : 'TIADA MAKLUMAT' }}</p></div>
 
                                         <div class="col-12 col-md-3"><h5>Pihak Berkuasa Tempatan :</h5></div>
-                                        <div class="col-12 col-md-3"><p id="modalKeterangan">{{ isset($pbt) ? strtoupper($pbt) : strtoupper($unik->pbt) ?? 'Tiada Maklumat' }}</p>
+                                        <div class="col-12 col-md-3"><p id="modalKeterangan">{{ isset($pbt) ? strtoupper($pbt) : strtoupper($unik->pbt) ?? 'TIADA MAKLUMAT' }}</p>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-12 col-md-3"><h5>Lokasi :</h5></div>
-                                        <div class="col-12 col-md-3"><p id="">{{ strtoupper($unik->lokasi) ?? 'Tiada Maklumat' }}</p></div>
+                                        <div class="col-12 col-md-3"><p id="">{{ strtoupper($unik->lokasi) ?? 'TIADA MAKLUMAT' }}</p></div>
 
-                                        <div class="col-12 col-md-3"><h5>Koordinat Entiti :</h5></div>
+                                        <div class="col-12 col-md-3"><h5>Koordinat :</h5></div>
                                         <div class="col-12 col-md-3">
                                             <p id="modalCoordinate">
-                                                {{ is_numeric($unik->lng) && is_numeric($unik->lat) ? '( '.$unik->lat.', '.$unik->lng.' )' : 'Tiada Maklumat' }}
+                                                {{ is_numeric($unik->lng) && is_numeric($unik->lat) ? '( '.$unik->lat.', '.$unik->lng.' )' : 'TIADA MAKLUMAT' }}
                                                 @if(is_numeric($unik->lng) && is_numeric($unik->lat))
                                                 &nbsp;<br>
                                                 <a href="{{ 'https://maps.google.com/?q='.$unik->lat.','.$unik->lng }}" target="_blank">
@@ -425,12 +425,12 @@
                                     </div>
                                     {{-- <div class="row">
                                         <div class="col-12 col-md-3"><h5>Lokasi :</h5></div>
-                                        <div class="col-12 col-md-3"><p id="">{{ $unik->lokasi ?? 'Tiada Maklumat' }}</p></div>
+                                        <div class="col-12 col-md-3"><p id="">{{ $unik->lokasi ?? 'TIADA MAKLUMAT' }}</p></div>
 
                                         <div class="col-12 col-md-3"><h5>Koordinat Taman :</h5></div>
                                         <div class="col-12 col-md-3">
                                             <p id="modalCoordinate">
-                                                {{ is_numeric($unik->lng) && is_numeric($unik->lat) ? '( '.$unik->lat.', '.$unik->lng.' )' : 'Tiada Maklumat' }}
+                                                {{ is_numeric($unik->lng) && is_numeric($unik->lat) ? '( '.$unik->lat.', '.$unik->lng.' )' : 'TIADA MAKLUMAT' }}
                                                 @if(is_numeric($unik->lng) && is_numeric($unik->lat))
                                                 &nbsp;<br>
                                                 <a href="{{ 'https://maps.google.com/?q='.$unik->lat.','.$unik->lng }}" target="_blank">

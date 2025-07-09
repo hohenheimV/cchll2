@@ -573,7 +573,7 @@ class MIBController extends Controller
 
     private function sendmailtopemohon($MIB)
     {
-        $PBT = MaklumatPenggunaPbt::where('pbt_name', '=', $MIB->pbt)->first();
+        $PBT = MaklumatPenggunaPbt::where('pbt_name', 'ILIKE', $MIB->pbt)->first();
         $PBTArr = ($PBT) !== null ? $PBT : [];
         $PBTid = $PBTArr->id ?? '';
         // $PBTuser = User::where('bahagian_jln', '=', $PBTid)->where('is_active', 1)->get();
@@ -648,9 +648,10 @@ class MIBController extends Controller
             Mail::send('pengurusan.MIB.mails.permohonan', ['MIB' => $MIB], function ($message) use ($data, $user_email) {
                 $message->subject($data["subject"]);
                 foreach ($user_email as $recipient) {
-                    // $message->to($recipient['address'], $recipient['name']);
+                    $message->to($recipient['address'], $recipient['name']);
                 }
-                $message->cc($data['email'], $data['client_name']);
+                $message->bcc($data['email'], $data['client_name']);
+                // $message->cc($data['email'], $data['client_name']);
             });
         } catch (Error $exception) {
              $exception->getMessage();

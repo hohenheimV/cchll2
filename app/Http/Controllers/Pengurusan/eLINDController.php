@@ -856,7 +856,7 @@ class eLINDController extends Controller
                             "subject" => 'Modul Pengurusan Maklumat Industri Landskap (eLIND)',
                         ];
         
-                        Mail::send('pengurusan.eLIND.mails.perubahan', ['elind' => $eLIND, 'jenis' => $requestData['jenis_industri']], function ($message) use ($emailData) {
+                        Mail::send('pengurusan.eLIND.mails.perubahan', ['elind' => $eLIND, 'type' => $type, 'jenis' => $eLIND->jenis_industri], function ($message) use ($emailData) {
                             $message->subject($emailData["subject"]);
                             // Loop through to array and add each email
                             foreach ($emailData['email_to'] as $to) {

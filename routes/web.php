@@ -668,6 +668,10 @@ Route::name('website.')
                 $query->where('state', $negeriKod);
             }
 
+             if ($keyword === 'kontraktor' && $request->filled('kelas_kontraktor')) {
+                $query->where('kelas_kontraktor', $request->kelas_kontraktor);
+            }
+
             // Only approved for some types
             if (in_array($keyword, ['kontraktor', 'perunding', 'pembekal'])) {
                 $query->where('status', 'approved');

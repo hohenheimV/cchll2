@@ -82,7 +82,6 @@
 </div>
 
 <!-- Modal Keputusan -->
-
 <div class="modal" id="modalKeputusan" tabindex="-1" role="dialog" aria-labelledby="modalKeputusanLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-l">
         <div class="modal-content">
@@ -105,6 +104,36 @@
             <div class="modal-footer d-flex">
                 {!! Form::button('Batal', ['class'=>'btn btn-danger btn-lg btn-flat btn-block m-0 mr-1', 'data-dismiss'=>'modal']) !!}
                 {!! Form::button('Kemaskini Status', ['type'=>'submit', 'name' => 'action', 'value' => 'keputusan', 'class'=>'btn btn-success btn-lg btn-flat btn-block m-0 ml-1']) !!}
+            </div>
+        {!! Form::close() !!}
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal JPT -->
+<div class="modal" id="modalJPT" tabindex="-1" role="dialog" aria-labelledby="modalJPTLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-l">
+        <div class="modal-content">
+        {!! Form::open(['method' => 'PUT', 'id' => 'modalFormJPT', 'route' => ['pengurusan.eLAPS.update', ''], 'enctype' => 'multipart/form-data']) !!}
+            <div class="modal-header d-flex justify-content-center bg-dark border-0">
+                <h5 class="modal-title">Status J/kuasa Penilaian Tapak</h5>
+            </div>
+
+            <div class="modal-body text-center">
+                <p><strong>Sila pilih Status J/kuasa Penilaian Tapak:</strong></p>
+                <div class="form-group">
+                    {!! Form::select('JPT', [
+                        '15' => 'Lulus J/kuasa Penilaian Tapak',
+                        '16' => 'Tidak Lulus J/kuasa Penilaian Tapak'
+                    ], null, ['class' => 'form-control']) !!}
+                    {!! Form::hidden('eLAPS_id', null, ['id' => 'eLAPS_idK']) !!}
+                </div>
+            </div>
+
+            <div class="modal-footer d-flex">
+                {!! Form::button('Batal', ['class'=>'btn btn-danger btn-lg btn-flat btn-block m-0 mr-1', 'data-dismiss'=>'modal']) !!}
+                {!! Form::button('Kemaskini Status', ['type'=>'submit', 'name' => 'action', 'value' => 'JPT', 'class'=>'btn btn-success btn-lg btn-flat btn-block m-0 ml-1']) !!}
             </div>
         {!! Form::close() !!}
 
@@ -529,6 +558,17 @@
             // alert(document.querySelector('#modalKeputusan form').getAttribute('action'));
         });
 
+        $('#modalJPT').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var elapsId = button.data('elaps-id');
+
+            // Update the hidden input field with the eLAPS ID
+            $('#eLAPS_idK').val(elapsId);
+            let url = document.querySelector('#modalJPT form').getAttribute('action');
+            document.querySelector('#modalJPT form').setAttribute('action', url + '/' + elapsId);
+            // alert(document.querySelector('#modalJPT form').getAttribute('action'));
+        });
+
         $('#modalStatusProjek').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var elapsId = button.data('elaps-id');
@@ -541,7 +581,7 @@
             var text = button.data('text');
             var select = $('#statusProjekSelect');
             select.empty();
-            if (text === 10) {
+            if (text === 15) {
                 select.append('<option value="12">Projek Dalam Pelaksanaan</option>');
             }
             if (text >= 10) {
@@ -569,6 +609,10 @@
         
         $('#modalKeputusan').on('hidden.bs.modal', function (event) {
             document.querySelector('#modalKeputusan form').setAttribute('action', '{{ route("pengurusan.eLAPS.update", "") }}');
+        });
+        
+        $('#modalJPT').on('hidden.bs.modal', function (event) {
+            document.querySelector('#modalJPT form').setAttribute('action', '{{ route("pengurusan.eLAPS.update", "") }}');
         });
         
         $('#modalStatusProjek').on('hidden.bs.modal', function (event) {

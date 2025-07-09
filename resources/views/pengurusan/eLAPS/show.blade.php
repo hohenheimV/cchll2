@@ -169,7 +169,16 @@
                         ]) !!}
                     @endif
 
-                    @if(($eLAPS->status_permohonan == 10 || $eLAPS->status_permohonan == 12) && (auth()->user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem|KP/ TKP JLN') || Auth::user()->id == $eLAPS->id_pemohon || (auth()->user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln || Auth::user()->bahagian_jln == 6))))
+                    @if(($eLAPS->status_permohonan == 10) && ((auth()->user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln || Auth::user()->bahagian_jln == 6)) || auth()->user()->hasRole('Pentadbir Sistem|KP/ TKP JLN')))
+                        {!! Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini Status JPT', [
+                            'class' => 'btn btn-warning', 
+                            'data-toggle'=>'modal', 
+                            'data-target'=>'#modalJPT', 
+                            'data-elaps-id' => $eLAPS->id
+                        ]) !!}
+                    @endif
+
+                    @if(($eLAPS->status_permohonan == 15 || $eLAPS->status_permohonan == 12) && (auth()->user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem|KP/ TKP JLN') || Auth::user()->id == $eLAPS->id_pemohon || (auth()->user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln || Auth::user()->bahagian_jln == 6))))
                         {!! Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini Status Projek', [
                             'class' => 'btn btn-warning', 
                             'data-toggle'=>'modal', 

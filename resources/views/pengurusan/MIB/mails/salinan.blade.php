@@ -27,6 +27,12 @@
         <th style="width: 220px; {!! $style !!}">Status</th>
         <td style="{!! $style !!}">{!! $MIB->status ?? $null !!}</td>
     </tr>
+    <tr>
+        <th style="{!! $style !!}">Pautan Cepat</th>
+        <td style="{!! $style !!}">
+            <a href="{{ url('/pengurusan/MIB/' . $MIB->id) }}">Klik di sini</a>
+        </td>
+    </tr>
 </table>
 
 @endsection

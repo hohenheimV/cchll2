@@ -35,12 +35,20 @@
         ['id' => 'Permohonan Tidak Lengkap', 'label' => 'bg-danger'], //11
         ['id' => 'Projek Dalam Pelaksanaan', 'label' => 'bg-secondary'], //12
         ['id' => 'Projek Batal', 'label' => 'bg-dark'], //13
-        ['id' => 'Projek Siap', 'label' => 'bg-success'] //14
+        ['id' => 'Projek Siap', 'label' => 'bg-success'], //14
+        ['id' => 'Lulus J/kuasa Penilaian Tapak', 'label' => 'bg-success'], //15
+        ['id' => 'Tidak Lulus J/kuasa Penilaian Tapak', 'label' => 'bg-danger'], //16
     ])
     <tr>
         <th style="{!! $style !!}">Status</th>
         <td style="{!! $style !!}">
             {{ $status_pembangunan[$elaps->status_permohonan - 1]['id'] }}
+        </td>
+    </tr>
+    <tr>
+        <th style="{!! $style !!}">Pautan Permohonan</th>
+        <td style="{!! $style !!}">
+            <a href="{{ url('/pengurusan/eLAPS/' . $elaps->id) }}">Klik di sini</a>
         </td>
     </tr>
 </table>

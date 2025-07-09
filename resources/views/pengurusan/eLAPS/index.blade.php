@@ -78,7 +78,9 @@
                                     ['id' => 'Permohonan Tidak Lengkap', 'label' => 'bg-danger'], //11
                                     ['id' => 'Projek Dalam Pelaksanaan', 'label' => 'bg-secondary'], //12
                                     ['id' => 'Projek Batal', 'label' => 'bg-dark'], //13
-                                    ['id' => 'Projek Siap', 'label' => 'bg-success'] //14
+                                    ['id' => 'Projek Siap', 'label' => 'bg-success'], //14
+                                    ['id' => 'Lulus J/kuasa Penilaian Tapak', 'label' => 'bg-success'], //15
+                                    ['id' => 'Tidak Lulus J/kuasa Penilaian Tapak', 'label' => 'bg-danger'], //16
                                 ])
                                 @php($status_count = count($status_pembangunan))
 
@@ -161,7 +163,14 @@
                                                             'data-target'=>'#modalKeputusan', 
                                                             'data-elaps-id' => $permohonan->id
                                                         ]) !!}
-                                                    @elseif(($permohonan->status_permohonan == 10 || $permohonan->status_permohonan == 12) && ((Auth::user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem') || Auth::user()->id == $permohonan->id_pemohon) || (Auth::user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == 6 || Auth::user()->bahagian_jln == $permohonan->bahagian_jln))))
+                                                    @elseif(($permohonan->status_permohonan == 10) && (Auth::user()->hasRole('Pentadbir Sistem|Pegawai')))
+                                                        {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
+                                                            ['class'=>'btn btn-warning btn-sm', Html::tooltip('Kemaskini Status JPT'),
+                                                            'data-toggle'=>'modal', 
+                                                            'data-target'=>'#modalJPT', 
+                                                            'data-elaps-id' => $permohonan->id
+                                                        ]) !!}
+                                                    @elseif(($permohonan->status_permohonan == 15 || $permohonan->status_permohonan == 12) && ((Auth::user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem') || Auth::user()->id == $permohonan->id_pemohon) || (Auth::user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == 6 || Auth::user()->bahagian_jln == $permohonan->bahagian_jln))))
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
                                                             ['class' => 'btn btn-warning btn-sm', 
                                                             'data-elaps-id' => $permohonan->id,

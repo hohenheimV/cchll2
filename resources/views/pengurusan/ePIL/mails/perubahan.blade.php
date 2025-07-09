@@ -23,5 +23,11 @@
             Proses Pengesahan Perubahan
         </td>
     </tr>
+    <tr>
+        <th style="{!! $style !!}">Pautan Cepat</th>
+        <td style="{!! $style !!}">
+            <a href="{{ url('/pengurusan/ePIL/' . $epil->id_pelan) }}">Klik di sini</a>
+        </td>
+    </tr>
 </table>
 @endsection

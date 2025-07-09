@@ -66,6 +66,49 @@
                                             <select id="negeri" name="negeriX">
                                             </select>
                                         </div>
+                                        
+                                        @if($lastSegment == "kontraktor")
+                                        {{-- Kelas Kontraktor Dropdown --}}
+                                        <div class="input-group mr-2">
+                                            <select id="kelas_kontraktor" name="kelas_kontraktor" style="
+                                                height: calc(1.8125rem + 2px) !important;
+                                                padding: 0.25rem 0.5rem !important;
+                                                font-size: 0.875rem !important;
+                                                line-height: 1.5 !important;
+                                                border-radius: 0.2rem !important;
+                                                border: 1px solid #ced4da !important;
+                                            ">
+                                                <option value="">Papar Semua Kelas Kontraktor</option>
+                                                @foreach([
+                                                    'A' => 'A',
+                                                    'B' => 'B',
+                                                    'BX' => 'BX',
+                                                    'C' => 'C',
+                                                    'D' => 'D',
+                                                    'E' => 'E',
+                                                    'EX' => 'EX',
+                                                    'F' => 'F',
+                                                    'G1' => 'G1',
+                                                    'G2' => 'G2',
+                                                    'G3' => 'G3',
+                                                    'G4' => 'G4',
+                                                    'G5' => 'G5',
+                                                    'G6' => 'G6',
+                                                    'G7' => 'G7',
+                                                    'TIADA' => 'TIADA MAKLUMAT'
+                                                ] as $kod => $nama)
+                                                    <option value="{{ $kod }}" {{ request('kelas_kontraktor') == $kod ? 'selected' : '' }}>
+                                                        {{ $nama }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="input-group" style="display: none;">
+                                            <select id="kelas_kontraktor" name="kelas_kontraktorX">
+                                            </select>
+                                        </div>
+                                        @endif
 
                                         {{-- Keyword Search --}}
                                         <div class="input-group mr-2">
@@ -105,12 +148,12 @@
                         <div class="table-responsive">
                             <div class="dt-buttons">
                                 <a class="dt-button buttons-csv buttons-html5" 
-                                href="{{ route('pengurusan.eLIND.export', array_merge(['type' => $lastSegment, 'format' => 'csv'], request()->only(['keyword', 'negeri']))) }}">
+                                href="{{ route('pengurusan.eLIND.export', array_merge(['type' => $lastSegment, 'format' => 'csv'], request()->only(['keyword', 'negeri', 'kelas_kontraktor']))) }}">
                                     <span>CSV</span>
                                 </a>
                                 
                                 <a class="dt-button buttons-excel buttons-html5" 
-                                href="{{ route('pengurusan.eLIND.export', array_merge(['type' => $lastSegment, 'format' => 'excel'], request()->only(['keyword', 'negeri']))) }}">
+                                href="{{ route('pengurusan.eLIND.export', array_merge(['type' => $lastSegment, 'format' => 'excel'], request()->only(['keyword', 'negeri', 'kelas_kontraktor']))) }}">
                                     <span>Excel</span>
                                 </a>
                             </div>
@@ -119,6 +162,9 @@
                                     <tr>
                                         <th class="text-center w-1">No</th>
                                         <th class="text-center w-15">Nama</th>
+                                        @if($lastSegment == "kontraktor")
+                                        <th class="text-center w-1">Kelas</th>
+                                        @endif
                                         @if($no_ssm)
                                         <th class="text-center w-10">No. Pendaftaran SSM</th>
                                         @endif
@@ -156,6 +202,9 @@
                                         <tr>
                                             <td class="text-center">{{ $index++ }}</td>
                                             <td>{{ strtoupper($user->name) }}</td>
+                                            @if($lastSegment == "kontraktor")
+                                            <td class="text-center w-1">{{ $user->kelas_kontraktor }}</td>
+                                            @endif
                                             @if($no_ssm)
                                             <td class="text-center w-10">{{ $user->no_ssm }}</td>
                                             @endif

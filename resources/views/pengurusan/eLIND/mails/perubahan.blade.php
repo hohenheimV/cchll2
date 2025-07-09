@@ -11,7 +11,7 @@
     </tr>
     <tr>
         <th style="width: 220px; {!! $style !!}">Nama Penggiat Industri</th>
-        <td style="{!! $style !!}">{{ $elind->nama_pelan ?? 'No Information' }}</td>
+        <td style="{!! $style !!}">{{ $elind->name ?? 'No Information' }}</td>
     </tr>
     <tr>
         <th style="width: 220px; {!! $style !!}">Jenis Penggiat Industri</th>
@@ -21,6 +21,12 @@
         <th style="{!! $style !!}">Status</th>
         <td style="{!! $style !!}">
             Proses Pengesahan Perubahan
+        </td>
+    </tr>
+    <tr>
+        <th style="{!! $style !!}">Pautan Cepat</th>
+        <td style="{!! $style !!}">
+            <a href="{{ url('/pengurusan/eLIND/' . $type . '/' . $elind->id_elind. '/show') }}">Klik di sini</a>
         </td>
     </tr>
 </table>

@@ -1,80 +1,70 @@
 <div class="card">
     <div class="card-header">
         <h3 class="card-title font-weight-bold my-1">Direktori Penggiat Industri: {{ $keyword }}</h3>
-        <div class="card-tools">
-            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                <div class="btn-group" role="group" aria-label="First group">
-                    <select id="negeri" name="negeri" onchange="handleSelectChange()">
-                        <option value="">Papar Semua</option>
-                    </select>
-                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                    <script>
-                        // Fetch and populate the Negeri dropdown with data
-                        $(document).ready(function() {
-                            function capitalizeWords(str) {
-                                return str
-                                    .toLowerCase() // Convert the entire string to lowercase
-                                    .split(' ')    // Split the string into an array of words by spaces
-                                    .map(function(word) {
-                                        return word.charAt(0).toUpperCase() + word.slice(1); // Capitalize the first letter of each word
-                                    })
-                                    .join(' ');    // Join the array back into a string
-                            }
-
-                            $.ajax({
-                                url: '/get-negeri', // API endpoint to get negeri data
-                                type: 'GET',
-                                dataType: 'json',
-                                success: function(data) {
-                                    // Populate the Negeri dropdown with the data
-                                    $('#negeri').empty(); // Clear current options
-                                    $('#negeri').append('<option value="">Papar Semua</option>');
-
-                                    $.each(data, function(key, value) {
-                                        // Add each Negeri to the dropdown
-                                        $('#negeri').append('<option value="' + value.kod_negeri + '">' + (value.nama_negeri) + '</option>');
-                                    });
-
-                                    var negeriSelected = "{{ request()->query('negeri', '') }}";
-                                    if (negeriSelected) {
-                                        $('#negeri').val(negeriSelected);
-                                    }
-                                },
-                                error: function(xhr, status, error) {
-                                    console.error("Error fetching Negeri data: ", error);
-                                }
-                            });
-                        });
-
-                        // Function to handle the dropdown change event
-                        // function handleSelectChange() {
-                        //     var selectedKeyword = $('#negeri').val(); // Get the selected negeri value
-
-                        //     if (selectedKeyword) {
-                        //         // Redirect to the route with the selected keyword
-                        //         window.location.href = "/epalm-taman/" + selectedKeyword;
-                        //     } else {
-                        //         window.location.href = "/epalm-taman";
-                        //     }
-                        // }
-                        function handleSelectChange() {
-                            var selectedNegeri = $('#negeri').val(); // Get the selected negeri
-                            var currentKeyword = "{{ request()->route('keyword') }}"; // From URL param
-
-                            let url = "/penggiat-industri/" + currentKeyword;
-                            if (selectedNegeri) {
-                                url += "?negeri=" + selectedNegeri;
-                            }
-
-                            window.location.href = url;
-                        }
-                    </script>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="card-body">
+        <div class="card-tools">
+            <div class="btn-toolbar" role="toolbar">
+                <div class="filter-container" role="group">
+
+                    {{-- Negeri Dropdown --}}
+                    <select id="negeri" name="negeri" class="filter-select">
+                        {{-- <option value="">PAPAR SEMUA NEGERI</option> --}}
+                    </select>
+
+                    {{-- Kelas Kontraktor Dropdown (Only for Kontraktor) --}}
+                    @if($keyword == "Kontraktor")
+                    <select id="kelas_kontraktor" name="kelas_kontraktor" class="filter-select">
+                        <option value="">PAPAR SEMUA KELAS</option>
+                        @foreach([
+                            'A','B','BX','C','D','E','EX','F',
+                            'G1','G2','G3','G4','G5','G6','G7','TIADA'
+                        ] as $kod)
+                            <option value="{{ $kod }}" {{ request('kelas_kontraktor') == $kod ? 'selected' : '' }}>
+                                {{ $kod == 'TIADA' ? 'TIADA MAKLUMAT' : $kod }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @endif
+
+                </div>
+            </div>
+
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                $(function () {
+                    const keyword = "{{ request()->route('keyword') }}";
+                    const selectedNegeri = "{{ request('negeri') }}";
+                    const selectedKelas = "{{ request('kelas_kontraktor') }}";
+
+                    $.getJSON('/get-negeri-salt', function (data) {
+                        const negeriDropdown = $('#negeri');
+                        negeriDropdown.append(`<option value="">PAPAR SEMUA NEGERI</option>`);
+                        data.forEach(item => {
+                            negeriDropdown.append(
+                                `<option value="${item.kod_negeri}" ${selectedNegeri == item.kod_negeri ? 'selected' : ''}>
+                                    ${item.nama_negeri}
+                                </option>`
+                            );
+                        });
+                    });
+
+                    $('#negeri, #kelas_kontraktor').on('change', function () {
+                        const negeri = $('#negeri').val();
+                        const kelas = $('#kelas_kontraktor').val();
+                        let url = `/penggiat-industri/${keyword}`;
+                        const params = new URLSearchParams();
+
+                        if (negeri) params.append('negeri', negeri);
+                        if (kelas) params.append('kelas_kontraktor', kelas);
+
+                        window.location.href = `${url}?${params.toString()}`;
+                    });
+                });
+            </script>
+        </div>
+        <br>
         <div class="body-content">
             <div class="table-responsive">
                 <style>
@@ -93,6 +83,7 @@
                         <tr>
                             <th class="w-1">Bil.</th>
                             <th class="w-15">Nama</th>
+                            <th class="text-center w-1">Kelas</th>
                             <th class="w-5">Alamat</th>
                             <!-- <th class="text-center w-5">Prestasi</th> -->
                             <th class="text-center w-1">Tindakan</th>
@@ -123,6 +114,7 @@
                                 <tr>
                                     <td>{{ $index++ }}</td>
                                     <td>{{ strtoupper($user->name) }}</td>
+                                    <td class="text-center w-1">{{ ($user->kelas_kontraktor) ? ($user->kelas_kontraktor) : "-" }}</td>
                                     <td>
                                         {{--@if(isset($user->email)) {{ $user->email }}<br>@endif--}}
                                         @if(isset($user->address1)) {{ strtoupper($user->address1.',') }}<br>@endif

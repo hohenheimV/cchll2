@@ -486,7 +486,8 @@ class eLAPSController extends Controller
         foreach ($PBTuser as $key => $value) {
             $PBTemail[] = ['address' => $value->email, 'name' => $value->name];
         }
-        if ($request->input('action') === 'submit' || $request->input('action') === 'keputusan') {
+        
+        if ($request->input('action') === 'submit' || $request->input('action') === 'keputusan' || $request->input('action') === 'JPT') {
             $userArr = User::where(function ($query) {
                 $query->whereHas('roles', function ($query) {
                     $query->where('name', 'Pegawai');
@@ -743,9 +744,9 @@ class eLAPSController extends Controller
                     //    dd("Error sending registration email: " . $exception->getMessage());
                     }
                 }
-                return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat keputusan telah berjaya dikemaskini');
+                return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat keputusan permohonan telah berjaya dikemaskini');
             }else{
-                return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat keputusan tidak berjaya dikemaskini');
+                return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat keputusan permohonan tidak berjaya dikemaskini');
             }
         } elseif ($request->input('action') === 'status') {
             $projekSiap = $request->input('statusProjek');
@@ -957,6 +958,42 @@ class eLAPSController extends Controller
                 return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat Status Projek telah berjaya dikemaskini');
             }else{
                 return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat Status Projek tidak berjaya dikemaskini');
+            }
+        } elseif ($request->input('action') === 'JPT') {
+            $JPTPermohonan = $permohonan->update([
+                'status_permohonan' => $request->input('JPT'),
+            ]);
+            
+            if($JPTPermohonan){
+                //email
+                if (config('mail.enabled')) {
+                    try {
+                        $emailData = [
+                            "email_to" => $PBTemail,
+                            "email_cc" => $user_email,
+                            "subject" => 'Permohonan Pembangunan Projek',
+                        ];
+        
+                        Mail::send('pengurusan.eLAPS.mails.pendaftaran', ['elaps' => $permohonan, 'name' => $nama_pemohon], function ($message) use ($emailData) {
+                            $message->subject($emailData["subject"]);
+                            // Loop through to array and add each email
+                            foreach ($emailData['email_to'] as $to) {
+                                $message->to($to['address'], $to['name']);
+                            }
+        
+                            // Loop through cc array and add each email
+                            foreach ($emailData['email_cc'] as $cc) {
+                                $message->cc($cc['address'], $cc['name']);
+                            }
+                        });
+                    } catch (\Exception $exception) {
+                        \Log::error("Error sending registration email: " . $exception->getMessage());
+                    //    dd("Error sending registration email: " . $exception->getMessage());
+                    }
+                }
+                return redirect()->route('pengurusan.eLAPS.index')->with('successMessage', 'Maklumat Status JPT telah berjaya dikemaskini');
+            }else{
+                return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat Status JPT tidak berjaya dikemaskini');
             }
         }
     }

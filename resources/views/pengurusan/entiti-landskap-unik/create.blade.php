@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Daftar Entiti Landskap Unik ')
+@section('title', 'Daftar Entiti Landskap ')
 
 @section('content')
 <div class="container-fluid">

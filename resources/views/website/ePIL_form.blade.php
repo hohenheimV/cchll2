@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card card-olive card-outline">
     <div class="card-header">
         <h3 class="card-title font-weight-bold my-1">Direktori Pelan Induk Landskap</h3>
         </div>
@@ -9,34 +9,22 @@
                 <div class="filter-container" role="group" aria-label="Filter Dropdowns">
                     {{-- Negeri Dropdown --}}
                     <select id="negeri" name="negeri" onchange="handleNegeriChange()" class="filter-select">
-                        <option value="">PAPAR SEMUA NEGERI</option>
+                        <option value="">Papar Semua Negeri</option>
                     </select>
 
                     @if(isset($namaPbtArray))
                     {{-- PBT Dropdown --}}
                     <form method="GET" action="{{ url('/epil-pelan') }}">
                         <select id="pbt" name="pbt" onchange="handlePbtChange()" class="filter-select">
-                            <option value="">PAPAR SEMUA PBT</option>
+                            <option value="">Papar Semua PBT</option>
                             @foreach ($namaPbtArray as $pbt)
                                 <option value="{{ $pbt }}" {{ request('keyword') === $pbt ? 'selected' : '' }}>
-                                    {{ strtoupper($pbt) }}
+                                    {{ ucwords(strtolower($pbt)) }}
                                 </option>
                             @endforeach
                         </select>
                     </form>
                     @endif
-
-                    {{-- Kategori Dropdown --}}
-                    {{-- <form method="GET" action="{{ url('/epil-pelan') }}">
-                        <select id="kategori" name="kategori" onchange="handleKategoriChange()" class="filter-select">
-                            <option value="">PAPAR SEMUA KATEGORI</option>
-                            @foreach ($namaKategoriArray as $kategori)
-                                <option value="{{ $kategori }}" {{ request('keyword') === $kategori ? 'selected' : '' }}>
-                                    {{ strtoupper($kategori) }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </form> --}}
                 </div>
 
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -47,10 +35,13 @@
                                 type: 'GET',
                                 dataType: 'json',
                                 success: function(data) {
-                                $('#negeri').empty().append('<option value="-1">PAPAR SEMUA NEGERI</option>');
+                                $('#negeri').empty().append('<option value="-1">Papar Semua Negeri</option>');
                                 $.each(data, function(index, value) {
-                                    $('#negeri').append('<option value="' + value.kod_negeri + '">' + value.nama_negeri + '</option>');
+                                    let capitalized = value.nama_negeri.toLowerCase().replace(/\b\w/g, function(char) {
+                                        return char.toUpperCase();
                                     });
+                                    $('#negeri').append('<option value="' + value.kod_negeri + '">' + capitalized + '</option>');
+                                });
 
                                 var keyword = "{{ request('keyword') }}";
 
@@ -130,16 +121,16 @@
                         @if($ePIL->isNotEmpty())
                             @foreach($ePIL as $pelan)
                                 @if($previousNegeri !== null && $previousNegeri !== $pelan->negeri)
-                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ strtoupper($pelan->negeri)}}</td></tr>
+                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ ucwords(strtolower($pelan->negeri))}}</td></tr>
                                 @elseif($previousNegeri === $pelan->negeri)
                                 @else
-                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ strtoupper($pelan->negeri)}}</td></tr>
+                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ ucwords(strtolower($pelan->negeri))}}</td></tr>
                                 @endif
                                 <tr>
                                     <td>{{ $index++ }}</td>
-                                    <td>{{ (strtoupper($pelan->nama_pelan)) }}</td>
+                                    <td>{{ (ucwords(strtolower($pelan->nama_pelan))) }}</td>
                                     <td>
-                                        {{ (strtoupper($pelan->nama_pbt)) }}
+                                        {{ (ucwords(strtolower($pelan->nama_pbt))) }}
                                     </td>
                                     <td style="text-align: center;">
                                         <?php 
@@ -182,10 +173,12 @@
                                             </button>
                                             <!-- </a> -->
                                         @else
-                                            Tiada paparan dokumen
+                                            Dokumen tidak dapat dipaparkan
                                             <br>&nbsp;
                                         @endif
-                                        <p>{{ $fileSizeInMB ? number_format($fileSizeInMB, 2) . " MB" : '' }}</p>
+                                        @if($fileSizeInMB)
+                                            <p>{{ $fileSizeInMB ? number_format($fileSizeInMB, 2) . " MB" : '' }}</p>
+                                        @endif
                                     </td>
                                     <td class="text-center">
                                         {{-- <div class="btn-group">

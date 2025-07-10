@@ -71,7 +71,7 @@
     </div>
     <div class="col-12 order-lg-2 order-3">
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg   p-lg-0">
+        <nav class="navbar navbar-expand-lg p-lg-0">
             <a class="navbar-brand" href="{{ route('welcome') }}">
                 <img src="{{ asset('images/logo2.png') }}" height="50" alt="">
             </a>

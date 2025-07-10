@@ -192,7 +192,7 @@ if (!function_exists('app_dashboard_taman_negeri')) {
             ) as total_kel
         ")->value('total_kel');
 
-        return number_format($total ?? 0, 4)/*  . " Ekar" */;
+        return number_format($total ?? 0)/*  . " Ekar" */;
         // return $total ?? 0;
     }
 

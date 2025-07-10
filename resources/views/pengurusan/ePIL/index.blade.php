@@ -93,7 +93,7 @@
                                                         </div>
                                                     </a>
                                                 @else
-                                                    Tiada paparan dokumen
+                                                    Dokumen tidak dapat dipaparkan
                                                     <br>&nbsp;
                                                 @endif
                                                 <p>{{ $fileSizeInMB ? number_format($fileSizeInMB, 2) . " MB" : '' }}</p>

@@ -1456,383 +1456,303 @@
 
         <div class="modal-body bg-white">
             <div class="box-container">
-            <div class="padding30">
-                <h3>SENARAI JENIS PERMOHONAN</h3>
-                <hr class="deco">
-                
-                    <ul class="unstyled">
-                    <p>* Klik pada jenis permohonan dibawah untuk maklumat lanjut</p>
-                    <details style="cursor:pointer">
-                        <summary> <strong>Pembangunan Taman Awam</strong> </summary>
+                <div class="padding30">
+                    <h3>SENARAI JENIS PERMOHONAN</h3>
+                    <hr class="deco">
+                    
+                        <ul class="unstyled">
+                        <p>* Klik pada jenis permohonan dibawah untuk maklumat lanjut</p>
+                        <details style="cursor:pointer">
+                            <summary> <strong>Pembangunan Taman Awam</strong> </summary>
+                                <p class="padding10">
+                                Program Pembangunan Taman Awam merupakan program utama Jabatan Landskap Negara, Visi Negara Taman Terindah 2020 menggerakkan JLN untuk berusaha membangunkan taman awam di seluruh negara. <br>Berteraskan piawaian dua (2) hektar kawasan lapang bagi 1.000 penduduk bandar.</p>
+                                
+                                <table class="table table-striped table-condensed table-bordered no-margin">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="4"><center> KRITERIA UMUM PENILAIAN DAN PEMILIHAN TAPAK </center></th>
+                                        </tr><tr>
+                                            <th>Bil</th>
+                                            <th>Kriteria</th>
+                                            <th>Keterangan</th>
+                                            <th>Terperinci</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Taman Bandaran</td>
+                                            <td>Saiz</td>
+                                            <td>Keluasan tapak di antara 40 - 100 hektar (100 - 250 ekar)</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Jarak</td>
+                                            <td>Berada dalam lingkungan kawasan yang mudah dikunjungi dalam jangka masa kira-kira setengah jam perjalanan dengan kenderaan atau dengan jarak antara 5-10 km (3-6 batu) radius dari bandar</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Populasi</td>
+                                            <td>Tapak boleh menawarkan keperluan aktiviti rekreasi kepada penduduk di sesebuah bandaraya, bandar dan daerah sekitar yang mempunyai kependudukan sekitar 50,000 orang ke atas</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Tiada Pertindihan</td>
+                                            <td>Tapak cadangan perlu mempunyai akses kemudahsampaian dengan jalan utama dan capaian bekalan air dan elektrik</td>
+                                        </tr>
+                                            <tr><td>2</td>
+                                            <td>Taman Tempatan</td>
+                                            <td>Saiz</td>
+                                            <td>Keluasan tapak antara 8 - 40 hektar (20-100 ekar) </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Jarak</td>
+                                            <td>Berada dalam lingkungan kawasan yang mudah dikunjungi oleh komuniti sekitar kawasan dengan
+                                            menggunakan pengangkutan awam atau persendirian, atau berjalan kaki atau dalam jarak antara 3 km radius dari bandar</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Populasi</td>
+                                            <td>Mampu menampung beberapa unit komuniti kejiranan berhampiran yang mempunyai penduduk melebihi 12,000 hingga 50,000 penduduk</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Aksesibaliti</td>
+                                            <td>Tapak cadangan perlu mempunyai akses kemudahsampaian dengan jalan utama dan capaian bekalan air dan elektrik</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            <br>                        
+                        </details>
+
+                        <details style="cursor:pointer">
+                            <summary> <strong>Pembangunan Taman Persekutuan</strong> </summary>
                             <p class="padding10">
-                            Program Pembangunan Taman Awam merupakan program utama Jabatan Landskap Negara, Visi Negara Taman Terindah 2020 menggerakkan JLN untuk berusaha membangunkan taman awam di seluruh negara. <br>Berteraskan piawaian dua (2) hektar kawasan lapang bagi 1.000 penduduk bandar.</p>
+                            Taman Persekutuan adalah sebuah taman yang dimiliki dan ditadbir urus oleh kerajaan persekutuan sebagai satu kawasan rekreasi awam berskala besar (100 ha) dan mengutamakan pengekalan sumber semula jadi untuk rekreasi.</p>
                             
                             <table class="table table-striped table-condensed table-bordered no-margin">
                                 <thead>
                                     <tr>
-                                        <th colspan="4"><center> KRITERIA UMUM PENILAIAN DAN PEMILIHAN TAPAK </center></th>
+                                        <th colspan="3"><center>KRITERIA SPESIFIK PENILAIAN DAN PEMILIHAN TAMAN PERSEKUTUAN </center></th>
                                     </tr><tr>
                                         <th>Bil</th>
                                         <th>Kriteria</th>
                                         <th>Keterangan</th>
-                                        <th>Terperinci</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>1</td>
-                                        <td>Taman Bandaran</td>
                                         <td>Saiz</td>
-                                        <td>Keluasan tapak di antara 40 - 100 hektar (100 - 250 ekar)</td>
+                                        <td>Keluasan melebihi 100 hektar (250 ekar).</td>
                                     </tr>
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td>Jarak</td>
-                                        <td>Berada dalam lingkungan kawasan yang mudah dikunjungi dalam jangka masa kira-kira setengah jam perjalanan dengan kenderaan atau dengan jarak antara 5-10 km (3-6 batu) radius dari bandar</td>
+                                        <td>2</td>
+                                        <td>Hak Milik</td>
+                                        <td>i) Sebuah kawasan tanah milik kerajaan yang telah diwarta /
+                                        dirizabkan sebagai Kawasan Lapang / Kawasan hijau / Taman
+                                        Awam / Taman Wilayah / Taman Persekutuan.<br>
+                                        ii) Sekiranya tanah adalah milik Kerajaan Negeri, tanah sedia
+                                        diserahkan kepada Kerajaan Persekutuan atas dasar pemilikan
+                                        tanah secara serahan kekal atau secara pajakan atau
+                                        berdasarkan terma dan syarat-syarat tertentu oleh Pihak
+                                        Berkuasa Negeri (PBN), untuk tujuan pembangunan dan
+                                        pengurusan Taman Persekutuan dengan tempoh pajakan yang
+                                        optima</td>
                                     </tr>
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td>Populasi</td>
-                                        <td>Tapak boleh menawarkan keperluan aktiviti rekreasi kepada penduduk di sesebuah bandaraya, bandar dan daerah sekitar yang mempunyai kependudukan sekitar 50,000 orang ke atas</td>
+                                        <td>3</td>
+                                        <td>Kaedah Pelaksanakan</td>
+                                        <td>Pembangunan akan dirancang, dibangun dan diuruskan oleh Kerajaan Persekutuan melalui Jabatan Landskap Negara</td>
                                     </tr>
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td>Tiada Pertindihan</td>
-                                        <td>Tapak cadangan perlu mempunyai akses kemudahsampaian dengan jalan utama dan capaian bekalan air dan elektrik</td>
-                                    </tr>
-                                        <tr><td>2</td>
-                                        <td>Taman Tempatan</td>
-                                        <td>Saiz</td>
-                                        <td>Keluasan tapak antara 8 - 40 hektar (20-100 ekar) </td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td>Jarak</td>
-                                        <td>Berada dalam lingkungan kawasan yang mudah dikunjungi oleh komuniti sekitar kawasan dengan
-                                        menggunakan pengangkutan awam atau persendirian, atau berjalan kaki atau dalam jarak antara 3 km radius dari bandar</td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td>Populasi</td>
-                                        <td>Mampu menampung beberapa unit komuniti kejiranan berhampiran yang mempunyai penduduk melebihi 12,000 hingga 50,000 penduduk</td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td>Aksesibaliti</td>
-                                        <td>Tapak cadangan perlu mempunyai akses kemudahsampaian dengan jalan utama dan capaian bekalan air dan elektrik</td>
+                                        <td>4</td>
+                                        <td>Karakter/Keunikan</td>
+                                        <td>Merupakan kawasan yang mempunyai karakter dan keunikan
+                                        tersendiri termasuk elemen-elemen semulajadi seperti air terjun,
+                                        tasik, sungai, pantai serta keadaan hutan dan topografi yang
+                                        menjadi tarikan pengunjung, pelancong serta agensi-agensi
+                                        penyelidikan.</td>
                                     </tr>
                                 </tbody>
                             </table>
-                        <br>                        
-                    </details>
+                            <br>
+                        </details>
 
-                    <details style="cursor:pointer">
-                        <summary> <strong>Pembangunan Taman Persekutuan</strong> </summary>
-                        <p class="padding10">
-                        Taman Persekutuan adalah sebuah taman yang dimiliki dan ditadbir urus oleh kerajaan persekutuan sebagai satu kawasan rekreasi awam berskala besar (100 ha) dan mengutamakan pengekalan sumber semula jadi untuk rekreasi.</p>
-                        
-                        <table class="table table-striped table-condensed table-bordered no-margin">
-                            <thead>
-                                <tr>
-                                    <th colspan="3"><center>KRITERIA SPESIFIK PENILAIAN DAN PEMILIHAN TAMAN PERSEKUTUAN </center></th>
-                                </tr><tr>
-                                    <th>Bil</th>
-                                    <th>Kriteria</th>
-                                    <th>Keterangan</th>
-                                    
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Saiz</td>
-                                    <td>Keluasan melebihi 100 hektar (250 ekar).</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Hak Milik</td>
-                                    <td>i) Sebuah kawasan tanah milik kerajaan yang telah diwarta /
-                                    dirizabkan sebagai Kawasan Lapang / Kawasan hijau / Taman
-                                    Awam / Taman Wilayah / Taman Persekutuan.<br>
-                                    ii) Sekiranya tanah adalah milik Kerajaan Negeri, tanah sedia
-                                    diserahkan kepada Kerajaan Persekutuan atas dasar pemilikan
-                                    tanah secara serahan kekal atau secara pajakan atau
-                                    berdasarkan terma dan syarat-syarat tertentu oleh Pihak
-                                    Berkuasa Negeri (PBN), untuk tujuan pembangunan dan
-                                    pengurusan Taman Persekutuan dengan tempoh pajakan yang
-                                    optima</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Kaedah Pelaksanakan</td>
-                                    <td>Pembangunan akan dirancang, dibangun dan diuruskan oleh Kerajaan Persekutuan melalui Jabatan Landskap Negara</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Karakter/Keunikan</td>
-                                    <td>Merupakan kawasan yang mempunyai karakter dan keunikan
-                                    tersendiri termasuk elemen-elemen semulajadi seperti air terjun,
-                                    tasik, sungai, pantai serta keadaan hutan dan topografi yang
-                                    menjadi tarikan pengunjung, pelancong serta agensi-agensi
-                                    penyelidikan.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <br>
-                    </details>
+                        <details style="cursor:pointer">
+                                <summary> <strong>Program Naik Taraf Taman Awam</strong> </summary>
+                                <p class="padding10">
+                                Menyalurkan peruntukkan bagi meningkatkan kualiti taman awam dan menambahkan bilangan serta fungsi kemudahan rekreasi taman di bawah pengurusan PBT. Program ini memberi keutamaan kepada taman-taman kejiranan sedia ada dan taman awam yang bersaiz 5 ekar sehingga 20 ekar. Skop kerja utama bagi program adalah penyelenggaraan landskap lembut dan landskap kejur yang melibatkan pemangkasan, penggantian, penjarangan penanaman semula pokok, pengubahsuaian rekabentuk, penambahan komponen mengikut keperluan, keselesaan dan keselamatan untuk semua.</p>
 
-                    <details style="cursor:pointer">
-                            <summary> <strong>Program Naik Taraf Taman Awam</strong> </summary>
-                            <p class="padding10">
-                            Menyalurkan peruntukkan bagi meningkatkan kualiti taman awam dan menambahkan bilangan serta fungsi kemudahan rekreasi taman di bawah pengurusan PBT. Program ini memberi keutamaan kepada taman-taman kejiranan sedia ada dan taman awam yang bersaiz 5 ekar sehingga 20 ekar. Skop kerja utama bagi program adalah penyelenggaraan landskap lembut dan landskap kejur yang melibatkan pemangkasan, penggantian, penjarangan penanaman semula pokok, pengubahsuaian rekabentuk, penambahan komponen mengikut keperluan, keselesaan dan keselamatan untuk semua.</p>
-
-                            <table class="table table-striped table-condensed table-bordered no-margin">
-                                <thead>
-                                    <tr>
-                                        <th colspan="3"><center>KRITERIA SPESIFIK PENILAIAN DAN PEMILIHAN NAIK TARAF TAMAN AWAM</center></th>
-                                    </tr><tr>
-                                        <th>Bil</th>
-                                        <th>Kriteria</th>
-                                        <th>Keterangan</th>
-                                        
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Saiz</td>
-                                        <td>Kawasan lapang atau taman awam sedia ada di bawah hirarki Taman
-                                        Kejiranan yang berkeluasan Kawasan lapang atau taman awam sedia
-                                        ada yang berkeluasan 3 ekar.</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Pewartaan</td>
-                                        <td>Tapak masih kekal diwarta atau dirizab sebagai kawasan lapang.</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Keutamaan</td>
-                                        <td>Keutamaan kepada taman kejiranan / taman komuniti dan kawasan
-                                        taman permainan kanak-kanak sedia ada yang berada dalam kawasan
-                                        perumahan / kediaman di bawah pentadbiran dan pengurusan PBT.<br>
-                                        Taman awam atau taman kejiranan sedia ada yang mempunyai daya
-                                        tampungan yang tinggi dengan kemudahan yang telah lama, rosak dan
-                                        tidak selamat untuk digunakan<br>
-                                        Naik taraf taman awam yang dibangunkan oleh JLN boleh
-                                        dipertimbangkan jika telah siap melebihi tempoh 5 tahun.</td>
+                                <table class="table table-striped table-condensed table-bordered no-margin">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="3"><center>KRITERIA SPESIFIK PENILAIAN DAN PEMILIHAN NAIK TARAF TAMAN AWAM</center></th>
+                                        </tr><tr>
+                                            <th>Bil</th>
+                                            <th>Kriteria</th>
+                                            <th>Keterangan</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Saiz</td>
+                                            <td>Kawasan lapang atau taman awam sedia ada di bawah hirarki Taman
+                                            Kejiranan yang berkeluasan Kawasan lapang atau taman awam sedia
+                                            ada yang berkeluasan 3 ekar.</td>
                                         </tr>
                                         <tr>
-                                        <td>4</td>
-                                        <td>Kemudahsampaian</td>
-                                        <td>Mempunyai lingkungan jarak berjalan kaki sejauh 1.5km daripada
-                                        kawasan kediaman penduduk</td>
-                                    </tr>
-                                </tbody>
-                            </table> 
-                        <br>
-                    </details>
-
-                    <details style="cursor:pointer">
-                            <summary> <strong>Pelan Induk Landskap (PIL)</strong> </summary>
-                            <p class="padding10">
-                            Kajian Pelan Induk Landskap (PIL) merupakan satu dokumen pernyataan bertulis yang mengandungi perancangan landskap dan pelan tindakan jangka panjang untuk tempoh 10 tahun bagi pembangunan landskap di sesebuah kawasan Pihak Berkuasa Tempatan (PBT). Ia menggariskan cadangan dalam bentuk polisi, strategi, kaedah kawalan, garis panduan pelaksanaan dan cadangan projek landskap yang sesuai untuk pembangunan di kawasan Pihak Berkuasa Tempatan.</p>
-                            
-                            <table class="table table-striped table-condensed table-bordered no-margin">
-                                <thead>
-                                    <tr>
-                                        <th colspan="3"><center>KRITERIA SPESIFIK PENILAIAN DAN PEMILIHAN PELAN INDUK LANDSKAP</center></th>
-                                    </tr><tr>
-                                        <th>Bil</th>
-                                        <th>Kriteria</th>
-                                        <th>Keterangan</th>
-                                        
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Keutamaan</td>
-                                        <td>Keseluruhan kawasan kawalan / operasi / pentadbiran
-                                        PBT / Pentadbir Kawasan (contoh:- Residen Limbang+MDL;
-                                        MDHT+Ketengah) dan sekitar kawasan pentadbirannya
-                                        termasuk pulau-pulau yang berkaitan</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Dokumen Perancangan</td>
-                                        <td>Telah mempunyai dokumen perancangan sama ada di
-                                        peringkat negeri, daerah dan tempatan.</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Pelan Persempadanan</td>
-                                        <td>PBT / Pentadbir kawasan mempunyai pelan persempadanan
-                                        yang merangkumi pelbagai peringkat (Jajahan, Mukim dan
-                                        berkaitan)
-                                        Mempunyai Pelan dan Maklumat Guna Tanah.</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Potensi Landskap</td>
-                                        <td>Sumber Landskap, Nilai Konservasi, Potensi Pelancongan
-                                        Utama, Karakter Landskap yang signifikan, Kawasan
-                                        Berpotensi untuk Program Pembangunan Landskap ,
-                                        Keunikan Sosio-Budaya, Tapak Warisan (UNESCO / Warisan
-                                        Negara / RAMSAR / Bernilai Sejarah), Mempunyai Keunikan
-                                        dan Keistimewaan yang Tersendiri</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Isu Persekitaran
-                                        untuk diatasi</td>
-                                        <td>Banjir, Pencemaran, Penempatan Haram, Ruang terhad</td>
-                                    </tr>
-                                </tbody>
-                            </table> 
+                                            <td>2</td>
+                                            <td>Pewartaan</td>
+                                            <td>Tapak masih kekal diwarta atau dirizab sebagai kawasan lapang.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Keutamaan</td>
+                                            <td>Keutamaan kepada taman kejiranan / taman komuniti dan kawasan
+                                            taman permainan kanak-kanak sedia ada yang berada dalam kawasan
+                                            perumahan / kediaman di bawah pentadbiran dan pengurusan PBT.<br>
+                                            Taman awam atau taman kejiranan sedia ada yang mempunyai daya
+                                            tampungan yang tinggi dengan kemudahan yang telah lama, rosak dan
+                                            tidak selamat untuk digunakan<br>
+                                            Naik taraf taman awam yang dibangunkan oleh JLN boleh
+                                            dipertimbangkan jika telah siap melebihi tempoh 5 tahun.</td>
+                                            </tr>
+                                            <tr>
+                                            <td>4</td>
+                                            <td>Kemudahsampaian</td>
+                                            <td>Mempunyai lingkungan jarak berjalan kaki sejauh 1.5km daripada
+                                            kawasan kediaman penduduk</td>
+                                        </tr>
+                                    </tbody>
+                                </table> 
                             <br>
-                    </details>
+                        </details>
 
-                    <details style="cursor:pointer">
-                            <summary> <strong>Landskap Perbandaran</strong> </summary>
-                            <p class="padding10">
-                            Program landskap perbandaran adalah satu pembangunan landskap yang dilaksanakan secara komprehensif di kawasan perbandaran bagi mewujudkan persekitaran yang kondusif bagi manfaat masyarakat bandar. Inisiatif ini bertujuan untuk mewujudkan dan mengekalkan persekitaran hijau di kawasan bandar dan mengurangkan kesan pulau haba dan meningkatkan persekitaran bandar yang sesuai didiami. Skop projek pembangunan landskap perbandaran termasuklah penyediaan rangkaian jaluran hijau, kawasan lapang, ruang pejalan kaki, rizab landskap dan taman yang bersistematik di kawasan pembangunan.</p> 
-                            
-                            <table class="table table-striped table-condensed table-bordered no-margin">
+                        <details style="cursor:pointer">
+                                <summary> <strong>Pelan Induk Landskap (PIL)</strong> </summary>
+                                <p class="padding10">
+                                Kajian Pelan Induk Landskap (PIL) merupakan satu dokumen pernyataan bertulis yang mengandungi perancangan landskap dan pelan tindakan jangka panjang untuk tempoh 10 tahun bagi pembangunan landskap di sesebuah kawasan Pihak Berkuasa Tempatan (PBT). Ia menggariskan cadangan dalam bentuk polisi, strategi, kaedah kawalan, garis panduan pelaksanaan dan cadangan projek landskap yang sesuai untuk pembangunan di kawasan Pihak Berkuasa Tempatan.</p>
+                                
+                                <table class="table table-striped table-condensed table-bordered no-margin">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="3"><center>KRITERIA SPESIFIK PENILAIAN DAN PEMILIHAN PELAN INDUK LANDSKAP</center></th>
+                                        </tr><tr>
+                                            <th>Bil</th>
+                                            <th>Kriteria</th>
+                                            <th>Keterangan</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Keutamaan</td>
+                                            <td>Keseluruhan kawasan kawalan / operasi / pentadbiran
+                                            PBT / Pentadbir Kawasan (contoh:- Residen Limbang+MDL;
+                                            MDHT+Ketengah) dan sekitar kawasan pentadbirannya
+                                            termasuk pulau-pulau yang berkaitan</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Dokumen Perancangan</td>
+                                            <td>Telah mempunyai dokumen perancangan sama ada di
+                                            peringkat negeri, daerah dan tempatan.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Pelan Persempadanan</td>
+                                            <td>PBT / Pentadbir kawasan mempunyai pelan persempadanan
+                                            yang merangkumi pelbagai peringkat (Jajahan, Mukim dan
+                                            berkaitan)
+                                            Mempunyai Pelan dan Maklumat Guna Tanah.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>Potensi Landskap</td>
+                                            <td>Sumber Landskap, Nilai Konservasi, Potensi Pelancongan
+                                            Utama, Karakter Landskap yang signifikan, Kawasan
+                                            Berpotensi untuk Program Pembangunan Landskap ,
+                                            Keunikan Sosio-Budaya, Tapak Warisan (UNESCO / Warisan
+                                            Negara / RAMSAR / Bernilai Sejarah), Mempunyai Keunikan
+                                            dan Keistimewaan yang Tersendiri</td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>Isu Persekitaran
+                                            untuk diatasi</td>
+                                            <td>Banjir, Pencemaran, Penempatan Haram, Ruang terhad</td>
+                                        </tr>
+                                    </tbody>
+                                </table> 
+                                <br>
+                        </details>
+
+                        <details style="cursor:pointer">
+                                <summary> <strong>Landskap Perbandaran</strong> </summary>
+                                <p class="padding10">
+                                Program landskap perbandaran adalah satu pembangunan landskap yang dilaksanakan secara komprehensif di kawasan perbandaran bagi mewujudkan persekitaran yang kondusif bagi manfaat masyarakat bandar. Inisiatif ini bertujuan untuk mewujudkan dan mengekalkan persekitaran hijau di kawasan bandar dan mengurangkan kesan pulau haba dan meningkatkan persekitaran bandar yang sesuai didiami. Skop projek pembangunan landskap perbandaran termasuklah penyediaan rangkaian jaluran hijau, kawasan lapang, ruang pejalan kaki, rizab landskap dan taman yang bersistematik di kawasan pembangunan.</p> 
+                                
+                                <table class="table table-striped table-condensed table-bordered no-margin">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="3"><center>KRITERIA SPESIFIK PENILAIAN DAN PEMILIHAN LANDSKAP PERBANDARAN</center></th>
+                                        </tr><tr>
+                                            <th>Bil</th>
+                                            <th>Kriteria</th>
+                                            <th>Keterangan</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Asas Pertimbangan</td>
+                                            <td>Terdapat di dalam Pelan Induk Landskap (PIL), rancangan pemajuan
+                                            fizikal di peringkat negeri, daerah dan tempatan atau sebagainya</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Kemudahsampaian</td>
+                                            <td>Tapak masih kekal diwarta atau dirizab sebagai kawasan lapang.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Potensi Landskap</td>
+                                            <td>Tapak yang terdiri daripada kawasan yang mempunyai nilai warisan
+                                            sejarah / budaya termasuk bangunan atau fasad bangunan yang unik
+                                            perlu diberi pertimbangan sewajarnya dengan memperbaiki sistem
+                                            ekologi bandar.<br>
+                                            Potensi landskap perbandaran juga adalah tertakluk kepada kualiti /
+                                            identiti / karakter perbandaran yang tertentu di antaranya seperti Bandar
+                                            DiRaja, Bandar Pelancongan, Bandar perindustrian, Bandar pertanian,
+                                            Bandar Maritime dan sebagainya.</td>
+                                        </tr>
+                                    </tbody>
+                                </table> 
+                                <br>
+                        </details>
+
+                        <details style="cursor:pointer">
+                                <summary> <strong>Persekitaran Kehidupan</strong> </summary>
+                                <p class="padding10">
+                                Program Pembangunan Landskap Persekitaran Kehidupan memberi tumpuan kepada penyediaan kawasan persekitaran yang kondusif khususnya di persekitaran kawasan kediaman dan pekan-pekan kecil melalui penyediaan kemudahan infrastruktur landskap yang optimum, indah, berfungsi dan efektif. Program ini terbukti berupaya meningkatkan kualiti persekitaran kehidupan dan kualiti hidup masyarakat melalui penyediaan kawasan landskap luar yang berfungsi dan penyatuan integrasi sosial. Komponen Projek Pembangunan Persekitaran Kehidupan disediakan berdasarkan kesesuaian tapak projek dan keperluan rekreasi masyarakat setempat.</p>
+                                
+                                <table class="table table-striped table-condensed table-bordered no-margin">
                                 <thead>
                                     <tr>
-                                        <th colspan="3"><center>KRITERIA SPESIFIK PENILAIAN DAN PEMILIHAN LANDSKAP PERBANDARAN</center></th>
-                                    </tr><tr>
-                                        <th>Bil</th>
-                                        <th>Kriteria</th>
-                                        <th>Keterangan</th>
-                                        
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Asas Pertimbangan</td>
-                                        <td>Terdapat di dalam Pelan Induk Landskap (PIL), rancangan pemajuan
-                                        fizikal di peringkat negeri, daerah dan tempatan atau sebagainya</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Kemudahsampaian</td>
-                                        <td>Tapak masih kekal diwarta atau dirizab sebagai kawasan lapang.</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Potensi Landskap</td>
-                                        <td>Tapak yang terdiri daripada kawasan yang mempunyai nilai warisan
-                                        sejarah / budaya termasuk bangunan atau fasad bangunan yang unik
-                                        perlu diberi pertimbangan sewajarnya dengan memperbaiki sistem
-                                        ekologi bandar.<br>
-                                        Potensi landskap perbandaran juga adalah tertakluk kepada kualiti /
-                                        identiti / karakter perbandaran yang tertentu di antaranya seperti Bandar
-                                        DiRaja, Bandar Pelancongan, Bandar perindustrian, Bandar pertanian,
-                                        Bandar Maritime dan sebagainya.</td>
-                                    </tr>
-                                </tbody>
-                            </table> 
-                            <br>
-                    </details>
-
-                    <details style="cursor:pointer">
-                            <summary> <strong>Persekitaran Kehidupan</strong> </summary>
-                            <p class="padding10">
-                            Program Pembangunan Landskap Persekitaran Kehidupan memberi tumpuan kepada penyediaan kawasan persekitaran yang kondusif khususnya di persekitaran kawasan kediaman dan pekan-pekan kecil melalui penyediaan kemudahan infrastruktur landskap yang optimum, indah, berfungsi dan efektif. Program ini terbukti berupaya meningkatkan kualiti persekitaran kehidupan dan kualiti hidup masyarakat melalui penyediaan kawasan landskap luar yang berfungsi dan penyatuan integrasi sosial. Komponen Projek Pembangunan Persekitaran Kehidupan disediakan berdasarkan kesesuaian tapak projek dan keperluan rekreasi masyarakat setempat.</p>
-                            
-                            <table class="table table-striped table-condensed table-bordered no-margin">
-                            <thead>
-                                <tr>
-                                    <th colspan="3"><center>KRITERIA SPESIFIK PENILAIAN DAN PEMILIHAN PERSEKITARAN KEHIDUPAN</center></th>
-                                    </tr><tr>
-                                    <th>Bil</th>
-                                    <th>Kriteria</th>
-                                    <th>Keterangan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Kategori</td>
-                                    <td><strong>KEDIAMAN AWAM</strong><br>
-                                    Perumahan Awam Kos Rendah &amp; Sederhana, Kg. Tradisional &amp; Kg.
-                                    Tersusun<br>
-                                    <strong>INSTITUSI AWAM</strong><br>
-                                    Institusi Kesihatan Awam Institusi Pendidikan Awam Institusi Kebajikan
-                                    Awam<br>
-                                    <strong>BANDAR TEMPATAN / PEKAN KECIL</strong><br>
-                                    Ruang awam / Ruang tumpuan , Kawasan Lingkaran Hijau, Kawasan
-                                    Persisiran Air, Kawasan Bersejarah / Warisan, Kawasan Lapang / Hijau /
-                                    Dataran<br>
-                                    <strong>KAWASAN SEMULAJADI</strong><br>
-                                    Kawasan Sensitif Alam Sekitar, Kawasan Tanah Terganggu, Kawasan
-                                    Warisan, Kawasan Pelancongan, Kawasan semulajadi yang unik.</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Keluasan</td>
-                                    <td>Keluasan minimum 3 ekar.</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Kawasan Tumpuan Utama</td>
-                                    <td>Tapak merupakan kawasan tumpuan utama (nodes) kawasan kediaman
-                                    / institusi / Bandar Tempatan / pekan kecil / kawasan semulajadi serta
-                                    berpotensi dihubungkan.</td>
-                                    </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Kaedah Pelaksanaan</td>
-                                    <td>1- Rekabentuk dan Perolehan PBT<br>
-                                    2- Rekabentuk JLN dan Perolehan PBT<br>
-                                    3- Rekabentuk dan Perolehan JLN
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>Keutamaan</td>
-                                    <td>Kawasan dicadangkan terdapat di dalam Pelan Induk Landskap (PIL),
-                                    rancangan pemajuan fizikal di peringkat negeri, daerah dan tempatan
-                                    atau sebagainya - layak diberikan keutamaan.</td>
-                                </tr>
-                                <tr>
-                                    <td>6</td>
-                                    <td>Nilai Warisan</td>
-                                    <td>Tapak yang terdiri daripada kawasan yang mempunyai nilai landskap
-                                    warisan sejarah termasuk bangunan atau fasad bangunan yang unik
-                                    perlu diberi pertimbangan sewajarnya.</td>
-                                </tr>
-                                <tr>
-                                    <td>7</td>
-                                    <td>Landskap
-                                    Semulajadi</td>
-                                    <td>Tapak yang mempunyai karakter landskap yang unik terhasil daripada
-                                    proses semulajadi.</td>
-                                </tr>
-                            </tbody>
-                        </table> 
-                        <br>
-                    </details>
-
-                    <details style="cursor:pointer">
-                            <summary> <strong>Taman Botani</strong> </summary>
-                            <p class="padding10">
-                            Taman Botani merupakan sebuah institusi yang mengumpul, menyimpan dan menyelenggara koleksi tumbuhan bagi tujuan penyelidikan saintifik, peragaan dan pendidikan. Secara prinsipnya, taman botani dibangunkan sebagai tempat untuk mendapatkan ketenangan, mencari jawapan kepada persolan saintifik alam tumbuhan, pusat kepada kajian perubatan alami dan kajian taksonomi tumbuhan. Taman botani memainkan peranan penting dalam penyebaran spesies tanaman bernilai ekonomi dan perubatan di seluruh dunia serta menyumbang kepada pembangunan ekonomi.
-                            Pendekatan pembangunan dan pengurusan taman botani adalah memulihara dan memelihara pokok-pokok sedia ada di tapak untuk tumbuh secara semulajadi dan melakukan penanaman spesies baru tumbuhan melalui kaedah pemuliharaan ex-situ berdasarkan konsep pembangunan yang bersesuaian dengan karakter, kualiti visual dan sumber semulajadi tapak. </p>
-
-                            <table class="table table-striped table-condensed table-bordered no-margin">
-                                <thead>
-                                    <tr>
-                                        <th colspan="3"><center>KRITERIA SPESIFIK PENILAIAN DAN PEMILIHAN TAMAN BOTANI</center></th>
+                                        <th colspan="3"><center>KRITERIA SPESIFIK PENILAIAN DAN PEMILIHAN PERSEKITARAN KEHIDUPAN</center></th>
                                         </tr><tr>
                                         <th>Bil</th>
                                         <th>Kriteria</th>
@@ -1842,62 +1762,142 @@
                                 <tbody>
                                     <tr>
                                         <td>1</td>
-                                        <td>Saiz</td>
-                                        <td>Keluasan melebihi 20 hektar (50 ekar).</td>
+                                        <td>Kategori</td>
+                                        <td><strong>KEDIAMAN AWAM</strong><br>
+                                        Perumahan Awam Kos Rendah &amp; Sederhana, Kg. Tradisional &amp; Kg.
+                                        Tersusun<br>
+                                        <strong>INSTITUSI AWAM</strong><br>
+                                        Institusi Kesihatan Awam Institusi Pendidikan Awam Institusi Kebajikan
+                                        Awam<br>
+                                        <strong>BANDAR TEMPATAN / PEKAN KECIL</strong><br>
+                                        Ruang awam / Ruang tumpuan , Kawasan Lingkaran Hijau, Kawasan
+                                        Persisiran Air, Kawasan Bersejarah / Warisan, Kawasan Lapang / Hijau /
+                                        Dataran<br>
+                                        <strong>KAWASAN SEMULAJADI</strong><br>
+                                        Kawasan Sensitif Alam Sekitar, Kawasan Tanah Terganggu, Kawasan
+                                        Warisan, Kawasan Pelancongan, Kawasan semulajadi yang unik.</td>
                                     </tr>
                                     <tr>
                                         <td>2</td>
-                                        <td>Kemudahsampaian</td>
-                                        <td>Kemudahsampaian yang baik tanpa mengganggu lot-lot bersebelahan.</td>
+                                        <td>Keluasan</td>
+                                        <td>Keluasan minimum 3 ekar.</td>
                                     </tr>
                                     <tr>
                                         <td>3</td>
-                                        <td>Keunikan</td>
-                                        <td>Merupakan kawasan yang mempunyai karakter dan keunikan tersendiri
-                                        serta mampu menawarkan keperluan aktiviti rekreasi pasif seperti
-                                        kawasan perkhemahan, perkelahan, denai serta aktiviti pembelajaran
-                                        dan penyelidikan.</td>
-                                    </tr>
+                                        <td>Kawasan Tumpuan Utama</td>
+                                        <td>Tapak merupakan kawasan tumpuan utama (nodes) kawasan kediaman
+                                        / institusi / Bandar Tempatan / pekan kecil / kawasan semulajadi serta
+                                        berpotensi dihubungkan.</td>
+                                        </tr>
                                     <tr>
                                         <td>4</td>
-                                        <td>Risiko Bencana</td>
-                                        <td>Lokasi tapak bukan di kawasan yang mempunyai risiko bencana alam
-                                        seperti banjir, tanah runtuh, hakisan dan mendapan tanah atau apa-apa
-                                        jangkaan risiko yang boleh menjejaskan pelaksanaan projek serta impak
-                                        selepas pelaksanaannya.
+                                        <td>Kaedah Pelaksanaan</td>
+                                        <td>1- Rekabentuk dan Perolehan PBT<br>
+                                        2- Rekabentuk JLN dan Perolehan PBT<br>
+                                        3- Rekabentuk dan Perolehan JLN
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>5</td>
-                                        <td>Pelan / Laporan Rancangan Permajuan</td>
-                                        <td>Tapak cadangan dinyatakan dalam Pelan Induk Landskap serta selari
-                                        dengan pelan-pelan perancangan fizikal yang lain seperti Rancangan
-                                        Struktur (RS), Rancangan Tempatan (RT), Rancangan Khas Kawasan (RKK)
-                                        serta Manual Penilaian Karakter Landskap Malaysia (MKL).<br>
-                                        Tapak cadangan mempunyai pelan ukur yang lengkap, tepat serta terkini.</td>
+                                        <td>Keutamaan</td>
+                                        <td>Kawasan dicadangkan terdapat di dalam Pelan Induk Landskap (PIL),
+                                        rancangan pemajuan fizikal di peringkat negeri, daerah dan tempatan
+                                        atau sebagainya - layak diberikan keutamaan.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td>Nilai Warisan</td>
+                                        <td>Tapak yang terdiri daripada kawasan yang mempunyai nilai landskap
+                                        warisan sejarah termasuk bangunan atau fasad bangunan yang unik
+                                        perlu diberi pertimbangan sewajarnya.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>7</td>
+                                        <td>Landskap
+                                        Semulajadi</td>
+                                        <td>Tapak yang mempunyai karakter landskap yang unik terhasil daripada
+                                        proses semulajadi.</td>
                                     </tr>
                                 </tbody>
-                            </table>
+                            </table> 
                             <br>
-                    </details>
+                        </details>
 
-                    <details style="cursor:pointer">
-                            <summary> <strong>Program Penyelenggaraan dan Pengurusan Risiko Pokok-Pokok di Pihak Berkuasa Tempatan (PBT)</strong> </summary>
-                            <p class="padding10">
-                            Pelaksanaan program penyelenggaraan dan pengurusan risiko pokok-pokok di PBT adalah salah satu program yang melibatkan kerja-kerja pengumpulan data, pemeliharaan dan pemuliharaan bagi pokok-pokok di bawah kawalan PBT. Objektif utama program ini adalah untuk menyediakan inventori pokok, kerja-kerja penilaian risiko pokok dan penilaian ekonomi pokok bagi pokok-pokok yang telah diinventori, melaksanakan kerja-kerja perawatan bagi pokok bermasalah melalui pendekatan arborikultur dan membangunkan Pelan Pengurusan Risiko bagi pokok-pokok di bawah kawalan PBT.
-                            <br><br>Kategori pokok yang terlibat adalah pokok yang mempunyai nilai istimewa yang mempunyai nilai karektor semulajadi dan estetika yang tinggi, pokok yang mempunyai nilai sejarah, tanaman kenamaan, pokok-pokok nadir yang ‘rare’ spesis, pokok-pokok endemic yang terdiri daripada spesies pokok yang hanya didapati tumbuh di tempat-tempat tertentu sahaja, pokok terancam yang spesisnya menghadapi masalah kepupusan dan lain-lain pokok yang mempunyai ukur lilit melebihi 0.8m, di mana ukur lilit (diameter) batang pokok diukur 0.5m dari permukaan aras tanah. 
-                            </p>
-                    </details>
+                        <details style="cursor:pointer">
+                                <summary> <strong>Taman Botani</strong> </summary>
+                                <p class="padding10">
+                                Taman Botani merupakan sebuah institusi yang mengumpul, menyimpan dan menyelenggara koleksi tumbuhan bagi tujuan penyelidikan saintifik, peragaan dan pendidikan. Secara prinsipnya, taman botani dibangunkan sebagai tempat untuk mendapatkan ketenangan, mencari jawapan kepada persolan saintifik alam tumbuhan, pusat kepada kajian perubatan alami dan kajian taksonomi tumbuhan. Taman botani memainkan peranan penting dalam penyebaran spesies tanaman bernilai ekonomi dan perubatan di seluruh dunia serta menyumbang kepada pembangunan ekonomi.
+                                Pendekatan pembangunan dan pengurusan taman botani adalah memulihara dan memelihara pokok-pokok sedia ada di tapak untuk tumbuh secara semulajadi dan melakukan penanaman spesies baru tumbuhan melalui kaedah pemuliharaan ex-situ berdasarkan konsep pembangunan yang bersesuaian dengan karakter, kualiti visual dan sumber semulajadi tapak. </p>
 
-                    <details style="cursor:pointer" open="">
-                            <summary> <strong>Program Penyelenggaraan dan Pembaikan Kecil Landskap</strong> </summary>
-                            <p class="padding10">
-                            Peruntukan untuk kerja-kerja yang melibatkan pembaikan, penggantian dan penyelenggaraan komponen landskap kejur dan lembut yang telah rosak serta tidak selamat untuk digunakan termasuk pembaikan padang untuk keselesaan dan keselamatan pengguna. 
-                            </p>
-                    </details>
+                                <table class="table table-striped table-condensed table-bordered no-margin">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="3"><center>KRITERIA SPESIFIK PENILAIAN DAN PEMILIHAN TAMAN BOTANI</center></th>
+                                            </tr><tr>
+                                            <th>Bil</th>
+                                            <th>Kriteria</th>
+                                            <th>Keterangan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Saiz</td>
+                                            <td>Keluasan melebihi 20 hektar (50 ekar).</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Kemudahsampaian</td>
+                                            <td>Kemudahsampaian yang baik tanpa mengganggu lot-lot bersebelahan.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Keunikan</td>
+                                            <td>Merupakan kawasan yang mempunyai karakter dan keunikan tersendiri
+                                            serta mampu menawarkan keperluan aktiviti rekreasi pasif seperti
+                                            kawasan perkhemahan, perkelahan, denai serta aktiviti pembelajaran
+                                            dan penyelidikan.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>Risiko Bencana</td>
+                                            <td>Lokasi tapak bukan di kawasan yang mempunyai risiko bencana alam
+                                            seperti banjir, tanah runtuh, hakisan dan mendapan tanah atau apa-apa
+                                            jangkaan risiko yang boleh menjejaskan pelaksanaan projek serta impak
+                                            selepas pelaksanaannya.
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>Pelan / Laporan Rancangan Permajuan</td>
+                                            <td>Tapak cadangan dinyatakan dalam Pelan Induk Landskap serta selari
+                                            dengan pelan-pelan perancangan fizikal yang lain seperti Rancangan
+                                            Struktur (RS), Rancangan Tempatan (RT), Rancangan Khas Kawasan (RKK)
+                                            serta Manual Penilaian Karakter Landskap Malaysia (MKL).<br>
+                                            Tapak cadangan mempunyai pelan ukur yang lengkap, tepat serta terkini.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br>
+                        </details>
 
-                    </ul>
-            </div>
+                        <details style="cursor:pointer">
+                                <summary> <strong>Program Penyelenggaraan dan Pengurusan Risiko Pokok-Pokok di Pihak Berkuasa Tempatan (PBT)</strong> </summary>
+                                <p class="padding10">
+                                Pelaksanaan program penyelenggaraan dan pengurusan risiko pokok-pokok di PBT adalah salah satu program yang melibatkan kerja-kerja pengumpulan data, pemeliharaan dan pemuliharaan bagi pokok-pokok di bawah kawalan PBT. Objektif utama program ini adalah untuk menyediakan inventori pokok, kerja-kerja penilaian risiko pokok dan penilaian ekonomi pokok bagi pokok-pokok yang telah diinventori, melaksanakan kerja-kerja perawatan bagi pokok bermasalah melalui pendekatan arborikultur dan membangunkan Pelan Pengurusan Risiko bagi pokok-pokok di bawah kawalan PBT.
+                                <br><br>Kategori pokok yang terlibat adalah pokok yang mempunyai nilai istimewa yang mempunyai nilai karektor semulajadi dan estetika yang tinggi, pokok yang mempunyai nilai sejarah, tanaman kenamaan, pokok-pokok nadir yang ‘rare’ spesis, pokok-pokok endemic yang terdiri daripada spesies pokok yang hanya didapati tumbuh di tempat-tempat tertentu sahaja, pokok terancam yang spesisnya menghadapi masalah kepupusan dan lain-lain pokok yang mempunyai ukur lilit melebihi 0.8m, di mana ukur lilit (diameter) batang pokok diukur 0.5m dari permukaan aras tanah. 
+                                </p>
+                        </details>
+
+                        <details style="cursor:pointer" open="">
+                                <summary> <strong>Program Penyelenggaraan dan Pembaikan Kecil Landskap</strong> </summary>
+                                <p class="padding10">
+                                Peruntukan untuk kerja-kerja yang melibatkan pembaikan, penggantian dan penyelenggaraan komponen landskap kejur dan lembut yang telah rosak serta tidak selamat untuk digunakan termasuk pembaikan padang untuk keselesaan dan keselamatan pengguna. 
+                                </p>
+                        </details>
+
+                        </ul>
+                </div>
             </div>
         </div>
         <div class="modal-footer bg-white">

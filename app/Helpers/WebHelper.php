@@ -190,7 +190,7 @@ if (!function_exists('in_arrayi')) {
                 ->orderBy(DB::raw('(web_menu.ordering is null),  web_menu.ordering'), 'ASC')->get();
 
             $html = '<ul class="navbar-nav">';
-            $html .= '<li class="nav-item active"><a class="nav-link text-uppercase text-nowrap" href="' . route('welcome') . '">Laman Utama  <span class="sr-only">(current)</span></a></li>';
+            // $html .= '<li class="nav-item active"><a class="nav-link text-uppercase text-nowrap" href="' . route('welcome') . '">Laman Utama  <span class="sr-only">(current)</span></a></li>';
             foreach ($parentMenus as $menu) :
 
                 if (count($menu->children)) : //SubMenu
@@ -489,9 +489,9 @@ if (!function_exists('in_arrayi')) {
                     $html .= '<a href="">';
                     $html .= '<div class="card border">';
                     $html .= '<div class="embed-responsive embed-responsive-4by3">';
-                    $html .= '<img src="/storage/img/bg-pattern-leaves.png" class="card-img-top embed-responsive-item" >';
+                    $html .= '<img src="/storage/img/bg-pattern-leaves.png" class="card-img-top embed-responsive-item" style="background-color: rgba(0, 0, 0, 0.48);">';
                     $html .= '</div>';
-                    $html .= '<div class="card-body" style="height:200px">';
+                    $html .= '<div class="card-body" style="max-height:200px">';
                     $html .= '<h5 class="text-capitalize">Artikel belum tersedia</h5>';
                     $html .= '<p class="card-text">Artikel belum tersedia</p>';
                     $html .= '<p class="card-text"><small class="text-muted">Artikel belum tersedia</small></p>';
@@ -504,6 +504,21 @@ if (!function_exists('in_arrayi')) {
                 $html .= '</div>';
 
             return $html;
+        }
+    }
+
+    if (!function_exists('article_exist')) {
+
+        function article_exist()
+        {
+            // Fetch the latest 15 featured articles with their category
+            $articles = Article::with('category')
+                ->where('is_features', 1)
+                ->latest()
+                ->limit(1)
+                ->get();
+
+            return !$articles->isEmpty();
         }
     }
 
@@ -688,11 +703,11 @@ if (!function_exists('in_arrayi')) {
                         // $html .= '<img src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" class="card-img-top embed-responsive-item" alt="' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '">';
                     }
                     // dump($url);
-                    $html .= '<img src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" class="card-img-top embed-responsive-item" alt="' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '">';
+                    $html .= '<img src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" class="card-img-top embed-responsive-item" style="background-color: rgba(0, 0, 0, 0.48);" alt="' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '">';
                     $html .= '</div>';
-                    $html .= '<div class="card-body" style="height:200px">';
-                    $html .= '<h5 class="text-capitalize">' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '</h5>';
-                    $html .= '<p class="card-text">' . htmlspecialchars($keterangan_taman, ENT_QUOTES, 'UTF-8') . '</p>';
+                    $html .= '<div class="card-body" style="max-height:200px">';
+                    $html .= '<h5 class="text-capitalize" style="color: black !important;">' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '</h5>';
+                    // $html .= '<p class="card-text">' . htmlspecialchars($keterangan_taman, ENT_QUOTES, 'UTF-8') . '</p>';
                     $html .= '<p class="card-text"><small class="text-muted">' . htmlspecialchars($nama_pbt, ENT_QUOTES, 'UTF-8') . '</small></p>';
                     $html .= '</div>';
                     $html .= '</div>';

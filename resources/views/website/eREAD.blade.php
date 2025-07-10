@@ -46,7 +46,7 @@
 
     </style>
 
-    <section id="posts" class="bg-white pt-5 mib">
+    <section id="posts" class="bg-white pt-5 mib2">
         <div class="container pt-5">
 
             <div class="row">
@@ -59,7 +59,7 @@
                 </div>
                 <!-- Post Content Column -->
                 <div class="col-12 col-lg-9">
-                    <div class="card">
+                    <div class="card card-olive card-outline">
                         <div class="card-header">
                             <h3 class="card-title font-weight-bold my-1">Direktori Penyelidikan dan Penerbitan Landskap</h3>
                         </div>
@@ -98,9 +98,9 @@
                                                 @foreach($ereads as $eread)
                                                     <tr>
                                                         <td>{{ $index++ }}</td>
-                                                        <td>{{ strtoupper($eread->tajuk )}}</td>
+                                                        <td>{{ ucwords(strtolower($eread->tajuk ))}}</td>
                                                         <td>
-                                                            {{ strtoupper($eread->kategori->name ?? 'Tiada Maklumat') }}
+                                                            {{ ucwords(strtolower($eread->kategori->name ?? 'Tiada Maklumat'))}}
                                                         </td>
                                                         <td class="text-center">
                                                             {!! Html::datetime($eread->tarikh, 'Y') !!}

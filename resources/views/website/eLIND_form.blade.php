@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card card-olive card-outline">
     <div class="card-header">
         <h3 class="card-title font-weight-bold my-1">Direktori Penggiat Industri: {{ $keyword }}</h3>
     </div>
@@ -10,19 +10,19 @@
 
                     {{-- Negeri Dropdown --}}
                     <select id="negeri" name="negeri" class="filter-select">
-                        {{-- <option value="">PAPAR SEMUA NEGERI</option> --}}
+                        {{-- <option value="">Papar Semua Negeri</option> --}}
                     </select>
 
                     {{-- Kelas Kontraktor Dropdown (Only for Kontraktor) --}}
                     @if($keyword == "Kontraktor")
                     <select id="kelas_kontraktor" name="kelas_kontraktor" class="filter-select">
-                        <option value="">PAPAR SEMUA KELAS</option>
+                        <option value="">Papar Semua Kelas</option>
                         @foreach([
                             'A','B','BX','C','D','E','EX','F',
                             'G1','G2','G3','G4','G5','G6','G7','TIADA'
                         ] as $kod)
                             <option value="{{ $kod }}" {{ request('kelas_kontraktor') == $kod ? 'selected' : '' }}>
-                                {{ $kod == 'TIADA' ? 'TIADA MAKLUMAT' : $kod }}
+                                {{ $kod == 'TIADA' ? 'Tiada Maklumat' : $kod }}
                             </option>
                         @endforeach
                     </select>
@@ -40,11 +40,15 @@
 
                     $.getJSON('/get-negeri-salt', function (data) {
                         const negeriDropdown = $('#negeri');
-                        negeriDropdown.append(`<option value="">PAPAR SEMUA NEGERI</option>`);
+                        negeriDropdown.append(`<option value="">Papar Semua Negeri</option>`);
                         data.forEach(item => {
+                            const capitalizedName = item.nama_negeri
+                                .toLowerCase()
+                                .replace(/\b\w/g, char => char.toUpperCase());
+
                             negeriDropdown.append(
                                 `<option value="${item.kod_negeri}" ${selectedNegeri == item.kod_negeri ? 'selected' : ''}>
-                                    ${item.nama_negeri}
+                                    ${capitalizedName}
                                 </option>`
                             );
                         });
@@ -113,15 +117,15 @@
                                 @endif
                                 <tr>
                                     <td>{{ $index++ }}</td>
-                                    <td>{{ strtoupper($user->name) }}</td>
+                                    <td>{{ ucwords(strtolower($user->name)) }}</td>
                                     <td class="text-center w-1">{{ ($user->kelas_kontraktor) ? ($user->kelas_kontraktor) : "-" }}</td>
                                     <td>
                                         {{--@if(isset($user->email)) {{ $user->email }}<br>@endif--}}
-                                        @if(isset($user->address1)) {{ strtoupper($user->address1.',') }}<br>@endif
-                                        @if(isset($user->address2)) {{ strtoupper($user->address2.',') }}<br>@endif
-                                        @if(isset($user->postcode)) {{ strtoupper($user->postcode) }}@endif
-                                        @if(isset($user->locality)) {{ strtoupper($user->locality.', ') }}@endif
-                                        @if(isset($user->state)) {{ strtoupper($user->state.'.') }}<br>@endif
+                                        @if(isset($user->address1)) {{ ucwords(strtolower($user->address1.',')) }}<br>@endif
+                                        @if(isset($user->address2)) {{ ucwords(strtolower($user->address2.',')) }}<br>@endif
+                                        @if(isset($user->postcode)) {{ ucwords(strtolower($user->postcode)) }}@endif
+                                        @if(isset($user->locality)) {{ ucwords(strtolower($user->locality.', ')) }}@endif
+                                        @if(isset($user->state)) {{ ucwords(strtolower($user->state.'.')) }}<br>@endif
                                     </td>
                                     <!-- <td class="text-center">
                                         <?php

@@ -84,14 +84,14 @@
                             @endphp
                             @if($dokumen->nama_dokumen_pelan && $fileSizeInMB < 1000 && $isPdf)
                                 <object data="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}" type="application/pdf" width="100%" height="600px">
-                                    <p>Tiada paparan dokumen.
+                                    <p>Dokumen tidak dapat dipaparkan.
                                         <a href="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}">Muat turun dokumen</a>.
                                     </p>
                                 </object>
 
                                 <p>{{ $fileSizeInMB ? number_format($fileSizeInMB, 2) . " MB" : '' }}</p>
                             @else
-                                Tiada paparan dokumen
+                                Dokumen tidak dapat dipaparkan
                                 <br>&nbsp;
                             @endif
                             <div class="col-md-12">
@@ -183,7 +183,7 @@
                     <!-- <div class="form-group" style="text-align: center;">
                         @if($dokumen->nama_dokumen_pelan)
                             <object data="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}" type="application/pdf" width="100%" height="400">
-                                <p>Tiada paparan dokumen. <a href="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}">Download the PDF</a>.</p>
+                                <p>Dokumen tidak dapat dipaparkan. <a href="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}">Download the PDF</a>.</p>
                             </object>
                             <?php
                                 $fileSizeInMB = '';

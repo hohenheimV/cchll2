@@ -46,7 +46,7 @@
 
     </style>
 
-    <section id="posts" class="bg-white pt-5 mib">
+    <section id="posts" class="bg-white pt-5 mib2">
         <div class="container pt-5">
 
             <div class="row">
@@ -59,7 +59,7 @@
                 </div>
                 <!-- Post Content Column -->
                 <div class="col-12 col-lg-9">
-                    <div class="card">
+                    <div class="card card-olive card-outline">
                         <div class="card-header">
                             <h3 class="card-title font-weight-bold my-1">Direktori Aktiviti Rakan Taman</h3>
                             {{--<div class="d-flex justify-content-end" role="group" aria-label="First group">
@@ -86,7 +86,7 @@
                                     </style>
                                     <div class="table-responsive">
                                         <table id="exampleNP" class="responsive table table-bordered table-hover table-striped table-sm mb-0">
-                                            <thead class="thead-dark">
+                                            <thead style="background-color:rgb(0, 0, 0) !important;color: white;">
                                                 <tr>
                                                     <th class="text-center align-middle w-5">No.</th>
                                                     <th class="text-center align-middle w-20">Nama Rakan Taman</th>
@@ -102,9 +102,9 @@
                                                 @forelse($MIB_laporan as $laporan)
                                                 <tr>
                                                     <td>{{ $index++ }}</td>
-                                                    <td>{{ (strtoupper($laporan->taman)) }}</td>
-                                                    <td>{!! (strtoupper($laporan->name)) !!}</td>
-                                                    <td>{{ (strtoupper($laporan->mib->pbt ?? 'Tiada Maklumat'))  }}</td>
+                                                    <td>{{ ucwords(strtolower($laporan->taman)) }}</td>
+                                                    <td>{!! ucwords(strtolower($laporan->name)) !!}</td>
+                                                    <td>{{ ucwords(strtolower($laporan->mib->pbt ?? 'Tiada Maklumat'))  }}</td>
                                                     <!-- <td class="text-center">{!! $laporan->created_at->format('d-m-Y') !!}</td> -->
                                                     <td class="text-center">
                                                         <?php

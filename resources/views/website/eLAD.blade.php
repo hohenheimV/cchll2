@@ -46,7 +46,7 @@
 
     </style>
 
-    <section id="posts" class="bg-white pt-5 mib">
+    <section id="posts" class="bg-secondary pt-5 mib2">
         <div class="container pt-5">
 
             <div class="row">
@@ -59,7 +59,7 @@
                 </div>
                 <!-- Post Content Column -->
                 <div class="col-12 col-lg-9">
-                    <div class="card">
+                    <div class="card card-olive card-outline">
                         <div class="card-header">
                             <h3 class="card-title font-weight-bold my-1">Direktori Rekabentuk Landskap {{ $keyword }}</h3>
                         </div>
@@ -98,9 +98,9 @@
                                                 @foreach($eLAD as $rekabentuk)
                                                     <tr>
                                                         <td>{{ $index++ }}</td>
-                                                        <td>{{ strtoupper($rekabentuk->tajuk) }}</td>
+                                                        <td>{{ ucwords(strtolower($rekabentuk->tajuk)) }}</td>
                                                         <td>
-                                                            {{ strtoupper($rekabentuk->kategori->name ?? 'Tiada Maklumat') }}
+                                                            {{ ucwords(strtolower($rekabentuk->kategori->name) ?? 'Tiada Maklumat') }}
                                                         </td>
                                                         <td class="text-center">
                                                             {!! Html::datetime($rekabentuk->tarikh, 'Y') !!}

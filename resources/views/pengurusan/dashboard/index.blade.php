@@ -71,7 +71,7 @@
             {!! stats_card('Institusi Pendidikan', app_dashboard_industri('Institusi Pendidikan'), route('pengurusan.eLIND.index', ['type' => 'pendidikan']), 'fas fa-university', '   #e67e22   ') !!}
         </div>
         <div class="row" id="entiti">
-            {!! stats_card('Jumlah Entiti Landskap Unik ', app_dashboard_entiti(), route('pengurusan.entiti-landskap-unik.index'), 'fas fa-dna', '  #616a6b  ') !!}
+            {!! stats_card('Jumlah Entiti Landskap ', app_dashboard_entiti(), route('pengurusan.entiti-landskap-unik.index'), 'fas fa-dna', '  #616a6b  ') !!}
         </div>
     </div> -->
 
@@ -207,7 +207,7 @@
                     {!! stats_card('Penyelidikan dan Penerbitan Landskap', app_dashboard_eread(), (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9])) ? 'javascript:void(0)' : route('pengurusan.eread.index'), 'fas fa-book', ' #141565 ') !!}
                     {!! stats_card('Rekabentuk Landskap', app_dashboard_elad(), (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9])) ? 'javascript:void(0)' : route('pengurusan.elad.index'), 'fas fa-paint-brush', ' #2e764a') !!}
                     {!! stats_card('Pentadbiran Kontrak dan <br>Polisi Landskap', app_dashboard_epact(), (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9])) ? 'javascript:void(0)' : route('pengurusan.epact.index'), 'fas fa-scroll', '  #ba4a4a   ') !!}
-                    {!! stats_card('Jumlah Entiti Landskap Unik <br>&nbsp;', app_dashboard_entiti(), (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9])) ? 'javascript:void(0)' : route('pengurusan.entiti-landskap-unik.index'), 'fas fa-dna', '  #616a6b  ') !!}
+                    {!! stats_card('Jumlah Entiti Landskap <br>&nbsp;', app_dashboard_entiti(), (Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9])) ? 'javascript:void(0)' : route('pengurusan.entiti-landskap-unik.index'), 'fas fa-dna', '  #616a6b  ') !!}
                 </div>
             @endif
 
@@ -310,7 +310,7 @@
                                     @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9, 7, 9])))
                                         {!! stats_card('Jumlah Keluasan Taman (Ekar)', app_dashboard_taman_negeri(), 'javascript:void(0)', 'fas fa-angle-right white-arrow', ' #145a32 ') !!}
                                         @foreach($negeriList as $negeri)
-                                            {!! stats_card('&#11166;&nbsp;Keluasan Taman ' . $negeri->nama_negeri . ' (Ekar)', app_dashboard_taman_negeri($negeri->kod_negeri), route('pengurusan.ePALM.index'), 'fas fa-leaf', '#196f3d') !!}
+                                            {!! stats_card('&#11166;&nbsp;Keluasan di ' . ucwords(strtolower($negeri->nama_negeri)) . ' (Ekar)', app_dashboard_taman_negeri($negeri->kod_negeri), route('pengurusan.ePALM.index'), 'fas fa-leaf', '#196f3d') !!}
                                         @endforeach
                                     @endif
                                 </div>
@@ -328,7 +328,7 @@
                         @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [1, 7, 9])))
                             {!! tab_content_start('eNTITI', 'Modul eNTITI') !!}
                             <div class="row">
-                                {!! stats_card('Jumlah Entiti Landskap Unik ', app_dashboard_entiti(), route('pengurusan.entiti-landskap-unik.index'), 'fas fa-dna', '  #616a6b  ') !!}
+                                {!! stats_card('Jumlah Entiti Landskap ', app_dashboard_entiti(), route('pengurusan.entiti-landskap-unik.index'), 'fas fa-dna', '  #616a6b  ') !!}
                             </div>
                             {!! tab_content_end() !!}
                         @endif

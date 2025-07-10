@@ -40,7 +40,7 @@
     }
 
 </style>
-<section id="posts" class="bg-white pt-5 mib">
+<section id="posts" class="bg-white pt-5 mib2">
     <div class="container pt-5">
         <div class="row">
             <div class="col-12 mt-5 d-lg-none mobile-gone">
@@ -52,7 +52,7 @@
             </div>
             <!-- Post Content Column -->
             <div class="col-12 col-lg-12">
-                <div class="card">
+                <div class="card card-olive card-outline">
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold my-1">Taburan Pembangunan Projek Landskap di Malaysia</h3>
                         <div class="d-flex justify-content-end" role="group" aria-label="First group">

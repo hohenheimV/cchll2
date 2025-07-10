@@ -614,7 +614,7 @@
                                                         <canvas id="pdf-render-{{ $value['id_dokumen_pelan'] }}" width="200" height="250"></canvas>
                                                     </div>
                                                 @else
-                                                    Tiada paparan dokumen
+                                                    Dokumen tidak dapat dipaparkan
                                                     <br>&nbsp;
                                                 @endif
                                                 <p>{{ $fileSizeInMB ? number_format($fileSizeInMB, 2) . " MB" : '' }}</p>

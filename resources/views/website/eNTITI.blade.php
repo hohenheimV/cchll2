@@ -1,5 +1,5 @@
 @extends('layouts.website.secondary')
-@section('title', 'Direktori Entiti Landskap Unik ')
+@section('title', 'Direktori Entiti Landskap ')
 
 @section('content')
 
@@ -46,7 +46,7 @@
 
     </style>
 
-    <section id="posts" class="bg-white pt-5 mib">
+    <section id="posts" class="bg-white pt-5 mib2">
         <div class="container pt-5">
 
             <div class="row">
@@ -59,9 +59,9 @@
                 </div>
                 <!-- Post Content Column -->
                 <div class="col-12 col-lg-9">
-                    <div class="card">
+                    <div class="card card-olive card-outline">
                         <div class="card-header">
-                            <h3 class="card-title font-weight-bold my-1">Direktori Entiti Landskap Unik </h3>
+                            <h3 class="card-title font-weight-bold my-1">Direktori Entiti Landskap </h3>
                         </div>
 
                         <div class="card-body">
@@ -82,7 +82,7 @@
                                         <thead style="background-color:rgb(0, 0, 0) !important;color: white;">
                                             <tr>
                                                 <th class="w-1">Bil.</th>
-                                                <th class="w-15">Nama Entiti Landskap Unik </th>
+                                                <th class="w-15">Nama Entiti Landskap </th>
                                                 <th class="w-3">Lokasi</th>
                                                 <th class="text-center w-5">Pihak Berkuasa Tempatan</th>
                                                 <th class="text-center w-1">Tindakan</th>
@@ -113,9 +113,9 @@
                                                     @endphp
                                                     <tr>
                                                         <td>{{ $index++ }}</td>
-                                                        <td>{{ (strtoupper($entiti->nama_entiti ?? 'Tiada Maklumat')) }}</td>
-                                                        <td>{{ (strtoupper($entiti->lokasi ?? 'Tiada Maklumat')) }}</td>
-                                                        <td>{{ isset($pbt) ? (strtoupper($pbt)) : 'Tiada Maklumat' }}</td>
+                                                        <td>{{ (ucwords(strtolower($entiti->nama_entiti) ?? 'Tiada Maklumat')) }}</td>
+                                                        <td>{{ (ucwords(strtolower($entiti->lokasi) ?? 'Tiada Maklumat')) }}</td>
+                                                        <td>{{ isset($pbt) ? (ucwords(strtolower($pbt))) : 'Tiada Maklumat' }}</td>
                                                         <td class="text-center">
                                                             <div class="btn-group">
                                                                 <a target="_self" class="btn bg-success btn-sm mr-1" href="/entiti-landskap/{{ $entiti->slug }}"><i class="fas fa-search"></i></a>

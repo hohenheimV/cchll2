@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card card-olive card-outline">
     <div class="card-header">
             <h3 class="card-title font-weight-bold my-1">Direktori Taman & Landskap</h3>
     </div>
@@ -9,17 +9,17 @@
                 <div class="filter-container" role="group" aria-label="Filter Dropdowns">
                     {{-- Negeri Dropdown --}}
                     <select id="negeri" name="negeri" onchange="handleNegeriChange()" class="filter-select">
-                        <option value="">PAPAR SEMUA NEGERI</option>
+                        <option value="">Papar Semua Negeri</option>
                     </select>
 
                     {{-- PBT Dropdown --}}
                     @if(isset($namaPbtArray))
                     <form method="GET" action="{{ url('/epalm') }}">
                         <select id="pbt" name="pbt" onchange="handlePbtChange()" class="filter-select">
-                            <option value="">PAPAR SEMUA PBT</option>
+                            <option value="">Papar Semua PBT</option>
                             @foreach ($namaPbtArray as $pbt)
                                 <option value="{{ $pbt }}" {{ request('keyword') === $pbt ? 'selected' : '' }}>
-                                    {{ $pbt }}
+                                    {{ ucwords(strtolower($pbt)) }}
                                 </option>
                             @endforeach
                         </select>
@@ -29,10 +29,10 @@
                     @if(isset($namaKategoriArray))
                     <form method="GET" action="{{ url('/epalm') }}">
                         <select id="kategori" name="kategori" onchange="handleKategoriChange()" class="filter-select">
-                            <option value="">PAPAR SEMUA KATEGORI</option>
+                            <option value="">Papar Semua Kategori</option>
                             @foreach ($namaKategoriArray as $kategori)
                                 <option value="{{ $kategori }}" {{ request('keyword') === $kategori ? 'selected' : '' }}>
-                                    {{ strtoupper($kategori) }}
+                                    {{ ucwords(strtolower($kategori)) }}
                                 </option>
                             @endforeach
                         </select>
@@ -48,9 +48,12 @@
                             type: 'GET',
                             dataType: 'json',
                             success: function(data) {
-                                $('#negeri').empty().append('<option value="-1">PAPAR SEMUA NEGERI</option>');
+                                $('#negeri').empty().append('<option value="-1">Papar Semua Negeri</option>');
                                 $.each(data, function(index, value) {
-                                    $('#negeri').append('<option value="' + value.kod_negeri + '">' + value.nama_negeri + '</option>');
+                                    let capitalized = value.nama_negeri.toLowerCase().replace(/\b\w/g, function(char) {
+                                        return char.toUpperCase();
+                                    });
+                                    $('#negeri').append('<option value="' + value.kod_negeri + '">' + capitalized + '</option>');
                                 });
 
                                 var keyword = "{{ request('keyword') }}";
@@ -140,17 +143,20 @@
                         @if($ePALM_all->isNotEmpty())
                             @foreach($ePALM_all as $taman)
                                 @if($previousNegeri !== null && $previousNegeri !== $taman->negeri)
-                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ strtoupper($taman->negeri)}}</td></tr>
+                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ ucwords(strtolower($taman->negeri))}}</td></tr>
                                 @elseif($previousNegeri === $taman->negeri)
                                 @else
-                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ strtoupper($taman->negeri)}}</td></tr>
+                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ ucwords(strtolower($taman->negeri))}}</td></tr>
                                 @endif
                                 <tr>
-                                    <td>{{ $index++ }}</td>
-                                    <td>{{ strtoupper($taman->nama_taman)}}</td>
-                                    <td>{!! ((!in_array($taman->kategori_taman, $jenis_pembangunan))) ? '<span class="badge bg-warning">'.strtoupper($taman->kategori_taman).'</span>' : strtoupper($taman->kategori_taman) !!}</td>
+                                    <td class="text-center">{{ $index++ }}</td>
+                                    <td>{{ ucwords(strtolower($taman->nama_taman))}}</td>
+                                    {{-- <td>{!! ((!in_array($taman->kategori_taman, $jenis_pembangunan))) ? '<span class="badge bg-warning">'.strtoupper($taman->kategori_taman).'</span>' : strtoupper($taman->kategori_taman) !!}</td> --}}
                                     <td>
-                                        {{ strtoupper($taman->nama_pbt) }}
+                                        {{ ucwords(strtolower($taman->kategori_taman)) }}
+                                    </td>
+                                    <td>
+                                        {{ ucwords(strtolower($taman->nama_pbt)) }}
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group">

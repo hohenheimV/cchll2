@@ -64,6 +64,22 @@
                 display: block;
             }
         }
+
+        .mib2 {
+            background-color:rgb(231, 255, 232) !important;
+            background-image: url("{{asset('storage/img/bg-pattern-leaves.png')}}");
+            /* background-image: url("https://www.transparenttextures.com/patterns/flowers.png"); */
+        }
+
+        a.btn, button {
+            border-radius: 10px !important;
+        }
+
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1300px;
+            }
+        }
     </style>
     <style>
         .filter-select {

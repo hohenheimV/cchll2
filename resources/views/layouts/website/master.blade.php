@@ -103,6 +103,22 @@
             .mobile-gone {
                 display: none;
             }
+            
+        }
+
+        .custom-article-style {
+            border: 1px solid white;
+            background-color: white !important;
+            border-radius: 55px;
+        }
+
+        /* Mobile override */
+        @media (max-width: 768px) {
+            .custom-article-style {
+                border: none !important;
+                background-color: transparent !important;
+                border-radius: 0 !important;
+            }
         }
     </style>
 </head>

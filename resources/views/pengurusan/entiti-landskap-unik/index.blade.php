@@ -1,6 +1,6 @@
 @extends('layouts.pengurusan.app')
 
-@section('title', 'Entiti Landskap Unik ')
+@section('title', 'Entiti Landskap ')
 
 @section('content')
 <div class="container-fluid">
@@ -99,7 +99,7 @@
                                     </td>
                                 </tr>
                                 @empty
-                                {!! Html::forelse_alert(request('keyword'),'Entiti Landskap Unik ') !!}
+                                {!! Html::forelse_alert(request('keyword'),'Entiti Landskap ') !!}
                                 @endforelse
                             </tbody>
                         </table>

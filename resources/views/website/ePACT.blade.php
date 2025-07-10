@@ -46,7 +46,7 @@
 
     </style>
 
-    <section id="posts" class="bg-white pt-5 mib">
+    <section id="posts" class="bg-white pt-5 mib2">
         <div class="container pt-5">
 
             <div class="row">
@@ -59,7 +59,7 @@
                 </div>
                 <!-- Post Content Column -->
                 <div class="col-12 col-lg-9">
-                    <div class="card">
+                    <div class="card card-olive card-outline">
                         <div class="card-header">
                             <h3 class="card-title font-weight-bold my-1">Direktori Pentadbiran Kontrak dan Polisi Landskap</h3>
                         </div>
@@ -98,12 +98,12 @@
                                                 @foreach($epacts as $epact)
                                                     <tr>
                                                         <td>{{ $index++ }}</td>
-                                                        <td>{{ strtoupper($epact->tajuk) }}</td>
+                                                        <td>{{ ucwords(strtolower($epact->tajuk)) }}</td>
                                                         <td>
-                                                            {{ strtoupper($epact->kategori->name ?? 'Tiada Maklumat') }}
+                                                            {{ ucwords(strtolower($epact->kategori->name) ?? 'Tiada Maklumat') }}
                                                         </td>
                                                         <td class="text-center">
-                                                            {{ $epact->tahun ?? strtoupper('Tiada Maklumat') }}
+                                                            {{ $epact->tahun ?? ucwords(strtolower('Tiada Maklumat')) }}
                                                             {{-- {{ $epact->tarikh ?? strtoupper('Tiada Maklumat') }} --}}
                                                         </td>
                                                         <td style="text-align: center;">

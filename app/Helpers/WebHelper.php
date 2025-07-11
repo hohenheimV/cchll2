@@ -196,7 +196,7 @@ if (!function_exists('in_arrayi')) {
                 if (count($menu->children)) : //SubMenu
                     $html .= '<li class="nav-item dropdown">';
                     // $html .= '<a class="nav-link dropdown-toggle text-uppercase text-nowrap" href="#" id="navbarDropdownMenu' . $menu->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $menu->title . '</a>';
-                    $html .= '<a class="nav-link dropdown-toggle text-nowrap" href="#" id="navbarDropdownMenu' . $menu->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $menu->title . '</a>';
+                    $html .= '<a class="nav-link dropdown-toggle text-nowrap" href="#" id="navbarDropdownMenu' . $menu->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><strong>' . $menu->title . '</strong></a>';
                     $html .= '<ul class="dropdown-menu rounded-0 mt-lg-0" aria-labelledby="navbarDropdownMenu' . $menu->id . '">';
                     foreach ($menu->children as $children) :
                         if (count($children->grandchildren)) : //SubMenu
@@ -215,7 +215,7 @@ if (!function_exists('in_arrayi')) {
                     $html .= '</li>';
                 else :
                     // $html .= '<li class="nav-item"><a class="nav-link text-uppercase text-nowrap" blank="' . $menu->target . '" href="' . $menu->link . '">' . $menu->title . '</a></li>';
-                    $html .= '<li class="nav-item"><a class="nav-link text-nowrap" blank="' . $menu->target . '" href="' . $menu->link . '">' . $menu->title . '</a></li>';
+                    $html .= '<li class="nav-item"><a class="nav-link text-nowrap" blank="' . $menu->target . '" href="' . $menu->link . '"><strong>' . $menu->title . '</strong></a></li>';
                 endif;
             endforeach;
             $html .= '<li class="nav-item dropdown d-none d-lg-block">';
@@ -227,7 +227,7 @@ if (!function_exists('in_arrayi')) {
             $html .= '</ul>';
 
             $html .= '</li>';
-            $html .= '<li class="nav-item"><a class="nav-link text-uppercase text-nowrap mobile-login" href="/login">Log Masuk&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-lock"></i></a></li>';
+            $html .= '<li class="nav-item"><a class="nav-link text-nowrap mobile-login" href="/login">Log Masuk&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-lock"></i></a></li>';
             $html .= '</ul>';
             $html .= website_search_form('d-lg-none');
             return $html;

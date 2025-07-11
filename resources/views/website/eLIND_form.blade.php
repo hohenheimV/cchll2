@@ -209,21 +209,23 @@
                                                     });
                                                 </script>
                                             @endif --}}
-                                            @php
-                                                $hasCIDB = $user->no_cidb && $keyword === 'Kontraktor';
-                                            @endphp
+                                            @if($user->no_cidb && $keyword == "Kontraktor")
+                                                @php
+                                                    $hasCIDB = $user->no_cidb && $keyword === 'Kontraktor';
+                                                @endphp
 
-                                            {{-- CIDB Button --}}
-                                            <button 
-                                                type="button"
-                                                class="btn btn-sm {{ $hasCIDB ? 'btn-success' : 'btn-secondary disabled' }}"
-                                                style="{{ $hasCIDB ? '' : 'opacity: 0.6; cursor: not-allowed;' }}"
-                                                title="{{ $hasCIDB ? 'Lihat Profil CIDB' : 'Tiada No. CIDB' }}"
-                                                onclick="{{ $hasCIDB ? "window.open('https://mcp.cidb.gov.my/MCP/ContractorSearch?CidbRegNo={$user->no_cidb}', '_blank')" : 'return false' }}"
-                                                {{ $hasCIDB ? '' : 'disabled' }}
-                                            >
-                                                CIDB
-                                            </button>
+                                                {{-- CIDB Button --}}
+                                                <button 
+                                                    type="button"
+                                                    class="btn btn-sm {{ $hasCIDB ? 'btn-success' : 'btn-secondary disabled' }}"
+                                                    style="{{ $hasCIDB ? '' : 'opacity: 0.6; cursor: not-allowed;' }}"
+                                                    title="{{ $hasCIDB ? 'Lihat Profil CIDB' : 'Tiada No. CIDB' }}"
+                                                    onclick="{{ $hasCIDB ? "window.open('https://mcp.cidb.gov.my/MCP/ContractorSearch?CidbRegNo={$user->no_cidb}', '_blank')" : 'return false' }}"
+                                                    {{ $hasCIDB ? '' : 'disabled' }}
+                                                >
+                                                    CIDB
+                                                </button>
+                                            @endif
                                         </div>
                                     </td>
                                     @php
@@ -507,7 +509,7 @@
                 <label class="col-xs-4 control-label"></label>
                 <div class="col-xs-12">
                     <h4 class="d-flex align-items-center justify-content-between">
-                        Senarai produk
+                        Senarai Produk
                     </h4>
                 </div>
             </div>

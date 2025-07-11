@@ -20,9 +20,12 @@
             /* color: #343a40 !important; */
         }
         .mib2 {
-            background-color:rgb(123, 123, 123) !important;
-            /* background-image: url("{{asset('storage/img/bg-pattern-leaves.png')}}"); */
-            /* background-image: url("https://www.transparenttextures.com/patterns/flowers.png"); */
+            background-color:rgb(250, 250, 250) !important;
+            color:rgb(0, 0, 0) !important;
+        }
+
+        .mib2 a.btn {
+            color: rgb(255, 255, 255) !important;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
@@ -73,7 +76,7 @@
             width: 100%;
             height: 100%;
             z-index: 1;
-            background-color: rgba(0, 0, 0, 0.15);
+            background-color: rgba(0, 0, 0, 0.48);
             pointer-events: none;
         }
 
@@ -101,14 +104,14 @@
         }
 
         .cta-buttons {
-            display: flex;
+            /* display: flex; */
             flex-wrap: wrap;
             justify-content: center;
             gap: 0.5rem;
         }
         .cta-buttons .primary,
         a.btn {
-            border-radius: 15px !important;
+            border-radius: 10px !important;
         }
 
         .cta-buttons a {
@@ -123,7 +126,7 @@
             transition: background-color 0.3s ease;
             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
             user-select: none;
-            flex: 1 1 250px; 
+            flex: 0 0 180px; 
             padding: 0.65rem 1rem;
         }
 
@@ -145,26 +148,31 @@
         /* Responsive Design */
         @media (max-width: 768px) {
             .hero-section {
-                height: auto;
+                height: 100vh;
                 padding: 2rem 1rem;
-                background-image: url('https://elandskap.jln.gov.my/storage/images/shares/sliderBen/elandskap_mobile_bg.jpeg');
+                background-image: url("{{ asset('storage/img/bg-pattern-leaves.png') }}");
                 background-position: center;
                 background-size: cover;
                 color: white;
-                text-shadow: 2px 2px 5px var(--text-shadow-dark);
+                text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
             }
-            .cta-buttons a {
-                display: inline-block;
-                font-size: 0.85rem;
-                font-weight: 600;
-                flex: 1 1 100px; 
-                padding: 0.65rem 1rem;
-            }
-            .cta-buttons .primary {
-                display: flex;
+
+            .cta-buttons {
+                flex-direction: column;
                 align-items: center;
-                justify-content: center;
-                text-align: center;
+            }
+
+            .cta-buttons a {
+                flex: 0 0 auto;
+                width: 180px;
+                margin-bottom: 0.75rem;
+            }
+
+            .cta-buttons a:last-child {
+                margin-bottom: 0;
+            }
+            .hero-content {
+                top: -10vh; /* move content up by 5% of viewport height */
             }
         }
     </style>
@@ -491,244 +499,35 @@
     <div id="particles-js" aria-hidden="true"></div>
     <div class="hero-content">
         <h1>Sistem Pengurusan Maklumat Landskap (eLANDSKAP)</h1>
-        <p>Komprehensif dan mudah dicapai untuk panduan serta rujukan.</p>
+        <h5>Pusat Data Landskap Negara</h5>
+        <br>
         <nav class="cta-buttons" aria-label="Call to action buttons">
-            <a href="/epalm" class="primary" role="button">Direktori Taman dan Landskap</a>
-            <a href="#penggiat_industri" class="primary" role="button">Penggiat Industri Landskap</a>
-            <a href="/epil-pelan" class="primary" role="button">Pelan Induk Landskap</a>
-            <a href="/entiti-landskap" class="primary" role="button">Entiti Landskap Unik</a>
-            <a href="#activities" class="primary" role="button">Permohonan Projek</a>
-            <a href="/emap" class="primary" role="button">eMAP JLN</a>
-            <!-- <a href="/epalm" class="primary">Entiti Landksap Unik</a>
-            <a href="#penggiat_industri" class="primary">Kempen Tanam Pokok</a> -->
+            {{-- <a href="/epalm" class="primary" role="button">Direktori Taman dan Landskap</a> --}}
+            <a href="#penggiat_industri" class="primary" role="button">Penggiat Industri</a>
+            {{-- <a href="/epil-pelan" class="primary" role="button">Direktori Pelan Induk Landskap</a> --}}
+            {{-- <a href="/entiti-landskap" class="primary" role="button">Direktori Entiti Landskap</a> --}}
+            <a href="#elaps" class="primary" role="button">Permohonan Projek</a>
+            {{-- <a href="/emap" class="primary" role="button">eMAP JLN</a> --}}
         </nav>
     </div>
 </section>
-
-
-<!-- <section id="taman" class="mib"><br>
-    <div class="mobile-gone">
-        <br>
-        <br>
-    </div>
-    <div class="container py-5" style="color: white;">
-        <div class="row">
-            <div class="col-lg-6 col-12" data-aos="fade-up">
-                <h1 class="text-center">Taman Pilihan</h1>
-                <p class="text-justify">Taman-taman yang diuruskan oleh PBT dibawah pantauan Jabatan Lanskap Negara. Semak taman-taman menarik berhampiran anda.</p>
-                <p>
-                    Taman-taman dibahagikan beberapa ZON pembangunan.
-                </p>
-                <ul>
-                    <li><i class="icofont-check"></i> Zon 1</li>
-                    <li><i class="icofont-check"></i> Zon 2</li>
-                    <li><i class="icofont-check"></i> Zon 3</li>
-                    <li><i class="icofont-check"></i> Zon 4</li>
-                    <li><i class="icofont-check"></i> Zon 5</li>
-                </ul>
-            </div>
-            <div class="col-lg-6 col-12" data-aos="fade-up">
-                <div class="container-fluid p-0">
-                    <div id="carouselBanner" class="carousel slide" data-ride="carousel">
-                        {!! website_slider('carouselBanner') !!}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="mobile-gone">
-            <br>
-            <br>
-        </div>
-        <div class="row">
-            <div class="col-lg-6 col-12">
-                <article>
-                    <div class="row m-3">
-                        <div class="col-md-3">
-                            <div class="img w-100">
-                                <img src="{{ asset('img/maps-image.png') }}" class="img-fluid img-thumnail" alt="Responsive image">
-                            </div>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="card-body p-0">
-                                <h5>Lorem ipsum</h5>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sit amet sem sed augue pretium gravida.</p>
-                                <a class="btn bg-olive mb-3" href="{{ route('website.peta') }}">Maklumat Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-            </div>
-            <div class="col-lg-6 col-12">
-                <article>
-                    <div class="row m-3">
-                        <div class="col-md-3">
-                            <div class="img w-100">
-                                <img src="{{ asset('img/maps-image.png') }}" class="img-fluid img-thumnail" alt="Responsive image">
-                            </div>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="card-body p-0">
-                                <h5>Lorem ipsum</h5>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sit amet sem sed augue pretium gravida.</p>
-                                <a class="btn bg-olive mb-3" href="{{ route('website.peta') }}">Maklumat Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </div>
-</section> -->
-
-<!-- <section id="hero" class="mib">
-    <div class="mobile-gone">
-        <br>
-        <br>
-    </div>
-    <div class="container py-5">
-        <div class="row">
-            <div class="col-lg-6 col-12">
-                <article>
-                    <div class="row m-3">
-                        <div class="col-md-3">
-                            <div class="img w-100">
-                                <img src="{{ asset('img/maps-image.png') }}" class="img-fluid img-thumnail" alt="Responsive image">
-                            </div>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="card-body p-0">
-                                <h5>Peta Inventori TPBK</h5>
-                                <p> Peta interaktif beserta maklumat mengenai aset lembut dan kejur yang terdapat di sekitar Taman Persekutuan Bukit Kiara.</p>
-                                <a class="btn bg-olive mb-3" href="{{ route('website.peta') }}">Maklumat Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="row m-3">
-                        <div class="col-md-3">
-                            <div class="img w-100">
-                                <img src="{{ asset('img/maps-image.png') }}" class="img-fluid img-thumnail" alt="Responsive image">
-                            </div>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="card-body p-0">
-                                <h5>Peta Inventori TPBK</h5>
-                                <p> Peta interaktif beserta maklumat mengenai aset lembut dan kejur yang terdapat di sekitar Taman Persekutuan Bukit Kiara.</p>
-                                <a class="btn bg-olive mb-3" href="{{ route('website.peta') }}">Maklumat Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="row m-3">
-                        <div class="col-md-3">
-                            <div class="img w-100">
-                                <img src="{{ asset('img/maps-image.png') }}" class="img-fluid img-thumnail" alt="Responsive image">
-                            </div>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="card-body p-0">
-                                <h5>Peta Inventori TPBK</h5>
-                                <p> Peta interaktif beserta maklumat mengenai aset lembut dan kejur yang terdapat di sekitar Taman Persekutuan Bukit Kiara.</p>
-                                <a class="btn bg-olive mb-3" href="{{ route('website.peta') }}">Maklumat Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-            </div>
-            <div class="col-lg-6 col-12">
-                <div id="carouselBanner2" class="carousel slide" data-ride="carousel" style="border: 2px solid blue;">
-                    {!! website_slider('carouselBanner2') !!}
-                </div>
-            </div>
-        </div>
-    </div>
-</section> -->
-
-<!-- <section id="banner">
-    <div class="container-fluid p-0">
-        <div id="carouselBanner" class="carousel slide" data-ride="carousel">
-            {!! website_slider('carouselBanner') !!}
-        </div>
-    </div>
-</section> -->
-
-<!-- <section id="why-chose-area" class="bg-gray mib2">
-    <div class="container py-5">
-        <div class="row">
-            <div class="col-lg-6 col-12">
-                <h1 class="text-center">Taman Persekutuan</h1>
-                <h5 class="text-center">Bukit Kiara</h5>
-                <p class="text-justify">Taman Persekutuan, Taman Awam Berskala Besar Bukit Kiara adalah merupakan muzium hidup yang menjadikan tempat lokasi pokok utama, pokok renek dan tanaman tutup
-                    bumi. Pokok-pokok
-                    hutan berkayu dan tanaman sokongan hutan hujan khatulistiwa akan ditanam mengikut rekabentuk senibina landskap berasaskan hutan semulajadi. </p>
-                <p>
-                    Pembangunan TABB Bukit Kiara dibahagikan beberapa ZON pembangunan.
-                </p>
-                <ul>
-                    <li><i class="icofont-check"></i> Zon Rekreasi Keluarga</li>
-                    <li><i class="icofont-check"></i> Zon Tropika Khatulistiwa Asia</li>
-                    <li><i class="icofont-check"></i> Zon Arboretum Bernilai Tinggi</li>
-                    <li><i class="icofont-check"></i> Zon Riparian / Konservasi Hidrologi</li>
-                    <li><i class="icofont-check"></i> Zon Biodiversiti (Forest Restoration)</li>
-                </ul>
-            </div>
-            <div class="col-lg-6 col-12">
-                <div class="embed-responsive embed-responsive-16by9 align-middle">
-                    <video class="w-100 w-lg-50" controls poster="{{ asset('storage/images/shares/kiara_gambar.png') }}">
-                        <source src="{{ asset('storage/videos/kiara_drone.mp4') }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-            </div>
-        </div>
-    </div>
-</section> -->
-
-<!-- <section id="new" class="mib">
-    <div class="container py-5">
-        <div class="row">
-            <div class="col-lg-6 col-12">
-                <article>
-                    <div class="row m-3">
-                        <div class="col-md-3">
-                            <div class="img w-100">
-                                <img src="{{ asset('img/maps-image.png') }}" class="img-fluid img-thumnail" alt="Responsive image">
-                            </div>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="card-body p-0">
-                                <h5>Peta Inventori TPBK</h5>
-                                <p> Peta interaktif beserta maklumat mengenai aset lembut dan kejur yang terdapat di sekitar Taman Persekutuan Bukit Kiara.</p>
-                                <a class="btn bg-olive mb-3" href="{{ route('website.peta') }}">Maklumat Lanjut</a>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-            </div>
-            <div class="col-lg-6 col-12">
-                <div id="carouselBanner3" class="carousel slide" data-ride="carousel" style="border: 2px solid blue;">
-                    {!! website_slider('carouselBanner3') !!}
-                </div>
-            </div>
-        </div>
-    </div>
-</section> -->
-
 
 <section id="taman" class="bg-white mib2">
     <div class="container py-5">
         <div class="row">
             <div class="col-12 text-center">
-                <h1 style="color: white;">Taman Pilihan</h1>
+                <h1>Taman Pilihan</h1>
             </div>
         </div>
         {!! website_carousel_taman() !!}
     </div>
 </section>
 
-<section id="activities" class="bg-gray mib">
+<section id="elaps" class="bg-gray mib">
+    <div class="mobile-gone">
+        <br>
+        <br>
+    </div>
     <div class="container py-5">
         <div class="row">
             <div class="col-12 text-center">
@@ -756,7 +555,6 @@
     <div class="mobile-gone">
         <br>
         <br>
-        <br>
     </div>
     <div class="container py-5">
         <div class="row">
@@ -769,99 +567,117 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6 col-6">
-                <article>
-                    <div class="row m-3">
-                        <div class="col-md-3">
-                            <div class="img w-100">
+            <div class="col-lg-12 col-6">
+                <article class="custom-article-style">
+                    <div class="row m-3 align-items-stretch">
+                        <div class="col-md-2">
+                            <div class="img w-100 h-100 d-flex align-items-center">
                                 <img src="{{ asset('img/engagement.png') }}" class="img-fluid img-thumnail" alt="Responsive image">
                             </div>
                         </div>
-                        <div class="col-md-9">
-                            <div class="card-body p-0">
+                        <div class="col-md-4 d-flex flex-column justify-content-between">
+                            <div class="card-body p-0 flex-grow-1">
                                 <h5>Kontraktor Landskap</h5>
-                                <p class="mobile-gone"> Realisasikan pelan idea anda dengan kepakaran dan komitmen kontraktor landskap. Setiap perincian dilaksanakan dengan sempurna!</p>
+                                <p class="d-none d-md-block" style="text-align: justify;"> Realisasikan pelan idea anda dengan kepakaran dan komitmen kontraktor landskap. Setiap perincian dilaksanakan dengan sempurna!</p>
                                 <a class="btn bg-olive mb-3" href="penggiat-industri/kontraktor">Maklumat Lanjut</a>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                        </div>
                     </div>
                 </article>
+                <br>
             </div>
-            <div class="col-lg-6 col-6">
-                <article>
-                    <div class="row m-3">
-                        <div class="col-md-3">
-                            <div class="img w-100">
+            <div class="col-lg-12 col-6">
+                <article class="custom-article-style">
+                    <div class="row m-3 align-items-stretch">
+                        <div class="col-md-6">
+                        </div>
+                        <div class="col-md-2 d-block d-md-none">
+                            <div class="img w-100 h-100 d-flex align-items-center">
                                 <img src="{{ asset('img/engagement.png') }}" class="img-fluid" alt="Responsive image">
                             </div>
                         </div>
-                        <div class="col-md-9">
-                            <div class="card-body p-0">
+                        <div class="col-md-4 d-flex flex-column justify-content-between">
+                            <div class="card-body p-0 flex-grow-1">
                                 <h5>Perunding Landskap</h5>
-                                <p class="mobile-gone">Visualkan idea impian anda menjadi rancangan nyata dengan cadangan dan reka bentuk daripada Perunding Landskap, disesuaikan mengikut keperluan dan visi anda!</p>
+                                <p class="d-none d-md-block" style="text-align: justify;">Visualkan idea impian anda menjadi rancangan nyata dengan cadangan dan reka bentuk daripada Perunding Landskap, disesuaikan mengikut keperluan dan visi anda!</p>
                                 <a class="btn bg-olive mb-3" href="penggiat-industri/perunding">Maklumat Lanjut</a>
                             </div>
                         </div>
-                    </div>
-
-                </article>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-6 col-6">
-                <article>
-                    <div class="row m-3">
-                        <div class="col-md-3">
-                            <div class="img w-100">
+                        <div class="col-md-2  d-none d-md-block">
+                            <div class="img w-100 h-100 d-flex align-items-center">
                                 <img src="{{ asset('img/engagement.png') }}" class="img-fluid" alt="Responsive image">
                             </div>
                         </div>
-                        <div class="col-md-9">
-                            <div class="card-body p-0">
+                    </div>
+                </article>
+                <br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-6">
+                <article class="custom-article-style">
+                    <div class="row m-3 align-items-stretch">
+                        <div class="col-md-2">
+                            <div class="img w-100 h-100 d-flex align-items-center">
+                                <img src="{{ asset('img/engagement.png') }}" class="img-fluid" alt="Responsive image">
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex flex-column justify-content-between">
+                            <div class="card-body p-0 flex-grow-1">
                                 <h5>Pembekal Landskap</h5>
-                                <p class="mobile-gone">Dapatkan segala keperluan landskap anda di satu tempat - dari tumbuhan hingga bahan binaan. Semuanya untuk mewujudkan ruang luar impian anda!</p>
+                                <p class="d-none d-md-block" style="text-align: justify;">Dapatkan segala keperluan landskap anda di satu tempat - dari tumbuhan hingga bahan binaan. Semuanya untuk mewujudkan ruang luar impian anda!</p>
                                 <a class="btn bg-olive mb-3" href="penggiat-industri/pembekal">Maklumat Lanjut</a>
                             </div>
+                        </div>
+                        <div class="col-md-6">
                         </div>
                     </div>
 
                 </article>
+                <br>
             </div>
-            <div class="col-lg-6 col-6">
-                <article>
-                    <div class="row m-3">
-                        <div class="col-md-3">
-                            <div class="img w-100">
+            <div class="col-lg-12 col-6">
+                <article class="custom-article-style">
+                    <div class="row m-3 align-items-stretch">
+                        <div class="col-md-6">
+                        </div>
+                        <div class="col-md-2 d-block d-md-none">
+                            <div class="img w-100 h-100 d-flex align-items-center">
                                 <img src="{{ asset('img/engagement.png') }}" class="img-fluid img-thumnail" alt="Responsive image">
                             </div>
                         </div>
-                        <div class="col-md-9">
-                            <div class="card-body p-0">
+                        <div class="col-md-4 d-flex flex-column justify-content-between">
+                            <div class="card-body p-0 flex-grow-1">
                                 <h5>Anda Penggiat Industri?</h5>
-                                <p class="mobile-gone"> Daftar akaun untuk mempromosikan syarikat anda di Sistem eLANDSKAP.<br></p>
+                                <p class="d-none d-md-block"  style="text-align: justify;"> Daftar akaun untuk mempromosikan syarikat anda di Sistem eLANDSKAP.<br></p>
                                 <a class="btn bg-olive mb-3" href="{{ route('register') }}">Maklumat Lanjut</a>
+                            </div>
+                        </div>
+                        <div class="col-md-2 d-none d-md-block">
+                            <div class="img w-100 h-100 d-flex align-items-center">
+                                <img src="{{ asset('img/engagement.png') }}" class="img-fluid img-thumnail" alt="Responsive image">
                             </div>
                         </div>
                     </div>
                 </article>
+                <br>
             </div>
         </div>
     </div>
 </section>
 <!-- /.section#posts -->
 
-
+@if(article_exist())
 <section id="artikel" class="bg-white mib">
     <div class="container py-5">
         {!! website_carousel_article() !!}
     </div>
 </section>
+@endif
 
-
-<style>
-
-</style>
-<section id="faq-area" class="bg-gray mib2">
+{{-- <section id="faq-area" class="bg-gray mib2">
     <div class="container py-5">
 
         <h1 class="text-center">Soalan Lazim</h1>
@@ -875,7 +691,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> --}}
 
 <section id="contact-area" class="bg-gray mib">
     <div class="container py-5">
@@ -886,11 +702,11 @@
             }
         </style>
 
-        <h1 class="text-center">Aduan, Cadangan, Atau Pertanyaan</h1>
-        <p class="text-center">Kami sentiasa berusaha untuk meningkatkan mutu perkhidmatan dari semasa ke semasa. Utarakan sebarang cadangan, aduan, atau pertanyaan anda kepada kami. Kami menghargai setiap maklumbalas yang kami terima.</p>
-        <hr class="mb-4">
+        <h1 class="text-center d-none d-md-block">Aduan, Cadangan, Atau Pertanyaan</h1>
+        <p class="text-center d-none d-md-block">Kami sentiasa berusaha untuk meningkatkan mutu perkhidmatan dari semasa ke semasa. Utarakan sebarang cadangan, aduan, atau pertanyaan anda kepada kami. Kami menghargai setiap maklumbalas yang kami terima.</p>
+        <hr class="mb-4 d-none d-md-block">
         <div class="row">
-            <div class="col-12 col-lg-5 text-center text-lg-left" style="color: #ffffff !important;">
+            <div class="col-12 col-lg-5 text-center text-lg-left d-none d-md-block" style="color: #ffffff !important;">
                 {!! website_contact() !!}
             </div>
             <!--start contact form-->

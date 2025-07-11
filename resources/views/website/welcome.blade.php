@@ -29,6 +29,7 @@
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Open Sans', sans-serif;
@@ -175,6 +176,44 @@
                 top: -10vh; /* move content up by 5% of viewport height */
             }
         }
+
+        @keyframes panImage {
+            0% {
+                transform: scale(1.1) translateX(0);
+            }
+            100% {
+                transform: scale(1.1) translateX(-5%);
+            }
+        }
+        @keyframes zoomOut {
+            0% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes panLeft {
+            0% { transform: scale(1.1) translateX(0); }
+            100% { transform: scale(1.1) translateX(-5%); }
+        }
+
+        @keyframes panRight {
+            0% { transform: scale(1.1) translateX(0); }
+            100% { transform: scale(1.1) translateX(5%); }
+        }
+
+        @keyframes panUp {
+            0% { transform: scale(1.1) translateY(0); }
+            100% { transform: scale(1.1) translateY(-5%); }
+        }
+
+        @keyframes panDown {
+            0% { transform: scale(1.1) translateY(0); }
+            100% { transform: scale(1.1) translateY(5%); }
+        }
+
+        .carousel-item img {
+            animation: zoomOut 7s ease-in-out infinite alternate;
+        }
+        
     </style>
 @endsection
 
@@ -497,9 +536,10 @@
         </div>
     </div>
     <div id="particles-js" aria-hidden="true"></div>
-    <div class="hero-content">
-        <h1>Sistem Pengurusan Maklumat Landskap (eLANDSKAP)</h1>
-        <h5>Pusat Data Landskap Negara</h5>
+    <div class="hero-content fly-in typewriter">
+        <h1 style="font-size: 30px; font-family: Arial, serif !important;">{{ ("Sistem Pengurusan Maklumat Landskap") }}</h1>
+        <h3 style="font-size: 22px; font-family: Arial, serif !important;"><i>(eLANDSKAP)</i></h3>
+        <h6 >Pusat Data Landskap Negara</h6>
         <br>
         <nav class="cta-buttons" aria-label="Call to action buttons">
             {{-- <a href="/epalm" class="primary" role="button">Direktori Taman dan Landskap</a> --}}

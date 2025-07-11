@@ -120,6 +120,67 @@
                 border-radius: 0 !important;
             }
         }
+
+        .owl-nav button.owl-prev,
+        .owl-nav button.owl-next {
+            background-color: #6c757d !important;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 62px !important;
+            }
+            h3 {
+                font-size: 52px !important;
+            }
+        }
+    </style>
+    <style>
+        .typewriter h3 {
+            display: inline-block;               /* Important for width animation */
+            overflow: hidden;                   /* Hide overflow text */
+            border-right: 2px solid #000;       /* Blinking caret */
+            white-space: nowrap;                /* Prevent text wrap */
+            letter-spacing: 1px;
+            animation:
+                typing 1.5s steps(11, end),
+                blink-caret 0.75s step-end infinite;
+            font-size: 22px;
+            font-family: Arial, serif !important;
+            width: 15ch; /* Matches character count exactly */
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 15ch } /* Set to exact width of your text */
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: black }
+        }
+
+        .fly-in h1 {
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: flyIn 1s ease-out forwards;
+            font-size: 30px;
+            font-family: Arial, serif !important;
+        }
+
+        @keyframes flyIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
     </style>
 </head>
 

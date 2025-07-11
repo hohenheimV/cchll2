@@ -215,6 +215,7 @@
         }
         
     </style>
+    
 @endsection
 
 @section('insert_js')
@@ -227,6 +228,18 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <!-- Owl Carousel JS (CDN) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 700,       // animation duration (ms)
+            delay: 0,             // delay before animation starts (ms)
+            easing: 'ease-in-out',// easing function
+            // once: true,           // whether animation happens only once while scrolling down
+            mirror: false         // whether elements animate out while scrolling past them
+        });
+    </script>
 
 
 
@@ -554,12 +567,14 @@
 
 <section id="taman" class="bg-white mib2">
     <div class="container py-5">
-        <div class="row">
+        <div class="row" data-aos="fade-up">
             <div class="col-12 text-center">
                 <h1>Taman Pilihan</h1>
             </div>
         </div>
-        {!! website_carousel_taman() !!}
+        <div data-aos="fade-up">
+            {!! website_carousel_taman() !!}
+        </div>
     </div>
 </section>
 
@@ -570,7 +585,7 @@
     </div>
     <div class="container py-5">
         <div class="row">
-            <div class="col-12 text-center">
+            <div class="col-12 text-center" data-aos="fade-up">
                 <h1>Permohonan Projek</h1>
                 <div class="mobile-gone">
                     <br>
@@ -598,7 +613,7 @@
     </div>
     <div class="container py-5">
         <div class="row">
-            <div class="col-12 text-center">
+            <div class="col-12 text-center" data-aos="fade-up">
                 <h1>Penggiat Industri Landskap</h1>
                 <div class="mobile-gone">
                     <br>
@@ -609,7 +624,7 @@
         <div class="row">
             <div class="col-lg-12 col-6">
                 <article class="custom-article-style">
-                    <div class="row m-3 align-items-stretch">
+                    <div class="row m-3 align-items-stretch" data-aos="fade-up">
                         <div class="col-md-2">
                             <div class="img w-100 h-100 d-flex align-items-center">
                                 <img src="{{ asset('img/engagement.png') }}" class="img-fluid img-thumnail" alt="Responsive image">
@@ -630,7 +645,7 @@
             </div>
             <div class="col-lg-12 col-6">
                 <article class="custom-article-style">
-                    <div class="row m-3 align-items-stretch">
+                    <div class="row m-3 align-items-stretch" data-aos="fade-up">
                         <div class="col-md-6">
                         </div>
                         <div class="col-md-2 d-block d-md-none">
@@ -658,7 +673,7 @@
         <div class="row">
             <div class="col-lg-12 col-6">
                 <article class="custom-article-style">
-                    <div class="row m-3 align-items-stretch">
+                    <div class="row m-3 align-items-stretch" data-aos="fade-up">
                         <div class="col-md-2">
                             <div class="img w-100 h-100 d-flex align-items-center">
                                 <img src="{{ asset('img/engagement.png') }}" class="img-fluid" alt="Responsive image">
@@ -680,7 +695,7 @@
             </div>
             <div class="col-lg-12 col-6">
                 <article class="custom-article-style">
-                    <div class="row m-3 align-items-stretch">
+                    <div class="row m-3 align-items-stretch" data-aos="fade-up">
                         <div class="col-md-6">
                         </div>
                         <div class="col-md-2 d-block d-md-none">
@@ -711,7 +726,7 @@
 
 @if(article_exist())
 <section id="artikel" class="bg-white mib">
-    <div class="container py-5">
+    <div class="container py-5" data-aos="fade-up">
         {!! website_carousel_article() !!}
     </div>
 </section>
@@ -742,15 +757,15 @@
             }
         </style>
 
-        <h1 class="text-center d-none d-md-block">Aduan, Cadangan, Atau Pertanyaan</h1>
-        <p class="text-center d-none d-md-block">Kami sentiasa berusaha untuk meningkatkan mutu perkhidmatan dari semasa ke semasa. Utarakan sebarang cadangan, aduan, atau pertanyaan anda kepada kami. Kami menghargai setiap maklumbalas yang kami terima.</p>
+        <h1 class="text-center d-none d-md-block" data-aos="fade-up">Aduan, Cadangan, Atau Pertanyaan</h1>
+        <p class="text-center d-none d-md-block" data-aos="fade-up">Kami sentiasa berusaha untuk meningkatkan mutu perkhidmatan dari semasa ke semasa. Utarakan sebarang cadangan, aduan, atau pertanyaan anda kepada kami. Kami menghargai setiap maklumbalas yang kami terima.</p>
         <hr class="mb-4 d-none d-md-block">
         <div class="row">
-            <div class="col-12 col-lg-5 text-center text-lg-left d-none d-md-block" style="color: #ffffff !important;">
+            <div class="col-12 col-lg-5 text-center text-lg-left d-none d-md-block" style="color: #ffffff !important;" data-aos="fade-up">
                 {!! website_contact() !!}
             </div>
             <!--start contact form-->
-            <div class="col-12 col-lg-7">
+            <div class="col-12 col-lg-7" data-aos="fade-up">
                 {!! website_contact_form() !!}
             </div>
             <!--end contact form-->

@@ -66,9 +66,9 @@
                 </select>
             </div>
 
-            <div class="form-group col-md-5 {{ isset($pbt) ? 'inertClass' : '' }}">
+            <div class="form-group col-md-5 {{-- {{ isset($pbt) ? 'inertClass' : '' }} --}}">
                 {{ Form::label('pbt', 'Pihak Berkuasa Tempatan') }}
-                <input value="{{ isset($pbt) ? strtoupper($pbt) : '' }}" {{ isset($pbt) ? 'inert' : '' }} type="text" name="pbt" id="pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" required>
+                <input value="{{ isset($pbt) ? strtoupper($pbt) : '' }}" {{-- {{ isset($pbt) ? 'inert' : '' }} --}} type="text" name="pbt" id="pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" required>
                 <datalist id="data_pbt">
                 </datalist>
             </div>
@@ -77,6 +77,18 @@
                 {{ Form::label('lokasi', 'Lokasi') }}
                 {{ Form::text('lokasi', null, ['placeholder' => 'Masukkan Lokasi', 'class' => 'form-control' . Html::isInvalid($errors, 'lokasi')]) }}
                 {!! Html::hasError($errors, 'lokasi') !!}
+            </div>
+            <div class="form-group required col-md-6">
+                <label for="lat" class="col-md-12 control-label">Koordinat X </label>
+                <div class="col-md-12">
+                    {{ Form::text('lat', null, ['class' => 'form-control', 'placeholder' => 'Masukkan koordinat X']) }}
+                </div>
+            </div>
+            <div class="form-group required col-md-6">
+                <label for="lng" class="col-md-12 control-label">Koordinat Y </label>
+                <div class="col-md-12">
+                    {{ Form::text('lng', null, ['class' => 'form-control', 'placeholder' => 'Masukkan koordinat Y']) }}
+                </div>
             </div>
         </div>
         <!-- <div class="form-row">
@@ -108,7 +120,13 @@
         
         <div class="form-group">
             {{ Form::label('keterangan', 'Keterangan') }}
-            {{ Form::textarea('keterangan',null,['placeholder'=>'Sila masukkan keterangan','rows'=>10,'class' => 'form-control '.Html::isInvalid($errors,'keterangan')]) }}
+            {{ Form::textarea('keterangan',null,[
+                'placeholder'=>'Sila masukkan keterangan', 
+                'rows'=>10, 
+                'class' => 'form-control '.Html::isInvalid($errors,'keterangan'),
+                !(Str::contains(request()->path(), ['create', 'edit'])) ? 'readonly' : null
+                ]) 
+            }}
             {!! Html::hasError($errors,'keterangan') !!}
         </div>
         

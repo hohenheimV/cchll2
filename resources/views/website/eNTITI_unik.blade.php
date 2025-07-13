@@ -413,7 +413,7 @@
                                         <div class="col-12 col-md-3"><h5>Koordinat :</h5></div>
                                         <div class="col-12 col-md-3">
                                             <p id="modalCoordinate">
-                                                {{ is_numeric($unik->lng) && is_numeric($unik->lat) ? '( '.$unik->lat.', '.$unik->lng.' )' : 'Tiada Maklumat' }}
+                                                {{ is_numeric($unik->lng) && is_numeric($unik->lat) ? '( '.$unik->lng.', '.$unik->lat.' )' : 'Tiada Maklumat' }}
                                                 @if(is_numeric($unik->lng) && is_numeric($unik->lat))
                                                 &nbsp;<br>
                                                 <a href="{{ 'https://maps.google.com/?q='.$unik->lat.','.$unik->lng }}" target="_blank">

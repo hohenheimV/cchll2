@@ -79,15 +79,15 @@
                 {!! Html::hasError($errors, 'lokasi') !!}
             </div>
             <div class="form-group required col-md-6">
-                <label for="lat" class="col-md-12 control-label">Koordinat X </label>
+                <label for="lng" class="col-md-12 control-label">Koordinat X </label>
                 <div class="col-md-12">
-                    {{ Form::text('lat', null, ['class' => 'form-control', 'placeholder' => 'Masukkan koordinat X']) }}
+                    {{ Form::text('lng', null, ['class' => 'form-control', 'placeholder' => '103.632857']) }}
                 </div>
             </div>
             <div class="form-group required col-md-6">
-                <label for="lng" class="col-md-12 control-label">Koordinat Y </label>
+                <label for="lat" class="col-md-12 control-label">Koordinat Y </label>
                 <div class="col-md-12">
-                    {{ Form::text('lng', null, ['class' => 'form-control', 'placeholder' => 'Masukkan koordinat Y']) }}
+                    {{ Form::text('lat', null, ['class' => 'form-control', 'placeholder' => '1.511946']) }}
                 </div>
             </div>
         </div>

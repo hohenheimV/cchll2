@@ -483,7 +483,7 @@
                                                 <div class="col-12 col-md-3"><h5>Koordinat Taman :</h5></div>
                                                 <div class="col-12 col-md-3">
                                                     <p id="modalCoordinate">
-                                                        {{ is_numeric($ePALM->lng) && is_numeric($ePALM->lat) ? '( '.$ePALM->lat.', '.$ePALM->lng.' )' : 'Tiada Maklumat' }}
+                                                        {{ is_numeric($ePALM->lng) && is_numeric($ePALM->lat) ? '( '.$ePALM->lng.', '.$ePALM->lat.' )' : 'Tiada Maklumat' }}
                                                         @if(is_numeric($ePALM->lng) && is_numeric($ePALM->lat))
                                                         &nbsp;<br>
                                                         <a href="{{ 'https://maps.google.com/?q='.$ePALM->lat.','.$ePALM->lng }}" target="_blank">

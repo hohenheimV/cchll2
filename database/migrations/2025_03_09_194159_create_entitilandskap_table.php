@@ -21,6 +21,8 @@ class CreateEntitilandskapTable extends Migration
             $table->string('pbt')->nullable();
             $table->string('agensi')->nullable();
             $table->string('gambar')->nullable();
+            $table->string('lat', 100)->comment('Lokasi Koordinat Latitude')->nullable();
+            $table->string('lng', 100)->comment('Lokasi Koordinat Longitude')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

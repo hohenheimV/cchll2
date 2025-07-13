@@ -23,7 +23,6 @@
 
                         .inertShow input,
                         .inertShow span:not(.parks span),
-                        .inertShow textarea,
                         .inertShow select {
                             background-color: rgb(241, 241, 241);
                             color: rgb(65, 60, 60);
@@ -37,6 +36,9 @@
                 </div>
                 <div class="card-footer">
                     {!! Form::button('Kembali', ['onclick' => "window.location='".route('pengurusan.entiti-landskap-unik.index')."'", 'class' => 'btn btn-secondary']) !!}
+                    {!! 
+                        Form::button('<i class="fas fa-pencil-alt"></i>', ['onclick'=>"window.location='".route('pengurusan.entiti-landskap-unik.edit',$entitiLandskapUnik)."'", 'class'=>'btn bg-warning', Html::tooltip('Kemaskini Entiti')]); 
+                    !!}
                 </div>
                 {!! Form::close() !!}
             </div>

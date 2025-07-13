@@ -43,6 +43,8 @@ class EntitiLandskapUnik extends Model implements Auditable
         'pbt',
         'agensi',
         'gambar',
+        'lat',
+        'lng',
     ];
 
 }

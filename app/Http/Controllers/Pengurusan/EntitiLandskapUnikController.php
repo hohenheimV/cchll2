@@ -131,7 +131,7 @@ class EntitiLandskapUnikController extends Controller
                 // Rename folder
                 rename($oldFolder, $newFolder);
             }else{
-                unset($requestData['nama_entiti']);
+                // unset($requestData['nama_entiti']);
             }
         }
         // dd($requestData);

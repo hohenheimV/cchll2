@@ -192,9 +192,12 @@
                     <div class="form-group required col-md-8 inertClass">
                         <label for="nama_pbt" class="col-md-12 control-label">Pihak Berkuasa Tempatan</label>
                         <div class="col-md-12">
-                            <input type="text" name="nama_pbt" id="nama_pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" required value="{{ $pbt->pbt_name ?? $ePALM->nama_pbt ?? '' }}">
+                            {{-- <input type="text" name="nama_pbt" id="nama_pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" required value="{{ $pbt->pbt_name ?? $ePALM->nama_pbt ?? '' }}">
                             <datalist id="data_pbt">
-                            </datalist>
+                            </datalist> --}}
+                            <select name="nama_pbt" id="nama_pbt" class="form-control" required>
+                                <option value="">Pilih PBT</option>
+                            </select>
                         </div>
                     </div>
                     <!-- <div class="form-group required col-md-8">
@@ -375,13 +378,31 @@
                                         }
                                     });
 
-                                    $('#data_pbt').empty();
+                                    // $('#data_pbt').empty();
+                                    // $.getJSON('/data/pbt/' + negeriText, function(data) {
+                                    //     $.each(data, function(index, pbt) {
+                                    //         $('#data_pbt').append($('<option>', {
+                                    //             value: pbt.name,
+                                    //             'data-id': pbt.id,
+                                    //         }));
+                                    //     });
+                                    // });
+
+                                    $('#nama_pbt').empty().append('<option value="">Pilih PBT</option>');
+                                    const selectedPBT = "{{ $pbt->pbt_name ?? $ePALM->nama_pbt ?? '' }}";
                                     $.getJSON('/data/pbt/' + negeriText, function(data) {
                                         $.each(data, function(index, pbt) {
-                                            $('#data_pbt').append($('<option>', {
+                                            const option = $('<option>', {
                                                 value: pbt.name,
-                                                'data-id': pbt.id,
-                                            }));
+                                                text: pbt.name,
+                                                'data-id': pbt.id
+                                            });
+
+                                            if (pbt.name === selectedPBT) {
+                                                option.prop('selected', true);
+                                            }
+
+                                            $('#nama_pbt').append(option);
                                         });
                                     });
 

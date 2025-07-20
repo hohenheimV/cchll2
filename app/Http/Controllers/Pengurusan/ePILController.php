@@ -324,9 +324,9 @@ class ePILController extends Controller
         }
     }
 
-    public function destroy(Request $request,ePIL_draf $ePIL)
+    public function destroy(Request $request, $id)
     {
-        $id_pelan = $ePIL->id_pelan;
+        $id_pelan = $id;
 
         $delete_draf = ePIL_draf::where('id_pelan', $id_pelan)->first();
         $delete_main = ePIL::where('id_pelan', $id_pelan)->first();

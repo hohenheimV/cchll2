@@ -574,7 +574,7 @@ class ePALMController extends Controller
                         ]);
                     }
                 }else{
-                    unset($requestData['nama_taman']);
+                    // unset($requestData['nama_taman']);
                 }
             }
             if ($ePALM_draf) {

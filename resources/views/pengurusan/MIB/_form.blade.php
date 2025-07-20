@@ -67,9 +67,12 @@
         </div>
         <div class="form-group mb-3 inertClass">
             {{ Form::label('pbt', 'Pihak Berkuasa Tempatan') }}
-            <input value="{{ isset($MIB->pbt) ? $MIB->pbt : '' }}" type="text" name="pbt" id="pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" >
+            {{-- <input value="{{ isset($MIB->pbt) ? $MIB->pbt : '' }}" type="text" name="pbt" id="pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" >
             <datalist id="data_pbt">
-            </datalist>
+            </datalist> --}}
+            <select name="pbt" id="pbt" class="form-control" required>
+                <option value="">Pilih PBT</option>
+            </select>
         </div>
         <div class="form-group mb-3">
             {{ Form::label('taman', 'Taman Perumahan') }}
@@ -718,7 +721,8 @@
                 });
                 var negeriSelected = "{{ isset($MIB->negeri) ? $MIB->negeri : '' }}"; // Assuming you have $ePALM->negeri
                 if (negeriSelected) {
-                    $('#negeri').val(negeriSelected);
+                    // $('#negeri').val(negeriSelected);
+                    $('#negeri').val(negeriSelected).trigger('change');
                 }
             },
             error: function(xhr, status, error) {
@@ -729,13 +733,31 @@
         $('#negeri').change(function() {
             var negeriId = $(this).val();
             var negeriText = $(this).find('option:selected').text();
-            $('#data_pbt').empty();
+            // $('#data_pbt').empty();
+            // $.getJSON('/data/pbt/' + negeriText, function(data) {
+            //     $.each(data, function(index, pbt) {
+            //         $('#data_pbt').append($('<option>', {
+            //             value: pbt.name,
+            //             'data-id': pbt.id,
+            //         }));
+            //     });
+            // });
+
+            $('#pbt').empty().append('<option value="">Pilih PBT</option>');
+            const selectedPBT = "{{ $pbt->pbt_name ?? isset($MIB->pbt) ? $MIB->pbt : '' }}";
             $.getJSON('/data/pbt/' + negeriText, function(data) {
                 $.each(data, function(index, pbt) {
-                    $('#data_pbt').append($('<option>', {
+                    const option = $('<option>', {
                         value: pbt.name,
-                        'data-id': pbt.id,
-                    }));
+                        text: pbt.name,
+                        'data-id': pbt.id
+                    });
+
+                    if (pbt.name === selectedPBT) {
+                        option.prop('selected', true);
+                    }
+
+                    $('#pbt').append(option);
                 });
             });
         });

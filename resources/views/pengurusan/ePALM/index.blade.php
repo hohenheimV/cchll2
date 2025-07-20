@@ -227,7 +227,7 @@
                                         <tr>
                                             <td>{{ $index++ }}</td>
                                             <td>{{ strtoupper($taman->nama_taman) }}</td>
-                                            <td>{!! ((!in_array($taman->kategori_taman, $jenis_pembangunan))) ? '<span class="badge bg-warning">'.strtoupper($taman->kategori_taman).'</span>' : strtoupper($taman->kategori_taman) !!}</td>
+                                            <td>{!! /* ((!in_array($taman->kategori_taman, $jenis_pembangunan))) ? '<span class="badge bg-warning">'.strtoupper($taman->kategori_taman).'</span>' : */ strtoupper($taman->kategori_taman) !!}</td>
                                             
                                             @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))
                                             <td>

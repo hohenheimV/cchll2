@@ -68,9 +68,12 @@
 
             <div class="form-group col-md-5 {{-- {{ isset($pbt) ? 'inertClass' : '' }} --}}">
                 {{ Form::label('pbt', 'Pihak Berkuasa Tempatan') }}
-                <input value="{{ isset($pbt) ? strtoupper($pbt) : '' }}" {{-- {{ isset($pbt) ? 'inert' : '' }} --}} type="text" name="pbt" id="pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" required>
+                {{-- <input value="{{ isset($pbt) ? strtoupper($pbt) : '' }}" {{ isset($pbt) ? 'inert' : '' }} type="text" name="pbt" id="pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" required>
                 <datalist id="data_pbt">
-                </datalist>
+                </datalist> --}}
+                <select name="pbt" id="pbt" class="form-control" required>
+                    <option value="">Pilih PBT</option>
+                </select>
             </div>
 
             <div class="form-group col-md-4">
@@ -464,20 +467,38 @@
                     $('#negeri').change(function() {
                         // $('#pbt').val('');
                         const negeriId = $('#negeri').val();
-                        const $datalist = $('#data_pbt');
-                        $datalist.empty();
+                        // const $datalist = $('#data_pbt');
+                        // $datalist.empty();
 
+                        // $.getJSON('/data/pbt/' + negeriId, function(data) {
+                        //     $.each(data, function(index, pbt) {
+                        //         $datalist.append($('<option>', {
+                        //             // value: pbt.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+                        //             value: pbt.name,
+                        //             // text: pbt.id,
+                        //             'data-id': pbt.id,
+                        //         }));
+                        //     });
+                        // }).fail(function() {
+                        //     alert('Failed to load data. Sila isi Nama Pihak Berkuasa Tempatan.');
+                        // });
+
+                        $('#pbt').empty().append('<option value="">Pilih PBT</option>');
+                        const selectedPBT = "{{ $pbt->pbt_name ?? isset($pbt) ? strtoupper($pbt) : '' }}";
                         $.getJSON('/data/pbt/' + negeriId, function(data) {
                             $.each(data, function(index, pbt) {
-                                $datalist.append($('<option>', {
-                                    // value: pbt.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+                                const option = $('<option>', {
                                     value: pbt.name,
-                                    // text: pbt.id,
-                                    'data-id': pbt.id,
-                                }));
+                                    text: pbt.name,
+                                    'data-id': pbt.id
+                                });
+
+                                if (pbt.name === selectedPBT) {
+                                    option.prop('selected', true);
+                                }
+
+                                $('#pbt').append(option);
                             });
-                        }).fail(function() {
-                            alert('Failed to load data. Sila isi Nama Pihak Berkuasa Tempatan.');
                         });
                     });
                 });

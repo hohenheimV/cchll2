@@ -398,9 +398,13 @@
                         </div>
                         <div class="form-group mb-3">
                             {{ Form::label('pbt', 'Pihak Berkuasa Tempatan') }}<span style="color: red">*</span>
-                            <input type="text" name="pbt" id="pbt" list="data_pbt" autocomplete="off" placeholder="Taip Atau Pilih" onchange="updatePBTaddress()" class="form-control" required>
+                            {{-- <input type="text" name="pbt" id="pbt" list="data_pbt" autocomplete="off" placeholder="Taip Atau Pilih" onchange="updatePBTaddress()" class="form-control" required>
                             <datalist id="data_pbt">
-                            </datalist>
+                            </datalist> --}}
+                            <select name="pbt" id="pbt" class="form-control" required onchange="updatePBTaddress()">
+                                <option value="">Pilih PBT</option>
+                            </select>
+
                         </div>
                         <!-- <div class="input-group mb-3">
                             <select id="pbt" class="form-control select2" name="pbt" onchange="updatePBTaddress()">
@@ -959,34 +963,49 @@
 
         function updatePBT() {
             $('#pbt').val('');
-            $('#user_address input').val('');
-            const negeriId = $('#negeri').val();
-            const $datalist = $('#data_pbt');  // Target the datalist element
+            // $('#user_address input').val('');
+            // const negeriId = $('#negeri').val();
+            // const $datalist = $('#data_pbt');  // Target the datalist element
             
-            // Clear previous options in the datalist
-            $datalist.empty();
+            // // Clear previous options in the datalist
+            // $datalist.empty();
             
-            // Show the spinner while loading
-            $('#loading-spinner').show(); 
+            // // Show the spinner while loading
+            // $('#loading-spinner').show(); 
 
-            $.getJSON('/data/pbt/' + negeriId, function(data) {
-                // Loop through the data and populate the datalist
+            // $.getJSON('/data/pbt/' + negeriId, function(data) {
+            //     // Loop through the data and populate the datalist
+            //     $.each(data, function(index, pbt) {
+            //         // Create a new option element for the datalist
+            //         $datalist.append($('<option>', {
+            //             // value: pbt.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+            //             // text: pbt.id,
+            //             value: pbt.name,
+            //             'data-id': pbt.id,
+            //         }));
+            //     });
+
+            //     // Hide the spinner once the data is loaded
+            //     $('#loading-spinner').hide(); 
+            // }).fail(function() {
+            //     // Hide the spinner in case of error
+            //     $('#loading-spinner').hide();
+            //     alert('Failed to load data. Sila isi Nama Pihak Berkuasa Tempatan.');
+            // });
+
+            
+            var negeriText = $('#negeri').find('option:selected').text();
+            $('#pbt').empty().append('<option value="">Pilih PBT</option>');
+            $.getJSON('/data/pbt/' + negeriText, function(data) {
                 $.each(data, function(index, pbt) {
-                    // Create a new option element for the datalist
-                    $datalist.append($('<option>', {
-                        // value: pbt.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-                        // text: pbt.id,
+                    const option = $('<option>', {
                         value: pbt.name,
-                        'data-id': pbt.id,
-                    }));
-                });
+                        text: pbt.name,
+                        'data-id': pbt.id
+                    });
 
-                // Hide the spinner once the data is loaded
-                $('#loading-spinner').hide(); 
-            }).fail(function() {
-                // Hide the spinner in case of error
-                $('#loading-spinner').hide();
-                alert('Failed to load data. Sila isi Nama Pihak Berkuasa Tempatan.');
+                    $('#pbt').append(option);
+                });
             });
         }
 
@@ -994,7 +1013,7 @@
             const negeriId = $('#negeri').val();
 
             const selectedValue = $('#pbt').val();
-            var selectedOption = $('#data_pbt option[value="' + selectedValue + '"]');
+            var selectedOption = $('#pbt option[value="' + selectedValue + '"]');
             const pbtId = selectedOption.data('id');
 
             var address1     = $('#address1');

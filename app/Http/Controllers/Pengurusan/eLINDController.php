@@ -808,7 +808,7 @@ class eLINDController extends Controller
                         ]);
                     }
                 }else{
-                    unset($requestData['name']);
+                    // unset($requestData['name']);
                 }
             }
 

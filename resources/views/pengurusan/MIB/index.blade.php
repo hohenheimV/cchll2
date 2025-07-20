@@ -67,7 +67,7 @@
                                             }
                                         }
                                     ?>
-                                    <td>
+                                    <td class="text-center">
                                         {!! $maklumat !!}
                                     </td>
                                     @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))

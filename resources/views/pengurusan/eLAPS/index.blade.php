@@ -205,6 +205,19 @@
                                                             Html::tooltip('Serahan kepada bahagian')
                                                         ]) !!}
                                                     @endif
+
+                                                    
+                                                    @if($permohonan->status_permohonan != 1 && (Auth::user()->hasRole('Pentadbir Sistem')))
+                                                        {!! 
+                                                            Form::button('<i class="fas fa-trash"></i>', [
+                                                                'class' => 'btn btn-danger btn-sm',
+                                                                'data-url' => route('pengurusan.eLAPS.destroy', $permohonan),
+                                                                'data-toggle' => 'modal',
+                                                                'data-target' => '#modalDelete',
+                                                                Html::tooltip('Padam Permohonan')
+                                                            ]) 
+                                                        !!}
+                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>

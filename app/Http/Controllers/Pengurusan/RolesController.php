@@ -20,7 +20,7 @@ class RolesController extends Controller
      */
     function __construct()
     {
-        $this->middleware('role:Pentadbir Sistem');
+        $this->middleware('role:Pentadbir Sistem|Pegawai');
     }
 
     /**

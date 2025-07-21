@@ -65,7 +65,7 @@
                         '2' => 'Bahagian Taman Awam',
                         '3' => 'Bahagian Pembangunan Landskap',
                         '4' => 'Bahagian Khidmat Teknikal',
-                        '5' => 'Bahagian Penyelidikan & Pemulihan'
+                        '5' => 'Bahagian Penyelidikan & Pemuliharaan'
                     ], null, ['class' => 'form-control']) !!}
                     {!! Form::hidden('eLAPS_id', null, ['id' => 'eLAPS_id']) !!}
                 </div>

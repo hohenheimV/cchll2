@@ -94,7 +94,7 @@
                                             {{ $epact->sumber == 2 ? 'Bahagian Taman Awam' : '' }}
                                             {{ $epact->sumber == 3 ? 'Bahagian Pembangunan Landskap' : '' }}
                                             {{ $epact->sumber == 4 ? 'Bahagian Khidmat Teknikal' : '' }}
-                                            {{ $epact->sumber == 5 ? 'Bahagian Penyelidikan & Pemulihan' : '' }}
+                                            {{ $epact->sumber == 5 ? 'Bahagian Penyelidikan & Pemuliharaan' : '' }}
                                             {{ $epact->sumber == 6 ? 'Bahagian Penilaian & Penyelenggaraan' : '' }}
                                             {{ $epact->sumber == 7 ? 'Bahagian Teknologi Maklumat' : '' }}
                                             {{ $epact->sumber == 8 ? 'Bahagian Promosi & Industri Landskap' : '' }}

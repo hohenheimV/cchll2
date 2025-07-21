@@ -13,7 +13,7 @@ class AuditController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['role:Pentadbir Sistem']);
+        $this->middleware(['role:Pentadbir Sistem|Pegawai']);
     }
 
     /**

@@ -93,7 +93,7 @@ class AppServiceProvider extends ServiceProvider
                         '2' => 'Bahagian Taman Awam',
                         '3' => 'Bahagian Pembangunan Landskap',
                         '4' => 'Bahagian Khidmat Teknikal',
-                        '5' => 'Bahagian Penyelidikan & Pemulihan',
+                        '5' => 'Bahagian Penyelidikan & Pemuliharaan',
                         '6' => 'Bahagian Penilaian & Penyelenggaraan',
                         '7' => 'Bahagian Teknologi Maklumat',
                         '8' => 'Bahagian Promosi & Industri Landskap',

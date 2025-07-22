@@ -301,13 +301,13 @@
                                 @endif
                                 @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [2, 7, 9])))
                                     {!! stats_card('&#11166;&nbsp;Jumlah Taman Persekutuan', app_dashboard_taman(5), route('pengurusan.ePALM.index'), 'fas fa-leaf', ' #16a085 ') !!}
-                                    {!! stats_card('&#11166;&nbsp;Jumlah Lain-lain Jenis Taman', app_dashboard_taman(6), route('pengurusan.ePALM.index'), 'fas fa-leaf', ' #1abc9c ') !!}
+                                    {{-- {!! stats_card('&#11166;&nbsp;Jumlah Lain-lain Jenis Taman', app_dashboard_taman(6), route('pengurusan.ePALM.index'), 'fas fa-leaf', ' #1abc9c ') !!} --}}
                                 @endif
                             </div>
                             <div class="accordion" id="ePALMModules">
                                 {!! accordion_start('KeluasanTaman', 'Jumlah Keluasan Taman (Ekar)', false, 'ePALMModules') !!}
                                 <div class="row">
-                                    @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [9, 7, 9])))
+                                    @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [2, 3, 4, 5, 7, 9])))
                                         {!! stats_card('Jumlah Keluasan Taman (Ekar)', app_dashboard_taman_negeri(), 'javascript:void(0)', 'fas fa-angle-right white-arrow', ' #145a32 ') !!}
                                         @foreach($negeriList as $negeri)
                                             {!! stats_card('&#11166;&nbsp;Keluasan di ' . ucwords(strtolower($negeri->nama_negeri)) . ' (Ekar)', app_dashboard_taman_negeri($negeri->kod_negeri), route('pengurusan.ePALM.index'), 'fas fa-leaf', '#196f3d') !!}

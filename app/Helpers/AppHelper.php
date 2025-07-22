@@ -212,10 +212,25 @@ if (!function_exists('app_dashboard_taman_negeri')) {
             }
         }
 
+        // $total = $query->selectRaw("
+        //     SUM(
+        //         CASE
+        //             WHEN keluasan_taman ~ '^[0-9]+(\\.[0-9]+)?$' THEN CAST(keluasan_taman AS NUMERIC)
+        //             ELSE 0
+        //         END
+        //     ) as total_kel
+        // ")->value('total_kel');
         $total = $query->selectRaw("
             SUM(
                 CASE
-                    WHEN keluasan_taman ~ '^[0-9]+(\\.[0-9]+)?$' THEN CAST(keluasan_taman AS NUMERIC)
+                    WHEN keluasan_taman ~ '^[0-9]+(\\.[0-9]+)?$' THEN
+                        CAST(keluasan_taman AS NUMERIC) * 
+                        CASE
+                            WHEN LOWER(keluasan_unit) = 'ekar' THEN 1
+                            WHEN LOWER(keluasan_unit) = 'hektar' THEN 2.47105
+                            WHEN LOWER(keluasan_unit) = 'm2' THEN 0.000247105
+                            ELSE 0
+                        END
                     ELSE 0
                 END
             ) as total_kel

@@ -587,6 +587,12 @@ class ePALMController extends Controller
                 
                 $kategoriToBahagian = [
                     'Taman Awam' => 2,
+                    'Taman Wilayah' => 2,
+                    'Taman Bandaran' => 2,
+                    'Taman Tempatan' => 2,
+                    'Padang Kejiranan' => 2,
+                    'Padang Permainan' => 2,
+                    'Lot Permainan' => 2,
                     'Landskap Perbandaran' => 3,
                     'Persekitaran Kehidupan' => 4,
                     'Taman Botani' => 5,

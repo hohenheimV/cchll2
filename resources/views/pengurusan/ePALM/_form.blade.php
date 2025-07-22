@@ -135,7 +135,7 @@
                     </div>
 
                     <div class="form-group required col-md-4">
-                        <label for="kategori_taman" class="col-md-12 control-label">Jenis Taman {!! in_array('kategori_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                        <label for="kategori_taman" class="col-md-12 control-label">Jenis Taman {!! in_array('kategori_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                         <div class="col-md-12">
                             @php
                                 $options = [
@@ -184,7 +184,7 @@
                 </div> -->
                 <div class="row">
                     <div class="form-group required col-md-4">
-                        <label for="negeri_taman" class="col-md-12 control-label">Negeri {!! in_array('negeri_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                        <label for="negeri_taman" class="col-md-12 control-label">Negeri {!! in_array('negeri_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                         <div class="col-md-12">
                             {{ Form::select('negeri_taman', [], null, ['class' => 'form-control', 'id' => 'negeri']) }}
                         </div>
@@ -208,7 +208,7 @@
                     </div> -->
 
                     <!-- <div class="form-group required col-md-4">
-                        <label for="kategori_taman" class="col-md-12 control-label">Jenis Taman {!! in_array('kategori_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                        <label for="kategori_taman" class="col-md-12 control-label">Jenis Taman {!! in_array('kategori_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                         <div class="col-md-12">
                             @php
                                 $options = [
@@ -246,28 +246,28 @@
                 <div class="inertClass">
                     <div class="row">
                         <!-- <div class="form-group required col-md-4">
-                            <label for="negeri_taman" class="col-md-12 control-label">Negeri {!! in_array('negeri_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                            <label for="negeri_taman" class="col-md-12 control-label">Negeri {!! in_array('negeri_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                             <div class="col-md-12">
                                 {{ Form::select('negeri_taman', [], null, ['class' => 'form-control', 'id' => 'negeri']) }}
                             </div>
                         </div> -->
 
                         <div class="form-group required col-md-4">
-                            <label for="daerah_taman" class="col-md-12 control-label">Daerah {!! in_array('daerah_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                            <label for="daerah_taman" class="col-md-12 control-label">Daerah {!! in_array('daerah_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                             <div class="col-md-12">
                                 {{ Form::select('daerah_taman', [], null, ['class' => 'form-control', 'id' => 'daerah']) }}
                             </div>
                         </div>
 
                         <div class="form-group required col-md-4">
-                            <label for="mukim_taman" class="col-md-12 control-label">Mukim {!! in_array('mukim_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                            <label for="mukim_taman" class="col-md-12 control-label">Mukim {!! in_array('mukim_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                             <div class="col-md-12">
                                 {{ Form::select('mukim_taman', [], null, ['class' => 'form-control', 'id' => 'mukim']) }}
                             </div>
                         </div>
 
                         <div class="form-group required col-md-4">
-                            <label for="parlimen_taman" class="col-md-12 control-label">Parlimen {!! in_array('parlimen_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                            <label for="parlimen_taman" class="col-md-12 control-label">Parlimen {!! in_array('parlimen_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                             <div class="col-md-12">
                                 {{ Form::select('parlimen_taman', [], null, ['class' => 'form-control', 'id' => 'parlimen']) }}
                             </div>
@@ -276,7 +276,7 @@
 
                     <div class="row">
                         <div class="form-group required col-md-4">
-                            <label for="dun_taman" class="col-md-12 control-label">Dun {!! in_array('dun_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                            <label for="dun_taman" class="col-md-12 control-label">Dun {!! in_array('dun_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                             <div class="col-md-12">
                                 {{ Form::select('dun_taman', [], null, ['class' => 'form-control', 'id' => 'dun']) }}
                             </div>
@@ -501,14 +501,14 @@
             </div>
             <div class="row">
                 <div class="form-group required col-md-6">
-                    <label for="alamat1_taman" class="col-md-4 control-label">Alamat 1 {!! in_array('alamat1_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <label for="alamat1_taman" class="col-md-4 control-label">Alamat 1 {!! in_array('alamat1_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                     <div class="col-md-12">
                         <input value="{{isset($ePALM->alamat1_taman) ? $ePALM->alamat1_taman : ''}}" name="alamat1_taman" class="form-control" maxlength="50" type="text" id="alamat1_taman" >
                     </div>
                 </div>
 
                 <div class="form-group required col-md-6">
-                    <label for="alamat2_taman" class="col-md-4 control-label">Alamat 2 {!! in_array('alamat2_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <label for="alamat2_taman" class="col-md-4 control-label">Alamat 2 {!! in_array('alamat2_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                     <div class="col-md-12">
                         <input value="{{isset($ePALM->alamat2_taman) ? $ePALM->alamat2_taman : ''}}" name="alamat2_taman" class="form-control" maxlength="50" type="text" id="alamat2_taman">
                     </div>
@@ -516,14 +516,14 @@
             </div>
             <div class="row">
                 <div class="form-group required col-md-8">
-                    <label for="alamat3_taman" class="col-md-12 control-label">Alamat 3 {!! in_array('alamat3_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <label for="alamat3_taman" class="col-md-12 control-label">Alamat 3 {!! in_array('alamat3_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                     <div class="col-md-12">
                         <input value="{{isset($ePALM->alamat3_taman) ? $ePALM->alamat3_taman : ''}}" name="alamat3_taman" class="form-control" maxlength="50" type="text" id="alamat3_taman">
                     </div>
                 </div>
 
                 <div class="form-group required col-md-4">
-                    <label for="poskod_taman" class="col-md-4 control-label">Poskod {!! in_array('poskod_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <label for="poskod_taman" class="col-md-4 control-label">Poskod {!! in_array('poskod_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                     <div class="col-md-12">
                         <input value="{{isset($ePALM->poskod_taman) ? $ePALM->poskod_taman : ''}}" name="poskod_taman" class="form-control" type="char" id="poskod_taman" >
                     </div>
@@ -532,7 +532,7 @@
             
             <div class="row">
                 <div class="form-group required col-md-4">
-                    <label for="keluasan_taman" class="col-md-12 control-label">Keluasan {!! in_array('keluasan_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <label for="keluasan_taman" class="col-md-12 control-label">Keluasan {!! in_array('keluasan_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                     <div class="col-md-12">
                         {{ Form::text('keluasan_taman', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}
                     </div>
@@ -549,7 +549,7 @@
                 </div>
 
                 <div class="form-group required col-md-4">
-                    <label for="panjang_taman" class="col-md-12 control-label">Panjang {!! in_array('panjang_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <label for="panjang_taman" class="col-md-12 control-label">Panjang {!! in_array('panjang_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                     <div class="col-md-12">
                         {{ Form::text('panjang_taman', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}
                     </div>
@@ -564,14 +564,14 @@
 
             <div class="row">
                 <div class="form-group required col-md-5">
-                    <label for="hakmilik_tanah_taman" class="col-md-12 control-label">Hakmilik Tanah {!! in_array('hakmilik_tanah_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <label for="hakmilik_tanah_taman" class="col-md-12 control-label">Hakmilik Tanah {!! in_array('hakmilik_tanah_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                     <div class="col-md-12">
                         {{ Form::text('hakmilik_tanah_taman', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}
                     </div>
                 </div>
 
                 <div class="form-group required col-md-7">
-                    <label for="status_tanah_taman" class="col-md-12 control-label">Status Tanah {!! in_array('status_tanah_taman', $arrChanges) || in_array('tarikhWarta_tanah_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <label for="status_tanah_taman" class="col-md-12 control-label">Status Tanah {!! in_array('status_tanah_taman', $arrChanges) || in_array('tarikhWarta_tanah_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                     <div class="row">
                         <div class="col-md-6">
                             {{ Form::text('status_tanah_taman', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}
@@ -597,25 +597,25 @@
 
             <div class="row">
                 <div class="form-group required col-md-6">
-                    <label for="lng" class="col-md-12 control-label">Koordinat X {!! in_array('lng', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <label for="lng" class="col-md-12 control-label">Koordinat X {!! in_array('lng', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                     <div class="col-md-12">
                         {{ Form::text('lng', null, ['class' => 'form-control', 'placeholder' => '103.632857']) }}
                     </div>
                 </div>
                 <div class="form-group required col-md-6">
-                    <label for="lat" class="col-md-12 control-label">Koordinat Y {!! in_array('lat', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <label for="lat" class="col-md-12 control-label">Koordinat Y {!! in_array('lat', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                     <div class="col-md-12">
                         {{ Form::text('lat', null, ['class' => 'form-control', 'placeholder' => '1.511946']) }}
                     </div>
                 </div>
                 <div class="form-group required col-md-6">
-                    <label for="waktuMula_taman" class="col-md-12 control-label">Waktu Mula Operasi {!! in_array('waktuMula_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <label for="waktuMula_taman" class="col-md-12 control-label">Waktu Mula Operasi {!! in_array('waktuMula_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                     <div class="col-md-12">
                         {{ Form::time('waktuMula_taman', null, ['class' => 'form-control', 'placeholder' => 'Masukkan waktu mula operasi']) }}
                     </div>
                 </div>
                 <div class="form-group required col-md-6">
-                    <label for="waktuTamat_taman" class="col-md-12 control-label">Waktu Tamat Operasi {!! in_array('waktuTamat_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <label for="waktuTamat_taman" class="col-md-12 control-label">Waktu Tamat Operasi {!! in_array('waktuTamat_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                     <div class="col-md-12">
                         {{ Form::time('waktuTamat_taman', null, ['class' => 'form-control', 'placeholder' => 'Masukkan waktu tamat operasi']) }}
                     </div>
@@ -748,7 +748,7 @@
 
                 <div class="form-group required col-md-12">
                     <label for="park_facilities" class="col-md-12 control-label">
-                        Kemudahan {!! in_array('fasiliti', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}
+                        Kemudahan {!! in_array('fasiliti', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}
                     </label>
 
                     <div class="col-md-12">
@@ -864,7 +864,7 @@
                 @foreach ($fixedFields as $index => $field)
                     @php $value = $mediaData[$field] ?? ''; @endphp
                     <div class="form-group required {{ $field == 'Emel' || $field == 'Web' ? 'col-md-6' : 'col-md-3' }}">
-                        <label for="mediaSosial" class="col-md-12 control-label">{{ $field == 'Web' ? 'Laman Web' : $field }} {!! in_array('mediaSosial_taman.'.$field, $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                        <label for="mediaSosial" class="col-md-12 control-label">{{ $field == 'Web' ? 'Laman Web' : $field }} {!! in_array('mediaSosial_taman.'.$field, $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
                             <input value="{{ $value }}" name="mediaSosial_taman[{{ $field }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_taman[]">
                         </div>
@@ -874,7 +874,7 @@
                     @foreach ($mediaData as $key => $value)
                         @if (!in_array($key, $fixedFields))
                             <div class="form-group required col-md-3">
-                                <label for="mediaSosial" class="col-md-12 control-label">{{ $key }} {!! in_array('mediaSosial_taman.'.$key, $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                                <label for="mediaSosial" class="col-md-12 control-label">{{ $key }} {!! in_array('mediaSosial_taman.'.$key, $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                                 <div class="col-md-12">
                                     <input value="{{ $value }}" name="mediaSosial_taman[{{ $key }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_taman[]">
                                 </div>
@@ -916,7 +916,7 @@
 
 
             <div class="form-group required inertShow">
-                <label for="keterangan_taman" class="col-md-12 control-label">Keterangan Taman {!! in_array('keterangan_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                <label for="keterangan_taman" class="col-md-12 control-label">Keterangan Taman {!! in_array('keterangan_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                 <div class="col-md-12">
                     <textarea name="keterangan_taman" class="form-control" maxlength="250" rows="5" id="keterangan_taman" >{{ isset($ePALM->keterangan_taman) ? $ePALM->keterangan_taman : '' }}</textarea>
                 </div>
@@ -924,7 +924,7 @@
             
             <div class="row">
                 <div class="form-group required col-md-8">
-                    <label for="fail_konsep" class="col-md-12 control-label">Konsep Rekabentuk {!! in_array('fail_konsep', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <label for="fail_konsep" class="col-md-12 control-label">Konsep Rekabentuk {!! in_array('fail_konsep', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                     <div class="col-md-12 showButton">
                         {{ Form::file('fail_konsep', ['class' => 'form-control d-inline-block ms-2', 'multiple' => false, 'accept' => '.pdf,.docx,.pptx']) }}
                         
@@ -969,7 +969,7 @@
                 </div>
                 <div class="form-group required col-md-4 ">
                     <div class="">
-                        <label for="tarikh_siapBina_taman" class="col-md-12 control-label">Tarikh Siap Bina {!! in_array('tarikh_siapBina_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                        <label for="tarikh_siapBina_taman" class="col-md-12 control-label">Tarikh Siap Bina {!! in_array('tarikh_siapBina_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                         <div class="col-md-12">
                             {{ Form::date('tarikh_siapBina_taman', isset($ePALM->tarikh_siapBina_taman) ? $ePALM->tarikh_siapBina_taman : '', ['class' => 'form-control d-inline-block ms-2', 'id' => 'tarikh_siapBina_taman']) }}
                         </div>
@@ -988,7 +988,7 @@
                 </div>
             </div>
             <div class="form-group required inertShow">
-                <label for="keterangan_taman" class="col-md-12 control-label">Keterangan Taman {!! in_array('keterangan_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                <label for="keterangan_taman" class="col-md-12 control-label">Keterangan Taman {!! in_array('keterangan_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                 <div class="col-md-12">
                     <textarea name="keterangan_taman" class="form-control" maxlength="250" rows="5" id="keterangan_taman" >{{ isset($ePALM->keterangan_taman) ? $ePALM->keterangan_taman : '' }}</textarea>
                 </div>
@@ -997,7 +997,7 @@
             
             <div class="row">
                 <div class="form-group required col-md-8">
-                    <label for="fail_konsep" class="col-md-12 control-label">Konsep Rekabentuk {!! in_array('fail_konsep', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                    <label for="fail_konsep" class="col-md-12 control-label">Konsep Rekabentuk {!! in_array('fail_konsep', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                     <div class="col-md-12 showButton">
                         {{ Form::file('fail_konsep', ['class' => 'form-control d-inline-block ms-2', 'multiple' => false, 'accept' => '.pdf,.docx,.pptx']) }}
                         
@@ -1040,7 +1040,7 @@
                 </div>
                 <div class="form-group required col-md-4 ">
                     <div class="">
-                        <label for="tarikh_siapBina_taman" class="col-md-12 control-label">Tarikh Siap Bina {!! in_array('tarikh_siapBina_taman', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                        <label for="tarikh_siapBina_taman" class="col-md-12 control-label">Tarikh Siap Bina {!! in_array('tarikh_siapBina_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                         <div class="col-md-12">
                             {{ Form::date('tarikh_siapBina_taman', isset($ePALM->tarikh_siapBina_taman) ? $ePALM->tarikh_siapBina_taman : '', ['class' => 'form-control d-inline-block ms-2', 'id' => 'tarikh_siapBina_taman']) }}
                         </div>
@@ -1061,7 +1061,7 @@
                 <label for="gambar_taman" class="col-md-12 control-label">
                     Gambar Taman 
                     {!! collect($arrChanges)->contains(fn($i) => Str::startsWith($i, 'gambar_taman')) 
-                        ? '<span class="text-danger newC">!</span>' 
+                        ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' 
                         : '' !!}
                 </label>
                     @php

@@ -62,14 +62,14 @@
 
             <div class="row">
                 <div class="form-group required col-md-6">
-                    <label for="address1" class="col-md-4 control-label">Alamat 1 {!! in_array('address1', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                    <label for="address1" class="col-md-4 control-label">Alamat 1 {!! in_array('address1', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                     <div class="col-md-12">
                         <input value="{{isset($eLIND->address1) ? $eLIND->address1 : ''}}" name="address1" class="form-control" maxlength="50" type="text" id="address1" >
                     </div>
                 </div>
 
                 <div class="form-group required col-md-6">
-                    <label for="address2" class="col-md-4 control-label">Alamat 2 {!! in_array('address2', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                    <label for="address2" class="col-md-4 control-label">Alamat 2 {!! in_array('address2', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                     <div class="col-md-12">
                         <input value="{{isset($eLIND->address2) ? $eLIND->address2 : ''}}" name="address2" class="form-control" maxlength="50" type="text" id="address2">
                     </div>
@@ -77,21 +77,21 @@
             </div>
             <div class="row">
                 <div class="form-group required col-md-2">
-                    <label for="postcode" class="col-md-12 control-label">Poskod {!! in_array('postcode', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                    <label for="postcode" class="col-md-12 control-label">Poskod {!! in_array('postcode', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                     <div class="col-md-12">
                         <input value="{{isset($eLIND->postcode) ? $eLIND->postcode : ''}}" name="postcode" class="form-control" type="char" id="postcode" >
                     </div>
                 </div>
 
                 <div class="form-group required col-md-4">
-                    <label for="locality" class="col-md-12 control-label">Bandar {!! in_array('locality', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                    <label for="locality" class="col-md-12 control-label">Bandar {!! in_array('locality', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                     <div class="col-md-12">
                         <input value="{{isset($eLIND->locality) ? $eLIND->locality : ''}}" name="locality" class="form-control" maxlength="50" type="text" id="locality">
                     </div>
                 </div>
 
                 <div class="form-group required col-md-6">
-                    <label for="state" class="col-md-12 control-label">Negeri {!! in_array('state', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                    <label for="state" class="col-md-12 control-label">Negeri {!! in_array('state', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                     <div class="col-md-12">
                         <!-- <input value="{{isset($eLIND->state) ? $eLIND->state : ''}}" name="state" class="form-control" type="char" id="state" > -->
                         {{ Form::select('state', [], null, ['class' => 'form-control', 'id' => 'negeri']) }}
@@ -348,7 +348,7 @@
 
             {{-- @if($capitalizedSegment == 'Kontraktor' || $capitalizedSegment == 'Perunding' || $capitalizedSegment == 'Pembekal')
             <div class="form-group required ">
-                <label for="profil_syarikat" class="col-md-12 control-label">Profil Syarikat {!! in_array('profil_syarikat', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                <label for="profil_syarikat" class="col-md-12 control-label">Profil Syarikat {!! in_array('profil_syarikat', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                 <div class="col-md-12 showButton">
                     {{ Form::file('profil_syarikat', ['class' => 'form-control d-inline-block ms-2', 'multiple' => false, 'accept' => '.pdf,.docx,.pptx']) }}
                     
@@ -406,7 +406,7 @@
             @if($capitalizedSegment == 'Kontraktor' || $capitalizedSegment == 'Perunding' || $capitalizedSegment == 'Pembekal')
                 <div class="row">
                     <div class="form-group required col-md-4 inertClass">
-                        <label for="no_ssm" class="col-md-12 control-label">No. Pendaftaran SSM {!! in_array('no_ssm', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                        <label for="no_ssm" class="col-md-12 control-label">No. Pendaftaran SSM {!! in_array('no_ssm', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
                             <input required value="{{isset($eLIND->no_ssm) ? $eLIND->no_ssm : ''}}" name="no_ssm" class="form-control" maxlength="50" type="text" id="no_ssm" >
                         </div>
@@ -442,13 +442,13 @@
                     </div>
 
                     <div class="form-group required col-md-4">
-                        <label for="no_mof" class="col-md-12 control-label">No. Pendaftaran MoF {!! in_array('no_mof', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                        <label for="no_mof" class="col-md-12 control-label">No. Pendaftaran MoF {!! in_array('no_mof', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
                             <input value="{{isset($eLIND->no_mof) ? $eLIND->no_mof : ''}}" name="no_mof" class="form-control" maxlength="50" type="text" id="no_mof" >
                         </div>
                     </div>
                     <div class="form-group required col-md-4">
-                        <label for="bilPekerja" class="col-md-12 control-label">Bilangan Pekerja {!! in_array('bilPekerja', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                        <label for="bilPekerja" class="col-md-12 control-label">Bilangan Pekerja {!! in_array('bilPekerja', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
                             <input value="{{isset($eLIND->bilPekerja) ? $eLIND->bilPekerja : ''}}" name="bilPekerja" class="form-control" type="number" id="bilPekerja" min="0">
                         </div>
@@ -457,7 +457,7 @@
                 @if($capitalizedSegment == 'Kontraktor')
                     <div class="row">
                         <div class="form-group required col-md-6">
-                            <label for="kelas_kontraktor" class="col-md-12 control-label">Kelas Kontraktor {!! in_array('kelas_kontraktor', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                            <label for="kelas_kontraktor" class="col-md-12 control-label">Kelas Kontraktor {!! in_array('kelas_kontraktor', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 {!! Form::select('kelas_kontraktor', [
                                     1 => 'A',
@@ -495,7 +495,7 @@
                         </div>
 
                         <div class="form-group required col-md-6">
-                            <label for="no_cidb" class="col-md-12 control-label">No. Pendaftaran PKK/ CIDB {!! in_array('no_cidb', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                            <label for="no_cidb" class="col-md-12 control-label">No. Pendaftaran PKK/ CIDB {!! in_array('no_cidb', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 <input value="{{isset($eLIND->no_cidb) ? $eLIND->no_cidb : ''}}" name="no_cidb" class="form-control" maxlength="50" type="text" id="no_cidb" >
                             </div>
@@ -504,7 +504,7 @@
 
                     <div class="row">
                         <div class="form-group required col-md-4">
-                            <label for="taraf_bumiputera" class="col-md-12 control-label">Taraf Bumiputera {!! in_array('taraf_bumiputera', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                            <label for="taraf_bumiputera" class="col-md-12 control-label">Taraf Bumiputera {!! in_array('taraf_bumiputera', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 {!! Form::select('taraf_bumiputera', [
                                     1 => 'BUMIPUTERA',
@@ -514,7 +514,7 @@
                             </div>
                         </div>
                         <div class="form-group required col-md-4">
-                            <label for="status_eperunding" class="col-md-12 control-label">Status e-Perunding {!! in_array('status_eperunding', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                            <label for="status_eperunding" class="col-md-12 control-label">Status e-Perunding {!! in_array('status_eperunding', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 {!! Form::select('status_eperunding', [
                                     1 => 'BERDAFTAR',
@@ -524,7 +524,7 @@
                             </div>
                         </div>
                         <div class="form-group required col-md-4">
-                            <label for="bidang_kepakaran" class="col-md-12 control-label">Bidang Kepakaran {!! in_array('bidang_kepakaran', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                            <label for="bidang_kepakaran" class="col-md-12 control-label">Bidang Kepakaran {!! in_array('bidang_kepakaran', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 {!! Form::select('bidang_kepakaran', [
                                     1 => 'LANDSKAP ARKITEK',
@@ -539,20 +539,20 @@
                 @elseif($capitalizedSegment == 'Perunding')
                     <div class="row">
                         <div class="form-group required col-md-4">
-                            <label for="no_ilam" class="col-md-12 control-label">No. Pendaftaran ILAM {!! in_array('no_ilam', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                            <label for="no_ilam" class="col-md-12 control-label">No. Pendaftaran ILAM {!! in_array('no_ilam', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 <input value="{{isset($eLIND->no_ilam) ? $eLIND->no_ilam : ''}}" name="no_ilam" class="form-control" maxlength="50" type="text" id="no_ilam" >
                             </div>
                         </div>
 
                         <div class="form-group required col-md-4">
-                            <label for="tarikh_luput_ilam" class="col-md-12 control-label">Tarikh Luput Keahlian ILAM {!! in_array('tarikh_luput_ilam', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                            <label for="tarikh_luput_ilam" class="col-md-12 control-label">Tarikh Luput Keahlian ILAM {!! in_array('tarikh_luput_ilam', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 <input value="{{isset($eLIND->tarikh_luput_ilam) ? $eLIND->tarikh_luput_ilam : ''}}" name="tarikh_luput_ilam" class="form-control" maxlength="50" type="date" id="tarikh_luput_ilam" >
                             </div>
                         </div>
                         <div class="form-group required col-md-4">
-                            <label for="status_eperunding" class="col-md-12 control-label">Status e-Perunding {!! in_array('status_eperunding', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                            <label for="status_eperunding" class="col-md-12 control-label">Status e-Perunding {!! in_array('status_eperunding', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 {!! Form::select('status_eperunding', [
                                     1 => 'BERDAFTAR',
@@ -565,7 +565,7 @@
                 @elseif($capitalizedSegment == 'Pembekal')
                     <div class="row">
                         <div class="form-group required col-md-6">
-                            <label for="bidang_pembekal" class="col-md-12 control-label">Bidang {!! in_array('bidang_pembekal', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                            <label for="bidang_pembekal" class="col-md-12 control-label">Bidang {!! in_array('bidang_pembekal', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 {!! Form::select('bidang_pembekal', [
                                     1 => 'Nurseri & Landskap Kejur',
@@ -576,14 +576,14 @@
                             </div>
                         </div>
                         <div class="form-group required col-md-6" style="display: none;" id="lainLainDiv">
-                            <label for="bidang_lain_pembekal" class="col-md-12 control-label">Sila Nyatakan (Contoh: Pasu, Baja, Bunga dll.) {!! in_array('bidang_lain_pembekal', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                            <label for="bidang_lain_pembekal" class="col-md-12 control-label">Sila Nyatakan (Contoh: Pasu, Baja, Bunga dll.) {!! in_array('bidang_lain_pembekal', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 <input value="{{isset($eLIND->bidang_lain_pembekal) ? $eLIND->bidang_lain_pembekal : ''}}" name="bidang_lain_pembekal" class="form-control" maxlength="50" type="text" id="bidang_lain_pembekal">
                             </div>
                         </div>
 
                         <div class="form-group required col-md-6" style="display: none;" id="nurseriDiv">
-                            <label for="saiz_nurseri" class="col-md-12 control-label">Saiz Nurseri {!! in_array('saiz_nurseri', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                            <label for="saiz_nurseri" class="col-md-12 control-label">Saiz Nurseri {!! in_array('saiz_nurseri', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 {!! Form::select('saiz_nurseri', [
                                     1 => '< 2 EKAR',
@@ -623,14 +623,14 @@
             @elseif($lastSegment == 'antarabangsa')
                 <div class="row">
                     <div class="form-group required col-md-6">
-                        <label for="nama_presiden" class="col-md-12 control-label">Presiden/Pengurus  {{ $capitalizedSegment }} {!! in_array('nama_presiden', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                        <label for="nama_presiden" class="col-md-12 control-label">Presiden/Pengurus  {{ $capitalizedSegment }} {!! in_array('nama_presiden', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
                             <input value="{{isset($eLIND->nama_presiden) ? $eLIND->nama_presiden : ''}}" name="nama_presiden" class="form-control" maxlength="50" type="text" id="nama_presiden" >
                         </div>
                     </div>
 
                     <div class="form-group required col-md-6">
-                        <label for="wakil_negara" class="col-md-12 control-label">Wakil Negara/Asia {!! in_array('wakil_negara', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                        <label for="wakil_negara" class="col-md-12 control-label">Wakil Negara/Asia {!! in_array('wakil_negara', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
                             <input value="{{isset($eLIND->wakil_negara) ? $eLIND->wakil_negara : ''}}" name="wakil_negara" class="form-control" maxlength="50" type="text" id="wakil_negara" >
                         </div>
@@ -639,7 +639,7 @@
             @elseif($lastSegment == 'ngo')
                 <div class="row">
                     <div class="form-group required col-md-6">
-                        <label for="kategori_ngo" class="col-md-12 control-label">Kategori  {{ $capitalizedSegment }} {!! in_array('kategori_ngo', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                        <label for="kategori_ngo" class="col-md-12 control-label">Kategori  {{ $capitalizedSegment }} {!! in_array('kategori_ngo', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
                             {!! Form::select('kategori_ngo', [
                                 1 => 'Badan Bukan Kerajaan (NGO)',
@@ -649,7 +649,7 @@
                         </div>
                     </div>
                     <div class="form-group required col-md-6">
-                        <label for="nama_presiden" class="col-md-12 control-label">Presiden/Pengurus  {{ $capitalizedSegment }} {!! in_array('nama_presiden', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                        <label for="nama_presiden" class="col-md-12 control-label">Presiden/Pengurus  {{ $capitalizedSegment }} {!! in_array('nama_presiden', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
                             <input value="{{isset($eLIND->nama_presiden) ? $eLIND->nama_presiden : ''}}" name="nama_presiden" class="form-control" maxlength="50" type="text" id="nama_presiden" >
                         </div>
@@ -658,7 +658,7 @@
             @elseif($lastSegment == 'pendidikan')
                 <div class="row">
                     <div class="form-group required col-md-12">
-                        <label for="jenis_institusi" class="col-md-12 control-label">Jenis {{ $capitalizedSegment }} {!! in_array('jenis_institusi', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                        <label for="jenis_institusi" class="col-md-12 control-label">Jenis {{ $capitalizedSegment }} {!! in_array('jenis_institusi', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
                             {!! Form::select('jenis_institusi', [
                                 1 => 'IPTA',
@@ -696,7 +696,7 @@
                 @foreach ($fixedFields as $index => $field)
                     @php $value = $mediaData[$field] ?? ''; @endphp
                     <div class="form-group required {{ $field == 'Emel' || $field == 'Web' ? 'col-md-6' : 'col-md-3' }}">
-                        <label for="mediaSosial" class="col-md-12 control-label">{{ $field == 'Web' ? 'Laman Web' : $field }} {!! in_array('mediaSosial_penggiat.'.$field, $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                        <label for="mediaSosial" class="col-md-12 control-label">{{ $field == 'Web' ? 'Laman Web' : $field }} {!! in_array('mediaSosial_penggiat.'.$field, $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
                             <input value="{{ $value }}" name="mediaSosial_penggiat[{{ $field }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]">
                         </div>
@@ -706,7 +706,7 @@
                     @foreach ($mediaData as $key => $value)
                         @if (!in_array($key, $fixedFields))
                             <div class="form-group required col-md-3">
-                                <label for="mediaSosial" class="col-md-12 control-label">{{ $key }} {!! in_array('mediaSosial_penggiat.'.$key, $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                                <label for="mediaSosial" class="col-md-12 control-label">{{ $key }} {!! in_array('mediaSosial_penggiat.'.$key, $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                                 <div class="col-md-12">
                                     <input value="{{ $value }}" name="mediaSosial_penggiat[{{ $key }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]">
                                 </div>
@@ -834,7 +834,7 @@
         <div class="col-lg col-separator">
             @if($capitalizedSegment == 'Kontraktor' || $capitalizedSegment == 'Perunding' || $capitalizedSegment == 'Pembekal')
             <div class="form-group required ">
-                <label for="profil_syarikat" class="col-md-12 control-label">Profil Syarikat {!! in_array('profil_syarikat', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!} </label>
+                <label for="profil_syarikat" class="col-md-12 control-label">Profil Syarikat {!! in_array('profil_syarikat', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                 <div class="col-md-12 showButton">
                     {{ Form::file('profil_syarikat', ['class' => 'form-control d-inline-block ms-2', 'multiple' => false, 'accept' => '.pdf,.docx,.pptx']) }}
                     
@@ -899,7 +899,7 @@
                 @foreach ($fixedFields as $index => $field)
                     @php $value = $mediaData[$field] ?? ''; @endphp
                     <div class="form-group required {{ $field == 'Emel' || $field == 'Web' ? 'col-md-6' : 'col-md-3' }}">
-                        <label for="mediaSosial" class="col-md-12 control-label">{{ $field == 'Web' ? 'Laman Web' : $field }} {!! in_array('mediaSosial_penggiat.'.$field, $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                        <label for="mediaSosial" class="col-md-12 control-label">{{ $field == 'Web' ? 'Laman Web' : $field }} {!! in_array('mediaSosial_penggiat.'.$field, $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
                             <input value="{{ $value }}" name="mediaSosial_penggiat[{{ $field }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]">
                         </div>
@@ -909,7 +909,7 @@
                     @foreach ($mediaData as $key => $value)
                         @if (!in_array($key, $fixedFields))
                             <div class="form-group required col-md-3">
-                                <label for="mediaSosial" class="col-md-12 control-label">{{ $key }} {!! in_array('mediaSosial_penggiat.'.$key, $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                                <label for="mediaSosial" class="col-md-12 control-label">{{ $key }} {!! in_array('mediaSosial_penggiat.'.$key, $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                                 <div class="col-md-12">
                                     <input value="{{ $value }}" name="mediaSosial_penggiat[{{ $key }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]">
                                 </div>

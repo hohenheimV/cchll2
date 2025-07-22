@@ -353,14 +353,14 @@
             
             <div class="row">
                 <div class="form-group required col-md-6">
-                    <label for="alamat1_pelan" class="col-md-4 control-label">Alamat 1 {!! in_array('alamat1_pelan', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                    <label for="alamat1_pelan" class="col-md-4 control-label">Alamat 1 {!! in_array('alamat1_pelan', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                     <div class="col-md-12">
                         <input value="{{isset($ePIL->alamat1_pelan) ? $ePIL->alamat1_pelan : ''}}" name="alamat1_pelan" class="form-control" maxlength="50" type="text" id="alamat1_pelan" >
                     </div>
                 </div>
 
                 <div class="form-group required col-md-6">
-                    <label for="alamat2_pelan" class="col-md-4 control-label">Alamat 2 {!! in_array('alamat2_pelan', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                    <label for="alamat2_pelan" class="col-md-4 control-label">Alamat 2 {!! in_array('alamat2_pelan', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                     <div class="col-md-12">
                         <input value="{{isset($ePIL->alamat2_pelan) ? $ePIL->alamat2_pelan : ''}}" name="alamat2_pelan" class="form-control" maxlength="50" type="text" id="alamat2_pelan">
                     </div>
@@ -368,14 +368,14 @@
             </div>
             <div class="row">
                 <div class="form-group required col-md-8">
-                    <label for="alamat3_pelan" class="col-md-12 control-label">Alamat 3 {!! in_array('alamat3_pelan', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                    <label for="alamat3_pelan" class="col-md-12 control-label">Alamat 3 {!! in_array('alamat3_pelan', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                     <div class="col-md-12">
                         <input value="{{isset($ePIL->alamat3_pelan) ? $ePIL->alamat3_pelan : ''}}" name="alamat3_pelan" class="form-control" maxlength="50" type="text" id="alamat3_pelan">
                     </div>
                 </div>
 
                 <div class="form-group required col-md-4">
-                    <label for="poskod_pelan" class="col-md-4 control-label">Poskod {!! in_array('poskod_pelan', $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                    <label for="poskod_pelan" class="col-md-4 control-label">Poskod {!! in_array('poskod_pelan', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                     <div class="col-md-12">
                         <input value="{{isset($ePIL->poskod_pelan) ? $ePIL->poskod_pelan : ''}}" name="poskod_pelan" class="form-control" type="char" id="poskod_pelan" >
                     </div>
@@ -478,7 +478,7 @@
                 @foreach ($fixedFields as $index => $field)
                     @php $value = $mediaData[$field] ?? ''; @endphp
                     <div class="form-group required {{ $field == 'Emel' || $field == 'Web' ? 'col-md-6' : 'col-md-3' }}">
-                        <label for="mediaSosial" class="col-md-12 control-label">{{ $field == 'Web' ? 'Laman Web' : $field }} {!! in_array('mediaSosial_pelan.'.$field, $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                        <label for="mediaSosial" class="col-md-12 control-label">{{ $field == 'Web' ? 'Laman Web' : $field }} {!! in_array('mediaSosial_pelan.'.$field, $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
                             <input value="{{ $value }}" name="mediaSosial_pelan[{{ $field }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_pelan[]">
                         </div>
@@ -488,7 +488,7 @@
                     @foreach ($mediaData as $key => $value)
                         @if (!in_array($key, $fixedFields))
                             <div class="form-group required col-md-3">
-                                <label for="mediaSosial" class="col-md-12 control-label">{{ $key }} {!! in_array('mediaSosial_pelan.'.$key, $arrChanges) ? '<span class="text-danger newC">!</span>' : '' !!}</label>
+                                <label for="mediaSosial" class="col-md-12 control-label">{{ $key }} {!! in_array('mediaSosial_pelan.'.$key, $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                                 <div class="col-md-12">
                                     <input value="{{ $value }}" name="mediaSosial_pelan[{{ $key }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_pelan[]">
                                 </div>

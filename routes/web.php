@@ -539,8 +539,8 @@ Route::name('website.')
         })->name('ePIL');
 
         Route::get('/eread-dokumen/{keyword?}', function ($keyword = null) {
-            $totalCount = eREAD::with('kategori')->count();
-            $ereads = eREAD::with('kategori')->orderBy('tarikh', 'desc')->paginate($totalCount);
+            $totalCount = eREAD::with('kategori')->where('kate', '!=', 184)->count();
+            $ereads = eREAD::with('kategori')->where('kate', '!=', 184)->orderBy('tarikh', 'desc')->paginate($totalCount);
             return view('website.eREAD', ['ereads' => $ereads, 'keyword' => $keyword]);
         })->name('eREAD');
 

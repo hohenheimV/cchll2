@@ -78,39 +78,68 @@ if (!function_exists('app_dashboard_permohonan')) {
 }
 
 if (!function_exists('app_dashboard_taman')) {
-    function app_dashboard_taman($keyword = null){
+    function app_dashboard_taman($keyword = null) {
+        // Original categories excluding the expanded "Taman Awam" group
         $kategoriList = [
-            'Taman Awam',
+            'Taman Awam',          // will cover multiple sub-categories below
             'Taman Botani',
             'Landskap Perbandaran',
             'Persekitaran Kehidupan',
             'Taman Persekutuan',
         ];
-        // return $keyword;
-        if(Auth::user()->hasRole('Pihak Berkuasa Tempatan')){
+
+        // Sub-categories considered as "Taman Awam"
+        $tamanAwamSubCategories = [
+            'Taman Wilayah',
+            'Taman Bandaran',
+            'Taman Tempatan',
+            'Padang Kejiranan',
+            'Padang Permainan',
+            'Lot Permainan',
+        ];
+
+        if (Auth::user()->hasRole('Pihak Berkuasa Tempatan')) {
             $id_pbt = Auth::user()->bahagian_jln;
             $data = MaklumatPenggunaPbt::where('id', $id_pbt)->latest()->first();
-            // $count = ePALM::where('nama_pbt', $data->pbt_name)
+
             $count = ePALM::whereRaw('LOWER(nama_pbt) = ?', [strtolower($data->pbt_name)])
-            ->where('is_komponen', null)
-            ->when($keyword, function ($q) use ($keyword, $kategoriList) {
+                ->where('is_komponen', null)
+                ->when($keyword, function ($q) use ($keyword, $kategoriList, $tamanAwamSubCategories) {
+                    if ($keyword === 6) {
+                        // Exclude all defined categories
+                        $q->whereNotIn('kategori_taman', $kategoriList);
+                    } else {
+                        if ($keyword === 1) {
+                            // If keyword is 1 (Taman Awam), include all sub-categories as well
+                            $q->where(function($query) use ($tamanAwamSubCategories) {
+                                $query->where('kategori_taman', 'Taman Awam')
+                                      ->orWhereIn('kategori_taman', $tamanAwamSubCategories);
+                            });
+                        } else {
+                            // Other categories just filter normally
+                            $q->where('kategori_taman', $kategoriList[$keyword - 1]);
+                        }
+                    }
+                })->count();
+
+            return number_format($count);
+        }
+
+        return number_format(ePALM::where('is_komponen', null)
+            ->when($keyword, function ($q) use ($keyword, $kategoriList, $tamanAwamSubCategories) {
                 if ($keyword === 6) {
                     $q->whereNotIn('kategori_taman', $kategoriList);
                 } else {
-                    $q->where('kategori_taman', $kategoriList[$keyword-1]);
+                    if ($keyword === 1) {
+                        $q->where(function($query) use ($tamanAwamSubCategories) {
+                            $query->where('kategori_taman', 'Taman Awam')
+                                  ->orWhereIn('kategori_taman', $tamanAwamSubCategories);
+                        });
+                    } else {
+                        $q->where('kategori_taman', $kategoriList[$keyword - 1]);
+                    }
                 }
-            })->count();
-            // $ePALM = ePALM::where('nama_pbt', $data->pbt_name)->paginate($count);
-            return number_format($count);
-        }
-        return number_format(ePALM::where('is_komponen', null)
-        ->when($keyword, function ($q) use ($keyword, $kategoriList) {
-            if ($keyword === 6) {
-                $q->whereNotIn('kategori_taman', $kategoriList);
-            } else {
-                $q->where('kategori_taman', $kategoriList[$keyword-1]);
-            }
-        })->count());
+            })->count());
     }
 }
 

@@ -209,7 +209,7 @@
                         </li>
                         @endif
                     @endforeach
-                    @if((Auth::user()->hasRole('Pentadbir Sistem')) || !(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [5, 7])))
+                    @if((Auth::user()->hasRole('Pentadbir Sistem')) || !(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [1, 5, 7])))
                     <li class="nav-item">
                         {!! Html::buttonSidebarNavLink('eNTITI', $icon['eNTITI'], [
                             'onclick' => "window.location='" . route('pengurusan.entiti-landskap-unik.index') . "'",
@@ -219,7 +219,7 @@
                     @endif
                     <li class="nav-item">
                         {!! Html::buttonSidebarNavLink('eMAP JLN', $icon['eMAP'], [
-                            'onclick' => "window.open('../emap', '_blank')",
+                            'onclick' => "window.open('https://elandskap.jln.gov.my/emap', '_blank')",
                             'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.peta'),
                             Html::tooltip($hoverText['eMAP'])
                         ]) !!}

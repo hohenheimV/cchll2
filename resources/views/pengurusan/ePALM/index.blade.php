@@ -69,7 +69,7 @@
                                 </style>
                                     {{-- Negeri Dropdown --}}
                                     <div class="input-group mr-2">
-                                        <select id="negeri" name="negeri" class="gyrodrop">
+                                        <select id="negeri" name="negeri" onchange="this.form.submit()" class="gyrodrop">
                                             <option value="">Papar Semua Negeri</option>
                                             @foreach(App\Model\Negeri::orderBy('nama_negeri')->get() as $negeri)
                                                 <option value="{{ $negeri->kod_negeri }}" {{ request('negeri') == $negeri->kod_negeri ? 'selected' : '' }}>
@@ -86,7 +86,7 @@
 
                                     <div class="input-group mr-2">
                                         {{-- {!! Form::select('nama_pbt', $namaPbtArray, request('nama_pbt'), ['class' => 'gyrodrop', 'id' => 'nama_pbt']) !!} --}}
-                                        <select id="nama_pbt" name="nama_pbt" class="gyrodrop">
+                                        <select id="nama_pbt" name="nama_pbt" onchange="this.form.submit()" class="gyrodrop">
                                             <option value="">Papar Semua PBT</option>
                                             @foreach ($namaPbtArray as $pbt)
                                                 <option value="{{ $pbt }}" {{ request('nama_pbt') === $pbt ? 'selected' : '' }}>
@@ -134,7 +134,7 @@
                                     @endphp
 
                                     <div class="input-group mr-2">
-                                        {!! Form::select('kategori', $options, request('kategori'), ['class' => 'gyrodrop', 'id' => 'kategori']) !!}
+                                        {!! Form::select('kategori', $options, request('kategori'), ['class' => 'gyrodrop', 'id' => 'kategori', 'onchange' => 'this.form.submit()']) !!}
                                     </div>
 
                                     <div class="input-group" style="display: none;">

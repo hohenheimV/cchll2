@@ -45,7 +45,7 @@
                                     {{ Form::open(['class'=>'form-inline', 'method' => 'get']) }}
                                         {{-- Negeri Dropdown --}}
                                         <div class="input-group mr-2">
-                                            <select id="negeri" name="negeri" style="
+                                            <select id="negeri" name="negeri" onchange="this.form.submit()" style="
                                                 height: calc(1.8125rem + 2px) !important;
                                                 padding: 0.25rem 0.5rem !important;
                                                 font-size: 0.875rem !important;
@@ -70,7 +70,7 @@
                                         @if($lastSegment == "kontraktor")
                                         {{-- Kelas Kontraktor Dropdown --}}
                                         <div class="input-group mr-2">
-                                            <select id="kelas_kontraktor" name="kelas_kontraktor" style="
+                                            <select id="kelas_kontraktor" name="kelas_kontraktor" onchange="this.form.submit()" style="
                                                 height: calc(1.8125rem + 2px) !important;
                                                 padding: 0.25rem 0.5rem !important;
                                                 font-size: 0.875rem !important;

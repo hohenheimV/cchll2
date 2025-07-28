@@ -15,7 +15,7 @@
 <!-- Nama Kempen and Lokasi -->
 <div class="form-row">
     <div class="form-group col-md-9"> <!-- Changed from col-md-8 to col-md-9 -->
-        <div class="form-row">
+        {{-- <div class="form-row">
             <div class="form-group col-md-6">
                 {{ Form::label('tajuk', 'Nama Program') }}
                 {{ Form::text('tajuk', null, [
@@ -43,13 +43,13 @@
                     </div>
                 @endif
             </div>
-        </div>
+        </div> --}}
 
         <!-- Negeri and PBT Fields -->
         @if (!$isPBTUser)
         <div class="form-row">
             <div class="form-group col-md-6">
-                {{ Form::label('negeri', 'Negeri PBT/Agensi') }}
+                {{ Form::label('negeri', 'Negeri') }}
                 {{ Form::select('negeri', $negeri ?? [], old('negeri', $ktp->negeri ?? null), [
                     'placeholder' => 'Pilih Negeri',
                     'class' => 'form-control select2 ' . ($errors->has('negeri') ? 'is-invalid' : ''),
@@ -63,7 +63,7 @@
                 @endif
             </div>
             <div class="form-group col-md-5" id="pbt-container">
-                {{ Form::label('pbt', 'Pihak Berkuasa Tempatan / Agensi') }} 
+                {{ Form::label('pbt', 'Pihak Berkuasa Tempatan') }} 
                 <!-- Loading Spinner -->
                 <div id="loading-spinner" style="display: none;">Muatnaik Maklumat...</div>
                 {{ Form::select('pbt', $pbt ?? [], old('pbt', $ktp->pbt ?? null), [
@@ -90,10 +90,46 @@
                 <input type="hidden" name="pbt" value="{{ $pbtName }}"> <!-- Hidden input for form submission -->
             </div>
         @endif
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                {{ Form::label('tajuk', 'Tahun') }}
+                {{ Form::number('tajuk', null, [
+                    'placeholder' => 'Masukkan Tahun',
+                    'class' => 'form-control ' . ($errors->has('tajuk') ? 'is-invalid' : ''),
+                ]) }}
+                @if ($errors->has('tajuk'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('tajuk') }}
+                    </div>
+                @endif
+            </div>
+
+            <div class="form-group col-md-5">
+                {{ Form::label('lokasi', 'Suku Tahun') }}
+                {{ Form::select('lokasi', [
+                    1 => 'Jan - Mac',
+                    2 => 'Apr - Jun',
+                    3 => 'Jul - Sep',
+                    4 => 'Okt - Dis'
+                ], null, [
+                    'placeholder' => 'Pilih Suku Tahun',
+                    'class' => 'form-control ' . ($errors->has('lokasi') ? 'is-invalid' : '')
+                ]) }}
+                @if ($errors->has('lokasi'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('lokasi') }}
+                    </div>
+                @endif
+            </div>
+        </div>
+
         <!-- Spesis Pokok & Jumlah Pokok -->
         <div class="form-row">
             <div class="form-group col-md-11">
                 {{ Form::label('maklumat', 'Maklumat Pokok') }}
+                <br>
+                <p style="color: red; font-weight:bold; font-size:24px;">(Bilangan Pokok Utama sahaja yang diperlukan)</p>
                 <div class="callout callout-info">
                     <span style="color: red; font-weight:bold;">Panduan Mengisi Maklumat Pokok</span>
                     <p class="light" style="margin-bottom: 0.5rem;">
@@ -114,6 +150,7 @@
                         </ol>
                     </p>
                 </div>
+                <p style="color: red; font-weight:bold; font-size:24px;">(Bilangan Pokok Utama sahaja yang diperlukan)</p>
                 <div class="table-responsive">
                     <table id="spesis-pokok-table" class="table table-bordered table-hover mt-2">
                         <thead class="thead-dark">
@@ -124,7 +161,7 @@
                                 }
                             </style>
                             <tr>
-                                <th class="w-30">Spesis Pokok</th>
+                                <th class="w-30">Pokok</th>
                                 <th class="w-15">Bilangan Pokok</th>
                                 <th class="w-15">Tinggi (m)</th>
                                 <th class="w-15">Diameter (cm)</th>
@@ -135,7 +172,7 @@
                                 @if(isset($spesisPokokJumlahPairs) && count($spesisPokokJumlahPairs) > 0)
                                     @foreach ($spesisPokokJumlahPairs as $index => $pair)
                                     <tr>
-                                        <td><input type="text" name="spesis_pokok[]" class="form-control @error('spesis_pokok.*') is-invalid @enderror" value="{{ $pair['spesis'] }}" placeholder="Spesis Pokok" oninput="this.value = this.value.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); })"></td>
+                                        <td><input type="text" name="spesis_pokok[]" class="form-control @error('spesis_pokok.*') is-invalid @enderror" value="{{ $pair['spesis'] }}" placeholder="Pokok Utama" value="Pokok Utama" oninput="this.value = this.value.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); })"></td>
                                         <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok @error('bilangan_pokok.*') is-invalid @enderror" value="{{ $pair['bilangan'] }}" placeholder="Bilangan" min="1" max="10000"></td>
                                         <td><input type="number" name="tinggi_pokok[]" class="form-control @error('tinggi_pokok.*') is-invalid @enderror" value="{{ $pair['tinggi'] }}" placeholder="Tinggi" min="0" max="1000"></td>
                                         <td><input type="number" name="diameter_pokok[]" class="form-control @error('diameter_pokok.*') is-invalid @enderror" value="{{ $pair['diameter'] }}" placeholder="Diameter" min="0" max="1000"></td>
@@ -144,7 +181,7 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td><input type="text" name="spesis_pokok[]" class="form-control @error('spesis_pokok.*') is-invalid @enderror" placeholder="Spesis Pokok" oninput="this.value = this.value.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); })"></td>
+                                        <td><input type="text" name="spesis_pokok[]" class="form-control @error('spesis_pokok.*') is-invalid @enderror" placeholder="Pokok Utama" value="Pokok Utama" oninput="this.value = this.value.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); })"></td>
                                         <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok @error('bilangan_pokok.*') is-invalid @enderror" placeholder="Bilangan"  min="1" max="10000"></td>
                                         <td><input type="number" name="tinggi_pokok[]" class="form-control @error('tinggi_pokok.*') is-invalid @enderror" placeholder="Tinggi"  min="0" max="1000"></td>
                                         <td><input type="number" name="diameter_pokok[]" class="form-control @error('diameter_pokok.*') is-invalid @enderror" placeholder="Diameter"  min="0" max="1000"></td>
@@ -194,7 +231,7 @@
             var container = document.getElementById('spesis_pokok_container');
             var newRow = document.createElement('tr');
             newRow.innerHTML = `
-                <td><input type="text" name="spesis_pokok[]" class="form-control" placeholder="Spesis Pokok" oninput="this.value = this.value.replace(/(?:^|\\s)\\S/g, function(a) { return a.toUpperCase(); })"></td>
+                <td><input type="text" name="spesis_pokok[]" class="form-control" placeholder="Pokok Utama" value="Pokok Utama" oninput="this.value = this.value.replace(/(?:^|\\s)\\S/g, function(a) { return a.toUpperCase(); })"></td>
                 <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok" placeholder="Bilangan" min="1"></td>
                 <td><input type="number" name="tinggi_pokok[]" class="form-control" placeholder="Tinggi" min="0"></td>
                 <td><input type="number" name="diameter_pokok[]" class="form-control" placeholder="Diameter" min="0"></td>
@@ -279,7 +316,7 @@
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td><input type="text" name="spesis_pokok[]" class="form-control" value="${row[0] || ''}" placeholder="Spesis Pokok" oninput="this.value = this.value.replace(/(?:^|\\s)\\S/g, function(a) { return a.toUpperCase(); })"></td>
+                    <td><input type="text" name="spesis_pokok[]" class="form-control" value="${row[0] || ''}" placeholder="Pokok Utama" value="Pokok Utama" oninput="this.value = this.value.replace(/(?:^|\\s)\\S/g, function(a) { return a.toUpperCase(); })"></td>
                     <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok" value="${row[1] || ''}" placeholder="Bilangan" min="1"></td>
                     <td><input type="number" name="tinggi_pokok[]" class="form-control" value="${row[2] || ''}" placeholder="Tinggi" min="0"></td>
                     <td><input type="number" name="diameter_pokok[]" class="form-control" value="${row[3] || ''}" placeholder="Diameter" min="0"></td>
@@ -309,10 +346,10 @@
                 }));
             });
             // Add 'lain-lain' option
-            $negeri.append($('<option>', {
-                value: 'lain-lain',
-                text: 'Lain-lain (Agensi/NGO)'
-            }));
+            // $negeri.append($('<option>', {
+            //     value: 'lain-lain',
+            //     text: 'Lain-lain (Agensi/NGO)'
+            // }));
             
             $negeri.prop('disabled', false);
             $('#loading-spinner').hide();
@@ -344,7 +381,7 @@
             $pbtContainer.append(`
                 <label for="pbt">Pihak Berkuasa Tempatan</label>
                 <select id="pbt" name="pbt" class="form-control select2">
-                    <option value="">Pilih PBT/Agensi</option>
+                    <option value="">Pilih PBT</option>
                 </select>
             `);
             return;
@@ -368,7 +405,7 @@
                 id: 'pbt',
                 name: 'pbt',
                 class: 'form-control select2'
-            }).append('<option value="">Pilih PBT/Agensi</option>');
+            }).append('<option value="">Pilih PBT</option>');
 
             $.each(data, function(index, pbt) {
                 $dropdown.append($('<option>', {
@@ -378,10 +415,10 @@
             });
 
             // Add 'lain-lain' option
-            $dropdown.append($('<option>', {
-                value: 'lain-lain',
-                text: 'Lain-lain'
-            }));
+            // $dropdown.append($('<option>', {
+            //     value: 'lain-lain',
+            //     text: 'Lain-lain'
+            // }));
 
             $pbtContainer.append(`
                 <label for="pbt">Pihak Berkuasa Tempatan</label>
@@ -419,7 +456,7 @@ document.getElementById('reset-form-btn').addEventListener('click', function() {
     var container = document.getElementById('spesis_pokok_container');
     container.innerHTML = `
         <tr>
-            <td><input type="text" name="spesis_pokok[]" class="form-control" placeholder="Spesis Pokok" oninput="this.value = this.value.replace(/(?:^|\\s)\\S/g, function(a) { return a.toUpperCase(); })"></td>
+            <td><input type="text" name="spesis_pokok[]" class="form-control" placeholder="Pokok Utama" value="Pokok Utama" oninput="this.value = this.value.replace(/(?:^|\\s)\\S/g, function(a) { return a.toUpperCase(); })"></td>
             <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok" placeholder="Bilangan" min="1" max="10000"></td>
             <td><input type="number" name="tinggi_pokok[]" class="form-control" placeholder="Tinggi" min="0" max="1000"></td>
             <td><input type="number" name="diameter_pokok[]" class="form-control" placeholder="Diameter" min="0" max="1000"></td>

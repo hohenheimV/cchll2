@@ -1,6 +1,36 @@
 <div class="card card-olive card-outline">
     <div class="card-header">
-            <h3 class="card-title font-weight-bold my-1">Direktori Taman & Landskap</h3>
+        <h3 class="card-title font-weight-bold my-1">Direktori Taman & Landskap</h3>
+        <div class="card-tools">
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group" role="group" aria-label="First group">
+                    {{ Form::open(['class' => 'form-inline', 'method' => 'get', 'url' => url()->current()]) }}
+                        {{-- Optional: carry forward current keyword in case it's in the route --}}
+                        @if(request()->route('keyword'))
+                            {{ Form::hidden('keyword', request()->route('keyword')) }}
+                        @endif
+
+                        {{-- Search box --}}
+                        <div class="input-group mr-2">
+                            {{ Form::search('search', request('search'), [
+                                'aria-label' => 'Search',
+                                'placeholder' => 'Carian Pantas',
+                                'class' => 'form-control form-control-sm ' . Html::isInvalid($errors, 'search')
+                            ]) }}
+                            &nbsp;
+                            <div class="input-group-append">
+                                {!! Form::button('<i class="fas fa-search"></i> Cari', [
+                                    'class' => 'btn btn-success btn-sm',
+                                    'type' => 'submit'
+                                ]) !!}
+                                &nbsp;
+                                <a href="/epalm" class="btn btn-secondary btn-sm">Reset</a>
+                            </div>
+                        </div>
+                    {{ Form::close() }}
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="card-body">

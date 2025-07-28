@@ -374,11 +374,19 @@ Route::name('website.')
                 // ->when($keywordSalt, function($query) use ($keywordSalt) {
                 //     return $query->where('negeri_taman', 'like', "%$keywordSalt%");
                 // })
+                ->when(request('search'), function ($query) {
+                    $searchTerm = request('search');
+                    return $query->where(function ($q) use ($searchTerm) {
+                        $q->where('negeri_taman', 'ilike', "%$searchTerm%")
+                        ->orWhere('nama_taman', 'ilike', "%$searchTerm%")
+                        ->orWhere('nama_pbt', 'ilike', "%$searchTerm%");
+                    });
+                })
                 ->when($keywordSalt, function ($query) use ($keywordSalt) {
                     return $query->where(function ($q) use ($keywordSalt) {
-                        $q->where('negeri_taman', 'like', "%$keywordSalt%")
-                        ->orWhere('nama_pbt', 'like', "%$keywordSalt%")
-                        ->orWhere('kategori_taman', 'like', "%$keywordSalt%");
+                        $q->where('negeri_taman', 'ilike', "%$keywordSalt%")
+                        ->orWhere('nama_pbt', 'ilike', "%$keywordSalt%")
+                        ->orWhere('kategori_taman', 'ilike', "%$keywordSalt%");
                     });
                 })
                 ->orderBy('negeri_taman')
@@ -415,15 +423,15 @@ Route::name('website.')
 
                 // $namaPbtArray[] = $item->nama_pbt;
             }
-            $namaPbtArray = ePALM::/* where('status', 'approved')
-                -> */where('is_komponen', null)
+            $namaPbtArray = ePALM::where('status', 'approved')
+                ->where('is_komponen', null)
                 ->orderBy('negeri_taman')
                 ->orderBy('nama_pbt')
                 ->pluck('nama_pbt')
                 ->unique()
                 ->values();
-            $namaKategoriArray = ePALM::/* where('status', 'approved')
-                -> */where('is_komponen', null)
+            $namaKategoriArray = ePALM::where('status', 'approved')
+                ->where('is_komponen', null)
                 ->orderBy('kategori_taman')
                 ->pluck('kategori_taman')
                 ->unique()
@@ -503,13 +511,18 @@ Route::name('website.')
 
         Route::get('/epil-pelan/{keyword?}', function ($keyword = null) {
             $ePIL = ePIL::where('status', 'approved')
-                // ->when($keyword, function($query) use ($keyword) {
-                //     return $query->where('negeri_pelan', 'like', "%$keyword%");
-                // })
+                ->when(request('search'), function ($query) {
+                    $searchTerm = request('search');
+                    return $query->where(function ($q) use ($searchTerm) {
+                        $q->where('negeri_pelan', 'ilike', "%$searchTerm%")
+                        ->orWhere('nama_pelan', 'ilike', "%$searchTerm%")
+                        ->orWhere('nama_pbt', 'ilike', "%$searchTerm%");
+                    });
+                })
                 ->when($keyword, function ($query) use ($keyword) {
                     return $query->where(function ($q) use ($keyword) {
-                        $q->where('negeri_pelan', 'like', "%$keyword%")
-                        ->orWhere('nama_pbt', 'like', "%$keyword%");
+                        $q->where('negeri_pelan', 'ilike', "%$keyword%")
+                        ->orWhere('nama_pbt', 'ilike', "%$keyword%");
                     });
                 })
                 ->orderBy('negeri_pelan')
@@ -555,11 +568,11 @@ Route::name('website.')
             $totalCount = ePACT::with('kategori')/* ->where('kate', $keyword) */ ->count();
             // $epacts = ePACT::with('kategori')/* ->where('kate', $keyword) */ ->orderBy('tahun', 'desc')->paginate($totalCount);
             $epacts = ePACT::with('kategori')
-                ->orderByRaw("LOWER(tajuk) LIKE '%dasar%' DESC") // Rows with 'dasar' come first
-                ->orderByRaw("CASE WHEN LOWER(tajuk) LIKE '%dasar%' THEN LOWER(tajuk) ELSE NULL END ASC")
-                ->orderBy('tahun', 'asc')
-                // ->orderBy('tarikh', 'asc')
-                ->orderBy('tajuk', 'asc')
+                ->orderByRaw("tajuk ILIKE 'Dasar Landskap Negara%' DESC") // Rows with 'dasar' come first
+                ->orderByRaw("CASE WHEN tajuk ILIKE 'dasar%' THEN LOWER(tajuk) ELSE NULL END ASC")
+                ->orderBy('tahun', 'DESC')
+                // ->orderBy('tarikh', 'DESC')
+                ->orderBy('tajuk', 'ASC')
                 ->paginate($totalCount);
             // dd($epacts);
             return view('website.ePACT', ['epacts' => $epacts, 'keyword' => $keyword]);
@@ -667,9 +680,21 @@ Route::name('website.')
             if ($negeriKod) {
                 $query->where('state', $negeriKod);
             }
+            
+            $search = $request->query('search');
+            if ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('no_ssm', 'ilike', "%$search%")
+                    ->orWhere('name', 'ilike', "%$search%")
+                    ->orWhere('email', 'ilike', "%$search%");
+                });
+            }
 
-             if ($keyword === 'kontraktor' && $request->filled('kelas_kontraktor')) {
+            if ($keyword === 'kontraktor' && $request->filled('kelas_kontraktor')) {
                 $query->where('kelas_kontraktor', $request->kelas_kontraktor);
+            }
+            if ($keyword === 'kontraktor' && $request->filled('bidang_kepakaran')) {
+                $query->where('bidang_kepakaran', $request->bidang_kepakaran);
             }
 
             // Only approved for some types
@@ -682,7 +707,8 @@ Route::name('website.')
                 return redirect()->route('website.eLIND', [
                     'keyword' => $keyword,
                     'page' => $data->lastPage(),
-                    'negeri' => $negeriKod
+                    'negeri' => $negeriKod,
+                    'search' => $search
                 ]);
             }
 

@@ -22,7 +22,8 @@
                     <div class="card-tools">
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                             <div class="btn-group" role="group" aria-label="First group">
-
+                                <a href="{{ route('pengurusan.ePIL.index') }}" class="btn btn-secondary btn-sm">Reset</a>
+                                &nbsp;&nbsp;&nbsp;
                                 {!! Form::button('<i class="fas fa-plus"></i> Daftar', 
                                     ['onclick'=>"window.location='".route('pengurusan.ePIL.create')."'",
                                     'class'=>'btn bg-success btn-sm', Html::tooltip('Daftar PIL')]) !!}

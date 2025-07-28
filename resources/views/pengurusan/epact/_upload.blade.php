@@ -70,6 +70,15 @@
             let deleteThis = $('#large_file_name_old').val();
             let fileInput = $('#supporting_documents')[0];
             let file = fileInput.files[0];
+            let maxSize = 1024 * 1024 * 1024;
+
+            if (file.size > maxSize) {
+                Swal.fire('Error', 'Saiz fail melebihi 1024MB tidak dibenarkan!', 'error');
+                $('#supporting_documents').val('');
+                $('button[type="submit"]').prop('disabled', true);
+                $('#supporting_documents').prop('disabled', false);
+                return;
+            }
             if (file.type !== 'application/pdf') {
                 Swal.fire('Error', 'Hanya Fail PDF Sahaja Dibenarkan!', 'error');
                 $('button[type="submit"]').prop('disabled', false);
@@ -77,7 +86,7 @@
                 return;
             }
 
-            console.log(file);
+            // console.log(file);
             let file_size = file.size;
             let file_type = file.type;
             let file_mime = file.type; 
@@ -137,11 +146,11 @@
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.log("Error: " + error);
+                        // console.log("Error: " + error);
                     },
                     complete: function(xhr, status) {
                         // Optionally log the completion of the request
-                        console.log("Request complete with status: " + status);
+                        // console.log("Request complete with status: " + status);
                     }
                 });
             }

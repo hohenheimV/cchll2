@@ -1303,6 +1303,15 @@
             }
 
             let file = fileInput.files[0];
+            let maxSize = 1024 * 1024 * 1024;
+
+            if (file.size > maxSize) {
+                Swal.fire('Error', 'Saiz fail melebihi 1024MB tidak dibenarkan!', 'error');
+                $('#supporting_documents').val('');
+                $('button[type="submit"]').prop('disabled', true);
+                $('#supporting_documents').prop('disabled', false);
+                return;
+            }
             let chunkSize = 15 * 1024 * 1024;  // 10MB per chunk
             let totalChunks = Math.ceil(file.size / chunkSize);
             let currentChunk = 0;

@@ -686,8 +686,11 @@
                 </form>
 
                 <!-- Optional -->
-                <p class="my-3 text-center">
+                <p class="my-1 text-center">
                     <a href="{{ route('login') }}" class="btn btn-link btn-sm">Sudah ada akaun? Log Masuk</a>
+                </p>
+                <p class="my-1 text-center">
+                    <a href="{{ route('welcome') }}" class="btn btn-link btn-sm">Halaman Utama</a>
                 </p>
             </div>
         </div>

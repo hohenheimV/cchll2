@@ -556,7 +556,7 @@
                     
                     @if(isset($rakanTaman[4]))
                     <tr>
-                        <td style="padding: 4px 8px; line-height: 1;">Penyelaras <span class="font-red"> * </span></td>
+                        <td style="padding: 4px 8px; line-height: 1;">Wakil PBT <span class="font-red"> * </span></td>
                         <td style="padding: 4px 8px; line-height: 1;">
                             <input required type="text" id="penyelaras_nama" name="penyelaras_nama" class="form-control @error('penyelaras_nama') is-invalid @enderror" maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[4]['penyelaras_nama'] : '' }}" >
                             @error('penyelaras_nama')
@@ -577,7 +577,7 @@
                     </tr>
                     @else
                     <tr>
-                        <td style="padding: 4px 8px; line-height: 1;">Penyelaras <span class="font-red"> * </span></td>
+                        <td style="padding: 4px 8px; line-height: 1;">Wakil PBT <span class="font-red"> * </span></td>
                         <td style="padding: 4px 8px; line-height: 1;">
                             <input required type="text" id="penyelaras_nama" name="penyelaras_nama" class="form-control @error('penyelaras_nama') is-invalid @enderror" maxlength="150" value="{{ isset($MIB->name) ? $MIB->name : '' }}" >
                             @error('penyelaras_nama')
@@ -598,7 +598,7 @@
                     </tr>
                     @endif
                     <tr>
-                        <td style="padding: 4px 8px; line-height: 1;">Alamat Surat Menyurat Penyelaras <span class="font-red"> * </span></td>
+                        <td style="padding: 4px 8px; line-height: 1;">Alamat Surat Menyurat Wakil PBT <span class="font-red"> * </span></td>
                         <td colspan="3" style="padding: 4px 8px; line-height: 1;">
                             <textarea id="alamat" name="alamat" class="form-control" rows="5">{{ $MIB->alamat ?? '' }}</textarea>
                         </td>

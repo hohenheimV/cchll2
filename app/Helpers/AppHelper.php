@@ -245,3 +245,26 @@ if (!function_exists('app_dashboard_taman_negeri')) {
         return $user->hasRole('Pegawai') && $user->bahagian_jln !== null && in_array($user->bahagian_jln, $allowed);
     }
 }
+
+if (!function_exists('app_dashboard_pokok_by_year')) {
+    function app_dashboard_pokok_by_year()
+    {
+        $query = KTP::whereNotNull('jumlah_pokok')
+            // only accept values in tajuk that are 4-digit numbers (i.e. years)
+            ->whereRaw("tajuk ~ '^[0-9]{4}$'")
+            ->select(
+                DB::raw('tajuk as tahun'),
+                DB::raw('SUM(CAST(jumlah_pokok AS INT)) as total')
+            )
+            ->groupBy('tajuk')
+            ->orderBy('tajuk', 'desc');
+
+        if (Auth::user()->hasRole('Pihak Berkuasa Tempatan')) {
+            $id_pbt = Auth::user()->bahagian_jln;
+            $data = MaklumatPenggunaPbt::where('id', $id_pbt)->latest()->first();
+            $query->whereRaw('LOWER(pbt) = ?', [strtolower($data->pbt_name)]);
+        }
+
+        return $query->get();
+    }
+}

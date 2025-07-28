@@ -54,6 +54,15 @@
             $('#supporting_documents').prop('disabled', true);
             let fileInput = $('#supporting_documents')[0];
             let file = fileInput.files[0];
+            let maxSize = 1024 * 1024 * 1024;
+
+            if (file.size > maxSize) {
+                Swal.fire('Error', 'Saiz fail melebihi 1024MB tidak dibenarkan!', 'error');
+                $('#supporting_documents').val('');
+                $('button[type="submit"]').prop('disabled', true);
+                $('#supporting_documents').prop('disabled', false);
+                return;
+            }
             let fileExtension = file.name.split('.').pop().toLowerCase();
             let allowedExtensions = ['pdf', 'zip'];
 
@@ -129,11 +138,11 @@
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.log("Error: " + error);
+                        // console.log("Error: " + error);
                     },
                     complete: function(xhr, status) {
                         // Optionally log the completion of the request
-                        console.log("Request complete with status: " + status);
+                        // console.log("Request complete with status: " + status);
                     }
                 });
             }

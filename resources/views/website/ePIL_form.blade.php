@@ -1,7 +1,37 @@
 <div class="card card-olive card-outline">
     <div class="card-header">
         <h3 class="card-title font-weight-bold my-1">Direktori Pelan Induk Landskap</h3>
+        <div class="card-tools">
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group" role="group" aria-label="First group">
+                    {{ Form::open(['class' => 'form-inline', 'method' => 'get', 'url' => url()->current()]) }}
+                        {{-- Optional: carry forward current keyword in case it's in the route --}}
+                        @if(request()->route('keyword'))
+                            {{ Form::hidden('keyword', request()->route('keyword')) }}
+                        @endif
+
+                        {{-- Search box --}}
+                        <div class="input-group mr-2">
+                            {{ Form::search('search', request('search'), [
+                                'aria-label' => 'Search',
+                                'placeholder' => 'Carian Pantas',
+                                'class' => 'form-control form-control-sm ' . Html::isInvalid($errors, 'search')
+                            ]) }}
+                            &nbsp;
+                            <div class="input-group-append">
+                                {!! Form::button('<i class="fas fa-search"></i> Cari', [
+                                    'class' => 'btn btn-success btn-sm',
+                                    'type' => 'submit'
+                                ]) !!}
+                                &nbsp;
+                                <a href="/epil-pelan" class="btn btn-secondary btn-sm">Reset</a>
+                            </div>
+                        </div>
+                    {{ Form::close() }}
+                </div>
+            </div>
         </div>
+    </div>
 
     <div class="card-body">
         <div class="card-tools">
@@ -27,39 +57,39 @@
                     @endif
                 </div>
 
-                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                    <script>
-                        $(document).ready(function() {
-                            $.ajax({
-                            url: '/get-negeri-salt',
-                                type: 'GET',
-                                dataType: 'json',
-                                success: function(data) {
-                                $('#negeri').empty().append('<option value="-1">Papar Semua Negeri</option>');
-                                $.each(data, function(index, value) {
-                                    let capitalized = value.nama_negeri.toLowerCase().replace(/\b\w/g, function(char) {
-                                        return char.toUpperCase();
-                                    });
-                                    $('#negeri').append('<option value="' + value.kod_negeri + '">' + capitalized + '</option>');
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function() {
+                        $.ajax({
+                        url: '/get-negeri-salt',
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(data) {
+                            $('#negeri').empty().append('<option value="-1">Papar Semua Negeri</option>');
+                            $.each(data, function(index, value) {
+                                let capitalized = value.nama_negeri.toLowerCase().replace(/\b\w/g, function(char) {
+                                    return char.toUpperCase();
                                 });
-
-                                var keyword = "{{ request('keyword') }}";
-
-                                // Set selected if it's a negeri match (based on kod_negeri in your API)
-                                let negeriMatch = data.find(item => item.kod_negeri === keyword);
-
-                                if (negeriMatch) {
-                                    $('#negeri').val(keyword);
-                                    $('#pbt').val(''); // Clear PBT selection
-                                } else {
-                                    $('#negeri').val('-1');
-                                    }
-                                },
-                            error: function(err) {
-                                console.error("Failed to load negeri list:", err);
-                                }
+                                $('#negeri').append('<option value="' + value.kod_negeri + '">' + capitalized + '</option>');
                             });
+
+                            var keyword = "{{ request('keyword') }}";
+
+                            // Set selected if it's a negeri match (based on kod_negeri in your API)
+                            let negeriMatch = data.find(item => item.kod_negeri === keyword);
+
+                            if (negeriMatch) {
+                                $('#negeri').val(keyword);
+                                $('#pbt').val(''); // Clear PBT selection
+                            } else {
+                                $('#negeri').val('-1');
+                                }
+                            },
+                        error: function(err) {
+                            console.error("Failed to load negeri list:", err);
+                            }
                         });
+                    });
 
                     function handleNegeriChange() {
                         var selected = $('#negeri').val();
@@ -84,10 +114,10 @@
                         } else {
                             window.location.href = "/epil-pelan";
                             }
-                        }
-                    </script>
-                </div>
+                    }
+                </script>
             </div>
+        </div>
         <br>
         <div class="body-content">
             <div class="table-responsive">

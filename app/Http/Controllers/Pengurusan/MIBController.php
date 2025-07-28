@@ -99,7 +99,10 @@ class MIBController extends Controller
                     /* where('pbt', $pbt->pbt_name)->latest() */->paginate($totalCount);
         }else{
             $totalCount = MIB::count();
-            $MIB = MIB::orderByRaw("CAST(SPLIT_PART(no_siri, '/', 2) AS INTEGER) ASC")
+            $MIB = MIB::when($request->filled('filter'), function ($query) use ($request) {
+                $query->where('status_keahlian', $request->input('filter')); // Adjust column as needed
+            })
+            ->orderByRaw("CAST(SPLIT_PART(no_siri, '/', 2) AS INTEGER) ASC")
                     ->orderByRaw("CAST(SPLIT_PART(no_siri, '/', 3) AS INTEGER) ASC")
                     /* ->latest() */
                     ->paginate($totalCount);

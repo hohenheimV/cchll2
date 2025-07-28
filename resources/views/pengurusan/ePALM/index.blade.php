@@ -52,7 +52,7 @@
                                     </div>
                                 </div>
                             {{ Form::close() }} --}}
-                             <div class="btn-group" role="group" aria-label="First group">
+                            <div class="btn-group" role="group" aria-label="First group">
                                 {{ Form::open(['class'=>'form-inline', 'method' => 'get']) }}
 
                                 <style>

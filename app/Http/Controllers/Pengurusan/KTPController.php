@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\User; // Import the User model
 use App\Model\MaklumatPenggunaPbt; // Import the MaklumatPenggunaPbt model
+use App\Model\Negeri;
 
 class KTPController extends Controller
 {
@@ -39,16 +40,18 @@ class KTPController extends Controller
         if($user->hasRole('Pihak Berkuasa Tempatan')){
             $id_pbt = $user->bahagian_jln;
             $pbt = MaklumatPenggunaPbt::where('id', '=', $id_pbt)->first();
-            $totalCount = KTP::where('pbt', $pbt->pbt_name)->count();
-            $ktps = KTP::where('pbt', $pbt->pbt_name)->latest()->paginate($totalCount);
+            $totalCount = KTP::where('pbt', 'ilike', $pbt->pbt_name)->count();
+            $ktps = KTP::where('pbt', 'ilike', $pbt->pbt_name)->orderByRaw("CAST(tajuk AS INTEGER) DESC")->orderByRaw("CAST(lokasi AS INTEGER) ASC")->paginate($totalCount);
             //$ktps = KTP::where('pbt', $pbt->pbt_name)->latest()->paginate(10);
         }else{
             $totalCount = KTP::count();
-            $ktps = KTP::latest()->paginate($totalCount);
+            $ktps = KTP::orderByRaw("CAST(tajuk AS INTEGER) DESC")->orderByRaw("CAST(lokasi AS INTEGER) ASC")->paginate($totalCount);
         }
         // tested for displaying only PBT KTP
         //$ktps = KTP::latest()->paginate(10);
-        return view('pengurusan.ktp.index', compact('ktps'));
+        $negeriMap = Negeri::pluck('nama_negeri', 'kod_negeri')->toArray();
+
+        return view('pengurusan.ktp.index', compact('ktps', 'negeriMap'));
     }
 
     /**
@@ -72,17 +75,17 @@ class KTPController extends Controller
         // Validate the request
         $validatedData = $request->validate([
             'tajuk' => ['required', 'min:3'],
-            'lokasi' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
+            'lokasi' => ['required', 'min:1', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
             'negeri' => ['required'],
             'pbt' => ['required'],
             'spesis_pokok' => 'required|array',
             'spesis_pokok.*' => 'required|string|min:3',
             'bilangan_pokok' => 'required|array',
             'bilangan_pokok.*' => 'required|integer|min:1|max:10000',
-            'tinggi_pokok' => 'required|array',
-            'tinggi_pokok.*' => 'required|integer|min:0|max:10000',
-            'diameter_pokok' => 'required|array',
-            'diameter_pokok.*' => 'required|integer|min:0|max:10000',
+            // 'tinggi_pokok' => 'array',
+            // 'tinggi_pokok.*' => 'integer|min:0|max:10000',
+            // 'diameter_pokok' => 'array',
+            // 'diameter_pokok.*' => 'integer|min:0|max:10000',
             'jumlah_pokok' => 'required|integer|min:1',
         ], [
             'required' => ':attribute diperlukan.',
@@ -90,11 +93,11 @@ class KTPController extends Controller
             'regex' => ':attribute format tidak sah.',
             'jumlah_pokok.required' => 'Jumlah Keseluruhan Pokok Ditanam diperlukan.',
         ], [
-            'tajuk' => 'Nama Program',
-            'lokasi' => 'Lokasi',
+            'tajuk' => 'Tahun',
+            'lokasi' => 'Suku Tahun',
             'negeri' => 'Negeri',
-            'pbt' => 'PBT/Agensi',
-            'spesis_pokok' => 'Spesis Pokok',
+            'pbt' => 'PBT',
+            'spesis_pokok' => 'Pokok Utama',
             'bilangan_pokok' => 'Bilangan Pokok',
             'tinggi_pokok' => 'Tinggi Pokok',
             'diameter_pokok' => 'Diameter Pokok',
@@ -142,6 +145,7 @@ class KTPController extends Controller
         return view('pengurusan.ktp.show', [
             'ktp' => $ktp,
             'spesisPokokJumlahPairs' => $spesisPokokJumlahPairs, // Pass the parsed data
+            'negeriMap' => Negeri::pluck('nama_negeri', 'kod_negeri')->toArray()
         ]);
     }
 
@@ -175,17 +179,17 @@ class KTPController extends Controller
         // Validate the request
         $validatedData = $request->validate([
             'tajuk' => ['required', 'min:3'],
-            'lokasi' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
+            'lokasi' => ['required', 'min:1', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
             'negeri' => ['required'],
             'pbt' => ['required'],
             'spesis_pokok' => 'required|array',
             'spesis_pokok.*' => 'required|string|min:3',
             'bilangan_pokok' => 'required|array',
             'bilangan_pokok.*' => 'required|integer|min:1|max:10000',
-            'tinggi_pokok' => 'required|array',
-            'tinggi_pokok.*' => 'required|integer|min:0|max:10000',
-            'diameter_pokok' => 'required|array',
-            'diameter_pokok.*' => 'required|integer|min:0|max:10000',
+            // 'tinggi_pokok' => 'required|array',
+            // 'tinggi_pokok.*' => 'required|integer|min:0|max:10000',
+            // 'diameter_pokok' => 'required|array',
+            // 'diameter_pokok.*' => 'required|integer|min:0|max:10000',
             'jumlah_pokok' => 'required|integer|min:1',
         ], [
             'required' => ':attribute diperlukan.',
@@ -193,11 +197,11 @@ class KTPController extends Controller
             'regex' => ':attribute format tidak sah.',
             'jumlah_pokok.required' => 'Jumlah Keseluruhan Pokok Ditanam diperlukan.',
         ], [
-            'tajuk' => 'Nama Program',
-            'lokasi' => 'Lokasi',
+            'tajuk' => 'Tahun',
+            'lokasi' => 'Suku Tahun',
             'negeri' => 'Negeri',
-            'pbt' => 'PBT/Agensi',
-            'spesis_pokok' => 'Spesis Pokok',
+            'pbt' => 'PBT',
+            'spesis_pokok' => 'Pokok Utama',
             'bilangan_pokok' => 'Bilangan Pokok',
             'tinggi_pokok' => 'Tinggi Pokok',
             'diameter_pokok' => 'Diameter Pokok',

@@ -150,16 +150,27 @@
                     <!-- Nama Kempen and Lokasi -->
                     <div class="form-row col-md-6">
                         <dl class="row">
-                            <dt class="col-4">Tajuk Program:</dt>
+                            <dt class="col-4">Tahun:</dt>
                             <dd class="col-8">{{ $ktp->tajuk }}</dd>
 
                             <!-- <dt class="col-6">Keterangan</dt>
                             <dd class="col-6">{{ $ktp->keterangan }}</dd> -->
                                 
-                            <dt class="col-4">Lokasi Tanaman:</dt>
-                            <dd class="col-8">{{ $ktp->lokasi }}</dd>
+                            <dt class="col-4">Suku Tahun:</dt>
+                            <?php
+                                $quarters = [
+                                    1 => 'Jan - Mac',
+                                    2 => 'Apr - Jun',
+                                    3 => 'Jul - Sep',
+                                    4 => 'Okt - Dis',
+                                ];
+                            ?>
+                            <dd class="col-8">{{ $quarters[$ktp->lokasi] ?? 'N/A' }}</dd>
 
-                            <dt class="col-4">PBT / NGO:</dt>
+                            <dt class="col-4">Negeri:</dt>
+                            <dd class="col-8">{{ isset($negeriMap[$ktp->negeri]) ? ucwords(strtolower($negeriMap[$ktp->negeri])) : 'N/A' }}</dd>
+
+                            <dt class="col-4">PBT:</dt>
                             <dd class="col-8">{{ $ktp->pbt }}</dd>
                         </dl>
                     </div>

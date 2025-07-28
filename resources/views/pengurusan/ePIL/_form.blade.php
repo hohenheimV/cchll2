@@ -941,6 +941,15 @@
                             const fileInput = event.target;
                             const rowId = fileInput.id.split('_')[1];
                             const file = fileInput.files[0];
+                            let maxSize = 1024 * 1024 * 1024;
+
+                            if (file.size > maxSize) {
+                                Swal.fire('Error', 'Saiz fail melebihi 1024MB tidak dibenarkan!', 'error');
+                                $('#supporting_documents').val('');
+                                $('button[type="submit"]').prop('disabled', true);
+                                $('#supporting_documents').prop('disabled', false);
+                                return;
+                            }
                             let file_size = ((file.size)/1048576).toFixed(2);
                             let file_type = file.type;
                             // console.log(((file.size)/1048576).toFixed(2));
@@ -1028,6 +1037,15 @@
                             const fileInput = event.target;
                             const rowId = fileInput.id.split('_')[1];
                             const file = fileInput.files[0];
+                            let maxSize = 1024 * 1024 * 1024;
+
+                            if (file.size > maxSize) {
+                                Swal.fire('Error', 'Saiz fail melebihi 1024MB tidak dibenarkan!', 'error');
+                                $('#supporting_documents').val('');
+                                $('button[type="submit"]').prop('disabled', true);
+                                $('#supporting_documents').prop('disabled', false);
+                                return;
+                            }
                             let file_size = ((file.size)/1048576).toFixed(2);
                             let file_type = file.type;
                             // console.log(((file.size)/1048576).toFixed(2));

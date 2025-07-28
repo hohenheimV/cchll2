@@ -15,6 +15,8 @@
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
 
                             <div class="btn-group" role="group" aria-label="First group">
+                                <a href="{{ route('pengurusan.MIB.index') }}" class="btn btn-secondary btn-sm">Reset</a>
+                                &nbsp;&nbsp;&nbsp;
                                 {!! Form::button('<i class="fas fa-plus"></i> Daftar', [
                                 'class'=>'btn btn-success btn-sm',
                                 'onclick'=>"window.location='".route('pengurusan.MIB.create')."'",
@@ -38,7 +40,9 @@
                                         <th class="text-center w-10">PBT</th>
                                     @endif
                                     <!-- <th class="text-center align-middle w-1">Tarikh Permohonan</th> -->
+                                    @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|KP/ TKP JLN'))
                                     <th class="text-center align-middle w-1">Penyaluran Peruntukan Promosi</th>
+                                    @endif
                                     <th class="text-center align-middle w-1">Status Permohonan</th>
                                     <th class="text-center align-middle w-1">Status Rakan Taman</th>
                                     <th class="text-center align-middle w-1">Tindakan</th>
@@ -51,34 +55,52 @@
                                 <tr>
                                     <td>{{ $index++ }}</td>
                                     <!-- <td>{!! $rakan_taman->name.'<br />'.$rakan_taman->email !!}</td> -->
-                                    <td>{{ strtoupper($rakan_taman->taman) }}</td>
+                                    <td>
+                                        {!! strtoupper($rakan_taman->taman)
+                                        .'<br>'
+                                        .'<span class="badge badge-secondary" style="white-space: normal; text-align: centre;">' . $rakan_taman->ref_num . '</span>' !!}
+                                    </td>
                                     <?php
                                         $rakanTaman = $nama = $telefon = $emel = null;
-                                        $maklumat = "Tiada Maklumat";
+                                        $setiausaha_maklumat = $penyelaras_maklumat = "Tiada Maklumat";
                                         if(isset($rakan_taman->jawatankuasa)){
                                             $rakanTaman = ($rakan_taman->jawatankuasa);
+                                            
+                                            if(isset($rakanTaman[2])){
+                                                $nama = isset($rakanTaman) ? $rakanTaman[2]['setiausaha_nama'] : 'Tiada Maklumat';
+                                                $telefon = isset($rakanTaman) ? $rakanTaman[2]['setiausaha_tel_bimbit'] : 'Tiada Maklumat';
+                                                $emel = isset($rakanTaman) ? $rakanTaman[2]['setiausaha_email'] : 'Tiada Maklumat';
+                                                $setiausaha_maklumat = strtoupper($nama ?? '') . '<br>' .
+                                                    ($telefon ?? '') . '<br>' .
+                                                    ($emel ?? '');
+                                            }
+
                                             if(isset($rakanTaman[4])){
                                                 $nama = isset($rakanTaman) ? $rakanTaman[4]['penyelaras_nama'] : 'Tiada Maklumat';
                                                 $telefon = isset($rakanTaman) ? $rakanTaman[4]['penyelaras_tel_bimbit'] : 'Tiada Maklumat';
                                                 $emel = isset($rakanTaman) ? $rakanTaman[4]['penyelaras_email'] : 'Tiada Maklumat';
-                                                $maklumat = strtoupper($nama ?? '') . '<br>' .
+                                                $penyelaras_maklumat = strtoupper($nama ?? '') . '<br>' .
                                                     ($telefon ?? '') . '<br>' .
                                                     ($emel ?? '');
                                             }
                                         }
                                     ?>
-                                    <td class="text-center">
-                                        {!! $maklumat !!}
+                                    <td class="text-left">
+                                        {!! $setiausaha_maklumat !!}
+                                        {!! $penyelaras_maklumat != "Tiada Maklumat" ? "<hr>".$penyelaras_maklumat : '' !!}
                                     </td>
                                     @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))
-                                        <td>
+                                        <td class="text-center">
                                             {{ strtoupper($rakan_taman->pbt) }}
                                         </td>
                                     @endif
                                     <!-- <td class="text-center">{!! $rakan_taman->created_at->format('d-m-Y') !!}</td> -->
+                                    
+                                    @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|KP/ TKP JLN'))
                                     <td class="text-center">
                                         {!! '<span class="badge badge-success" style="white-space: normal; text-align: centre;width: 100%;">RM ' . number_format($rakan_taman->peruntukan, 2) . '</span>' !!}
                                     </td>
+                                    @endif
                                     <td class="text-center">{!! '<span class="badge badge-warning" style="white-space: normal; text-align: centre;width: 100%;">'.$rakan_taman->status.'</span>' !!}</td>
                                     <td class="text-center">{!! '<span class="badge badge-primary" style="white-space: normal; text-align: centre;width: 100%;">'.$rakan_taman->status_keahlian.'</span>' !!}</td>
                                     <td>

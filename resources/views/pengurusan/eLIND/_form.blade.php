@@ -52,7 +52,7 @@
                     <h4>Butiran Maklumat {{ $capitalizedSegment ?? '' }}</h4>
                 </div>
             </div>
-            <div class="form-group required ">
+            <div class="form-group required inertClass">
                 <label for="name" class="col-md-4 control-label">Nama {{ $capitalizedSegment ?? '' }}</label>
                 <div class="col-md-12">
                     <input name="name" class="form-control" maxlength="50" type="text" id="name" value="{{ isset($eLIND->name) ? $eLIND->name : '' }}">
@@ -460,23 +460,26 @@
                             <label for="kelas_kontraktor" class="col-md-12 control-label">Kelas Kontraktor {!! in_array('kelas_kontraktor', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 {!! Form::select('kelas_kontraktor', [
-                                    1 => 'A',
-                                    2 => 'B',
-                                    3 => 'BX',
-                                    4 => 'C',
-                                    5 => 'D',
-                                    6 => 'E',
-                                    7 => 'EX',
-                                    8 => 'F',
-                                    9 => 'G1',
-                                    10 => 'G2',
-                                    11 => 'G3',
-                                    12 => 'G4',
-                                    13 => 'G5',
-                                    14 => 'G6',
-                                    15 => 'G7',
-                                    0 => 'TIADA MAKLUMAT'
-                                ], isset($eLIND->kelas_kontraktor) ? $eLIND->kelas_kontraktor : '0', ['class' => 'form-control', 'id' => 'kelas_kontraktor']) !!}
+                                    'A'  => 'A',
+                                    'B'  => 'B',
+                                    'BX' => 'BX',
+                                    'C'  => 'C',
+                                    'D'  => 'D',
+                                    'E'  => 'E',
+                                    'EX' => 'EX',
+                                    'F'  => 'F',
+                                    'G1' => 'G1',
+                                    'G2' => 'G2',
+                                    'G3' => 'G3',
+                                    'G4' => 'G4',
+                                    'G5' => 'G5',
+                                    'G6' => 'G6',
+                                    'G7' => 'G7',
+                                    'TIADA MAKLUMAT' => 'TIADA MAKLUMAT'
+                                ], isset($eLIND->kelas_kontraktor) ? $eLIND->kelas_kontraktor : 'TIADA MAKLUMAT', [
+                                    'class' => 'form-control',
+                                    'id'    => 'kelas_kontraktor'
+                                ]) !!}
                             </div>
                             <script>
                                 $(document).ready(function() {
@@ -527,10 +530,13 @@
                             <label for="bidang_kepakaran" class="col-md-12 control-label">Bidang Kepakaran {!! in_array('bidang_kepakaran', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                             <div class="col-md-12">
                                 {!! Form::select('bidang_kepakaran', [
-                                    1 => 'LANDSKAP ARKITEK',
-                                    2 => 'ELEKTRIK',
-                                    3 => 'SIVIL DAN STRUKTUR',
-                                    4 => 'UKURBAHAN',
+                                    // 1 => 'LANDSKAP ARKITEK',
+                                    // 2 => 'ELEKTRIK',
+                                    // 3 => 'SIVIL DAN STRUKTUR',
+                                    // 4 => 'UKURBAHAN',
+                                    5 => 'B09 (Lanskap dalam bangunan)',
+                                    6 => 'CE14 (Landskap diluar bangunan)',
+                                    7 => 'B09 & CE14 (Lanskap dalam bangunan), (Landskap diluar bangunan)',
                                     0 => 'TIADA MAKLUMAT'
                                 ], isset($eLIND->bidang_kepakaran) ? $eLIND->bidang_kepakaran : '0', ['class' => 'form-control', 'id' => 'bidang_kepakaran']) !!}
                             </div>
@@ -867,7 +873,7 @@
                                         <img src="{{ $extensionIcon }}" class="br-5" alt="" style="width: 100px; height: 100px; border-radius: 5px; margin-bottom: 10px;">
                                     </div>
                                     <div class="product-image">
-                                        <span class="file-name-1" style="background-color: #008000; padding: 5px 10px; border-radius: 5px; color: #fff; font-weight: 600; display: inline-block; font-size: 14px;">Profil Syarikat <i class="fas fa-download"></i></span>
+                                        <span class="file-name-1" style="background-color: #008000; padding: 5px 10px; border-radius: 5px; color: #fff; font-weight: 600; display: inline-block; font-size: 12px;">Profil Syarikat <i class="fas fa-download"></i></span>
                                     </div>
                                     <div class="product-image">
                                         <span class="file-name-1">{{ $eLIND->profil_syarikat ?? '' }}</span>
@@ -877,7 +883,18 @@
                         </div>
                     </div>
                 @else
-                    Tiada Dokumen
+                    <div class="col-md-12">
+                        <div class="d-flex align-items-center">
+                            <a class="" style="border: 0px solid #ddd; border-radius: 10px; padding: 10px; display: inline-block; text-align: center; background-color: #fff;">
+                                <div class="product-image">
+                                    <img src="https://img.icons8.com/plasticine/100/pdf-2.png" class="br-5" alt="" style="width: 48px; height: 48px; border-radius: 5px; margin-bottom: 10px;">
+                                </div>
+                                <div class="product-image">
+                                    <span class="file-name-1" style="background-color: #008000; padding: 5px 10px; border-radius: 5px; color: #fff; font-weight: 600; display: inline-block; font-size: 12px;">Tiada Profil Syarikat</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 @endif
             </div>
             @endif

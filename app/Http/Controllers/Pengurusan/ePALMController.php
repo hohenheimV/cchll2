@@ -137,7 +137,25 @@ class ePALMController extends Controller
             }
 
             if ($kategori) {
-                $query->whereRaw('LOWER(kategori_taman) = ?', [strtolower($kategori)]);
+                if (strtolower($kategori) === 'taman awam') {
+                    $kategoriList = [
+                        'Taman Awam',
+                        'Taman Wilayah',
+                        'Taman Bandaran',
+                        'Taman Tempatan',
+                        'Padang Kejiranan',
+                        'Padang Permainan',
+                        'Lot Permainan'
+                    ];
+
+                    $query->where(function ($q) use ($kategoriList) {
+                        foreach ($kategoriList as $k) {
+                            $q->orWhere('kategori_taman', 'ilike', $k); // case-insensitive if using PostgreSQL
+                        }
+                    });
+                } else {
+                    $query->where('kategori_taman', 'ilike', $kategori); // or 'like' for MySQL
+                }
             }
 
             if ($negeri && !$nama_pbt) {
@@ -170,7 +188,25 @@ class ePALMController extends Controller
             }
 
             if ($kategori) {
-                $query->whereRaw('LOWER(kategori_taman) = ?', [strtolower($kategori)]);
+                if (strtolower($kategori) === 'taman awam') {
+                    $kategoriList = [
+                        'Taman Awam',
+                        'Taman Wilayah',
+                        'Taman Bandaran',
+                        'Taman Tempatan',
+                        'Padang Kejiranan',
+                        'Padang Permainan',
+                        'Lot Permainan'
+                    ];
+
+                    $query->where(function ($q) use ($kategoriList) {
+                        foreach ($kategoriList as $k) {
+                            $q->orWhere('kategori_taman', 'ilike', $k); // case-insensitive if using PostgreSQL
+                        }
+                    });
+                } else {
+                    $query->where('kategori_taman', 'ilike', $kategori); // or 'like' for MySQL
+                }
             }
 
             if ($negeri && !$nama_pbt) {

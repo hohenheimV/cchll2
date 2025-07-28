@@ -67,12 +67,15 @@
                 {{ Form::close() }}
                 <!--hold-->
                 @if(config('mail.enabled'))
-                <p class="my-3 text-center">
+                <p class="my-1 text-center">
                     {!! Form::button('Lupa Kata Laluan', ['onclick'=>"window.location='".route('password.request')."'",'class'=>'btn btn-link btn-sm']) !!}
                 </p>
                 @endif
-                <p class="my-3 text-center">
+                <p class="my-1 text-center">
                     <a href="{{ route('register') }}" class="btn btn-link btn-sm">Belum ada akaun? Daftar Akaun</a>
+                </p>
+                <p class="my-1 text-center">
+                    <a href="{{ route('welcome') }}" class="btn btn-link btn-sm">Halaman Utama</a>
                 </p>
             
             </div>

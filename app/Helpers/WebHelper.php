@@ -418,7 +418,7 @@ if (!function_exists('in_arrayi')) {
             //         $html .= '<li class="nav-item"><a target="_blank" class="btn bg-olive btn-sm mr-1" href="' . $social['link'] . '"><i class="' . $social['icon'] . '"></i></a>';
             //     }
             // }
-            $html .= '<li class="nav-item"><a target="_blank" class="btn bg-olive btn-sm mr-1" href="/login">Log Masuk&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-lock"></i></a>&nbsp;';
+            $html .= '<li class="nav-item"><a class="btn bg-olive btn-sm mr-1" href="/login">Log Masuk&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-lock"></i></a>&nbsp;';
             
             $html .= '</ul></div>';
             return $html;

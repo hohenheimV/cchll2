@@ -23,10 +23,12 @@
                     <div class="card-tools">
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                             <div class="btn-group" role="group" aria-label="First group">
-
+                                <a href="{{ route('pengurusan.eLAPS.index') }}" class="btn btn-secondary btn-sm">Reset</a>
+                                &nbsp;&nbsp;&nbsp;
                                 {!! Form::button('<i class="fas fa-plus"></i> Daftar', 
                                     ['onclick'=>"window.location='".route('pengurusan.eLAPS.create')."'",
-                                    'class'=>'btn bg-success btn-sm', Html::tooltip('Daftar Permohonan Projek Landskap')]) !!}
+                                    'class'=>'btn bg-success btn-sm', Html::tooltip('Daftar Permohonan Projek Landskap')]) 
+                                !!}
                             </div>
                         </div>
                     </div>
@@ -196,7 +198,19 @@
                                                         @endif
                                                     --}}
                                                     @endif
-                                                    @if(($permohonan->status_permohonan == 3 && (Auth::user()->hasRole('KP/ TKP JLN') || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6))) || ((Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 7 || Auth::user()->hasRole('Pentadbir Sistem')) && $permohonan->status_permohonan >= 3))
+                                                    @if(
+                                                        (
+                                                            $permohonan->status_permohonan == 3 
+                                                            && (
+                                                                Auth::user()->hasRole('KP/ TKP JLN') 
+                                                                || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6)
+                                                                || (
+                                                                    Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 7 
+                                                                    || Auth::user()->hasRole('Pentadbir Sistem')
+                                                                ) 
+                                                            )
+                                                        )
+                                                    )
                                                         {!! Form::button('<i class="fas fa-tasks"></i>', [
                                                             'class' => 'btn btn-success btn-sm', 
                                                             'data-toggle'=>'modal', 
@@ -207,7 +221,7 @@
                                                     @endif
 
                                                     
-                                                    @if($permohonan->status_permohonan != 1 && (Auth::user()->hasRole('Pentadbir Sistem')))
+                                                    {{-- @if($permohonan->status_permohonan != 1 && (Auth::user()->hasRole('Pentadbir Sistem')))
                                                         {!! 
                                                             Form::button('<i class="fas fa-trash"></i>', [
                                                                 'class' => 'btn btn-danger btn-sm',
@@ -217,8 +231,78 @@
                                                                 Html::tooltip('Padam Permohonan')
                                                             ]) 
                                                         !!}
-                                                    @endif
+                                                    @endif --}}
                                                 </div>
+
+                                                @if(
+                                                    (
+                                                        Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 7 
+                                                        || Auth::user()->hasRole('Pentadbir Sistem')
+                                                    )
+                                                    && $permohonan->status_permohonan >= 2
+                                                )
+                                                    <br>Pentadbir:<br>
+                                                    <div class="btn-group">
+                                                        @if($permohonan->status_permohonan > 3)
+                                                            {!! 
+                                                                Form::button('<i class="fas fa-tasks"></i>', [
+                                                                    'class' => 'btn btn-success btn-sm', 
+                                                                    'data-toggle'=>'modal', 
+                                                                    'data-target'=>'#modalSerahan', 
+                                                                    'data-elaps-id' => $permohonan->id, 
+                                                                    Html::tooltip('Serahan kepada bahagian')
+                                                                ]) 
+                                                            !!}
+                                                        @endif
+
+                                                        @if($permohonan->status_permohonan >= 11)
+                                                        {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
+                                                            [
+                                                                'class'=>'btn btn-warning btn-sm', Html::tooltip('Kemaskini Status Permohonan'),
+                                                                'data-toggle'=>'modal', 
+                                                                'data-target'=>'#modalKeputusan', 
+                                                                'data-elaps-id' => $permohonan->id
+                                                            ]) 
+                                                        !!}
+                                                        @endif
+
+                                                        @if($permohonan->status_permohonan > 11 || $permohonan->status_permohonan >= 12)
+                                                        {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
+                                                            [
+                                                                'class'=>'btn btn-warning btn-sm', Html::tooltip('Kemaskini Status JPT'),
+                                                                'data-toggle'=>'modal', 
+                                                                'data-target'=>'#modalJPT', 
+                                                                'data-elaps-id' => $permohonan->id
+                                                            ]) 
+                                                        !!}
+                                                        @endif
+
+                                                        @if($permohonan->status_permohonan > 12 && $permohonan->status_permohonan <= 14)
+                                                        {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
+                                                            [
+                                                                'class' => 'btn btn-warning btn-sm', 
+                                                                'data-elaps-id' => $permohonan->id,
+                                                                'data-text'=> $permohonan->status_permohonan, 
+                                                                'data-toggle' => 'modal', 
+                                                                'data-target' => '#modalStatusProjek', 
+                                                                Html::tooltip('Kemaskini Status Projek')
+                                                            ])  
+                                                        !!}
+                                                        @endif
+
+                                                        @if($permohonan->status_permohonan != 1)
+                                                            {!! 
+                                                                Form::button('<i class="fas fa-trash"></i>', [
+                                                                    'class' => 'btn btn-danger btn-sm',
+                                                                    'data-url' => route('pengurusan.eLAPS.destroy', $permohonan),
+                                                                    'data-toggle' => 'modal',
+                                                                    'data-target' => '#modalDelete',
+                                                                    Html::tooltip('Padam Permohonan')
+                                                                ]) 
+                                                            !!}
+                                                        @endif
+                                                    </div>
+                                                @endif
                                             </td>
                                         </tr>
                                         @endif

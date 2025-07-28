@@ -257,7 +257,7 @@
                     // buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
                 });
                 $('#exampleNP').DataTable({
-                    responsive: true,
+                    responsive: false,
                     paging: true,
                     searching: true,
                     info: true,

@@ -26,9 +26,8 @@ class eLAPSController extends Controller
         $this->middleware(['role_or_permission:Pentadbir Sistem|Pegawai|elaps-delete'], ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        
         $userId = $this->getUserID();
         $user = $this->getUser();//User::whereRaw('id = ?', [$userId])->first();
         if($user->hasRole('Pihak Berkuasa Tempatan')){
@@ -36,11 +35,16 @@ class eLAPSController extends Controller
             $eLAPS = eLAPS::where('id_pemohon', $user->bahagian_jln)->orderBy('updated_at', 'desc')->paginate($totalCount);
         }elseif($user->hasRole('KP/ TKP JLN|Pentadbir Sistem') || ($user->hasRole('Pegawai') && $user->bahagian_jln == 6) || ($user->hasRole('Pegawai') && $user->bahagian_jln == 7)){
             $totalCount = eLAPS::count();
-            $eLAPS = eLAPS::/* orderByRaw('CAST(status_permohonan AS INT) ASC')-> */orderBy('updated_at', 'desc')->paginate($totalCount);
+            $eLAPS = eLAPS::/* orderByRaw('CAST(status_permohonan AS INT) ASC')-> */when($request->filled('filter'), function ($query) use ($request) {
+            $query->where('bahagian_jln', $request->input('filter')); // Adjust column as needed
+        })->orderBy('updated_at', 'desc')->paginate($totalCount);
         }else{
             // $totalCount = eLAPS::where('status_permohonan', '!=', $userId)->count();
             // $eLAPS = eLAPS::where('status_permohonan', '!=', $userId)->orderBy('updated_at', 'desc')->paginate($totalCount);
-            $totalCount = eLAPS::where('bahagian_jln', $user->bahagian_jln)->orWhere('id_pemohon', $user->id)->count();
+            $totalCount = eLAPS::when($request->filled('filter'), function ($query) use ($request) {
+                $query->where('bahagian_jln', $request->input('filter')); // Adjust column as needed
+            })
+            ->where('bahagian_jln', $user->bahagian_jln)->orWhere('id_pemohon', $user->id)->count();
             $eLAPS = eLAPS::where('bahagian_jln', $user->bahagian_jln)->orWhere('id_pemohon', $user->id)->/* orderByRaw('CAST(status_permohonan AS INT) ASC')-> */orderBy('updated_at', 'desc')->paginate($totalCount);
         }
 

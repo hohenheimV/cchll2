@@ -32,10 +32,18 @@
                                 <tr>
                                     <th class="w-1">Bil.</th>
                                     <!-- <th class="w-5">Gambar</th> -->
-                                    <th class="text-center w-15">Nama Program</th>
+
+                                    {{-- <th class="text-center w-15">Nama Program</th>
                                     <th class="text-center w-15">PBT/ Agensi</th>
                                     <th class="text-center w-15">Lokasi</th>
-                                    <th class="text-center w-5">Jumlah Pokok Ditanam</th>
+                                    <th class="text-center w-5">Jumlah Pokok Ditanam</th> --}}
+                                    
+                                    <th class="text-center w-5">Negeri</th>
+                                    <th class="text-center w-15">Pihak Berkuasa Tempatan</th>
+                                    <th class="text-center w-5">Tahun</th>
+                                    <th class="text-center w-5">Suku Tahun</th>
+                                    <th class="text-center w-10">Jumlah Pokok Ditanam</th>
+
                                     {{-- <th class="text-center w-5">Tarikh</th> --}}
                                     <th class="text-center w-5">Tindakan</th>
                                 </tr>
@@ -49,12 +57,34 @@
                                         {!! '<img class="image-thumb p-1 w-75 mx-auto d-block embed-responsive-item" alt="Gambar Kempen Tanam Pokok"
                                             src="'.asset($ktp->gambar_360 ? 'storage/images/shares/ktp/'.$ktp->gambar_360 : 'img/no-photos.png').'">' !!}
                                     </td> -->
-                                    <td class="text-center">{{ $ktp->tajuk ?? 'N/A' }}</td>
+
+                                    {{-- <td class="text-center">{{ $ktp->tajuk ?? 'N/A' }}</td>
                                     <td class="text-center">{{ $ktp->pbt ?? 'N/A' }}</td>
                                     <td class="text-center">{{ $ktp->lokasi ?? 'N/A' }}</td>
+                                    <td class="text-center">{{ $ktp->jumlah_pokok ?? 'N/A' }}</td> --}}
+
+                                    
+                                    <td class="text-center">
+                                        {{ isset($negeriMap[$ktp->negeri]) ? ucwords(strtolower($negeriMap[$ktp->negeri])) : 'N/A' }}
+                                    </td>
+                                    <td class="text-center">{{ ucwords(strtolower($ktp->pbt)) ?? 'N/A' }}</td>
+                                    <td class="text-center">{{ $ktp->tajuk ?? 'N/A' }}</td>
+                                    <td class="text-center">
+                                        <?php
+                                            $quarters = [
+                                                1 => 'Jan - Mac',
+                                                2 => 'Apr - Jun',
+                                                3 => 'Jul - Sep',
+                                                4 => 'Okt - Dis',
+                                            ];
+                                        ?>
+                                        <span style="display: none;">{{ $ktp->lokasi }}</span>
+                                        {{ $quarters[$ktp->lokasi] ?? 'N/A' }}
+                                    </td>
                                     <td class="text-center">{{ $ktp->jumlah_pokok ?? 'N/A' }}</td>
+
                                     {{-- <td class="text-center">{{ $ktp->created_at ? $ktp->created_at->format('Y') : 'N/A' }}</td> --}}
-                                    <td>
+                                    <td class="text-center">
                                         <div class="btn-group">
                                             {!! Form::button('<i class="fas fa-search"></i>',
                                                 ['onclick'=>"window.location='".route('pengurusan.ktp.show',$ktp)."'",

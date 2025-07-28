@@ -1,6 +1,34 @@
 <div class="card card-olive card-outline">
     <div class="card-header">
         <h3 class="card-title font-weight-bold my-1">Direktori Penggiat Industri: {{ $keyword }}</h3>
+        <div class="card-tools">
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group" role="group" aria-label="First group">
+                    {{ Form::open(['class' => 'form-inline', 'method' => 'get', 'url' => url()->current()]) }}
+                        {{ Form::hidden('negeri', request('negeri')) }}
+                        {{ Form::hidden('kelas_kontraktor', request('kelas_kontraktor')) }}
+                        {{ Form::hidden('bidang_kepakaran', request('bidang_kepakaran')) }}
+                        {{-- Keyword Search --}}
+                        <div class="input-group mr-2">
+                            {{ Form::search('search', request('search'), [
+                                'aria-label' => 'Search',
+                                'placeholder' => 'Carian Pantas',
+                                'class' => 'form-control form-control-sm ' . Html::isInvalid($errors, 'search')
+                            ]) }}
+                            &nbsp;
+                            <div class="input-group-append">
+                                {!! Form::button('<i class="fas fa-search"></i> Cari', [
+                                    'class' => 'btn btn-success btn-sm',
+                                    'type' => 'submit'
+                                ]) !!}
+                                &nbsp;
+                                <a href="{{ request()->route('keyword') }}" class="btn btn-secondary btn-sm">Reset</a>
+                            </div>
+                        </div>
+                    {{ Form::close() }}
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="card-body">
@@ -9,12 +37,15 @@
                 <div class="filter-container" role="group">
 
                     {{-- Negeri Dropdown --}}
+                    @if($keyword !== "Pertubuhan Antarabangsa")
                     <select id="negeri" name="negeri" class="filter-select">
                         {{-- <option value="">Papar Semua Negeri</option> --}}
                     </select>
+                    @endif
 
-                    {{-- Kelas Kontraktor Dropdown (Only for Kontraktor) --}}
+                    {{-- (Only for Kontraktor) --}}
                     @if($keyword == "Kontraktor")
+                    {{-- Kelas Kontraktor Dropdown --}}
                     <select id="kelas_kontraktor" name="kelas_kontraktor" class="filter-select">
                         <option value="">Papar Semua Kelas</option>
                         @foreach([
@@ -23,6 +54,20 @@
                         ] as $kod)
                             <option value="{{ $kod }}" {{ request('kelas_kontraktor') == $kod ? 'selected' : '' }}>
                                 {{ $kod == 'TIADA' ? 'Tiada Maklumat' : $kod }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    {{-- Bidang Kepakaran --}}
+                    <select id="bidang_kepakaran" name="bidang_kepakaran" class="filter-select">
+                        <option value="">Papar Semua Kepakaran</option>
+                        @foreach([
+                            5 => 'B09',
+                            6 => 'CE14',
+                            7 => 'B09 & CE14'
+                        ] as $kod => $label)
+                            <option value="{{ $kod }}" {{ request('bidang_kepakaran') == $kod ? 'selected' : '' }}>
+                                {{ $label }}
                             </option>
                         @endforeach
                     </select>
@@ -54,14 +99,16 @@
                         });
                     });
 
-                    $('#negeri, #kelas_kontraktor').on('change', function () {
+                    $('#negeri, #kelas_kontraktor, #bidang_kepakaran').on('change', function () {
                         const negeri = $('#negeri').val();
                         const kelas = $('#kelas_kontraktor').val();
+                        const bidang = $('#bidang_kepakaran').val();
                         let url = `/penggiat-industri/${keyword}`;
                         const params = new URLSearchParams();
 
                         if (negeri) params.append('negeri', negeri);
                         if (kelas) params.append('kelas_kontraktor', kelas);
+                        if (bidang) params.append('bidang_kepakaran', bidang);
 
                         window.location.href = `${url}?${params.toString()}`;
                     });
@@ -87,7 +134,10 @@
                         <tr>
                             <th class="w-1">Bil.</th>
                             <th class="w-15">Nama</th>
+                            @if($keyword == "Kontraktor")
                             <th class="text-center w-1">Kelas</th>
+                            <th class="text-center w-1">Bidang</th>
+                            @endif
                             <th class="w-5">Alamat</th>
                             <!-- <th class="text-center w-5">Prestasi</th> -->
                             <th class="text-center w-1">Tindakan</th>
@@ -117,8 +167,25 @@
                                 @endif
                                 <tr>
                                     <td>{{ $index++ }}</td>
-                                    <td>{{ ucwords(strtolower($user->name)) }}</td>
+                                    <td>{{ strtoupper($user->name) }}</td>
+                                    @if($keyword == "Kontraktor")
                                     <td class="text-center w-1">{{ ($user->kelas_kontraktor) ? ($user->kelas_kontraktor) : "-" }}</td>
+                                    @php
+                                        $bidangOptions = [
+                                            // 1 => 'LANDSKAP ARKITEK',
+                                            // 2 => 'ELEKTRIK',
+                                            // 3 => 'SIVIL DAN STRUKTUR',
+                                            // 4 => 'UKURBAHAN',
+                                            5 => 'B09',
+                                            6 => 'CE14',
+                                            7 => 'B09 & CE14',
+                                        ];
+                                    @endphp
+
+                                    <td class="text-center w-1">
+                                        {{ $bidangOptions[$user->bidang_kepakaran] ?? '-' }}
+                                    </td>
+                                    @endif
                                     <td>
                                         {{--@if(isset($user->email)) {{ $user->email }}<br>@endif--}}
                                         @if(isset($user->address1)) {{ ucwords(strtolower($user->address1.',')) }}<br>@endif
@@ -666,6 +733,9 @@
                     2: 'ELEKTRIK',
                     3: 'SIVIL DAN STRUKTUR',
                     4: 'UKURBAHAN',
+                    5: 'B09 (Lanskap dalam bangunan)',
+                    6: 'CE14 (Landskap diluar bangunan)',
+                    7: 'B09 & CE14 (Lanskap dalam bangunan), (Landskap diluar bangunan)',
                     0: 'TIADA MAKLUMAT'
                 };
 

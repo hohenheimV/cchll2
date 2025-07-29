@@ -56,8 +56,8 @@ class MIBController extends Controller
         $data = [
             'serial_number' => $rakanTaman->no_siri,
             'approved_at' => $rakanTaman->approved_at,
+            'taman' => $rakanTaman->taman,
         ];
-        
         // Load the view and pass the data
         $pdf = PDF::loadView('pengurusan.MIB.cert', $data);
 

@@ -58,7 +58,7 @@
                                     <td>
                                         {!! strtoupper($rakan_taman->taman)
                                         .'<br>'
-                                        .'<span class="badge badge-secondary" style="white-space: normal; text-align: centre;">' . $rakan_taman->ref_num . '</span>' !!}
+                                        .'<span class="badge badge-secondary" style="white-space: normal; text-align: centre;">' . $rakan_taman->no_siri . '</span>' !!}
                                     </td>
                                     <?php
                                         $rakanTaman = $nama = $telefon = $emel = null;

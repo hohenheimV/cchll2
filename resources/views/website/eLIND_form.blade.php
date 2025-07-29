@@ -301,7 +301,7 @@
                                 </tr>
                             @endforeach
                         @else
-                            <tr><td colspan="5" class="text-center">No data available</td></tr>
+                            <tr><td colspan="6" class="text-center">No data available</td></tr>
                         @endif
                     </tbody>
 

@@ -550,8 +550,10 @@
     </div>
     <div id="particles-js" aria-hidden="true"></div>
     <div class="hero-content fly-in typewriter">
-        <h1 style="font-size: 30px; font-family: Arial, serif !important;">{{ ("Sistem Pengurusan Maklumat Landskap") }}</h1>
-        <h3 style="font-size: 22px; font-family: Arial, serif !important;"><i>(eLANDSKAP)</i></h3>
+        <img src="{{ asset('img/logo-jln.png') }}" height="80" alt="">
+        <br>
+        <h3>eLANDSKAP</h3>
+        <h5>{{ ("Sistem Pengurusan Maklumat Landskap") }}</h5>
         <h6 >Pusat Data Landskap Negara</h6>
         <br>
         <nav class="cta-buttons" aria-label="Call to action buttons">

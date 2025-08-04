@@ -53,6 +53,6 @@
 </div>
 <div class="form-group">
     {{ Form::label('target', 'Target') }}
-    {{ Form::select('target', ['_self' => '_self', '_blank' => '_blank'], null, ['placeholder' => '--Pilihan--','class' => 'form-control '.Html::isInvalid($errors,'target')]) }}
+    {{ Form::select('target', ['_self' => 'Open in Same Tab', '_blank' => 'Open in New Tab'], null, ['placeholder' => '--Pilihan--','class' => 'form-control '.Html::isInvalid($errors,'target')]) }}
     {!! Html::hasError($errors,'target') !!}
 </div>

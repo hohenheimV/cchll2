@@ -134,8 +134,8 @@
         }
 
         @media (min-width: 768px) {
-            h1 {
-                font-size: 62px !important;
+            h5 {
+                font-size: 30px !important;
             }
             h3 {
                 font-size: 52px !important;
@@ -144,17 +144,19 @@
     </style>
     <style>
         .typewriter h3 {
-            display: inline-block;               /* Important for width animation */
-            overflow: hidden;                   /* Hide overflow text */
-            border-right: 2px solid #000;       /* Blinking caret */
-            white-space: nowrap;                /* Prevent text wrap */
+            display: inline-block;
+            overflow: hidden;
+            border-right: 2px solid #000;
+            white-space: nowrap;
             letter-spacing: 1px;
             animation:
                 typing 1.5s steps(11, end),
                 blink-caret 0.75s step-end infinite;
-            font-size: 22px;
+            /* font-size: 22px; */
             font-family: Arial, serif !important;
-            width: 15ch; /* Matches character count exactly */
+            width: 15ch; 
+            margin-bottom: 0px;
+            margin-top: 5px !important;
         }
 
         @keyframes typing {
@@ -167,12 +169,13 @@
             50% { border-color: black }
         }
 
-        .fly-in h1 {
+        .fly-in h5 {
             opacity: 0;
             transform: translateX(-50px);
             animation: flyIn 1s ease-out forwards;
-            font-size: 30px;
+            /* font-size: 35px !important; */
             font-family: Arial, serif !important;
+            margin-top: 0px;
         }
 
         @keyframes flyIn {

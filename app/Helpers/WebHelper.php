@@ -200,22 +200,22 @@ if (!function_exists('in_arrayi')) {
                     $html .= '<ul class="dropdown-menu rounded-0 mt-lg-0" aria-labelledby="navbarDropdownMenu' . $menu->id . '">';
                     foreach ($menu->children as $children) :
                         if (count($children->grandchildren)) : //SubMenu
-                            $html .= '<li class="dropdown-submenu"><a class="dropdown-item dropdown-toggle" blank="' . $children->target . '" href="' . $children->link . '">' . $children->title . '</a>';
+                            $html .= '<li class="dropdown-submenu"><a class="dropdown-item dropdown-toggle" target="' . $children->target . '" href="' . $children->link . '">' . $children->title . '</a>';
                             $html .= '<ul class="dropdown-menu rounded-0 mt-lg-0">';
                             foreach ($children->grandchildren as $grandchildren) :
-                                $html .= '<li class="dropdown-submenu"><a class="dropdown-item text-nowrap" blank="' . $grandchildren->target . '" href="' . $grandchildren->link . '">' . $grandchildren->title . '</a></li>';
+                                $html .= '<li class="dropdown-submenu"><a class="dropdown-item text-nowrap" target="' . $grandchildren->target . '" href="' . $grandchildren->link . '">' . $grandchildren->title . '</a></li>';
                             endforeach;
                             $html .= '</ul>';
                             $html .= '</li>';
                         else :
-                            $html .= '<li><a class="dropdown-item text-nowrap" blank="' . $children->target . '" href="' . $children->link . '">' . $children->title . '</a></li>';
+                            $html .= '<li><a class="dropdown-item text-nowrap" target="' . $children->target . '" href="' . $children->link . '">' . $children->title . '</a></li>';
                         endif;
                     endforeach;
                     $html .= '</ul>';
                     $html .= '</li>';
                 else :
                     // $html .= '<li class="nav-item"><a class="nav-link text-uppercase text-nowrap" blank="' . $menu->target . '" href="' . $menu->link . '">' . $menu->title . '</a></li>';
-                    $html .= '<li class="nav-item"><a class="nav-link text-nowrap" blank="' . $menu->target . '" href="' . $menu->link . '"><strong>' . $menu->title . '</strong></a></li>';
+                    $html .= '<li class="nav-item"><a class="nav-link text-nowrap" target="' . $menu->target . '" href="' . $menu->link . '"><strong>' . $menu->title . '</strong></a></li>';
                 endif;
             endforeach;
             $html .= '<li class="nav-item dropdown d-none d-lg-block">';

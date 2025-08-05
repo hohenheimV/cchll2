@@ -62,9 +62,9 @@
                     <select id="bidang_kepakaran" name="bidang_kepakaran" class="filter-select">
                         <option value="">Papar Semua Kepakaran</option>
                         @foreach([
-                            5 => 'B09',
-                            6 => 'CE14',
-                            7 => 'B09 & CE14'
+                            4 => 'B09',
+                            5 => 'CE14',
+                            6 => 'B09 & CE14'
                         ] as $kod => $label)
                             <option value="{{ $kod }}" {{ request('bidang_kepakaran') == $kod ? 'selected' : '' }}>
                                 {{ $label }}

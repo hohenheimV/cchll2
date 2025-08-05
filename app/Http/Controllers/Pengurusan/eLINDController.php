@@ -1343,7 +1343,127 @@ class eLINDController extends Controller
 
     public function importForm()
     {
-        // return view('pengurusan.eLIND.import');
+        return view('pengurusan.eLIND.import');
+    }
+
+    public function import(Request $request)
+    {
+        ini_set('memory_limit', '3048M');
+        ini_set('max_execution_time', 3000);
+
+        $request->validate([
+            'fileMultiple' => 'required',
+            'fileMultiple.*' => 'file|mimes:xlsx,xls,csv|max:12048',
+        ]);
+
+        $files = $request->file('fileMultiple');
+        $inserted = 0;
+        $updated = 0;
+
+        $negeriMap = Negeri::all()->keyBy(function ($item) {
+            return strtolower(trim($item->nama_negeri));
+        });
+
+        $grouped = [];
+
+        foreach ($files as $file) {
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file->getPathname());
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($file->getPathname());
+
+            $sheet = $spreadsheet->getSheet(0);
+            $startRow = 4;
+            $lastRow = min($sheet->getHighestRow(), 111500);
+            $range = 'A' . $startRow . ':J' . $lastRow;
+            $sheetData = $sheet->rangeToArray($range, null, false, false, true);
+            $totalRows = 0;
+            $uniqueNames = [];
+            $duplicateNames = [];
+
+            foreach ($sheetData as $row) {
+                $totalRows++;
+
+                $name = strtoupper(trim($row["B"] ?? ''));
+                if ($name === '') continue;
+
+                if (!isset($uniqueNames[$name])) {
+                    $uniqueNames[$name] = true; // mark as seen
+
+                    $bidangText = strtoupper(trim($row["J"] ?? ''));
+
+                    if (!in_array($bidangText, ['B09', 'CE14'])) continue;
+
+                    $negeriName = strtolower(trim($row["G"] ?? ''));
+                    $kod_negeri = $negeriMap[$negeriName]->kod_negeri ?? "00";
+
+                    if (!isset($grouped[$name])) {
+                        $grouped[$name] = [
+                            'name' => $name,
+                            'no_cidb' => trim($row['A'] ?? ''),
+                            'kelas_kontraktor' => trim($row['C'] ?? ''),
+                            'address1' => trim($row['D'] ?? ''),
+                            'locality' => trim($row['E'] ?? ''),
+                            'postcode' => trim($row['F'] ?? ''),
+                            'state' => $kod_negeri,
+                            // 'email' => trim($row['H'] ?? ''),
+                            'mediaSosial_penggiat' => json_encode([
+                                'Telefon' => trim($row['I'] ?? ''),
+                                'Emel' => trim($row['H'] ?? ''),
+                            ]),
+                            'bidang_flags' => [$bidangText], // temp field
+                            'jenis_industri' => "Kontraktor",
+                        ];
+                    } else {
+                        if (!in_array($bidangText, $grouped[$name]['bidang_flags'])) {
+                            $grouped[$name]['bidang_flags'][] = $bidangText;
+                        }
+                    }
+
+                } else {
+                    $duplicateNames[] = $name;
+                    // Still merge bidang even if duplicated
+                    $bidangText = strtoupper(trim($row["J"] ?? ''));
+                    if (!in_array($bidangText, ['B09', 'CE14'])) continue;
+                    if (!in_array($bidangText, $grouped[$name]['bidang_flags'])) {
+                        $grouped[$name]['bidang_flags'][] = $bidangText;
+                    }
+                }
+            }
+        }
+
+        foreach ($grouped as $name => $data) {
+            $flags = $data['bidang_flags'];
+            unset($data['bidang_flags']);
+
+            // Determine final bidang_kepakaran (numeric)
+            if (in_array('B09', $flags) && in_array('CE14', $flags)) {
+                $data['bidang_kepakaran'] = 6;
+            } elseif (in_array('B09', $flags)) {
+                $data['bidang_kepakaran'] = 4;
+            } elseif (in_array('CE14', $flags)) {
+                $data['bidang_kepakaran'] = 5;
+            } else {
+                continue;
+            }
+
+            $existing = MaklumatPenggunaPenggiatIndustri::where('name', $name)->first();
+            $existing_draf = MaklumatPenggunaPenggiatIndustri_draf::where('name', $name)->first();
+
+            if ($existing) {
+                $existing->update($data);
+                $existing_draf->update($data);
+                $updated++;
+            } else {
+                $maklumat = MaklumatPenggunaPenggiatIndustri::create($data);
+                $data['id_elind'] = $maklumat->id_elind;
+                MaklumatPenggunaPenggiatIndustri_draf::create($data);
+                $inserted++;
+            }
+        }
+
+        // dd($grouped);
+        return back()->with('successMessage', "Excel processed. Total rows: {$totalRows}, Unique names: " . count($uniqueNames) . ", Inserted: {$inserted}, Updated: {$updated}, Duplicates skipped: " . count(array_unique($duplicateNames)) . ".");
+        return back()->with('successMessage', "Excel processed. Inserted: {$inserted}, Updated: {$updated}.");
     }
 
     public function export($type, Request $request)

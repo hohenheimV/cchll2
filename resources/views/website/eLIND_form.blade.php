@@ -729,13 +729,13 @@
 
             if(jenis == "Kontraktor"){
                 const bidangKepakaranMap = {
-                    1: 'LANDSKAP ARKITEK',
-                    2: 'ELEKTRIK',
-                    3: 'SIVIL DAN STRUKTUR',
-                    4: 'UKURBAHAN',
-                    5: 'B09 (Lanskap dalam bangunan)',
-                    6: 'CE14 (Landskap diluar bangunan)',
-                    7: 'B09 & CE14 (Lanskap dalam bangunan), (Landskap diluar bangunan)',
+                    // 1: 'LANDSKAP ARKITEK',
+                    // 2: 'ELEKTRIK',
+                    // 3: 'SIVIL DAN STRUKTUR',
+                    // 4: 'UKURBAHAN',
+                    4: 'B09 (Lanskap dalam bangunan)',
+                    5: 'CE14 (Landskap diluar bangunan)',
+                    6: 'B09 & CE14 (Lanskap dalam bangunan), (Landskap diluar bangunan)',
                     0: 'TIADA MAKLUMAT'
                 };
 

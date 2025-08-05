@@ -176,9 +176,9 @@
                                             // 2 => 'ELEKTRIK',
                                             // 3 => 'SIVIL DAN STRUKTUR',
                                             // 4 => 'UKURBAHAN',
-                                            5 => 'B09',
-                                            6 => 'CE14',
-                                            7 => 'B09 & CE14',
+                                            4 => 'B09',
+                                            5 => 'CE14',
+                                            6 => 'B09 & CE14',
                                         ];
                                     @endphp
 

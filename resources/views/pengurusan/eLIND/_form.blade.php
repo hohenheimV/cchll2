@@ -534,9 +534,9 @@
                                     // 2 => 'ELEKTRIK',
                                     // 3 => 'SIVIL DAN STRUKTUR',
                                     // 4 => 'UKURBAHAN',
-                                    5 => 'B09 (Lanskap dalam bangunan)',
-                                    6 => 'CE14 (Landskap diluar bangunan)',
-                                    7 => 'B09 & CE14 (Lanskap dalam bangunan), (Landskap diluar bangunan)',
+                                    4 => 'B09 (Lanskap dalam bangunan)',
+                                    5 => 'CE14 (Landskap diluar bangunan)',
+                                    6 => 'B09 & CE14 (Lanskap dalam bangunan), (Landskap diluar bangunan)',
                                     0 => 'TIADA MAKLUMAT'
                                 ], isset($eLIND->bidang_kepakaran) ? $eLIND->bidang_kepakaran : '0', ['class' => 'form-control', 'id' => 'bidang_kepakaran']) !!}
                             </div>

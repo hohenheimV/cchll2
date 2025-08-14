@@ -713,7 +713,7 @@ if (!function_exists('in_arrayi')) {
                     $html .= '<img src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" class="card-img-top embed-responsive-item" style="background-color: rgba(0, 0, 0, 0.48);" alt="' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '">';
                     $html .= '</div>';
                     $html .= '<div class="card-body" style="height:200px">';
-                    $html .= '<h5 class="text-capitalize" style="color: black !important;">' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '</h5>';
+                    $html .= '<h5 class="text-capitalize" style="color: black !important; font-size: 25px !important;">' . strtoupper(htmlspecialchars($nama, ENT_QUOTES, 'UTF-8')) . '</h5>';
                     // $html .= '<p class="card-text">' . htmlspecialchars($keterangan_taman, ENT_QUOTES, 'UTF-8') . '</p>';
                     $html .= '<p class="card-text"><small class="text-muted">' . htmlspecialchars($nama_pbt, ENT_QUOTES, 'UTF-8') . '</small></p>';
                     $html .= '</div>';

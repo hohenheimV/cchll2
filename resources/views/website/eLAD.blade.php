@@ -60,10 +60,24 @@
                 <!-- Post Content Column -->
                 <div class="col-12 col-lg-9">
                     <div class="card card-olive card-outline">
+                        {{-- <div class="card-header">
+                            <h3 class="card-title font-weight-bold my-1">Direktori Rekabentuk Landskap {{ $keyword }}</h3>
+                        </div> --}}
                         <div class="card-header">
                             <h3 class="card-title font-weight-bold my-1">Direktori Rekabentuk Landskap {{ $keyword }}</h3>
-                        </div>
 
+                            <div class="card-tools">
+                                @php
+                                    if($keyword == "Kejur") $anti = "Lembut";
+                                    elseif($keyword == "Lembut") $anti = "Kejur";
+                                @endphp
+                                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                                    <div class="btn-group" role="group" aria-label="First group">
+                                        <a href="/elad-dokumen/{{ strtolower($anti) }}" class="btn btn-primary btn-sm">Landskap {{ $anti }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="card-body">
                             <div class="body-content">
                                 <div class="table-responsive">

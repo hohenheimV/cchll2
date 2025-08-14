@@ -72,9 +72,9 @@
     <div class="col-12 order-lg-2 order-3">
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg p-lg-0">
-            {{-- <a class="navbar-brand" href="{{ route('welcome') }}">
-                <img src="{{ asset('images/logo2.png') }}" height="50" alt="">
-            </a> --}}
+            <a class="navbar-brand" href="{{ route('welcome') }}">
+                <img src="{{ asset('images/jata.png') }}" height="60" alt="">
+            </a>
             {{-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"  style="background-color: #36458e;">
                 <span class="navbar-toggler-icon"  style="color: white;"><i class="fas fa-bars"></i></span>
             </button> --}}
@@ -86,13 +86,38 @@
                 <style>
                 @media (max-width: 1275px) {
                     .mobile-login {
-                        display: inline-block !important;
+                        display: block !important;
                     }
                 }
                 @media (min-width: 1275px) {
                     .mobile-login {
                         display: none !important;
                     }
+                }
+                /* Reduce overall padding inside the button */
+                .login-btn-custom {
+                    padding: 4px 8px;
+                    line-height: 1.2;
+                    display: inline-block;
+                    background-color: #e8e8e8 !important;
+                    color: #000000 !important;
+                    transition: background-color 0.3s ease;
+                }
+
+                .login-btn-custom.scrolled {
+                    background-color: #31d5c8 !important;
+                    color: white !important;
+                }
+                .login-btn-custom:hover {
+                    background-color: #31d5c8 !important; /* slightly darker teal */
+                    color: #ffffff !important;
+                }
+
+                /* Style the labels to be tighter and smaller */
+                .login-labels {
+                    font-size: 10px;
+                    line-height: 1.1;
+                    margin-top: 2px;
                 }
                 </style>
                 {!! website_navbar() !!}
@@ -103,17 +128,40 @@
     </div>
 </div>
 <script>
-    document.addEventListener('scroll', function() {
-        const button = document.querySelector('.scroll-button');
-        const scrollPosition = window.scrollY;
+    let lastScrollTop = 0;
 
-        if (scrollPosition > 100) { // Change 100 to the scroll position where you want the color to change
-            button.classList.add('scrolled');
-        } else {
+    document.addEventListener('scroll', function () {
+        const button = document.querySelector('.scroll-button');
+        const loginBtn = document.querySelector('.login-btn-custom');
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+        if (scrollTop > lastScrollTop) {
+            // Scrolling down
             button.classList.remove('scrolled');
+            button.style.backgroundColor = 'transparent';
+            button.style.backgroundImage = 'none';
+            button.style.display = 'none';
+            loginBtn.classList.add('scrolled');
+        } else {
+            // Scrolling up
+            if (scrollTop > 100) {
+                button.classList.add('scrolled');
+                button.style.backgroundColor = ''; // Let CSS handle color
+                button.style.backgroundImage = 'url("{{ asset('storage/img/bg-pattern-leaves.png') }}")';
+                button.style.display = 'block';
+                loginBtn.classList.remove('scrolled');
+            } else {
+                button.classList.remove('scrolled');
+                button.style.backgroundColor = '';
+                button.style.backgroundImage = 'url("{{ asset('storage/img/bg-pattern-leaves.png') }}")';
+                button.style.display = 'block';
+            }
         }
+
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
     });
 </script>
+
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const toggler = document.getElementById('customNavbarToggler');

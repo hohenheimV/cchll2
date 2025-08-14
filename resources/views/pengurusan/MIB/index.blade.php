@@ -70,18 +70,18 @@
                                                 $nama = isset($rakanTaman) ? $rakanTaman[2]['setiausaha_nama'] : 'Tiada Maklumat';
                                                 $telefon = isset($rakanTaman) ? $rakanTaman[2]['setiausaha_tel_bimbit'] : 'Tiada Maklumat';
                                                 $emel = isset($rakanTaman) ? $rakanTaman[2]['setiausaha_email'] : 'Tiada Maklumat';
-                                                $setiausaha_maklumat = strtoupper($nama ?? '') . '<br>' .
-                                                    ($telefon ?? '') . '<br>' .
-                                                    ($emel ?? '');
+                                                $setiausaha_maklumat = ($nama != '' ? strtoupper($nama) : 'Tiada Maklumat') . '<br>' .
+                                                    ($telefon != '' ? $telefon : '-') . '<br>' .
+                                                    ($emel != '' ? $emel : '-');
                                             }
 
                                             if(isset($rakanTaman[4])){
                                                 $nama = isset($rakanTaman) ? $rakanTaman[4]['penyelaras_nama'] : 'Tiada Maklumat';
                                                 $telefon = isset($rakanTaman) ? $rakanTaman[4]['penyelaras_tel_bimbit'] : 'Tiada Maklumat';
                                                 $emel = isset($rakanTaman) ? $rakanTaman[4]['penyelaras_email'] : 'Tiada Maklumat';
-                                                $penyelaras_maklumat = strtoupper($nama ?? '') . '<br>' .
-                                                    ($telefon ?? '') . '<br>' .
-                                                    ($emel ?? '');
+                                                $penyelaras_maklumat = ($nama != '' ? strtoupper($nama) : 'Tiada Maklumat') . '<br>' .
+                                                    ($telefon != '' ? $telefon : '-') . '<br>' .
+                                                    ($emel != '' ? $emel : '-');
                                             }
                                         }
                                     ?>

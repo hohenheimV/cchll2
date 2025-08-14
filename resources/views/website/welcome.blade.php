@@ -30,6 +30,8 @@
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <link href="https://db.onlinewebfonts.com/c/9292cc35e4f1fd3bee22274764613e63?family=Leadville+W00+Regular" rel="stylesheet" type="text/css"/>
+
     <style>
         body {
             font-family: 'Open Sans', sans-serif;
@@ -553,15 +555,16 @@
         <img src="{{ asset('img/logo-jln.png') }}" height="80" alt="">
         <br>
         <h3>eLANDSKAP</h3>
-        <h5>{{ ("Sistem Pengurusan Maklumat Landskap") }}</h5>
-        <h6 >Pusat Data Landskap Negara</h6>
+        <h5>{{ ("Pusat Data Landskap Negara") }}</h5>
+        {{-- <h6 >Pusat Data Landskap Negara</h6> --}}
         <br>
         <nav class="cta-buttons" aria-label="Call to action buttons">
             {{-- <a href="/epalm" class="primary" role="button">Direktori Taman dan Landskap</a> --}}
-            <a href="#penggiat_industri" class="primary" role="button">Penggiat Industri</a>
+            {{-- <a href="#penggiat_industri" class="primary" role="button">Penggiat Industri</a> --}}
+            <a href="#menu" class="primary" role="button">MASUK</a>
             {{-- <a href="/epil-pelan" class="primary" role="button">Direktori Pelan Induk Landskap</a> --}}
             {{-- <a href="/entiti-landskap" class="primary" role="button">Direktori Entiti Landskap</a> --}}
-            <a href="#elaps" class="primary" role="button">Permohonan Projek</a>
+            {{-- <a href="#elaps" class="primary" role="button">Permohonan Projek</a> --}}
             {{-- <a href="/emap" class="primary" role="button">eMAP JLN</a> --}}
         </nav>
     </div>
@@ -580,6 +583,276 @@
     </div>
 </section>
 
+
+
+<section id="menu" class="bg-light mib2 py-5">
+    {{-- web --}}
+    <div class="mobile-gone">
+        <br>
+        <br>
+        <br>
+    </div>
+    <div class="container mobile-gone" style="max-width: 1200px; font-family: 'Inter', sans-serif;">
+        <div class="row justify-content-center g-4">
+            {{-- <div class="col-lg-2 col-md-3 col-sm-4 col-4 justify-content-center">
+                <a target="_blank" style="color: black;" href="/pengurusan/dashboard">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/warga.png') }}" class="img-fluid mb-2 rounded" alt="Warga">
+                        <div class="fontnew">Warga </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="col-lg-2 col-md-3 col-sm-4 col-4 justify-content-center">
+                <a target="_blank" style="color: black;" href="/register">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/warga.png') }}" class="img-fluid mb-2 rounded" alt="PBT">
+                        <div class="fontnew">PBT </div>
+                    </div>
+                </a>
+            </div> --}}
+            
+            <div class="col-lg-2 col-md-3 col-sm-4 col-4 justify-content-center">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="top" title="Direktori Taman Awam" href="/epalm">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/ePALM.png') }}" class="img-fluid mb-2 rounded" alt="Direktori Taman">
+                        <div class="fontnew">ePALM </div>
+                    </div>
+                </a>
+                <div style="text-align: center; margin: 0  0 40px 0 !important; font-size: 0.85rem;">Direktori Taman Awam </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-3 col-sm-4 col-4 justify-content-center">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="top" title="Direktori Pelan Induk Landskap" href="/epil-pelan">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/ePIL.png') }}" class="img-fluid mb-2 rounded" alt="Pelan Induk Landskap">
+                        <div class="fontnew">ePIL </div>
+                    </div>
+                </a>
+                <div style="text-align: center; margin: 0  0 40px 0 !important; font-size: 0.85rem;">Direktori Pelan Induk Landskap </div>
+            </div>
+
+            <div class="col-lg-2 col-md-3 col-sm-4 col-4 justify-content-center">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="top" title="Direktori Penggiat Industri Landskap" href="/penggiat-industri/kontraktor">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/eLIND.png') }}" class="img-fluid mb-2 rounded" alt="Kontraktor">
+                        <div class="fontnew">eLIND </div>
+                    </div>
+                </a>
+                <div style="text-align: center; margin: 0  0 40px 0 !important; font-size: 0.85rem;">Direktori Penggiat Industri Landskap </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-3 col-sm-4 col-4 justify-content-center">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="top" title="Direktori Penyelidikan dan Penerbitan Landskap" href="/eread-dokumen">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/eREAD.png') }}" class="img-fluid mb-2 rounded" alt="Penerbitan">
+                        <div class="fontnew">eREAD </div>
+                    </div>
+                </a>
+                <div style="text-align: center; margin: 0  0 40px 0 !important; font-size: 0.85rem;">Direktori Penyelidikan dan Penerbitan Landskap </div>
+            </div>
+
+        </div>
+        <div class="row justify-content-center g-4">
+            
+            <div class="col-lg-2 col-md-3 col-sm-4 col-4 justify-content-center">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="bottom" title="Direktori Rekabentuk Landskap" href="/elad-dokumen/kejur">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/eLAD.png') }}" class="img-fluid mb-2 rounded" alt="Rekabentuk Landskap">
+                        <div class="fontnew">eLAD  </div>
+                    </div>
+                </a>
+                <div style="text-align: center; margin: 0  0 40px 0 !important; font-size: 0.85rem;">Direktori Rekabentuk Landskap </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-3 col-sm-4 col-4 justify-content-center">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="bottom" title="Direktori Pentadbiran Kontrak dan Polisi Landskap" href="/epact-dokumen">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/ePACT.png') }}" class="img-fluid mb-2 rounded" alt="Pentadbiran Kontrak">
+                        <div class="fontnew">ePACT </div>
+                    </div>
+                </a>
+                <div style="text-align: center; margin: 0  0 40px 0 !important; font-size: 0.85rem;">Direktori Pentadbiran Kontrak dan Polisi Landskap </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-3 col-sm-4 col-4 justify-content-center">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="bottom" title="Direktori Entiti Landskap" href="/entiti-landskap">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/eNTITI.png') }}" class="img-fluid mb-2 rounded" alt="Entiti Landskap">
+                        <div class="fontnew">eNTITI </div>
+                    </div>
+                </a>
+                <div style="text-align: center; margin: 0  0 40px 0 !important; font-size: 0.85rem;">Direktori Entiti Landskap </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-3 col-sm-4 col-4 justify-content-center">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="bottom" title="Aktiviti Rakan Taman" href="/aktiviti-rakan-taman">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/Rakan Taman.png') }}" class="img-fluid mb-2 rounded" alt="Rakan Taman">
+                        <div class="fontnew">Rakan Taman </div>
+                    </div>
+                </a>
+                <div style="text-align: center; margin: 0  0 40px 0 !important; font-size: 0.85rem;">Aktiviti Rakan Taman </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="mobile-gone">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+    </div>
+
+    {{-- mobile --}}
+
+    <div class="container mobile-done" style="max-width: 1200px; font-family: 'Inter', sans-serif;">
+        <div class="row justify-content-center g-4">
+            <div class="col-lg-2 col-md-3 col-sm-4 col-6 justify-content-center">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="top" title="Direktori Taman Awam" href="/epalm">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/ePALM.png') }}" class="img-fluid mb-2 rounded" alt="Direktori Taman">
+                        <div class="fontnew">ePALM </div>
+                    </div>
+                </a>
+                <div style="text-align: center; margin: 0  0 18px 0 !important; font-size: 0.6rem;">Direktori Taman Awam </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-3 col-sm-4 col-6 justify-content-center">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="top" title="Direktori Pelan Induk Landskap" href="/epil-pelan">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/ePIL.png') }}" class="img-fluid mb-2 rounded" alt="Pelan Induk Landskap">
+                        <div class="fontnew">ePIL </div>
+                    </div>
+                </a>
+                <div style="text-align: center; margin: 0  0 18px 0 !important; font-size: 0.6rem;">Direktori Pelan Induk Landskap </div>
+            </div>
+
+            <div class="col-lg-2 col-md-3 col-sm-4 col-6 justify-content-center">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="top" title="Direktori Penggiat Industri Landskap" href="/penggiat-industri/kontraktor">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/eLIND.png') }}" class="img-fluid mb-2 rounded" alt="Kontraktor">
+                        <div class="fontnew">eLIND </div>
+                    </div>
+                </a>
+                <div style="text-align: center; margin: 0  0 18px 0 !important; font-size: 0.6rem;">Direktori Penggiat Industri Landskap </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-3 col-sm-4 col-6 justify-content-center">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="top" title="Direktori Penyelidikan dan Penerbitan Landskap" href="/eread-dokumen">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/eREAD.png') }}" class="img-fluid mb-2 rounded" alt="Penerbitan">
+                        <div class="fontnew">eREAD </div>
+                    </div>
+                </a>
+                <div style="text-align: center; margin: 0  0 18px 0 !important; font-size: 0.6rem;">Direktori Penyelidikan dan Penerbitan Landskap </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-3 col-sm-4 col-6 justify-content-center">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="bottom" title="Direktori Rekabentuk Landskap" href="/elad-dokumen/kejur">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/eLAD.png') }}" class="img-fluid mb-2 rounded" alt="Rekabentuk Landskap">
+                        <div class="fontnew">eLAD  </div>
+                    </div>
+                </a>
+                <div style="text-align: center; margin: 0  0 18px 0 !important; font-size: 0.6rem;">Direktori Rekabentuk Landskap </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-3 col-sm-4 col-6 justify-content-center">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="bottom" title="Direktori Pentadbiran Kontrak dan Polisi Landskap" href="/epact-dokumen">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/ePACT.png') }}" class="img-fluid mb-2 rounded" alt="Pentadbiran Kontrak">
+                        <div class="fontnew">ePACT </div>
+                    </div>
+                </a>
+                <div style="text-align: center; margin: 0  0 18px 0 !important; font-size: 0.6rem;">Direktori Pentadbiran Kontrak dan Polisi Landskap </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-3 col-sm-4 col-6 justify-content-center">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="bottom" title="Direktori Entiti Landskap" href="/entiti-landskap">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/eNTITI.png') }}" class="img-fluid mb-2 rounded" alt="Entiti Landskap">
+                        <div class="fontnew">eNTITI </div>
+                    </div>
+                </a>
+                <div style="text-align: center; margin: 0  0 18px 0 !important; font-size: 0.6rem;">Direktori Entiti Landskap </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-3 col-sm-4 col-6 justify-content-center">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="bottom" title="Aktiviti Rakan Taman" href="/aktiviti-rakan-taman">
+                    <div class="card menu-button text-center p-3 shadow-sm">
+                        <img src="{{ asset('/images/Rakan Taman.png') }}" class="img-fluid mb-2 rounded" alt="Rakan Taman">
+                        <div class="fontnew">Rakan Taman </div>
+                    </div>
+                </a>
+                <div style="text-align: center; margin: 0  0 18px 0 !important; font-size: 0.6rem;">Aktiviti Rakan Taman </div>
+            </div>
+
+        </div>
+    </div>
+
+    <style>
+        .menu-button {
+            background: #fff;
+            border-radius: 1.5rem;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            width: 100%;
+            height: 200px;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .menu-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .menu-button img {
+            max-height: 100px;
+            max-width: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .fontnew{
+            font-family: 'Leadville W00 Regular' !important; 
+            font-size: 25px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            text-align: center;
+            min-height: 2.5em;
+            line-height: 1.2;
+            font-weight: bold;
+            color: #2e99b2;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .menu-button {
+                height: 90px;
+            }
+            .menu-button img {
+                max-height: 40px;
+                max-width: 100%;
+            }
+            .fontnew{
+                font-size: 16px;
+                min-height: 1em;
+                font-weight: normal;
+            }
+        }
+    </style>
+</section>
+
 <section id="elaps" class="bg-gray mib">
     <div class="mobile-gone">
         <br>
@@ -588,7 +861,7 @@
     <div class="container py-5">
         <div class="row">
             <div class="col-12 text-center" data-aos="fade-up">
-                <h1>Permohonan Projek</h1>
+                <h1>Permohonan Projek PBT</h1>
                 <div class="mobile-gone">
                     <br>
                     <br>
@@ -608,7 +881,7 @@
     </div>
 </section>
 
-<section id="penggiat_industri" class="bg-gray mib2">
+{{-- <section id="penggiat_industri" class="bg-gray mib2">
     <div class="mobile-gone">
         <br>
         <br>
@@ -723,8 +996,7 @@
             </div>
         </div>
     </div>
-</section>
-<!-- /.section#posts -->
+</section> --}}
 
 @if(article_exist())
 <section id="artikel" class="bg-white mib">

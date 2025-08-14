@@ -227,7 +227,7 @@ if (!function_exists('in_arrayi')) {
             $html .= '</ul>';
 
             $html .= '</li>';
-            $html .= '<li class="nav-item"><a class="nav-link text-nowrap mobile-login" href="/login">Log Masuk&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-lock"></i></a></li>';
+            $html .= '<li class="nav-item"><a class="nav-link text-nowrap mobile-login" href="/login">Log Masuk&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-lock"></i>&nbsp;&nbsp; (Kegunaan Warga-PBT-Industri)</a></li>';
             $html .= '</ul>';
             $html .= website_search_form('d-lg-none');
             return $html;
@@ -418,7 +418,14 @@ if (!function_exists('in_arrayi')) {
             //         $html .= '<li class="nav-item"><a target="_blank" class="btn bg-olive btn-sm mr-1" href="' . $social['link'] . '"><i class="' . $social['icon'] . '"></i></a>';
             //     }
             // }
-            $html .= '<li class="nav-item"><a class="btn bg-olive btn-sm mr-1" href="/login">Log Masuk&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-lock"></i></a>&nbsp;';
+            $html .= '<li class="nav-item">
+            <a class="btn bg-olive btn-sm mr-1 login-btn-custom" href="/login" style="text-align: left;">
+                <strong>LOG MASUK:</strong>
+                <div class="login-labels">
+                    WARGA<br>PBT<br>INDUSTRI
+                </div>
+            </a>&nbsp;';
+
             
             $html .= '</ul></div>';
             return $html;
@@ -705,7 +712,7 @@ if (!function_exists('in_arrayi')) {
                     // dump($url);
                     $html .= '<img src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" class="card-img-top embed-responsive-item" style="background-color: rgba(0, 0, 0, 0.48);" alt="' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '">';
                     $html .= '</div>';
-                    $html .= '<div class="card-body" style="height:150px">';
+                    $html .= '<div class="card-body" style="height:200px">';
                     $html .= '<h5 class="text-capitalize" style="color: black !important;">' . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . '</h5>';
                     // $html .= '<p class="card-text">' . htmlspecialchars($keterangan_taman, ENT_QUOTES, 'UTF-8') . '</p>';
                     $html .= '<p class="card-text"><small class="text-muted">' . htmlspecialchars($nama_pbt, ENT_QUOTES, 'UTF-8') . '</small></p>';

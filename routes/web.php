@@ -194,7 +194,7 @@ Route::get('/get-pbt-statistics', [DataController::class, 'getPBTStatistics']);
 Route::get('/get-visitor-statistics', [DataController::class, 'getVisitorStatistics']);
 Route::get('/get-jln-statistics', [DataController::class, 'getJlnStatistics']);
 Route::middleware(['throttle:10,1'])->group(function () {
-    Route::get('/XyZ83hQ2d8A9/{jenis?}', [DataController::class, 'getPenggiatIndustri']);
+    Route::get('/XyZ83hQ2d8A9/{jenis?}/{cidb?}', [DataController::class, 'getPenggiatIndustri']);
 });
 Route::get('/get-pbt', [DataController::class, 'getPbtName']);
 
@@ -698,9 +698,9 @@ Route::name('website.')
             }
 
             // Only approved for some types
-            if (in_array($keyword, ['kontraktor', 'perunding', 'pembekal'])) {
+            // if (in_array($keyword, ['kontraktor', 'perunding', 'pembekal'])) {
                 $query->where('status', 'approved');
-            }
+            // }
             $data = $query->paginate(15)->appends(request()->query());
 
             if ($data->currentPage() > $data->lastPage()) {

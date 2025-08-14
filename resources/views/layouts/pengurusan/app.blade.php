@@ -82,10 +82,10 @@
         /* Mobile Styles */
         @media only screen and (max-width: 768px) {
             .mobile-gone {
-                display: none;
+                display: none !important;
             }
             .mobile-done {
-                display: block;
+                display: block !important;
             }
         }
     </style>

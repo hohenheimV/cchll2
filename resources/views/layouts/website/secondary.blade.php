@@ -45,23 +45,23 @@
             flex: 1;
         }
         .mobile-done {
-            display: none;
+            display: none !important;
         }
         .mobile-fone {
-            display: none;
+            display: none !important;
         }
         /* Mobile Styles */
         @media only screen and (max-width: 768px) {
             .mobile-gone {
-                display: none;
+                display: none !important;
             }
             .mobile-done {
-                display: block;
+                display: block !important;
             }
         }
         @media (min-width: 768px) and (max-width: 1024px) {
             .mobile-fone {
-                display: block;
+                display: block !important;
             }
         }
 

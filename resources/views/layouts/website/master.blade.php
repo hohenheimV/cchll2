@@ -74,6 +74,9 @@
         // document.documentElement.style.setProperty('--themeColor', color);
     </script>
     <style>
+        .mobile-done {
+            display: none !important;
+        }
         /* Mobile Styles */
         @media only screen and (max-width: 768px) {
             body {
@@ -101,7 +104,10 @@
             }
             
             .mobile-gone {
-                display: none;
+                display: none !important;
+            }
+            .mobile-done {
+                display: block !important;
             }
             
         }
@@ -119,6 +125,10 @@
                 background-color: transparent !important;
                 border-radius: 0 !important;
             }
+        }
+
+        .tooltip-inner {
+            text-align: left !important;
         }
 
         .owl-nav button.owl-prev,
@@ -269,6 +279,10 @@
                 }
 
                 return false;
+            });
+
+            $('[data-toggle="tooltip"]').tooltip({
+                html: true
             });
         });
 

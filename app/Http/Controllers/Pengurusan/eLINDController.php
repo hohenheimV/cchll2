@@ -1346,6 +1346,8 @@ class eLINDController extends Controller
         return view('pengurusan.eLIND.import');
     }
 
+    // eLIND2
+    /* 
     public function import(Request $request)
     {
         ini_set('memory_limit', '3048M');
@@ -1464,6 +1466,357 @@ class eLINDController extends Controller
         // dd($grouped);
         return back()->with('successMessage', "Excel processed. Total rows: {$totalRows}, Unique names: " . count($uniqueNames) . ", Inserted: {$inserted}, Updated: {$updated}, Duplicates skipped: " . count(array_unique($duplicateNames)) . ".");
         return back()->with('successMessage', "Excel processed. Inserted: {$inserted}, Updated: {$updated}.");
+    }
+    */
+
+    // eLIND3
+    /* 
+    public function import(Request $request)
+    {
+        ini_set('memory_limit', '3048M');
+        ini_set('max_execution_time', 3000);
+
+        $request->validate([
+            'fileMultiple' => 'required',
+            'fileMultiple.*' => 'file|mimes:xlsx,xls,csv|max:12048',
+        ]);
+
+        $files = $request->file('fileMultiple');
+        $inserted = 0;
+        $updated = 0;
+
+        $negeriMap = Negeri::all()->keyBy(function ($item) {
+            return strtolower(trim($item->nama_negeri));
+        });
+        $stateAliases = [
+            'labuan' => 'wp labuan',
+            'kuala lumpur' => 'wp kuala lumpur',
+            'putrajaya' => 'wp putrajaya',
+            'wilayah persekutuan labuan' => 'wp labuan',
+            'wilayah persekutuan kuala lumpur' => 'wp kuala lumpur',
+            'wilayah persekutuan putrajaya' => 'wp putrajaya',
+            'kelatan' => 'kelantan',
+        ];
+
+        $grouped = [];
+
+        foreach ($files as $file) {
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file->getPathname());
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($file->getPathname());
+
+            foreach ($spreadsheet->getAllSheets() as $sheet) {
+                $sheetName = strtoupper(trim($sheet->getTitle()));
+                $startRow = 5;
+                $lastRow = min($sheet->getHighestRow(), 111500);
+                $range = 'A' . $startRow . ':I' . $lastRow;
+                $sheetData = $sheet->rangeToArray($range, null, false, false, true);
+
+                $currentBidang = null;
+
+                foreach ($sheetData as $row) {
+                    // Check if it's a blank row (all fields empty)
+                    if (empty(array_filter($row))) {
+                        continue;
+                    }
+
+                    // Special logic for "PEMBEKAL"
+                    if ($sheetName === 'PEMBEKAL') {
+                        $a = trim($row['A'] ?? '');
+                        $otherCols = array_filter([
+                            $row['B'] ?? '', $row['C'] ?? '', $row['D'] ?? '', $row['E'] ?? '',
+                            $row['F'] ?? '', $row['G'] ?? '', $row['H'] ?? '', $row['I'] ?? ''
+                        ]);
+
+                        if ($a !== '' && empty($otherCols)) {
+                            if(str_contains($a, 'TAPAK SEMAIAN')){
+                                $currentBidang = 'TAPAK SEMAIAN';
+                            }else{
+                                $currentBidang = $a;
+                            }
+                            continue; // skip this row as it's just a heading
+                        }
+                    }
+
+                    $name = mb_convert_encoding(strtoupper(trim($row["A"] ?? '')), 'UTF-8', 'UTF-8');
+                    if ($name === '') continue;
+
+                    $rawNegeri = strtolower(trim($row["E"] ?? ''));
+                    $negeriKey = $stateAliases[$rawNegeri] ?? $rawNegeri;
+                    $kod_negeri = $negeriMap[$negeriKey]->kod_negeri ?? "00";
+
+                    $no_ssm = mb_convert_encoding(trim($row['H'] ?? ''), 'UTF-8', 'UTF-8');
+                    $no_mof = mb_convert_encoding(trim($row['I'] ?? ''), 'UTF-8', 'UTF-8');
+                    $address1 = mb_convert_encoding(trim($row['B'] ?? ''), 'UTF-8', 'UTF-8');
+
+                    // Build base data
+                    $data = [
+                        'name' => $name,
+                        'address1' => $address1,
+                        'locality' => trim($row['C'] ?? ''),
+                        'postcode' => trim($row['D'] ?? ''),
+                        'state' => $kod_negeri,
+                        'mediaSosial_penggiat' => json_encode([
+                            'Telefon' => trim($row['G'] ?? ''),
+                            'Emel' => trim($row['F'] ?? ''),
+                        ]),
+                        'jenis_industri' => ucwords(strtolower($sheetName)),
+                        // 'no_ssm' => $no_ssm,
+                        // 'no_mof' => $no_mof,
+                    ];
+
+                    
+                    if ($no_ssm) {
+                        $data['no_ssm'] = $no_ssm;
+                    }
+
+                    if ($no_mof) {
+                        $data['no_mof'] = $no_mof;
+                    }
+
+                    if ($sheetName === 'PEMBEKAL' && $currentBidang) {
+                        $data['bidang_pembekal'] = 3;
+                        $data['bidang_lain_pembekal'] = ucwords(strtolower($currentBidang));
+                    }
+
+                    $grouped[] = $data;
+                    // dump($data);
+                    // --- Check if exists ---
+                    // $existing = MaklumatPenggunaPenggiatIndustri::where('name', $name)->first();
+                    if ($no_ssm !== '') {
+                        $existing = MaklumatPenggunaPenggiatIndustri::where('no_ssm', $no_ssm)->first();
+                        $existing_draf = MaklumatPenggunaPenggiatIndustri_draf::where('no_ssm', $no_ssm)->first();
+                    } else {
+                        $existing = MaklumatPenggunaPenggiatIndustri::where('name', $name)->where('address1', $address1)->first();
+                        $existing_draf = MaklumatPenggunaPenggiatIndustri_draf::where('name', $name)->where('address1', $address1)->first();
+                    }
+
+                    if ($existing) {
+                        $existing->update($data);
+                        $existing_draf->update($data);
+                        $updated++;
+                    } else {
+                        $maklumat = MaklumatPenggunaPenggiatIndustri::create($data);
+                        $data['id_elind'] = $maklumat->id_elind;
+                        MaklumatPenggunaPenggiatIndustri_draf::create($data);
+                        $inserted++;
+                    }
+                    // dd($inserted);
+                }
+
+                
+                // foreach ($sheetData as $row) {
+                //     $totalRows++;
+
+                //     $name = strtoupper(trim($row["B"] ?? ''));
+                //     if ($name === '') continue;
+
+                //     if (!isset($uniqueNames[$name])) {
+                //         $uniqueNames[$name] = true;
+
+                //         $bidangText = strtoupper(trim($row["J"] ?? ''));
+                //         if (!in_array($bidangText, ['B09', 'CE14'])) continue;
+
+                //         $negeriName = strtolower(trim($row["G"] ?? ''));
+                //         $kod_negeri = $negeriMap[$negeriName]->kod_negeri ?? "00";
+
+                //         if (!isset($grouped[$name])) {
+                //             $grouped[$name] = [
+                //                 'name' => $name,
+                //                 'no_cidb' => trim($row['A'] ?? ''),
+                //                 'kelas_kontraktor' => trim($row['C'] ?? ''),
+                //                 'address1' => trim($row['D'] ?? ''),
+                //                 'locality' => trim($row['E'] ?? ''),
+                //                 'postcode' => trim($row['F'] ?? ''),
+                //                 'state' => $kod_negeri,
+                //                 'mediaSosial_penggiat' => json_encode([
+                //                     'Telefon' => trim($row['I'] ?? ''),
+                //                     'Emel' => trim($row['H'] ?? ''),
+                //                 ]),
+                //                 'bidang_flags' => [$bidangText],
+                //                 'jenis_industri' => "Kontraktor",
+                //                 'kategori' => $sheetName, // Optional new field
+                //             ];
+                //         } else {
+                //             if (!in_array($bidangText, $grouped[$name]['bidang_flags'])) {
+                //                 $grouped[$name]['bidang_flags'][] = $bidangText;
+                //             }
+                //         }
+                //     } else {
+                //         $duplicateNames[] = $name;
+
+                //         $bidangText = strtoupper(trim($row["J"] ?? ''));
+                //         if (!in_array($bidangText, ['B09', 'CE14'])) continue;
+                //         if (!in_array($bidangText, $grouped[$name]['bidang_flags'])) {
+                //             $grouped[$name]['bidang_flags'][] = $bidangText;
+                //         }
+                //     }
+                // }
+            }
+            dump($updated);
+            dump($inserted);
+            dump($grouped);
+
+        }
+
+        // foreach ($grouped as $name => $data) {
+        //     $flags = $data['bidang_flags'];
+        //     unset($data['bidang_flags']);
+
+        //     // Determine final bidang_kepakaran (numeric)
+        //     if (in_array('B09', $flags) && in_array('CE14', $flags)) {
+        //         $data['bidang_kepakaran'] = 6;
+        //     } elseif (in_array('B09', $flags)) {
+        //         $data['bidang_kepakaran'] = 4;
+        //     } elseif (in_array('CE14', $flags)) {
+        //         $data['bidang_kepakaran'] = 5;
+        //     } else {
+        //         continue;
+        //     }
+
+        //     $existing = MaklumatPenggunaPenggiatIndustri::where('name', $name)->first();
+        //     $existing_draf = MaklumatPenggunaPenggiatIndustri_draf::where('name', $name)->first();
+
+        //     if ($existing) {
+        //         $existing->update($data);
+        //         $existing_draf->update($data);
+        //         $updated++;
+        //     } else {
+        //         $maklumat = MaklumatPenggunaPenggiatIndustri::create($data);
+        //         $data['id_elind'] = $maklumat->id_elind;
+        //         MaklumatPenggunaPenggiatIndustri_draf::create($data);
+        //         $inserted++;
+        //     }
+        // }
+
+        dd("XXX");
+        return back()->with('successMessage', "Excel processed. Total rows: {$totalRows}, Unique names: " . count($uniqueNames) . ", Inserted: {$inserted}, Updated: {$updated}, Duplicates skipped: " . count(array_unique($duplicateNames)) . ".");
+        return back()->with('successMessage', "Excel processed. Inserted: {$inserted}, Updated: {$updated}.");
+    }
+    */
+
+    // MIB2
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv|max:2048',
+        ]);
+
+        $file = $request->file('file');
+        // $spreadsheet = IOFactory::load($file->getPathname());
+
+        $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file->getPathname());
+        $reader->setReadDataOnly(true);
+        $spreadsheet = $reader->load($file->getPathname());
+
+        $sheets = $spreadsheet->getAllSheets(); // Get all sheets
+        $sheetCount = count($sheets);
+        $result = [];
+        $sheetNames = $spreadsheet->getSheetNames();
+
+        // dd($sheets);
+        $negeriMap = Negeri::all()->keyBy(function($item) {
+            return strtolower($item->nama_negeri);
+        });
+        // dd($negeriMap);
+        foreach ($sheets as $sheetIndex => $sheet) {
+            // dd($sheetIndex);
+            if($sheetIndex <= 20){
+                $sheetName = $sheet->getTitle();
+                $startRow = 2;
+                $startCol = 'A';
+                $endCol = 'K';
+                // $lastRow = $sheet->getHighestRow();
+                $lastRow = min($sheet->getHighestRow(), 1500);
+                $range = $startCol . $startRow . ':' . $endCol . $lastRow;
+                $sheetData = $sheet->rangeToArray($range, null, false, false, true);
+                $startIndex = 0;
+                $inserted = 0;
+                $updated = 0;
+
+                foreach ($sheetData as $index => $row) {
+                    $dataController = new \App\Http\Controllers\DataController();
+                    $pbtName = $dataController->findFullPbtName($row["B"]);
+                    // dd($row);
+                    if($row["B"] != ""){
+                        if($row["D"] != ''){
+                            $kod_negeri = str_replace("wilayah persekutuan", "wp", strtolower($row["A"]));
+                            $kod_negeri = str_replace("p.", "pulau", strtolower($kod_negeri));
+                            $kod_negeri = str_replace("n.", "negeri ", strtolower($kod_negeri));
+                            $kod_negeri = $negeriMap[$kod_negeri]->kod_negeri ?? "00";
+
+                            // Build the data array
+                            $requestData = [
+
+                                // NEW FIELDS
+                                'penduduk' => $row["K"] ?? null,
+                                'jawatankuasa' => [
+                                    // [
+                                        ["pengerusi_nama" => null, "pengerusi_tel_bimbit" => null, "pengerusi_email" => null,],
+                                        ["timbalan_pengerusi_nama" => null, "timbalan_pengerusi_tel_bimbit" => null, "timbalan_pengerusi_email" => null,],
+                                        ["setiausaha_nama" => $row["I"] ?? null, 
+                                        "setiausaha_tel_bimbit" => $row["J"] ?? null, 
+                                        "setiausaha_email" => null,],
+
+                                        ["bendahari_nama" => null, "bendahari_tel_bimbit" => null, "bendahari_email" => null,],
+
+                                        ["penyelaras_nama" => $row["E"] ?? null, 
+                                        "penyelaras_tel_bimbit" => $row["F"] ?? null, 
+                                        "penyelaras_email" => $row["G"] ?? null,],
+
+                                        ["ajk1_nama" => null, "ajk1_tel_bimbit" => null, "ajk1_email" => null,],
+                                        ["ajk2_nama" => null, "ajk2_tel_bimbit" => null, "ajk2_email" => null,],
+                                        ["ajk3_nama" => null, "ajk3_tel_bimbit" => null, "ajk3_email" => null,],
+                                        ["ajk4_nama" => null, "ajk4_tel_bimbit" => null, "ajk4_email" => null,],
+                                        ["ajk5_nama" => null, "ajk5_tel_bimbit" => null, "ajk5_email" => null,],
+                                        ["ajk6_nama" => null, "ajk6_tel_bimbit" => null, "ajk6_email" => null]
+                                    // ],
+                                ],
+                            ];
+                            // $maklumat = MIB::create($requestData);
+                            $existing = MIB::where('taman', trim(strtoupper($row["D"])))
+                                    // ->where('pbt', $pbtName)
+                                    ->where('negeri', $kod_negeri)
+                                    ->first();
+
+                            if ($existing) {
+                                $existing->update($requestData);
+                                $updated++;
+                            } else {
+                                // dump($updated);
+                                // dump(strtoupper($row["D"]));
+
+                                $ref = Carbon::now()->timestamp . rand(100, 999);
+                                $ref_num = "RT$ref";
+                                $currentYear = $row["H"];
+                                $recordCount = MIB::whereYear('approved_at', $currentYear)->count();
+                                $no_siri = "JLN-RT/{$currentYear}/" . ($recordCount + 1);
+                                $status_keahlian = "Aktif";
+
+                                $requestData['ref_num'] = $ref_num;
+                                $requestData['no_siri'] = $no_siri;
+                                $requestData['taman'] = strtoupper($row["D"]);
+                                $requestData['pbt'] = $pbtName;
+                                $requestData['negeri'] = $kod_negeri;
+                                $requestData['status'] = "Diluluskan";
+                                $requestData['status_keahlian'] = $status_keahlian;
+                                $requestData['approved_by'] = "eLANDSKAP";
+                                $requestData['approved_at'] = Carbon::createFromDate($currentYear, 1, 1)->startOfDay();
+
+                                $maklumat = MIB::create($requestData);
+                                if ($maklumat) {
+                                    $inserted++;
+                                }
+                            }
+                            // dd($requestData);
+                            $result[] = $requestData;
+                        }
+                    }
+                }
+            }
+        }
+        dd($result);
+        return back()->with('successMessage', 'Excel processed. Total rows: ' . count($result));
     }
 
     public function export($type, Request $request)

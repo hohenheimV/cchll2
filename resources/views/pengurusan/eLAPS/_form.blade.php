@@ -57,7 +57,7 @@
 
     <!-- Second Row: KATEGORI PROJEK -->
     <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" >
-        <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('projectCategory', '3.&nbsp;&nbsp;&nbsp;&nbsp;KATEGORI PROJEK:', ['class' => 'col-form-label required-field']) }}</td>
+        <td colspan="6" style="border: none; height: 20px; padding-top: 5px; padding-bottom: 5px; background-color: #ffff00;">{{ Form::label('projectCategory', '3.&nbsp;&nbsp;&nbsp;&nbsp;KATEGORI PROJEK:', ['class' => 'col-form-label required-field-create']) }}</td>
     </tr>
     <!-- Third Row: Rancangan Pembangunan (checkboxes with input fields) -->
     <tr style="border-bottom: 1px solid black;border-top: 1px solid black;" class="{{ in_array('category', session('errorFields', [])) ? 'is-invalid' : '' }}">

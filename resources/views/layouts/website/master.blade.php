@@ -77,6 +77,9 @@
         .mobile-done {
             display: none !important;
         }
+        .owl-nav, .owl-dots{
+            display: none !important;
+        }
         /* Mobile Styles */
         @media only screen and (max-width: 768px) {
             body {

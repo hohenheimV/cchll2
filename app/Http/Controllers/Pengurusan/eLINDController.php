@@ -1470,7 +1470,7 @@ class eLINDController extends Controller
     */
 
     // eLIND3
-    /* 
+    
     public function import(Request $request)
     {
         ini_set('memory_limit', '3048M');
@@ -1693,9 +1693,10 @@ class eLINDController extends Controller
         return back()->with('successMessage', "Excel processed. Total rows: {$totalRows}, Unique names: " . count($uniqueNames) . ", Inserted: {$inserted}, Updated: {$updated}, Duplicates skipped: " . count(array_unique($duplicateNames)) . ".");
         return back()->with('successMessage', "Excel processed. Inserted: {$inserted}, Updated: {$updated}.");
     }
-    */
+   
 
     // MIB2
+    /* 
     public function import(Request $request)
     {
         $request->validate([
@@ -1818,6 +1819,7 @@ class eLINDController extends Controller
         dd($result);
         return back()->with('successMessage', 'Excel processed. Total rows: ' . count($result));
     }
+     */
 
     public function export($type, Request $request)
     {

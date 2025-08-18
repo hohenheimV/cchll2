@@ -630,7 +630,7 @@
                                                     }
                                                 ?>
                                                 
-                                                @if($value['nama_dokumen_pelan'] && $fileSizeInMB < 1000 && $isPdf)
+                                                @if($value['nama_dokumen_pelan'] && $fileSizeInMB < 200 && $isPdf)
                                                     <div style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                                                         <canvas id="pdf-render-{{ $value['id_dokumen_pelan'] }}" width="200" height="250"></canvas>
                                                     </div>
@@ -643,7 +643,7 @@
 
                                             <td style="text-align: center;">
                                                 <div>
-                                                    @if($value['nama_dokumen_pelan'] && $fileSizeInMB < 1000 && $isPdf)
+                                                    @if($value['nama_dokumen_pelan'] && $fileSizeInMB < 200 && $isPdf)
                                                         {!! 
                                                             Form::button('<i class="fas fa-eye"></i>', 
                                                             [

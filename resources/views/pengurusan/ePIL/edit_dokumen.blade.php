@@ -82,7 +82,7 @@
                                 }
                                 // dd($fileSizeInMB);
                             @endphp
-                            @if($dokumen->nama_dokumen_pelan && $fileSizeInMB < 1000 && $isPdf)
+                            @if($dokumen->nama_dokumen_pelan && $fileSizeInMB < 200 && $isPdf)
                                 <object data="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}" type="application/pdf" width="100%" height="600px">
                                     <p>Dokumen tidak dapat dipaparkan.
                                         <a href="{{ asset('storage/uploads/ePIL/'.$dokumen->folder.'/'.$dokumen->nama_dokumen_pelan) }}">Muat turun dokumen</a>.

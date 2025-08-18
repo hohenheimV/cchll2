@@ -78,7 +78,7 @@
                                                         }
                                                     }
                                                 ?>
-                                                @if ($pelan->nama_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan)) && $fileSizeInMB < 1000 && $isPdf)
+                                                @if ($pelan->nama_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan)) && $fileSizeInMB < 200 && $isPdf)
                                                     <a href="{{ asset($pelan->nama_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan : 'storage/uploads/no-photos.png' ) }}" 
                                                         target="_blank">
                                                         <div id="pdf-viewer-{{$pelan->id_dokumen_pelan ?? $pelan->id_pelan}}" 

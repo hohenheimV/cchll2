@@ -70,7 +70,7 @@
             {{-- <input value="{{ isset($MIB->pbt) ? $MIB->pbt : '' }}" type="text" name="pbt" id="pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" >
             <datalist id="data_pbt">
             </datalist> --}}
-            <select name="pbt" id="pbt" class="form-control" required>
+            <select name="pbt" id="pbt" class="form-control" {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }}>
                 <option value="">Pilih PBT</option>
             </select>
         </div>
@@ -471,61 +471,61 @@
                     @if(isset($rakanTaman[0]))
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Pengerusi <span class="font-red"> * </span></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="pengerusi_nama" name="pengerusi_nama" class="form-control" maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[0]['pengerusi_nama'] : '' }}"></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="pengerusi_tel_bimbit" name="pengerusi_tel_bimbit" class="form-control" maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[0]['pengerusi_tel_bimbit'] : '' }}"></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="email" id="pengerusi_email" name="pengerusi_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[0]['pengerusi_email'] : '' }}"></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="pengerusi_nama" name="pengerusi_nama" class="form-control" maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[0]['pengerusi_nama'] : '' }}"></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="pengerusi_tel_bimbit" name="pengerusi_tel_bimbit" class="form-control" maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[0]['pengerusi_tel_bimbit'] : '' }}"></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="email" id="pengerusi_email" name="pengerusi_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[0]['pengerusi_email'] : '' }}"></td>
                     </tr>
                     @else
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Pengerusi <span class="font-red"> * </span></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="pengerusi_nama" name="pengerusi_nama" class="form-control" maxlength="150" value=""></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="pengerusi_tel_bimbit" name="pengerusi_tel_bimbit" class="form-control" maxlength="20" value=""></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="email" id="pengerusi_email" name="pengerusi_email" class="form-control lowercase" maxlength="100" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="pengerusi_nama" name="pengerusi_nama" class="form-control" maxlength="150" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="pengerusi_tel_bimbit" name="pengerusi_tel_bimbit" class="form-control" maxlength="20" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="email" id="pengerusi_email" name="pengerusi_email" class="form-control lowercase" maxlength="100" value=""></td>
                     </tr>
                     @endif
                     @if(isset($rakanTaman[1]))
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Timbalan Pengerusi <span class="font-red"> * </span></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="timbalan_pengerusi_nama" name="timbalan_pengerusi_nama" class="form-control" maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[1]['timbalan_pengerusi_nama'] : '' }}"></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="timbalan_pengerusi_tel_bimbit" name="timbalan_pengerusi_tel_bimbit" class="form-control" maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[1]['timbalan_pengerusi_tel_bimbit'] : '' }}"></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="email" id="timbalan_pengerusi_email" name="timbalan_pengerusi_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[1]['timbalan_pengerusi_email'] : '' }}"></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="timbalan_pengerusi_nama" name="timbalan_pengerusi_nama" class="form-control" maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[1]['timbalan_pengerusi_nama'] : '' }}"></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="timbalan_pengerusi_tel_bimbit" name="timbalan_pengerusi_tel_bimbit" class="form-control" maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[1]['timbalan_pengerusi_tel_bimbit'] : '' }}"></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="email" id="timbalan_pengerusi_email" name="timbalan_pengerusi_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[1]['timbalan_pengerusi_email'] : '' }}"></td>
                     </tr>
                     @else
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Timbalan Pengerusi <span class="font-red"> * </span></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="timbalan_pengerusi_nama" name="timbalan_pengerusi_nama" class="form-control" maxlength="150" value=""></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="timbalan_pengerusi_tel_bimbit" name="timbalan_pengerusi_tel_bimbit" class="form-control" maxlength="20" value=""></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="email" id="timbalan_pengerusi_email" name="timbalan_pengerusi_email" class="form-control lowercase" maxlength="100" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="timbalan_pengerusi_nama" name="timbalan_pengerusi_nama" class="form-control" maxlength="150" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="timbalan_pengerusi_tel_bimbit" name="timbalan_pengerusi_tel_bimbit" class="form-control" maxlength="20" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="email" id="timbalan_pengerusi_email" name="timbalan_pengerusi_email" class="form-control lowercase" maxlength="100" value=""></td>
                     </tr>
                     @endif
                     @if(isset($rakanTaman[2]))
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Setiausaha <span class="font-red"> * </span></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="setiausaha_nama" name="setiausaha_nama" class="form-control " maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[2]['setiausaha_nama'] : '' }}" ></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="setiausaha_tel_bimbit" name="setiausaha_tel_bimbit" class="form-control" maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[2]['setiausaha_tel_bimbit'] : '' }}" ></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="email" id="setiausaha_email" name="setiausaha_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[2]['setiausaha_email'] : '' }}"></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="setiausaha_nama" name="setiausaha_nama" class="form-control " maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[2]['setiausaha_nama'] : '' }}" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="setiausaha_tel_bimbit" name="setiausaha_tel_bimbit" class="form-control" maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[2]['setiausaha_tel_bimbit'] : '' }}" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="email" id="setiausaha_email" name="setiausaha_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[2]['setiausaha_email'] : '' }}"></td>
                     </tr>
                     @else
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Setiausaha <span class="font-red"> * </span></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="setiausaha_nama" name="setiausaha_nama" class="form-control " maxlength="150" value="" ></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="setiausaha_tel_bimbit" name="setiausaha_tel_bimbit" class="form-control" maxlength="20" value="" ></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="email" id="setiausaha_email" name="setiausaha_email" class="form-control lowercase" maxlength="100" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="setiausaha_nama" name="setiausaha_nama" class="form-control " maxlength="150" value="" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="setiausaha_tel_bimbit" name="setiausaha_tel_bimbit" class="form-control" maxlength="20" value="" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="email" id="setiausaha_email" name="setiausaha_email" class="form-control lowercase" maxlength="100" value=""></td>
                     </tr>
                     @endif
                     @if(isset($rakanTaman[3]))
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Bendahari <span class="font-red"> * </span></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="bendahari_nama" name="bendahari_nama" class="form-control " maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[3]['bendahari_nama'] : '' }}" ></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="bendahari_tel_bimbit" name="bendahari_tel_bimbit" class="form-control " maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[3]['bendahari_tel_bimbit'] : '' }}" ></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="email" id="bendahari_email" name="bendahari_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[3]['bendahari_email'] : '' }}"></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="bendahari_nama" name="bendahari_nama" class="form-control " maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[3]['bendahari_nama'] : '' }}" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="bendahari_tel_bimbit" name="bendahari_tel_bimbit" class="form-control " maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[3]['bendahari_tel_bimbit'] : '' }}" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="email" id="bendahari_email" name="bendahari_email" class="form-control lowercase" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[3]['bendahari_email'] : '' }}"></td>
                     </tr>
                     @else
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Bendahari <span class="font-red"> * </span></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="bendahari_nama" name="bendahari_nama" class="form-control " maxlength="150" value="" ></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="bendahari_tel_bimbit" name="bendahari_tel_bimbit" class="form-control " maxlength="20" value="" ></td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="email" id="bendahari_email" name="bendahari_email" class="form-control lowercase" maxlength="100" value=""></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="bendahari_nama" name="bendahari_nama" class="form-control " maxlength="150" value="" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="bendahari_tel_bimbit" name="bendahari_tel_bimbit" class="form-control " maxlength="20" value="" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="email" id="bendahari_email" name="bendahari_email" class="form-control lowercase" maxlength="100" value=""></td>
                     </tr>
                     @endif
                     <!-- Repeat for other rows with similar structure -->
@@ -558,16 +558,16 @@
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Wakil PBT <span class="font-red"> * </span></td>
                         <td style="padding: 4px 8px; line-height: 1;">
-                            <input required type="text" id="penyelaras_nama" name="penyelaras_nama" class="form-control @error('penyelaras_nama') is-invalid @enderror" maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[4]['penyelaras_nama'] : '' }}" >
+                            <input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="penyelaras_nama" name="penyelaras_nama" class="form-control @error('penyelaras_nama') is-invalid @enderror" maxlength="150" value="{{ isset($rakanTaman) ? $rakanTaman[4]['penyelaras_nama'] : '' }}" >
                             @error('penyelaras_nama')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="penyelaras_tel_bimbit" name="penyelaras_tel_bimbit" class="form-control " maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[4]['penyelaras_tel_bimbit'] : '' }}" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="penyelaras_tel_bimbit" name="penyelaras_tel_bimbit" class="form-control " maxlength="20" value="{{ isset($rakanTaman) ? $rakanTaman[4]['penyelaras_tel_bimbit'] : '' }}" ></td>
                         <td style="padding: 4px 8px; line-height: 1;">
-                            <input required type="email" id="penyelaras_email" name="penyelaras_email" class="form-control lowercase @error('penyelaras_email') is-invalid @enderror" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[4]['penyelaras_email'] : '' }}">
+                            <input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="email" id="penyelaras_email" name="penyelaras_email" class="form-control lowercase @error('penyelaras_email') is-invalid @enderror" maxlength="100" value="{{ isset($rakanTaman) ? $rakanTaman[4]['penyelaras_email'] : '' }}">
                             @error('penyelaras_email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -579,16 +579,16 @@
                     <tr>
                         <td style="padding: 4px 8px; line-height: 1;">Wakil PBT <span class="font-red"> * </span></td>
                         <td style="padding: 4px 8px; line-height: 1;">
-                            <input required type="text" id="penyelaras_nama" name="penyelaras_nama" class="form-control @error('penyelaras_nama') is-invalid @enderror" maxlength="150" value="{{ isset($MIB->name) ? $MIB->name : '' }}" >
+                            <input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="penyelaras_nama" name="penyelaras_nama" class="form-control @error('penyelaras_nama') is-invalid @enderror" maxlength="150" value="{{ isset($MIB->name) ? $MIB->name : '' }}" >
                             @error('penyelaras_nama')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </td>
-                        <td style="padding: 4px 8px; line-height: 1;"><input required type="text" id="penyelaras_tel_bimbit" name="penyelaras_tel_bimbit" class="form-control " maxlength="20" value="" ></td>
+                        <td style="padding: 4px 8px; line-height: 1;"><input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="text" id="penyelaras_tel_bimbit" name="penyelaras_tel_bimbit" class="form-control " maxlength="20" value="" ></td>
                         <td style="padding: 4px 8px; line-height: 1;">
-                            <input required type="email" id="penyelaras_email" name="penyelaras_email" class="form-control lowercase @error('penyelaras_email') is-invalid @enderror" maxlength="100" value="{{ isset($MIB->email) ? $MIB->email : '' }}">
+                            <input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} type="email" id="penyelaras_email" name="penyelaras_email" class="form-control lowercase @error('penyelaras_email') is-invalid @enderror" maxlength="100" value="{{ isset($MIB->email) ? $MIB->email : '' }}">
                             @error('penyelaras_email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

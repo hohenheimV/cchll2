@@ -8,6 +8,7 @@
                         {{ Form::hidden('negeri', request('negeri')) }}
                         {{ Form::hidden('kelas_kontraktor', request('kelas_kontraktor')) }}
                         {{ Form::hidden('bidang_kepakaran', request('bidang_kepakaran')) }}
+                        {{ Form::hidden('bidang_pembekal', request('bidang_pembekal')) }}
                         {{-- Keyword Search --}}
                         <div class="input-group mr-2">
                             {{ Form::search('search', request('search'), [
@@ -60,7 +61,7 @@
 
                     {{-- Bidang Kepakaran --}}
                     <select id="bidang_kepakaran" name="bidang_kepakaran" class="filter-select">
-                        <option value="">Papar Semua Kepakaran</option>
+                        <option value="">Papar Semua Bidang Kepakaran</option>
                         @foreach([
                             4 => 'B09',
                             5 => 'CE14',
@@ -70,6 +71,28 @@
                                 {{ $label }}
                             </option>
                         @endforeach
+                    </select>
+                    @endif
+                    @if($keyword == "Pembekal")
+                    {{-- Bidang Pembekal --}}
+                    <select id="bidang_pembekal" name="bidang_pembekal" class="filter-select">
+                        <option value="">Papar Semua Bidang Pembekal</option>
+                        <option value="1" {{ request('bidang_pembekal') == '1' ? 'selected' : '' }}>Nurseri & Landskap Kejur</option>
+                        <option value="2" {{ request('bidang_pembekal') == '2' ? 'selected' : '' }}>Alat Permainan</option>
+
+                        @foreach(
+                                    App\Model\MaklumatPenggunaPenggiatIndustri::whereNotNull('bidang_lain_pembekal')
+                                        ->where('bidang_lain_pembekal', '!=', '')
+                                        ->distinct()
+                                        ->pluck('bidang_lain_pembekal')
+                                        ->toArray() 
+                                    as $lain
+                                )
+                            <option value="{{ $lain }}" {{ request('bidang_pembekal') == $lain ? 'selected' : '' }}>
+                                {{ $lain }}
+                            </option>
+                        @endforeach
+                        <option value="0" {{ request('bidang_pembekal') == '0' ? 'selected' : '' }}>Tiada Maklumat</option>
                     </select>
                     @endif
 
@@ -99,16 +122,18 @@
                         });
                     });
 
-                    $('#negeri, #kelas_kontraktor, #bidang_kepakaran').on('change', function () {
+                    $('#negeri, #kelas_kontraktor, #bidang_kepakaran, #bidang_pembekal').on('change', function () {
                         const negeri = $('#negeri').val();
                         const kelas = $('#kelas_kontraktor').val();
                         const bidang = $('#bidang_kepakaran').val();
+                        const bidang_pembekal = $('#bidang_pembekal').val();
                         let url = `/penggiat-industri/${keyword}`;
                         const params = new URLSearchParams();
 
                         if (negeri) params.append('negeri', negeri);
                         if (kelas) params.append('kelas_kontraktor', kelas);
                         if (bidang) params.append('bidang_kepakaran', bidang);
+                        if (bidang_pembekal) params.append('bidang_pembekal', bidang_pembekal);
 
                         window.location.href = `${url}?${params.toString()}`;
                     });
@@ -136,6 +161,9 @@
                             <th class="w-15">Nama</th>
                             @if($keyword == "Kontraktor")
                             <th class="text-center w-1">Kelas</th>
+                            <th class="text-center w-1">Bidang</th>
+                            @endif
+                            @if($keyword == "Pembekal")
                             <th class="text-center w-1">Bidang</th>
                             @endif
                             <th class="w-5">Alamat</th>
@@ -185,6 +213,24 @@
                                     <td class="text-center w-1">
                                         {{ $bidangOptions[$user->bidang_kepakaran] ?? '-' }}
                                     </td>
+                                    @endif
+                                    @if($keyword == "Pembekal")
+                                        <td class="text-left w-5">
+                                            <?php
+                                                $bidangLabels = [
+                                                    '1' => 'Nurseri & Landskap Kejur',
+                                                    '2' => 'Alat Permainan',
+                                                    '0' => 'Tiada Maklumat'
+                                                ];
+                                                $bp = $user->bidang_pembekal;
+                                            ?>
+
+                                            @if(is_numeric($bp) && isset($bidangLabels[$bp]))
+                                                {{ $bidangLabels[$bp] }}
+                                            @else
+                                                {{ $user->bidang_lain_pembekal ?? '-' }}
+                                            @endif
+                                        </td>
                                     @endif
                                     <td>
                                         {{--@if(isset($user->email)) {{ $user->email }}<br>@endif--}}
@@ -241,6 +287,8 @@
                                                 @endif
                                                 @if($keyword == "Pembekal" || $keyword == "Perunding" || $keyword == "Kontraktor") 
                                                     data-pengalaman="{{ $user->pengalaman }}" 
+                                                    data-bidang_pembekal="{{ $user->bidang_pembekal }}" 
+                                                    data-bidang_lain_pembekal="{{ $user->bidang_lain_pembekal }}" 
                                                 @endif
                                                 @if($keyword == "Institusi Pendidikan") 
                                                     data-jenis_institusi="{{ $user->jenis_institusi }}"
@@ -442,32 +490,32 @@
                 </div>
             </div> -->
             @if($keyword == "Pembekal" || $keyword == "Perunding" || $keyword == "Kontraktor") 
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col-5 col-xs-12">
                     <p><strong>No. Pendaftaran Syarikat (SSM)</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
                     <p id="no_ssm">Tiada Maklumat</p>
                 </div>
-            </div>
-            <div class="row">
+            </div> --}}
+            {{-- <div class="row">
                 <div class="col-5 col-xs-12">
                     <p><strong>No. Pendaftaran MoF</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
                     <p id="no_mof">Tiada Maklumat</p>
                 </div>
-            </div>
+            </div> --}}
             @endif
             @if($keyword == "Kontraktor") 
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col-5 col-xs-12">
                     <p><strong>No. Pendaftaran PKK/ CIDB</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
                     <p id="no_cidb">Tiada Maklumat</p>
                 </div>
-            </div>
+            </div> --}}
             <div class="row">
                 <div class="col-5 col-xs-12">
                     <p><strong>Taraf Bumiputera</strong></p>
@@ -758,7 +806,7 @@
                     modal.find('#bidang_kepakaran').text(bidangKepakaranName);
                 }
                 if (no_cidb && no_cidb !== '') {
-                    modal.find('#no_cidb').text(no_cidb);
+                    // modal.find('#no_cidb').text(no_cidb);
                 }
             }
             if(jenis == "Perunding"){
@@ -777,7 +825,10 @@
                     0: 'Tiada Maklumat'
                 };
                 if (bidang_pembekal && bidang_pembekal !== '') {
-                    const bidangPembekalName = bidangPembekalMap[bidang_pembekal];
+                    let bidangPembekalName = bidangPembekalMap[bidang_pembekal];
+                    if(bidang_pembekal == 3){
+                        bidangPembekalName = button.data('bidang_lain_pembekal');
+                    }
                     modal.find('#bidang_pembekal').text(bidangPembekalName);
                 }
             }
@@ -812,10 +863,10 @@
             }
             if(jenis == "Kontraktor" || jenis == "Perunding" || jenis == "Pembekal"){
                 if (no_ssm && no_ssm !== '') {
-                    modal.find('#no_ssm').text(no_ssm);
+                    // modal.find('#no_ssm').text(no_ssm);
                 }
                 if (no_mof && no_mof !== '') {
-                    modal.find('#no_mof').text(no_mof);
+                    // modal.find('#no_mof').text(no_mof);
                 }
             }
             if(jenis == "Kontraktor" || jenis == "Perunding" || jenis == "Pembekal"){

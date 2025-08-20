@@ -52,7 +52,7 @@
                     <h4>Butiran Maklumat {{ $capitalizedSegment ?? '' }}</h4>
                 </div>
             </div>
-            <div class="form-group required inertClass">
+            <div class="form-group required ">
                 <label for="name" class="col-md-4 control-label">Nama {{ $capitalizedSegment ?? '' }}</label>
                 <div class="col-md-12">
                     <input name="name" class="form-control" maxlength="50" type="text" id="name" value="{{ isset($eLIND->name) ? $eLIND->name : '' }}">
@@ -405,10 +405,10 @@
             </div>
             @if($capitalizedSegment == 'Kontraktor' || $capitalizedSegment == 'Perunding' || $capitalizedSegment == 'Pembekal')
                 <div class="row">
-                    <div class="form-group required col-md-4 inertClass">
+                    <div class="form-group required col-md-4 ">
                         <label for="no_ssm" class="col-md-12 control-label">No. Pendaftaran SSM {!! in_array('no_ssm', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
-                            <input required value="{{isset($eLIND->no_ssm) ? $eLIND->no_ssm : ''}}" name="no_ssm" class="form-control" maxlength="50" type="text" id="no_ssm" >
+                            <input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} value="{{isset($eLIND->no_ssm) ? $eLIND->no_ssm : ''}}" name="no_ssm" class="form-control" maxlength="50" type="text" id="no_ssm" >
                         </div>
                         <script>
                             $(document).ready(function() {

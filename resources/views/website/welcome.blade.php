@@ -31,6 +31,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
     <link href="https://db.onlinewebfonts.com/c/9292cc35e4f1fd3bee22274764613e63?family=Leadville+W00+Regular" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+
 
     <style>
         body {
@@ -824,7 +826,7 @@
         }
 
         .fontnew{
-            font-family: 'Leadville W00 Regular' !important; 
+            font-family: 'Poppins' !important; 
             font-size: 25px;
             display: flex;
             align-items: flex-start;
@@ -832,8 +834,9 @@
             text-align: center;
             min-height: 2.5em;
             line-height: 1.2;
-            font-weight: bold;
+            font-weight: 800;
             color: #2e99b2;
+
         }
 
         @media only screen and (max-width: 768px) {

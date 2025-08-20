@@ -142,49 +142,47 @@ class RegisterController extends Controller
                 $maklumat = $existingMof;
                 $id = $existingMof->id_elind;
                 $name = $existingMof->name;
-                // $existingMof->update([
-                //     'name' => $data['nama_syarikat'],
-                //     'address1' => $data['address1'],
-                //     'address2' => $data['address2'],
-                //     'postcode' => $data['postcode'],
-                //     'locality' => $data['locality'],
-                //     'state' => $data['state'],
-                // ]);
-                // $existingMof_draf = MaklumatPenggunaPenggiatIndustri_draf::where('no_ssm', $data['no_ssm'])->first();
-                // $existingMof_draf->update([
-                //     'name' => $data['nama_syarikat'],
-                //     'address1' => $data['address1'],
-                //     'address2' => $data['address2'],
-                //     'postcode' => $data['postcode'],
-                //     'locality' => $data['locality'],
-                //     'state' => $data['state'],
-                // ]);
                 //proceed without creating new row
             }else{
-                $maklumat = MaklumatPenggunaPenggiatIndustri::create([
-                    'name' => $data['nama_syarikat'],
-                    // 'email' => $data['email'],
-                    'jenis_industri' => $data['jenis_penggiat'],
-                    'no_ssm' => $data['no_ssm'],
-                    'address1' => $data['address1'],
-                    'address2' => $data['address2'],
-                    'postcode' => $data['postcode'],
-                    'locality' => $data['locality'],
-                    'state' => $data['state'],
-                ]);
-                $id = $maklumat->id_elind;
-                $name = $maklumat->name;
-                $maklumat_draf = MaklumatPenggunaPenggiatIndustri_draf::create([
-                    'name' => $data['nama_syarikat'],
-                    'id_elind' => $id,
-                    'jenis_industri' => $data['jenis_penggiat'],
-                    'no_ssm' => $data['no_ssm'],
-                    'address1' => $data['address1'],
-                    'address2' => $data['address2'],
-                    'postcode' => $data['postcode'],
-                    'locality' => $data['locality'],
-                    'state' => $data['state'],
-                ]);
+                $existing_cidb = MaklumatPenggunaPenggiatIndustri::where('no_cidb', $data['no_cidb'])->first();
+                
+                if ($existing_cidb) {
+                    $maklumat = $existing_cidb;
+                    $id = $existing_cidb->id_elind;
+                    $name = $existing_cidb->name;
+                    if($existing_cidb->no_ssm == null){
+                        $existing_cidb_draf = MaklumatPenggunaPenggiatIndustri_draf::where('no_cidb', $data['no_cidb'])->first();
+                        $existing_cidb_draf->update([
+                            'no_ssm' => $data['no_ssm'],
+                        ]);
+                    }
+                    //proceed without creating new row
+                } else {
+                    $maklumat = MaklumatPenggunaPenggiatIndustri::create([
+                        'name' => $data['nama_syarikat'],
+                        // 'email' => $data['email'],
+                        'jenis_industri' => $data['jenis_penggiat'],
+                        'no_ssm' => $data['no_ssm'],
+                        'address1' => $data['address1'],
+                        'address2' => $data['address2'],
+                        'postcode' => $data['postcode'],
+                        'locality' => $data['locality'],
+                        'state' => $data['state'],
+                    ]);
+                    $id = $maklumat->id_elind;
+                    $name = $maklumat->name;
+                    $maklumat_draf = MaklumatPenggunaPenggiatIndustri_draf::create([
+                        'name' => $data['nama_syarikat'],
+                        'id_elind' => $id,
+                        'jenis_industri' => $data['jenis_penggiat'],
+                        'no_ssm' => $data['no_ssm'],
+                        'address1' => $data['address1'],
+                        'address2' => $data['address2'],
+                        'postcode' => $data['postcode'],
+                        'locality' => $data['locality'],
+                        'state' => $data['state'],
+                    ]);
+                }
             }
             $accountType = $data['roles']." ({$data['jenis_penggiat']})";
         }else{

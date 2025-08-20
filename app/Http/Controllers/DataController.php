@@ -1219,7 +1219,7 @@ class DataController extends Controller
         // ]);
     }
 
-    public function getPenggiatIndustri($jenis = null)
+    public function getPenggiatIndustri($jenis = null, $cidb = null)
     {
         $penggiat = collect();
 
@@ -1237,6 +1237,13 @@ class DataController extends Controller
             }
         } elseif (auth()->check()) {
             $penggiat = MaklumatPenggunaPenggiatIndustri::select('name', 'no_ssm', 'address1', 'address2', 'postcode', 'locality', 'state')
+                ->get();
+        }
+
+        if ($cidb) {
+            $penggiat = MaklumatPenggunaPenggiatIndustri::select('name', 'no_cidb', 'address1', 'address2', 'postcode', 'locality', 'state', 'jenis_industri')
+                ->where('no_cidb', $cidb)
+                ->limit(1)
                 ->get();
         }
 

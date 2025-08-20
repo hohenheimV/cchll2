@@ -330,10 +330,15 @@ class UsersController extends Controller
      */
     public function destroy(User $user)
     {
-        if ($user->delete()) {
-            return redirect()->route('pengurusan.users.index')->with('successMessage', 'Maklumat telah berjaya dihapuskan');
+        $role = $user->getRoleNames()->first();
+        if ($role === 'Pihak Berkuasa Tempatan' || $role === 'Penggiat Industri') {
+            $params = ['keyword' => $role];
         }
-        return redirect()->route('pengurusan.users.index')->with('errorMessage', 'Maklumat telah gagal dihapuskan');
+
+        if ($user->delete()) {
+            return redirect()->route('pengurusan.users.index', $params)->with('successMessage', 'Maklumat telah berjaya dihapuskan');
+        }
+        return redirect()->route('pengurusan.users.index', $params)->with('errorMessage', 'Maklumat telah gagal dihapuskan');
     }
 
 

@@ -180,7 +180,7 @@
                                                 }
                                             }
                                         ?>
-                                        @if ($pelan->gambar_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan)) && $fileSizeInMB < 1000 && $isPdf)
+                                        @if ($pelan->gambar_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan)) && $fileSizeInMB < 200 && $isPdf)
                                             <!-- <a href="{{ asset($pelan->gambar_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan : 'storage/uploads/no-photos.png' ) }}" 
                                                 target="_blank" download> -->
                                             <button 
@@ -221,7 +221,7 @@
                                                     data-toggle="modal" 
                                                     data-target="#pelanModal"
                                                 > -->
-                                                @if($fileSizeInMB < 1000 && $isPdf)
+                                                @if($fileSizeInMB < 200 && $isPdf)
                                                     <a href="{{ asset($pelan->gambar_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan : 'javascript:void(0)' ) }}" 
                                                     target="_blank" type="button" class="btn btn-primary btn-sm" >
                                                         <i class="fas fa-search"></i>
@@ -241,7 +241,7 @@
                                                 $pelanFilePath = "storage/uploads/ePIL/{$folder}/{$pelan->gambar_dokumen_pelan}";
                                                 $isPdf = strtolower(pathinfo($pelan->gambar_dokumen_pelan, PATHINFO_EXTENSION)) === 'pdf';
                                                 $fileSizeInMB = $hasPelanFile ? filesize(public_path($pelanFilePath)) / 1024 / 1024 : 0;
-                                                $canView = $hasPelanFile && $isPdf && $fileSizeInMB < 1000;
+                                                $canView = $hasPelanFile && $isPdf && $fileSizeInMB < 200;
                                                 $canDownload = $hasPelanFile;
                                             @endphp
 

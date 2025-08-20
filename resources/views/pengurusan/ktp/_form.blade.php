@@ -347,7 +347,7 @@
             });
             // Add 'lain-lain' option
             // $negeri.append($('<option>', {
-            //     value: 'lain-lain',
+            //     value: '-1',
             //     text: 'Lain-lain (Agensi/NGO)'
             // }));
             
@@ -390,7 +390,7 @@
         var negeriText = $('#negeri').find('option:selected').text();
 
         // Handle "Lain-lain" case
-        if (negeriId === 'lain-lain') {
+        if (negeriId === '-1') {
             $('#loading-spinner').hide();
             $pbtContainer.append(`
                 <label for="pbt">Agensi/NGO</label>
@@ -407,7 +407,19 @@
                 class: 'form-control select2'
             }).append('<option value="">Pilih PBT</option>');
 
+            $dropdown.on('change', function () {
+                // updateAgensi();
+            });
+
+            $dropdown.append($('<option>', {
+                value: 'AGENSI LAIN',
+                text: 'AGENSI LAIN'
+            }));
+            
+            let optionValues = [];
+
             $.each(data, function(index, pbt) {
+                optionValues.push(pbt.name);
                 $dropdown.append($('<option>', {
                     value: pbt.name,
                     text: pbt.name.toUpperCase()
@@ -416,9 +428,10 @@
 
             // Add 'lain-lain' option
             // $dropdown.append($('<option>', {
-            //     value: 'lain-lain',
+            //     value: '-1',
             //     text: 'Lain-lain'
             // }));
+
 
             $pbtContainer.append(`
                 <label for="pbt">Pihak Berkuasa Tempatan</label>
@@ -426,15 +439,41 @@
             $pbtContainer.append($dropdown);
             $('#loading-spinner').hide();
 
-            // Set the selected value if editing
+            // Set selected value (even if not in fetched list)
             var selectedPbt = '{{ old('pbt', $ktp->pbt ?? '') }}';
             if (selectedPbt) {
+                if (!optionValues.includes(selectedPbt) && selectedPbt !== '-1') {
+                    // Append it as a new option if missing
+                    $dropdown.append($('<option>', {
+                        value: selectedPbt,
+                        text: selectedPbt.toUpperCase()
+                    }));
+                }
+
                 $dropdown.val(selectedPbt).trigger('change');
             }
         }).fail(function() {
             $('#loading-spinner').hide();
             alert('Failed to load PBT. Sila isi Nama Pihak Berkuasa Tempatan.');
         });
+
+    }
+
+    function updateAgensi() {
+        console.log();
+        var pbtId = $('#pbt').val();
+
+        // Handle "Lain-lain" case
+        if (pbtId === '-1') {
+            const $pbtContainer = $('#pbt-container');
+            $pbtContainer.empty();
+            $('#loading-spinner').hide();
+            $pbtContainer.append(`
+                <label for="pbt">Agensi/NGO</label>
+                <input type="text" id="pbt" name="pbt" class="form-control" placeholder="Masukkan Nama Agensi/NGO" value="{{ old('pbt', $ktp->pbt ?? '') }}">
+            `);
+            return;
+        }
     }
 
     // Utility function to capitalize each word
@@ -447,35 +486,37 @@
         updateFields();
     });
 
-document.getElementById('reset-form-btn').addEventListener('click', function() {
-    // Reset all form fields
-    var form = this.closest('form');
-    form.reset();
+    
 
-    // Clear dynamic rows in the table except for one blank row
-    var container = document.getElementById('spesis_pokok_container');
-    container.innerHTML = `
-        <tr>
-            <td><input type="text" name="spesis_pokok[]" class="form-control" placeholder="Pokok Utama" value="Pokok Utama" oninput="this.value = this.value.replace(/(?:^|\\s)\\S/g, function(a) { return a.toUpperCase(); })"></td>
-            <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok" placeholder="Bilangan" min="1" max="10000"></td>
-            <td><input type="number" name="tinggi_pokok[]" class="form-control" placeholder="Tinggi" min="0" max="1000"></td>
-            <td><input type="number" name="diameter_pokok[]" class="form-control" placeholder="Diameter" min="0" max="1000"></td>
-            <td><button type="button" class="btn btn-danger btn-sm remove_field"><i class="fas fa-trash"></i></button></td>
-        </tr>
-    `;
+    document.getElementById('reset-form-btn').addEventListener('click', function() {
+        // Reset all form fields
+        var form = this.closest('form');
+        form.reset();
 
-    // Reset jumlah pokok
-    document.getElementById('jumlah_pokok').textContent = '';
-    document.getElementById('jumlah_pokok_hidden').value = '';
+        // Clear dynamic rows in the table except for one blank row
+        var container = document.getElementById('spesis_pokok_container');
+        container.innerHTML = `
+            <tr>
+                <td><input type="text" name="spesis_pokok[]" class="form-control" placeholder="Pokok Utama" value="Pokok Utama" oninput="this.value = this.value.replace(/(?:^|\\s)\\S/g, function(a) { return a.toUpperCase(); })"></td>
+                <td><input type="number" name="bilangan_pokok[]" class="form-control bilangan-pokok" placeholder="Bilangan" min="1" max="10000"></td>
+                <td><input type="number" name="tinggi_pokok[]" class="form-control" placeholder="Tinggi" min="0" max="1000"></td>
+                <td><input type="number" name="diameter_pokok[]" class="form-control" placeholder="Diameter" min="0" max="1000"></td>
+                <td><button type="button" class="btn btn-danger btn-sm remove_field"><i class="fas fa-trash"></i></button></td>
+            </tr>
+        `;
 
-    // Reset file input
-    document.getElementById('excel-upload').value = '';
+        // Reset jumlah pokok
+        document.getElementById('jumlah_pokok').textContent = '';
+        document.getElementById('jumlah_pokok_hidden').value = '';
 
-    // If you use select2, reset selects
-    if (window.$ && $.fn.select2) {
-        $('#negeri').val('').trigger('change');
-        $('#pbt').val('').trigger('change');
-    }
-});
+        // Reset file input
+        document.getElementById('excel-upload').value = '';
+
+        // If you use select2, reset selects
+        if (window.$ && $.fn.select2) {
+            $('#negeri').val('').trigger('change');
+            $('#pbt').val('').trigger('change');
+        }
+    });
 </script>
 @endsection

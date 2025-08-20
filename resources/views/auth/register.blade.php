@@ -546,6 +546,45 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="row" id="no_cidb_field" style="display: none;">
+                            <div class="form-group mb-3 col-md-6">
+                                {{ Form::label('no_cidb', 'No. Pendaftaran PKK/ CIDB') }}<span style="color: red">*</span>
+                                <input id="no_cidb" type="text" class="form-control" name="no_cidb" placeholder="No. Pendaftaran PKK/ CIDB" required>
+
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#no_cidb').on('blur', function () {
+                                            let no_cidb = $(this).val().trim();
+
+                                            if (no_cidb.length === 0) return;
+
+                                            $.get(`/XyZ83hQ2d8A9/null/${no_cidb}`, function (response) {
+                                                if (Array.isArray(response) && response.length > 0) {
+                                                    const company = response[0];
+
+                                                    // Update only if fields are empty
+                                                    if (!$('#nama_syarikat').val()) $('#nama_syarikat').val(company.name);
+                                                    if (!$('#address1').val()) $('#address1').val(company.address1);
+                                                    if (!$('#address2').val()) $('#address2').val(company.address2);
+                                                    if (!$('#postcode').val()) $('#postcode').val(company.postcode);
+                                                    if (!$('#locality').val()) $('#locality').val(company.locality);
+                                                    if (!$('#state_PI').val()) $('#state_PI').val(company.state);
+                                                }
+                                            }).fail(function () {
+                                                console.error('CIDB request failed or no data found');
+                                                alert('Unable to fetch CIDB info. Please try again later.');
+                                            });
+                                        });
+                                    });
+                                </script>
+
+                                @error('no_cidb')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="form-group mb-3 col-md-12">
                                 {{ Form::label('nama_syarikat', 'Nama Syarikat') }}<span style="color: red">*</span>
@@ -873,6 +912,13 @@
                 $('#state-field').removeClass('col-md-6').addClass('col-md-3');
                 $countryField.show();
             }
+
+            if (jenisPenggiat === 'Kontraktor') {
+                $('#no_cidb_field').show();
+            }else{
+                $('#no_cidb_field').hide();
+            }
+            
         }
 
         function updatePostcode() {

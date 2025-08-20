@@ -696,6 +696,15 @@ Route::name('website.')
             if ($keyword === 'kontraktor' && $request->filled('bidang_kepakaran')) {
                 $query->where('bidang_kepakaran', $request->bidang_kepakaran);
             }
+            if ($keyword === 'pembekal' && $request->filled('bidang_pembekal') != '') {
+                if (in_array($request->input('bidang_pembekal'), ['0', '1', '2'])) {
+                    // Static bidang (1, 2, 0)
+                    $query->where('bidang_pembekal', $request->bidang_pembekal);
+                } else {
+                    // Lain-lain from bidang_lain_pembekal
+                    $query->where('bidang_lain_pembekal', $request->bidang_pembekal);
+                }
+            }
 
             // Only approved for some types
             // if (in_array($keyword, ['kontraktor', 'perunding', 'pembekal'])) {

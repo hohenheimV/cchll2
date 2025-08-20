@@ -110,6 +110,45 @@
                                         </div>
                                         @endif
 
+                                        @if($lastSegment == "pembekal")
+                                        {{-- Kelas Kontraktor Dropdown --}}
+                                        <div class="input-group mr-2">
+                                            <select id="bidang_pembekal" name="bidang_pembekal" onchange="this.form.submit()" style="
+                                                height: calc(1.8125rem + 2px) !important;
+                                                width: 10rem !important;
+                                                padding: 0.25rem 0.5rem !important;
+                                                font-size: 0.875rem !important;
+                                                line-height: 1.5 !important;
+                                                border-radius: 0.2rem !important;
+                                                border: 1px solid #ced4da !important;
+                                            ">
+                                                <option value="">Papar Semua Bidang Pembekal</option>
+                                                <option value="1" {{ request('bidang_pembekal') == '1' ? 'selected' : '' }}>Nurseri & Landskap Kejur</option>
+                                                <option value="2" {{ request('bidang_pembekal') == '2' ? 'selected' : '' }}>Alat Permainan</option>
+
+                                                @foreach(
+                                                            App\Model\MaklumatPenggunaPenggiatIndustri::whereNotNull('bidang_lain_pembekal')
+                                                                ->where('bidang_lain_pembekal', '!=', '')
+                                                                ->distinct()
+                                                                ->pluck('bidang_lain_pembekal')
+                                                                ->toArray() 
+                                                            as $lain
+                                                        )
+                                                    <option value="{{ $lain }}" {{ request('bidang_pembekal') == $lain ? 'selected' : '' }}>
+                                                        {{ $lain }}
+                                                    </option>
+                                                @endforeach
+                                                <option value="0" {{ request('bidang_pembekal') == '0' ? 'selected' : '' }}>Tiada Maklumat</option>
+
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="input-group" style="display: none;">
+                                            <select id="bidang_pembekal" name="bidang_pembekalX">
+                                            </select>
+                                        </div>
+                                        @endif
+
                                         {{-- Keyword Search --}}
                                         <div class="input-group mr-2">
                                             {{ Form::search('keyword', request('keyword'), [
@@ -165,6 +204,9 @@
                                         @if($lastSegment == "kontraktor")
                                         <th class="text-center w-1">Kelas</th>
                                         @endif
+                                        @if($lastSegment == "pembekal")
+                                        <th class="text-center w-1">Bidang</th>
+                                        @endif
                                         @if($no_ssm)
                                         <th class="text-center w-10">No. Pendaftaran SSM</th>
                                         @endif
@@ -204,6 +246,24 @@
                                             <td>{{ strtoupper($user->name) }}</td>
                                             @if($lastSegment == "kontraktor")
                                             <td class="text-center w-1">{{ $user->kelas_kontraktor }}</td>
+                                            @endif
+                                            @if($lastSegment == "pembekal")
+                                                <td class="w-5">
+                                                    <?php
+                                                        $bidangLabels = [
+                                                            '1' => 'Nurseri & Landskap Kejur',
+                                                            '2' => 'Alat Permainan',
+                                                            '0' => 'Tiada Maklumat'
+                                                        ];
+                                                        $bp = $user->bidang_pembekal;
+                                                    ?>
+
+                                                    @if(is_numeric($bp) && isset($bidangLabels[$bp]))
+                                                        {{ $bidangLabels[$bp] }}
+                                                    @else
+                                                        {{ $user->bidang_lain_pembekal ?? '-' }}
+                                                    @endif
+                                                </td>
                                             @endif
                                             @if($no_ssm)
                                             <td class="text-center w-10">{{ $user->no_ssm }}</td>

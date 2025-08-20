@@ -26,21 +26,10 @@
             </div>
         </div>
     </div> --}}
-    <!-- Categories Widget -->
-    <div class="card mobile-gone">
-        <h5 class="card-header bg-olive">Hubungi Kami</h5>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-12">
-                    {!! website_sidebar_contact() !!}
-                </div>
-            </div>
-        </div>
-    </div>
-
+    
     @if(isset($eLIND))
-        <div class="card my-4">
-            <h5 class="card-header">Penggiat Industri Landskap</h5>
+        <div class="card">
+            <h5 class="card-header bg-olive">Penggiat Industri Landskap</h5>
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
@@ -61,4 +50,16 @@
             </div>
         </div>
     @endif
+    <!-- Categories Widget -->
+    <div class="card mobile-gone">
+        <h5 class="card-header bg-olive">Hubungi Kami</h5>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    {!! website_sidebar_contact() !!}
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

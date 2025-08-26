@@ -135,8 +135,8 @@
 
 <script>
     $('#ktptable').DataTable({
-        responsive: true,
-        paging: false,
+        responsive: false,
+        paging: true,
         searching: true,
         info: false,
         autoWidth: false,

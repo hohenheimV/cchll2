@@ -29,7 +29,7 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="epacttable" class="responsive table table-bordered table-hover table-striped mb-0">
+                            <table id="exampleNP" class="responsive table table-bordered table-hover table-striped mb-0">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th class="w-2">Bil</th>

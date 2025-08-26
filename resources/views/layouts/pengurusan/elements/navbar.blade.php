@@ -22,7 +22,7 @@
                 'ePACT',
                 'eLAD',
                 'eNTITI',
-                'eMAP'
+                'eLIND'
             ];
 
             $currentUrl = request()->url();

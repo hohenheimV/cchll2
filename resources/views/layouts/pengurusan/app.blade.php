@@ -274,7 +274,7 @@
                         // },
                         {
                             targets: '_all',
-                            orderable: false
+                            orderable: true
                         }
                     ],
                     dom: 'Bfrtip',

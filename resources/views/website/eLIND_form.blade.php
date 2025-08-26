@@ -330,7 +330,7 @@
                                                 @endphp
 
                                                 {{-- CIDB Button --}}
-                                                {{-- <button 
+                                                <button 
                                                     type="button"
                                                     class="btn btn-sm {{ $hasCIDB ? 'btn-success' : 'btn-secondary disabled' }}"
                                                     style="{{ $hasCIDB ? '' : 'opacity: 0.6; cursor: not-allowed;' }}"
@@ -339,7 +339,7 @@
                                                     {{ $hasCIDB ? '' : 'disabled' }}
                                                 >
                                                     CIDB
-                                                </button> --}}
+                                                </button>
                                             @endif
                                         </div>
                                     </td>

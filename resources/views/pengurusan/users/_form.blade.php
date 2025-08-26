@@ -88,8 +88,8 @@
     </div>
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    @if(isset($userRole["Penggiat Industri"]))
-        @if($user->jenis == null)
+    @if(1 || isset($userRole["Penggiat Industri"]))
+        @if(1)
         <div class="col-12 col-md-6">
             <div class="form-group">
                 {{ Form::label('jenis_industri', 'Jenis - Penggiat Industri') }}
@@ -110,8 +110,9 @@
                 <script>
                     $(document).ready(function() {
                         $('#jenis_industri option[value=""]').attr('disabled', 'disabled');
-                        let jenis = '{{ $user->jenis }}';
-                        if(jenis){getSyarikat(jenis);}
+                        
+                        let jenis = '{{ $user->jenis ?? "null" }}';
+                        if(jenis){getSyarikat(jenis);}else{getSyarikat(($('#jenis_industri').val()));}
                         $('#jenis_industri').on('change', function() {
                             const selectedJenis = $(this).val();
                             if (selectedJenis) {

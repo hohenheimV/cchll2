@@ -138,8 +138,8 @@
                             <th class="w-1">Bil.</th>
                             <th class="w-15">Nama </th>
                             <th class="text-center w-5">Pihak Berkuasa Tempatan</th>
-                            <th class="w-3">Pelan Induk Landskap</th>
-                            <th class="text-center w-1">Tindakan</th>
+                            <th class="w-3">Catatan</th>
+                            <th class="text-center w-1">Maklumat Lanjut</th>
                             
                         </tr>
                     </thead>
@@ -151,10 +151,18 @@
                         @if($ePIL->isNotEmpty())
                             @foreach($ePIL as $pelan)
                                 @if($previousNegeri !== null && $previousNegeri !== $pelan->negeri)
-                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ ucwords(strtolower($pelan->negeri))}}</td></tr>
+                                    <tr onclick="window.location='{{ url('epil-pelan/' . $pelan->negeri_pelan) }}'" style="background-color: #31d5c8 !important; color: white; cursor: pointer;">
+                                        <td colspan="5" class="text-center">
+                                            {{ ucwords(strtolower($pelan->negeri)) }}
+                                        </td>
+                                    </tr>
                                 @elseif($previousNegeri === $pelan->negeri)
                                 @else
-                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ ucwords(strtolower($pelan->negeri))}}</td></tr>
+                                    <tr onclick="window.location='{{ url('epil-pelan/' . $pelan->negeri_pelan) }}'" style="background-color: #31d5c8 !important; color: white; cursor: pointer;">
+                                        <td colspan="5" class="text-center">
+                                            {{ ucwords(strtolower($pelan->negeri)) }}
+                                        </td>
+                                    </tr>
                                 @endif
                                 <tr>
                                     <td>{{ $index++ }}</td>
@@ -180,12 +188,12 @@
                                                 }
                                             }
                                         ?>
-                                        @if ($pelan->gambar_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan)) && $fileSizeInMB < 200 && $isPdf)
-                                            <!-- <a href="{{ asset($pelan->gambar_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan : 'storage/uploads/no-photos.png' ) }}" 
+                                        @if ($pelan->nama_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan)) && $fileSizeInMB < 100 && $isPdf)
+                                            <!-- <a href="{{ asset($pelan->nama_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan : 'storage/uploads/no-photos.png' ) }}" 
                                                 target="_blank" download> -->
                                             <button 
                                                 data-title="{{ $pelan->nama_pelan }}" 
-                                                data-pelan="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan) }}"
+                                                data-pelan="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan) }}"
                                                 data-toggle="modal" 
                                                 data-target="#pelanModal"
                                             >
@@ -203,7 +211,7 @@
                                             </button>
                                             <!-- </a> -->
                                         @else
-                                            Dokumen tidak dapat dipaparkan
+                                            -
                                             <br>&nbsp;
                                         @endif
                                         @if($fileSizeInMB)
@@ -212,23 +220,23 @@
                                     </td>
                                     <td class="text-center">
                                         {{-- <div class="btn-group">
-                                            @if ($pelan->gambar_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan)))
+                                            @if ($pelan->nama_dokumen_pelan && file_exists(public_path('storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan)))
                                                 <!-- <button 
                                                     type="button" 
                                                     class="btn btn-primary btn-sm" 
                                                     data-title="{{ $pelan->nama_pelan }}" 
-                                                    data-pelan="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan) }}"
+                                                    data-pelan="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan) }}"
                                                     data-toggle="modal" 
                                                     data-target="#pelanModal"
                                                 > -->
                                                 @if($fileSizeInMB < 200 && $isPdf)
-                                                    <a href="{{ asset($pelan->gambar_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan : 'javascript:void(0)' ) }}" 
+                                                    <a href="{{ asset($pelan->nama_dokumen_pelan ? 'storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan : 'javascript:void(0)' ) }}" 
                                                     target="_blank" type="button" class="btn btn-primary btn-sm" >
                                                         <i class="fas fa-search"></i>
                                                     </a>
                                                 @endif
                                                 <!-- </button> -->
-                                                <a href="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$pelan->gambar_dokumen_pelan) }}" target="_blank" download>
+                                                <a href="{{ asset('storage/uploads/ePIL/'.$folder.'/'.$pelan->nama_dokumen_pelan) }}" target="_blank" download>
                                                     {!! Form::button('<i class="fas fa-download"></i>', [
                                                         'class' => 'btn btn-success btn-sm'
                                                     ]) !!}
@@ -237,9 +245,9 @@
                                         </div> --}}
                                         <div class="btn-group">
                                             @php
-                                                $hasPelanFile = $pelan->gambar_dokumen_pelan && file_exists(public_path("storage/uploads/ePIL/{$folder}/{$pelan->gambar_dokumen_pelan}"));
-                                                $pelanFilePath = "storage/uploads/ePIL/{$folder}/{$pelan->gambar_dokumen_pelan}";
-                                                $isPdf = strtolower(pathinfo($pelan->gambar_dokumen_pelan, PATHINFO_EXTENSION)) === 'pdf';
+                                                $hasPelanFile = $pelan->nama_dokumen_pelan && file_exists(public_path("storage/uploads/ePIL/{$folder}/{$pelan->nama_dokumen_pelan}"));
+                                                $pelanFilePath = "storage/uploads/ePIL/{$folder}/{$pelan->nama_dokumen_pelan}";
+                                                $isPdf = strtolower(pathinfo($pelan->nama_dokumen_pelan, PATHINFO_EXTENSION)) === 'pdf';
                                                 $fileSizeInMB = $hasPelanFile ? filesize(public_path($pelanFilePath)) / 1024 / 1024 : 0;
                                                 $canView = $hasPelanFile && $isPdf && $fileSizeInMB < 200;
                                                 $canDownload = $hasPelanFile;
@@ -378,8 +386,8 @@
             // let folder = pelan.nama_pelan.replace(/\s+/g, '_'); // Replace spaces with underscores in folder name
             let namaFolder = pelan.id_pelan+' '+pelan.nama_pelan;
             let folder = namaFolder.replace(/\s+/g, '_');
-            const url = pelan.gambar_dokumen_pelan ?
-                `/storage/uploads/ePIL/${folder}/${pelan.gambar_dokumen_pelan}` : 
+            const url = pelan.nama_dokumen_pelan ?
+                `/storage/uploads/ePIL/${folder}/${pelan.nama_dokumen_pelan}` : 
                 '/img/no-photos.png';
 
             // Load and render the first page of the PDF document
@@ -425,7 +433,7 @@
                 const viewerElement = document.getElementById('pdf-viewer-' + pelan.id_pelan);
                 if (viewerElement) {
                     viewerElement.innerHTML = `<div class="text-center text-muted" style="padding-top: 20px;">
-                        Fail bukan PDF — tidak dapat dipaparkan
+                        —
                     </div>`;
                 }
                 return;
@@ -434,17 +442,17 @@
             fetch(url, { method: 'HEAD' }).then(response => {
                 const sizeInBytes = response.headers.get('Content-Length');
                 const sizeInMB = sizeInBytes / (1024 * 1024);
-                if (sizeInMB > 1000) {
+                if (sizeInMB > 100) {
                     // Too large, skip rendering
                     const viewerElement = document.getElementById('pdf-viewer-' + pelan.id_pelan);
                     if (viewerElement) {
                         viewerElement.innerHTML = `<div class="text-center text-muted" style="padding-top: 80px;">
-                            Dokumen melebihi 1000MB — tidak dapat dipaparkan
+                            -
                         </div>`;
                     }
                     return;
                 }
-                if(sizeInMB <= 1000){
+                if(sizeInMB <= 100){
                     // Load and render first page
                     pdfjsLib.getDocument(url).promise.then(function (pdf) {
                         return pdf.getPage(1);
@@ -479,7 +487,7 @@
                     }).catch(function (error) {
                         const viewerElement = document.getElementById('pdf-viewer-' + pelan.id_pelan);
                         if (viewerElement) {
-                            viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Dokumen tidak dapat dipaparkan</div>';
+                            viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">-</div>';
                         }
                     });
                 }

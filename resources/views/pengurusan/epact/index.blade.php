@@ -2,7 +2,7 @@
 
 {{-- @section('title', 'Maklumat Polisi Landskap (ePACT)') --}}
 
-@section('title', 'Maklumat Pentadbiran Kontrak dan Polisi Landskap')
+@section('title', 'Maklumat Polisi Landskap dan Pentadbiran Kontrak')
 
 @section('content')
 <section class="content">

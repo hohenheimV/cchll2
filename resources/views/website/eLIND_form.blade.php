@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 <div class="card card-olive card-outline">
     <div class="card-header">
         <h3 class="card-title font-weight-bold my-1">Direktori Penggiat Industri: {{ $keyword }}</h3>
@@ -54,7 +55,7 @@
                             'G1','G2','G3','G4','G5','G6','G7','TIADA'
                         ] as $kod)
                             <option value="{{ $kod }}" {{ request('kelas_kontraktor') == $kod ? 'selected' : '' }}>
-                                {{ $kod == 'TIADA' ? 'Tiada Maklumat' : $kod }}
+                                {{ $kod == 'TIADA' ? 'Sedang dikemaskini' : $kod }}
                             </option>
                         @endforeach
                     </select>
@@ -92,7 +93,7 @@
                                 {{ $lain }}
                             </option>
                         @endforeach
-                        <option value="0" {{ request('bidang_pembekal') == '0' ? 'selected' : '' }}>Tiada Maklumat</option>
+                        <option value="0" {{ request('bidang_pembekal') == '0' ? 'selected' : '' }}>Sedang dikemaskini</option>
                     </select>
                     @endif
 
@@ -168,7 +169,7 @@
                             @endif
                             <th class="w-5">Alamat</th>
                             <!-- <th class="text-center w-5">Prestasi</th> -->
-                            <th class="text-center w-1">Tindakan</th>
+                            <th class="text-center w-1">Maklumat Lanjut</th>
                             
                         </tr>
                     </thead>
@@ -234,11 +235,11 @@
                                     @endif
                                     <td>
                                         {{--@if(isset($user->email)) {{ $user->email }}<br>@endif--}}
-                                        @if(isset($user->address1)) {{ ucwords(strtolower($user->address1.',')) }}<br>@endif
-                                        @if(isset($user->address2)) {{ ucwords(strtolower($user->address2.',')) }}<br>@endif
-                                        @if(isset($user->postcode)) {{ ucwords(strtolower($user->postcode)) }}@endif
-                                        @if(isset($user->locality)) {{ ucwords(strtolower($user->locality.', ')) }}@endif
-                                        @if(isset($user->state)) {{ ucwords(strtolower($user->state.'.')) }}<br>@endif
+                                        @if(isset($user->address1)) {{ (($user->address1.'')) }}<br>@endif
+                                        @if(isset($user->address2)) {{ (($user->address2.'')) }}<br>@endif
+                                        @if(isset($user->postcode)) {{ (($user->postcode)) }}@endif
+                                        @if(isset($user->locality)) {{ (($user->locality.'')) }}<br>@endif
+                                        @if(isset($user->state) && $keyword != 'Pertubuhan Antarabangsa') {{ (($user->state.'.')) }}<br>@endif
                                     </td>
                                     <!-- <td class="text-center">
                                         <?php
@@ -265,7 +266,7 @@
                                                 @if(isset($user->address2)) {{ $user->address2.',' }}@endif
                                                 @if(isset($user->postcode)) {{ $user->postcode }}@endif
                                                 @if(isset($user->locality)) {{ $user->locality.', ' }}@endif
-                                                @if(isset($user->state)) {{ $user->state.'.' }}@endif"
+                                                @if(isset($user->state) && $keyword != 'Pertubuhan Antarabangsa') {{ $user->state.'.' }}@endif"
                                                 data-media_sosial="{{ $user->mediaSosial_penggiat }}"
                                                 data-emel="{{ $user->email }}"
                                                 @if($keyword == "Pembekal" || $keyword == "Perunding" || $keyword == "Kontraktor") 
@@ -437,7 +438,7 @@
                     <p><strong>Presiden</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
-                    <p id="nama_presiden">Tiada Maklumat</p>
+                    <p id="nama_presiden">Sedang dikemaskini</p>
                 </div>
             </div>
             @endif
@@ -447,7 +448,7 @@
                     <p><strong>Kategori</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
-                    <p id="kategori_ngo">Tiada Maklumat</p>
+                    <p id="kategori_ngo">Sedang dikemaskini</p>
                 </div>
             </div>
             @endif
@@ -457,7 +458,7 @@
                     <p><strong>Jenis Institusi</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
-                    <p id="jenis_institusi">Tiada Maklumat</p>
+                    <p id="jenis_institusi">Sedang dikemaskini</p>
                 </div>
             </div>
             @endif
@@ -466,11 +467,11 @@
                     <p><strong>Alamat</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
-                    <p id="address">Tiada Maklumat</p>
-                    <!-- <p id="address2">Tiada Maklumat</p>
-                    <p id="postcode">Tiada Maklumat</p>
-                    <p id="locality">Tiada Maklumat</p>
-                    <p id="state">Tiada Maklumat</p> -->
+                    <p id="address">Sedang dikemaskini</p>
+                    <!-- <p id="address2">Sedang dikemaskini</p>
+                    <p id="postcode">Sedang dikemaskini</p>
+                    <p id="locality">Sedang dikemaskini</p>
+                    <p id="state">Sedang dikemaskini</p> -->
                 </div>
             </div>
             <!-- <div class="row">
@@ -478,7 +479,7 @@
                     <p><strong>No Telefon</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
-                    <p id="no_telefon">Tiada Maklumat</p>
+                    <p id="no_telefon">Sedang dikemaskini</p>
                 </div>
             </div>
             <div class="row">
@@ -486,7 +487,7 @@
                     <p><strong>Emel</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
-                    <p id="emel">Tiada Maklumat</p>
+                    <p id="emel">Sedang dikemaskini</p>
                 </div>
             </div> -->
             @if($keyword == "Pembekal" || $keyword == "Perunding" || $keyword == "Kontraktor") 
@@ -495,7 +496,7 @@
                     <p><strong>No. Pendaftaran Syarikat (SSM)</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
-                    <p id="no_ssm">Tiada Maklumat</p>
+                    <p id="no_ssm">Sedang dikemaskini</p>
                 </div>
             </div> --}}
             {{-- <div class="row">
@@ -503,7 +504,7 @@
                     <p><strong>No. Pendaftaran MoF</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
-                    <p id="no_mof">Tiada Maklumat</p>
+                    <p id="no_mof">Sedang dikemaskini</p>
                 </div>
             </div> --}}
             @endif
@@ -513,7 +514,7 @@
                     <p><strong>No. Pendaftaran PKK/ CIDB</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
-                    <p id="no_cidb">Tiada Maklumat</p>
+                    <p id="no_cidb">Sedang dikemaskini</p>
                 </div>
             </div> --}}
             <div class="row">
@@ -521,7 +522,7 @@
                     <p><strong>Taraf Bumiputera</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
-                    <p id="taraf_bumiputera">Tiada Maklumat</p>
+                    <p id="taraf_bumiputera">Sedang dikemaskini</p>
                 </div>
             </div>
             <div class="row">
@@ -529,7 +530,7 @@
                     <p><strong>Bidang Kepakaran</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
-                    <p id="bidang_kepakaran">Tiada Maklumat</p>
+                    <p id="bidang_kepakaran">Sedang dikemaskini</p>
                 </div>
             </div>
             @endif
@@ -539,7 +540,7 @@
                     <p><strong>No. Pendaftaran ILAM</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
-                    <p id="no_ilam">Tiada Maklumat</p>
+                    <p id="no_ilam">Sedang dikemaskini</p>
                 </div>
             </div>
             <div class="row">
@@ -547,7 +548,7 @@
                     <p><strong>Tarikh Luput Keahlian ILAM</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
-                    <p id="tarikh_luput_ilam">Tiada Maklumat</p>
+                    <p id="tarikh_luput_ilam">Sedang dikemaskini</p>
                 </div>
             </div>
             @endif
@@ -557,7 +558,7 @@
                     <p><strong>Bidang</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
-                    <p id="bidang_pembekal">Tiada Maklumat</p>
+                    <p id="bidang_pembekal">Sedang dikemaskini</p>
                 </div>
             </div>
             @endif
@@ -567,7 +568,7 @@
                     <p><strong>Media</strong></p>
                 </div>
                 <div class="col-7 col-xs-12">
-                    <p id="">Tiada Maklumat</p>
+                    <p id="">Sedang dikemaskini</p>
                 </div>
             </div>
 
@@ -722,37 +723,135 @@
             //     }
             // }
 
+            // const container = document.getElementById("mediaSosial");
+
+            // // Clear existing (optional)
+            // container.innerHTML = "";
+
+            // const priorityOrder = ["Emel", "Telefon", "Web"];
+            // function appendRow(labelText, valueText) {
+            //     const row = document.createElement("div");
+            //     row.className = "row";
+
+            //     const colLabel = document.createElement("div");
+            //     colLabel.className = "col-5 col-xs-12";
+            //     colLabel.innerHTML = `<p><strong>${labelText}</strong></p>`;
+
+            //     const colValue = document.createElement("div");
+            //     colValue.className = "col-7 col-xs-12";
+            //     colValue.innerHTML = `<p>${valueText || 'Sedang dikemaskini'}</p>`;
+
+            //     row.appendChild(colLabel);
+            //     row.appendChild(colValue);
+            //     container.appendChild(row);
+            // }
+
+            // // Add in priority order
+            // priorityOrder.forEach(key => {
+            //     if (media_sosial.hasOwnProperty(key)) {
+            //         appendRow(key, media_sosial[key]);
+            //     }
+            // });
+
+            // // Add the remaining keys
+            // Object.keys(media_sosial).forEach(key => {
+            //     if (!priorityOrder.includes(key)) {
+            //         appendRow(key, media_sosial[key]);
+            //     }
+            // });
+
             const container = document.getElementById("mediaSosial");
 
-            // Clear existing (optional)
-            container.innerHTML = "";
+            // Dummy data
+            //  media_sosial = {
+            //     Emel: "taman@example.com",
+            //     Telefon: "012-3456789",
+            //     Web: "https://www.tamantest.my",
+            //     Facebook: "https://facebook.com/tamantest",
+            //     Instagram: "@tamantest",
+            //     TikTok: "@taman_tok",
+            //     YouTube: "http://youtube.com/@tamantube",
+            //     Lain: "Info tambahan"
+            // };
 
             const priorityOrder = ["Emel", "Telefon", "Web"];
+
+            // Icon map (label => icon class)
+            const iconMap = {
+                Emel: "fas fa-envelope",
+                Telefon: "fas fa-phone",
+                Web: "fas fa-globe",
+                Facebook: "fab fa-facebook",
+                Instagram: "fab fa-instagram",
+                Twitter: "fab fa-twitter",
+                TikTok: "fab fa-tiktok",
+                YouTube: "fab fa-youtube",
+                WhatsApp: "fab fa-whatsapp",
+                Lain: "fas fa-link",
+            };
+
+            // Function to create and append a row
+            // function appendRow(labelText, valueText) {
+            //     const icon = iconMap[labelText] || "fas fa-link";
+            //     const row = document.createElement("div");
+            //     row.className = "row mb-2";
+
+            //     const colLabel = document.createElement("div");
+            //     colLabel.className = "col-5 col-xs-12";
+            //     colLabel.innerHTML = `<p><strong><i class="${icon} me-1"></i> ${labelText}</strong></p>`;
+
+            //     const colValue = document.createElement("div");
+            //     colValue.className = "col-7 col-xs-12";
+            //     colValue.innerHTML = `<p>${valueText || 'Sedang dikemaskini'}</p>`;
+
+            //     row.appendChild(colLabel);
+            //     row.appendChild(colValue);
+            //     container.appendChild(row);
+            // }
             function appendRow(labelText, valueText) {
+                const icon = iconMap[labelText] || "fas fa-link";
                 const row = document.createElement("div");
-                row.className = "row";
+                row.className = "row mb-2";
 
                 const colLabel = document.createElement("div");
                 colLabel.className = "col-5 col-xs-12";
-                colLabel.innerHTML = `<p><strong>${labelText}</strong></p>`;
 
                 const colValue = document.createElement("div");
                 colValue.className = "col-7 col-xs-12";
-                colValue.innerHTML = `<p>${valueText || 'Tiada Maklumat'}</p>`;
+
+                let displayValue = "Sedang dikemaskini";
+
+                if (valueText && typeof valueText === "string") {
+                    const trimmed = valueText.trim();
+
+                    // Check if value starts with http:// or https:// (case-insensitive)
+                    if (/^http?:\/\//i.test(trimmed) || /^https?:\/\//i.test(trimmed)) {
+                        colLabel.innerHTML = `<p><a href="${trimmed}" target="_blank" rel="noopener noreferrer"><strong><i class="${icon} me-1"></i></strong></a></p>`;
+                        displayValue = `<a href="${trimmed}" target="_blank" rel="noopener noreferrer">${trimmed}</a>`;
+                    } else {
+                        colLabel.innerHTML = `<p><strong><i class="${icon} me-1"></i></strong></p>`;
+                        displayValue = trimmed;
+                    }
+                }
+
+                colValue.innerHTML = `<p>${displayValue}</p>`;
 
                 row.appendChild(colLabel);
                 row.appendChild(colValue);
                 container.appendChild(row);
             }
 
-            // Add in priority order
+            // Clear existing content
+            container.innerHTML = "";
+
+            // First: Append priority keys
             priorityOrder.forEach(key => {
                 if (media_sosial.hasOwnProperty(key)) {
                     appendRow(key, media_sosial[key]);
                 }
             });
 
-            // Add the remaining keys
+            // Then: Append remaining keys
             Object.keys(media_sosial).forEach(key => {
                 if (!priorityOrder.includes(key)) {
                     appendRow(key, media_sosial[key]);
@@ -784,13 +883,13 @@
                     4: 'B09 (Lanskap dalam bangunan)',
                     5: 'CE14 (Landskap diluar bangunan)',
                     6: 'B09 & CE14 (Lanskap dalam bangunan), (Landskap diluar bangunan)',
-                    0: 'TIADA MAKLUMAT'
+                    0: 'Tiada Maklumat'
                 };
 
                 const tarafBumiputeraMap = {
                     1: 'BUMIPUTERA',
                     2: 'BUKAN BUMIPUTERA',
-                    0: 'TIADA MAKLUMAT'
+                    0: 'Tiada Maklumat'
                 };
                 if (taraf_bumiputera && taraf_bumiputera !== '') {
                     // Map the numeric value to the corresponding name
@@ -849,7 +948,7 @@
                     2: 'IPTS',
                     3: 'KOLEJ',
                     4: 'SEKOLAH',
-                    0: 'TIADA MAKLUMAT'
+                    0: 'Tiada Maklumat'
                 };
                 if (jenis_institusi && jenis_institusi !== '') {
                     const jenisInstitusiName = jenisInstitusiMap[jenis_institusi];
@@ -903,7 +1002,7 @@
             // Check if data is empty
             if (data.length === 0) {
                 // If no data, add a row indicating no information available
-                tableBody.innerHTML = "<tr><td colspan='5' class='text-center'>Tiada Maklumat</td></tr>";
+                tableBody.innerHTML = "<tr><td colspan='5' class='text-center'>Sedang dikemaskini</td></tr>";
                 return;
             }
 
@@ -949,7 +1048,7 @@
             // Check if data is empty
             if (data.length === 0) {
                 // If no data, add a row indicating no information available
-                tableBody.innerHTML = "<tr><td colspan='6' class='text-center'>Tiada Maklumat</td></tr>";
+                tableBody.innerHTML = "<tr><td colspan='6' class='text-center'>Sedang dikemaskini</td></tr>";
                 return;
             }
 

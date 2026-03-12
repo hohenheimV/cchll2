@@ -34,6 +34,7 @@
     <!-- Google Font: Source Sans Pro -->
     {{-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet"> --}}
     <link href="https://fonts.googleapis.com/css?family=Catamaran:700|Roboto:300,400,400i,700,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
     <!-- CSS:style -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -41,6 +42,9 @@
     <!-- CSS:percentage -->
     <link rel="stylesheet" href="{{ asset('css/percentage.css') }}">
     <style>
+        html, body, h1, h2, h3, h4, h5, p, a {
+          font-family: 'Poppins', sans-serif !important;
+        }
         #posts {
             flex: 1;
         }
@@ -80,6 +84,10 @@
                 max-width: 1300px;
             }
         }
+        table td:not([colspan]) {
+            color: black !important;
+        }
+
     </style>
     <style>
         .filter-select {
@@ -122,7 +130,7 @@
         @include('layouts.website.elements.navbar')
     <!-- <link rel="stylesheet" href="{{ asset('css/tree.css') }}"> -->
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper mib2">
             @yield('content')
             {{--  @include('layouts.website.elements.footer')  --}}
             <!-- /.section#footer -->
@@ -177,7 +185,7 @@
             $('#exampleNP').DataTable({
                 responsive: false,
                 paging: true,
-                pageLength: 5,
+                pageLength: 20,
                 searching: true,
                 info: true,
                 autoWidth: false,

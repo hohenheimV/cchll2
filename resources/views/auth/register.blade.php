@@ -495,6 +495,9 @@
                                     <option value="Pembekal">Pembekal Landskap</option>
                                     <option value="Perunding">Perunding</option>
                                     <option value="Kontraktor">Kontraktor</option>
+                                    <option value="Institusi Pendidikan">Institusi Pendidikan</option>
+                                    <option value="NGO / Badan Ikhtisas">NGO & Badan Ikhtisas</option>
+                                    <option value="Pertubuhan Antarabangsa">Pertubuhan Antarabangsa</option>
                                 </select>
                                 @error('jenis_penggiat')
                                     <span class="invalid-feedback" role="alert">
@@ -693,11 +696,11 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                            </div>
+                            </di
+                    </dv>
                             <!-- <input id="namaYDP" type="text" class="form-control" name="namaYDP">
                             <input id="emailYDP" type="text" class="form-control" name="emailYDP"> -->
-                        </div>
-                    </div>
+                        </div>iv>
 
                     <div id="pengesahan" style="display: none;">
                         <div class="row">
@@ -880,10 +883,14 @@
             // var $perundingFields = $('#perunding_fields');
             // var $pembekalFields = $('#pembekal_fields');
             var $countryField = $('#country-field');
+            var noCidb = document.getElementById("no_cidb");
             
             if (jenisPenggiat !== 'Pertubuhan Antarabangsa') {
                 $('#state-field').removeClass('col-md-3').addClass('col-md-6');
                 $countryField.hide();
+                noCidb.required = false;
+                noCidb.disabled = true;
+                noCidb.value = "";
                 if (jenisPenggiat === 'Kontraktor') {
                     $kontraktorFields.show();
                     $kontraktorFields.find('input, select').prop('disabled', false);
@@ -891,6 +898,8 @@
                     // $perundingFields.find('input, select').prop('disabled', true);
                     // $pembekalFields.hide();
                     // $pembekalFields.find('input, select').prop('disabled', true);
+                    noCidb.required = true;
+                    noCidb.disabled = false;
                 } else if (jenisPenggiat === 'Pembekal Landskap') {
                     $kontraktorFields.hide();
                     $kontraktorFields.find('input, select').prop('disabled', true);

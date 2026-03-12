@@ -93,18 +93,18 @@
                                                     <th class="text-center align-middle">Tajuk Laporan</th>
                                                     <th class="text-center align-middle w-20">Pihak Berkuasa Tempatan</th>
                                                     <!-- <th class="text-center align-middle w-20">Tarikh Laporan</th> -->
-                                                    <th class="text-center align-middle w-5">Tindakan</th>
+                                                    <th class="text-center align-middle w-5">Maklumat Lanjut</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @php($null = '<span class="badge badge-light">Tiada Maklumat</span>')
+                                                @php($null = '<span class="badge badge-light">Sedang dikemaskini</span>')
                                                 @php($index = $MIB_laporan->firstItem())
                                                 @forelse($MIB_laporan as $laporan)
                                                 <tr>
                                                     <td>{{ $index++ }}</td>
                                                     <td>{{ ucwords(strtolower($laporan->taman)) }}</td>
                                                     <td>{!! ucwords(strtolower($laporan->name)) !!}</td>
-                                                    <td>{{ ucwords(strtolower($laporan->mib->pbt ?? 'Tiada Maklumat'))  }}</td>
+                                                    <td>{{ ucwords(strtolower($laporan->mib->pbt ?? 'Sedang dikemaskini'))  }}</td>
                                                     <!-- <td class="text-center">{!! $laporan->created_at->format('d-m-Y') !!}</td> -->
                                                     <td class="text-center">
                                                         <?php
@@ -290,7 +290,7 @@
 
                 <div class="modal-body bg-white">
                     <h5>Laporan</h5>
-                    <p id="laporan">Tiada Maklumat</p>
+                    <p id="laporan" style="white-space: pre-line;">Sedang dikemaskini</p>
                     <br>
                     <h5>Gambar Aktiviti</h5>
                     {{-- <div class="park-images">
@@ -563,22 +563,22 @@
                         }
 
                         // Toggle logic
-                        $('#laporan').on('click', '.toggle-laporan', function (e) {
-                            e.preventDefault();
-                            const $short = $('#laporan .short-text');
-                            const $full = $('#laporan .full-text');
-                            const $link = $(this);
+                        // $('#laporan').on('click', '.toggle-laporan', function (e) {
+                        //     e.preventDefault();
+                        //     const $short = $('#laporan .short-text');
+                        //     const $full = $('#laporan .full-text');
+                        //     const $link = $(this);
 
-                            if ($short.is(':visible')) {
-                                $short.addClass('d-none');
-                                $full.removeClass('d-none');
-                                $link.text('See less');
-                            } else {
-                                $short.removeClass('d-none');
-                                $full.addClass('d-none');
-                                $link.text('See more');
-                            }
-                        });
+                        //     if ($short.is(':visible')) {
+                        //         $short.addClass('d-none');
+                        //         $full.removeClass('d-none');
+                        //         $link.text('See less');
+                        //     } else {
+                        //         $short.removeClass('d-none');
+                        //         $full.addClass('d-none');
+                        //         $link.text('See more');
+                        //     }
+                        // });
                     }
                 });
 
@@ -597,6 +597,26 @@
                     modal.find('#modalNama').text('');
                     modal.find('#laporan').text('');
                     modal.find('.modal-content').scrollTop(0);
+                    modal.find('#laporan').html('');
+                });
+
+                $(document).on('click', '.toggle-laporan', function (e) {
+                    e.preventDefault();
+
+                    const $laporan = $(this).closest('#laporan');
+                    const $short = $laporan.find('.short-text');
+                    const $full = $laporan.find('.full-text');
+                    const $link = $(this);
+
+                    if ($short.is(':visible')) {
+                        $short.addClass('d-none');
+                        $full.removeClass('d-none');
+                        $link.text('See less');
+                    } else {
+                        $short.removeClass('d-none');
+                        $full.addClass('d-none');
+                        $link.text('See more');
+                    }
                 });
             });
         </script>

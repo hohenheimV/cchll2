@@ -7,6 +7,11 @@
 @php
     //dd(auth()->user()->roles, auth()->user()->permissions);
 @endphp
+<style>
+.content-wrapper{
+    min-height: 100px !important;
+}
+</style>
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
@@ -94,7 +99,7 @@
                                                         </div>
                                                     </a>
                                                 @else
-                                                    Dokumen tidak dapat dipaparkan
+                                                    -
                                                     <br>&nbsp;
                                                 @endif
                                                 <p>{{ $fileSizeInMB ? number_format($fileSizeInMB, 2) . " MB" : '' }}</p>
@@ -235,7 +240,7 @@
                 const viewerElement = document.getElementById('pdf-viewer-' + pelan.id_pelan);
                 if (viewerElement) {
                     viewerElement.innerHTML = `<div class="text-center text-muted" style="padding-top: 80px;">
-                        Fail bukan PDF — tidak dapat dipaparkan
+                        —
                     </div>`;
                 }
                 return;
@@ -250,7 +255,7 @@
                     const viewerElement = document.getElementById('pdf-viewer-' + pelan.id_pelan);
                     if (viewerElement) {
                         viewerElement.innerHTML = `<div class="text-center text-muted" style="padding-top: 80px;">
-                            Dokumen melebihi 1000MB — tidak dapat dipaparkan
+                            —
                         </div>`;
                     }
                     return;
@@ -290,7 +295,7 @@
                     }).catch(function (error) {
                         const viewerElement = document.getElementById('pdf-viewer-' + pelan.id_pelan);
                         if (viewerElement) {
-                            viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Dokumen tidak dapat dipaparkan</div>';
+                            viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">-</div>';
                         }
                     });
                 }

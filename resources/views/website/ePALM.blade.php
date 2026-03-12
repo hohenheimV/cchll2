@@ -1,5 +1,5 @@
 @extends('layouts.website.secondary')
-@section('title', 'Direktori Taman & Landskap')
+@section('title', 'Direktori Taman dan Landskap')
 
 @section('content')
 

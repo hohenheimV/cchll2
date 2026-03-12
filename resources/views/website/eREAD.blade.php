@@ -86,7 +86,7 @@
                                                 <th class="text-center w-5">Kategori</th>
                                                 <th class="text-center w-5">Tahun Penerbitan</th>
                                                 <th class="w-3">Saiz</th>
-                                                <th class="text-center w-1">Tindakan</th>
+                                                <th class="text-center w-1">Maklumat Lanjut</th>
                                                 
                                             </tr>
                                         </thead>
@@ -100,7 +100,7 @@
                                                         <td>{{ $index++ }}</td>
                                                         <td>{{ ucwords(strtolower($eread->tajuk ))}}</td>
                                                         <td>
-                                                            {{ ucwords(strtolower($eread->kategori->name ?? 'Tiada Maklumat'))}}
+                                                            {{ ucwords(strtolower($eread->kategori->name ?? 'Sedang dikemaskini'))}}
                                                         </td>
                                                         <td class="text-center">
                                                             {!! Html::datetime($eread->tarikh, 'Y') !!}
@@ -284,7 +284,7 @@
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
             document.addEventListener('DOMContentLoaded', function() {
-                const ereads = @json($ereads);
+                /*const ereads = @json($ereads);
 
                 ereads.data.forEach(eread => {
                     const url = eread.dokumen ? `{{ asset('storage/uploads/eread/dokumen') }}/${eread.dokumen}` : `{{ asset('img/no-photos.png') }}`;
@@ -327,7 +327,7 @@
                             viewerElement.innerHTML = '<div class="text-center text-muted"><img src="http://127.0.0.1:8000/storage/uploads/no-photos.png" class="img-fluid" alt="Responsive image"></div>';
                         }
                     });
-                });
+                });*/
             });
         </script>
 

@@ -44,6 +44,7 @@
 
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
     <!-- CSS:style -->
     {{--  <link rel="stylesheet" href="{{ asset('css/style.css') }}"> --}}
@@ -71,6 +72,12 @@
 
     </style> -->
     <style>
+        html, body, h1, h2, h3, h4, h5, p, a {
+          font-family: 'Poppins', sans-serif !important;
+        }
+        .form-control {
+          color: #000 !important;
+        }
         .pagination {
             display: flex;
             flex-wrap: wrap; /* Allow buttons to wrap */
@@ -259,6 +266,7 @@
                 $('#exampleNP').DataTable({
                     responsive: false,
                     paging: true,
+                    pageLength: 20,
                     searching: true,
                     info: true,
                     autoWidth: false,

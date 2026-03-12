@@ -364,10 +364,21 @@ Route::name('website.')
         })->name('search');
 
         Route::get('/epalm/{keyword?}', function ($keyword = null) {
-            $keywordSalt = $keyword;// ? Crypt::decryptString($keyword) : null;
+            $keywordSalt = str_replace('|', '/', $keyword);// ? Crypt::decryptString($keyword) : null;
             // dd($keyword);
             // return ePALM::where('is_komponen', null)->latest()->paginate(10);
             // $ePALM = ePALM::/* where('is_komponen', null)-> */where('status', 'approved')->latest()->paginate(5);//ePALM::latest()->paginate(15);
+            $parkSort = "
+                    CASE
+                        WHEN kategori_taman = 'Taman Tempatan' THEN 1
+                        WHEN kategori_taman = 'Taman Bandaran' THEN 2
+                        WHEN kategori_taman = 'Taman Wilayah' THEN 3
+                        WHEN kategori_taman = 'Padang Kejiranan' THEN 4
+                        WHEN kategori_taman = 'Padang Permainan' THEN 5
+                        WHEN kategori_taman = 'Lot Permainan' THEN 6
+                        ELSE 99
+                    END
+                ";
             $ePALM = ePALM::where('status', 'approved')
                 ->where('is_komponen', null)
                 // ->where('nama_pbt', '!=', 'Landskap Perbandaran')
@@ -389,10 +400,14 @@ Route::name('website.')
                         ->orWhere('kategori_taman', 'ilike', "%$keywordSalt%");
                     });
                 })
-                ->orderBy('negeri_taman')
+                ->orderBy('negeri_taman', 'asc')
+                // ->orderBy('nama_pbt', 'asc')
+                ->orderByRaw($parkSort)
+                ->orderBy('kategori_taman', 'asc')
+                ->orderBy('nama_taman', 'asc')
                 // ->orderBy('created_at', 'asc')
-                ->orderBy('nama_pbt')
-                ->paginate(10);
+                // ->orderBy('nama_pbt')
+                ->paginate(20);
 
             // $namaPbtArray = [];
             foreach ($ePALM as $item) {
@@ -423,15 +438,16 @@ Route::name('website.')
 
                 // $namaPbtArray[] = $item->nama_pbt;
             }
-            $namaPbtArray = ePALM::where('status', 'approved')
-                ->where('is_komponen', null)
+            $namaPbtArray = ePALM::/*where('status', 'approved')
+                ->*/where('is_komponen', null)
                 ->orderBy('negeri_taman')
                 ->orderBy('nama_pbt')
                 ->pluck('nama_pbt')
                 ->unique()
                 ->values();
-            $namaKategoriArray = ePALM::where('status', 'approved')
-                ->where('is_komponen', null)
+            $namaKategoriArray = ePALM::/*where('status', 'approved')
+                ->*/where('is_komponen', null)
+                ->orderByRaw($parkSort)
                 ->orderBy('kategori_taman')
                 ->pluck('kategori_taman')
                 ->unique()
@@ -528,7 +544,7 @@ Route::name('website.')
                 ->orderBy('negeri_pelan')
                 ->orderBy('created_at', 'asc')
                 ->orderBy('nama_pbt')
-                ->paginate(5);
+                ->paginate(20);
             foreach ($ePIL as $item) {
                 $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->negeri_pelan)->orderBy('nama_negeri', 'asc')->first();
                 $item->negeri = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 
@@ -593,11 +609,30 @@ Route::name('website.')
             return view('website.MIB_aktiviti', ['MIB_laporan' => $MIB_laporan, 'MIB' => $MIB, 'keyword' => $keyword]);
         })->name('MIB_aktiviti'); */
 
+        // Route::get('/aktiviti-rakan-taman', function ($keyword = null) {
+        //     $count = MIB_laporan::whereYear('created_at', 2025)->count();
+        //     $MIB_laporan = MIB_laporan::with('mib')->whereYear('created_at', 2025)->latest()->paginate($count);
+        //     // dd($MIB_laporan);
+        //     return view('website.MIB_aktiviti', ['MIB_laporan' => $MIB_laporan, 'keyword' => $keyword]);
+        // })->name('MIB_aktiviti');
         Route::get('/aktiviti-rakan-taman', function ($keyword = null) {
-            $count = MIB_laporan::whereYear('created_at', 2025)->count();
-            $MIB_laporan = MIB_laporan::with('mib')->whereYear('created_at', 2025)->latest()->paginate($count);
-            // dd($MIB_laporan);
-            return view('website.MIB_aktiviti', ['MIB_laporan' => $MIB_laporan, 'keyword' => $keyword]);
+            $query = MIB_laporan::with('mib')
+                // ->whereYear('created_at', 2025)
+                ->whereRaw("
+                    EXISTS (
+                        SELECT 1 FROM maklumat_rakan_taman
+                        WHERE CAST(maklumat_rakan_taman.id AS VARCHAR) = maklumat_aktiviti_rakan_taman.id_rakan
+                        AND maklumat_rakan_taman.deleted_at IS NULL
+                    )
+                ");
+
+            $count = $query->count();
+            $MIB_laporan = $query->latest()->paginate($count);
+
+            return view('website.MIB_aktiviti', [
+                'MIB_laporan' => $MIB_laporan,
+                'keyword' => $keyword
+            ]);
         })->name('MIB_aktiviti');
 
         Route::get('/elad-dokumen/{keyword}', function ($keyword) {
@@ -673,7 +708,15 @@ Route::name('website.')
             }
 
             $type = $types[$keyword];
-            $query = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest();
+            $query = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->orderBy('state', 'ASC');
+            if ($keyword === 'kontraktor') {
+                $query->orderBy('kelas_kontraktor', 'ASC');
+                $query->orderBy('bidang_kepakaran', 'ASC');
+            }
+            if ($keyword === 'pembekal') {
+                $query->orderBy('bidang_pembekal', 'ASC');
+                $query->orderBy('bidang_lain_pembekal', 'ASC');
+            }
 
             // Optional negeri filter
             $negeriKod = $request->query('negeri');
@@ -710,7 +753,7 @@ Route::name('website.')
             // if (in_array($keyword, ['kontraktor', 'perunding', 'pembekal'])) {
                 $query->where('status', 'approved');
             // }
-            $data = $query->paginate(15)->appends(request()->query());
+            $data = $query->orderBy('name', 'ASC')->paginate(20)->appends(request()->query());
 
             if ($data->currentPage() > $data->lastPage()) {
                 return redirect()->route('website.eLIND', [

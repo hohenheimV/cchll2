@@ -97,6 +97,7 @@
                                                     ) || Auth::user()->hasRole('Pegawai|Pentadbir Sistem|KP/ TKP JLN')
                                                 )
                                             ) || Auth::user()->id == $permohonan->id_pemohon
+                                            || Auth::user()->hasRole('Pentadbir Sistem')
                                         )
                                         <tr>
                                             <td>{{ $index++ }}</td>

@@ -230,7 +230,7 @@
                             @if(user_in_bahagian(1, 2, 3, 4, 5, 6, 7, 9))
                             <li class="nav-item"><a class="nav-link  {{ $elaps_active }}" href="#eLAPS" data-toggle="tab" role="tab">eLAPS</a></li>
                             @endif
-                            @if(user_in_bahagian(2, 3, 4, 5, 7, 9))
+                            @if(user_in_bahagian(1, 2, 3, 4, 5, 7, 9))
                             <li class="nav-item"><a class="nav-link" href="#ePALM" data-toggle="tab" role="tab">ePALM</a></li>
                             @endif
                             @if(user_in_bahagian(3, 7, 9))
@@ -283,31 +283,31 @@
                             </div>
                             {!! tab_content_end() !!}
                         @endif
-                        @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [2, 3, 4, 5, 7, 9])))
+                        @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [1, 2, 3, 4, 5, 7, 9])))
                             {!! tab_content_start('ePALM', 'Modul ePALM') !!}
                             <div class="row">
                                 {!! stats_card('Jumlah Taman Setakat ' . date('Y'), app_dashboard_taman(), 'javascript:void(0)', 'fas fa-angle-right white-arrow', ' #145a32 ') !!}
-                                @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [2, 7, 9])))
+                                @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [1, 2, 7, 9])))
                                     {!! stats_card('&#11166;&nbsp;Jumlah Taman Awam', app_dashboard_taman(1), route('pengurusan.ePALM.index', ['kategori' => 'Taman Awam']), 'fas fa-leaf', ' #196f3d ') !!}
                                 @endif
-                                @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [3, 7, 9])))
+                                @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [1, 3, 7, 9])))
                                     {!! stats_card('&#11166;&nbsp;Jumlah Landskap Perbandaran', app_dashboard_taman(3), route('pengurusan.ePALM.index', ['kategori' => 'Landskap Perbandaran']), 'fas fa-leaf', ' #229954 ') !!}
                                 @endif
-                                @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [4, 7, 9])))
+                                @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [1, 4, 7, 9])))
                                     {!! stats_card('&#11166;&nbsp;Jumlah Persekitaran Kehidupan', app_dashboard_taman(4), route('pengurusan.ePALM.index', ['kategori' => 'Persekitaran Kehidupan']), 'fas fa-leaf', ' #27ae60 ') !!}
                                 @endif
-                                @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [5, 7, 9])))
+                                @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [1, 5, 7, 9])))
                                     {!! stats_card('&#11166;&nbsp;Jumlah Taman Botani', app_dashboard_taman(2), route('pengurusan.ePALM.index', ['kategori' => 'Taman Botani']), 'fas fa-leaf', ' #1e8449 ') !!}
                                 @endif
                                 @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [2, 7, 9])))
-                                    {!! stats_card('&#11166;&nbsp;Jumlah Taman Persekutuan', app_dashboard_taman(5), route('pengurusan.ePALM.index', ['kategori' => 'Taman Persekutuan']), 'fas fa-leaf', ' #16a085 ') !!}
-                                    {{-- {!! stats_card('&#11166;&nbsp;Jumlah Lain-lain Jenis Taman', app_dashboard_taman(6), route('pengurusan.ePALM.index', ['kategori' => 'Taman Awam']), 'fas fa-leaf', ' #1abc9c ') !!} --}}
+                                    {{-- {!! stats_card('&#11166;&nbsp;Jumlah Taman Persekutuan', app_dashboard_taman(5), route('pengurusan.ePALM.index', ['kategori' => 'Taman Persekutuan']), 'fas fa-leaf', ' #16a085 ') !!}
+                                    {!! stats_card('&#11166;&nbsp;Jumlah Lain-lain Jenis Taman', app_dashboard_taman(6), route('pengurusan.ePALM.index', ['kategori' => 'Taman Awam']), 'fas fa-leaf', ' #1abc9c ') !!} --}}
                                 @endif
                             </div>
                             <div class="accordion" id="ePALMModules">
                                 {!! accordion_start('KeluasanTaman', 'Jumlah Keluasan Taman (Ekar)', true, 'ePALMModules') !!}
                                 <div class="row">
-                                    @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [2, 3, 4, 5, 7, 9])))
+                                    @if((Auth::user()->hasRole('Pegawai') && in_array(Auth::user()->bahagian_jln, [1, 2, 3, 4, 5, 7, 9])))
                                         {!! stats_card('Jumlah Keluasan Taman (Ekar)', app_dashboard_taman_negeri(), 'javascript:void(0)', 'fas fa-angle-right white-arrow', ' #145a32 ') !!}
                                         @foreach($negeriList as $negeri)
                                             {!! stats_card('&#11166;&nbsp;Keluasan di ' . ucwords(strtolower($negeri->nama_negeri)) . ' (Ekar)', app_dashboard_taman_negeri($negeri->kod_negeri), route('pengurusan.ePALM.index', ['negeri' => $negeri->kod_negeri]), 'fas fa-leaf', '#196f3d') !!}

@@ -45,6 +45,7 @@
         }
 
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     @php
         $arrChanges = [];
     @endphp
@@ -68,7 +69,7 @@
                                     </div>
                                 </div> -->
                                 <div class="card-header">
-                                    <h3 class="card-title font-weight-bold my-1">Direktori Taman & Landskap</h3>
+                                    <h3 class="card-title font-weight-bold my-1">Direktori Taman dan Landskap</h3>
                                     <div class="card-tools">
                                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                                             <div class="btn-group" role="group" aria-label="First group">
@@ -367,7 +368,7 @@
                                             </style>
 
                                             @if (collect($imageFields)->filter()->isEmpty())
-                                                <p class="text-center">Tiada gambar taman dimuat naik.</p>
+                                                <p class="text-center">Gambar taman sedang dikemaskini.</p>
                                             @else
                                             <div id="parkCarousel" class="carousel slide" data-ride="carousel" data-interval="3000">
                                                 <div class="carousel-inner">
@@ -462,34 +463,35 @@
 
                                             <br><br>
                                             <h5>Pihak Berkuasa Tempatan :</h5>
-                                            <p id="modalpbt">{{ $ePALM->nama_pbt ?? 'Tiada Maklumat' }}</p>
+                                            <p id="modalpbt">{{ $ePALM->nama_pbt ?? 'Sedang dikemaskini' }}</p>
                                             <br>
                                             <h5>Keterangan Taman :</h5>
-                                            <p id="modalKeterangan">{{ $ePALM->keterangan_taman ?? 'Tiada Maklumat' }}</p>
+                                            <p id="modalKeterangan" style="white-space: pre-line;">{{ $ePALM->keterangan_taman ?? 'Sedang dikemaskini' }}</p>
                                             <br><br>
                                             <div class="row">
                                                 <div class="col-12 col-md-3"><h5>Kategori Taman :</h5></div>
-                                                <div class="col-12 col-md-3"><p id="modalKategoriTaman">{{ $ePALM->kategori_taman ?? 'Tiada Maklumat' }}</p></div>
+                                                <div class="col-12 col-md-3"><p id="modalKategoriTaman">{{ $ePALM->kategori_taman ?? 'Sedang dikemaskini' }}</p></div>
 
                                                 <div class="col-12 col-md-3"><h5>Waktu Operasi :</h5></div>
-                                                <div class="col-12 col-md-3"><p id="modalWaktu">{{ ($ePALM->waktuMula_taman && $ePALM->waktuTamat_taman) ? $ePALM->waktuMula_taman . ' - ' . $ePALM->waktuTamat_taman : 'Tiada Maklumat' }}</p>
+                                                <div class="col-12 col-md-3"><p id="modalWaktu">{{ ($ePALM->waktuMula_taman && $ePALM->waktuTamat_taman) ? $ePALM->waktuMula_taman . ' - ' . $ePALM->waktuTamat_taman : 'Sedang dikemaskini' }}</p>
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-12 col-md-3"><h5>Keluasan Taman :</h5></div>
-                                                <div class="col-12 col-md-3"><p id="modalKeluasan">{{ is_numeric($ePALM->keluasan_taman) ? number_format($ePALM->keluasan_taman, 2).' '.$ePALM->keluasan_unit : 'Tiada Maklumat' }}</p></div>
+                                                <div class="col-12 col-md-3"><p id="modalKeluasan">{{ is_numeric($ePALM->keluasan_taman) ? number_format($ePALM->keluasan_taman, 2).' '.$ePALM->keluasan_unit : 'Sedang dikemaskini' }}</p></div>
 
                                                 <div class="col-12 col-md-3"><h5>Koordinat Taman :</h5></div>
                                                 <div class="col-12 col-md-3">
                                                     <p id="modalCoordinate">
-                                                        {{ is_numeric($ePALM->lng) && is_numeric($ePALM->lat) ? '( '.$ePALM->lng.', '.$ePALM->lat.' )' : 'Tiada Maklumat' }}
-                                                        @if(is_numeric($ePALM->lng) && is_numeric($ePALM->lat))
-                                                        &nbsp;<br>
-                                                        <a href="{{ 'https://maps.google.com/?q='.$ePALM->lat.','.$ePALM->lng }}" target="_blank">
-                                                            Pautan Google Map <i class="fas fa-globe"></i>
+                                                    @if(is_numeric($ePALM->lng) && is_numeric($ePALM->lat))
+                                                        <a href="https://maps.google.com/?q={{ $ePALM->lat }},{{ $ePALM->lng }}" target="_blank">
+                                                            <i class="fas fa-globe"></i>
+                                                            ( {{ round($ePALM->lng, 6) }}, {{ round($ePALM->lat, 6) }} )
                                                         </a>
-                                                        @endif
+                                                    @else
+                                                        Sedang dikemaskini
+                                                    @endif
                                                     </p>
                                                 </div>
                                             </div>
@@ -500,12 +502,23 @@
                                                     : [];
 
                                                 $facilityOptions = [
-                                                    'cctv'    => ['label' => 'CCTV', 'icon' => 'fas fa-video'],
-                                                    'wifi'    => ['label' => 'WiFi', 'icon' => 'fas fa-wifi'],
-                                                    'cycling' => ['label' => 'Kemudahan Berbasikal', 'icon' => 'fas fa-bicycle'],
-                                                    'food'    => ['label' => 'Gerai Makan', 'icon' => 'fas fa-utensils'],
-                                                    'oku'     => ['label' => 'Kemudahan OKU', 'icon' => 'fas fa-wheelchair'],
-                                                    'toilet'  => ['label' => 'Tandas Awam', 'icon' => 'fas fa-toilet'],
+                                                    'cctv'          => ['label' => 'CCTV', 'icon' => 'fas fa-video'],
+                                                    'wifi'          => ['label' => 'WiFi', 'icon' => 'fas fa-wifi'],
+                                                    'cycling'       => ['label' => 'Kemudahan Berbasikal', 'icon' => 'fas fa-bicycle'],
+                                                    'food'          => ['label' => 'Gerai Makan', 'icon' => 'fas fa-utensils'],
+                                                    'oku'           => ['label' => 'Kemudahan OKU', 'icon' => 'fas fa-wheelchair'],
+                                                    'toilet'        => ['label' => 'Tandas Awam', 'icon' => 'fas fa-restroom'],
+
+                                                    'surau'         => ['label' => 'Surau', 'icon' => 'fas fa-mosque'],
+                                                    'basikal'       => ['label' => 'Laluan Basikal', 'icon' => 'fas fa-biking'],
+                                                    'plaza'         => ['label' => 'Dataran /Plaza', 'icon' => 'fas fa-landmark'],
+                                                    'sukan'         => ['label' => 'Gelanggang Sukan', 'icon' => 'fas fa-basketball-ball'],
+                                                    'senam'         => ['label' => 'Alat Senam Riang', 'icon' => 'fas fa-dumbbell'],
+                                                    'laluan'        => ['label' => 'Laluan Pejalan Kaki', 'icon' => 'fas fa-walking'],
+                                                    'park'          => ['label' => 'Tempat Letak Kenderaan', 'icon' => 'fas fa-parking'],
+                                                    'air'           => ['label' => 'Badan Air (Kolam /Tasik)', 'icon' => 'fas fa-water'],
+                                                    'mainan'        => ['label' => 'Alat Permainan Kanak-kanak', 'icon' => 'fas fa-child'],
+                                                    'wakaf'         => ['label' => 'Wakaf dan Struktur Berbumbung', 'icon' => 'fas fa-umbrella-beach'],
                                                 ];
 
                                                 $facilityKeys = array_keys($facilityOptions);
@@ -636,22 +649,41 @@
                                                         @endforeach
 
                                                         {{-- Dynamic Facilities - Show if checked --}}
+                                                        @php
+                                                            // For performance, get the keys of $facilityOptions once
+                                                            $facilityOptionKeys = array_keys($facilityOptions);
+                                                        @endphp
+
                                                         @foreach($fasilitiData as $key => $val)
                                                             @if (!in_array($key, $facilityKeys) && $val == '1')
+                                                                @php
+                                                                    $iconClass = 'fab fa-pagelines';  // default icon
+                                                                    $label = ucwords(str_replace('_', ' ', $key)); // default label
+
+                                                                    // Loop through facilityOptions keys to find partial match
+                                                                    foreach ($facilityOptionKeys as $fKey) {
+                                                                        if (strpos($key, $fKey) !== false) {
+                                                                            $iconClass = $facilityOptions[$fKey]['icon'];
+                                                                            //$label = $facilityOptions[$fKey]['label'];
+                                                                            break; // stop after first match
+                                                                        }
+                                                                    }
+                                                                @endphp
                                                                 <div class="col-4 col-md-2 facility-wrapper">
-                                                                    <label class="facility" aria-label="{{ ucfirst($key) }}">
+                                                                    <label class="facility" aria-label="{{ $label }}">
                                                                         <input disabled type="hidden" name="fasiliti[{{ $key }}]" value="0">
                                                                         <input disabled type="checkbox" name="fasiliti[{{ $key }}]" value="1" checked>
                                                                         <span class="bg">
                                                                             <div class="icon-container">
-                                                                                <i class="fas fa-chart-pie" title="{{ ucfirst($key) }}"></i>
+                                                                                <i class="{{ $iconClass }}" title="{{ $label }}"></i>
                                                                             </div>
                                                                         </span>
-                                                                        <span class="facility-label">{{ ucfirst(str_replace('_', ' ', $key)) }}</span>
+                                                                        <span class="facility-label">{{ $label }}</span>
                                                                     </label>
                                                                 </div>
                                                             @endif
                                                         @endforeach
+
                                                     </div>
 
                                                     {{-- <div class="row justify-content-center">
@@ -696,6 +728,7 @@
                                             <br>
                                             <h5 class="row justify-content-center">Media Sosial</h5>
                                             <br>
+                                            {{--
                                             @php
                                                 $mediaData = isset($ePALM->mediaSosial_taman) ? json_decode($ePALM->mediaSosial_taman, true) : [];
                                                 $fixedFields = ['Web', 'Telefon', 'Emel', 'Facebook'];
@@ -704,30 +737,133 @@
                                                 // Build list of label-value pairs (including dynamic ones)
                                                 foreach ($fixedFields as $field) {
                                                     $label = $field === 'Web' ? 'Laman Web' : $field;
-                                                    $value = $mediaData[$field] ?? 'Tiada Maklumat';
+                                                    $value = $mediaData[$field] ?? 'Sedang dikemaskini';
                                                     $displayFields[] = ['label' => $label, 'value' => $value];
                                                 }
 
                                                 foreach ($mediaData as $key => $value) {
                                                     if (!in_array($key, $fixedFields)) {
-                                                        $displayFields[] = ['label' => $key, 'value' => $value ?? 'Tiada Maklumat'];
+                                                        $displayFields[] = ['label' => $key, 'value' => $value ?? 'Sedang dikemaskini'];
                                                     }
                                                 }
                                             @endphp
 
                                             @for ($i = 0; $i < count($displayFields); $i += 2)
                                                 <div class="row">
-                                                    {{-- First column --}}
                                                     <div class="col-12 col-md-3"><h5>{{ $displayFields[$i]['label'] }} :</h5></div>
                                                     <div class="col-12 col-md-3"><p>{{ $displayFields[$i]['value'] }}</p></div>
 
-                                                    {{-- Second column (if exists) --}}
                                                     @if (isset($displayFields[$i + 1]))
                                                         <div class="col-12 col-md-3"><h5>{{ $displayFields[$i + 1]['label'] }} :</h5></div>
                                                         <div class="col-12 col-md-3"><p>{{ $displayFields[$i + 1]['value'] }}</p></div>
                                                     @endif
                                                 </div>
                                             @endfor
+                                            --}}
+                                            @php
+                                                $mediaData = isset($ePALM->mediaSosial_taman) ? json_decode($ePALM->mediaSosial_taman, true) : [];
+                                                $fixedFields = ['Web', 'Telefon', 'Emel', 'Facebook'];
+                                                $displayFields = [];
+
+                                                // Mapping of labels to Font Awesome icons
+                                                $iconMap = [
+                                                    'Web' => 'fas fa-globe',
+                                                    'Laman Web' => 'fas fa-globe',
+                                                    'Telefon' => 'fas fa-phone',
+                                                    'Emel' => 'fas fa-envelope',
+                                                    'Facebook' => 'fab fa-facebook',
+                                                    'Instagram' => 'fab fa-instagram',
+                                                    'Twitter' => 'fab fa-twitter',
+                                                    'YouTube' => 'fab fa-youtube',
+                                                    'TikTok' => 'fab fa-tiktok',
+                                                    'WhatsApp' => 'fab fa-whatsapp',
+                                                    // Add more if needed
+                                                ];
+
+                                                // Build list of label-value-icon triplets (including dynamic fields)
+                                                foreach ($fixedFields as $field) {
+                                                    $label = $field === 'Web' ? 'Laman Web' : $field;
+                                                    $value = $mediaData[$field] ?? 'Sedang dikemaskini';
+                                                    $icon = $iconMap[$label] ?? 'fas fa-link';
+                                                    $displayFields[] = ['label' => $label, 'value' => $value, 'icon' => $icon];
+                                                }
+
+                                                foreach ($mediaData as $key => $value) {
+                                                    if (!in_array($key, $fixedFields)) {
+                                                        $label = $key;
+                                                        $icon = $iconMap[$label] ?? 'fas fa-link';
+                                                        $displayFields[] = ['label' => $label, 'value' => $value ?? 'Sedang dikemaskini', 'icon' => $icon];
+                                                    }
+                                                }
+
+                                                function renderNextLink($displayFields, $i) {
+                                                    $nextIndex = $i + 1;
+
+                                                    // Check if next index exists to avoid errors
+                                                    if (!isset($displayFields[$nextIndex])) {
+                                                        return ''; // or return some default/fallback if you want
+                                                    }
+
+                                                    $item = $displayFields[$nextIndex];
+                                                    $href = e($item['value']);
+                                                    $icon = $item['icon'];
+                                                    $label = $item['label'];
+                                                    $value = e($item['value']);
+
+                                                    // Build the icon or label part
+                                                    $iconOrLabel = $icon/* !== 'fas fa-link'*/
+                                                        ? '<i class="' . e($icon) . ' me-1"></i>'
+                                                        : e($label);
+
+                                                    // Determine href based on type of value
+                                                    if (filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                                                        $href = 'mailto:' . $value;
+                                                    } elseif (preg_match('/^https?:\/\//i', $value)) {
+                                                        $href = $value;
+                                                    } elseif (preg_match('/^\+?[0-9\s\-]{7,}$/', $value)) {
+                                                        // Remove spaces for tel:
+                                                        $tel = preg_replace('/\s+/', '', $value);
+                                                        $href = 'tel:' . e($tel);
+                                                    } else {
+                                                        $href = "javascript:void(0)";
+                                                        return <<<HTML
+                                                            <p>
+                                                                <strong style="font-size: 1.25rem;">
+                                                                    {$iconOrLabel}&nbsp;&nbsp;&nbsp;:
+                                                                </strong> 
+                                                                {$value}
+                                                            </p>
+                                                        HTML;
+                                                    }
+
+                                                    // Return full anchor block as raw HTML string
+                                                    return <<<HTML
+                                                    <a href="{$href}" target="_blank" rel="noopener noreferrer">
+                                                        <p>
+                                                            <strong style="font-size: 1.25rem;">
+                                                                {$iconOrLabel}&nbsp;&nbsp;&nbsp;:
+                                                            </strong> 
+                                                            {$value}
+                                                        </p>
+                                                    </a>
+                                                    HTML;
+                                                }
+                                            @endphp
+
+                                            @for ($i = 0; $i < count($displayFields); $i += 2)
+                                                <div class="row">
+                                                    <div class="col-12 col-md-6">
+                                                        {!! renderNextLink($displayFields, $i) !!}
+                                                    </div>
+
+                                                    @if (isset($displayFields[$i + 1]))
+                                                        <div class="col-12 col-md-6">
+                                                            {!! renderNextLink($displayFields, $i + 1) !!}
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            @endfor
+
                                             <br>
                                         </div>
 

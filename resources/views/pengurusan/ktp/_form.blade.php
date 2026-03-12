@@ -21,7 +21,7 @@
                 {{ Form::text('tajuk', null, [
                     'placeholder' => 'Masukkan Nama Program',
                     'class' => 'form-control ' . ($errors->has('tajuk') ? 'is-invalid' : ''),
-                    'maxlength' => 200,
+                    
                     'oninput' => "this.value = this.value.slice(0,200).replace(/(?:^|\\s)\\S/g, function(a) { return a.toUpperCase(); })"
                 ]) }}
                 @if ($errors->has('tajuk'))

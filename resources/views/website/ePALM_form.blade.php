@@ -1,6 +1,6 @@
 <div class="card card-olive card-outline">
     <div class="card-header">
-        <h3 class="card-title font-weight-bold my-1">Direktori Taman & Landskap</h3>
+        <h3 class="card-title font-weight-bold my-1">Direktori Taman dan Landskap</h3>
         <div class="card-tools">
             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group" role="group" aria-label="First group">
@@ -61,7 +61,7 @@
                         <select id="kategori" name="kategori" onchange="handleKategoriChange()" class="filter-select">
                             <option value="">Papar Semua Kategori</option>
                             @foreach ($namaKategoriArray as $kategori)
-                                <option value="{{ $kategori }}" {{ request('keyword') === $kategori ? 'selected' : '' }}>
+                                <option value="{{ str_replace('/', '|', $kategori) }}" {{ request('keyword') === str_replace('/', '|', $kategori) ? 'selected' : '' }}>
                                     {{ ucwords(strtolower($kategori)) }}
                                 </option>
                             @endforeach
@@ -152,7 +152,7 @@
                             <th class="w-15">Nama Taman</th>
                             <th class="w-5">Kategori</th>
                             <th class="text-center w-5">Pihak Berkuasa Tempatan</th>
-                            <th class="text-center w-1">Tindakan</th>
+                            <th class="text-center w-1">Maklumat Lanjut</th>
                             
                         </tr>
                     </thead>
@@ -173,10 +173,28 @@
                         @if($ePALM_all->isNotEmpty())
                             @foreach($ePALM_all as $taman)
                                 @if($previousNegeri !== null && $previousNegeri !== $taman->negeri)
-                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ ucwords(strtolower($taman->negeri))}}</td></tr>
+                                    <!-- <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">
+                                        <a href="{{ url('epalm/' . $taman->negeri_taman) }}" style="color: white; text-decoration: underline;">
+                                            {{ ucwords(strtolower($taman->negeri)) }}
+                                        </a>
+                                    </td></tr> -->
+                                    <tr onclick="window.location='{{ url('epalm/' . $taman->negeri_taman) }}'" style="background-color: #31d5c8 !important; color: white; cursor: pointer;">
+                                        <td colspan="5" class="text-center">
+                                            {{ ucwords(strtolower($taman->negeri)) }}
+                                        </td>
+                                    </tr>
                                 @elseif($previousNegeri === $taman->negeri)
                                 @else
-                                    <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">{{ ucwords(strtolower($taman->negeri))}}</td></tr>
+                                    <!-- <tr style="background-color: #31d5c8 !important;color: white;"><td colspan="5" class="text-center">
+                                        <a href="{{ url('epalm/' . $taman->negeri_taman) }}" style="color: white; text-decoration: underline;">
+                                            {{ ucwords(strtolower($taman->negeri)) }}
+                                        </a>
+                                    </td></tr> -->
+                                    <tr onclick="window.location='{{ url('epalm/' . $taman->negeri_taman) }}'" style="background-color: #31d5c8 !important; color: white; cursor: pointer;">
+                                        <td colspan="5" class="text-center">
+                                            {{ ucwords(strtolower($taman->negeri)) }}
+                                        </td>
+                                    </tr>
                                 @endif
                                 <tr>
                                     <td class="text-center">{{ $index++ }}</td>
@@ -350,9 +368,9 @@
             <br>
             <br>
             <h5>Pihak Berkuasa Tempatan</h5>
-            <p id="modalpbt">Tiada Maklumat</p>
+            <p id="modalpbt">Sedang dikemaskini</p>
             <h5>Keterangan</h5>
-            <p id="modalKeterangan">Tiada Maklumat</p>
+            <p id="modalKeterangan">Sedang dikemaskini</p>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sit amet sem sed augue pretium gravida.</p>
             <p>Nulla facilisi. Sed malesuada, erat ac pretium venenatis, turpis libero vestibulum dui, ut convallis eros sapien vel orci. Donec tincidunt, metus in malesuada tempor, enim nulla bibendum felis, a luctus leo arcu in ante. Aenean convallis velit nec est eleifend interdum.</p>
 
@@ -361,13 +379,13 @@
                     <h5>Kategori</h5>
                 </div>
                 <div class="col-12 col-md-3">
-                    <p id="modalKategoriTaman">Tiada Maklumat</p>
+                    <p id="modalKategoriTaman">Sedang dikemaskini</p>
                 </div>
                 <div class="col-12 col-md-3">
                     <h5>Waktu Operasi</h5>
                 </div>
                 <div class="col-12 col-md-3">
-                    <p id="modalWaktu">Tiada Maklumat</p>
+                    <p id="modalWaktu">Sedang dikemaskini</p>
                 </div>
             </div>
             <div class="row">
@@ -375,16 +393,16 @@
                     <h5>Keluasan</h5>
                 </div>
                 <div class="col-12 col-md-3">
-                    <p id="modalKeluasan">Tiada Maklumat</p>
+                    <p id="modalKeluasan">Sedang dikemaskini</p>
                 </div>
                 <div class="col-12 col-md-3">
                     <h5>Koordinat</h5>
                 </div>
                 <div class="col-12 col-md-3">
-                    <p id="modalCoordinate">Tiada Maklumat</p>
+                    <p id="modalCoordinate">Sedang dikemaskini</p>
                 </div>
             </div>
-            <p id="coordinate">Tiada Maklumat</p>
+            <p id="coordinate">Sedang dikemaskini</p>
             
             
 
@@ -529,7 +547,7 @@
                             <input type="checkbox" value="1" name="fasiliti[toilet]" id="toilet" style="display:none;">
                             <span class="bg">
                                 <div class="icon-container">
-                                    <i class="fas fa-toilet" data-toggle="tooltip" title="Tandas Awam"></i>
+                                    <i class="fas fa-restroom" data-toggle="tooltip" title="Tandas Awam"></i>
                                 </div>
                             </span>
                         </label>
@@ -556,7 +574,7 @@
                             <input type="checkbox" value="1" name="fasiliti[toilet2]" id="toilet2" style="display:none;">
                             <span class="bg">
                                 <div class="icon-container">
-                                    <i class="fas fa-toilet" data-toggle="tooltip" title="Tandas Awam"></i>
+                                    <i class="fas fa-restroom" data-toggle="tooltip" title="Tandas Awam"></i>
                                 </div>
                             </span>
                         </label>

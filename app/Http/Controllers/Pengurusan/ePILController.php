@@ -246,65 +246,71 @@ class ePILController extends Controller
             }
 
             $requestData['id_pelan'] = $id_pelan;
+            $wasApproved = $ePIL->status === 'approved';
+            $pelanStatus = ePIL::where('id_pelan', $ePIL->id_pelan)->first();
+            $statusInit = isset($pelanStatus->status) ? $pelanStatus->status : 'draft';
+
             $ePIL_update = $ePIL->update($requestData);
             // dd($ePIL);
             if ($ePIL_update) {
-                $bahagian_jln = 3;
-                $userArr = []; $user_email = []; $btm_email = [];
-                if ($bahagian_jln) {
-                    $userArr = User::where(function ($query) use ($bahagian_jln) {
-                        $query->whereHas('roles', function ($query) {
-                            $query->where('name', 'Pegawai');
+                if ($wasApproved || $statusInit == 'draft'){
+                    $bahagian_jln = 3;
+                    $userArr = []; $user_email = []; $btm_email = [];
+                    if ($bahagian_jln) {
+                        $userArr = User::where(function ($query) use ($bahagian_jln) {
+                            $query->whereHas('roles', function ($query) {
+                                $query->where('name', 'Pegawai');
+                            })
+                            ->where('bahagian_jln', $bahagian_jln);
                         })
-                        ->where('bahagian_jln', $bahagian_jln);
-                    })
-                    ->get();
-                }
-                foreach ($userArr as $key => $value) {
-                    $user_email[] = ['address' => $value->email, 'name' => $value->name];
-                }
-
-                $emailBTM = User::where(function ($query) use ($bahagian_jln) {
-                    $query->whereHas('roles', function ($query) {
-                            $query->where('name', 'Pentadbir Sistem');
-                        });
-                    })->where('is_active', 1)
-                    ->orWhere(function ($query) use ($bahagian_jln) {
-                        $query->whereHas('roles', function ($query) {
-                            $query->where('name', 'Pegawai');
-                        })
-                        ->where('bahagian_jln', '7');
-                    })->where('is_active', 1)
-                    ->get();
-                foreach ($emailBTM as $key => $value) {
-                    $btm_email[] = ['address' => $value->email, 'name' => $value->name];
-                }
-                // dd($user_email);
-                if (config('mail.enabled')) {
-                    try {
-                        $emailData = [
-                            "email_to" => $user_email,
-                            "email_cc" => $btm_email,
-                            "subject" => 'Modul Pelan Induk Landskap (ePIL)',
-                        ];
-        
-                        Mail::send('pengurusan.ePIL.mails.perubahan', ['epil' => $ePIL], function ($message) use ($emailData) {
-                            $message->subject($emailData["subject"]);
-                            // Loop through to array and add each email
-                            foreach ($emailData['email_to'] as $to) {
-                                $message->to($to['address'], $to['name']);
-                            }
-        
-                            // Loop through cc array and add each email
-                            foreach ($emailData['email_cc'] as $cc) {
-                                $message->cc($cc['address'], $cc['name']);
-                            }
-                        });
-                    } catch (\Exception $exception) {
-                        \Log::error("Error sending registration email: " . $exception->getMessage());
-                    //    dd("Error sending registration email: " . $exception->getMessage());
+                        ->get();
                     }
-                    // dd($emailData);
+                    foreach ($userArr as $key => $value) {
+                        $user_email[] = ['address' => $value->email, 'name' => $value->name];
+                    }
+
+                    $emailBTM = User::where(function ($query) use ($bahagian_jln) {
+                        $query->whereHas('roles', function ($query) {
+                                $query->where('name', 'Pentadbir Sistem');
+                            });
+                        })->where('is_active', 1)
+                        ->orWhere(function ($query) use ($bahagian_jln) {
+                            $query->whereHas('roles', function ($query) {
+                                $query->where('name', 'Pegawai');
+                            })
+                            ->where('bahagian_jln', '7');
+                        })->where('is_active', 1)
+                        ->get();
+                    foreach ($emailBTM as $key => $value) {
+                        $btm_email[] = ['address' => $value->email, 'name' => $value->name];
+                    }
+                    // dd($user_email);
+                    if (config('mail.enabled')) {
+                        try {
+                            $emailData = [
+                                "email_to" => $user_email,
+                                "email_cc" => $btm_email,
+                                "subject" => 'Modul Pelan Induk Landskap (ePIL)',
+                            ];
+            
+                            Mail::send('pengurusan.ePIL.mails.perubahan', ['epil' => $ePIL], function ($message) use ($emailData) {
+                                $message->subject($emailData["subject"]);
+                                // Loop through to array and add each email
+                                foreach ($emailData['email_to'] as $to) {
+                                    $message->to($to['address'], $to['name']);
+                                }
+            
+                                // Loop through cc array and add each email
+                                foreach ($emailData['email_cc'] as $cc) {
+                                    $message->cc($cc['address'], $cc['name']);
+                                }
+                            });
+                        } catch (\Exception $exception) {
+                            \Log::error("Error sending registration email: " . $exception->getMessage());
+                        //    dd("Error sending registration email: " . $exception->getMessage());
+                        }
+                        // dd($emailData);
+                    }
                 }
                 return redirect()->route('pengurusan.ePIL.edit', [$id_pelan])->with('successMessage', 'Maklumat pelan telah berjaya dikemaskini');
             }

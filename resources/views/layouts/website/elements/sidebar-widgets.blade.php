@@ -34,15 +34,15 @@
                 <div class="row">
                     <div class="col-12">
                     <ul class="left-aligned-list"> <!-- This keeps bullets and indents list nicely -->
-                        <li><a href="https://www.eperolehan.gov.my/" target="_blank">ePerolehan</a></li>
-                        <li><a href="https://www.ssm.com.my/Pages/e-Search.aspx" target="_blank">Carian No. SSM</a></li>
-                        <li><a href="https://mcp.cidb.gov.my/MCP/ContractorSearch" target="_blank">Carian Kontraktor CIDB</a></li>
+                        <!-- <li><a href="https://www.eperolehan.gov.my/" target="_blank">ePerolehan</a></li> -->
+                        <!-- <li><a href="https://www.ssm.com.my/Pages/e-Search.aspx" target="_blank">Carian No. SSM</a></li> -->
+                        <!-- <li><a href="https://mcp.cidb.gov.my/MCP/ContractorSearch" target="_blank">Carian Kontraktor CIDB</a></li> -->
+                        <li><a href="../penggiat-industri/pembekal" target="_self">Pembekal</a></li>
                         <li><a href="../penggiat-industri/kontraktor" target="_self">Kontraktor</a></li>
                         <li><a href="../penggiat-industri/perunding" target="_self">Perunding</a></li>
-                        <li><a href="../penggiat-industri/pembekal" target="_self">Pembekal</a></li>
-                        <li><a href="../penggiat-industri/antarabangsa" target="_self">Pertubuhan Antarabangsa</a></li>
-                        <li><a href="../penggiat-industri/ngo" target="_self">NGO &amp; Badan Ikhtisas</a></li>
                         <li><a href="../penggiat-industri/pendidikan" target="_self">Institusi Pendidikan</a></li>
+                        <li><a href="../penggiat-industri/ngo" target="_self">NGO &amp; Badan Ikhtisas</a></li>
+                        <li><a href="../penggiat-industri/antarabangsa" target="_self">Pertubuhan Antarabangsa</a></li>
                     </ul>
 
                     </div>

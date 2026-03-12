@@ -85,7 +85,7 @@
                                                 <th class="w-15">Nama Entiti Landskap </th>
                                                 <th class="w-3">Lokasi</th>
                                                 <th class="text-center w-5">Pihak Berkuasa Tempatan</th>
-                                                <th class="text-center w-1">Tindakan</th>
+                                                <th class="text-center w-1">Maklumat Lanjut</th>
                                                 
                                             </tr>
                                         </thead>
@@ -113,9 +113,9 @@
                                                     @endphp
                                                     <tr>
                                                         <td>{{ $index++ }}</td>
-                                                        <td>{{ (ucwords(strtolower($entiti->nama_entiti) ?? 'Tiada Maklumat')) }}</td>
-                                                        <td>{{ (ucwords(strtolower($entiti->lokasi) ?? 'Tiada Maklumat')) }}</td>
-                                                        <td>{{ isset($pbt) ? (ucwords(strtolower($pbt))) : 'Tiada Maklumat' }}</td>
+                                                        <td>{{ (ucwords(strtolower($entiti->nama_entiti) ?? 'Sedang dikemaskini')) }}</td>
+                                                        <td>{{ (ucwords(strtolower($entiti->lokasi) ?? 'Sedang dikemaskini')) }}</td>
+                                                        <td>{{ isset($pbt) ? (ucwords(strtolower($pbt))) : 'Sedang dikemaskini' }}</td>
                                                         <td class="text-center">
                                                             <div class="btn-group">
                                                                 <a target="_self" class="btn bg-success btn-sm mr-1" href="/entiti-landskap/{{ $entiti->slug }}"><i class="fas fa-search"></i></a>

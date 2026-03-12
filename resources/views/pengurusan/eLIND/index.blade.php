@@ -213,7 +213,9 @@
                                         @if(Auth::user()->hasRole('KP/ TKP JLN|Pegawai|Pentadbir Sistem'))
                                         {{-- <th class="text-center w-5" style="display: none;">Tarikh Daftar</th> --}}
                                         <th class="text-center w-5">Prestasi</th>
-                                        <th class="text-center w-5">Negeri</th>
+                                            @if($capitalizedSegment != 'Pertubuhan Antarabangsa')
+                                            <th class="text-center w-5">Negeri</th>
+                                            @endif
                                         @endif
                                         <th class="text-center w-5">Paparan Portal</th>
                                         <th class="text-center w-5">Tindakan</th>
@@ -291,7 +293,10 @@
                                                         {{ $prestasi[$prestasiDB-1 ?? '4']['id'] }}
                                                     </span>
                                                 </td>
-                                                <td class="text-center">{{ strtoupper($user->state) }}</td>
+
+                                                @if($capitalizedSegment != 'Pertubuhan Antarabangsa')
+                                                    <td class="text-center">{{ strtoupper($user->state) }}</td>
+                                                @endif
                                             @endif
                                                 <td>
                                                     @if(Auth::user()->hasRole('Penggiat Industri'))

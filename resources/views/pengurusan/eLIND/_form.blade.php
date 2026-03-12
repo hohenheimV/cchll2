@@ -53,9 +53,9 @@
                 </div>
             </div>
             <div class="form-group required ">
-                <label for="name" class="col-md-4 control-label">Nama {{ $capitalizedSegment ?? '' }}</label>
+                <label for="name" class="col-md-12 control-label">Nama {{ $capitalizedSegment ?? '' }}</label>
                 <div class="col-md-12">
-                    <input name="name" class="form-control" maxlength="50" type="text" id="name" value="{{ isset($eLIND->name) ? $eLIND->name : '' }}">
+                    <input name="name" class="form-control"  type="text" id="name" value="{{ isset($eLIND->name) ? $eLIND->name : '' }}">
                     <input name="jenis_industri" class="form-control" value="{{ $capitalizedSegment }}" type="hidden" id="jenis_industri" >
                 </div>
             </div>
@@ -64,14 +64,14 @@
                 <div class="form-group required col-md-6">
                     <label for="address1" class="col-md-4 control-label">Alamat 1 {!! in_array('address1', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                     <div class="col-md-12">
-                        <input value="{{isset($eLIND->address1) ? $eLIND->address1 : ''}}" name="address1" class="form-control" maxlength="50" type="text" id="address1" >
+                        <input value="{{isset($eLIND->address1) ? $eLIND->address1 : ''}}" name="address1" class="form-control"  type="text" id="address1" >
                     </div>
                 </div>
 
                 <div class="form-group required col-md-6">
                     <label for="address2" class="col-md-4 control-label">Alamat 2 {!! in_array('address2', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                     <div class="col-md-12">
-                        <input value="{{isset($eLIND->address2) ? $eLIND->address2 : ''}}" name="address2" class="form-control" maxlength="50" type="text" id="address2">
+                        <input value="{{isset($eLIND->address2) ? $eLIND->address2 : ''}}" name="address2" class="form-control"  type="text" id="address2">
                     </div>
                 </div>
             </div>
@@ -86,7 +86,7 @@
                 <div class="form-group required col-md-4">
                     <label for="locality" class="col-md-12 control-label">Bandar {!! in_array('locality', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                     <div class="col-md-12">
-                        <input value="{{isset($eLIND->locality) ? $eLIND->locality : ''}}" name="locality" class="form-control" maxlength="50" type="text" id="locality">
+                        <input value="{{isset($eLIND->locality) ? $eLIND->locality : ''}}" name="locality" class="form-control"  type="text" id="locality">
                     </div>
                 </div>
 
@@ -408,7 +408,7 @@
                     <div class="form-group required col-md-4 ">
                         <label for="no_ssm" class="col-md-12 control-label">No. Pendaftaran SSM {!! in_array('no_ssm', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
-                            <input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} value="{{isset($eLIND->no_ssm) ? $eLIND->no_ssm : ''}}" name="no_ssm" class="form-control" maxlength="50" type="text" id="no_ssm" >
+                            <input {{ (strpos(request()->url(), 'edit') === false) && (strpos(request()->url(), 'create') === false) ? '' : 'required' }} value="{{isset($eLIND->no_ssm) ? $eLIND->no_ssm : ''}}" name="no_ssm" class="form-control"  type="text" id="no_ssm" >
                         </div>
                         <script>
                             $(document).ready(function() {
@@ -444,7 +444,7 @@
                     <div class="form-group required col-md-4">
                         <label for="no_mof" class="col-md-12 control-label">No. Pendaftaran MoF {!! in_array('no_mof', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
-                            <input value="{{isset($eLIND->no_mof) ? $eLIND->no_mof : ''}}" name="no_mof" class="form-control" maxlength="50" type="text" id="no_mof" >
+                            <input value="{{isset($eLIND->no_mof) ? $eLIND->no_mof : ''}}" name="no_mof" class="form-control"  type="text" id="no_mof" >
                         </div>
                     </div>
                     <div class="form-group required col-md-4">
@@ -500,7 +500,7 @@
                         <div class="form-group required col-md-6">
                             <label for="no_cidb" class="col-md-12 control-label">No. Pendaftaran PKK/ CIDB {!! in_array('no_cidb', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                             <div class="col-md-12">
-                                <input value="{{isset($eLIND->no_cidb) ? $eLIND->no_cidb : ''}}" name="no_cidb" class="form-control" maxlength="50" type="text" id="no_cidb" >
+                                <input value="{{isset($eLIND->no_cidb) ? $eLIND->no_cidb : ''}}" name="no_cidb" class="form-control"  type="text" id="no_cidb" >
                             </div>
                         </div>
                     </div>
@@ -547,14 +547,14 @@
                         <div class="form-group required col-md-4">
                             <label for="no_ilam" class="col-md-12 control-label">No. Pendaftaran ILAM {!! in_array('no_ilam', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                             <div class="col-md-12">
-                                <input value="{{isset($eLIND->no_ilam) ? $eLIND->no_ilam : ''}}" name="no_ilam" class="form-control" maxlength="50" type="text" id="no_ilam" >
+                                <input value="{{isset($eLIND->no_ilam) ? $eLIND->no_ilam : ''}}" name="no_ilam" class="form-control"  type="text" id="no_ilam" >
                             </div>
                         </div>
 
                         <div class="form-group required col-md-4">
                             <label for="tarikh_luput_ilam" class="col-md-12 control-label">Tarikh Luput Keahlian ILAM {!! in_array('tarikh_luput_ilam', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                             <div class="col-md-12">
-                                <input value="{{isset($eLIND->tarikh_luput_ilam) ? $eLIND->tarikh_luput_ilam : ''}}" name="tarikh_luput_ilam" class="form-control" maxlength="50" type="date" id="tarikh_luput_ilam" >
+                                <input value="{{isset($eLIND->tarikh_luput_ilam) ? $eLIND->tarikh_luput_ilam : ''}}" name="tarikh_luput_ilam" class="form-control"  type="date" id="tarikh_luput_ilam" >
                             </div>
                         </div>
                         <div class="form-group required col-md-4">
@@ -584,7 +584,7 @@
                         <div class="form-group required col-md-6" style="display: none;" id="lainLainDiv">
                             <label for="bidang_lain_pembekal" class="col-md-12 control-label">Sila Nyatakan (Contoh: Pasu, Baja, Bunga dll.) {!! in_array('bidang_lain_pembekal', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                             <div class="col-md-12">
-                                <input value="{{isset($eLIND->bidang_lain_pembekal) ? $eLIND->bidang_lain_pembekal : ''}}" name="bidang_lain_pembekal" class="form-control" maxlength="50" type="text" id="bidang_lain_pembekal">
+                                <input value="{{isset($eLIND->bidang_lain_pembekal) ? $eLIND->bidang_lain_pembekal : ''}}" name="bidang_lain_pembekal" class="form-control"  type="text" id="bidang_lain_pembekal">
                             </div>
                         </div>
 
@@ -631,14 +631,14 @@
                     <div class="form-group required col-md-6">
                         <label for="nama_presiden" class="col-md-12 control-label">Presiden/Pengurus  {{ $capitalizedSegment }} {!! in_array('nama_presiden', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
-                            <input value="{{isset($eLIND->nama_presiden) ? $eLIND->nama_presiden : ''}}" name="nama_presiden" class="form-control" maxlength="50" type="text" id="nama_presiden" >
+                            <input value="{{isset($eLIND->nama_presiden) ? $eLIND->nama_presiden : ''}}" name="nama_presiden" class="form-control"  type="text" id="nama_presiden" >
                         </div>
                     </div>
 
                     <div class="form-group required col-md-6">
                         <label for="wakil_negara" class="col-md-12 control-label">Wakil Negara/Asia {!! in_array('wakil_negara', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
-                            <input value="{{isset($eLIND->wakil_negara) ? $eLIND->wakil_negara : ''}}" name="wakil_negara" class="form-control" maxlength="50" type="text" id="wakil_negara" >
+                            <input value="{{isset($eLIND->wakil_negara) ? $eLIND->wakil_negara : ''}}" name="wakil_negara" class="form-control"  type="text" id="wakil_negara" >
                         </div>
                     </div>
                 </div>
@@ -657,7 +657,7 @@
                     <div class="form-group required col-md-6">
                         <label for="nama_presiden" class="col-md-12 control-label">Presiden/Pengurus  {{ $capitalizedSegment }} {!! in_array('nama_presiden', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
-                            <input value="{{isset($eLIND->nama_presiden) ? $eLIND->nama_presiden : ''}}" name="nama_presiden" class="form-control" maxlength="50" type="text" id="nama_presiden" >
+                            <input value="{{isset($eLIND->nama_presiden) ? $eLIND->nama_presiden : ''}}" name="nama_presiden" class="form-control"  type="text" id="nama_presiden" >
                         </div>
                     </div>
                 </div>
@@ -704,7 +704,7 @@
                     <div class="form-group required {{ $field == 'Emel' || $field == 'Web' ? 'col-md-6' : 'col-md-3' }}">
                         <label for="mediaSosial" class="col-md-12 control-label">{{ $field == 'Web' ? 'Laman Web' : $field }} {!! in_array('mediaSosial_penggiat.'.$field, $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
-                            <input value="{{ $value }}" name="mediaSosial_penggiat[{{ $field }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]">
+                            <input value="{{ $value }}" name="mediaSosial_penggiat[{{ $field }}]" class="form-control"  type="text" id="mediaSosial_penggiat[]">
                         </div>
                     </div>
                 @endforeach
@@ -714,7 +714,7 @@
                             <div class="form-group required col-md-3">
                                 <label for="mediaSosial" class="col-md-12 control-label">{{ $key }} {!! in_array('mediaSosial_penggiat.'.$key, $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                                 <div class="col-md-12">
-                                    <input value="{{ $value }}" name="mediaSosial_penggiat[{{ $key }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]">
+                                    <input value="{{ $value }}" name="mediaSosial_penggiat[{{ $key }}]" class="form-control"  type="text" id="mediaSosial_penggiat[]">
                                 </div>
                             </div>
                         @endif
@@ -745,7 +745,7 @@
                     div.innerHTML = `
                         <label class="col-md-12 control-label">${name}</label>
                         <div class="col-md-12">
-                            <input name="mediaSosial_penggiat[${key}]" class="form-control" maxlength="50" type="text">
+                            <input name="mediaSosial_penggiat[${key}]" class="form-control"  type="text">
                         </div>
                     `;
                     container.appendChild(div);
@@ -780,56 +780,56 @@
                 <div class="form-group required col-md-3">
                     <label for="mediaSosial" class="col-md-12 control-label">Telefon</label>
                     <div class="col-md-12">
-                        <input value="{{$media1}}" name="mediaSosial_penggiat[Telefon]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]" >
+                        <input value="{{$media1}}" name="mediaSosial_penggiat[Telefon]" class="form-control"  type="text" id="mediaSosial_penggiat[]" >
                     </div>
                 </div>
 
                 <div class="form-group required col-md-3">
                     <label for="mediaSosial" class="col-md-12 control-label">Emel</label>
                     <div class="col-md-12">
-                        <input value="{{$media2}}" name="mediaSosial_penggiat[Emel]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]" >
+                        <input value="{{$media2}}" name="mediaSosial_penggiat[Emel]" class="form-control"  type="text" id="mediaSosial_penggiat[]" >
                     </div>
                 </div>
 
                 <div class="form-group required col-md-3">
                     <label for="mediaSosial" class="col-md-12 control-label">Laman Web</label>
                     <div class="col-md-12">
-                        <input value="{{$media3}}" name="mediaSosial_penggiat[Web]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]" >
+                        <input value="{{$media3}}" name="mediaSosial_penggiat[Web]" class="form-control"  type="text" id="mediaSosial_penggiat[]" >
                     </div>
                 </div>
 
                 <div class="form-group required col-md-3">
                     <label for="mediaSosial" class="col-md-12 control-label">Facebook</label>
                     <div class="col-md-12">
-                        <input value="{{$media4}}" name="mediaSosial_penggiat[Facebook]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]" >
+                        <input value="{{$media4}}" name="mediaSosial_penggiat[Facebook]" class="form-control"  type="text" id="mediaSosial_penggiat[]" >
                     </div>
                 </div>
 
                 <div class="form-group required col-md-3">
                     <label for="mediaSosial" class="col-md-12 control-label">Instagram</label>
                     <div class="col-md-12">
-                        <input value="{{$media5}}" name="mediaSosial_penggiat[Instagram]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]" >
+                        <input value="{{$media5}}" name="mediaSosial_penggiat[Instagram]" class="form-control"  type="text" id="mediaSosial_penggiat[]" >
                     </div>
                 </div>
 
                 <div class="form-group required col-md-3">
                     <label for="mediaSosial" class="col-md-12 control-label">LinkedIn</label>
                     <div class="col-md-12">
-                        <input value="{{$media6}}" name="mediaSosial_penggiat[LinkedIn]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]" >
+                        <input value="{{$media6}}" name="mediaSosial_penggiat[LinkedIn]" class="form-control"  type="text" id="mediaSosial_penggiat[]" >
                     </div>
                 </div>
 
                 <div class="form-group required col-md-3">
                     <label for="mediaSosial" class="col-md-12 control-label">Twitter (X)</label>
                     <div class="col-md-12">
-                        <input value="{{$media7}}" name="mediaSosial_penggiat[Twitter]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]" >
+                        <input value="{{$media7}}" name="mediaSosial_penggiat[Twitter]" class="form-control"  type="text" id="mediaSosial_penggiat[]" >
                     </div>
                 </div>
 
                 <div class="form-group required col-md-3">
                     <label for="mediaSosial" class="col-md-12 control-label">TikTok</label>
                     <div class="col-md-12">
-                        <input value="{{$media8}}" name="mediaSosial_penggiat[TikTok]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]" >
+                        <input value="{{$media8}}" name="mediaSosial_penggiat[TikTok]" class="form-control"  type="text" id="mediaSosial_penggiat[]" >
                     </div>
                 </div>
             </div> -->
@@ -918,7 +918,7 @@
                     <div class="form-group required {{ $field == 'Emel' || $field == 'Web' ? 'col-md-6' : 'col-md-3' }}">
                         <label for="mediaSosial" class="col-md-12 control-label">{{ $field == 'Web' ? 'Laman Web' : $field }} {!! in_array('mediaSosial_penggiat.'.$field, $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
-                            <input value="{{ $value }}" name="mediaSosial_penggiat[{{ $field }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]">
+                            <input value="{{ $value }}" name="mediaSosial_penggiat[{{ $field }}]" class="form-control"  type="text" id="mediaSosial_penggiat[]">
                         </div>
                     </div>
                 @endforeach
@@ -928,7 +928,7 @@
                             <div class="form-group required col-md-3">
                                 <label for="mediaSosial" class="col-md-12 control-label">{{ $key }} {!! in_array('mediaSosial_penggiat.'.$key, $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                                 <div class="col-md-12">
-                                    <input value="{{ $value }}" name="mediaSosial_penggiat[{{ $key }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_penggiat[]">
+                                    <input value="{{ $value }}" name="mediaSosial_penggiat[{{ $key }}]" class="form-control"  type="text" id="mediaSosial_penggiat[]">
                                 </div>
                             </div>
                         @endif
@@ -959,7 +959,7 @@
                     div.innerHTML = `
                         <label class="col-md-12 control-label">${name}</label>
                         <div class="col-md-12">
-                            <input name="mediaSosial_penggiat[${key}]" class="form-control" maxlength="50" type="text">
+                            <input name="mediaSosial_penggiat[${key}]" class="form-control"  type="text">
                         </div>
                     `;
                     container.appendChild(div);

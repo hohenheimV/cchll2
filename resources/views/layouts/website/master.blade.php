@@ -33,6 +33,7 @@
     <!-- Google Font: Source Sans Pro -->
     {{-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet"> --}}
     <link href="https://fonts.googleapis.com/css?family=Catamaran:700|Roboto:300,400,400i,700,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Yield:insert_style -->
     @yield('insert_style')
@@ -74,6 +75,9 @@
         // document.documentElement.style.setProperty('--themeColor', color);
     </script>
     <style>
+        html, body, h1, h2, h3, h4, h5, p, a {
+          font-family: 'Poppins', sans-serif !important;
+        }
         .mobile-done {
             display: none !important;
         }
@@ -83,7 +87,7 @@
         /* Mobile Styles */
         @media only screen and (max-width: 768px) {
             body {
-                font-family: Arial, sans-serif;
+                font-family: 'Poppins', sans-serif;
                 padding: 5px;
             }
 
@@ -166,7 +170,7 @@
                 typing 1.5s steps(11, end),
                 blink-caret 0.75s step-end infinite;
             /* font-size: 22px; */
-            font-family: Arial, serif !important;
+            font-family: 'Poppins', sans-serif !important;
             width: 15ch; 
             margin-bottom: 0px;
             margin-top: 5px !important;
@@ -187,7 +191,7 @@
             transform: translateX(-50px);
             animation: flyIn 1s ease-out forwards;
             /* font-size: 35px !important; */
-            font-family: Arial, serif !important;
+            font-family: 'Poppins', sans-serif !important;
             margin-top: 0px;
         }
 

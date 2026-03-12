@@ -88,8 +88,8 @@
     </div>
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    @if(1 || isset($userRole["Penggiat Industri"]))
-        @if(1)
+    @if(isset($userRole["Penggiat Industri"]))
+        @if($user->jenis == null)
         <div class="col-12 col-md-6">
             <div class="form-group">
                 {{ Form::label('jenis_industri', 'Jenis - Penggiat Industri') }}

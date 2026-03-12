@@ -200,7 +200,13 @@ if (!function_exists('in_arrayi')) {
                     $html .= '<ul class="dropdown-menu rounded-0 mt-lg-0" aria-labelledby="navbarDropdownMenu' . $menu->id . '">';
                     foreach ($menu->children as $children) :
                         if (count($children->grandchildren)) : //SubMenu
-                            $html .= '<li class="dropdown-submenu"><a class="dropdown-item dropdown-toggle" target="' . $children->target . '" href="' . $children->link . '">' . $children->title . '</a>';
+                            if ($children->title == "Direktori Penggiat Industri (eLIND)"){
+                                $link = "../penggiat-industri/pembekal";
+                            } else {
+                                $link =$children->link;
+                            }
+                            $html .= '<li class="dropdown-submenu"><a class="dropdown-item dropdown-toggle" target="' . $children->target . '" href="' . $link . '">' . $children->title . '</a>';
+                            
                             $html .= '<ul class="dropdown-menu rounded-0 mt-lg-0">';
                             foreach ($children->grandchildren as $grandchildren) :
                                 $html .= '<li class="dropdown-submenu"><a class="dropdown-item text-nowrap" target="' . $grandchildren->target . '" href="' . $grandchildren->link . '">' . $grandchildren->title . '</a></li>';

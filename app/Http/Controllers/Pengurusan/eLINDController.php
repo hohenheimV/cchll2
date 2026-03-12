@@ -65,7 +65,7 @@ class eLINDController extends Controller
             $id_elind = $user->bahagian_jln;
             $query->where('id_elind', $id_elind);
 
-            $data = $query->latest()->paginate(15);
+            $data = $query->latest()->paginate(20);
 
             if ($data->isEmpty()) {
                 dump("Akaun Industri anda tidak wujud. Sila hubungi Pentadbir eLANDSKAP");
@@ -116,7 +116,7 @@ class eLINDController extends Controller
             }
 
             $data = $query->orderBy('state', 'ASC')->orderBy('name', 'ASC')
-                ->paginate(15)
+                ->paginate(20)
                 ->appends($request->query());
 
             // Replace state code with name
@@ -662,67 +662,73 @@ class eLINDController extends Controller
                 }
             }
 
+            $wasApproved = $eLIND->status === 'approved';
+            $penggiat = MaklumatPenggunaPenggiatIndustri::where('id_elind', $eLIND->id_elind)->first();
+            $statusInit = isset($penggiat->status) ? $penggiat->status : 'draft';
+
             $requestData['status'] = "draft";
             // dd($requestData);
             $eLIND_update = $eLIND->update($requestData);
             // dd($eLIND);
             if ($eLIND_update) {
-                $bahagian_jln = 8;
-                $userArr = []; $user_email = []; $btm_email = [];
-                if ($bahagian_jln) {
-                    $userArr = User::where(function ($query) use ($bahagian_jln) {
-                        $query->whereHas('roles', function ($query) {
-                            $query->where('name', 'Pegawai');
+                if ($wasApproved || $statusInit == 'draft') {
+                    $bahagian_jln = 8;
+                    $userArr = []; $user_email = []; $btm_email = [];
+                    if ($bahagian_jln) {
+                        $userArr = User::where(function ($query) use ($bahagian_jln) {
+                            $query->whereHas('roles', function ($query) {
+                                $query->where('name', 'Pegawai');
+                            })
+                            ->where('bahagian_jln', $bahagian_jln);
                         })
-                        ->where('bahagian_jln', $bahagian_jln);
-                    })
-                    ->get();
-                }
-                foreach ($userArr as $key => $value) {
-                    $user_email[] = ['address' => $value->email, 'name' => $value->name];
-                }
-
-                $emailBTM = User::where(function ($query) use ($bahagian_jln) {
-                    $query->whereHas('roles', function ($query) {
-                            $query->where('name', 'Pentadbir Sistem');
-                        });
-                    })->where('is_active', 1)
-                    ->orWhere(function ($query) use ($bahagian_jln) {
-                        $query->whereHas('roles', function ($query) {
-                            $query->where('name', 'Pegawai');
-                        })
-                        ->where('bahagian_jln', '7');
-                    })->where('is_active', 1)
-                    ->get();
-                foreach ($emailBTM as $key => $value) {
-                    $btm_email[] = ['address' => $value->email, 'name' => $value->name];
-                }
-                // dd($user_email);
-                if (config('mail.enabled')) {
-                    try {
-                        $emailData = [
-                            "email_to" => $user_email,
-                            "email_cc" => $btm_email,
-                            "subject" => 'Modul Pengurusan Maklumat Industri Landskap (eLIND)',
-                        ];
-        
-                        Mail::send('pengurusan.eLIND.mails.perubahan', ['elind' => $eLIND, 'type' => $type, 'jenis' => $eLIND->jenis_industri], function ($message) use ($emailData) {
-                            $message->subject($emailData["subject"]);
-                            // Loop through to array and add each email
-                            foreach ($emailData['email_to'] as $to) {
-                                $message->to($to['address'], $to['name']);
-                            }
-        
-                            // Loop through cc array and add each email
-                            foreach ($emailData['email_cc'] as $cc) {
-                                $message->cc($cc['address'], $cc['name']);
-                            }
-                        });
-                    } catch (\Exception $exception) {
-                        \Log::error("Error sending registration email: " . $exception->getMessage());
-                    //    dd("Error sending registration email: " . $exception->getMessage());
+                        ->get();
                     }
-                    // dd($emailData);
+                    foreach ($userArr as $key => $value) {
+                        $user_email[] = ['address' => $value->email, 'name' => $value->name];
+                    }
+
+                    $emailBTM = User::where(function ($query) use ($bahagian_jln) {
+                        $query->whereHas('roles', function ($query) {
+                                $query->where('name', 'Pentadbir Sistem');
+                            });
+                        })->where('is_active', 1)
+                        ->orWhere(function ($query) use ($bahagian_jln) {
+                            $query->whereHas('roles', function ($query) {
+                                $query->where('name', 'Pegawai');
+                            })
+                            ->where('bahagian_jln', '7');
+                        })->where('is_active', 1)
+                        ->get();
+                    foreach ($emailBTM as $key => $value) {
+                        $btm_email[] = ['address' => $value->email, 'name' => $value->name];
+                    }
+                    // dd($user_email);
+                    if (config('mail.enabled')) {
+                        try {
+                            $emailData = [
+                                "email_to" => $user_email,
+                                "email_cc" => $btm_email,
+                                "subject" => 'Modul Pengurusan Maklumat Industri Landskap (eLIND)',
+                            ];
+            
+                            Mail::send('pengurusan.eLIND.mails.perubahan', ['elind' => $eLIND, 'type' => $type, 'jenis' => $eLIND->jenis_industri], function ($message) use ($emailData) {
+                                $message->subject($emailData["subject"]);
+                                // Loop through to array and add each email
+                                foreach ($emailData['email_to'] as $to) {
+                                    $message->to($to['address'], $to['name']);
+                                }
+            
+                                // Loop through cc array and add each email
+                                foreach ($emailData['email_cc'] as $cc) {
+                                    $message->cc($cc['address'], $cc['name']);
+                                }
+                            });
+                        } catch (\Exception $exception) {
+                            \Log::error("Error sending registration email: " . $exception->getMessage());
+                        //    dd("Error sending registration email: " . $exception->getMessage());
+                        }
+                        // dd($emailData);
+                    }
                 }
                 return redirect()->route('pengurusan.eLIND.edit', ['type' => $type, 'id' => $eLIND->id_elind])->with('successMessage', 'Maklumat '.$eLIND->jenis_industri.' telah berjaya dikemaskini');
             }

@@ -1,5 +1,5 @@
 @extends('layouts.website.secondary')
-@section('title', 'Direktori Pentadbiran Kontrak dan Polisi Landskap')
+@section('title', 'Direktori Polisi Landskap dan Pentadbiran Kontrak')
 
 @section('content')
 
@@ -61,7 +61,7 @@
                 <div class="col-12 col-lg-9">
                     <div class="card card-olive card-outline">
                         <div class="card-header">
-                            <h3 class="card-title font-weight-bold my-1">Direktori Pentadbiran Kontrak dan Polisi Landskap</h3>
+                            <h3 class="card-title font-weight-bold my-1">Direktori Polisi Landskap dan Pentadbiran Kontrak</h3>
                         </div>
 
                         <div class="card-body">
@@ -86,7 +86,7 @@
                                                 <th class="text-center w-5">Kategori</th>
                                                 <th class="text-center w-5">Tahun Penerbitan</th>
                                                 <th class="w-3">Saiz</th>
-                                                <th class="text-center w-1">Tindakan</th>
+                                                <th class="text-center w-1">Maklumat Lanjut</th>
                                                 
                                             </tr>
                                         </thead>
@@ -98,13 +98,13 @@
                                                 @foreach($epacts as $epact)
                                                     <tr>
                                                         <td>{{ $index++ }}</td>
-                                                        <td>{{ ucwords(strtolower($epact->tajuk)) }}</td>
+                                                        <td>{{ (($epact->tajuk)) }}</td>
                                                         <td>
-                                                            {{ ucwords(strtolower($epact->kategori->name) ?? 'Tiada Maklumat') }}
+                                                            {{ ucwords(strtolower($epact->kategori->name) ?? 'Sedang dikemaskini') }}
                                                         </td>
                                                         <td class="text-center">
-                                                            {{ $epact->tahun ?? ucwords(strtolower('Tiada Maklumat')) }}
-                                                            {{-- {{ $epact->tarikh ?? strtoupper('Tiada Maklumat') }} --}}
+                                                            {{ $epact->tahun ?? ucwords(strtolower('Sedang dikemaskini')) }}
+                                                            {{-- {{ $epact->tarikh ?? strtoupper('Sedang dikemaskini') }} --}}
                                                         </td>
                                                         <td style="text-align: center;">
                                                             <!-- <a href="{{ asset($epact->dokumen ? 'storage/uploads/epact/dokumen/' . $epact->dokumen : 'img/no-photos.png') }}" 
@@ -309,7 +309,7 @@
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
             document.addEventListener('DOMContentLoaded', function() {
-                const epacts = @json($epacts);
+                /*const epacts = @json($epacts);
 
                 epacts.data.forEach(epact => {
                     const url = epact.dokumen ? `{{ asset('storage/uploads/epact/dokumen') }}/${epact.dokumen}` : `{{ asset('img/no-photos.png') }}`;
@@ -352,7 +352,7 @@
                             viewerElement.innerHTML = '<div class="text-center text-muted"><img src="http://127.0.0.1:8000/storage/uploads/no-photos.png" class="img-fluid" alt="Responsive image"></div>';
                         }
                     });
-                });
+                });*/
             });
         </script>
 

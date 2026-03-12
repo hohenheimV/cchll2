@@ -59,23 +59,53 @@
                             <div class="col-md-12">
                                 <h4>Nilai Asal</h4>
                                 <table id="example" class="responsive table table-sm table-bordered">
+                                    {{--
                                     @foreach ($audit->old_values as $ky => $older)
                                     <tr>
                                         <td class="w-10">{{ $ky }}</td>
                                         <td>{{ $older }}</td>
                                     </tr>
                                     @endforeach
+                                    --}}
+                                    @foreach ($audit->old_values as $ky => $older)
+                                    <tr>
+                                        <td class="w-10">{{ $ky }}</td>
+                                        <td>
+                                            @if(is_array($older) || is_object($older))
+                                                <pre>{{ json_encode($older, JSON_PRETTY_PRINT) }}</pre>
+                                            @else
+                                                {{ $older }}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @endforeach
+
                                 </table>
                             </div>
                             <div class="col-md-12">
                                 <h4>Nilai Baharu</h4>
                                 <table id="example" class="responsive table table-sm table-bordered">
+                                    {{--
                                     @foreach ($audit->new_values as $ky => $newer)
                                     <tr>
                                         <td class="w-10">{{ $ky }}</td>
                                         <td>{{ $newer }}</td>
                                     </tr>
                                     @endforeach
+                                    --}}
+                                    @foreach ($audit->new_values as $ky => $newer)
+                                    <tr>
+                                        <td class="w-10">{{ $ky }}</td>
+                                        <td>
+                                            @if(is_array($newer) || is_object($newer))
+                                                <pre>{{ json_encode($newer, JSON_PRETTY_PRINT) }}</pre>
+                                            @else
+                                                {{ $newer }}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @endforeach
+
                                 </table>
                             </div>
                         </div>

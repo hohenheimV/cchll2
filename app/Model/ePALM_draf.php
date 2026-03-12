@@ -23,8 +23,8 @@ class ePALM_draf extends Model implements Auditable
      *
      * @var string
      */
-    protected $primaryKey = 'id_taman';
-    // public $incrementing = true;
+    protected $primaryKey = 'id_taman_draf';
+    public $incrementing = true;
 
     /**
      * The attributes that should be mutated to dates.

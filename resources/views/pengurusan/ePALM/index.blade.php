@@ -120,16 +120,23 @@
                                         $options = [
                                             '' => 'Papar Semua Kategori',
                                             'Taman Awam' => 'Taman Awam',
+                                            'Taman Nasional/ Taman Negara' => '&nbsp;&nbsp;Taman Nasional/ Taman Negara',
+                                            'Taman Persekutuan' => '&nbsp;&nbsp;Taman Persekutuan/ Taman Wilayah/ Taman Negeri',
+                                            // 'Taman Persekutuan/ Taman Wilayah/ Taman Negeri' => '&nbsp;&nbsp;Taman Persekutuan/ Taman Wilayah/ Taman Negeri',
+                                            'Taman Bandaran/ Taman Tempatan' => '&nbsp;&nbsp;Taman Bandaran/ Taman Tempatan',
+                                            'Taman Kejiranan' => '&nbsp;&nbsp;Taman Kejiranan',
+                                            'Taman Permainan/ Laman Permainan' => '&nbsp;&nbsp;Taman Permainan/ Laman Permainan',
+                                            'Naik Taraf Taman Awam' => '&nbsp;&nbsp;Naik Taraf Taman Awam',
                                             'Taman Botani' => 'Taman Botani',
                                             'Landskap Perbandaran' => 'Landskap Perbandaran',
                                             'Persekitaran Kehidupan' => 'Persekitaran Kehidupan',
-                                            'Taman Persekutuan' => 'Taman Persekutuan',
-                                            'Taman Wilayah' => 'Taman Wilayah',
-                                            'Taman Bandaran' => 'Taman Bandaran',
-                                            'Taman Tempatan' => 'Taman Tempatan',
-                                            'Padang Kejiranan' => 'Padang Kejiranan',
-                                            'Padang Permainan' => 'Padang Permainan',
-                                            'Lot Permainan' => 'Lot Permainan',
+                                            //'Taman Persekutuan' => 'Taman Persekutuan',
+                                            //'Taman Tempatan' => 'Taman Tempatan',
+                                            //'Taman Bandaran' => 'Taman Bandaran',
+                                            //'Taman Wilayah' => 'Taman Wilayah',
+                                            //'Padang Kejiranan' => 'Padang Kejiranan',
+                                            //'Padang Permainan' => 'Padang Permainan',
+                                            //'Lot Permainan' => 'Lot Permainan',
                                         ];
                                     @endphp
 
@@ -195,8 +202,8 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="w-1">Bil.</th>
-                                    <th>Nama Taman</th>
-                                    <th class="text-center w-5">Kategori Taman</th>
+                                    <th>Nama</th>
+                                    <th class="text-center w-5">Kategori</th>
                                     @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|KP/ TKP JLN'))
                                         <th class="text-center w-10">PBT</th>
                                     @endif

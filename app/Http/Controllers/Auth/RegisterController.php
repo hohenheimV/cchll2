@@ -144,9 +144,10 @@ class RegisterController extends Controller
                 $name = $existingMof->name;
                 //proceed without creating new row
             }else{
+                $data['no_cidb'] = $data['no_cidb'] ?? null;
                 $existing_cidb = MaklumatPenggunaPenggiatIndustri::where('no_cidb', $data['no_cidb'])->first();
                 
-                if ($existing_cidb) {
+                if ($existing_cidb && !empty($data['no_cidb'])) {
                     $maklumat = $existing_cidb;
                     $id = $existing_cidb->id_elind;
                     $name = $existing_cidb->name;
@@ -208,7 +209,7 @@ class RegisterController extends Controller
                 'sv_email' => $data['sv_email'] ?? null,
             ]);
         }
-
+        
         // Send email notification (if enabled)
         if (config('mail.enabled')) {
             $bahagian_jln = 7;  //BTM

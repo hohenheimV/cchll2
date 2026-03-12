@@ -60,8 +60,11 @@ class EPACTController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
-            'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
+            // 'tajuk' => ['required', 'min:3', 'regex:/^[\pL\pN\p{Zs}\.\,\-\/\@\(\)\'"`&;:!?\[\]]+$/u'],
+            //keterangan' => ['nullable', 'min:3', 'regex:/^[\pL\pN\p{Zs}\.\,\-\/\@\(\)\'"`&;:!?\[\]]+$/u'],
+            //change regex
+            'tajuk' => ['required', 'min:3'],
+            'keterangan' => ['nullable', 'min:3'],
             'tahun' => 'required|integer|min:1950|max:' . now()->year,
             'sumber_type' => 'required|in:jln,selain_jln',
             'sumber' => 'required_if:sumber_type,jln|nullable|integer',
@@ -166,8 +169,10 @@ class EPACTController extends Controller
     public function update(Request $request, ePACT $epact)
     {
         $request->validate([
-            'tajuk' => ['required', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
-            'keterangan' => ['nullable', 'min:3', 'regex:/[0-9a-zA-Z @\/\'`,\(\)\-&]+$/'],
+            // 'tajuk' => ['required', 'min:3','regex:/^[\pL\pM\pN\p{Z}\p{P}\p{S}]+$/u'],
+            // 'keterangan' => ['nullable', 'min:3', 'regex:/^[\pL\pM\pN\p{Z}\p{P}\p{S}]+$/u'],
+            'tajuk' => ['required', 'min:3'],
+            'keterangan' => ['nullable', 'min:3'],
             'tahun' => 'required|integer|min:1900|max:' . now()->year,
             'sumber_type' => 'required|in:jln,selain_jln',
             'sumber' => 'required_if:sumber_type,jln|integer|nullable',

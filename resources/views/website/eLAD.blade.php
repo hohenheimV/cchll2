@@ -98,9 +98,9 @@
                                                 <th class="w-1">Bil.</th>
                                                 <th class="w-15">Tajuk </th>
                                                 <th class="text-center w-5">Kategori</th>
-                                                <th class="text-center w-5">Tahun Penerbitan</th>
+                                                <!-- <th class="text-center w-5">Tahun Penerbitan</th> -->
                                                 <th class="w-3">Saiz</th>
-                                                <th class="text-center w-1">Tindakan</th>
+                                                <th class="text-center w-1">Maklumat Lanjut</th>
                                                 
                                             </tr>
                                         </thead>
@@ -114,11 +114,11 @@
                                                         <td>{{ $index++ }}</td>
                                                         <td>{{ ucwords(strtolower($rekabentuk->tajuk)) }}</td>
                                                         <td>
-                                                            {{ ucwords(strtolower($rekabentuk->kategori->name) ?? 'Tiada Maklumat') }}
+                                                            {{ ucwords(strtolower($rekabentuk->kategori->name) ?? 'Sedang dikemaskini') }}
                                                         </td>
-                                                        <td class="text-center">
+                                                        <!-- <td class="text-center">
                                                             {!! Html::datetime($rekabentuk->tarikh, 'Y') !!}
-                                                        </td>
+                                                        </td> -->
                                                         <td style="text-align: center;">
                                                             <!-- <a href="{{ asset($rekabentuk->dokumen ? 'storage/uploads/elad/dokumen/' . $rekabentuk->dokumen : 'img/no-photos.png') }}" 
                                                                 data-toggle="lightbox" 
@@ -299,7 +299,7 @@
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
             document.addEventListener('DOMContentLoaded', function() {
-                const eLAD = @json($eLAD);
+                /*const eLAD = @json($eLAD);
 
                 function renderPDF(elads) {
                     elads.data.forEach(elad => {
@@ -355,7 +355,7 @@
                     });
                 }
 
-                renderPDF(eLAD);
+                renderPDF(eLAD);*/
             });
         </script>
 

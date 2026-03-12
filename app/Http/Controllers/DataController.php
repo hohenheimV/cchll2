@@ -753,6 +753,18 @@ class DataController extends Controller
     }
     
     public function getPBT($negeriId, $pbtId = null) {
+        $negeriIdFormatted = (strtolower($negeriId));
+        $jsonPath = public_path("data/pbt/{$negeriIdFormatted}.json");
+
+        if (file_exists($jsonPath)) {
+            $staticData = json_decode(file_get_contents($jsonPath), true);
+
+            if ($pbtId !== null) {
+                return response()->json($staticData[$pbtId] ?? []);
+            }
+            return response()->json($staticData);
+        }
+
         $negeriId = ucwords(strtolower($negeriId));
         static $simplifiedApiData = null;
     

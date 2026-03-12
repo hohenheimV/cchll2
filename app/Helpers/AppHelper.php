@@ -96,6 +96,13 @@ if (!function_exists('app_dashboard_taman')) {
             'Padang Kejiranan',
             'Padang Permainan',
             'Lot Permainan',
+            'Taman Nasional/ Taman Negara',
+            'Taman Persekutuan',
+            'Taman Persekutuan/ Taman Wilayah/ Taman Negeri',
+            'Taman Bandaran/ Taman Tempatan',
+            'Taman Kejiranan',
+            'Taman Permainan/ Laman Permainan',
+            'Naik Taraf Taman Awam', 
         ];
 
         if (Auth::user()->hasRole('Pihak Berkuasa Tempatan')) {

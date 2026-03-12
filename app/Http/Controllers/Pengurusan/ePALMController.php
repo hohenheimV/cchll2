@@ -118,7 +118,18 @@ class ePALMController extends Controller
         $userId = auth()->id();
         $user = User::find($userId);
 
-        $totalCount = 15; // default pagination count
+        $totalCount = 20; // default pagination count
+        $parkSort = "
+            CASE
+                WHEN kategori_taman = 'Taman Tempatan' THEN 1
+                WHEN kategori_taman = 'Taman Bandaran' THEN 2
+                WHEN kategori_taman = 'Taman Wilayah' THEN 3
+                WHEN kategori_taman = 'Padang Kejiranan' THEN 4
+                WHEN kategori_taman = 'Padang Permainan' THEN 5
+                WHEN kategori_taman = 'Lot Permainan' THEN 6
+                ELSE 99
+            END
+        ";
 
         if ($user->hasRole('Pihak Berkuasa Tempatan')) {
             $email = $user->bahagian_jln;
@@ -140,21 +151,28 @@ class ePALMController extends Controller
                 if (strtolower($kategori) === 'taman awam') {
                     $kategoriList = [
                         'Taman Awam',
-                        'Taman Wilayah',
-                        'Taman Bandaran',
-                        'Taman Tempatan',
-                        'Padang Kejiranan',
-                        'Padang Permainan',
-                        'Lot Permainan'
+                        // 'Taman Wilayah',
+                        // 'Taman Bandaran',
+                        // 'Taman Tempatan',
+                        // 'Padang Kejiranan',
+                        // 'Padang Permainan',
+                        // 'Lot Permainan'
+                        'Taman Nasional/ Taman Negara',
+                        'Taman Persekutuan',
+                        'Taman Persekutuan/ Taman Wilayah/ Taman Negeri',
+                        'Taman Bandaran/ Taman Tempatan',
+                        'Taman Kejiranan',
+                        'Taman Permainan/ Laman Permainan',
+                        'Naik Taraf Taman Awam'
                     ];
 
                     $query->where(function ($q) use ($kategoriList) {
                         foreach ($kategoriList as $k) {
-                            $q->orWhere('kategori_taman', 'ilike', $k); // case-insensitive if using PostgreSQL
+                            $q->orWhere('kategori_taman', 'ilike', ["%{$k}%"]); // case-insensitive if using PostgreSQL
                         }
                     });
                 } else {
-                    $query->where('kategori_taman', 'ilike', $kategori); // or 'like' for MySQL
+                    $query->where('kategori_taman', 'ilike', ["%{$kategori}%"]); // or 'like' for MySQL
                 }
             }
 
@@ -168,6 +186,7 @@ class ePALMController extends Controller
 
             $ePALM = $query->orderBy('status', 'ASC')->orderBy('negeri_taman', 'ASC')
                 ->orderBy('nama_pbt', 'ASC')
+                ->orderByRaw($parkSort)
                 ->paginate($totalCount);
 
             // Add draft status to each item
@@ -191,21 +210,28 @@ class ePALMController extends Controller
                 if (strtolower($kategori) === 'taman awam') {
                     $kategoriList = [
                         'Taman Awam',
-                        'Taman Wilayah',
-                        'Taman Bandaran',
-                        'Taman Tempatan',
-                        'Padang Kejiranan',
-                        'Padang Permainan',
-                        'Lot Permainan'
+                        // 'Taman Wilayah',
+                        // 'Taman Bandaran',
+                        // 'Taman Tempatan',
+                        // 'Padang Kejiranan',
+                        // 'Padang Permainan',
+                        // 'Lot Permainan'
+                        'Taman Nasional/ Taman Negara',
+                        'Taman Persekutuan',
+                        'Taman Persekutuan/ Taman Wilayah/ Taman Negeri',
+                        'Taman Bandaran/ Taman Tempatan',
+                        'Taman Kejiranan',
+                        'Taman Permainan/ Laman Permainan',
+                        'Naik Taraf Taman Awam'
                     ];
 
                     $query->where(function ($q) use ($kategoriList) {
                         foreach ($kategoriList as $k) {
-                            $q->orWhere('kategori_taman', 'ilike', $k); // case-insensitive if using PostgreSQL
+                            $q->orWhere('kategori_taman', 'ilike', ["%{$k}%"]); // case-insensitive if using PostgreSQL
                         }
                     });
                 } else {
-                    $query->where('kategori_taman', 'ilike', $kategori); // or 'like' for MySQL
+                    $query->where('kategori_taman', 'ilike', ["%{$kategori}%"]); // or 'like' for MySQL
                 }
             }
 
@@ -218,7 +244,7 @@ class ePALMController extends Controller
             }
 
             $ePALM = $query->orderBy('status', 'ASC')->orderBy('negeri_taman', 'ASC')
-                ->orderBy('nama_pbt', 'ASC')
+                ->orderBy('nama_pbt', 'ASC')->orderByRaw($parkSort)
                 ->paginate($totalCount);
         }
         $namaPbtArray = ePALM::whereNull('is_komponen')
@@ -463,8 +489,18 @@ class ePALMController extends Controller
         return redirect()->route('pengurusan.ePALM.index')->with('errorMessage', 'Maklumat taman tidak berjaya disimpan');
     }
 
-    public function show(ePALM_draf $ePALM)
+    public function show($id)
+    // public function show(ePALM_draf $ePALM)
     {
+        $ePALM = ePALM_draf::where('id_taman', $id)->first();
+        if (!$ePALM) {
+            $ePALM = ePALM_draf::where('id_taman_draf', $id)->first();
+        }
+
+        if (!$ePALM) {
+            return redirect()->route('pengurusan.ePALM.index')->with('errorMessage', 'Maklumat taman tidak dapat ditemui');
+        }
+
         if ($ePALM->kategori_taman == "Landskap Perbandaran" || 1) {
             $ePALM_komponen = ePALM_draf::select([
                 'id_taman_draf',
@@ -503,8 +539,19 @@ class ePALMController extends Controller
         ]);
     }
 
-    public function edit(ePALM_draf $ePALM)
+    public function edit($id)
+    // public function edit(ePALM_draf $ePALM)
     {
+        $ePALM = ePALM_draf::where('id_taman', $id)->first();
+        // dd($ePALM);
+        if (!$ePALM) {
+            $ePALM = ePALM_draf::where('id_taman_draf', $id)->first();
+        }
+
+        if (!$ePALM) {
+            return redirect()->route('pengurusan.ePALM.index')->with('errorMessage', 'Maklumat taman tidak dapat ditemui');
+        }
+
         if ($ePALM->kategori_taman == "Landskap Perbandaran" || 1) {
             $ePALM_komponen = ePALM_draf::where('is_komponen', $ePALM->id_taman)->get();
             $ePALM->komponen = $ePALM_komponen;
@@ -613,88 +660,101 @@ class ePALMController extends Controller
                     // unset($requestData['nama_taman']);
                 }
             }
+            $wasApproved = $ePALM_draf->status === 'approved';
+            $tamanStatus = ePALM::where('id_taman', $ePALM_draf->id_taman)->first();
+            $statusInit = isset($tamanStatus->status) ? $tamanStatus->status : 'draft';
+
             if ($ePALM_draf) {
                 $updateDraf = $ePALM_draf->update($requestData);
             }
             
             // dd($ePALM_draf);
             if ($updateDraf) {
-                $kategori = ($ePALM_draf->kategori_taman);
-                
-                $kategoriToBahagian = [
-                    'Taman Awam' => 2,
-                    'Taman Wilayah' => 2,
-                    'Taman Bandaran' => 2,
-                    'Taman Tempatan' => 2,
-                    'Padang Kejiranan' => 2,
-                    'Padang Permainan' => 2,
-                    'Lot Permainan' => 2,
-                    'Landskap Perbandaran' => 3,
-                    'Persekitaran Kehidupan' => 4,
-                    'Taman Botani' => 5,
-                    'Pemuliharaan Dan Penyelidikan Landskap' => 5,
-                ];
-                $bahagian_jln = $kategoriToBahagian[$kategori] ?? 2;
-                if ($bahagian_jln) {
-                    $userArr = User::where(function ($query) use ($bahagian_jln) {
-                        $query->whereHas('roles', function ($query) {
-                            $query->where('name', 'Pegawai');
+                if ($wasApproved || $statusInit == 'draft'){
+                    $kategori = ($ePALM_draf->kategori_taman);
+                    
+                    $kategoriToBahagian = [
+                        'Taman Awam' => 2,
+                        // 'Taman Wilayah' => 2,
+                        // 'Taman Bandaran' => 2,
+                        // 'Taman Tempatan' => 2,
+                        // 'Padang Kejiranan' => 2,
+                        // 'Padang Permainan' => 2,
+                        // 'Lot Permainan' => 2,
+                        'Landskap Perbandaran' => 3,
+                        'Persekitaran Kehidupan' => 4,
+                        'Taman Botani' => 5,
+                        'Pemuliharaan Dan Penyelidikan Landskap' => 5,
+                        'Taman Nasional/ Taman Negara' => 2,
+                        'Taman Persekutuan' => 2,
+                        'Taman Persekutuan/ Taman Wilayah/ Taman Negeri' => 2,
+                        'Taman Bandaran/ Taman Tempatan' => 2,
+                        'Taman Kejiranan' => 2,
+                        'Taman Permainan/ Laman Permainan' => 2,
+                        'Naik Taraf Taman Awam' => 1, 
+                    ];
+                    $bahagian_jln = $kategoriToBahagian[$kategori] ?? 2;
+                    if ($bahagian_jln) {
+                        $userArr = User::where(function ($query) use ($bahagian_jln) {
+                            $query->whereHas('roles', function ($query) {
+                                $query->where('name', 'Pegawai');
+                            })
+                            ->where('bahagian_jln', $bahagian_jln);
                         })
-                        ->where('bahagian_jln', $bahagian_jln);
-                    })
-                    ->get();
-                } else {
-                    $userArr = [];
-                }
-
-                $user_email = [];
-                foreach ($userArr as $key => $value) {
-                    $user_email[] = ['address' => $value->email, 'name' => $value->name];
-                }
-
-                $emailBTM = User::where(function ($query) use ($bahagian_jln) {
-                    $query->whereHas('roles', function ($query) {
-                            $query->where('name', 'Pentadbir Sistem');
-                        });
-                    })->where('is_active', 1)
-                    ->orWhere(function ($query) use ($bahagian_jln) {
-                        $query->whereHas('roles', function ($query) {
-                            $query->where('name', 'Pegawai');
-                        })
-                        ->where('bahagian_jln', '7');
-                    })->where('is_active', 1)
-                    ->get();
-                $btm_email = [];
-                foreach ($emailBTM as $key => $value) {
-                    $btm_email[] = ['address' => $value->email, 'name' => $value->name];
-                }
-                // dd($btm_email);
-                $nama_pemohon = isset($PBTArr->pbt_name) ? $PBTArr->pbt_name : 'Jabatan Landskap Negara';
-                if (config('mail.enabled')) {
-                    try {
-                        $emailData = [
-                            "email_to" => $user_email,
-                            "email_cc" => $btm_email,
-                            "subject" => 'Modul Pengurusan Taman & Landskap (ePALM)',
-                        ];
-        
-                        Mail::send('pengurusan.ePALM.mails.perubahan', ['epalm' => $ePALM_draf], function ($message) use ($emailData) {
-                            $message->subject($emailData["subject"]);
-                            // Loop through to array and add each email
-                            foreach ($emailData['email_to'] as $to) {
-                                $message->to($to['address'], $to['name']);
-                            }
-        
-                            // Loop through cc array and add each email
-                            foreach ($emailData['email_cc'] as $cc) {
-                                $message->cc($cc['address'], $cc['name']);
-                            }
-                        });
-                    } catch (\Exception $exception) {
-                        \Log::error("Error sending registration email: " . $exception->getMessage());
-                    //    dd("Error sending registration email: " . $exception->getMessage());
+                        ->get();
+                    } else {
+                        $userArr = [];
                     }
-                    // dd($emailData);
+
+                    $user_email = [];
+                    foreach ($userArr as $key => $value) {
+                        $user_email[] = ['address' => $value->email, 'name' => $value->name];
+                    }
+
+                    $emailBTM = User::where(function ($query) use ($bahagian_jln) {
+                        $query->whereHas('roles', function ($query) {
+                                $query->where('name', 'Pentadbir Sistem');
+                            });
+                        })->where('is_active', 1)
+                        ->orWhere(function ($query) use ($bahagian_jln) {
+                            $query->whereHas('roles', function ($query) {
+                                $query->where('name', 'Pegawai');
+                            })
+                            ->where('bahagian_jln', '7');
+                        })->where('is_active', 1)
+                        ->get();
+                    $btm_email = [];
+                    foreach ($emailBTM as $key => $value) {
+                        $btm_email[] = ['address' => $value->email, 'name' => $value->name];
+                    }
+                    // dd($btm_email);
+                    $nama_pemohon = isset($PBTArr->pbt_name) ? $PBTArr->pbt_name : 'Jabatan Landskap Negara';
+                    if (config('mail.enabled')) {
+                        try {
+                            $emailData = [
+                                "email_to" => $user_email,
+                                "email_cc" => $btm_email,
+                                "subject" => 'Modul Pengurusan Taman & Landskap (ePALM)',
+                            ];
+            
+                            Mail::send('pengurusan.ePALM.mails.perubahan', ['epalm' => $ePALM_draf], function ($message) use ($emailData) {
+                                $message->subject($emailData["subject"]);
+                                // Loop through to array and add each email
+                                foreach ($emailData['email_to'] as $to) {
+                                    $message->to($to['address'], $to['name']);
+                                }
+            
+                                // Loop through cc array and add each email
+                                foreach ($emailData['email_cc'] as $cc) {
+                                    $message->cc($cc['address'], $cc['name']);
+                                }
+                            });
+                        } catch (\Exception $exception) {
+                            \Log::error("Error sending registration email: " . $exception->getMessage());
+                        //    dd("Error sending registration email: " . $exception->getMessage());
+                        }
+                        // dd($emailData);
+                    }
                 }
                 return redirect()->route('pengurusan.ePALM.edit', [$ePALM_draf])->with('successMessage', 'Maklumat taman telah berjaya dikemaskini');
             }
@@ -737,10 +797,12 @@ class ePALMController extends Controller
         return redirect()->route('pengurusan.ePALM.index')->with('errorMessage', 'Maklumat taman tidak berjaya dikemaskini');
     }
 
-    public function destroy(Request $request,ePALM_draf $ePALM)
+    public function destroy(Request $request, $id)
+    // public function destroy(Request $request,ePALM_draf $ePALM)
     {
         // dd($ePALM->id_taman);
-        $id_taman = $ePALM->id_taman;
+        $id_taman = $id;
+        // $id_taman = $ePALM->id_taman;
 
         $delete_draf = ePALM_draf::where('id_taman', $id_taman)->first();
         $delete_main = ePALM::where('id_taman', $id_taman)->first();
@@ -765,6 +827,8 @@ class ePALMController extends Controller
                 $delete_draf->delete();
             }
             $delete_main->delete();
+        } else {
+            return redirect()->route('pengurusan.ePALM.index')->with('errorMessage', 'Maklumat taman tidak dapat dihapuskan');
         }
 
         return redirect()->route('pengurusan.ePALM.index')->with('successMessage', 'Maklumat taman telah dihapuskan');

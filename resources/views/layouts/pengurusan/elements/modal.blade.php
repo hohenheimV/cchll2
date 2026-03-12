@@ -10,10 +10,10 @@
             <div class="modal-footer d-flex  border-0">
                 {!! Form::hidden('id', null, ['id'=>'id']) !!}
                 {!! Form::button('Batal', ['class'=>'btn btn-danger btn-lg btn-flat btn-block m-0
-                mr-1','data-dismiss'=>'modal']) !!}
+                mr-1','data-dismiss'=>'modal','style'=>'font-size: 18px;']) !!}
                 {!! Form::button('Log Keluar', ['onclick'=>'event.preventDefault();
                 document.getElementById(\'logout-form\').submit();','class'=>'btn bg-green btn-lg btn-flat btn-block m-0
-                ml-1']) !!}
+                ml-1','style'=>'font-size: 18px;']) !!}
                 {!! Form::open(['id'=>'logout-form','style'=>'display: none;','method'=>'POST','route'=>['logout']]) !!}
                 {!! Form::close() !!}
             </div>

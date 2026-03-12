@@ -76,7 +76,7 @@
                         'ktp' => 'Modul Pelaporan Kempen Tanam Pokok',
                         'MIB' => 'Modul Rakan Taman',
                         'eREAD' => 'Modul Penyelidikan dan Penerbitan Landskap',
-                        'ePACT' => 'Modul Pentadbiran Kontrak dan Polisi Landskap',
+                        'ePACT' => 'Modul Polisi Landskap dan Pentadbiran Kontrak',
                         'eLAD' => 'Modul Rekabentuk Landskap',
                         'eNTITI' => 'Modul Entiti Landskap',
                         'eMAP' => 'Taburan Pembangunan Projek Landskap di Malaysia'
@@ -96,7 +96,7 @@
                         @if(
                             (Auth::user()->hasRole('Pentadbir Sistem')) ||
                             (!(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [1, 2, 3, 4, 5, 6, 7])) && $item == 'eLAPS') ||
-                            (!(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [2, 3, 4, 5, 7])) && $item == 'ePALM') ||
+                            (!(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [1, 2, 3, 4, 5, 7])) && $item == 'ePALM') ||
                             (!(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [3, 7])) && $item == 'ePIL')
                         )
                         <li class="nav-item">
@@ -134,12 +134,12 @@
                 @if ((Auth::user()->hasRole('Pentadbir Sistem|KP/ TKP JLN|Pegawai')))
                     @php
                         $types = [
+                            'pembekal' => ['label' => 'Pembekal', 'icon' => 'fas fa-truck'],
                             'kontraktor' => ['label' => 'Kontraktor', 'icon' => 'fas fa-user-tie'],
                             'perunding' => ['label' => 'Perunding', 'icon' => 'fas fa-briefcase'],
-                            'pembekal' => ['label' => 'Pembekal', 'icon' => 'fas fa-truck'],
-                            'antarabangsa' => ['label' => 'Pertubuhan Antarabangsa', 'icon' => 'fas fa-globe'],
+                            'pendidikan' => ['label' => 'Institusi Pendidikan', 'icon' => 'fas fa-university'],
                             'ngo' => ['label' => 'NGO & Badan Ikhtisas', 'icon' => 'fas fa-hands-helping'],
-                            'pendidikan' => ['label' => 'Institusi Pendidikan', 'icon' => 'fas fa-university']
+                            'antarabangsa' => ['label' => 'Pertubuhan <br>Antarabangsa', 'icon' => 'fas fa-globe'],
                         ];
                     @endphp
                     @if((Auth::user()->hasRole('Pentadbir Sistem|Pegawai')) || !(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [10, 8, 7])))

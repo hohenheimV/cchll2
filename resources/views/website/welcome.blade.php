@@ -28,15 +28,15 @@
             color: rgb(255, 255, 255) !important;
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
-    <link href="https://db.onlinewebfonts.com/c/9292cc35e4f1fd3bee22274764613e63?family=Leadville+W00+Regular" rel="stylesheet" type="text/css"/>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"> -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet"> -->
+    <!-- <link href="https://db.onlinewebfonts.com/c/9292cc35e4f1fd3bee22274764613e63?family=Leadville+W00+Regular" rel="stylesheet" type="text/css"/> -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&display=swap" rel="stylesheet"> -->
 
 
     <style>
         body {
-            font-family: 'Open Sans', sans-serif;
+            /*font-family: 'Open Sans', sans-serif;*/
             margin: 0;
             padding: 0;
         }
@@ -615,13 +615,13 @@
             </div> --}}
             
             <div class="col-lg-2 col-md-3 col-sm-4 col-4 justify-content-center">
-                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="top" title="Direktori Taman Awam" href="/epalm">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="top" title="Direktori Taman Awam" href="/epalm/Taman%20Tempatan">
                     <div class="card menu-button text-center p-3 shadow-sm">
                         <img src="{{ asset('/images/ePALM.png') }}" class="img-fluid mb-2 rounded" alt="Direktori Taman">
                         <div class="fontnew">ePALM </div>
                     </div>
                 </a>
-                <div style="text-align: center; margin: 0  0 40px 0 !important; font-size: 0.85rem;">Direktori Taman Awam </div>
+                <div style="text-align: center; margin: 0  0 40px 0 !important; font-size: 0.85rem;">Direktori Taman dan Landskap </div>
             </div>
             
             <div class="col-lg-2 col-md-3 col-sm-4 col-4 justify-content-center">
@@ -668,13 +668,13 @@
             </div>
             
             <div class="col-lg-2 col-md-3 col-sm-4 col-4 justify-content-center">
-                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="bottom" title="Direktori Pentadbiran Kontrak dan Polisi Landskap" href="/epact-dokumen">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="bottom" title="Direktori Polisi Landskap dan Pentadbiran Kontrak" href="/epact-dokumen">
                     <div class="card menu-button text-center p-3 shadow-sm">
                         <img src="{{ asset('/images/ePACT.png') }}" class="img-fluid mb-2 rounded" alt="Pentadbiran Kontrak">
                         <div class="fontnew">ePACT </div>
                     </div>
                 </a>
-                <div style="text-align: center; margin: 0  0 40px 0 !important; font-size: 0.85rem;">Direktori Pentadbiran Kontrak dan Polisi Landskap </div>
+                <div style="text-align: center; margin: 0  0 40px 0 !important; font-size: 0.85rem;">Direktori Polisi Landskap dan Pentadbiran Kontrak </div>
             </div>
             
             <div class="col-lg-2 col-md-3 col-sm-4 col-4 justify-content-center">
@@ -709,7 +709,7 @@
 
     {{-- mobile --}}
 
-    <div class="container mobile-done" style="max-width: 1200px; font-family: 'Inter', sans-serif;">
+    <div class="container mobile-done" style="max-width: 1200px;">
         <div class="row justify-content-center g-4">
             <div class="col-lg-2 col-md-3 col-sm-4 col-6 justify-content-center">
                 <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="top" title="Direktori Taman Awam" href="/epalm">
@@ -762,13 +762,13 @@
             </div>
             
             <div class="col-lg-2 col-md-3 col-sm-4 col-6 justify-content-center">
-                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="bottom" title="Direktori Pentadbiran Kontrak dan Polisi Landskap" href="/epact-dokumen">
+                <a target="_blank" style="color: black;" data-toggle="tooltipx" data-placement="bottom" title="Direktori Polisi Landskap dan Pentadbiran Kontrak" href="/epact-dokumen">
                     <div class="card menu-button text-center p-3 shadow-sm">
                         <img src="{{ asset('/images/ePACT.png') }}" class="img-fluid mb-2 rounded" alt="Pentadbiran Kontrak">
                         <div class="fontnew">ePACT </div>
                     </div>
                 </a>
-                <div style="text-align: center; margin: 0  0 18px 0 !important; font-size: 0.6rem;">Direktori Pentadbiran Kontrak dan Polisi Landskap </div>
+                <div style="text-align: center; margin: 0  0 18px 0 !important; font-size: 0.6rem;">Direktori Polisi Landskap dan Pentadbiran Kontrak </div>
             </div>
             
             <div class="col-lg-2 col-md-3 col-sm-4 col-6 justify-content-center">
@@ -826,7 +826,7 @@
         }
 
         .fontnew{
-            font-family: 'Poppins' !important; 
+            font-family: 'Poppins', sans-serif !important; 
             font-size: 25px;
             display: flex;
             align-items: flex-start;

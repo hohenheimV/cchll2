@@ -15,10 +15,19 @@
 
             <h4 class="login-box-msg text-dark">@yield('title')</h4>
 
-            @if (session('status'))
+            {{--@if (session('status'))
             <div class="alert alert-success" role="alert">
                 {{ session('status') }}
             </div>
+            @endif--}}
+            @if (session('status') == 'passwords.sent')
+                <div class="alert alert-success" role="alert">
+                    Kami telah menghantar pautan untuk menetapkan semula kata laluan anda!
+                </div>
+            @elseif (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
+                </div>
             @endif
 
             <form method="POST" action="{{ route('password.email') }}" class="text-center w-75">

@@ -379,7 +379,7 @@
     <!-- Fifth Row: Keluasan and Panjang -->
     <tr>
         <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('keluasan', 'a.&nbsp;&nbsp;&nbsp;&nbsp;Keluasan (ekar / hektar) :', ['class' => 'col-form-label']) }}</td>
-        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::text('keluasan', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
+        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::number('keluasan', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
 
         <!-- Dropdown for Unit (Keluasan) with fixed width -->
         <td style="border: none; padding: 8px; text-align: left;" >
@@ -387,7 +387,7 @@
         </td>
 
         <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('panjang', 'Panjang (Jika berkaitan):', ['class' => 'col-form-label']) }}</td>
-        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::text('panjang', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
+        <td style="border: none; padding: 8px; text-align: left;" >{{ Form::number('panjang', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
 
         <!-- Dropdown for Unit (Panjang) with fixed width -->
         <td style="border: none; padding: 8px; text-align: left;" >
@@ -836,7 +836,7 @@
 
 
         <td style="border: none; padding: 8px; text-align: left;" >{{ Form::label('jumlah_penduduk', 'f.&nbsp;&nbsp;&nbsp;&nbsp;Jumlah penduduk (kawasan pentadbiran PBT) :', ['class' => 'col-form-label']) }}<!-- </td>
-        <td style="border: none; padding: 8px; text-align: left;" > -->{{ Form::text('jumlah_penduduk', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
+        <td style="border: none; padding: 8px; text-align: left;" > -->{{ Form::number('jumlah_penduduk', null, ['class' => 'form-control', 'placeholder' => 'Masukkan butiran jika ada']) }}</td>
     </tr>
 
     <!-- g. Status Tanah : Diwartakan sebagai tanah lapang /rezab landskap -->
@@ -1191,7 +1191,7 @@
     <!-- File Upload Section -->
     <tr>
         <td style="border: none; padding: 8px; text-align: left;"  colspan="6" style="padding-top: 15px; padding-bottom: 15px;">
-            @if(((Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || ( Auth::user()->id == $eLAPS->id_pemohon)) && (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 2)) || (Auth::user()->hasRole('Pihak Berkuasa Tempatan|Pegawai') && !isset($eLAPS->status_permohonan)))
+            @if(((Auth::user()->hasRole('Pihak Berkuasa Tempatan') || !(isset($eLAPS->status_permohonan)) || ( Auth::user()->id == $eLAPS->id_pemohon)) && (isset($eLAPS->status_permohonan) && $eLAPS->status_permohonan < 2)) || (Auth::user()->hasRole('Pihak Berkuasa Tempatan|Pegawai') && (!isset($eLAPS->status_permohonan) || $eLAPS->status_permohonan < 2)))
                 <div class="form-group row">
                     <div class="col-md-12">
                         {{ Form::label('file_upload', '&nbsp;&nbsp;&nbsp;&nbsp;Sila muat naik dokumen sokongan:', ['class' => 'col-form-label', 'style' => 'font-weight: normal;']) }}

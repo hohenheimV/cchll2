@@ -330,6 +330,7 @@ class UsersController extends Controller
      */
     public function destroy(User $user)
     {
+        $params = [];
         $role = $user->getRoleNames()->first();
         if ($role === 'Pihak Berkuasa Tempatan' || $role === 'Penggiat Industri') {
             $params = ['keyword' => $role];

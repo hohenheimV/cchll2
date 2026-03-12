@@ -75,7 +75,7 @@
                         <div inert class="form-group required">
                             <label for="keterangan_taman" class="col-md-12 control-label">Keterangan Taman</label>
                             <div class="col-md-12">
-                                <textarea name="keterangan_taman" class="form-control" maxlength="50" rows="5" id="keterangan_taman" >{{ isset($ePALM->keterangan_taman) ? $ePALM->keterangan_taman : '' }}</textarea>
+                                <textarea name="keterangan_taman" class="form-control" rows="5" id="keterangan_taman" >{{ isset($ePALM->keterangan_taman) ? $ePALM->keterangan_taman : '' }}</textarea>
                             </div>
                         </div>
                         <div class="row">
@@ -133,7 +133,7 @@
                     {!! Form::button('Kembali', ['onclick' => "window.location='".route('pengurusan.ePALM.index')."'", 'class' => 'btn btn-secondary']) !!}
                     
                     {!! 
-                        Form::button('<i class="fas fa-pencil-alt"></i>', ['onclick'=>"window.location='".route('pengurusan.ePALM.edit',$ePALM)."'", 'class'=>'btn bg-warning', Html::tooltip('Kemaskini Taman')]); 
+                        Form::button('<i class="fas fa-pencil-alt"></i>', ['onclick'=>"window.location='".route('pengurusan.ePALM.edit',$ePALM->id_taman)."'", 'class'=>'btn bg-warning', Html::tooltip('Kemaskini Taman')]); 
                     !!}
                     @if(auth()->user()->hasRole('Pentadbir Sistem|Pegawai'))
                         {!! Form::button('<i class="fas fa-save"></i> Pengesahan', [

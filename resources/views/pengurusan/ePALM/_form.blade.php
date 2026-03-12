@@ -115,7 +115,7 @@
                     <div class="form-group required col-md-8">
                         <label for="nama_taman" class="col-md-12 control-label">Nama Taman</label>
                         <div class="col-md-12">
-                            {!! Form::textarea('nama_taman', null, ['class' => 'form-control', 'maxlength' => '150', 'rows' => '1', 'id' => 'nama_taman', 'required' => 'required']) !!}
+                            {!! Form::textarea('nama_taman', null, ['class' => 'form-control', 'rows' => '1', 'id' => 'nama_taman', 'required' => 'required']) !!}
                             <script>
                                 function resizeTextarea(textarea) {
                                     textarea.style.height = 'auto';
@@ -139,28 +139,36 @@
                         <div class="col-md-12">
                             @php
                                 $options = [
-                                    'Taman Awam' => 'Taman Awam',
+                                    //'Taman Awam' => 'Taman Awam',
+
+                                    'Taman Nasional/ Taman Negara' => 'Taman Nasional/ Taman Negara',
+                                    'Taman Persekutuan/ Taman Wilayah/ Taman Negeri' => 'Taman Persekutuan/ Taman Wilayah/ Taman Negeri',
+                                    'Taman Bandaran/ Taman Tempatan' => 'Taman Bandaran/ Taman Tempatan',
+                                    'Taman Kejiranan' => 'Taman Kejiranan',
+                                    'Taman Permainan/ Laman Permainan' => 'Taman Permainan/ Laman Permainan',
+                                    'Naik Taraf Taman Awam' => 'Naik Taraf Taman Awam',
+
                                     'Taman Botani' => 'Taman Botani',
                                     'Landskap Perbandaran' => 'Landskap Perbandaran',
                                     'Persekitaran Kehidupan' => 'Persekitaran Kehidupan',
-                                    'Taman Persekutuan' => 'Taman Persekutuan',
-                                    'Taman Wilayah' => 'Taman Wilayah',
-                                    'Taman Bandaran' => 'Taman Bandaran',
-                                    'Taman Tempatan' => 'Taman Tempatan',
-                                    'Padang Kejiranan' => 'Padang Kejiranan',
-                                    'Padang Permainan' => 'Padang Permainan',
-                                    'Lot Permainan' => 'Lot Permainan',
+                                    //'Taman Persekutuan' => 'Taman Persekutuan',
+                                    //'Taman Wilayah' => 'Taman Wilayah',
+                                    //'Taman Bandaran' => 'Taman Bandaran',
+                                    //'Taman Tempatan' => 'Taman Tempatan',
+                                    //'Padang Kejiranan' => 'Padang Kejiranan',
+                                    //'Padang Permainan' => 'Padang Permainan',
+                                    //'Lot Permainan' => 'Lot Permainan',
                                     //'6' => 'Lain-lain (sila nyatakan)'
                                 ];
 
                                 // Check if $ePALM->kategori_taman exists and is not in the options list, then append it
                                 if (isset($ePALM->kategori_taman) && !array_key_exists($ePALM->kategori_taman, $options)) {
-                                    $options[$ePALM->kategori_taman] = $ePALM->kategori_taman;  // Add it to options
+                                    //$options[$ePALM->kategori_taman] = $ePALM->kategori_taman;  // Add it to options
                                 }
                                 //dd(array_key_exists("Taman Awamw", $options));
                             @endphp
 
-                            {!! Form::select('kategori_taman', $options, isset($ePALM->kategori_taman) ? $ePALM->kategori_taman : '', ['class' => 'form-control ', 'id' => 'kategori_taman', 'required' => 'required']) !!}
+                            {!! Form::select('kategori_taman', $options, isset($ePALM->kategori_taman) ? $ePALM->kategori_taman : '', ['class' => 'form-control ', 'id' => 'kategori_taman', 'required' => 'required', 'placeholder' => 'Sila Pilih']) !!}
                         </div>
                     </div>
                 </div>
@@ -189,7 +197,7 @@
                             {{ Form::select('negeri_taman', [], null, ['class' => 'form-control', 'id' => 'negeri']) }}
                         </div>
                     </div>
-                    <div class="form-group required col-md-8 inertClass">
+                    <div class="form-group required col-md-8 {{-- inertClass --}}">
                         <label for="nama_pbt" class="col-md-12 control-label">Pihak Berkuasa Tempatan</label>
                         <div class="col-md-12">
                             {{-- <input type="text" name="nama_pbt" id="nama_pbt" list="data_pbt" autocomplete="off" placeholder="Type or select an option" class="form-control" required value="{{ $pbt->pbt_name ?? $ePALM->nama_pbt ?? '' }}">
@@ -237,13 +245,13 @@
                     <div class="form-group col-md-12">
                         <label for="lainlainJenisTaman" class="col-md-12 control-label">Sila Nyatakan Jenis Taman</label>
                         <div class="col-md-12">
-                            <input name="lainlainJenisTaman" class="form-control" type="text" id="lainlainJenisTaman" maxlength="50">
+                            <input name="lainlainJenisTaman" class="form-control" type="text" id="lainlainJenisTaman" >
                         </div>
                     </div>
                 </div>
 
                 
-                <div class="inertClass">
+                <div class="{{-- inertClass --}}">
                     <div class="row">
                         <!-- <div class="form-group required col-md-4">
                             <label for="negeri_taman" class="col-md-12 control-label">Negeri {!! in_array('negeri_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
@@ -503,14 +511,14 @@
                 <div class="form-group required col-md-6">
                     <label for="alamat1_taman" class="col-md-4 control-label">Alamat 1 {!! in_array('alamat1_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                     <div class="col-md-12">
-                        <input value="{{isset($ePALM->alamat1_taman) ? $ePALM->alamat1_taman : ''}}" name="alamat1_taman" class="form-control" maxlength="50" type="text" id="alamat1_taman" >
+                        <input value="{{isset($ePALM->alamat1_taman) ? $ePALM->alamat1_taman : ''}}" name="alamat1_taman" class="form-control"  type="text" id="alamat1_taman" >
                     </div>
                 </div>
 
                 <div class="form-group required col-md-6">
                     <label for="alamat2_taman" class="col-md-4 control-label">Alamat 2 {!! in_array('alamat2_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                     <div class="col-md-12">
-                        <input value="{{isset($ePALM->alamat2_taman) ? $ePALM->alamat2_taman : ''}}" name="alamat2_taman" class="form-control" maxlength="50" type="text" id="alamat2_taman">
+                        <input value="{{isset($ePALM->alamat2_taman) ? $ePALM->alamat2_taman : ''}}" name="alamat2_taman" class="form-control"  type="text" id="alamat2_taman">
                     </div>
                 </div>
             </div>
@@ -518,7 +526,7 @@
                 <div class="form-group required col-md-8">
                     <label for="alamat3_taman" class="col-md-12 control-label">Alamat 3 {!! in_array('alamat3_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                     <div class="col-md-12">
-                        <input value="{{isset($ePALM->alamat3_taman) ? $ePALM->alamat3_taman : ''}}" name="alamat3_taman" class="form-control" maxlength="50" type="text" id="alamat3_taman">
+                        <input value="{{isset($ePALM->alamat3_taman) ? $ePALM->alamat3_taman : ''}}" name="alamat3_taman" class="form-control"  type="text" id="alamat3_taman">
                     </div>
                 </div>
 
@@ -731,15 +739,23 @@
                         $fasilitiData = [];
                     }
                     $facilityOptions = [
-                        'cctv'    => ['label' => 'CCTV', 'icon' => 'fas fa-video'],
-                        'wifi'    => ['label' => 'WiFi', 'icon' => 'fas fa-wifi'],
-                        'cycling' => ['label' => 'Kemudahan Berbasikal', 'icon' => 'fas fa-bicycle'],
-                        'food'    => ['label' => 'Gerai Makan', 'icon' => 'fas fa-utensils'],
-                        'oku'     => ['label' => 'Kemudahan OKU', 'icon' => 'fas fa-wheelchair'],
-                        'toilet'  => ['label' => 'Tandas Awam', 'icon' => 'fas fa-toilet'],
-                        //'food2'   => ['label' => 'Gerai Makan', 'icon' => 'fas fa-utensils'],
-                        //'oku2'    => ['label' => 'Kemudahan OKU', 'icon' => 'fas fa-wheelchair'],
-                        //'toilet2' => ['label' => 'Tandas Awam', 'icon' => 'fas fa-toilet'],
+                        'cctv'          => ['label' => 'CCTV', 'icon' => 'fas fa-video'],
+                        'wifi'          => ['label' => 'WiFi', 'icon' => 'fas fa-wifi'],
+                        'cycling'       => ['label' => 'Kemudahan Berbasikal', 'icon' => 'fas fa-bicycle'],
+                        'food'          => ['label' => 'Gerai Makan', 'icon' => 'fas fa-utensils'],
+                        'oku'           => ['label' => 'Kemudahan OKU', 'icon' => 'fas fa-wheelchair'],
+                        'toilet'        => ['label' => 'Tandas Awam', 'icon' => 'fas fa-restroom'],
+
+                        'surau'         => ['label' => 'Surau', 'icon' => 'fas fa-mosque'],
+                        'basikal'       => ['label' => 'Laluan Basikal', 'icon' => 'fas fa-biking'],
+                        'plaza'         => ['label' => 'Dataran /Plaza', 'icon' => 'fas fa-landmark'],
+                        'sukan'         => ['label' => 'Gelanggang Sukan', 'icon' => 'fas fa-basketball-ball'],
+                        'senam'         => ['label' => 'Alat Senam Riang', 'icon' => 'fas fa-dumbbell'],
+                        'laluan'        => ['label' => 'Laluan Pejalan Kaki', 'icon' => 'fas fa-walking'],
+                        'park'          => ['label' => 'Tempat Letak Kenderaan', 'icon' => 'fas fa-parking'],
+                        'air'           => ['label' => 'Badan Air (Kolam /Tasik)', 'icon' => 'fas fa-water'],
+                        'mainan'        => ['label' => 'Alat Permainan Kanak-kanak', 'icon' => 'fas fa-child'],
+                        'wakaf'         => ['label' => 'Wakaf dan Struktur Berbumbung', 'icon' => 'fas fa-umbrella-beach'],
                     ];
 
                     $facilityKeys = array_keys($facilityOptions);
@@ -772,23 +788,44 @@
                                 @endforeach
 
                                 {{-- Loop custom (unknown) facilities --}}
+                                @php
+                                    // For performance, get the keys of $facilityOptions once
+                                    $facilityOptionKeys = array_keys($facilityOptions);
+                                @endphp
+
                                 @foreach($fasilitiData as $key => $val)
                                     @if (!in_array($key, $facilityKeys))
-                                        @php $isChecked = isset($fasilitiData[$key]) && $fasilitiData[$key] == '1' ? 'checked' : ''; @endphp
+                                        @php 
+                                            $isChecked = isset($fasilitiData[$key]) && $fasilitiData[$key] == '1' ? 'checked' : ''; 
+
+                                            $iconClass = 'fab fa-pagelines';  // default icon
+                                            $label = ucwords(str_replace('_', ' ', $key)); // default label
+
+                                            // Loop through facilityOptions keys to find partial match
+                                            foreach ($facilityOptionKeys as $fKey) {
+                                                if (strpos($key, $fKey) !== false) {
+                                                    $iconClass = $facilityOptions[$fKey]['icon'];
+                                                    //$label = $facilityOptions[$fKey]['label'];
+                                                    break; // stop after first match
+                                                }
+                                            }
+                                        @endphp
                                         <div class="col-md-3 facility-wrapper">
                                             <label class="facility">
                                                 <input type="hidden" name="fasiliti[{{ $key }}]" value="0">
                                                 <input type="checkbox" value="1" name="fasiliti[{{ $key }}]" id="{{ $key }}" {{ $isChecked }}>
                                                 <span class="parks bg">
                                                     <div class="icon-container">
-                                                        <i class="fas fa-chart-pie" data-toggle="tooltip" title="{{ ucfirst($key) }}"></i>
+                                                        <i class="{{ $iconClass }}" data-toggle="tooltip" title="{{ $label }}"></i>
                                                     </div>
                                                 </span>
-                                                <span class="facility-label">{{ ucfirst(str_replace('_', ' ', $key)) }}</span>
+                                                <span class="facility-label">{{ $label }}</span>
                                             </label>
                                         </div>
                                     @endif
                                 @endforeach
+
+
                             </div>
 
                             {{-- Add Facility Button --}}
@@ -866,7 +903,7 @@
                     <div class="form-group required {{ $field == 'Emel' || $field == 'Web' ? 'col-md-6' : 'col-md-3' }}">
                         <label for="mediaSosial" class="col-md-12 control-label">{{ $field == 'Web' ? 'Laman Web' : $field }} {!! in_array('mediaSosial_taman.'.$field, $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                         <div class="col-md-12">
-                            <input value="{{ $value }}" name="mediaSosial_taman[{{ $field }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_taman[]">
+                            <input value="{{ $value }}" name="mediaSosial_taman[{{ $field }}]" class="form-control"  type="text" id="mediaSosial_taman[]">
                         </div>
                     </div>
                 @endforeach
@@ -876,7 +913,7 @@
                             <div class="form-group required col-md-3">
                                 <label for="mediaSosial" class="col-md-12 control-label">{{ $key }} {!! in_array('mediaSosial_taman.'.$key, $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!}</label>
                                 <div class="col-md-12">
-                                    <input value="{{ $value }}" name="mediaSosial_taman[{{ $key }}]" class="form-control" maxlength="50" type="text" id="mediaSosial_taman[]">
+                                    <input value="{{ $value }}" name="mediaSosial_taman[{{ $key }}]" class="form-control"  type="text" id="mediaSosial_taman[]">
                                 </div>
                             </div>
                         @endif
@@ -907,7 +944,7 @@
                     div.innerHTML = `
                         <label class="col-md-12 control-label">${name}</label>
                         <div class="col-md-12">
-                            <input name="mediaSosial_taman[${key}]" class="form-control" maxlength="50" type="text">
+                            <input name="mediaSosial_taman[${key}]" class="form-control"  type="text">
                         </div>
                     `;
                     container.appendChild(div);
@@ -918,7 +955,7 @@
             <div class="form-group required inertShow">
                 <label for="keterangan_taman" class="col-md-12 control-label">Keterangan Taman {!! in_array('keterangan_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                 <div class="col-md-12">
-                    <textarea name="keterangan_taman" class="form-control" maxlength="250" rows="5" id="keterangan_taman" >{{ isset($ePALM->keterangan_taman) ? $ePALM->keterangan_taman : '' }}</textarea>
+                    <textarea name="keterangan_taman" class="form-control" rows="5" id="keterangan_taman" >{{ isset($ePALM->keterangan_taman) ? $ePALM->keterangan_taman : '' }}</textarea>
                 </div>
             </div>
             
@@ -990,7 +1027,7 @@
             <div class="form-group required inertShow">
                 <label for="keterangan_taman" class="col-md-12 control-label">Keterangan Taman {!! in_array('keterangan_taman', $arrChanges) ? '<span class="text-danger newC" style="font-size: 12px;">Perubahan baru !</span>' : '' !!} </label>
                 <div class="col-md-12">
-                    <textarea name="keterangan_taman" class="form-control" maxlength="250" rows="5" id="keterangan_taman" >{{ isset($ePALM->keterangan_taman) ? $ePALM->keterangan_taman : '' }}</textarea>
+                    <textarea name="keterangan_taman" class="form-control"  rows="5" id="keterangan_taman" >{{ isset($ePALM->keterangan_taman) ? $ePALM->keterangan_taman : '' }}</textarea>
                 </div>
             </div>
 

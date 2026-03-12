@@ -18,7 +18,6 @@ function verify_signature($payload, $github_signature, $secret)
     $hash = 'sha1=' . hash_hmac('sha1', $payload, $secret);
     return hash_equals($hash, $github_signature);
 }
-
 // Check if the signature is valid
 if (!verify_signature($payload, $github_signature, $secret)) {
     header('HTTP/1.1 400 Bad Request');
@@ -26,35 +25,23 @@ if (!verify_signature($payload, $github_signature, $secret)) {
     exit;
 }
 
-// Decode the payload (GitHub sends JSON data)
 $data = json_decode($payload, true);
-
-// Handle the event types based on what GitHub sends
-if (isset($data['action'])) {
-    $action = $data['action'];
-    
-    // Example: Log the event to a file (you can do any logic here)
-    $log_message = "Event: " . $action . "\n";
+if (isset($data['commits'])) {
+    $event = $data['commits'][0]["timestamp"];
+    $log_message = "Event: " . $event . "\n";
     $log_message .= "Repository: " . $data['repository']['name'] . "\n";
     $log_message .= "Sender: " . $data['sender']['login'] . "\n";
 
-    // Save the log message in a file
-    file_put_contents('webhook_log.txt', $log_message, FILE_APPEND);
+    file_put_contents('E:\www\elandskapv2\webhook_log.txt', $log_message, FILE_APPEND);
 
-    // Custom action after receiving the webhook, such as triggering an action
-    if ($action === 'push') {
-        // Handle push event, perform git pull to get the latest code
-        $repository_dir = 'D:/ePokok/laravel/eLANDSKAP'; // Set the path to your Git repository (not the public folder)
-        $branch = 'main'; // Set your branch (e.g., 'main', 'master', etc.)
-
-        // Perform the git pull command
-        $command = "cd $repository_dir && git checkout $branch && git pull origin $branch";
-
-        // Execute the command
-        $output = shell_exec($command);
-
-        // Optionally log the output of the command to check for any issues
-        file_put_contents('git_pull_log.txt', $output, FILE_APPEND);
+    if (isset($data['sender']['login'])) {
+        $repository_dir = 'E:\www\elandskapv2';
+        $branch = 'main';
+        // $command = "cd /d $repository_dir && git checkout $branch && git pull origin $branch";
+        // $output = shell_exec($command);
+        // $command = 'echo "Hello from shell_exec!"';
+        // $output = shell_exec($command);
+        // file_put_contents('E:\www\elandskapv2\git_pull_log.txt', $output, FILE_APPEND);
     }
 
     // Respond with a success message

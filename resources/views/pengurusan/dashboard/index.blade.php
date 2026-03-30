@@ -146,6 +146,7 @@
                 {!! stats_card('Jumlah Pelan Induk Landskap', app_dashboard_pelan(), route('pengurusan.ePIL.index'), 'fas fa-drafting-compass', ' #7d6608 ') !!}
                 {!! stats_card('Jumlah Pokok Ditanam Setakat ' . date('Y'), app_dashboard_pokok(), route('pengurusan.ktp.index'), 'fas fa-tree', ' #186a3b ') !!}
                 {!! stats_card('Jumlah Rakan Taman', app_dashboard_mib(), route('pengurusan.MIB.index'), 'fas fa-users', ' #4a235a  ') !!}
+                {!! stats_card('Jumlah Entiti Landskap', app_dashboard_entiti(), route('pengurusan.entiti-landskap-unik.index'), 'fas fa-dna', ' #616a6b  ') !!}
             </div>
             <div class="row">
                 <div class="col-lg-6">

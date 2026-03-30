@@ -301,13 +301,25 @@ class UsersController extends Controller
                 // });
             }
             if (config('mail.enabled')) {
-                Mail::send('pengurusan.users.mails.pengaktifan', [
-                    'user' => $user,
-                    'accountType' => $user->roles->pluck('name')->first(), // or however you store role
-                ], function ($message) use ($user) {
-                    $message->to($user->email, $user->name)
-                            ->subject('Akaun Anda Telah Diaktifkan');
-                });
+                try {
+                    Mail::send('pengurusan.users.mails.pengaktifan', [
+                        'user' => $user,
+                        'accountType' => $user->roles->pluck('name')->first(),
+                    ], function ($message) use ($user) {
+                        $message->to($user->email, $user->name)
+                                ->subject('Akaun Anda Telah Diaktifkan');
+                    });
+
+                } catch (\Throwable $e) {
+                    \Log::error('Mail error', [
+                        'message' => $e->getMessage(),
+                        'user_id' => $user->id,
+                        'email' => $user->email
+                    ]);
+
+                    // Optional: show message (only if needed)
+                    // session()->flash('warning', 'Email gagal dihantar');
+                }
             }
         }
 

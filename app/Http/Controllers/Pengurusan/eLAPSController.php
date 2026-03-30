@@ -57,7 +57,7 @@ class eLAPSController extends Controller
                     break;
                 }
             }
-            $id_pemohon = $createdByUserId ?? $eLAP->id_pemohon;
+            $id_pemohon = $eLAP->id_pemohon ?? $createdByUserId;
             $email = User::find($id_pemohon);
             
             if($email && $email->hasRole('Pihak Berkuasa Tempatan')){
@@ -437,7 +437,10 @@ class eLAPSController extends Controller
     {
         $user = $this->getUser();
         if($user->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem')){
-            $eLAPS = eLAPS::findOrFail($id);
+            $eLAPS = eLAPS::when($user->hasRole('Pihak Berkuasa Tempatan'), function ($q) {
+                $q->where('status_permohonan', '1');
+            })
+            ->findOrFail($id);
             return view('pengurusan.eLAPS.edit', compact('eLAPS'));
         }else if($user->hasRole('Pegawai')){
             $eLAPS = eLAPS::findOrFail($id);
@@ -674,7 +677,30 @@ class eLAPSController extends Controller
                 return redirect()->route('pengurusan.eLAPS.index')->with('errorMessage', 'Maklumat permohonan tidak berjaya diserah kepada bahagian');
             }
         } elseif ($request->input('ulasan') === 'draf') {
-            $drafUlasan = $permohonan->update(['status_permohonan' => 7, 'ulasan_lawatan' => $request->input('ulasan_lawatan')]);
+            if ($request->hasFile('file_ulasan')) {
+                $file = $request->file('file_ulasan');
+                
+                if ($file->isValid()) {
+                    $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                    $originalName = preg_replace('/[^A-Za-z0-9\-]/', '_', $originalName);
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = time() . '_' . $originalName . '.' . $extension;
+                    $file->storeAs('public/uploads/eLAPS/' . $folderName, $filename);
+                }
+                $requestData['file_ulasan'] = $filename;
+            }
+            $data = [
+                'status_permohonan' => 7,
+                'ulasan_lawatan' => $request->input('ulasan_lawatan')
+            ];
+
+            if (!empty($requestData['file_ulasan'])) {
+                $data['file_ulasan'] = $requestData['file_ulasan'];
+            }
+
+            // $drafUlasan = $permohonan->update(['status_permohonan' => 7, 'ulasan_lawatan' => $request->input('ulasan_lawatan')]);
+
+            $drafUlasan = $permohonan->update($data);
             // dd($permohonan);
             if($drafUlasan){
                 //email
@@ -683,7 +709,30 @@ class eLAPSController extends Controller
                 return redirect()->route('pengurusan.eLAPS.show', [$permohonan])->with('errorMessage', 'Maklumat ulasan tidak berjaya disimpan');
             }
         } elseif ($request->input('ulasan') === 'hantar') {
-            $hantarUlasan = $permohonan->update(['status_permohonan' => 8, 'ulasan_lawatan' => $request->input('ulasan_lawatan')]);
+            if ($request->hasFile('file_ulasan')) {
+                $file = $request->file('file_ulasan');
+                
+                if ($file->isValid()) {
+                    $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                    $originalName = preg_replace('/[^A-Za-z0-9\-]/', '_', $originalName);
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = time() . '_' . $originalName . '.' . $extension;
+                    $file->storeAs('public/uploads/eLAPS/' . $folderName, $filename);
+                }
+                $requestData['file_ulasan'] = $filename;
+            }
+            $data = [
+                'status_permohonan' => 8,
+                'ulasan_lawatan' => $request->input('ulasan_lawatan')
+            ];
+
+            if (!empty($requestData['file_ulasan'])) {
+                $data['file_ulasan'] = $requestData['file_ulasan'];
+            }
+
+            $hantarUlasan = $permohonan->update($data);
+
+            // $hantarUlasan = $permohonan->update(['status_permohonan' => 8, 'ulasan_lawatan' => $request->input('ulasan_lawatan')]);
             
             if($hantarUlasan){
                 //email to ?

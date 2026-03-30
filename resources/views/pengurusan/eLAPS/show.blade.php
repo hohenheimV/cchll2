@@ -98,6 +98,18 @@
                             )
                         )
                     )
+                    
+                        @php
+                            $folderName = isset($eLAPS->file_ulasan) ? 'eLAPS/'.str_replace('/', '', $eLAPS->referenceNumber).'/'.$eLAPS->file_ulasan : null;
+                            $fileExtension = isset($eLAPS->file_ulasan) ? pathinfo($eLAPS->file_ulasan, PATHINFO_EXTENSION) : '';
+                            $extensionIcon = "https://img.icons8.com/plasticine/100/pdf-2.png";
+                            if ($fileExtension === 'docx') {
+                                $extensionIcon = "https://img.icons8.com/plasticine/100/google-docs--v2.png";
+                            } elseif ($fileExtension === 'pptx') {
+                                $extensionIcon = "https://img.icons8.com/plasticine/100/google-slides.png";
+                            }
+                        @endphp
+                        
                         @if(($eLAPS->status_permohonan > 7) || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6)) <div inert> @endif
                             @php
                                 $ulasan_lawatan = ($eLAPS->status_permohonan > 7 ||  (auth()->user()->hasRole('Pentadbir Sistem|KP/ TKP JLN') || (Auth::user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln)))) ? $eLAPS->ulasan_lawatan : '';
@@ -106,7 +118,36 @@
                             {{ Form::label('ulasan_lawatan', 'Ulasan :', ['class' => 'col-form-label ulasan']) }}
                         
                             {{ Form::textarea('ulasan_lawatan', $ulasan_lawatan, ['class' => 'form-control summernote', 'rows' => 3, 'cols' => 20, 'placeholder' => 'Masukkan butiran jika ada', 'required' => true]) }}
+
+                            @if($folderName != null || $eLAPS->status_permohonan <= 7)
+                            {{ Form::label('file_ulasan', 'Dokumen Ulasan (jika berkaitan) :', ['class' => 'col-form-label ulasan mt-4']) }}
+                            @endif
+                            @if(!(($eLAPS->status_permohonan > 7) || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6)))
+                                {{ Form::file('file_ulasan', [
+                                    'class' => 'form-control d-inline-block ms-2 mb-4', 
+                                    'multiple' => false, 
+                                    'accept' => '.pdf,.docx,.pptx'
+                                ]) }}
+                            @endif
                         @if(($eLAPS->status_permohonan > 7) || (Auth::user()->hasRole('Pegawai') && Auth::user()->bahagian_jln == 6)) </div> @endif
+
+                        <div class="col-md-12">
+                            <div class="d-flex align-items-center">
+                                @if($folderName != null)
+                                <a href="{{ asset('storage/uploads/' . $folderName) }}" target="_blank" class="" style="border: 0px solid #ddd; border-radius: 10px; padding: 10px; display: inline-block; text-align: center; background-color: #fff;" download>
+                                    <div class="product-image">
+                                        <img src="{{ $extensionIcon }}" class="br-5" alt="" style="width: 48px; height: 48px; border-radius: 5px; margin-bottom: 10px;">
+                                    </div>
+                                    <div class="product-image">
+                                        <span class="file-name-1" style="background-color: #008000; padding: 5px 10px; border-radius: 5px; color: #fff; font-weight: 600; display: inline-block; font-size: 14px;">Dokumen Ulasan  <i class="fas fa-download"></i></span>
+                                    </div>
+                                    <div class="product-image">
+                                        <span class="file-name-1">{{ $eLAPS->file_ulasan }}</span>
+                                    </div>
+                                </a>
+                                @endif
+                            </div>
+                        </div>
                     @endif
                     <script>
                         @if($eLAPS->status_permohonan >= 5)
@@ -160,21 +201,23 @@
                         ]) !!}
                     @endif
 
-                    @if(($eLAPS->status_permohonan == 8 || $eLAPS->status_permohonan == 9) && ((auth()->user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln || Auth::user()->bahagian_jln == 6)) || auth()->user()->hasRole('Pentadbir Sistem|KP/ TKP JLN')))
+                    @if(($eLAPS->status_permohonan == 8 || $eLAPS->status_permohonan == 9 || $eLAPS->status_permohonan == 10) && ((auth()->user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln || Auth::user()->bahagian_jln == 6)) || auth()->user()->hasRole('Pentadbir Sistem|KP/ TKP JLN')))
                         {!! Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini Status Permohonan', [
                             'class' => 'btn btn-warning', 
                             'data-toggle'=>'modal', 
                             'data-target'=>'#modalKeputusan', 
-                            'data-elaps-id' => $eLAPS->id
+                            'data-elaps-id' => $eLAPS->id,
+                            'data-text'=> $eLAPS->status_permohonan, 
                         ]) !!}
                     @endif
 
-                    @if(($eLAPS->status_permohonan == 10) && ((auth()->user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln || Auth::user()->bahagian_jln == 6)) || auth()->user()->hasRole('Pentadbir Sistem|KP/ TKP JLN')))
+                    @if(($eLAPS->status_permohonan == 17) && ((auth()->user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == $eLAPS->bahagian_jln || Auth::user()->bahagian_jln == 6)) || auth()->user()->hasRole('Pentadbir Sistem|KP/ TKP JLN')))
                         {!! Form::button('<i class="fas fa-pencil-alt"></i> Kemaskini Status JPT', [
                             'class' => 'btn btn-warning', 
                             'data-toggle'=>'modal', 
                             'data-target'=>'#modalJPT', 
-                            'data-elaps-id' => $eLAPS->id
+                            'data-elaps-id' => $eLAPS->id,
+                            'data-text'=> $eLAPS->status_permohonan, 
                         ]) !!}
                     @endif
 

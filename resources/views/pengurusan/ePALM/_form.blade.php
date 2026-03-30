@@ -312,7 +312,7 @@
                                         // Add each Negeri to the dropdown
                                         $('#negeri').append('<option value="' + value.kod_negeri + '">' + value.nama_negeri + '</option>');
                                     });
-                                    var negeriSelected = "{{ isset($ePALM->negeri_taman) ? $ePALM->negeri_taman : '' }}"; // Assuming you have $ePALM->negeri
+                                    var negeriSelected = "{{ isset($ePALM->negeri_taman) ? $ePALM->negeri_taman : ( $pbt->state ?? '') }}"; // Assuming you have $ePALM->negeri
                                     if (negeriSelected) {
                                         $('#negeri').val(negeriSelected).trigger('change');
                                     }

@@ -719,7 +719,8 @@
                 $.each(data, function(key, value) {
                     $('#negeri').append('<option value="' + value.kod_negeri + '">' + value.nama_negeri + '</option>');
                 });
-                var negeriSelected = "{{ isset($MIB->negeri) ? $MIB->negeri : '' }}"; // Assuming you have $ePALM->negeri
+                // var negeriSelected = "{{ isset($MIB->negeri) ? $MIB->negeri : '' }}"; // Assuming you have $ePALM->negeri
+                var negeriSelected = "{{ $MIB->negeri ?? ($pbt->state ?? '') }}";
                 if (negeriSelected) {
                     // $('#negeri').val(negeriSelected);
                     $('#negeri').val(negeriSelected).trigger('change');
@@ -744,7 +745,8 @@
             // });
 
             $('#pbt').empty().append('<option value="">Pilih PBT</option>');
-            const selectedPBT = "{{ $pbt->pbt_name ?? isset($MIB->pbt) ? $MIB->pbt : '' }}";
+            // const selectedPBT = "{{-- $pbt->pbt_name ?? isset($MIB->pbt) ? $MIB->pbt : '' --}}";
+            var selectedPBT = "{{ $MIB->pbt ?? ($pbt->pbt_name ?? '') }}";
             $.getJSON('/data/pbt/' + negeriText, function(data) {
                 $.each(data, function(index, pbt) {
                     const option = $('<option>', {

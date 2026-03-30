@@ -123,6 +123,14 @@
                         ]) !!}
                     </li>
                     @endif
+                    @if((Auth::user()->hasRole('Pentadbir Sistem')) || !(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [1, 5, 7])))
+                    <li class="nav-item">
+                        {!! Html::buttonSidebarNavLink('eNTITI', $icon['eNTITI'], [
+                            'onclick' => "window.location='" . route('pengurusan.entiti-landskap-unik.index') . "'",
+                            'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.entiti-landskap-unik.'), Html::tooltip($hoverText['eNTITI']) 
+                        ]) !!}
+                    </li>
+                    @endif
                     <!-- <li class="nav-item">
                         <button onclick="window.location='http://127.0.0.1:8000/pengurusan/MIB'" class="nav-link btn btn-block btn-link text-left {{ Html::active('pengurusan.MIB.') }}">
                             <img src="{{ asset('storage/images/logo.png') }}" alt="" style="height:30px;">
@@ -209,14 +217,14 @@
                         </li>
                         @endif
                     @endforeach
-                    @if((Auth::user()->hasRole('Pentadbir Sistem')) || !(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [1, 5, 7])))
+                    {{-- @if((Auth::user()->hasRole('Pentadbir Sistem')) || !(Auth::user()->hasRole('Pegawai') && !in_array(Auth::user()->bahagian_jln, [1, 5, 7])))
                     <li class="nav-item">
                         {!! Html::buttonSidebarNavLink('eNTITI', $icon['eNTITI'], [
                             'onclick' => "window.location='" . route('pengurusan.entiti-landskap-unik.index') . "'",
                             'class' => 'nav-link btn btn-block btn-link text-left ' . Html::active('pengurusan.entiti-landskap-unik.'), Html::tooltip($hoverText['eNTITI']) 
                         ]) !!}
                     </li>
-                    @endif
+                    @endif --}}
                     <li class="nav-item">
                         {!! Html::buttonSidebarNavLink('eMAP JLN', $icon['eMAP'], [
                             'onclick' => "window.open('https://elandskap.jln.gov.my/emap', '_blank')",

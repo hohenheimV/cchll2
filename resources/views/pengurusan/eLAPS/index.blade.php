@@ -72,7 +72,7 @@
                                     ['id' => 'Pengesahan Permohonan', 'label' => 'bg-primary'], //3
                                     ['id' => 'Permohonan ditolak', 'label' => 'bg-danger'], //4
                                     ['id' => 'Serahan Permohonan ke Bahagian', 'label' => 'bg-secondary'], //5
-                                    ['id' => 'Lawatan Kawasan Tapak', 'label' => 'bg-success'], //6
+                                    ['id' => 'Permohonan sedang diproses', 'label' => 'bg-success'], //6
                                     ['id' => 'Draf Ulasan', 'label' => 'bg-warning'], //7
                                     ['id' => 'Ulasan diterima', 'label' => 'bg-info'], //8
                                     ['id' => 'Permohonan dalam pertimbangan', 'label' => 'bg-primary'], //9
@@ -83,6 +83,7 @@
                                     ['id' => 'Projek Siap', 'label' => 'bg-success'], //14
                                     ['id' => 'Lulus J/kuasa Penilaian Tapak', 'label' => 'bg-success'], //15
                                     ['id' => 'Tidak Lulus J/kuasa Penilaian Tapak', 'label' => 'bg-danger'], //16
+                                    ['id' => 'Projek disenaraikan dalam permohonan JLN', 'label' => 'bg-teal'], //17
                                 ])
                                 @php($status_count = count($status_pembangunan))
 
@@ -159,19 +160,21 @@
                                                             'data-elaps-id' => $permohonan->id, 
                                                             Html::tooltip('Serahan kepada bahagian')
                                                         ]) !!} --}}
-                                                    @elseif(($permohonan->status_permohonan == 8 || $permohonan->status_permohonan == 9) && (Auth::user()->hasRole('Pentadbir Sistem|Pegawai')))
+                                                    @elseif(($permohonan->status_permohonan == 8 || $permohonan->status_permohonan == 9 || $permohonan->status_permohonan == 10) && (Auth::user()->hasRole('Pentadbir Sistem|Pegawai')))
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
                                                             ['class'=>'btn btn-warning btn-sm', Html::tooltip('Kemaskini Status Permohonan'),
                                                             'data-toggle'=>'modal', 
                                                             'data-target'=>'#modalKeputusan', 
-                                                            'data-elaps-id' => $permohonan->id
+                                                            'data-elaps-id' => $permohonan->id,
+                                                            'data-text'=> $permohonan->status_permohonan, 
                                                         ]) !!}
-                                                    @elseif(($permohonan->status_permohonan == 10) && (Auth::user()->hasRole('Pentadbir Sistem|Pegawai')))
+                                                    @elseif(($permohonan->status_permohonan == 10 || $permohonan->status_permohonan == 17) && (Auth::user()->hasRole('Pentadbir Sistem|Pegawai')))
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
                                                             ['class'=>'btn btn-warning btn-sm', Html::tooltip('Kemaskini Status JPT'),
                                                             'data-toggle'=>'modal', 
                                                             'data-target'=>'#modalJPT', 
-                                                            'data-elaps-id' => $permohonan->id
+                                                            'data-elaps-id' => $permohonan->id,
+                                                            'data-text'=> $permohonan->status_permohonan, 
                                                         ]) !!}
                                                     @elseif(($permohonan->status_permohonan == 15 || $permohonan->status_permohonan == 12) && ((Auth::user()->hasRole('Pihak Berkuasa Tempatan|Pentadbir Sistem') || Auth::user()->id == $permohonan->id_pemohon) || (Auth::user()->hasRole('Pegawai') && (Auth::user()->bahagian_jln == 6 || Auth::user()->bahagian_jln == $permohonan->bahagian_jln))))
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
@@ -256,24 +259,26 @@
                                                             !!}
                                                         @endif
 
-                                                        @if($permohonan->status_permohonan >= 11)
+                                                        @if($permohonan->status_permohonan >= 10)
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
                                                             [
                                                                 'class'=>'btn btn-warning btn-sm', Html::tooltip('Kemaskini Status Permohonan'),
                                                                 'data-toggle'=>'modal', 
                                                                 'data-target'=>'#modalKeputusan', 
-                                                                'data-elaps-id' => $permohonan->id
+                                                                'data-elaps-id' => $permohonan->id,
+                                                                'data-text'=> $permohonan->status_permohonan, 
                                                             ]) 
                                                         !!}
                                                         @endif
 
-                                                        @if($permohonan->status_permohonan > 11 || $permohonan->status_permohonan >= 12)
+                                                        @if(($permohonan->status_permohonan > 11 || $permohonan->status_permohonan >= 12) && $permohonan->status_permohonan != 17)
                                                         {!! Form::button('<i class="fas fa-pencil-alt"></i>', 
                                                             [
                                                                 'class'=>'btn btn-warning btn-sm', Html::tooltip('Kemaskini Status JPT'),
                                                                 'data-toggle'=>'modal', 
                                                                 'data-target'=>'#modalJPT', 
-                                                                'data-elaps-id' => $permohonan->id
+                                                                'data-elaps-id' => $permohonan->id,
+                                                                'data-text'=> $permohonan->status_permohonan, 
                                                             ]) 
                                                         !!}
                                                         @endif

@@ -13,7 +13,18 @@
 
                 {{ Form::open(['route' =>['pengurusan.entiti-landskap-unik.store'], 'enctype'=>'multipart/form-data']) }}
                 <div class="card-body table-hardscape form-hardscape text-sm">
+                    @if(isset($MaklumatPenggunaPbt))
+                        <style>
+                            #pbt {
+                                pointer-events: none;
+                                background-color:rgb(215, 215, 215); /* Light grey background for input/select */
+                                color:rgb(65, 60, 60); /* Light grey text color */
+                                cursor: not-allowed; /* Change the cursor to indicate it's not clickable */
+                                pointer-events: none; /* Ensure no interactions are possible */
+                            }
 
+                        </style>
+                    @endif
                     @include('pengurusan.entiti-landskap-unik._form')
                 </div>
                 <div class="card-footer">

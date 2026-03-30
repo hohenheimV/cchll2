@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Pengurusan;
 use App\Http\Controllers\Controller;
 use App\Model\EntitiLandskapUnik;
 use Illuminate\Http\Request;
+use App\User; // Import the User model
+use App\Model\MaklumatPenggunaPbt; // Import the MaklumatPenggunaPbt model
+use App\Model\Negeri;
 
 class EntitiLandskapUnikController extends Controller
 {
@@ -23,14 +26,32 @@ class EntitiLandskapUnikController extends Controller
 
     public function index()
     {
-        $entitiLandskapUnik = EntitiLandskapUnik::latest()->paginate(EntitiLandskapUnik::count());
+        $userId = auth()->id();
+        $user = User::find($userId);
+        if($user->hasRole('Pihak Berkuasa Tempatan')){
+            $id_pbt = $user->bahagian_jln;
+            $pbt = MaklumatPenggunaPbt::where('id', '=', $id_pbt)->first();
+            $totalCount = EntitiLandskapUnik::where('pbt', 'ILIKE', '%' . $pbt->pbt_name . '%')->count();
+            $entitiLandskapUnik = EntitiLandskapUnik::latest()->where('pbt', 'ILIKE', '%' . $pbt->pbt_name . '%')->paginate($totalCount);
+        }else{
+            $entitiLandskapUnik = EntitiLandskapUnik::latest()->paginate(EntitiLandskapUnik::count());
+        }
         // dd($entitiLandskapUnik);
         return view('pengurusan.entiti-landskap-unik.index', ['entitiLandskapUnik' => $entitiLandskapUnik]);
     }
 
     public function create()
-    {
-        return view('pengurusan.entiti-landskap-unik.create');
+    {        
+        $userId = auth()->id();
+        $user = User::find($userId);
+        $MaklumatPenggunaPbt = null; 
+        if($user->hasRole('Pihak Berkuasa Tempatan')){
+            $email = $user->bahagian_jln;
+            $MaklumatPenggunaPbt = MaklumatPenggunaPbt::where('id', '=', $email)->first();
+            $MaklumatPenggunaPbt->state = Negeri::where('kod_negeri', $MaklumatPenggunaPbt->state)
+            ->value('nama_negeri');
+        }
+        return view('pengurusan.entiti-landskap-unik.create', compact('MaklumatPenggunaPbt'));
     }
 
     public function store(Request $request)
@@ -61,9 +82,9 @@ class EntitiLandskapUnikController extends Controller
         }
         if (!empty($filenames)) {
             $requestData['gambar'] = json_encode($filenames);
+            $newRecord->gambar = $requestData['gambar'];
         }
 
-        $newRecord->gambar = $requestData['gambar'];
         $newRecord->save();
         
         if($newRecord){

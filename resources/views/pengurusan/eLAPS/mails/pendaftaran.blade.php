@@ -27,17 +27,18 @@
         ['id' => 'Pengesahan Permohonan', 'label' => 'bg-primary'], //3
         ['id' => 'Permohonan ditolak', 'label' => 'bg-danger'], //4
         ['id' => 'Serahan Permohonan ke Bahagian', 'label' => 'bg-secondary'], //5
-        ['id' => 'Lawatan Kawasan Tapak', 'label' => 'bg-success'], //6
+        ['id' => 'Permohonan sedang diproses', 'label' => 'bg-success'], //6
         ['id' => 'Draf Ulasan', 'label' => 'bg-warning'], //7
         ['id' => 'Ulasan diterima', 'label' => 'bg-info'], //8
         ['id' => 'Permohonan dalam pertimbangan', 'label' => 'bg-primary'], //9
         ['id' => 'Permohonan Lengkap', 'label' => 'bg-success'], //10
         ['id' => 'Permohonan Tidak Lengkap', 'label' => 'bg-danger'], //11
-        ['id' => 'Projek Dalam Pelaksanaan', 'label' => 'bg-secondary'], //12
+        ['id' => 'Projek dalam pelaksanaan', 'label' => 'bg-secondary'], //12
         ['id' => 'Projek Batal', 'label' => 'bg-dark'], //13
         ['id' => 'Projek Siap', 'label' => 'bg-success'], //14
         ['id' => 'Lulus J/kuasa Penilaian Tapak', 'label' => 'bg-success'], //15
         ['id' => 'Tidak Lulus J/kuasa Penilaian Tapak', 'label' => 'bg-danger'], //16
+        ['id' => 'Projek disenaraikan dalam permohonan JLN', 'label' => 'bg-teal'], //17
     ])
     <tr>
         <th style="{!! $style !!}">Status</th>

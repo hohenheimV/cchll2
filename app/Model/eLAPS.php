@@ -58,7 +58,8 @@ class eLAPS extends Model implements Auditable
         'bahagian_jln', 
         'ulasan_lawatan', 
         'status_permohonan', 
-        'file_path'
+        'file_path', 
+        'file_ulasan'
     ];
 
     /**

@@ -118,7 +118,14 @@ class MIBController extends Controller
      */
     public function create()
     {
-        return view('pengurusan.MIB.create', ['status' => $this->statusArr]);
+        $userId = auth()->id();
+        $user = User::find($userId);
+        $pbt = null; 
+        if($user->hasRole('Pihak Berkuasa Tempatan')){
+            $email = $user->bahagian_jln;
+            $pbt = MaklumatPenggunaPbt::where('id', '=', $email)->first();
+        }
+        return view('pengurusan.MIB.create', ['status' => $this->statusArr, 'pbt' => $pbt]);
     }
 
     /**

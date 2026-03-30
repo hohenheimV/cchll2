@@ -157,7 +157,7 @@
                                         // Add each Negeri to the dropdown
                                         $('#negeri').append('<option value="' + value.kod_negeri + '">' + value.nama_negeri + '</option>');
                                     });
-                                    var negeriSelected = "{{ isset($ePIL->negeri_pelan) ? $ePIL->negeri_pelan : '' }}"; // Assuming you have $ePIL->negeri
+                                    var negeriSelected = "{{ isset($ePIL->negeri_pelan) ? $ePIL->negeri_pelan : ( $pbt->state ?? '') }}"; // Assuming you have $ePIL->negeri
                                     if (negeriSelected) {
                                         $('#negeri').val(negeriSelected).trigger('change');
                                     }

@@ -454,7 +454,8 @@
                                 // Add each Negeri to the dropdown
                                 $('#negeri').append('<option value="' + value.nama_negeri + '">' + value.nama_negeri + '</option>');
                             });
-                            var negeriSelected = "{{ isset($negeri) ? $negeri : '' }}"; // Assuming you have $entitiLandskapUnik->negeri
+                            // var negeriSelected = "{{ isset($negeri) ? $negeri : '' }}"; // Assuming you have $entitiLandskapUnik->negeri
+                            var negeriSelected = "{{ $negeri ?? ($MaklumatPenggunaPbt->state ?? '') }}";
                             if (negeriSelected) {
                                 $('#negeri').val(negeriSelected).trigger('change');
                             }
@@ -484,7 +485,8 @@
                         // });
 
                         $('#pbt').empty().append('<option value="">Pilih PBT</option>');
-                        const selectedPBT = "{{ $pbt->pbt_name ?? isset($pbt) ? strtoupper($pbt) : '' }}";
+                        // const selectedPBT = "{{ $pbt->pbt_name ?? isset($pbt) ? strtoupper($pbt) : '' }}";
+                        const selectedPBT = "{{ $pbt ?? ($MaklumatPenggunaPbt->pbt_name ?? '') }}";
                         $.getJSON('/data/pbt/' + negeriId, function(data) {
                             $.each(data, function(index, pbt) {
                                 const option = $('<option>', {

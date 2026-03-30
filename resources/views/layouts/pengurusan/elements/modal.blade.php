@@ -93,10 +93,11 @@
             <div class="modal-body text-center">
                 <p><strong>Sila pilih Status Permohonan:</strong></p>
                 <div class="form-group">
-                    {!! Form::select('keputusan', [
+                    {{-- {!! Form::select('keputusan', [
                         '10' => 'Lengkap',
                         '11' => 'Tidak Lengkap'
-                    ], null, ['class' => 'form-control']) !!}
+                    ], null, ['class' => 'form-control']) !!} --}}
+                    {!! Form::select('keputusan', [], null, ['class' => 'form-control', 'id' => 'statuskeputusanSelect']) !!}
                     {!! Form::hidden('eLAPS_id', null, ['id' => 'eLAPS_idK']) !!}
                 </div>
             </div>
@@ -123,10 +124,11 @@
             <div class="modal-body text-center">
                 <p><strong>Sila pilih Status J/kuasa Penilaian Tapak:</strong></p>
                 <div class="form-group">
-                    {!! Form::select('JPT', [
+                    {{-- {!! Form::select('JPT', [
                         '15' => 'Lulus J/kuasa Penilaian Tapak',
                         '16' => 'Tidak Lulus J/kuasa Penilaian Tapak'
-                    ], null, ['class' => 'form-control']) !!}
+                    ], null, ['class' => 'form-control']) !!} --}}
+                    {!! Form::select('JPT', [], null, ['class' => 'form-control', 'id' => 'statusJPTSelect']) !!}
                     {!! Form::hidden('eLAPS_id', null, ['id' => 'eLAPS_idK']) !!}
                 </div>
             </div>
@@ -556,6 +558,19 @@
             let url = document.querySelector('#modalKeputusan form').getAttribute('action');
             document.querySelector('#modalKeputusan form').setAttribute('action', url + '/' + elapsId);
             // alert(document.querySelector('#modalKeputusan form').getAttribute('action'));
+
+            var text = button.data('text');
+            var select = $('#statuskeputusanSelect');
+            select.empty();
+            if (text > 7 && text != 10) {
+                select.append('<option value="10">Lengkap</option>');
+            }
+            if (text > 7 && text != 11) {
+                select.append('<option value="11">Tidak Lengkap</option>');
+            }
+            if ((text > 11 && text != 17) || text === 10) {
+                select.append('<option value="17">Projek disenaraikan dalam permohonan JLN</option>');
+            }
         });
 
         $('#modalJPT').on('show.bs.modal', function (event) {
@@ -567,6 +582,16 @@
             let url = document.querySelector('#modalJPT form').getAttribute('action');
             document.querySelector('#modalJPT form').setAttribute('action', url + '/' + elapsId);
             // alert(document.querySelector('#modalJPT form').getAttribute('action'));
+
+            var text = button.data('text');
+            var select = $('#statusJPTSelect');
+            select.empty();
+            if ((text > 10  && text != 15) || text === 17) {
+                select.append('<option value="15">Lulus J/kuasa Penilaian Tapak</option>');
+            }
+            if ((text > 10  && text != 16) || text === 17) {
+                select.append('<option value="16">Tidak Lulus J/kuasa Penilaian Tapak</option>');
+            }
         });
 
         $('#modalStatusProjek').on('show.bs.modal', function (event) {
@@ -581,12 +606,14 @@
             var text = button.data('text');
             var select = $('#statusProjekSelect');
             select.empty();
-            if (text === 15) {
+            if ((text > 10 && text != 12) || text === 15) {
                 select.append('<option value="12">Projek Dalam Pelaksanaan</option>');
             }
-            if (text >= 10) {
+            if (text > 10 && text != 14) {
+                select.append('<option value="13">Projek Siap</option>');
+            }
+            if (text > 10 && text != 13) {
                 select.append('<option value="13">Projek Batal</option>');
-                select.append('<option value="14">Projek Siap</option>');
             }
         });
 

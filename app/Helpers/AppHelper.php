@@ -190,6 +190,12 @@ if (!function_exists('app_dashboard_industri')) {
 
 if (!function_exists('app_dashboard_entiti')) {
     function app_dashboard_entiti($keyword = null){
+        if(Auth::user()->hasRole('Pihak Berkuasa Tempatan')){
+            $id_pbt = Auth::user()->bahagian_jln;
+            $data = MaklumatPenggunaPbt::where('id', $id_pbt)->latest()->first();
+            $count = EntitiLandskapUnik::where('pbt', 'ILIKE', '%' . $data->pbt_name . '%')->count();
+            return number_format($count);
+        }
         return number_format(EntitiLandskapUnik::when($keyword, function ($q) use ($keyword) {
             $q->where(function ($query) use ($keyword) {
 				$query->where('jenis_entiti', $keyword);    

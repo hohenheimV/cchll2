@@ -30,7 +30,9 @@
                                     <th class="w-1">Bil.</th>
                                     <th class="w-10">Nama Entiti</th>
                                     <th>Keterangan</th>
+                                    @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|KP/ TKP JLN'))
                                     <th class="text-center w-10">PBT</th>
+                                    @endif
                                     <th class="text-center w-10">Lokasi</th>
                                     <th class="w-15">Gambar</th>
                                     <th class="text-center w-10">Anggaran Nilai</th>
@@ -63,7 +65,9 @@
                                             $dataPbt = [];
                                         }
                                     ?>
+                                    @if(Auth::user()->hasRole('Pegawai|Pentadbir Sistem|KP/ TKP JLN'))
                                     <td class="text-center">{{ isset($pbt) ? strtoupper($pbt) : strtoupper($entiti->pbt) }}</td>
+                                    @endif
                                     <td class="text-center">{{ strtoupper($entiti->lokasi) }}</td>
                                     <td class="p-0">
                                         <?php

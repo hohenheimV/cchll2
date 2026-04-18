@@ -696,11 +696,11 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                            </di
-                    </dv>
+                            </div>
+                        </div>
                             <!-- <input id="namaYDP" type="text" class="form-control" name="namaYDP">
                             <input id="emailYDP" type="text" class="form-control" name="emailYDP"> -->
-                        </div>iv>
+                    </div>
 
                     <div id="pengesahan" style="display: none;">
                         <div class="row">

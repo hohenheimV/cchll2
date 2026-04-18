@@ -6,7 +6,8 @@
 /public/storage
 /storage/*.key
 /vendor
-.env
+/public
+# .env
 .env.backup
 .phpunit.result.cache
 Homestead.json
@@ -16,3 +17,19 @@ yarn-error.log
 tpbk.code-workspace
 
 *copy*
+webhook_log.txt
+logfile.log
+listofuser.txt
+git_pull.sh
+git_pull.bat
+git_pull_log.txt
+composer.lock
+composer.json
+.env
+composer.lock
+composer.json
+vendor/autoload.php
+storage/framework/laravel-excel/laravel-excel-BVAXtQb7U8TreTTaSUxTrD3UgGWPosPO.tmp
+storage/framework/laravel-excel/laravel-excel-MP5bOJsxixvHZqQl19kXWPaUaxyudeET.tmp
+storage/framework/laravel-excel/laravel-excel-nWYnp7BjmHz975qtyqi9vrXu5LZFJlZ4.tmp
+.vscode/settings.json

@@ -1,0 +1,22 @@
+[
+    {
+        "id": 0,
+        "name": "MAJLIS BANDARAYA PULAU PINANG",
+        "name_short": "MBPP",
+        "address1": "PARAS 17, KOMTAR",
+        "address2": "",
+        "postcode": "10675",
+        "locality": "PULAU PINANG",
+        "state": "PULAU PINANG"
+    },
+    {
+        "id": 1,
+        "name": "MAJLIS BANDARAYA SEBERANG PERAI",
+        "name_short": "MBSP",
+        "address1": "JALAN PERDA UTAMA,",
+        "address2": "",
+        "postcode": "14000",
+        "locality": "BUKIT MERTAJAM",
+        "state": "PULAU PINANG"
+    }
+]

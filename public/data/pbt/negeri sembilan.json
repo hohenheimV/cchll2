@@ -1,0 +1,72 @@
+[
+    {
+        "id": 0,
+        "name": "MAJLIS BANDARAYA SEREMBAN",
+        "name_short": "MBS",
+        "address1": "WISMA MBS,, PERSIARAN FOREST HEIGHTS 1,",
+        "address2": "JALAN SEREMBAN - TAMPIN,",
+        "postcode": "70450",
+        "locality": "SEREMBAN",
+        "state": "NEGERI SEMBILAN"
+    },
+    {
+        "id": 1,
+        "name": "MAJLIS DAERAH KUALA PILAH",
+        "name_short": "MDKP",
+        "address1": "JALAN PERPATEH",
+        "address2": "",
+        "postcode": "72009",
+        "locality": "KUALA PILAH",
+        "state": "NEGERI SEMBILAN"
+    },
+    {
+        "id": 2,
+        "name": "MAJLIS DAERAH TAMPIN",
+        "name_short": "MDTAMPIN",
+        "address1": "PEJABAT MAJLIS DAERAH TAMPIN",
+        "address2": "",
+        "postcode": "73000",
+        "locality": "TAMPIN",
+        "state": "NEGERI SEMBILAN"
+    },
+    {
+        "id": 3,
+        "name": "MAJLIS PERBANDARAN PORT DICKSON",
+        "name_short": "MPPD",
+        "address1": "KM 1, JALAN PANTAI",
+        "address2": "",
+        "postcode": "71009",
+        "locality": "PORT DICKSON",
+        "state": "NEGERI SEMBILAN"
+    },
+    {
+        "id": 4,
+        "name": "MAJLIS DAERAH JELEBU",
+        "name_short": "MDJELEBU",
+        "address1": "JALAN KUALA KLAWANG - SIMPANG PERTANG",
+        "address2": "",
+        "postcode": "71600",
+        "locality": "KUALA KELAWANG",
+        "state": "NEGERI SEMBILAN"
+    },
+    {
+        "id": 5,
+        "name": "MAJLIS DAERAH REMBAU",
+        "name_short": "MDR",
+        "address1": "JALAN DATO' MAHARAJA LELA",
+        "address2": "",
+        "postcode": "71309",
+        "locality": "REMBAU",
+        "state": "NEGERI SEMBILAN"
+    },
+    {
+        "id": 6,
+        "name": "MAJLIS PERBANDARAN JEMPOL",
+        "name_short": "MPJL",
+        "address1": "MAJLIS PERBANDARAN JEMPOL",
+        "address2": "",
+        "postcode": "72120",
+        "locality": "BANDAR SERI JEMPOL",
+        "state": "NEGERI SEMBILAN"
+    }
+]

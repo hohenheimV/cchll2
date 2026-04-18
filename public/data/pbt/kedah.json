@@ -1,0 +1,120 @@
+[
+    {
+        "id": 0,
+        "name": "MAJLIS BANDARAYA ALOR SETAR",
+        "name_short": "MBAS",
+        "address1": "JALAN KOLAM AIR",
+        "address2": "",
+        "postcode": "05675",
+        "locality": "ALOR SETAR",
+        "state": "KEDAH"
+    },
+    {
+        "id": 1,
+        "name": "MAJLIS PERBANDARAN SUNGAI PETANI",
+        "name_short": "MPSPK",
+        "address1": "MENARA MPSPK",
+        "address2": "",
+        "postcode": "08000",
+        "locality": "SUNGAI PETANI",
+        "state": "KEDAH"
+    },
+    {
+        "id": 2,
+        "name": "MAJLIS PERBANDARAN KULIM",
+        "name_short": "MPKK",
+        "address1": "NO, 1, LEBUH BANDAR 2, BANDAR PUTRA",
+        "address2": "",
+        "postcode": "09000",
+        "locality": "KULIM",
+        "state": "KEDAH"
+    },
+    {
+        "id": 3,
+        "name": "MAJLIS DAERAH BALING",
+        "name_short": "MDBALING",
+        "address1": "MAJLIS DAERAH BALING",
+        "address2": "",
+        "postcode": "09100",
+        "locality": "BALING",
+        "state": "KEDAH"
+    },
+    {
+        "id": 4,
+        "name": "MAJLIS PERBANDARAN KUBANG PASU",
+        "name_short": "MPKPASU",
+        "address1": "KOMPLEKS PENTADBIRAN DAERAH,",
+        "address2": "",
+        "postcode": "06000",
+        "locality": "JITRA",
+        "state": "KEDAH"
+    },
+    {
+        "id": 5,
+        "name": "MAJLIS DAERAH YAN",
+        "name_short": "MDYAN",
+        "address1": "PEJABAT MAJLIS DAERAH YAN",
+        "address2": "",
+        "postcode": "06900",
+        "locality": "YAN",
+        "state": "KEDAH"
+    },
+    {
+        "id": 6,
+        "name": "MAJLIS DAERAH SIK",
+        "name_short": "MDSIK",
+        "address1": "MAJLIS DAERAH SIK",
+        "address2": "",
+        "postcode": "08200",
+        "locality": "SIK",
+        "state": "KEDAH"
+    },
+    {
+        "id": 7,
+        "name": "MAJLIS DAERAH PENDANG",
+        "name_short": "MDPENDANG",
+        "address1": "WISMA MDP",
+        "address2": "",
+        "postcode": "06700",
+        "locality": "PENDANG",
+        "state": "KEDAH"
+    },
+    {
+        "id": 8,
+        "name": "MAJLIS DAERAH PADANG TERAP",
+        "name_short": "MDPTERAP",
+        "address1": "MAJLIS DAERAH PADANG TERAP",
+        "address2": "",
+        "postcode": "06300",
+        "locality": "KUALA NERANG",
+        "state": "KEDAH"
+    },
+    {
+        "id": 9,
+        "name": "MAJLIS DAERAH BANDAR BAHARU",
+        "name_short": "MDBB",
+        "address1": "MAJLIS DAERAH BANDAR BAHARU",
+        "address2": "",
+        "postcode": "09800",
+        "locality": "SERDANG",
+        "state": "KEDAH"
+    },
+    {
+        "id": 10,
+        "name": "MAJLIS PERBANDARAN LANGKAWI BANDARAYA PELANCONGAN",
+        "name_short": "MPL",
+        "address1": "MAJLIS PERBANDARAN LANGKAWI, BANDARAYA PELANCONGAN",
+        "address2": "",
+        "postcode": "07000",
+        "locality": "LANGKAWI",
+        "state": "KEDAH"
+    },
+    {
+        "id": 11,
+        "name": "PBT TAMAN PERINDUSTRIAN HI-TECH KULIM",
+        "address1": "LOT 01-02 ADMINISTRATIVE CENTRE, KULIM HI-TECH PARK",
+        "address2": "",
+        "postcode": "",
+        "state": "KEDAH"
+    }
+]

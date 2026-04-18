@@ -1,0 +1,122 @@
+[
+    {
+        "id": 0,
+        "name": "MAJLIS BANDARAYA SHAH ALAM",
+        "name_short": "MBSA",
+        "address1": "TINGKAT 1, WISMA MBSA",
+        "address2": "",
+        "postcode": "40706",
+        "locality": "SHAH ALAM",
+        "state": "SELANGOR"
+    },
+    {
+        "id": 1,
+        "name": "MAJLIS BANDARAYA PETALING JAYA",
+        "name_short": "MBPJ",
+        "address1": "",
+        "address2": "",
+        "postcode": "46675",
+        "locality": "PETALING JAYA",
+        "state": "SELANGOR"
+    },
+    {
+        "id": 2,
+        "name": "MAJLIS BANDARAYA DIRAJA KLANG",
+        "name_short": "MBDK",
+        "address1": "BANGUNAN SULTAN ALAM SHAH, JALAN PERBANDARAN",
+        "address2": "",
+        "postcode": "41675",
+        "locality": "KLANG",
+        "state": "SELANGOR"
+    },
+    {
+        "id": 3,
+        "name": "MAJLIS PERBANDARAN AMPANG JAYA",
+        "name_short": "MPAJ",
+        "address1": "MENARA MPAJ, PERSIARAN MPAJ",
+        "address2": "",
+        "postcode": "55100",
+        "locality": "KUALA LUMPUR",
+        "state": "SELANGOR"
+    },
+    {
+        "id": 4,
+        "name": "MAJLIS BANDARAYA SUBANG JAYA",
+        "name_short": "MPSJ",
+        "address1": "PERSIARAN PERPADUAN, ",
+        "address2": "",
+        "postcode": "47610",
+        "locality": "SUBANG JAYA",
+        "state": "SELANGOR"
+    },
+    {
+        "id": 5,
+        "name": "MAJLIS PERBANDARAN SELAYANG",
+        "name_short": "MPS",
+        "address1": "MENARA MPS, PERSIARAN 3",
+        "address2": "",
+        "postcode": "68100",
+        "locality": "BATU CAVES",
+        "state": "SELANGOR"
+    },
+    {
+        "id": 6,
+        "name": "MAJLIS PERBANDARAN KAJANG",
+        "name_short": "MPKJ",
+        "address1": "MENARA MPKJ",
+        "address2": "",
+        "postcode": "43000",
+        "locality": "KAJANG",
+        "state": "SELANGOR"
+    },
+    {
+        "id": 7,
+        "name": "MAJLIS PERBANDARAN KUALA SELANGOR",
+        "name_short": "MPKS",
+        "address1": "JALAN MAJLIS",
+        "address2": "",
+        "postcode": "45000",
+        "locality": "KUALA SELANGOR",
+        "state": "SELANGOR"
+    },
+    {
+        "id": 8,
+        "name": "MAJLIS PERBANDARAN KUALA LANGAT",
+        "name_short": "MPKL",
+        "address1": "PERSIARAN MAJLIS",
+        "address2": "",
+        "postcode": "42700",
+        "locality": "BANTING",
+        "state": "SELANGOR"
+    },
+    {
+        "id": 9,
+        "name": "MAJLIS PERBANDARAN HULU SELANGOR",
+        "name_short": "MPHS",
+        "address1": "JALAN BUKIT KERAJAAN",
+        "address2": "",
+        "postcode": "44000",
+        "locality": "KUALA KUBU BHARU",
+        "state": "SELANGOR"
+    },
+    {
+        "id": 10,
+        "name": "MAJLIS DAERAH SABAK BERNAM",
+        "name_short": "MDSB",
+        "address1": "SUNGAI BESAR",
+        "address2": "",
+        "postcode": "45300",
+        "locality": "SUNGAI BESAR",
+        "state": "SELANGOR"
+    },
+    {
+        "id": 11,
+        "name": "MAJLIS PERBANDARAN SEPANG",
+        "name_short": "MPSEPANG",
+        "address1": "PERSIARAN SEMARAK API",
+        "address2": "",
+        "postcode": "63200",
+        "locality": "CYBERJAYA",
+        "state": "SELANGOR"
+    }
+]

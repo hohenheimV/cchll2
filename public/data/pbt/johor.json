@@ -1,0 +1,162 @@
+[
+    {
+        "id": 0,
+        "name": "MAJLIS BANDARAYA JOHOR BAHRU",
+        "name_short": "MBJB",
+        "address1": "NO. 1 JALAN LINGKARAN DALAM",
+        "address2": "",
+        "postcode": "80300",
+        "locality": "JOHOR BAHRU",
+        "state": "JOHOR"
+    },
+    {
+        "id": 1,
+        "name": "MAJLIS BANDARAYA ISKANDAR PUTERI",
+        "name_short": "MBIP",
+        "address1": "BANGUNAN TEMENGGONG IBRAHIM, JALAN MEDINI SENTRAL 9,",
+        "address2": "BANDAR MEDINI ISKANDAR",
+        "postcode": "79250",
+        "locality": "ISKANDAR PUTERI",
+        "state": "JOHOR"
+    },
+    {
+        "id": 2,
+        "name": "MAJLIS PERBANDARAN KULAI",
+        "name_short": "MPKULAI",
+        "address1": "JALAN PEJABAT KERAJAAN",
+        "address2": "",
+        "postcode": "81000",
+        "locality": "KULAI",
+        "state": "JOHOR"
+    },
+    {
+        "id": 3,
+        "name": "MAJLIS PERBANDARAN MUAR",
+        "name_short": "MPMUAR",
+        "address1": "JALAN PINTASAN MUAR",
+        "address2": "",
+        "postcode": "84000",
+        "locality": "MUAR",
+        "state": "JOHOR"
+    },
+    {
+        "id": 4,
+        "name": "MAJLIS DAERAH TANGKAK",
+        "name_short": "MDTANGKAK",
+        "address1": "PEJABAT BESAR MAJLIS DAERAH TANGKAK",
+        "address2": "",
+        "postcode": "84900",
+        "locality": "TANGKAK",
+        "state": "JOHOR"
+    },
+    {
+        "id": 5,
+        "name": "MAJLIS PERBANDARAN BATU PAHAT",
+        "name_short": "MPBP",
+        "address1": "MENARA MPBP",
+        "address2": "",
+        "postcode": "83000",
+        "locality": "BATU PAHAT",
+        "state": "JOHOR"
+    },
+    {
+        "id": 6,
+        "name": "MAJLIS DAERAH YONG PENG",
+        "name_short": "MDYP",
+        "address1": "KM 1, JALAN LABIS",
+        "address2": "",
+        "postcode": "83700",
+        "locality": "YONG PENG",
+        "state": "JOHOR"
+    },
+    {
+        "id": 7,
+        "name": "MAJLIS PERBANDARAN SEGAMAT",
+        "name_short": "MPSEGAMAT",
+        "address1": "NO.1, JALAN ABDULLAH",
+        "address2": "",
+        "postcode": "85000",
+        "locality": "SEGAMAT",
+        "state": "JOHOR"
+    },
+    {
+        "id": 8,
+        "name": "MAJLIS DAERAH LABIS",
+        "name_short": "MDLABIS",
+        "address1": "MAJLIS DAERAH LABIS",
+        "address2": "",
+        "postcode": "85300",
+        "locality": "LABIS",
+        "state": "JOHOR"
+    },
+    {
+        "id": 9,
+        "name": "MAJLIS PERBANDARAN KLUANG",
+        "name_short": "MPKLUANG",
+        "address1": "JALAN PEJABAT KERAJAAN",
+        "address2": "",
+        "postcode": "86000",
+        "locality": "KLUANG",
+        "state": "JOHOR"
+    },
+    {
+        "id": 10,
+        "name": "MAJLIS DAERAH SIMPANG RENGGAM",
+        "name_short": "MDSR",
+        "address1": "KOMPLEKS PENTADBIRAN MDSR",
+        "address2": "",
+        "postcode": "86200",
+        "locality": "SIMPANG RENGGAM",
+        "state": "JOHOR"
+    },
+    {
+        "id": 11,
+        "name": "MAJLIS PERBANDARAN PONTIAN",
+        "name_short": "MPPN",
+        "address1": "MAJLIS PERBANDARAN PONTIAN,",
+        "address2": "",
+        "postcode": "82000",
+        "locality": "PONTIAN",
+        "state": "JOHOR"
+    },
+    {
+        "id": 12,
+        "name": "MAJLIS DAERAH KOTA TINGGI",
+        "name_short": "MDKT",
+        "address1": "JALAN PADANG",
+        "address2": "",
+        "postcode": "81900",
+        "locality": "KOTA TINGGI",
+        "state": "JOHOR"
+    },
+    {
+        "id": 13,
+        "name": "MAJLIS DAERAH MERSING",
+        "name_short": "MDMERSING",
+        "address1": "",
+        "address2": "",
+        "postcode": "86800",
+        "locality": "MERSING",
+        "state": "JOHOR"
+    },
+    {
+        "id": 14,
+        "name": "MAJLIS BANDARAYA PASIR GUDANG",
+        "name_short": "MBPG",
+        "address1": "ARAS 19, MENARA AQABAH,",
+        "address2": "",
+        "postcode": "81700",
+        "locality": "PASIR GUDANG",
+        "state": "JOHOR"
+    },
+    {
+        "id": 15,
+        "name": "MAJLIS PERBANDARAN PENGERANG",
+        "name_short": "MPPENGERANG",
+        "address1": "NO. 7, JALAN KEMPAS 1",
+        "address2": "",
+        "postcode": "81930",
+        "locality": "BANDAR PENAWAR",
+        "state": "JOHOR"
+    }
+]

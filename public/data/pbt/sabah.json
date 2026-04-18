@@ -1,0 +1,262 @@
+[
+    {
+        "id": 0,
+        "name": "DEWAN BANDARAYA KOTA KINABALU",
+        "name_short": "DBKK",
+        "address1": "NO.1 JALAN BANDARAN",
+        "address2": "",
+        "postcode": "88675",
+        "locality": "KOTA KINABALU",
+        "state": "SABAH"
+    },
+    {
+        "id": 1,
+        "name": "MAJLIS PERBANDARAN SANDAKAN",
+        "name_short": "MPS",
+        "address1": "PETI SURAT 221",
+        "address2": "",
+        "postcode": "90702",
+        "locality": "SANDAKAN",
+        "state": "SABAH"
+    },
+    {
+        "id": 2,
+        "name": "MAJLIS PERBANDARAN TAWAU",
+        "name_short": "MPT",
+        "address1": "PETI SURAT 412",
+        "address2": "",
+        "postcode": "91007",
+        "locality": "TAWAU",
+        "state": "SABAH"
+    },
+    {
+        "id": 3,
+        "name": "LEMBAGA BANDARAN KUDAT",
+        "name_short": "LBK",
+        "address1": "PETI SURAT NO.201",
+        "address2": "",
+        "postcode": "89057",
+        "locality": "KUDAT",
+        "state": "SABAH"
+    },
+    {
+        "id": 4,
+        "name": "MAJLIS DAERAH BEAUFORT",
+        "name_short": "MD BEAUFORT",
+        "address1": "PETI SURAT BIL.181",
+        "address2": "",
+        "postcode": "89808",
+        "locality": "BEAUFORT",
+        "state": "SABAH"
+    },
+    {
+        "id": 5,
+        "name": "MAJLIS DAERAH BELURAN",
+        "name_short": "MD BELURAN",
+        "address1": "PETI SURAT 20",
+        "address2": "",
+        "postcode": "90107",
+        "locality": "BELURAN",
+        "state": "SABAH"
+    },
+    {
+        "id": 6,
+        "name": "MAJLIS DAERAH KENINGAU",
+        "name_short": "MDKENINGAU",
+        "address1": "PETI SURAT 181",
+        "address2": "",
+        "postcode": "89008",
+        "locality": "KENINGAU",
+        "state": "SABAH"
+    },
+    {
+        "id": 7,
+        "name": "MAJLIS DAERAH KINABATANGAN",
+        "name_short": "MDKINABATANGAN",
+        "address1": "W.D.T NO.8",
+        "address2": "",
+        "postcode": "90200",
+        "locality": "KINABATANGAN",
+        "state": "SABAH"
+    },
+    {
+        "id": 8,
+        "name": "MAJLIS DAERAH KOTA BELUD",
+        "name_short": "MDKB",
+        "address1": "PETI SURAT NO.8, MAJLIS DAERAH KOTA BELUD",
+        "address2": "89157 KOTA BELUD",
+        "postcode": "89157",
+        "locality": "KOTA BELUD",
+        "state": "SABAH"
+    },
+    {
+        "id": 9,
+        "name": "MAJLIS DAERAH KOTA MARUDU",
+        "name_short": "MDKM",
+        "address1": "PETI SURAT 129",
+        "address2": "",
+        "postcode": "89100",
+        "locality": "KOTA MARUDU",
+        "state": "SABAH"
+    },
+    {
+        "id": 10,
+        "name": "MAJLIS DAERAH KUALA PENYU",
+        "name_short": "MDKPENYU",
+        "address1": "PETI SURAT NO.120",
+        "address2": "",
+        "postcode": "89740",
+        "locality": "KUALA PENYU",
+        "state": "SABAH"
+    },
+    {
+        "id": 11,
+        "name": "MAJLIS DAERAH KUNAK",
+        "name_short": "MDKUNAK",
+        "address1": "PETI SURAT BIL 15",
+        "address2": "",
+        "postcode": "91207",
+        "locality": "KUNAK",
+        "state": "SABAH"
+    },
+    {
+        "id": 12,
+        "name": "MAJLIS DAERAH LAHAD DATU",
+        "name_short": "MDLD",
+        "address1": "PETI SURAT 60249",
+        "address2": "",
+        "postcode": "91112",
+        "locality": "LAHAD DATU",
+        "state": "SABAH"
+    },
+    {
+        "id": 13,
+        "name": "MAJLIS DAERAH NABAWAN",
+        "name_short": "MDN",
+        "address1": "PETI SURAT NO.27",
+        "address2": "",
+        "postcode": "89957",
+        "locality": "NABAWAN PENSIANGAN",
+        "state": "SABAH"
+    },
+    {
+        "id": 14,
+        "name": "MAJLIS DAERAH PAPAR",
+        "name_short": "MDPAPAR",
+        "address1": "PETI SURAT 177",
+        "address2": "",
+        "postcode": "89608",
+        "locality": "PAPAR",
+        "state": "SABAH"
+    },
+    {
+        "id": 15,
+        "name": "MAJLIS PERBANDARAN PENAMPANG",
+        "name_short": "MPPENAMPANG",
+        "address1": "PETI SURAT 80",
+        "address2": "",
+        "postcode": "89507",
+        "locality": "PENAMPANG",
+        "state": "SABAH"
+    },
+    {
+        "id": 16,
+        "name": "MAJLIS DAERAH RANAU",
+        "name_short": "MDRANAU",
+        "address1": "PETI SURAT NO.57",
+        "address2": "",
+        "postcode": "89308",
+        "locality": "RANAU",
+        "state": "SABAH"
+    },
+    {
+        "id": 17,
+        "name": "MAJLIS DAERAH SEMPORNA",
+        "name_short": "MDS7",
+        "address1": "PETI SURAT BIL. 134",
+        "address2": "",
+        "postcode": "91308",
+        "locality": "SEMPORNA",
+        "state": "SABAH"
+    },
+    {
+        "id": 18,
+        "name": "MAJLIS DAERAH SIPITANG",
+        "name_short": "MDSIPITANG",
+        "address1": "MAJLIS DAERAH SIPITANG, PETI SURAT 28",
+        "address2": "",
+        "postcode": "89857",
+        "locality": "SIPITANG",
+        "state": "SABAH"
+    },
+    {
+        "id": 19,
+        "name": "MAJLIS DAERAH TAMBUNAN",
+        "name_short": "MDT",
+        "address1": "P.O. BOX 31",
+        "address2": "",
+        "postcode": "89650",
+        "locality": "TAMBUNAN",
+        "state": "SABAH"
+    },
+    {
+        "id": 20,
+        "name": "MAJLIS DAERAH TENOM",
+        "name_short": "MDT",
+        "address1": "PETI SURAT 114",
+        "address2": "",
+        "postcode": "89907",
+        "locality": "TENOM",
+        "state": "SABAH"
+    },
+    {
+        "id": 21,
+        "name": "MAJLIS DAERAH TUARAN",
+        "name_short": "MD TUARAN",
+        "address1": "PETI SURAT BIL. 580",
+        "address2": "",
+        "postcode": "89208",
+        "locality": "TUARAN",
+        "state": "SABAH"
+    },
+    {
+        "id": 22,
+        "name": "MAJLIS DAERAH PUTATAN",
+        "name_short": "MDPUTATAN",
+        "address1": "DEWAN MINI, PEJABAT DAERAH PUTATAN",
+        "address2": "",
+        "postcode": "88200",
+        "locality": "PUTATAN",
+        "state": "SABAH"
+    },
+    {
+        "id": 23,
+        "name": "MAJLIS DAERAH PITAS",
+        "name_short": "MDPITAS",
+        "address1": "PETI POS NO. 47",
+        "address2": "",
+        "postcode": "89100",
+        "locality": "PITAS",
+        "state": "SABAH"
+    },
+    {
+        "id": 24,
+        "name": "MAJLIS DAERAH TONGOD",
+        "name_short": "MDTONGOD",
+        "address1": "PEJABAT POS MINI TONGOD",
+        "address2": "",
+        "postcode": "89300",
+        "locality": "TONGOD",
+        "state": "SABAH"
+    },
+    {
+        "id": 25,
+        "name": "MAJLIS DAERAH TELUPID",
+        "name_short": "MDTELUPID",
+        "address1": "PETI SURAT NO. 55",
+        "address2": "",
+        "postcode": "89320",
+        "locality": "TELUPID",
+        "state": "SABAH"
+    }
+]

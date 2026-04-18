@@ -1,0 +1,120 @@
+[
+    {
+        "id": 0,
+        "name": "MAJLIS BANDARAYA KUANTAN",
+        "name_short": "MBK",
+        "address1": "JALAN TANAH PUTIH",
+        "address2": "",
+        "postcode": "25100",
+        "locality": "KUANTAN",
+        "state": "PAHANG"
+    },
+    {
+        "id": 1,
+        "name": "MAJLIS PERBANDARAN TEMERLOH",
+        "name_short": "MPT",
+        "address1": "ARAS 6 & 7",
+        "address2": "",
+        "postcode": "28000",
+        "locality": "TEMERLOH",
+        "state": "PAHANG"
+    },
+    {
+        "id": 2,
+        "name": "MAJLIS PERBANDARAN BENTONG",
+        "name_short": "MPBENTONG",
+        "address1": "JALAN KETARI",
+        "address2": "",
+        "postcode": "28700",
+        "locality": "BENTONG",
+        "state": "PAHANG"
+    },
+    {
+        "id": 3,
+        "name": "MAJLIS PERBANDARAN PEKAN BANDAR DIRAJA",
+        "name_short": "MPPEKAN",
+        "address1": "JALAN MAHKOTA",
+        "address2": "",
+        "postcode": "26600",
+        "locality": "PEKAN",
+        "state": "PAHANG"
+    },
+    {
+        "id": 4,
+        "name": "MAJLIS DAERAH LIPIS",
+        "name_short": "MDLIPIS",
+        "address1": "KOMPLEKS PEJABAT KERAJAAN",
+        "address2": "",
+        "postcode": "27200",
+        "locality": "KUALA LIPIS",
+        "state": "PAHANG"
+    },
+    {
+        "id": 5,
+        "name": "MAJLIS DAERAH CAMERON HIGHLANDS",
+        "name_short": "MDCH",
+        "address1": "NO.1, JALAN MAJLIS",
+        "address2": "",
+        "postcode": "39000",
+        "locality": "TANAH RATA",
+        "state": "PAHANG"
+    },
+    {
+        "id": 6,
+        "name": "MAJLIS DAERAH RAUB",
+        "name_short": "MDRAUB",
+        "address1": "MAJLIS DAERAH RAUB",
+        "address2": "",
+        "postcode": "26700",
+        "locality": "RAUB",
+        "state": "PAHANG"
+    },
+    {
+        "id": 7,
+        "name": "MAJLIS DAERAH BERA",
+        "name_short": "MDBERA",
+        "address1": "JALAN MAJLIS",
+        "address2": "",
+        "postcode": "28300",
+        "locality": "TRIANG",
+        "state": "PAHANG"
+    },
+    {
+        "id": 8,
+        "name": "MAJLIS DAERAH MARAN",
+        "name_short": "MDMARAN",
+        "address1": "MAJLIS DAERAH MARAN",
+        "address2": "",
+        "postcode": "26500",
+        "locality": "MARAN",
+        "state": "PAHANG"
+    },
+    {
+        "id": 9,
+        "name": "MAJLIS DAERAH ROMPIN",
+        "name_short": "MDROMPIN",
+        "address1": "PEJABAT MD ROMPIN",
+        "address2": "",
+        "postcode": "26800",
+        "locality": "KUALA ROMPIN",
+        "state": "PAHANG"
+    },
+    {
+        "id": 10,
+        "name": "MAJLIS DAERAH JERANTUT",
+        "name_short": "MDJERANTUT",
+        "address1": "MAJLIS DAERAH JERANTUT",
+        "address2": "",
+        "postcode": "27000",
+        "locality": "JERANTUT",
+        "state": "PAHANG"
+    },
+    {
+        "id": 11,
+        "name": "LEMBAGA PEMBANGUNAN TIOMAN",
+        "address1": "NO. 1&2, JALAN ENDAU ROMPIN, TANJONG GEMOK, KUALA ROMPIN",
+        "address2": "",
+        "postcode": "",
+        "state": "PAHANG"
+    }
+]

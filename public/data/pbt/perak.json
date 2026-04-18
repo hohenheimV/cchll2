@@ -1,0 +1,152 @@
+[
+    {
+        "id": 0,
+        "name": "MAJLIS BANDARAYA IPOH",
+        "name_short": "MBI",
+        "address1": "JALAN SULTAN ABDUL JALIL, GREENTOWN",
+        "address2": "",
+        "postcode": "30450",
+        "locality": "IPOH",
+        "state": "PERAK"
+    },
+    {
+        "id": 1,
+        "name": "MAJLIS PERBANDARAN TAIPING",
+        "name_short": "MPTAIPING",
+        "address1": "WISMA PERBANDARAN, JALAN TAMING SARI",
+        "address2": "",
+        "postcode": "34000",
+        "locality": "TAIPING",
+        "state": "PERAK"
+    },
+    {
+        "id": 2,
+        "name": "MAJLIS PERBANDARAN MANJUNG",
+        "name_short": "MPM",
+        "address1": "JALAN PINANG RAJA",
+        "address2": "",
+        "postcode": "32040",
+        "locality": "SERI MANJUNG",
+        "state": "PERAK"
+    },
+    {
+        "id": 3,
+        "name": "MAJLIS DAERAH PERAK TENGAH",
+        "name_short": "MDPT",
+        "address1": "ARAS BAWAH,",
+        "address2": "",
+        "postcode": "32600",
+        "locality": "SRI ISKANDAR",
+        "state": "PERAK"
+    },
+    {
+        "id": 4,
+        "name": "MAJLIS PERBANDARAN KUALA KANGSAR",
+        "name_short": "MPKKPK",
+        "address1": "WISMA MPKK, JALAN SULTAN NAZRIN SHAH",
+        "address2": "",
+        "postcode": "33000",
+        "locality": "KUALA KANGSAR",
+        "state": "PERAK"
+    },
+    {
+        "id": 5,
+        "name": "MAJLIS DAERAH SELAMA",
+        "name_short": "MDSELAMA",
+        "address1": "SELAMA, PERAK DARUL RIDZUAN",
+        "address2": "",
+        "postcode": "34100",
+        "locality": "SELAMA",
+        "state": "PERAK"
+    },
+    {
+        "id": 6,
+        "name": "MAJLIS DAERAH BATU GAJAH",
+        "name_short": "MDBG",
+        "address1": "JALAN HAJI ABDUL WAHAB",
+        "address2": "",
+        "postcode": "31000",
+        "locality": "BATU GAJAH",
+        "state": "PERAK"
+    },
+    {
+        "id": 7,
+        "name": "MAJLIS DAERAH KAMPAR",
+        "name_short": "MDKAMPAR",
+        "address1": "KOMPLEKS PENTADBIRAN MAJLIS DAERAH KAMPAR,",
+        "address2": "",
+        "postcode": "31900",
+        "locality": "KAMPAR",
+        "state": "PERAK"
+    },
+    {
+        "id": 8,
+        "name": "MAJLIS DAERAH GERIK",
+        "name_short": "MDG",
+        "address1": "JALAN HAJI MEOR YAHAYA",
+        "address2": "",
+        "postcode": "33300",
+        "locality": "GERIK",
+        "state": "PERAK"
+    },
+    {
+        "id": 9,
+        "name": "MAJLIS DAERAH LENGGONG",
+        "name_short": "MDLG",
+        "address1": "MAJLIS DAERAH LENGGONG, JALAN ALANG ISKANDAR",
+        "address2": "",
+        "postcode": "33400",
+        "locality": "LENGGONG",
+        "state": "PERAK"
+    },
+    {
+        "id": 10,
+        "name": "MAJLIS DAERAH PENGKALAN HULU",
+        "name_short": "MDPH",
+        "address1": "WISMA KROH",
+        "address2": "",
+        "postcode": "33100",
+        "locality": "PENGKALAN HULU",
+        "state": "PERAK"
+    },
+    {
+        "id": 11,
+        "name": "MAJLIS DAERAH TAPAH",
+        "name_short": "MDTAPAH",
+        "address1": "MAJLIS DAERAH TAPAH, JALAN STESYEN",
+        "address2": "",
+        "postcode": "35000",
+        "locality": "TAPAH",
+        "state": "PERAK"
+    },
+    {
+        "id": 12,
+        "name": "MAJLIS DAERAH TANJONG MALIM",
+        "name_short": "MDTM",
+        "address1": "PETI SURAT 59",
+        "address2": "",
+        "postcode": "35900",
+        "locality": "TANJONG MALIM",
+        "state": "PERAK"
+    },
+    {
+        "id": 13,
+        "name": "MAJLIS PERBANDARAN TELUK INTAN",
+        "name_short": "MPTI",
+        "address1": "JALAN SPEEDY",
+        "address2": "",
+        "postcode": "36000",
+        "locality": "TELUK INTAN",
+        "state": "PERAK"
+    },
+    {
+        "id": 14,
+        "name": "MAJLIS DAERAH KERIAN",
+        "name_short": "MDKERIAN",
+        "address1": "NO.1 WISMA MDK,JALAN PADANG",
+        "address2": "",
+        "postcode": "34200",
+        "locality": "PARIT BUNTAR",
+        "state": "PERAK"
+    }
+]

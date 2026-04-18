@@ -1,0 +1,42 @@
+[
+    {
+        "id": 0,
+        "name": "MAJLIS BANDARAYA MELAKA BERSEJARAH",
+        "name_short": "MBMB",
+        "address1": "BANGUNAN GRAHA MAKMUR",
+        "address2": "",
+        "postcode": "75450",
+        "locality": "MELAKA",
+        "state": "MELAKA"
+    },
+    {
+        "id": 1,
+        "name": "MAJLIS PERBANDARAN ALOR GAJAH",
+        "name_short": "MPAG",
+        "address1": "JALAN DATO' DOL SAID",
+        "address2": "",
+        "postcode": "78000",
+        "locality": "ALOR GAJAH",
+        "state": "MELAKA"
+    },
+    {
+        "id": 2,
+        "name": "MAJLIS PERBANDARAN JASIN",
+        "name_short": "MPJASIN",
+        "address1": "MAJLIS PERBANDARAN JASIN",
+        "address2": "",
+        "postcode": "77000",
+        "locality": "JASIN",
+        "state": "MELAKA"
+    },
+    {
+        "id": 3,
+        "name": "MAJLIS PERBANDARAN HANG TUAH JAYA",
+        "name_short": "MPHTJ",
+        "address1": "LOT 51 & 52, TINGKAT 1",
+        "address2": "",
+        "postcode": "75450",
+        "locality": "AYER KEROH",
+        "state": "MELAKA"
+    }
+]

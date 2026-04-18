@@ -1,0 +1,72 @@
+[
+    {
+        "id": 0,
+        "name": "MAJLIS BANDARAYA KUALA TERENGGANU",
+        "name_short": "MBKT",
+        "address1": "MENARA MBKT",
+        "address2": "",
+        "postcode": "20000",
+        "locality": "KUALA TERENGGANU",
+        "state": "TERENGGANU"
+    },
+    {
+        "id": 1,
+        "name": "MAJLIS DAERAH BESUT",
+        "name_short": "MD BESUT",
+        "address1": "MAJLIS DAERAH BESUT",
+        "address2": "",
+        "postcode": "22200",
+        "locality": "BESUT",
+        "state": "TERENGGANU"
+    },
+    {
+        "id": 2,
+        "name": "MAJLIS DAERAH SETIU",
+        "name_short": "MDSETIU",
+        "address1": "WISMA MDS",
+        "address2": "",
+        "postcode": "22100",
+        "locality": "SETIU",
+        "state": "TERENGGANU"
+    },
+    {
+        "id": 3,
+        "name": "MAJLIS PERBANDARAN DUNGUN",
+        "name_short": "MPDUNGUN",
+        "address1": "JALAN YAHAYA AHMAD",
+        "address2": "",
+        "postcode": "23000",
+        "locality": "DUNGUN",
+        "state": "TERENGGANU"
+    },
+    {
+        "id": 4,
+        "name": "MAJLIS DAERAH HULU TERENGGANU",
+        "name_short": "MDHT",
+        "address1": "MAJLIS DAERAH HULU TERENGGANU",
+        "address2": "",
+        "postcode": "21700",
+        "locality": "HULU TERENGGANU",
+        "state": "TERENGGANU"
+    },
+    {
+        "id": 5,
+        "name": "MAJLIS PERBANDARAN KEMAMAN",
+        "name_short": "MPKEMAMAN",
+        "address1": "JALAN AIR PUTIH",
+        "address2": "",
+        "postcode": "24000",
+        "locality": "KEMAMAN",
+        "state": "TERENGGANU"
+    },
+    {
+        "id": 6,
+        "name": "MAJLIS DAERAH MARANG",
+        "name_short": "MDMARANG",
+        "address1": "MAJLIS DAERAH MARANG",
+        "address2": "",
+        "postcode": "21600",
+        "locality": "MARANG",
+        "state": "TERENGGANU"
+    }
+]

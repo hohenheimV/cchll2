@@ -1,0 +1,122 @@
+[
+    {
+        "id": 0,
+        "name": "MAJLIS PERBANDARAN KOTA BHARU - BANDAR RAYA ISLAM",
+        "name_short": "MPKBBRI",
+        "address1": "JALAN HOSPITAL",
+        "address2": "",
+        "postcode": "15000",
+        "locality": "KOTA BHARU",
+        "state": "KELANTAN"
+    },
+    {
+        "id": 1,
+        "name": "MAJLIS DAERAH BACHOK BANDAR PELANCONGAN ISLAM",
+        "name_short": "MDBACHOK",
+        "address1": "MAJLIS DAERAH BACHOK BANDAR PELANCONGAN ISLAM",
+        "address2": "",
+        "postcode": "16300",
+        "locality": "BACHOK",
+        "state": "KELANTAN"
+    },
+    {
+        "id": 2,
+        "name": "MAJLIS DAERAH GUA MUSANG",
+        "name_short": "MDGM",
+        "address1": "JALAN HOSPITAL",
+        "address2": "",
+        "postcode": "18300",
+        "locality": "GUA MUSANG",
+        "state": "KELANTAN"
+    },
+    {
+        "id": 3,
+        "name": "MAJLIS DAERAH JELI",
+        "name_short": "MDJELI",
+        "address1": "BANDAR JELI",
+        "address2": "",
+        "postcode": "17600",
+        "locality": "JELI",
+        "state": "KELANTAN"
+    },
+    {
+        "id": 4,
+        "name": "MAJLIS DAERAH KETEREH - PERBANDARAN ISLAM",
+        "name_short": "MDKETEREH",
+        "address1": "KM 19, JALAN KUALA KRAI",
+        "address2": "",
+        "postcode": "16450",
+        "locality": "KOTA BHARU",
+        "state": "KELANTAN"
+    },
+    {
+        "id": 5,
+        "name": "MAJLIS DAERAH DABONG",
+        "name_short": "MDDABONG",
+        "address1": "YANG DIPERTUA, MAJLIS DAERAH DABONG",
+        "address2": "",
+        "postcode": "18200",
+        "locality": "DABONG",
+        "state": "KELANTAN"
+    },
+    {
+        "id": 6,
+        "name": "MAJLIS DAERAH KUALA KRAI",
+        "name_short": "MDKK",
+        "address1": "",
+        "address2": "",
+        "postcode": "18000",
+        "locality": "KUALA KRAI",
+        "state": "KELANTAN"
+    },
+    {
+        "id": 7,
+        "name": "MAJLIS DAERAH MACHANG",
+        "name_short": "MDMACHANG",
+        "address1": "JALAN TOK KEMUNING",
+        "address2": "",
+        "postcode": "18500",
+        "locality": "MACHANG",
+        "state": "KELANTAN"
+    },
+    {
+        "id": 8,
+        "name": "MAJLIS DAERAH PASIR MAS",
+        "name_short": "MDPM",
+        "address1": "KOMPLEKS APAM PUTRA",
+        "address2": "",
+        "postcode": "17000",
+        "locality": "PASIR MAS",
+        "state": "KELANTAN"
+    },
+    {
+        "id": 9,
+        "name": "MAJLIS DAERAH PASIR PUTEH",
+        "name_short": "MDPP",
+        "address1": "MAJLIS DAERAH PASIR PUTEH",
+        "address2": "",
+        "postcode": "16800",
+        "locality": "PASIR PUTEH",
+        "state": "KELANTAN"
+    },
+    {
+        "id": 10,
+        "name": "MAJLIS DAERAH TANAH MERAH",
+        "name_short": "MDTMERAH",
+        "address1": "MAJLIS DAERAH TANAH MERAH, JALAN PEGAWAI",
+        "address2": "",
+        "postcode": "17500",
+        "locality": "TANAH MERAH",
+        "state": "KELANTAN"
+    },
+    {
+        "id": 11,
+        "name": "MAJLIS DAERAH TUMPAT",
+        "name_short": "MDTUMPAT",
+        "address1": "JALAN TANJUNG KUALA",
+        "address2": "",
+        "postcode": "16200",
+        "locality": "TUMPAT",
+        "state": "KELANTAN"
+    }
+]

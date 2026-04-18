@@ -1,0 +1,272 @@
+[
+    {
+        "id": 0,
+        "name": "LEMBAGA KEMAJUAN BINTULU",
+        "name_short": "BDA",
+        "address1": "WISMA BINTULU",
+        "address2": "",
+        "postcode": "97007",
+        "locality": "BINTULU",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 1,
+        "name": "DEWAN BANDARAYA KUCHING UTARA",
+        "name_short": "DBKU",
+        "address1": "BUKIT SIOL",
+        "address2": "",
+        "postcode": "93050",
+        "locality": "KUCHING",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 2,
+        "name": "MAJLIS BANDARAYA KUCHING SELATAN",
+        "name_short": "MBKS",
+        "address1": "JALAN PADUNGAN",
+        "address2": "",
+        "postcode": "93675",
+        "locality": "KUCHING",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 3,
+        "name": "MAJLIS PERBANDARAN PADAWAN",
+        "name_short": "MPP",
+        "address1": "",
+        "address2": "",
+        "postcode": "93250",
+        "locality": "KUCHING",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 4,
+        "name": "MAJLIS PERBANDARAN SIBU",
+        "name_short": "SMC",
+        "address1": "TINGKAT 19-24, WISMA SANYAN",
+        "address2": "",
+        "postcode": "96007",
+        "locality": "SIBU",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 5,
+        "name": "MAJLIS BANDARAYA MIRI",
+        "name_short": "MBM",
+        "address1": "JALAN RAJA",
+        "address2": "",
+        "postcode": "98000",
+        "locality": "MIRI",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 6,
+        "name": "MAJLIS DAERAH BAU",
+        "name_short": "BAUDC",
+        "address1": "JALAN ONG GUAN CHENG",
+        "address2": "",
+        "postcode": "94000",
+        "locality": "BAU KUCHING",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 7,
+        "name": "MAJLIS DAERAH BETONG",
+        "name_short": "MD BETONG",
+        "address1": "BANGUNAN KUBU RENTAP",
+        "address2": "",
+        "postcode": "95700",
+        "locality": "BETONG",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 8,
+        "name": "MAJLIS DAERAH DALAT & MUKAH",
+        "name_short": "MDDM",
+        "address1": "ARAS 1, PUSAT PENTADBIRAN BARU",
+        "address2": "",
+        "postcode": "96400",
+        "locality": "MUKAH",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 9,
+        "name": "MAJLIS DAERAH KANOWIT",
+        "name_short": "MDKANOWIT",
+        "address1": "JALAN KUBU",
+        "address2": "",
+        "postcode": "96707",
+        "locality": "KANOWIT",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 10,
+        "name": "MAJLIS DAERAH KAPIT",
+        "name_short": "MDKAPIT",
+        "address1": "JALAN KUBU, PETI SURAT 57",
+        "address2": "",
+        "postcode": "96800",
+        "locality": "KAPIT",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 11,
+        "name": "MAJLIS DAERAH LAWAS",
+        "name_short": "MDLAWAS",
+        "address1": "JALAN TRUSAN BY-PASS",
+        "address2": "",
+        "postcode": "98857",
+        "locality": "LAWAS",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 12,
+        "name": "MAJLIS DAERAH LIMBANG",
+        "name_short": "MDLIMBANG",
+        "address1": "PETI SURAT 390, TINGKAT 4 BANGUNAN LIMBANG PLAZA, 98700 LIMBANG, SARAWAK",
+        "address2": "",
+        "postcode": "98708",
+        "locality": "LIMBANG",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 13,
+        "name": "MAJLIS DAERAH LUBOK ANTU",
+        "name_short": "MDLA",
+        "address1": "JALAN PENGHULU IMONG ANAK AWAN",
+        "address2": "",
+        "postcode": "95800",
+        "locality": "ENGKILILI, BAHAGIAN SRI AMAN",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 14,
+        "name": "MAJLIS DAERAH LUNDU",
+        "name_short": "MDLUNDU",
+        "address1": "JALAN BATANG KAYAN",
+        "address2": "",
+        "postcode": "94500",
+        "locality": "LUNDU",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 15,
+        "name": "MAJLIS DAERAH MARADONG & JULAU",
+        "name_short": "MDMJ",
+        "address1": "PETI SURAT 4, JALAN MAHKAMAH",
+        "address2": "",
+        "postcode": "96507",
+        "locality": "BINTANGOR",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 16,
+        "name": "MAJLIS DAERAH MARUDI",
+        "name_short": "MDM",
+        "address1": "PETI SURAT 374",
+        "address2": "",
+        "postcode": "98058",
+        "locality": "BARAM",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 17,
+        "name": "MAJLIS DAERAH MATU & DARO",
+        "name_short": "MDMD",
+        "address1": "BANGUNAN DATUK PENGIRAN HIPNI,",
+        "address2": "",
+        "postcode": "96250",
+        "locality": "MATU",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 18,
+        "name": "MAJLIS DAERAH SARATOK",
+        "name_short": "MDS2",
+        "address1": "JLN DATUK ABANG ABU TALIB",
+        "address2": "",
+        "postcode": "95400",
+        "locality": "SARATOK",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 19,
+        "name": "MAJLIS PERBANDARAN KOTA SAMARAHAN",
+        "name_short": "MDS1",
+        "address1": "JLN DATUK MOHAMMAD MUSA",
+        "address2": "",
+        "postcode": "94300",
+        "locality": "KOTA SAMARAHAN",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 20,
+        "name": "MAJLIS DAERAH SERIAN",
+        "name_short": "MDS4",
+        "address1": "NO. 1 JLN BUNGA TANJUNG",
+        "address2": "",
+        "postcode": "94700",
+        "locality": "SERIAN",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 21,
+        "name": "MAJLIS DAERAH SARIKEI",
+        "name_short": "MDS3",
+        "address1": "JALAN NYELONG",
+        "address2": "",
+        "postcode": "96100",
+        "locality": "SARIKEI",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 22,
+        "name": "MAJLIS DAERAH SIMUNJAN",
+        "name_short": "MDS5",
+        "address1": "LOT 805, GUNONG NGELI NEW SERVICE CENTRE",
+        "address2": "",
+        "postcode": "94800",
+        "locality": "SIMUNJAN",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 23,
+        "name": "MAJLIS DAERAH SRI AMAN",
+        "name_short": "MDSA",
+        "address1": "PETI SURAT 78",
+        "address2": "",
+        "postcode": "95700",
+        "locality": "SRI AMAN",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 24,
+        "name": "MAJLIS DAERAH SUBIS",
+        "name_short": "MDS6",
+        "address1": "PETI SURAT 83, 98150, BEKENU",
+        "address2": "MIRI , SARAWAK",
+        "postcode": "98150",
+        "locality": "BEKENU",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 25,
+        "name": "MAJLIS DAERAH LUAR BANDAR SIBU",
+        "name_short": "MDLBS",
+        "address1": "LEVEL 18, WISMA SANYAN",
+        "address2": "",
+        "postcode": "96008",
+        "locality": "SIBU",
+        "state": "SARAWAK"
+    },
+    {
+        "id": 26,
+        "name": "MAJLIS DAERAH GEDONG",
+        "name_short": "-",
+        "address1": "LOT RGC, FASA 1, GEDONG,",
+        "address2": "",
+        "postcode": "94820",
+        "locality": "KOTA SAMARAHAN",
+        "state": "SARAWAK"
+    }
+]

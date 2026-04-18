@@ -281,4 +281,170 @@ class RegisterController extends Controller
         // dd($user);  
         return $user;
     }
+
+    public function testCsv(Request $request)
+    {
+
+        if (!$request->hasFile('file_csv')) {
+            dd('No file uploaded');
+        }
+
+        $file = $request->file('file_csv');
+
+        if (!$file->isValid()) {
+            dd('Invalid file');
+        }
+
+        $path = $file->getRealPath();
+
+        $rows = array_map('str_getcsv', file($path));
+
+        // remove header
+        $header = array_shift($rows);
+
+        $success = 0;
+        $failed = 0;
+        $errors = [];
+
+        foreach ($rows as $i => $row) {
+
+            if (count($row) < 13) continue;
+
+            try {
+
+                $postcode = str_replace("'", "", $row[4]);
+                $state = trim($row[6]);
+
+                // ✅ fix state (01, 02, etc.)
+                if (is_numeric($state) && strlen($state) == 1) {
+                    $state = '0' . $state;
+                }
+
+                $data = [
+                    'pbt'       => strtoupper(trim($row[1])),
+                    'address1'  => strtoupper(trim($row[2])),
+                    'address2'  => strtoupper(trim($row[3])),
+                    'postcode'  => trim($postcode),
+                    'locality'  => strtoupper(trim($row[5])),
+                    'state'     => $state,
+
+                    'sv_name'   => strtoupper(trim($row[7])),
+                    'sv_email'  => trim($row[8]),
+
+                    'name'      => strtoupper(trim($row[9])),
+                    'position'  => strtoupper(trim($row[10])),
+                    'email'     => trim($row[11]),
+                    'phone'     => trim($row[12]),
+
+                    'roles'     => 'Pihak Berkuasa Tempatan',
+                    'password'  => 'elandskapv2'
+                ];
+
+                // ✅ skip if no email (important for User table)
+                if (empty($data['email'])) {
+                    $failed++;
+                    $errors[] = "Row $i: Missing email";
+                    continue;
+                }
+
+                // ✅ skip duplicate user email
+                if (\App\User::where('email', $data['email'])->exists()) {
+                    $failed++;
+                    $errors[] = "Row $i: Email exists - " . $data['email'];
+                    continue;
+                }
+                // dd($data);  
+                $accountType = $data['roles'] ? $data['roles'] : "-" ;
+                if($accountType == "Pihak Berkuasa Tempatan"){
+                    $existingPbt = MaklumatPenggunaPbt::whereRaw('LOWER(pbt_name) = ?', [strtolower($data['pbt'])])->first();
+                    if ($existingPbt) {
+                        $maklumat = $existingPbt;
+                        $id = $existingPbt->id;
+                        $name = $existingPbt->pbt_name;
+                        $existingPbt->update([
+                            'address1' => $data['address1'],
+                            'address2' => $data['address2'],
+                            'postcode' => $data['postcode'],
+                            'locality' => $data['locality'],
+                            'state' => $data['state'],
+                        ]);
+                        //proceed without creating new row
+                    }else{
+                        $maklumat = MaklumatPenggunaPbt::create([
+                            'name' => $data['pbt'],
+                            'email' => $data['sv_email'],
+                            'pbt_name' => $data['pbt'],
+                            'address1' => $data['address1'],
+                            'address2' => $data['address2'],
+                            'postcode' => $data['postcode'],
+                            'locality' => $data['locality'],
+                            'state' => $data['state'],
+                        ]);
+                        $id = $maklumat->id;
+                        $name = $maklumat->pbt_name;
+                    }
+                }
+
+
+                $user = null;
+
+                if ($maklumat) {
+
+                    try {
+
+                        // ✅ skip if email already exists
+                        if (\App\User::where('email', $data['email'])->exists()) {
+                            // optional: log it
+                            \Log::info("Skipped existing email: " . $data['email']);
+                        } else {
+
+                            $user = User::create([
+                                'name' => $data['name'],
+                                'email' => $data['email'],
+                                'password' => Hash::make($data['password']),
+                                'is_active' => 1,
+                                'bahagian_jln' => $id,
+                            ]);
+
+                            $user->assignRole($data['roles']);
+                        }
+
+                    } catch (\Exception $e) {
+                        // ✅ skip error, don't break import
+                        \Log::error("User create failed: " . $data['email'] . " | " . $e->getMessage());
+                    }
+                }
+
+                if ($accountType == "Pihak Berkuasa Tempatan" && $user) {
+                    try {
+                        $user->update([
+                            'department' => isset($data['pbt']) ? $data['pbt'] : null,
+                            'phone' => isset($data['phone']) ? $data['phone'] : null,
+                            'position' => isset($data['position']) ? $data['position'] : null,
+                            'sv_name' => isset($data['sv_name']) ? $data['sv_name'] : null,
+                            'sv_email' => isset($data['sv_email']) ? $data['sv_email'] : null,
+                        ]);
+                    } catch (\Exception $e) {
+                        \Log::error("User update failed: " . $data['email'] . " | " . $e->getMessage());
+                    }
+                }
+                
+                // dd($user);  
+                // return $user;
+
+                $success++;
+
+            } catch (\Exception $e) {
+                $failed++;
+                $errors[] = "Row $i: " . $e->getMessage();
+            }
+        }
+
+        // ✅ RESULT SUMMARY
+        dd([
+            'success' => $success,
+            'failed' => $failed,
+            'errors' => $errors
+        ]);
+    }
 }

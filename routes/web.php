@@ -174,6 +174,7 @@ Route::get('/T4', function () {
 Route::get('/api/negeri', [RegisterController::class, 'getNegeri']);
 // Route::get('/api/daerah/{negeriId}', [RegisterController::class, 'getDaerah']);
 Route::get('/api/pbt/{negeriId}', [RegisterController::class, 'getPBT']);
+Route::post('/test-csv', 'Auth\RegisterController@testCsv')->name('test.csv');
 
 // Route::view('/registration', 'registration');
 

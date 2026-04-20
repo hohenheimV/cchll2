@@ -406,61 +406,6 @@
                         $media9 = ''; 
                     }
                 @endphp
-                <!-- <div class="form-group required col-md-3">
-                    <label for="mediaSosial" class="col-md-12 control-label">Telefon</label>
-                    <div class="col-md-12">
-                        <input value="{{$media1}}" name="mediaSosial_pelan[Telefon]" class="form-control"  type="text" id="mediaSosial_pelan[]" >
-                    </div>
-                </div>
-
-                <div class="form-group required col-md-3">
-                    <label for="mediaSosial" class="col-md-12 control-label">Emel</label>
-                    <div class="col-md-12">
-                        <input value="{{$media2}}" name="mediaSosial_pelan[Emel]" class="form-control"  type="text" id="mediaSosial_pelan[]" >
-                    </div>
-                </div>
-
-                <div class="form-group required col-md-3">
-                    <label for="mediaSosial" class="col-md-12 control-label">Laman Web</label>
-                    <div class="col-md-12">
-                        <input value="{{$media3}}" name="mediaSosial_pelan[Web]" class="form-control"  type="text" id="mediaSosial_pelan[]" >
-                    </div>
-                </div>
-
-                <div class="form-group required col-md-3">
-                    <label for="mediaSosial" class="col-md-12 control-label">Facebook</label>
-                    <div class="col-md-12">
-                        <input value="{{$media4}}" name="mediaSosial_pelan[Facebook]" class="form-control"  type="text" id="mediaSosial_pelan[]" >
-                    </div>
-                </div>
-
-                <div class="form-group required col-md-3">
-                    <label for="mediaSosial" class="col-md-12 control-label">Instagram</label>
-                    <div class="col-md-12">
-                        <input value="{{$media5}}" name="mediaSosial_pelan[Instagram]" class="form-control"  type="text" id="mediaSosial_pelan[]" >
-                    </div>
-                </div>
-
-                <div class="form-group required col-md-3">
-                    <label for="mediaSosial" class="col-md-12 control-label">LinkedIn</label>
-                    <div class="col-md-12">
-                        <input value="{{$media6}}" name="mediaSosial_pelan[LinkedIn]" class="form-control"  type="text" id="mediaSosial_pelan[]" >
-                    </div>
-                </div>
-
-                <div class="form-group required col-md-3">
-                    <label for="mediaSosial" class="col-md-12 control-label">Twitter (X)</label>
-                    <div class="col-md-12">
-                        <input value="{{$media7}}" name="mediaSosial_pelan[Twitter]" class="form-control"  type="text" id="mediaSosial_pelan[]" >
-                    </div>
-                </div>
-
-                <div class="form-group required col-md-3">
-                    <label for="mediaSosial" class="col-md-12 control-label">TikTok</label>
-                    <div class="col-md-12">
-                        <input value="{{$media8}}" name="mediaSosial_pelan[TikTok]" class="form-control"  type="text" id="mediaSosial_pelan[]" >
-                    </div>
-                </div> -->
             </div>
             
             <div class="row" id="dynamic-media-fields">

@@ -134,84 +134,7 @@
             <span></span>
         </div>
     </div>
-    <!-- <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Register') }}</div>
-
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('register') }}">
-                            @csrf
-
-                            <div class="form-group row">
-                                <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autofocus>
-
-                                    @error('name')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('Email Address') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required>
-
-                                    @error('email')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <label for="roles">Roles</label><br>
-                            <input type="checkbox" name="roles[]" value="Penggiat Industri"> Penggiat Industri<br>
-                            <input type="checkbox" name="roles[]" value="Admin"> Admin<br>
-                            <input type="checkbox" name="roles[]" value="User"> User<br>
-
-                            <div class="form-group row">
-                                <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required>
-
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-                                </div>
-                            </div>
-
-                            <div class="form-group row mb-0">
-                                <div class="col-md-6 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        {{ __('Register') }}
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
+    
     <br>
     <br>
     <div class="row">
@@ -225,20 +148,13 @@
                     {{ config('app.name_short') }}
                 </div>
 
+
                 <!-- Registration form Input Fields -->
                 <form id="myForm" method="POST" action="{{ route('register') }}" class="m-lg-5">
                     @csrf
                     <h4 class="login-box-msg text-dark">@yield('title')</h4>
 
                     <!-- Dropdown Selection -->
-                    <!-- <div class="form-group mb-3">
-                        {{ Form::label('roles', 'Jenis Akaun') }}
-                        <select id="roles" class="form-control select2" name="roles" onchange="updateFields()">
-                            <option value="" selected>Pilih Jenis Akaun</option>
-                            <option value="Pihak Berkuasa Tempatan">Pihak Berkuasa Tempatan</option>
-                            <option value="Penggiat Industri">Penggiat Industri</option>
-                        </select>
-                    </div> -->
                     <div class="form-group mb-3">
                         {{ Form::label('roles', 'Jenis Akaun') }}
                         <select id="roles" class="form-control select2" name="roles" onchange="updateFields()">
@@ -599,50 +515,6 @@
                                 @enderror
                             </div>
                         </div>
-                        <!-- <div class="input-group mb-3">
-                            <select id="jenis_penggiat" class="form-control select2" name="jenis_penggiat" onchange="updateJenisIndustri()">
-                                <option value="">Pilih Jenis Penggiat</option>
-                                <option value="Pembekal Landskap">Pembekal Landskap</option>
-                                <option value="Perunding">Perunding</option>
-                                <option value="Kontraktor">Kontraktor</option>
-                            </select>
-                        </div> -->
-
-                        <!-- Kontraktor Specific Fields -->
-                        <!-- <div id="kontraktor_fields" style="display: none;">
-                            <div class="row">
-                                <div class="input-group mb-3 col-md-6">
-                                    <select id="kelas-kontraktor" class="form-control select2" name="kelas_kontraktor" required>
-                                        <option value="" selected>Pilih Kelas Kontraktor</option>
-                                        <option value="A">A</option>
-                                        <option value="B">B</option>
-                                        <option value="BX">BX</option>
-                                        <option value="C">C</option>
-                                        <option value="D">D</option>
-                                        <option value="E">E</option>
-                                        <option value="EX">EX</option>
-                                        <option value="F">F</option>
-                                    </select>
-                                </div>
-
-                                <div class="input-group mb-3 col-md-6">
-                                    <select id="taraf-bumiputera" class="form-control select2" name="taraf_bumiputera" required>
-                                        <option value="" selected>Pilih Taraf Bumiputera</option>
-                                        <option value="bumiputera">Bumiputera</option>
-                                        <option value="bukan bumiputera">Bukan Bumiputera</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="input-group mb-3 col-md-6">
-                                    <input id="no-pendaftaran-pkk-cidb" type="text" class="form-control" name="no_pendaftaran_pkk_cidb" placeholder="No. Pendaftaran PKK/ CIDB" required>
-                                </div>
-
-                                <div class="input-group mb-3 col-md-6">
-                                    <input id="no-pendaftaran-mof" type="text" class="form-control" name="no_pendaftaran_mof" placeholder="No. Pendaftaran SSM" required>
-                                </div>
-                            </div>
-                        </div> -->
                     </div>
 
                     
@@ -768,34 +640,6 @@
                 $passwordConfirmField.show();
                 $daftarButton.show();
                 var $negeri = $('#negeri');
-                // Disable the PBT dropdown and show the spinner
-                // $negeri.prop('disabled', true);
-                // $('#loading-spinner').show(); // Show the spinner
-                // Load Negeri options
-                // $.getJSON('/data/negeri', function(data) {
-                    
-                //     $.each(data, function(index, negeri) {
-                //         let pname = negeri.name;
-                //         $negeri.append($('<option>', {
-                //             value: negeri.id,
-                //             text: negeri.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-                //         }));
-                //     });
-                //     // Re-enable the negeri dropdown and hide the spinner
-                //     $negeri.prop('disabled', false);
-                //     $('#loading-spinner').hide(); // Hide the spinner
-
-                //     // Initialize Select2
-                //     $negeri.select2({
-                //         // placeholder: 'Pilih Negeri',
-                //         allowClear: false
-                //     });
-                // }).fail(function() {
-                //     // Handle errors if needed
-                //     $negeri.prop('disabled', false);
-                //     $('#loading-spinner').hide(); // Hide the spinner in case of error
-                //     alert('Failed to load data');
-                // });
 
                 $.ajax({
                     url: '/get-negeri', // API endpoint to get negeri data
@@ -880,8 +724,6 @@
         function updateJenisIndustri() {
             var jenisPenggiat = $('#jenis_penggiat').val();
             var $kontraktorFields = $('#kontraktor_fields');
-            // var $perundingFields = $('#perunding_fields');
-            // var $pembekalFields = $('#pembekal_fields');
             var $countryField = $('#country-field');
             var noCidb = document.getElementById("no_cidb");
             
@@ -894,26 +736,14 @@
                 if (jenisPenggiat === 'Kontraktor') {
                     $kontraktorFields.show();
                     $kontraktorFields.find('input, select').prop('disabled', false);
-                    // $perundingFields.hide();
-                    // $perundingFields.find('input, select').prop('disabled', true);
-                    // $pembekalFields.hide();
-                    // $pembekalFields.find('input, select').prop('disabled', true);
                     noCidb.required = true;
                     noCidb.disabled = false;
                 } else if (jenisPenggiat === 'Pembekal Landskap') {
                     $kontraktorFields.hide();
                     $kontraktorFields.find('input, select').prop('disabled', true);
-                    // $perundingFields.hide();
-                    // $perundingFields.find('input, select').prop('disabled', true);
-                    // $pembekalFields.show();
-                    // $pembekalFields.find('input, select').prop('disabled', false);
                 } else if (jenisPenggiat === 'Perunding') {
                     $kontraktorFields.hide();
                     $kontraktorFields.find('input, select').prop('disabled', true);
-                    // $perundingFields.show();
-                    // $perundingFields.find('input, select').prop('disabled', false);
-                    // $pembekalFields.hide();
-                    // $pembekalFields.find('input, select').prop('disabled', true);
                 } else {
                     $kontraktorFields.hide();
                 }
@@ -949,34 +779,12 @@
                         // Check if the dropdown contains a matching value
                         var stateValue = data.kod_negeri;
                         $('#state_PI').val(stateValue)
-                        // var $negeri = $('#state_PI');
-                        // Disable the PBT dropdown and show the spinner
-                        // $negeri.prop('disabled', true);
-                        // $('#loading-spinner').show(); // Show the spinner
-                        // Load Negeri options
-                        // $.getJSON('/data/negeri/'+stateValue, function(data) {
-                        //     state.val(data.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
-                        //     // Re-enable the negeri dropdown and hide the spinner
-                        //     // $negeri.prop('disabled', false);
-                            $('#loading-spinner').hide(); // Hide the spinner
-                        // }).fail(function() {
-                        //     // Handle errors if needed
-                        //     $negeri.prop('disabled', false);
-                        //     $('#loading-spinner').hide(); // Hide the spinner in case of error
-                        //     // alert('Failed to load data');
-                        // });
                         country.val(data.country);
+                        $('#loading-spinner').hide();
                     }else{
-                        // console.log("data");
-                        // locality.val('');
-                        // state.val('');
-                        // country.val('');
                         $('#loading-spinner').hide(); // Hide the spinner in case of error
                         // alert('Failed to load data');
                     }
-                    // Re-enable the PBT dropdown and hide the spinner
-                    // $pbt.prop('disabled', false);
-                    // $('#loading-spinner').hide(); // Hide the spinner
                 }).fail(function() {
                     // Handle errors if needed
                     // $pbt.prop('disabled', false);
@@ -986,71 +794,8 @@
             }
         }
 
-        // function updatePBT() {
-        //     const negeriId = $('#negeri').val();
-        //     const $pbt = $('#pbt');
-            
-        //     // Disable the PBT dropdown and show the spinner
-        //     $pbt.prop('disabled', true);
-        //     $('#loading-spinner').show(); // Show the spinner
-
-        //     $.getJSON('/data/pbt/' + negeriId, function(data) {
-        //         $pbt.empty().append('<option value="">Pilih PBT</option>');
-
-        //         $.each(data, function(index, pbt) {
-        //             $pbt.append($('<option>', {
-        //                 value: pbt.id,
-        //                 text: pbt.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-        //             }));
-        //         });
-
-        //         // Re-enable the PBT dropdown and hide the spinner
-        //         $pbt.prop('disabled', false);
-        //         $('#loading-spinner').hide(); // Hide the spinner
-        //         $pbt.select2({
-        //             // placeholder: 'Pilih PBT',
-        //             allowClear: false
-        //         });
-        //     }).fail(function() {
-        //         // Handle errors if needed
-        //         $pbt.prop('disabled', false);
-        //         $('#loading-spinner').hide(); // Hide the spinner in case of error
-        //         alert('Failed to load data');
-        //     });
-        // }
-
         function updatePBT() {
             $('#pbt').val('');
-            // $('#user_address input').val('');
-            // const negeriId = $('#negeri').val();
-            // const $datalist = $('#data_pbt');  // Target the datalist element
-            
-            // // Clear previous options in the datalist
-            // $datalist.empty();
-            
-            // // Show the spinner while loading
-            // $('#loading-spinner').show(); 
-
-            // $.getJSON('/data/pbt/' + negeriId, function(data) {
-            //     // Loop through the data and populate the datalist
-            //     $.each(data, function(index, pbt) {
-            //         // Create a new option element for the datalist
-            //         $datalist.append($('<option>', {
-            //             // value: pbt.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-            //             // text: pbt.id,
-            //             value: pbt.name,
-            //             'data-id': pbt.id,
-            //         }));
-            //     });
-
-            //     // Hide the spinner once the data is loaded
-            //     $('#loading-spinner').hide(); 
-            // }).fail(function() {
-            //     // Hide the spinner in case of error
-            //     $('#loading-spinner').hide();
-            //     alert('Failed to load data. Sila isi Nama Pihak Berkuasa Tempatan.');
-            // });
-
             
             var negeriText = $('#negeri').find('option:selected').text();
             $('#pbt').empty().append('<option value="">Pilih PBT</option>');
@@ -1091,15 +836,6 @@
 
                 $.getJSON('/data/pbt/' + negeriId + '/' + pbtId, function(data) {//console.log(data);
                     if(data != null && data != '' && (typeof data === "object" && !Array.isArray(data))){
-                        // console.log(data);
-                        // address1.val(data.alamat1.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
-                        // postcode.val(data.poskod);
-                        // locality.val(data.kawasan.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
-                        // // Check if the dropdown contains a matching value
-                        // var stateValue = data.negeri;
-                        // state.val(stateValue.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
-                        // console.log(data.address1);
-                        // console.log(data.address2);
                         address1.val(data.address1);
                         address2.val(data.address2);
                         postcode.val(data.postcode);

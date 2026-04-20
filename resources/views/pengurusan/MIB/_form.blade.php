@@ -35,29 +35,6 @@
 ?>
 
 
-    <!-- <div id="user_details" style="display: block;">
-        <div class="row">
-            <div class="form-group mb-3 col-md-6">
-                {{ Form::label('name', 'Nama Wakil') }}
-                <input value="{{ isset($MIB->name) ? $MIB->name : '' }}" id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" placeholder="Nama"  autofocus>
-                @error('name')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-            <div class="form-group mb-3 col-md-6">
-                {{ Form::label('email', 'Emel Wakil') }}
-                <input value="{{ isset($MIB->email) ? $MIB->email : '' }}" id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" placeholder="Emel" >
-                @error('email')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-        </div>
-    </div> -->
-
     <!-- Fields for PBT Account Type -->
     <div id="pbt_fields" style="display: block;" class="">
         <div class="form-group mb-3 inertClass">
@@ -610,48 +587,6 @@
         </div>
     </div>
 
-    <!-- Register Button -->
-    <!-- <div class="row" style="display: block;" id="daftar">
-        <div class="col-12">
-            <button type="submit" class="btn bg-olive btn-block btn-flat">Daftar</button>
-        </div>
-    </div>
-    &nbsp;
-    <div class="row" style="display: block;" id="daftar">
-        <div class="col-12">
-            <button type="reset" class="btn bg-gray btn-block btn-flat">Reset</button>
-        </div>
-    </div> -->
-
-<!-- <div class="form-row">
-    <div class="col-12 col-md-4">
-        <div class="form-group">
-            {{ Form::label('name', 'Nama Pengguna') }}
-            {{ Form::text('name',null,['placeholder'=>'Sila masukkan Nama Pemohon','class' => 'form-control '.Html::isInvalid($errors,'name')]) }}
-            {!! Html::hasError($errors,'name') !!}
-        </div>
-    </div>
-    <div class="col-12 col-md-4">
-        <div class="form-group">
-            {{ Form::label('email', 'E-Mel Pengguna') }}
-            {{ Form::email('email',null,['placeholder'=>'Sila masukkan E-Mel Pemohon','class' => 'form-control '.Html::isInvalid($errors,'email')]) }}
-            {!! Html::hasError($errors,'email') !!}
-        </div>
-    </div>
-    <div class="col-12 col-md-2">
-        <div class="form-group">
-            {{ Form::label('phone', 'No. Telefon Pengguna') }}
-            {{ Form::text('phone',null,['placeholder'=>'Sila masukkanNo. Telefon','class' => 'form-control '.Html::isInvalid($errors,'phone')]) }}
-            {!! Html::hasError($errors,'phone') !!}
-        </div>
-    </div>
-</div>
-
-<div class="form-group">
-    {{ Form::label('message', 'Ringkasan Aktiviti') }}
-    {{ Form::textarea('message',null,['rows'=>6,'placeholder'=>'Sila masukkan Ringkasan Aktiviti','class' => 'form-control '.Html::isInvalid($errors,'message')]) }}
-    {!! Html::hasError($errors,'message') !!}
-</div> -->
 
 
 <script>

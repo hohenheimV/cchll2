@@ -306,64 +306,6 @@
                     }else{
                         textInput.disabled = !checkbox2.checked;
                     }
-                    // if (textInput) {
-                    //     if (checkbox6.id === 'guna_tanah_6') {
-                    //         textInput.disabled = !checkbox6.checked;
-                    //         setTimeout(function() {
-                    //             textInput.focus();
-                    //         }, 100);
-                    //     } else {
-                    //         // textInput.disabled = true;
-                    //     }
-                    // }
-                    // var checkboxes2 = document.querySelectorAll('input[name="rancangan_pembangunan[jenis]"]');
-                    // checkboxes2.forEach(function(item2) {
-                    //     let id = item2.id.replace("rancangan_pembangunan", "rancangan_pembangunan_details");
-                    //     if (item2 !== checkbox2) {
-                    //         item2.checked = false;
-                    //         document.getElementById(id).disabled = true;
-                    //     }else{
-                    //         document.getElementById(id).disabled = false;
-                    //         setTimeout(function() {
-                    //             document.getElementById(id).focus();
-                    //         }, 100); 
-                    //     }
-                    // });
-
-                    // switch(checkbox2.id) {
-                    //     case 'rancangan_pembangunan_1':
-                    //         document.getElementById('rancangan_pembangunan_details_1').disabled = false;
-                    //         setTimeout(function() {
-                    //             document.getElementById('rancangan_pembangunan_details_1').focus();
-                    //         }, 100); // Delay the focus by 100ms
-                    //         break;
-                    //     case 'rancangan_pembangunan_2':
-                            
-                    //         setTimeout(function() {
-                    //             document.getElementById('rancangan_pembangunan_details_2').focus();
-                    //         }, 100); // Delay the focus by 100ms
-                    //         break;
-                    //     case 'rancangan_pembangunan_3':
-                            
-                    //         setTimeout(function() {
-                    //             document.getElementById('rancangan_pembangunan_details_3').focus();
-                    //         }, 100); // Delay the focus by 100ms
-                    //         break;
-                    //     case 'rancangan_pembangunan_4':
-                            
-                    //         setTimeout(function() {
-                    //             document.getElementById('rancangan_pembangunan_details_4').focus();
-                    //         }, 100); // Delay the focus by 100ms
-                    //         break;
-                    //     case 'rancangan_pembangunan_5':
-                            
-                    //         setTimeout(function() {
-                    //             document.getElementById('rancangan_pembangunan_details_5').focus();
-                    //         }, 100); // Delay the focus by 100ms
-                    //         break;
-                    //     default:
-                    //         console.log('No matching case');
-                    // }
                 }
             </script>
 
@@ -808,28 +750,6 @@
                 <div class="col-md-9">
                     {{ Form::textarea('aktiviti_semasa', null, ['class' => 'form-control summernote', 'rows' => 3, 'cols' => 20, 'placeholder' => 'Masukkan butiran jika ada']) }}
                 </div>
-                <!-- Include Summernote CSS -->
-                <!-- <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet"> -->
-
-                <!-- Include Summernote JS -->
-                <!-- <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script> -->
-
-                <!-- <script>
-                    $(document).ready(function() {
-                        // Initialize Summernote for all textareas with the class 'summernote'
-                        $('.summernote').summernote({
-                            height: 200,  // Set the height of the editor
-                            toolbar: [
-                                // Define the toolbar buttons (optional, you can customize this)
-                                ['style', ['bold', 'italic', 'underline', 'clear']],
-                                ['font', ['strikethrough', 'superscript', 'subscript']],
-                                ['para', ['ul', 'ol', 'paragraph']],
-                                ['insert', ['link', 'picture']],
-                                ['view', ['fullscreen', 'codeview', 'help']]
-                            ]
-                        });
-                    });
-                </script> -->
 
             </div>
         </td>

@@ -125,7 +125,7 @@ class RegisterController extends Controller
             }else{
                 $maklumat = MaklumatPenggunaPbt::create([
                     'name' => $data['pbt'],
-                    'email' => $data['email'],
+                    'email' => $data['sv_email'],
                     'pbt_name' => $data['pbt'],
                     'address1' => $data['address1'],
                     'address2' => $data['address2'],
@@ -282,6 +282,10 @@ class RegisterController extends Controller
         return $user;
     }
 
+    /**
+     * A function used to insert PBT Users from a .csv file.
+     */
+    /*
     public function testCsv(Request $request)
     {
 
@@ -362,6 +366,8 @@ class RegisterController extends Controller
                         $id = $existingPbt->id;
                         $name = $existingPbt->pbt_name;
                         $existingPbt->update([
+                            'name' => $data['pbt'],
+                            'email' => $data['sv_email'],
                             'address1' => $data['address1'],
                             'address2' => $data['address2'],
                             'postcode' => $data['postcode'],
@@ -447,4 +453,5 @@ class RegisterController extends Controller
             'errors' => $errors
         ]);
     }
+    */
 }

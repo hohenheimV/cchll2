@@ -128,44 +128,6 @@ class MIBController extends Controller
         return view('pengurusan.MIB.create', ['status' => $this->statusArr, 'pbt' => $pbt]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    // public function store(Request $request)
-    // {
-    //     // dd($request->all());
-    //     // Mula Rule validation
-    //     $rules = [
-    //         'name'   => 'required',
-    //         'email'   => 'required|email',
-    //         'message'  => 'required',
-    //     ];
-
-    //     //Selaras bentuk mesej yang sama; attributes berbeza
-    //     $messages = [
-    //         'required'  => ':attribute diperlukan.',
-    //         'email'  => ':attribute tidak sah.'
-    //     ];
-
-    //     // Rename field ke perkataan boleh difaham (jika perlu/berlainan)
-    //     $attributes = [];
-
-    //     $validator = Validator::make($request->all(), $rules, $messages, $attributes)->validate();
-
-    //     $ref = Carbon::now()->timestamp;
-    //     $data = $request->all();
-    //     $data['ref_num'] = "F$ref";
-    //     $data['MIB_at'] = Carbon::now()->format('Y-m-d H:i:s');
-
-    //     // define data field of Model
-    //     $MIB = MIB::create($data);
-
-    //     // redirect to
-    //     return redirect()->route('pengurusan.MIB.index')->with('successMessage', 'Maklumat telah berjaya disimpan');
-    // }
     public function store(Request $request)
     {
         $keysToCheck = [

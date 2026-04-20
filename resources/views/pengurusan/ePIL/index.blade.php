@@ -170,60 +170,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
 <script>
-    // pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     const ePIL = @json($ePIL);
-
-    //     // Use ePIL.data to loop through the records
-    //     ePIL.data.forEach(pelan => {
-    //         // console.log(pelan);
-    //         let namaFolder = pelan.id_pelan+' '+pelan.nama_pelan;
-    //         let folder = namaFolder.replace(/\s+/g, '_'); // Replace spaces with underscores in folder name
-    //         const url = pelan.nama_dokumen_pelan ?
-    //             `/storage/uploads/ePIL/${folder}/${pelan.nama_dokumen_pelan}` : 
-    //             '/img/no-photos.png';
-
-    //         // Load and render the first page of the PDF document
-    //         pdfjsLib.getDocument(url).promise.then(function(pdf) {
-    //             return pdf.getPage(1); // Get the first page of the document
-    //         }).then(function(page) {
-    //             const canvas = document.getElementById('pdf-render-' + pelan.id_dokumen_pelan);
-    //             const loadingElement = document.getElementById('loading-' + pelan.id_dokumen_pelan);
-    //             const context = canvas.getContext('2d');
-
-    //             const originalViewport = page.getViewport({ scale: 0.5 });
-
-    //             const containerWidth = 150;
-    //             const containerHeight = 200;
-    //             const scale = Math.min(
-    //                 containerWidth / originalViewport.width,
-    //                 containerHeight / originalViewport.height
-    //             );
-
-    //             const viewport = page.getViewport({ scale: scale });
-
-    //             canvas.width = viewport.width;
-    //             canvas.height = viewport.height;
-
-    //             page.render({
-    //                 canvasContext: context,
-    //                 viewport: viewport
-    //             }).promise.then(() => {
-    //                 if (loadingElement) {
-    //                     loadingElement.style.display = 'none';
-    //                 }
-    //                 canvas.style.display = 'block';
-    //             });
-    //         }).catch(function(error) {
-    //             // console.error('Error loading PDF for ID ' + pelan.id_dokumen_pelan + ':', error);
-    //             const viewerElement = document.getElementById('pdf-viewer-' + pelan.id_pelan);
-    //             if (viewerElement) {
-    //                 viewerElement.innerHTML = '<div class="text-center text-muted" style="padding-top: 80px;">Dokumen tidak dapat dipaparkan</div>';
-    //             }
-    //         });
-    //     });
-    // });
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
     document.addEventListener('DOMContentLoaded', function () {

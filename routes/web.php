@@ -412,25 +412,6 @@ Route::name('website.')
 
             // $namaPbtArray = [];
             foreach ($ePALM as $item) {
-                // if ($item->nama_pbt == "Landskap Perbandaran") {
-                //     $ePALM_komponen = ePALM::where('id_taman', $item->is_komponen)->first();
-                //     $item->komponen = str_replace(' ', '_', $ePALM_komponen->nama_taman)."/".str_replace(' ', '_', $item->nama_taman);
-                //     // dump($ePALM_komponen);
-                //     $item->nama_pbt = $ePALM_komponen->nama_pbt;
-                //     // $item->gambar_taman = str_replace('gambar_input_modal_', 'Xgambar_input_modal_', $item->gambar_taman);
-                //     // $item->gambar_taman = preg_replace('/\b(X?gambar_input_modal_|GIM_)/', 'XGIM_', $item->gambar_taman);
-                //     $item->kategori_taman = $ePALM_komponen->kategori_taman;
-                //     // $item->keterangan_taman = $ePALM_komponen->nama_pbt;
-                //     $item->fasiliti = $ePALM_komponen->fasiliti;
-                //     $item->lat = $ePALM_komponen->lat;
-                //     $item->lng = $ePALM_komponen->lng;
-                //     $item->keluasan_taman = $ePALM_komponen->keluasan_taman;
-                //     $item->keluasan_unit = $ePALM_komponen->keluasan_unit;
-                //     $item->waktuMula_taman = $ePALM_komponen->waktuMula_taman;
-                //     $item->waktuTamat_taman = $ePALM_komponen->waktuTamat_taman;
-                //     $item->negeri_taman = $ePALM_komponen->negeri_taman;
-                //     $item->nama_taman = "Komponen: ".$item->nama_taman;
-                // }
                 $item->gambar_taman = preg_replace('/\b(X?gambar_input_modal_|GIM_)/', 'XGIM_', $item->gambar_taman);
                 // dump($item->gambar_taman);
                 $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->negeri_taman)->orderBy('nama_negeri', 'asc')->first();
@@ -461,68 +442,7 @@ Route::name('website.')
 
         Route::get('/taman/{keyword}', function ($keyword) {
             $keyword = $keyword ? Crypt::decryptString($keyword) : null;
-            // dd($keyword);
-            // // return ePALM::where('is_komponen', null)->latest()->paginate(10);
-            // // $ePALM = ePALM::/* where('is_komponen', null)-> */where('status', 'approved')->latest()->paginate(5);//ePALM::latest()->paginate(15);
-            // $ePALM = ePALM::where('status', 'approved')
-            //     ->where('nama_pbt', '!=', 'Landskap Perbandaran')
-            //     ->when($keywordSalt, function($query) use ($keywordSalt) {
-            //         return $query->where('id_taman', $keywordSalt);
-            //     })
-            //     ->orderBy('negeri_taman')
-            //     ->orderBy('created_at', 'asc')
-            //     ->orderBy('nama_pbt')
-            //     ->paginate(10);
-            // foreach ($ePALM as $item) {
-            //     if ($item->nama_pbt == "Landskap Perbandaran") {
-            //         $ePALM_komponen = ePALM::where('id_taman', $item->is_komponen)->first();
-            //         $item->komponen = str_replace(' ', '_', $ePALM_komponen->nama_taman)."/".str_replace(' ', '_', $item->nama_taman);
-            //         // dump($ePALM_komponen);
-            //         $item->nama_pbt = $ePALM_komponen->nama_pbt;
-            //         // $item->gambar_taman = str_replace('gambar_input_modal_', 'Xgambar_input_modal_', $item->gambar_taman);
-            //         // $item->gambar_taman = preg_replace('/\b(X?gambar_input_modal_|GIM_)/', 'XGIM_', $item->gambar_taman);
-            //         $item->kategori_taman = $ePALM_komponen->kategori_taman;
-            //         // $item->keterangan_taman = $ePALM_komponen->nama_pbt;
-            //         $item->fasiliti = $ePALM_komponen->fasiliti;
-            //         $item->lat = $ePALM_komponen->lat;
-            //         $item->lng = $ePALM_komponen->lng;
-            //         $item->keluasan_taman = $ePALM_komponen->keluasan_taman;
-            //         $item->keluasan_unit = $ePALM_komponen->keluasan_unit;
-            //         $item->waktuMula_taman = $ePALM_komponen->waktuMula_taman;
-            //         $item->waktuTamat_taman = $ePALM_komponen->waktuTamat_taman;
-            //         $item->negeri_taman = $ePALM_komponen->negeri_taman;
-            //         $item->nama_taman = "Komponen: ".$item->nama_taman;
-            //     }
-            //     $item->gambar_taman = preg_replace('/\b(X?gambar_input_modal_|GIM_)/', 'XGIM_', $item->gambar_taman);
-            //     // dump($item->gambar_taman);
-            //     $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->negeri_taman)->orderBy('nama_negeri', 'asc')->first();
-            //     $item->negeri = isset($negeris->nama_negeri) ? ucwords(strtolower($negeris->nama_negeri)) : ''; 
-            // }
             $ePALM = ePALM::where('id_taman', $keyword)->first();
-            // if ($ePALM->kategori_taman == "Landskap Perbandaran" || 1) {
-            //     $ePALM_komponen = ePALM::select([
-            //         // 'id_taman',
-            //         'id_taman',
-            //         'nama_taman',
-            //         'nama_pbt',
-            //         'kategori_taman',
-            //         'keterangan_taman',
-            //         'gambar_taman',
-            //         'is_komponen',
-            //         'id_permohonan',
-            //         'status',
-            //     ])->where('is_komponen', $ePALM->id_taman)->get();
-            //     $ePALM->komponen = $ePALM_komponen;
-            // }
-    
-            // if ($ePALM->nama_pbt == "Landskap Perbandaran") {
-            //     $ePALM_induk = ePALM::select([
-            //         'nama_taman',
-            //     ])->where('id_taman', $ePALM->is_komponen)->first();
-            //     // dd($ePALM_induk);
-            //     $ePALM->nama_pbt = $ePALM_induk->nama_taman;
-            // }
-            // dd(Crypt::encryptString($ePALM->id_taman));
             return view('website.ePALM_taman', ['ePALM' => $ePALM]);
         })->name('taman');
 
@@ -595,27 +515,6 @@ Route::name('website.')
             return view('website.ePACT', ['epacts' => $epacts, 'keyword' => $keyword]);
         })->name('ePACT');
 
-        /* Route::get('/mib', function ($keyword = null) {
-            $totalCount = MIB::where('status', 'Diluluskan')->count();
-            $mibs = MIB::where('status', 'Diluluskan')->orderBy('negeri', 'asc')->orderBy('pbt', 'asc')->paginate($totalCount);
-            // dd($mibs);
-            return view('website.MIB', ['mibs' => $mibs, 'keyword' => $keyword]);
-        })->name('MIB');
-
-        Route::get('/mib/{keyword}', function ($keyword = null) {
-            $MIB = MIB::where('id', $keyword)->first();
-            $count = MIB_laporan::where('id_rakan', $keyword)->count();
-            $MIB_laporan = MIB_laporan::where('id_rakan', $keyword)->latest()->paginate($count);
-            // dd($MIB_laporan);
-            return view('website.MIB_aktiviti', ['MIB_laporan' => $MIB_laporan, 'MIB' => $MIB, 'keyword' => $keyword]);
-        })->name('MIB_aktiviti'); */
-
-        // Route::get('/aktiviti-rakan-taman', function ($keyword = null) {
-        //     $count = MIB_laporan::whereYear('created_at', 2025)->count();
-        //     $MIB_laporan = MIB_laporan::with('mib')->whereYear('created_at', 2025)->latest()->paginate($count);
-        //     // dd($MIB_laporan);
-        //     return view('website.MIB_aktiviti', ['MIB_laporan' => $MIB_laporan, 'keyword' => $keyword]);
-        // })->name('MIB_aktiviti');
         Route::get('/aktiviti-rakan-taman', function ($keyword = null) {
             $query = MIB_laporan::with('mib')
                 // ->whereYear('created_at', 2025)
@@ -648,51 +547,6 @@ Route::name('website.')
             }
             return view('website.eLAD', ['eLAD' => $eLAD, 'keyword' => ucwords($keyword)]);
         })->name('eLAD');
-
-        // Route::get('/penggiat-industri/{keyword}', function ($keyword) {
-        //     switch ($keyword) {
-        //         case 'kontraktor':
-        //             $type = 'Kontraktor';
-        //             $data = MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->latest()->paginate(15);
-        //             break;
-    
-        //         case 'perunding':
-        //             $type = 'Perunding';
-        //             $data = MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->latest()->paginate(15);
-        //             break;
-    
-        //         case 'pembekal':
-        //             $type = 'Pembekal';
-        //             $data = MaklumatPenggunaPenggiatIndustri::where('status', 'approved')->where('jenis_industri', $type)->latest()->paginate(15);
-        //             break;
-        //         case 'antarabangsa':
-        //             $type = 'Pertubuhan Antarabangsa';
-        //             $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
-        //             break;
-    
-        //         case 'ngo':
-        //             $type = 'NGO / Badan Ikhtisas';
-        //             $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
-        //             break;
-    
-        //         case 'pendidikan':
-        //             $type = 'Institusi Pendidikan';
-        //             $data = MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->latest()->paginate(MaklumatPenggunaPenggiatIndustri::where('jenis_industri', $type)->count());
-        //             break;
-    
-        //         default:
-        //             return abort(404, 'Not Found');
-        //     }
-        //     foreach ($data as $item) {
-        //         $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->state)->orderBy('nama_negeri', 'asc')->first();
-        //         if($negeris){
-        //             $item->state = ucwords(strtolower($negeris->nama_negeri)) ?? ''; 
-        //         }else{
-        //             $item->state = 'Tiada Maklumat';
-        //         }
-        //     }
-        //     return view('website.eLIND', ['eLIND' => $data, 'keyword' => ($type)]);
-        // })->name('website.eLIND');
 
         Route::get('/penggiat-industri/{keyword}', function (Request $request, $keyword) {
             $types = [
@@ -795,41 +649,6 @@ Route::name('website.')
             }
             // dd($entitiLandskapUnik);
             return view('website.eNTITI', ['unik' => $entitiLandskapUnik, 'keyword' => $keyword]);
-            // $ePALM = EntitiLandskapUnik::where('status', 'approved')
-            //     ->where('nama_pbt', '!=', 'Landskap Perbandaran')
-            //     ->when($keywordSalt, function($query) use ($keywordSalt) {
-            //         return $query->where('negeri_taman', 'like', "%$keywordSalt%");
-            //     })
-            //     ->orderBy('negeri_taman')
-            //     ->orderBy('created_at', 'asc')
-            //     ->orderBy('nama_pbt')
-            //     ->paginate(10);
-            // foreach ($ePALM as $item) {
-            //     if ($item->nama_pbt == "Landskap Perbandaran") {
-            //         $ePALM_komponen = ePALM::where('id_taman', $item->is_komponen)->first();
-            //         $item->komponen = str_replace(' ', '_', $ePALM_komponen->nama_taman)."/".str_replace(' ', '_', $item->nama_taman);
-            //         // dump($ePALM_komponen);
-            //         $item->nama_pbt = $ePALM_komponen->nama_pbt;
-            //         // $item->gambar_taman = str_replace('gambar_input_modal_', 'Xgambar_input_modal_', $item->gambar_taman);
-            //         // $item->gambar_taman = preg_replace('/\b(X?gambar_input_modal_|GIM_)/', 'XGIM_', $item->gambar_taman);
-            //         $item->kategori_taman = $ePALM_komponen->kategori_taman;
-            //         // $item->keterangan_taman = $ePALM_komponen->nama_pbt;
-            //         $item->fasiliti = $ePALM_komponen->fasiliti;
-            //         $item->lat = $ePALM_komponen->lat;
-            //         $item->lng = $ePALM_komponen->lng;
-            //         $item->keluasan_taman = $ePALM_komponen->keluasan_taman;
-            //         $item->keluasan_unit = $ePALM_komponen->keluasan_unit;
-            //         $item->waktuMula_taman = $ePALM_komponen->waktuMula_taman;
-            //         $item->waktuTamat_taman = $ePALM_komponen->waktuTamat_taman;
-            //         $item->negeri_taman = $ePALM_komponen->negeri_taman;
-            //         $item->nama_taman = "Komponen: ".$item->nama_taman;
-            //     }
-            //     $item->gambar_taman = preg_replace('/\b(X?gambar_input_modal_|GIM_)/', 'XGIM_', $item->gambar_taman);
-            //     // dump($item->gambar_taman);
-            //     $negeris = Negeri::select('nama_negeri')->where('kod_negeri', $item->negeri_taman)->orderBy('nama_negeri', 'asc')->first();
-            //     $item->negeri = isset($negeris->nama_negeri) ? ucwords(strtolower($negeris->nama_negeri)) : ''; 
-            // }
-            // return view('website.ePALM', ['ePALM_all' => $ePALM, 'keyword' => $keyword]);
         })->name('eNTITI');
     });
 
@@ -883,37 +702,6 @@ Route::middleware(['auth'])
             // New route for eLIND
             Route::get('velind', 'UsersController@velind')->name('velind');
         });
-
-        // Route::get('eLIND/kontraktor', 'eLINDController@kontraktor')->name('eLIND.kontraktor');
-        // Route::get('eLIND/perunding_landskap', 'eLINDController@perundingLandskap')->name('eLIND.perunding_landskap');
-        // Route::get('eLIND/pembekal_landskap', 'eLINDController@pembekalLandskap')->name('eLIND.pembekal_landskap');
-        // Route::get('eLIND/pertubuhan_antarabangsa', 'eLINDController@pertubuhanAntarabangsa')->name('eLIND.pertubuhan_antarabangsa');
-        // Route::get('eLIND/ngo_badan_ikhtisas', 'eLINDController@ngoBadanIkhtisas')->name('eLIND.ngo_badan_ikhtisas');
-        // Route::get('eLIND/institusi_pendidikan', 'eLINDController@institusiPendidikan')->name('eLIND.institusi_pendidikan');
-
-        /**
-         * Route eLINDController
-         */
-        // Route::resource('eLIND', 'eLINDController');
-        // Add this route for the kontraktor method
-
-
-        // Route::get('eLIND/kontraktor', [eLINDController::class, 'kontraktor'])->name('pengurusan.eLIND.kontraktor');
-        // Route::get('eLIND/perunding', [eLINDController::class, 'perunding'])->name('pengurusan.eLIND.perunding');
-
-        
-        Route::get('entiti-lanskap', [EntitiLandskapController::class, 'index'])->name('entitiLandskap.entiti.index');
-        Route::get('kempen-tanam', [KempenTanamController::class, 'index'])->name('kempenTanam.entiti.index');
-        Route::get('eMohon', [eMohonController::class, 'index'])->name('eMohon.entiti.index');
-        Route::get('dashPBT', function () {
-            return view('pengurusan.eLIND.dashPBT');
-        })->name('dashPBT.entiti.index');
-        Route::get('dashPenggiat', function () {
-            return view('pengurusan.eLIND.dashPenggiat');
-        })->name('dashPenggiat.entiti.index');
-        Route::get('dasheLIND', function () {
-            return view('pengurusan.eLIND.dasheLIND');
-        })->name('dasheLIND.entiti.index');
         
         /**
          * Route HardscapeController
@@ -1127,11 +915,6 @@ Route::middleware(['auth'])
         /**
          * Route eLINDController
          */
-        // Route::resource('eLIND', 'eLINDController');
-        // Route::resource('eLIND', 'eLINDController');
-        // Route::get('eLIND/{type}', 'eLINDController@indexSubmodule')->name('eLIND.indexSubmodule');
-        // Define routes for the submodule actions
-        // Route::get('eLIND/{type}', 'eLINDController@index')->name('eLIND.index');
         Route::get('eLIND/{type}', 'eLINDController@index')->name('eLIND.index');
         Route::get('eLIND/{type}/create', 'eLINDController@create')->name('eLIND.create');
         Route::get('eLIND/{type}/{id}/show', 'eLINDController@show')->name('eLIND.show');
@@ -1143,8 +926,6 @@ Route::middleware(['auth'])
         Route::get('import-users-form', 'eLINDController@importForm')->name('eLIND.importForm');
         Route::post('import-users', 'eLINDController@import')->name('eLIND.import');
 
-        // Route::get('eLIND', 'eLINDController@kontraktor')->name('eLIND.kontraktor');
-        // Route::get('pengurusan/eLINDz', [eLINDController::class, 'indexz'])->name('pengurusan.eLIND.indexz');
 
         /**
          * Route DroneController
@@ -1274,68 +1055,4 @@ Route::middleware(['auth'])
             Route::get('exports/visitor/all', 'PageController@export_all')->name('visitor.all');
             Route::post('exports/visitor/all', 'PageController@export_all')->name('visitor.post');
         });
-    });
-
-
-    // Route::get('/test-email', function () {
-    //     $details = [
-    //         'title' => 'Mail from Laravel App',
-    //         'body' => 'This is a test email sent from Laravel application.'
-    //     ];
-    //     if(config('mail.enabled')){
-    //         // Mail::raw($details['body'], function ($message) use ($details) {
-    //         // $message->to('your_test_email@example.com')  // Replace with your test email address
-    //         //         ->subject($details['title']);
-    //         // });
-    //         echo "enabled";
-    //     }else{
-    //         echo "disabled";
-    //     }
-
-    //     return 'Email sent!';
-    // });
-    // Route::get('/test-email2', function () {
-    //     $details = [
-    //         'title' => 'Mail from Laravel App',
-    //         'body' => 'This is a test email sent from Laravel application.'
-    //     ];
-
-    //     \Illuminate\Support\Facades\Mail::raw($details['body'], function ($message) use ($details) {
-    //         $message->to('cakkik@gmail.com')  // Replace with your test email address
-    //                 ->subject($details['title']);
-    //     });
-
-    //     return 'Email sent!';
-    // });
-
-    Route::get('/test-email', function () {
-        $details = [
-            'title' => 'HTML Mail from sistem eLANDSKAP',
-            'body' => '<h1>Ini adalah percubaan dari sistem eLANDSKAP. Mohon abaikan.</h1>'
-        ];
-
-        \Illuminate\Support\Facades\Mail::send([], [], function ($message) use ($details) {
-            $message->to('cakkik@gmail.com')
-                    ->subject($details['title'])
-                    ->setBody($details['body'], 'text/html');
-        });
-
-        return 'HTML email sent!';
-    });
-
-    Route::get('/content-email', function () {
-        $details = [
-            'title' => 'HTML Mail from sistem eLANDSKAP',
-            'body' => '<h1>Ini adalah percubaan dari sistem eLANDSKAP. Mohon abaikan.</h1>'
-        ];
-    
-        // Instead of sending email, display the message content
-        $messageContent = [
-            'to' => 'cakkik@gmail.com',
-            'subject' => $details['title'],
-            'body' => $details['body']
-        ];
-    
-        // Return the message content as a response
-        return response()->json($messageContent);
     });

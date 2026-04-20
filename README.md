@@ -1,4 +1,11 @@
+<h1 align="center">eLANDSKAP</h1>
+
+<p align="center">
+Digital Landscape Management System
+</p>
+
 ---
+<p align="right"><i>Most of the contents are AI-generated</i></p>
 
 ## About eLANDSKAP
 
@@ -6,7 +13,11 @@
 
 The system transforms traditional manual processes into a structured digital workflow, enabling efficient management of parks, landscape assets, project applications, and related documentation.
 
-It is designed for use by **Jabatan Landskap Negara (JLN)**, **Pihak Berkuasa Tempatan (PBT)**, **industry players**, and the **public**.
+It is designed for use by:
+- Jabatan Landskap Negara (JLN)
+- Pihak Berkuasa Tempatan (PBT)
+- Industry players
+- Public users
 
 ---
 

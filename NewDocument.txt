@@ -1,4 +1,0 @@
-git clone https://github.com/hohenheimV/eLANDSKAP.git
-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
-hohenheimV
-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

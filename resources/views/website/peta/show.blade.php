@@ -332,7 +332,7 @@
     }
 
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5xujv9ZIKE1Q4ZKjw7OPLXY8KeOvikRU&callback=initMap">
+<script src="https://maps.googleapis.com/maps/api/js?key=xxxxx&callback=initMap">
 </script>
 @endsection
 @endif

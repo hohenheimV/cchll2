@@ -17,8 +17,8 @@ return [
     'name_short' => env('APP_NAME_SHORT', 'eLANDSKAP'),
     'agency' => env('APP_AGENCY', 'Jabatan Landskap Negara'),
     'agency_short' => env('APP_AGENCY_SHORT', 'JLN'),
-    'api_map_hardscape' => 'AIzaSyCUqBvWNhRdh4kgI96VQpsth-TXgXgjIrE',
-    'api_map_softscape' => 'AIzaSyCUqBvWNhRdh4kgI96VQpsth-TXgXgjIrE',
+    'api_map_hardscape' => '',
+    'api_map_softscape' => '',
 
     /*
     |--------------------------------------------------------------------------
